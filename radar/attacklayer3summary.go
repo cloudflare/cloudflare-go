@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // AttackLayer3SummaryService contains methods and other services that help with
@@ -908,7 +908,7 @@ func (r attackLayer3SummaryProtocolResponseSummary0JSON) RawJSON() string {
 
 type AttackLayer3SummaryVectorResponse struct {
 	Meta     AttackLayer3SummaryVectorResponseMeta `json:"meta,required"`
-	Summary0 map[string][]string                   `json:"summary_0,required"`
+	Summary0 map[string]string                     `json:"summary_0,required"`
 	JSON     attackLayer3SummaryVectorResponseJSON `json:"-"`
 }
 
@@ -1605,6 +1605,9 @@ type AttackLayer3SummaryVectorParams struct {
 	Format param.Field[AttackLayer3SummaryVectorParamsFormat] `query:"format"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer3SummaryVectorParamsIPVersion] `query:"ipVersion"`
+	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
+	// the time range.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.

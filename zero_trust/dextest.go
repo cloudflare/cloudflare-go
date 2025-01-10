@@ -9,13 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // DEXTestService contains methods and other services that help with interacting
@@ -40,7 +39,7 @@ func NewDEXTestService(opts ...option.RequestOption) (r *DEXTestService) {
 }
 
 // List DEX tests with overview metrics
-func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DEXTestListResponse], err error) {
+func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[Tests], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -62,7 +61,7 @@ func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opt
 }
 
 // List DEX tests with overview metrics
-func (r *DEXTestService) ListAutoPaging(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[DEXTestListResponse] {
+func (r *DEXTestService) ListAutoPaging(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[Tests] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -704,82 +703,6 @@ func (r *TestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue) UnmarshalJ
 }
 
 func (r testsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXTestListResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    DEXTestListResponseSuccess    `json:"success,required"`
-	Result     Tests                         `json:"result"`
-	ResultInfo DEXTestListResponseResultInfo `json:"result_info"`
-	JSON       dexTestListResponseJSON       `json:"-"`
-}
-
-// dexTestListResponseJSON contains the JSON metadata for the struct
-// [DEXTestListResponse]
-type dexTestListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXTestListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTestListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DEXTestListResponseSuccess bool
-
-const (
-	DEXTestListResponseSuccessTrue DEXTestListResponseSuccess = true
-)
-
-func (r DEXTestListResponseSuccess) IsKnown() bool {
-	switch r {
-	case DEXTestListResponseSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DEXTestListResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                           `json:"total_count"`
-	JSON       dexTestListResponseResultInfoJSON `json:"-"`
-}
-
-// dexTestListResponseResultInfoJSON contains the JSON metadata for the struct
-// [DEXTestListResponseResultInfo]
-type dexTestListResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXTestListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTestListResponseResultInfoJSON) RawJSON() string {
 	return r.raw
 }
 

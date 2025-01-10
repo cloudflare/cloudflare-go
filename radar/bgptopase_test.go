@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestBGPTopAseGetWithOptionalParams(t *testing.T) {
@@ -29,15 +29,15 @@ func TestBGPTopAseGetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Top.Ases.Get(context.TODO(), radar.BGPTopAseGetParams{
-		ASN:        cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:  cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:        cloudflare.F([]string{"string"}),
+		DateEnd:    cloudflare.F([]time.Time{time.Now()}),
+		DateRange:  cloudflare.F([]string{"7d"}),
+		DateStart:  cloudflare.F([]time.Time{time.Now()}),
 		Format:     cloudflare.F(radar.BGPTopAseGetParamsFormatJson),
 		Limit:      cloudflare.F(int64(5)),
-		Name:       cloudflare.F([]string{"string", "string", "string"}),
-		Prefix:     cloudflare.F([]string{"1.1.1.0/24", "1.1.1.0/24", "1.1.1.0/24"}),
-		UpdateType: cloudflare.F([]radar.BGPTopAseGetParamsUpdateType{radar.BGPTopAseGetParamsUpdateTypeAnnouncement, radar.BGPTopAseGetParamsUpdateTypeWithdrawal}),
+		Name:       cloudflare.F([]string{"string"}),
+		Prefix:     cloudflare.F([]string{"1.1.1.0/24"}),
+		UpdateType: cloudflare.F([]radar.BGPTopAseGetParamsUpdateType{radar.BGPTopAseGetParamsUpdateTypeAnnouncement}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

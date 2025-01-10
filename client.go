@@ -7,91 +7,94 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/cloudflare/cloudflare-go/v3/accounts"
-	"github.com/cloudflare/cloudflare-go/v3/acm"
-	"github.com/cloudflare/cloudflare-go/v3/addressing"
-	"github.com/cloudflare/cloudflare-go/v3/ai_gateway"
-	"github.com/cloudflare/cloudflare-go/v3/alerting"
-	"github.com/cloudflare/cloudflare-go/v3/api_gateway"
-	"github.com/cloudflare/cloudflare-go/v3/argo"
-	"github.com/cloudflare/cloudflare-go/v3/audit_logs"
-	"github.com/cloudflare/cloudflare-go/v3/billing"
-	"github.com/cloudflare/cloudflare-go/v3/bot_management"
-	"github.com/cloudflare/cloudflare-go/v3/botnet_feed"
-	"github.com/cloudflare/cloudflare-go/v3/brand_protection"
-	"github.com/cloudflare/cloudflare-go/v3/cache"
-	"github.com/cloudflare/cloudflare-go/v3/calls"
-	"github.com/cloudflare/cloudflare-go/v3/certificate_authorities"
-	"github.com/cloudflare/cloudflare-go/v3/client_certificates"
-	"github.com/cloudflare/cloudflare-go/v3/cloud_connector"
-	"github.com/cloudflare/cloudflare-go/v3/cloudforce_one"
-	"github.com/cloudflare/cloudflare-go/v3/custom_certificates"
-	"github.com/cloudflare/cloudflare-go/v3/custom_hostnames"
-	"github.com/cloudflare/cloudflare-go/v3/custom_nameservers"
-	"github.com/cloudflare/cloudflare-go/v3/d1"
-	"github.com/cloudflare/cloudflare-go/v3/dcv_delegation"
-	"github.com/cloudflare/cloudflare-go/v3/diagnostics"
-	"github.com/cloudflare/cloudflare-go/v3/dns"
-	"github.com/cloudflare/cloudflare-go/v3/dnssec"
-	"github.com/cloudflare/cloudflare-go/v3/durable_objects"
-	"github.com/cloudflare/cloudflare-go/v3/email_routing"
-	"github.com/cloudflare/cloudflare-go/v3/email_security"
-	"github.com/cloudflare/cloudflare-go/v3/event_notifications"
-	"github.com/cloudflare/cloudflare-go/v3/filters"
-	"github.com/cloudflare/cloudflare-go/v3/firewall"
-	"github.com/cloudflare/cloudflare-go/v3/healthchecks"
-	"github.com/cloudflare/cloudflare-go/v3/hostnames"
-	"github.com/cloudflare/cloudflare-go/v3/hyperdrive"
-	"github.com/cloudflare/cloudflare-go/v3/iam"
-	"github.com/cloudflare/cloudflare-go/v3/images"
-	"github.com/cloudflare/cloudflare-go/v3/intel"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/ips"
-	"github.com/cloudflare/cloudflare-go/v3/keyless_certificates"
-	"github.com/cloudflare/cloudflare-go/v3/kv"
-	"github.com/cloudflare/cloudflare-go/v3/load_balancers"
-	"github.com/cloudflare/cloudflare-go/v3/logpush"
-	"github.com/cloudflare/cloudflare-go/v3/logs"
-	"github.com/cloudflare/cloudflare-go/v3/magic_network_monitoring"
-	"github.com/cloudflare/cloudflare-go/v3/magic_transit"
-	"github.com/cloudflare/cloudflare-go/v3/managed_transforms"
-	"github.com/cloudflare/cloudflare-go/v3/memberships"
-	"github.com/cloudflare/cloudflare-go/v3/mtls_certificates"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/origin_ca_certificates"
-	"github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption"
-	"github.com/cloudflare/cloudflare-go/v3/origin_tls_client_auth"
-	"github.com/cloudflare/cloudflare-go/v3/page_shield"
-	"github.com/cloudflare/cloudflare-go/v3/pagerules"
-	"github.com/cloudflare/cloudflare-go/v3/pages"
-	"github.com/cloudflare/cloudflare-go/v3/queues"
-	"github.com/cloudflare/cloudflare-go/v3/r2"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
-	"github.com/cloudflare/cloudflare-go/v3/rate_limits"
-	"github.com/cloudflare/cloudflare-go/v3/registrar"
-	"github.com/cloudflare/cloudflare-go/v3/request_tracers"
-	"github.com/cloudflare/cloudflare-go/v3/rules"
-	"github.com/cloudflare/cloudflare-go/v3/rulesets"
-	"github.com/cloudflare/cloudflare-go/v3/rum"
-	"github.com/cloudflare/cloudflare-go/v3/secondary_dns"
-	"github.com/cloudflare/cloudflare-go/v3/snippets"
-	"github.com/cloudflare/cloudflare-go/v3/spectrum"
-	"github.com/cloudflare/cloudflare-go/v3/speed"
-	"github.com/cloudflare/cloudflare-go/v3/ssl"
-	"github.com/cloudflare/cloudflare-go/v3/storage"
-	"github.com/cloudflare/cloudflare-go/v3/stream"
-	"github.com/cloudflare/cloudflare-go/v3/turnstile"
-	"github.com/cloudflare/cloudflare-go/v3/url_normalization"
-	"github.com/cloudflare/cloudflare-go/v3/url_scanner"
-	"github.com/cloudflare/cloudflare-go/v3/user"
-	"github.com/cloudflare/cloudflare-go/v3/vectorize"
-	"github.com/cloudflare/cloudflare-go/v3/waiting_rooms"
-	"github.com/cloudflare/cloudflare-go/v3/warp_connector"
-	"github.com/cloudflare/cloudflare-go/v3/web3"
-	"github.com/cloudflare/cloudflare-go/v3/workers"
-	"github.com/cloudflare/cloudflare-go/v3/workers_for_platforms"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
+	"github.com/cloudflare/cloudflare-go/v4/abuse_reports"
+	"github.com/cloudflare/cloudflare-go/v4/accounts"
+	"github.com/cloudflare/cloudflare-go/v4/acm"
+	"github.com/cloudflare/cloudflare-go/v4/addressing"
+	"github.com/cloudflare/cloudflare-go/v4/ai"
+	"github.com/cloudflare/cloudflare-go/v4/ai_gateway"
+	"github.com/cloudflare/cloudflare-go/v4/alerting"
+	"github.com/cloudflare/cloudflare-go/v4/api_gateway"
+	"github.com/cloudflare/cloudflare-go/v4/argo"
+	"github.com/cloudflare/cloudflare-go/v4/audit_logs"
+	"github.com/cloudflare/cloudflare-go/v4/billing"
+	"github.com/cloudflare/cloudflare-go/v4/bot_management"
+	"github.com/cloudflare/cloudflare-go/v4/botnet_feed"
+	"github.com/cloudflare/cloudflare-go/v4/brand_protection"
+	"github.com/cloudflare/cloudflare-go/v4/cache"
+	"github.com/cloudflare/cloudflare-go/v4/calls"
+	"github.com/cloudflare/cloudflare-go/v4/certificate_authorities"
+	"github.com/cloudflare/cloudflare-go/v4/client_certificates"
+	"github.com/cloudflare/cloudflare-go/v4/cloud_connector"
+	"github.com/cloudflare/cloudflare-go/v4/cloudforce_one"
+	"github.com/cloudflare/cloudflare-go/v4/content_scanning"
+	"github.com/cloudflare/cloudflare-go/v4/custom_certificates"
+	"github.com/cloudflare/cloudflare-go/v4/custom_hostnames"
+	"github.com/cloudflare/cloudflare-go/v4/custom_nameservers"
+	"github.com/cloudflare/cloudflare-go/v4/d1"
+	"github.com/cloudflare/cloudflare-go/v4/dcv_delegation"
+	"github.com/cloudflare/cloudflare-go/v4/diagnostics"
+	"github.com/cloudflare/cloudflare-go/v4/dns"
+	"github.com/cloudflare/cloudflare-go/v4/dns_firewall"
+	"github.com/cloudflare/cloudflare-go/v4/durable_objects"
+	"github.com/cloudflare/cloudflare-go/v4/email_routing"
+	"github.com/cloudflare/cloudflare-go/v4/email_security"
+	"github.com/cloudflare/cloudflare-go/v4/filters"
+	"github.com/cloudflare/cloudflare-go/v4/firewall"
+	"github.com/cloudflare/cloudflare-go/v4/healthchecks"
+	"github.com/cloudflare/cloudflare-go/v4/hostnames"
+	"github.com/cloudflare/cloudflare-go/v4/hyperdrive"
+	"github.com/cloudflare/cloudflare-go/v4/iam"
+	"github.com/cloudflare/cloudflare-go/v4/images"
+	"github.com/cloudflare/cloudflare-go/v4/intel"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/ips"
+	"github.com/cloudflare/cloudflare-go/v4/keyless_certificates"
+	"github.com/cloudflare/cloudflare-go/v4/kv"
+	"github.com/cloudflare/cloudflare-go/v4/leaked_credential_checks"
+	"github.com/cloudflare/cloudflare-go/v4/load_balancers"
+	"github.com/cloudflare/cloudflare-go/v4/logpush"
+	"github.com/cloudflare/cloudflare-go/v4/logs"
+	"github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring"
+	"github.com/cloudflare/cloudflare-go/v4/magic_transit"
+	"github.com/cloudflare/cloudflare-go/v4/managed_transforms"
+	"github.com/cloudflare/cloudflare-go/v4/memberships"
+	"github.com/cloudflare/cloudflare-go/v4/mtls_certificates"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/origin_ca_certificates"
+	"github.com/cloudflare/cloudflare-go/v4/origin_post_quantum_encryption"
+	"github.com/cloudflare/cloudflare-go/v4/origin_tls_client_auth"
+	"github.com/cloudflare/cloudflare-go/v4/page_rules"
+	"github.com/cloudflare/cloudflare-go/v4/page_shield"
+	"github.com/cloudflare/cloudflare-go/v4/pages"
+	"github.com/cloudflare/cloudflare-go/v4/queues"
+	"github.com/cloudflare/cloudflare-go/v4/r2"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
+	"github.com/cloudflare/cloudflare-go/v4/rate_limits"
+	"github.com/cloudflare/cloudflare-go/v4/registrar"
+	"github.com/cloudflare/cloudflare-go/v4/request_tracers"
+	"github.com/cloudflare/cloudflare-go/v4/resource_sharing"
+	"github.com/cloudflare/cloudflare-go/v4/rules"
+	"github.com/cloudflare/cloudflare-go/v4/rulesets"
+	"github.com/cloudflare/cloudflare-go/v4/rum"
+	"github.com/cloudflare/cloudflare-go/v4/security_txt"
+	"github.com/cloudflare/cloudflare-go/v4/snippets"
+	"github.com/cloudflare/cloudflare-go/v4/spectrum"
+	"github.com/cloudflare/cloudflare-go/v4/speed"
+	"github.com/cloudflare/cloudflare-go/v4/ssl"
+	"github.com/cloudflare/cloudflare-go/v4/stream"
+	"github.com/cloudflare/cloudflare-go/v4/turnstile"
+	"github.com/cloudflare/cloudflare-go/v4/url_normalization"
+	"github.com/cloudflare/cloudflare-go/v4/url_scanner"
+	"github.com/cloudflare/cloudflare-go/v4/user"
+	"github.com/cloudflare/cloudflare-go/v4/vectorize"
+	"github.com/cloudflare/cloudflare-go/v4/waiting_rooms"
+	"github.com/cloudflare/cloudflare-go/v4/web3"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
+	"github.com/cloudflare/cloudflare-go/v4/workers_for_platforms"
+	"github.com/cloudflare/cloudflare-go/v4/workflows"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4/zones"
 )
 
 // Client creates a struct with services and top level methods that help with
@@ -115,8 +118,8 @@ type Client struct {
 	CustomCertificates          *custom_certificates.CustomCertificateService
 	CustomHostnames             *custom_hostnames.CustomHostnameService
 	CustomNameservers           *custom_nameservers.CustomNameserverService
+	DNSFirewall                 *dns_firewall.DNSFirewallService
 	DNS                         *dns.DNSService
-	DNSSEC                      *dnssec.DNSSECService
 	EmailSecurity               *email_security.EmailSecurityService
 	EmailRouting                *email_routing.EmailRoutingService
 	Filters                     *filters.FilterService
@@ -126,9 +129,8 @@ type Client struct {
 	Logpush                     *logpush.LogpushService
 	Logs                        *logs.LogService
 	OriginTLSClientAuth         *origin_tls_client_auth.OriginTLSClientAuthService
-	Pagerules                   *pagerules.PageruleService
+	PageRules                   *page_rules.PageRuleService
 	RateLimits                  *rate_limits.RateLimitService
-	SecondaryDNS                *secondary_dns.SecondaryDNSService
 	WaitingRooms                *waiting_rooms.WaitingRoomService
 	Web3                        *web3.Web3Service
 	Workers                     *workers.WorkerService
@@ -155,12 +157,10 @@ type Client struct {
 	Registrar                   *registrar.RegistrarService
 	RequestTracers              *request_tracers.RequestTracerService
 	Rules                       *rules.RuleService
-	Storage                     *storage.StorageService
 	Stream                      *stream.StreamService
 	Alerting                    *alerting.AlertingService
 	D1                          *d1.D1Service
 	R2                          *r2.R2Service
-	WARPConnector               *warp_connector.WARPConnectorService
 	WorkersForPlatforms         *workers_for_platforms.WorkersForPlatformService
 	ZeroTrust                   *zero_trust.ZeroTrustService
 	Turnstile                   *turnstile.TurnstileService
@@ -177,11 +177,17 @@ type Client struct {
 	Snippets                    *snippets.SnippetService
 	Calls                       *calls.CallService
 	CloudforceOne               *cloudforce_one.CloudforceOneService
-	EventNotifications          *event_notifications.EventNotificationService
 	AIGateway                   *ai_gateway.AIGatewayService
 	IAM                         *iam.IAMService
 	CloudConnector              *cloud_connector.CloudConnectorService
 	BotnetFeed                  *botnet_feed.BotnetFeedService
+	SecurityTXT                 *security_txt.SecurityTXTService
+	Workflows                   *workflows.WorkflowService
+	ResourceSharing             *resource_sharing.ResourceSharingService
+	LeakedCredentialChecks      *leaked_credential_checks.LeakedCredentialCheckService
+	ContentScanning             *content_scanning.ContentScanningService
+	AbuseReports                *abuse_reports.AbuseReportService
+	AI                          *ai.AIService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -223,8 +229,8 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CustomCertificates = custom_certificates.NewCustomCertificateService(opts...)
 	r.CustomHostnames = custom_hostnames.NewCustomHostnameService(opts...)
 	r.CustomNameservers = custom_nameservers.NewCustomNameserverService(opts...)
+	r.DNSFirewall = dns_firewall.NewDNSFirewallService(opts...)
 	r.DNS = dns.NewDNSService(opts...)
-	r.DNSSEC = dnssec.NewDNSSECService(opts...)
 	r.EmailSecurity = email_security.NewEmailSecurityService(opts...)
 	r.EmailRouting = email_routing.NewEmailRoutingService(opts...)
 	r.Filters = filters.NewFilterService(opts...)
@@ -234,9 +240,8 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Logpush = logpush.NewLogpushService(opts...)
 	r.Logs = logs.NewLogService(opts...)
 	r.OriginTLSClientAuth = origin_tls_client_auth.NewOriginTLSClientAuthService(opts...)
-	r.Pagerules = pagerules.NewPageruleService(opts...)
+	r.PageRules = page_rules.NewPageRuleService(opts...)
 	r.RateLimits = rate_limits.NewRateLimitService(opts...)
-	r.SecondaryDNS = secondary_dns.NewSecondaryDNSService(opts...)
 	r.WaitingRooms = waiting_rooms.NewWaitingRoomService(opts...)
 	r.Web3 = web3.NewWeb3Service(opts...)
 	r.Workers = workers.NewWorkerService(opts...)
@@ -263,12 +268,10 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Registrar = registrar.NewRegistrarService(opts...)
 	r.RequestTracers = request_tracers.NewRequestTracerService(opts...)
 	r.Rules = rules.NewRuleService(opts...)
-	r.Storage = storage.NewStorageService(opts...)
 	r.Stream = stream.NewStreamService(opts...)
 	r.Alerting = alerting.NewAlertingService(opts...)
 	r.D1 = d1.NewD1Service(opts...)
 	r.R2 = r2.NewR2Service(opts...)
-	r.WARPConnector = warp_connector.NewWARPConnectorService(opts...)
 	r.WorkersForPlatforms = workers_for_platforms.NewWorkersForPlatformService(opts...)
 	r.ZeroTrust = zero_trust.NewZeroTrustService(opts...)
 	r.Turnstile = turnstile.NewTurnstileService(opts...)
@@ -285,11 +288,17 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Snippets = snippets.NewSnippetService(opts...)
 	r.Calls = calls.NewCallService(opts...)
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
-	r.EventNotifications = event_notifications.NewEventNotificationService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
 	r.IAM = iam.NewIAMService(opts...)
 	r.CloudConnector = cloud_connector.NewCloudConnectorService(opts...)
 	r.BotnetFeed = botnet_feed.NewBotnetFeedService(opts...)
+	r.SecurityTXT = security_txt.NewSecurityTXTService(opts...)
+	r.Workflows = workflows.NewWorkflowService(opts...)
+	r.ResourceSharing = resource_sharing.NewResourceSharingService(opts...)
+	r.LeakedCredentialChecks = leaked_credential_checks.NewLeakedCredentialCheckService(opts...)
+	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
+	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
+	r.AI = ai.NewAIService(opts...)
 
 	return
 }

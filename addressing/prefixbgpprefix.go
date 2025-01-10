@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PrefixBGPPrefixService contains methods and other services that help with
@@ -33,6 +33,29 @@ type PrefixBGPPrefixService struct {
 func NewPrefixBGPPrefixService(opts ...option.RequestOption) (r *PrefixBGPPrefixService) {
 	r = &PrefixBGPPrefixService{}
 	r.Options = opts
+	return
+}
+
+// Create a BGP prefix, controlling the BGP advertisement status of a specific
+// subnet. When created, BGP prefixes are initially withdrawn, and can be
+// advertised with the Update BGP Prefix API.
+func (r *PrefixBGPPrefixService) New(ctx context.Context, prefixID string, params PrefixBGPPrefixNewParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
+	var env PrefixBGPPrefixNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes", params.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -125,7 +148,7 @@ func (r *PrefixBGPPrefixService) Get(ctx context.Context, prefixID string, bgpPr
 }
 
 type BGPPrefix struct {
-	// Identifier
+	// Identifier of BGP Prefix.
 	ID string `json:"id"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
 	ASN           int64                  `json:"asn,nullable"`
@@ -221,13 +244,67 @@ func (r bgpPrefixOnDemandJSON) RawJSON() string {
 	return r.raw
 }
 
+type PrefixBGPPrefixNewParams struct {
+	// Identifier of a Cloudflare account.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	CIDR param.Field[string] `json:"cidr"`
+}
+
+func (r PrefixBGPPrefixNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PrefixBGPPrefixNewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success PrefixBGPPrefixNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  BGPPrefix                                 `json:"result"`
+	JSON    prefixBGPPrefixNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// prefixBGPPrefixNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PrefixBGPPrefixNewResponseEnvelope]
+type prefixBGPPrefixNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixBGPPrefixNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixBGPPrefixNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type PrefixBGPPrefixNewResponseEnvelopeSuccess bool
+
+const (
+	PrefixBGPPrefixNewResponseEnvelopeSuccessTrue PrefixBGPPrefixNewResponseEnvelopeSuccess = true
+)
+
+func (r PrefixBGPPrefixNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPPrefixNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PrefixBGPPrefixListParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PrefixBGPPrefixEditParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string]                            `path:"account_id,required"`
 	OnDemand  param.Field[PrefixBGPPrefixEditParamsOnDemand] `json:"on_demand"`
 }
@@ -288,7 +365,7 @@ func (r PrefixBGPPrefixEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PrefixBGPPrefixGetParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

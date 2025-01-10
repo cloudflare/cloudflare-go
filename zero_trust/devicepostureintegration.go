@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DevicePostureIntegrationService contains methods and other services that help
@@ -246,24 +246,24 @@ func (r DevicePostureIntegrationNewParams) MarshalJSON() (data []byte, err error
 
 // The configuration object containing third-party integration information.
 type DevicePostureIntegrationNewParamsConfig struct {
-	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
-	APIURL param.Field[string] `json:"api_url"`
-	// The Workspace One Authorization URL depending on your region.
-	AuthURL param.Field[string] `json:"auth_url"`
-	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID param.Field[string] `json:"client_id"`
-	// The Workspace One client secret provided in the Workspace One Admin Dashboard.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The Crowdstrike customer ID.
-	CustomerID param.Field[string] `json:"customer_id"`
-	// The Uptycs client secret.
-	ClientKey param.Field[string] `json:"client_key"`
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
 	// hitting the `api_url`
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
 	// when hitting the `api_url`
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
+	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
+	APIURL param.Field[string] `json:"api_url"`
+	// The Workspace One Authorization URL depending on your region.
+	AuthURL param.Field[string] `json:"auth_url"`
+	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
+	ClientID param.Field[string] `json:"client_id"`
+	// The Uptycs client secret.
+	ClientKey param.Field[string] `json:"client_key"`
+	// The Workspace One client secret provided in the Workspace One Admin Dashboard.
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The Crowdstrike customer ID.
+	CustomerID param.Field[string] `json:"customer_id"`
 }
 
 func (r DevicePostureIntegrationNewParamsConfig) MarshalJSON() (data []byte, err error) {
@@ -501,7 +501,7 @@ type DevicePostureIntegrationDeleteParams struct {
 type DevicePostureIntegrationDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   interface{}           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureIntegrationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureIntegrationDeleteResponseEnvelopeJSON    `json:"-"`
@@ -560,24 +560,24 @@ func (r DevicePostureIntegrationEditParams) MarshalJSON() (data []byte, err erro
 
 // The configuration object containing third-party integration information.
 type DevicePostureIntegrationEditParamsConfig struct {
-	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
-	APIURL param.Field[string] `json:"api_url"`
-	// The Workspace One Authorization URL depending on your region.
-	AuthURL param.Field[string] `json:"auth_url"`
-	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID param.Field[string] `json:"client_id"`
-	// The Workspace One client secret provided in the Workspace One Admin Dashboard.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The Crowdstrike customer ID.
-	CustomerID param.Field[string] `json:"customer_id"`
-	// The Uptycs client secret.
-	ClientKey param.Field[string] `json:"client_key"`
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
 	// hitting the `api_url`
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
 	// when hitting the `api_url`
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
+	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
+	APIURL param.Field[string] `json:"api_url"`
+	// The Workspace One Authorization URL depending on your region.
+	AuthURL param.Field[string] `json:"auth_url"`
+	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
+	ClientID param.Field[string] `json:"client_id"`
+	// The Uptycs client secret.
+	ClientKey param.Field[string] `json:"client_key"`
+	// The Workspace One client secret provided in the Workspace One Admin Dashboard.
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The Crowdstrike customer ID.
+	CustomerID param.Field[string] `json:"customer_id"`
 }
 
 func (r DevicePostureIntegrationEditParamsConfig) MarshalJSON() (data []byte, err error) {

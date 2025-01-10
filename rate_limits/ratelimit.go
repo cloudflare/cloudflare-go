@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RateLimitService contains methods and other services that help with interacting
@@ -44,15 +44,15 @@ func NewRateLimitService(opts ...option.RequestOption) (r *RateLimitService) {
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
 // for full details.
-func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body RateLimitNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *RateLimitService) New(ctx context.Context, params RateLimitNewParams, opts ...option.RequestOption) (res *RateLimit, err error) {
 	var env RateLimitNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/rate_limits", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,16 +66,16 @@ func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body 
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
 // for full details.
-func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RateLimit], err error) {
+func (r *RateLimitService) List(ctx context.Context, params RateLimitListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RateLimit], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/rate_limits", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -93,8 +93,8 @@ func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, quer
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
 // for full details.
-func (r *RateLimitService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[RateLimit] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
+func (r *RateLimitService) ListAutoPaging(ctx context.Context, params RateLimitListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[RateLimit] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing rate limit.
@@ -103,18 +103,18 @@ func (r *RateLimitService) ListAutoPaging(ctx context.Context, zoneIdentifier st
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
 // for full details.
-func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitDeleteResponse, err error) {
+func (r *RateLimitService) Delete(ctx context.Context, rateLimitID string, body RateLimitDeleteParams, opts ...option.RequestOption) (res *RateLimitDeleteResponse, err error) {
 	var env RateLimitDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if rateLimitID == "" {
+		err = errors.New("missing required rate_limit_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
+	path := fmt.Sprintf("zones/%s/rate_limits/%s", body.ZoneID, rateLimitID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -129,19 +129,19 @@ func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
 // for full details.
-func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id string, body RateLimitEditParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *RateLimitService) Edit(ctx context.Context, rateLimitID string, params RateLimitEditParams, opts ...option.RequestOption) (res *RateLimit, err error) {
 	var env RateLimitEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if rateLimitID == "" {
+		err = errors.New("missing required rate_limit_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/rate_limits/%s", params.ZoneID, rateLimitID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -155,18 +155,18 @@ func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id s
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
 // for full details.
-func (r *RateLimitService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *RateLimitService) Get(ctx context.Context, rateLimitID string, query RateLimitGetParams, opts ...option.RequestOption) (res *RateLimit, err error) {
 	var env RateLimitGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if rateLimitID == "" {
+		err = errors.New("missing required rate_limit_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
+	path := fmt.Sprintf("zones/%s/rate_limits/%s", query.ZoneID, rateLimitID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -524,14 +524,41 @@ func (r rateLimitMatchResponseJSON) RawJSON() string {
 
 type RateLimitDeleteResponse struct {
 	// The unique identifier of the rate limit.
-	ID   string                      `json:"id"`
-	JSON rateLimitDeleteResponseJSON `json:"-"`
+	ID string `json:"id"`
+	// The action to perform when the threshold of matched traffic within the
+	// configured period is exceeded.
+	Action RateLimitDeleteResponseAction `json:"action"`
+	// Criteria specifying when the current rate limit should be bypassed. You can
+	// specify that the rate limit should not apply to one or more URLs.
+	Bypass []RateLimitDeleteResponseBypass `json:"bypass"`
+	// An informative summary of the rate limit. This value is sanitized and any tags
+	// will be removed.
+	Description string `json:"description"`
+	// When true, indicates that the rate limit is currently disabled.
+	Disabled bool `json:"disabled"`
+	// Determines which traffic the rate limit counts towards the threshold.
+	Match RateLimitDeleteResponseMatch `json:"match"`
+	// The time in seconds (an integer value) to count matching traffic. If the count
+	// exceeds the configured threshold within this period, Cloudflare will perform the
+	// configured action.
+	Period float64 `json:"period"`
+	// The threshold that will trigger the configured mitigation action. Configure this
+	// value along with the `period` property to establish a threshold per period.
+	Threshold float64                     `json:"threshold"`
+	JSON      rateLimitDeleteResponseJSON `json:"-"`
 }
 
 // rateLimitDeleteResponseJSON contains the JSON metadata for the struct
 // [RateLimitDeleteResponse]
 type rateLimitDeleteResponseJSON struct {
 	ID          apijson.Field
+	Action      apijson.Field
+	Bypass      apijson.Field
+	Description apijson.Field
+	Disabled    apijson.Field
+	Match       apijson.Field
+	Period      apijson.Field
+	Threshold   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -544,7 +571,268 @@ func (r rateLimitDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// The action to perform when the threshold of matched traffic within the
+// configured period is exceeded.
+type RateLimitDeleteResponseAction struct {
+	// The action to perform.
+	Mode RateLimitDeleteResponseActionMode `json:"mode"`
+	// A custom content type and reponse to return when the threshold is exceeded. The
+	// custom response configured in this object will override the custom error for the
+	// zone. This object is optional. Notes: If you omit this object, Cloudflare will
+	// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
+	// or "js_challenge", Cloudflare will use the zone challenge pages and you should
+	// not provide the "response" object.
+	Response RateLimitDeleteResponseActionResponse `json:"response"`
+	// The time in seconds during which Cloudflare will perform the mitigation action.
+	// Must be an integer value greater than or equal to the period. Notes: If "mode"
+	// is "challenge", "managed_challenge", or "js_challenge", Cloudflare will use the
+	// zone's Challenge Passage time and you should not provide this value.
+	Timeout float64                           `json:"timeout"`
+	JSON    rateLimitDeleteResponseActionJSON `json:"-"`
+}
+
+// rateLimitDeleteResponseActionJSON contains the JSON metadata for the struct
+// [RateLimitDeleteResponseAction]
+type rateLimitDeleteResponseActionJSON struct {
+	Mode        apijson.Field
+	Response    apijson.Field
+	Timeout     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseAction) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitDeleteResponseActionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action to perform.
+type RateLimitDeleteResponseActionMode string
+
+const (
+	RateLimitDeleteResponseActionModeSimulate         RateLimitDeleteResponseActionMode = "simulate"
+	RateLimitDeleteResponseActionModeBan              RateLimitDeleteResponseActionMode = "ban"
+	RateLimitDeleteResponseActionModeChallenge        RateLimitDeleteResponseActionMode = "challenge"
+	RateLimitDeleteResponseActionModeJSChallenge      RateLimitDeleteResponseActionMode = "js_challenge"
+	RateLimitDeleteResponseActionModeManagedChallenge RateLimitDeleteResponseActionMode = "managed_challenge"
+)
+
+func (r RateLimitDeleteResponseActionMode) IsKnown() bool {
+	switch r {
+	case RateLimitDeleteResponseActionModeSimulate, RateLimitDeleteResponseActionModeBan, RateLimitDeleteResponseActionModeChallenge, RateLimitDeleteResponseActionModeJSChallenge, RateLimitDeleteResponseActionModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
+// A custom content type and reponse to return when the threshold is exceeded. The
+// custom response configured in this object will override the custom error for the
+// zone. This object is optional. Notes: If you omit this object, Cloudflare will
+// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
+// or "js_challenge", Cloudflare will use the zone challenge pages and you should
+// not provide the "response" object.
+type RateLimitDeleteResponseActionResponse struct {
+	// The response body to return. The value must conform to the configured content
+	// type.
+	Body string `json:"body"`
+	// The content type of the body. Must be one of the following: `text/plain`,
+	// `text/xml`, or `application/json`.
+	ContentType string                                    `json:"content_type"`
+	JSON        rateLimitDeleteResponseActionResponseJSON `json:"-"`
+}
+
+// rateLimitDeleteResponseActionResponseJSON contains the JSON metadata for the
+// struct [RateLimitDeleteResponseActionResponse]
+type rateLimitDeleteResponseActionResponseJSON struct {
+	Body        apijson.Field
+	ContentType apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseActionResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitDeleteResponseActionResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RateLimitDeleteResponseBypass struct {
+	Name RateLimitDeleteResponseBypassName `json:"name"`
+	// The URL to bypass.
+	Value string                            `json:"value"`
+	JSON  rateLimitDeleteResponseBypassJSON `json:"-"`
+}
+
+// rateLimitDeleteResponseBypassJSON contains the JSON metadata for the struct
+// [RateLimitDeleteResponseBypass]
+type rateLimitDeleteResponseBypassJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseBypass) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitDeleteResponseBypassJSON) RawJSON() string {
+	return r.raw
+}
+
+type RateLimitDeleteResponseBypassName string
+
+const (
+	RateLimitDeleteResponseBypassNameURL RateLimitDeleteResponseBypassName = "url"
+)
+
+func (r RateLimitDeleteResponseBypassName) IsKnown() bool {
+	switch r {
+	case RateLimitDeleteResponseBypassNameURL:
+		return true
+	}
+	return false
+}
+
+// Determines which traffic the rate limit counts towards the threshold.
+type RateLimitDeleteResponseMatch struct {
+	Headers  []RateLimitDeleteResponseMatchHeader `json:"headers"`
+	Request  RateLimitDeleteResponseMatchRequest  `json:"request"`
+	Response RateLimitDeleteResponseMatchResponse `json:"response"`
+	JSON     rateLimitDeleteResponseMatchJSON     `json:"-"`
+}
+
+// rateLimitDeleteResponseMatchJSON contains the JSON metadata for the struct
+// [RateLimitDeleteResponseMatch]
+type rateLimitDeleteResponseMatchJSON struct {
+	Headers     apijson.Field
+	Request     apijson.Field
+	Response    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitDeleteResponseMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+type RateLimitDeleteResponseMatchHeader struct {
+	// The name of the response header to match.
+	Name string `json:"name"`
+	// The operator used when matching: `eq` means "equal" and `ne` means "not equal".
+	Op RateLimitDeleteResponseMatchHeadersOp `json:"op"`
+	// The value of the response header, which must match exactly.
+	Value string                                 `json:"value"`
+	JSON  rateLimitDeleteResponseMatchHeaderJSON `json:"-"`
+}
+
+// rateLimitDeleteResponseMatchHeaderJSON contains the JSON metadata for the struct
+// [RateLimitDeleteResponseMatchHeader]
+type rateLimitDeleteResponseMatchHeaderJSON struct {
+	Name        apijson.Field
+	Op          apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseMatchHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitDeleteResponseMatchHeaderJSON) RawJSON() string {
+	return r.raw
+}
+
+// The operator used when matching: `eq` means "equal" and `ne` means "not equal".
+type RateLimitDeleteResponseMatchHeadersOp string
+
+const (
+	RateLimitDeleteResponseMatchHeadersOpEq RateLimitDeleteResponseMatchHeadersOp = "eq"
+	RateLimitDeleteResponseMatchHeadersOpNe RateLimitDeleteResponseMatchHeadersOp = "ne"
+)
+
+func (r RateLimitDeleteResponseMatchHeadersOp) IsKnown() bool {
+	switch r {
+	case RateLimitDeleteResponseMatchHeadersOpEq, RateLimitDeleteResponseMatchHeadersOpNe:
+		return true
+	}
+	return false
+}
+
+type RateLimitDeleteResponseMatchRequest struct {
+	// The HTTP methods to match. You can specify a subset (for example,
+	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
+	// creating a rate limit.
+	Methods []Methods `json:"methods"`
+	// The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both
+	// schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is
+	// optional.
+	Schemes []string `json:"schemes"`
+	// The URL pattern to match, composed of a host and a path such as
+	// `example.org/path*`. Normalization is applied before the pattern is matched. `*`
+	// wildcards are expanded to match applicable traffic. Query strings are not
+	// matched. Set the value to `*` to match all traffic to your zone.
+	URL  string                                  `json:"url"`
+	JSON rateLimitDeleteResponseMatchRequestJSON `json:"-"`
+}
+
+// rateLimitDeleteResponseMatchRequestJSON contains the JSON metadata for the
+// struct [RateLimitDeleteResponseMatchRequest]
+type rateLimitDeleteResponseMatchRequestJSON struct {
+	Methods     apijson.Field
+	Schemes     apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseMatchRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitDeleteResponseMatchRequestJSON) RawJSON() string {
+	return r.raw
+}
+
+type RateLimitDeleteResponseMatchResponse struct {
+	// When true, only the uncached traffic served from your origin servers will count
+	// towards rate limiting. In this case, any cached traffic served by Cloudflare
+	// will not count towards rate limiting. This field is optional. Notes: This field
+	// is deprecated. Instead, use response headers and set "origin_traffic" to "false"
+	// to avoid legacy behaviour interacting with the "response_headers" property.
+	OriginTraffic bool                                     `json:"origin_traffic"`
+	JSON          rateLimitDeleteResponseMatchResponseJSON `json:"-"`
+}
+
+// rateLimitDeleteResponseMatchResponseJSON contains the JSON metadata for the
+// struct [RateLimitDeleteResponseMatchResponse]
+type rateLimitDeleteResponseMatchResponseJSON struct {
+	OriginTraffic apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseMatchResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitDeleteResponseMatchResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
 	Action param.Field[RateLimitNewParamsAction] `json:"action,required"`
@@ -700,7 +988,7 @@ func (r RateLimitNewParamsMatchResponse) MarshalJSON() (data []byte, err error) 
 type RateLimitNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   RateLimit             `json:"result,required"`
 	// Whether the API call was successful
 	Success RateLimitNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitNewResponseEnvelopeJSON    `json:"-"`
@@ -741,6 +1029,8 @@ func (r RateLimitNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RateLimitListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// The maximum number of results per page. You can only set the value to `1` or to
@@ -754,6 +1044,11 @@ func (r RateLimitListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type RateLimitDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RateLimitDeleteResponseEnvelope struct {
@@ -800,6 +1095,8 @@ func (r RateLimitDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RateLimitEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
 	Action param.Field[RateLimitEditParamsAction] `json:"action,required"`
@@ -955,7 +1252,7 @@ func (r RateLimitEditParamsMatchResponse) MarshalJSON() (data []byte, err error)
 type RateLimitEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   RateLimit             `json:"result,required"`
 	// Whether the API call was successful
 	Success RateLimitEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitEditResponseEnvelopeJSON    `json:"-"`
@@ -995,10 +1292,15 @@ func (r RateLimitEditResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type RateLimitGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type RateLimitGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   RateLimit             `json:"result,required"`
 	// Whether the API call was successful
 	Success RateLimitGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitGetResponseEnvelopeJSON    `json:"-"`

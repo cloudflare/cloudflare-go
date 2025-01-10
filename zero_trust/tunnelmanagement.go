@@ -7,14 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TunnelManagementService contains methods and other services that help with
@@ -38,7 +36,7 @@ func NewTunnelManagementService(opts ...option.RequestOption) (r *TunnelManageme
 
 // Gets a management token used to access the management resources (i.e. Streaming
 // Logs) of a tunnel.
-func (r *TunnelManagementService) New(ctx context.Context, tunnelID string, params TunnelManagementNewParams, opts ...option.RequestOption) (res *TunnelManagementNewResponseUnion, err error) {
+func (r *TunnelManagementService) New(ctx context.Context, tunnelID string, params TunnelManagementNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env TunnelManagementNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -57,31 +55,6 @@ func (r *TunnelManagementService) New(ctx context.Context, tunnelID string, para
 	res = &env.Result
 	return
 }
-
-// Union satisfied by [zero_trust.TunnelManagementNewResponseArray] or
-// [shared.UnionString].
-type TunnelManagementNewResponseUnion interface {
-	ImplementsZeroTrustTunnelManagementNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelManagementNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TunnelManagementNewResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type TunnelManagementNewResponseArray []interface{}
-
-func (r TunnelManagementNewResponseArray) ImplementsZeroTrustTunnelManagementNewResponseUnion() {}
 
 type TunnelManagementNewParams struct {
 	// Cloudflare account ID
@@ -109,9 +82,9 @@ func (r TunnelManagementNewParamsResource) IsKnown() bool {
 }
 
 type TunnelManagementNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   TunnelManagementNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   string                `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelManagementNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelManagementNewResponseEnvelopeJSON    `json:"-"`

@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // VariantService contains methods and other services that help with interacting
@@ -40,7 +40,7 @@ func NewVariantService(opts ...option.RequestOption) (r *VariantService) {
 // 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
 // does not serve the variant requested, the response will not be cached. This will
 // be indicated with BYPASS cache status in the response headers.
-func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, opts ...option.RequestOption) (res *CacheVariant, err error) {
+func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, opts ...option.RequestOption) (res *VariantDeleteResponse, err error) {
 	var env VariantDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
@@ -98,71 +98,68 @@ func (r *VariantService) Get(ctx context.Context, query VariantGetParams, opts .
 	return
 }
 
-// Variant support enables caching variants of images with certain file extensions
-// in addition to the original. This only applies when the origin server sends the
-// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
-// does not serve the variant requested, the response will not be cached. This will
-// be indicated with BYPASS cache status in the response headers.
-type CacheVariant struct {
+type VariantDeleteResponse struct {
 	// ID of the zone setting.
-	ID CacheVariantIdentifier `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time        `json:"modified_on,required,nullable" format:"date-time"`
-	JSON       cacheVariantJSON `json:"-"`
+	ID VariantDeleteResponseID `json:"id,required"`
+	// Whether the setting is editable
+	Editable bool `json:"editable,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       variantDeleteResponseJSON `json:"-"`
 }
 
-// cacheVariantJSON contains the JSON metadata for the struct [CacheVariant]
-type cacheVariantJSON struct {
+// variantDeleteResponseJSON contains the JSON metadata for the struct
+// [VariantDeleteResponse]
+type variantDeleteResponseJSON struct {
 	ID          apijson.Field
+	Editable    apijson.Field
 	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CacheVariant) UnmarshalJSON(data []byte) (err error) {
+func (r *VariantDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r cacheVariantJSON) RawJSON() string {
+func (r variantDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // ID of the zone setting.
-type CacheVariantIdentifier string
+type VariantDeleteResponseID string
 
 const (
-	CacheVariantIdentifierVariants CacheVariantIdentifier = "variants"
+	VariantDeleteResponseIDVariants VariantDeleteResponseID = "variants"
 )
 
-func (r CacheVariantIdentifier) IsKnown() bool {
+func (r VariantDeleteResponseID) IsKnown() bool {
 	switch r {
-	case CacheVariantIdentifierVariants:
+	case VariantDeleteResponseIDVariants:
 		return true
 	}
 	return false
 }
 
-// Variant support enables caching variants of images with certain file extensions
-// in addition to the original. This only applies when the origin server sends the
-// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
-// does not serve the variant requested, the response will not be cached. This will
-// be indicated with BYPASS cache status in the response headers.
 type VariantEditResponse struct {
 	// ID of the zone setting.
-	ID CacheVariantIdentifier `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value VariantEditResponseValue `json:"value,required"`
-	JSON  variantEditResponseJSON  `json:"-"`
+	ID VariantEditResponseID `json:"id,required"`
+	// Whether the setting is editable
+	Editable bool `json:"editable,required"`
+	// The value of the feature
+	Value string `json:"value,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time               `json:"modified_on,nullable" format:"date-time"`
+	JSON       variantEditResponseJSON `json:"-"`
 }
 
 // variantEditResponseJSON contains the JSON metadata for the struct
 // [VariantEditResponse]
 type variantEditResponseJSON struct {
 	ID          apijson.Field
-	ModifiedOn  apijson.Field
+	Editable    apijson.Field
 	Value       apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -175,91 +172,40 @@ func (r variantEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Value of the zone setting.
-type VariantEditResponseValue struct {
-	// List of strings with the MIME types of all the variants that should be served
-	// for avif.
-	AVIF []string `json:"avif"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for bmp.
-	BMP []string `json:"bmp"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for gif.
-	GIF []string `json:"gif"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for jp2.
-	JP2 []string `json:"jp2"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for jpeg.
-	JPEG []string `json:"jpeg"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for jpg.
-	JPG []string `json:"jpg"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for jpg2.
-	JPG2 []string `json:"jpg2"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for png.
-	PNG []string `json:"png"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for tif.
-	TIF []string `json:"tif"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for tiff.
-	TIFF []string `json:"tiff"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for webp.
-	WebP []string                     `json:"webp"`
-	JSON variantEditResponseValueJSON `json:"-"`
+// ID of the zone setting.
+type VariantEditResponseID string
+
+const (
+	VariantEditResponseIDVariants VariantEditResponseID = "variants"
+)
+
+func (r VariantEditResponseID) IsKnown() bool {
+	switch r {
+	case VariantEditResponseIDVariants:
+		return true
+	}
+	return false
 }
 
-// variantEditResponseValueJSON contains the JSON metadata for the struct
-// [VariantEditResponseValue]
-type variantEditResponseValueJSON struct {
-	AVIF        apijson.Field
-	BMP         apijson.Field
-	GIF         apijson.Field
-	JP2         apijson.Field
-	JPEG        apijson.Field
-	JPG         apijson.Field
-	JPG2        apijson.Field
-	PNG         apijson.Field
-	TIF         apijson.Field
-	TIFF        apijson.Field
-	WebP        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VariantEditResponseValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r variantEditResponseValueJSON) RawJSON() string {
-	return r.raw
-}
-
-// Variant support enables caching variants of images with certain file extensions
-// in addition to the original. This only applies when the origin server sends the
-// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
-// does not serve the variant requested, the response will not be cached. This will
-// be indicated with BYPASS cache status in the response headers.
 type VariantGetResponse struct {
 	// ID of the zone setting.
-	ID CacheVariantIdentifier `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value VariantGetResponseValue `json:"value,required"`
-	JSON  variantGetResponseJSON  `json:"-"`
+	ID VariantGetResponseID `json:"id,required"`
+	// Whether the setting is editable
+	Editable bool `json:"editable,required"`
+	// The value of the feature
+	Value string `json:"value,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time              `json:"modified_on,nullable" format:"date-time"`
+	JSON       variantGetResponseJSON `json:"-"`
 }
 
 // variantGetResponseJSON contains the JSON metadata for the struct
 // [VariantGetResponse]
 type variantGetResponseJSON struct {
 	ID          apijson.Field
-	ModifiedOn  apijson.Field
+	Editable    apijson.Field
 	Value       apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -272,68 +218,19 @@ func (r variantGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Value of the zone setting.
-type VariantGetResponseValue struct {
-	// List of strings with the MIME types of all the variants that should be served
-	// for avif.
-	AVIF []string `json:"avif"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for bmp.
-	BMP []string `json:"bmp"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for gif.
-	GIF []string `json:"gif"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for jp2.
-	JP2 []string `json:"jp2"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for jpeg.
-	JPEG []string `json:"jpeg"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for jpg.
-	JPG []string `json:"jpg"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for jpg2.
-	JPG2 []string `json:"jpg2"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for png.
-	PNG []string `json:"png"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for tif.
-	TIF []string `json:"tif"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for tiff.
-	TIFF []string `json:"tiff"`
-	// List of strings with the MIME types of all the variants that should be served
-	// for webp.
-	WebP []string                    `json:"webp"`
-	JSON variantGetResponseValueJSON `json:"-"`
-}
+// ID of the zone setting.
+type VariantGetResponseID string
 
-// variantGetResponseValueJSON contains the JSON metadata for the struct
-// [VariantGetResponseValue]
-type variantGetResponseValueJSON struct {
-	AVIF        apijson.Field
-	BMP         apijson.Field
-	GIF         apijson.Field
-	JP2         apijson.Field
-	JPEG        apijson.Field
-	JPG         apijson.Field
-	JPG2        apijson.Field
-	PNG         apijson.Field
-	TIF         apijson.Field
-	TIFF        apijson.Field
-	WebP        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	VariantGetResponseIDVariants VariantGetResponseID = "variants"
+)
 
-func (r *VariantGetResponseValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r variantGetResponseValueJSON) RawJSON() string {
-	return r.raw
+func (r VariantGetResponseID) IsKnown() bool {
+	switch r {
+	case VariantGetResponseIDVariants:
+		return true
+	}
+	return false
 }
 
 type VariantDeleteParams struct {
@@ -344,14 +241,9 @@ type VariantDeleteParams struct {
 type VariantDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Variant support enables caching variants of images with certain file extensions
-	// in addition to the original. This only applies when the origin server sends the
-	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
-	// does not serve the variant requested, the response will not be cached. This will
-	// be indicated with BYPASS cache status in the response headers.
-	Result CacheVariant `json:"result,required"`
 	// Whether the API call was successful
 	Success VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  VariantDeleteResponse                `json:"result"`
 	JSON    variantDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -360,8 +252,8 @@ type VariantDeleteResponseEnvelope struct {
 type variantDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -444,14 +336,9 @@ func (r VariantEditParamsValue) MarshalJSON() (data []byte, err error) {
 type VariantEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Variant support enables caching variants of images with certain file extensions
-	// in addition to the original. This only applies when the origin server sends the
-	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
-	// does not serve the variant requested, the response will not be cached. This will
-	// be indicated with BYPASS cache status in the response headers.
-	Result VariantEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success VariantEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  VariantEditResponse                `json:"result"`
 	JSON    variantEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -460,8 +347,8 @@ type VariantEditResponseEnvelope struct {
 type variantEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -497,14 +384,9 @@ type VariantGetParams struct {
 type VariantGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Variant support enables caching variants of images with certain file extensions
-	// in addition to the original. This only applies when the origin server sends the
-	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
-	// does not serve the variant requested, the response will not be cached. This will
-	// be indicated with BYPASS cache status in the response headers.
-	Result VariantGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success VariantGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  VariantGetResponse                `json:"result"`
 	JSON    variantGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -513,8 +395,8 @@ type VariantGetResponseEnvelope struct {
 type variantGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

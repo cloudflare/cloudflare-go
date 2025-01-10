@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/magic_transit"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/magic_transit"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestSiteACLNewWithOptionalParams(t *testing.T) {
@@ -35,19 +35,19 @@ func TestSiteACLNewWithOptionalParams(t *testing.T) {
 			LAN1: cloudflare.F(magic_transit.ACLConfigurationParam{
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
-				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
+				Ports:   cloudflare.F([]int64{int64(1)}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1"}),
 			}),
 			LAN2: cloudflare.F(magic_transit.ACLConfigurationParam{
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
-				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
+				Ports:   cloudflare.F([]int64{int64(1)}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1"}),
 			}),
 			Name:           cloudflare.F("PIN Pad - Cash Register"),
 			Description:    cloudflare.F("Allows local traffic between PIN pads and cash register."),
 			ForwardLocally: cloudflare.F(true),
-			Protocols:      cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP, magic_transit.AllowedProtocolUdp, magic_transit.AllowedProtocolIcmp}),
+			Protocols:      cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP}),
 		},
 	)
 	if err != nil {
@@ -83,17 +83,17 @@ func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
 			LAN1: cloudflare.F(magic_transit.ACLConfigurationParam{
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
-				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
+				Ports:   cloudflare.F([]int64{int64(1)}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1"}),
 			}),
 			LAN2: cloudflare.F(magic_transit.ACLConfigurationParam{
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
-				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
+				Ports:   cloudflare.F([]int64{int64(1)}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1"}),
 			}),
 			Name:      cloudflare.F("PIN Pad - Cash Register"),
-			Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP, magic_transit.AllowedProtocolUdp, magic_transit.AllowedProtocolIcmp}),
+			Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP}),
 		},
 	)
 	if err != nil {
@@ -188,17 +188,17 @@ func TestSiteACLEditWithOptionalParams(t *testing.T) {
 			LAN1: cloudflare.F(magic_transit.ACLConfigurationParam{
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
-				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
+				Ports:   cloudflare.F([]int64{int64(1)}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1"}),
 			}),
 			LAN2: cloudflare.F(magic_transit.ACLConfigurationParam{
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
-				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
+				Ports:   cloudflare.F([]int64{int64(1)}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1"}),
 			}),
 			Name:      cloudflare.F("PIN Pad - Cash Register"),
-			Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP, magic_transit.AllowedProtocolUdp, magic_transit.AllowedProtocolIcmp}),
+			Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP}),
 		},
 	)
 	if err != nil {

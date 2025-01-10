@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // UARuleService contains methods and other services that help with interacting
@@ -38,15 +38,15 @@ func NewUARuleService(opts ...option.RequestOption) (r *UARuleService) {
 }
 
 // Creates a new User Agent Blocking rule in a zone.
-func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UARuleNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *UARuleService) New(ctx context.Context, params UARuleNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env UARuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/ua_rules", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/ua_rules", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -55,19 +55,19 @@ func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UAR
 }
 
 // Updates an existing User Agent Blocking rule.
-func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id string, body UARuleUpdateParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *UARuleService) Update(ctx context.Context, uaRuleID string, params UARuleUpdateParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env UARuleUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if uaRuleID == "" {
+		err = errors.New("missing required ua_rule_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", params.ZoneID, uaRuleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -77,16 +77,16 @@ func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id st
 
 // Fetches User Agent Blocking rules in a zone. You can filter the results using
 // several optional parameters.
-func (r *UARuleService) List(ctx context.Context, zoneIdentifier string, query UARuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UARuleListResponse], err error) {
+func (r *UARuleService) List(ctx context.Context, params UARuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UARuleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/ua_rules", zoneIdentifier)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/ua_rules", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -100,23 +100,23 @@ func (r *UARuleService) List(ctx context.Context, zoneIdentifier string, query U
 
 // Fetches User Agent Blocking rules in a zone. You can filter the results using
 // several optional parameters.
-func (r *UARuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query UARuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[UARuleListResponse] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
+func (r *UARuleService) ListAutoPaging(ctx context.Context, params UARuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[UARuleListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing User Agent Blocking rule.
-func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *UARuleDeleteResponse, err error) {
+func (r *UARuleService) Delete(ctx context.Context, uaRuleID string, body UARuleDeleteParams, opts ...option.RequestOption) (res *UARuleDeleteResponse, err error) {
 	var env UARuleDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if uaRuleID == "" {
+		err = errors.New("missing required ua_rule_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
+	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", body.ZoneID, uaRuleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -126,18 +126,18 @@ func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id st
 }
 
 // Fetches the details of a User Agent Blocking rule.
-func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *UARuleService) Get(ctx context.Context, uaRuleID string, query UARuleGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env UARuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if uaRuleID == "" {
+		err = errors.New("missing required ua_rule_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
+	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", query.ZoneID, uaRuleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -249,6 +249,8 @@ func (r uaRuleDeleteResponseJSON) RawJSON() string {
 }
 
 type UARuleNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The rule configuration.
 	Configuration param.Field[UARuleNewParamsConfigurationUnion] `json:"configuration,required"`
 	// The action to apply to a matched request.
@@ -368,6 +370,8 @@ func (r UARuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The rule configuration.
 	Configuration param.Field[UARuleUpdateParamsConfigurationUnion] `json:"configuration,required"`
 	// The action to apply to a matched request.
@@ -487,6 +491,8 @@ func (r UARuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A string to search for in the description of existing rules.
 	Description param.Field[string] `query:"description"`
 	// A string to search for in the description of existing rules.
@@ -506,6 +512,11 @@ func (r UARuleListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type UARuleDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type UARuleDeleteResponseEnvelope struct {
@@ -549,6 +560,11 @@ func (r UARuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type UARuleGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type UARuleGetResponseEnvelope struct {

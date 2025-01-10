@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DLPDatasetVersionService contains methods and other services that help with
@@ -114,8 +114,10 @@ func (r DLPDatasetVersionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPDatasetVersionNewParamsBody struct {
-	EntryID   param.Field[string] `json:"entry_id" format:"uuid"`
-	EntryName param.Field[string] `json:"entry_name"`
+	EntryID    param.Field[string] `json:"entry_id" format:"uuid"`
+	EntryName  param.Field[string] `json:"entry_name"`
+	HeaderName param.Field[string] `json:"header_name"`
+	NumCells   param.Field[int64]  `json:"num_cells"`
 }
 
 func (r DLPDatasetVersionNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -132,7 +134,9 @@ type DLPDatasetVersionNewParamsBodyUnion interface {
 }
 
 type DLPDatasetVersionNewParamsBodyExistingColumn struct {
-	EntryID param.Field[string] `json:"entry_id,required" format:"uuid"`
+	EntryID    param.Field[string] `json:"entry_id,required" format:"uuid"`
+	HeaderName param.Field[string] `json:"header_name"`
+	NumCells   param.Field[int64]  `json:"num_cells"`
 }
 
 func (r DLPDatasetVersionNewParamsBodyExistingColumn) MarshalJSON() (data []byte, err error) {
@@ -143,7 +147,9 @@ func (r DLPDatasetVersionNewParamsBodyExistingColumn) implementsZeroTrustDLPData
 }
 
 type DLPDatasetVersionNewParamsBodyNewColumn struct {
-	EntryName param.Field[string] `json:"entry_name,required"`
+	EntryName  param.Field[string] `json:"entry_name,required"`
+	HeaderName param.Field[string] `json:"header_name"`
+	NumCells   param.Field[int64]  `json:"num_cells"`
 }
 
 func (r DLPDatasetVersionNewParamsBodyNewColumn) MarshalJSON() (data []byte, err error) {

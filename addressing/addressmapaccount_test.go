@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/addressing"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/addressing"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestAddressMapAccountUpdate(t *testing.T) {
@@ -29,9 +29,9 @@ func TestAddressMapAccountUpdate(t *testing.T) {
 	)
 	_, err := client.Addressing.AddressMaps.Accounts.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"055817b111884e0227e1be16a0be6ee0",
 		addressing.AddressMapAccountUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
 			Body:      map[string]interface{}{},
 		},
 	)
@@ -59,9 +59,9 @@ func TestAddressMapAccountDelete(t *testing.T) {
 	)
 	_, err := client.Addressing.AddressMaps.Accounts.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"055817b111884e0227e1be16a0be6ee0",
 		addressing.AddressMapAccountDeleteParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
 		},
 	)
 	if err != nil {

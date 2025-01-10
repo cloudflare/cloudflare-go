@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/email_security"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/email_security"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestSettingImpersonationRegistryNew(t *testing.T) {
@@ -28,12 +28,10 @@ func TestSettingImpersonationRegistryNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.ImpersonationRegistry.New(context.TODO(), email_security.SettingImpersonationRegistryNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body: email_security.SettingImpersonationRegistryNewParamsBodyEmailSecurityCreateDisplayName{
-			Email:        cloudflare.F("email"),
-			IsEmailRegex: cloudflare.F(true),
-			Name:         cloudflare.F("name"),
-		},
+		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Email:        cloudflare.F("email"),
+		IsEmailRegex: cloudflare.F(true),
+		Name:         cloudflare.F("name"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

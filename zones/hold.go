@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HoldService contains methods and other services that help with interacting with
@@ -65,6 +65,24 @@ func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts 
 	}
 	path := fmt.Sprintf("zones/%s/hold", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Update the `hold_after` and/or `include_subdomains` values on an existing zone
+// hold. The hold is enabled if the `hold_after` date-time value is in the past.
+func (r *HoldService) Edit(ctx context.Context, params HoldEditParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
+	var env HoldEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/hold", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -193,14 +211,21 @@ func (r HoldDeleteParams) URLQuery() (v url.Values) {
 }
 
 type HoldDeleteResponseEnvelope struct {
-	Result ZoneHold                       `json:"result"`
-	JSON   holdDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZoneHold              `json:"result,required"`
+	// Whether the API call was successful
+	Success HoldDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    holdDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
 // holdDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [HoldDeleteResponseEnvelope]
 type holdDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -211,6 +236,84 @@ func (r *HoldDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r holdDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type HoldDeleteResponseEnvelopeSuccess bool
+
+const (
+	HoldDeleteResponseEnvelopeSuccessTrue HoldDeleteResponseEnvelopeSuccess = true
+)
+
+func (r HoldDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HoldDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type HoldEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// If `hold_after` is provided and future-dated, the hold will be temporarily
+	// disabled, then automatically re-enabled by the system at the time specified in
+	// this RFC3339-formatted timestamp. A past-dated `hold_after` value will have no
+	// effect on an existing, enabled hold. Providing an empty string will set its
+	// value to the current time.
+	HoldAfter param.Field[string] `json:"hold_after"`
+	// If `true`, the zone hold will extend to block any subdomain of the given zone,
+	// as well as SSL4SaaS Custom Hostnames. For example, a zone hold on a zone with
+	// the hostname 'example.com' and include_subdomains=true will block 'example.com',
+	// 'staging.example.com', 'api.staging.example.com', etc.
+	IncludeSubdomains param.Field[bool] `json:"include_subdomains"`
+}
+
+func (r HoldEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type HoldEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZoneHold              `json:"result,required"`
+	// Whether the API call was successful
+	Success HoldEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    holdEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// holdEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [HoldEditResponseEnvelope]
+type holdEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HoldEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r holdEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type HoldEditResponseEnvelopeSuccess bool
+
+const (
+	HoldEditResponseEnvelopeSuccessTrue HoldEditResponseEnvelopeSuccess = true
+)
+
+func (r HoldEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HoldEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type HoldGetParams struct {

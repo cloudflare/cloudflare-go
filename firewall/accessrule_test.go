@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/firewall"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/firewall"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestAccessRuleNewWithOptionalParams(t *testing.T) {
@@ -99,7 +99,7 @@ func TestAccessRuleDeleteWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.AccessRules.Delete(
 		context.TODO(),
-		"de677e5818985db1285d0e80225f06e5",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.AccessRuleDeleteParams{
 			AccountID: cloudflare.F("account_id"),
 		},
@@ -129,7 +129,7 @@ func TestAccessRuleEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.AccessRules.Edit(
 		context.TODO(),
-		"de677e5818985db1285d0e80225f06e5",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.AccessRuleEditParams{
 			Configuration: cloudflare.F[firewall.AccessRuleEditParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
 				Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
@@ -165,7 +165,7 @@ func TestAccessRuleGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.AccessRules.Get(
 		context.TODO(),
-		"de677e5818985db1285d0e80225f06e5",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.AccessRuleGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},

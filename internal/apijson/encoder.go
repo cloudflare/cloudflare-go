@@ -7,12 +7,13 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/tidwall/sjson"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 )
 
 var encoders sync.Map // map[encoderEntry]encoderFunc
@@ -342,16 +343,18 @@ func (e *encoder) encodeMapEntries(json []byte, v reflect.Value) ([]byte, error)
 
 	iter := v.MapRange()
 	for iter.Next() {
-		var encodedKey []byte
+		var encodedKeyString string
 		if iter.Key().Type().Kind() == reflect.String {
-			encodedKey = []byte(iter.Key().String())
+			encodedKeyString = iter.Key().String()
 		} else {
 			var err error
-			encodedKey, err = keyEncoder(iter.Key())
+			encodedKeyBytes, err := keyEncoder(iter.Key())
 			if err != nil {
 				return nil, err
 			}
+			encodedKeyString = string(encodedKeyBytes)
 		}
+		encodedKey := []byte(sjsonReplacer.Replace(encodedKeyString))
 		pairs = append(pairs, mapPair{key: encodedKey, value: iter.Value()})
 	}
 
@@ -389,3 +392,7 @@ func (e *encoder) newMapEncoder(t reflect.Type) encoderFunc {
 		return json, nil
 	}
 }
+
+// If we want to set a literal key value into JSON using sjson, we need to make sure it doesn't have
+// special characters that sjson interprets as a path.
+var sjsonReplacer *strings.Replacer = strings.NewReplacer(".", "\\.", ":", "\\:", "*", "\\*")

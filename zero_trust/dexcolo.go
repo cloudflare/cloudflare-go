@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // DEXColoService contains methods and other services that help with interacting
@@ -70,9 +70,9 @@ type DEXColoListResponse = interface{}
 
 type DEXColoListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Start time for connection period in RFC3339 (ISO 8601) format.
+	// Start time for connection period in ISO (RFC3339 - ISO 8601) format
 	From param.Field[string] `query:"from,required"`
-	// End time for connection period in RFC3339 (ISO 8601) format.
+	// End time for connection period in ISO (RFC3339 - ISO 8601) format
 	To param.Field[string] `query:"to,required"`
 	// Type of usage that colos should be sorted by. If unspecified, returns all
 	// Cloudflare colos sorted alphabetically.

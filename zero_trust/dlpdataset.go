@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DLPDatasetService contains methods and other services that help with interacting
@@ -152,8 +152,11 @@ type Dataset struct {
 	NumCells        int64           `json:"num_cells,required"`
 	Secret          bool            `json:"secret,required"`
 	Status          DatasetStatus   `json:"status,required"`
-	UpdatedAt       time.Time       `json:"updated_at,required" format:"date-time"`
-	Uploads         []DatasetUpload `json:"uploads,required"`
+	// When the dataset was last updated.
+	//
+	// This includes name or description changes as well as uploads.
+	UpdatedAt time.Time       `json:"updated_at,required" format:"date-time"`
+	Uploads   []DatasetUpload `json:"uploads,required"`
 	// The description of the dataset
 	Description string      `json:"description,nullable"`
 	JSON        datasetJSON `json:"-"`

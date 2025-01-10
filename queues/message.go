@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // MessageService contains methods and other services that help with interacting
@@ -34,7 +34,7 @@ func NewMessageService(opts ...option.RequestOption) (r *MessageService) {
 	return
 }
 
-// Acknowledge + Retry messages from a Queue.
+// Acknowledge + Retry messages from a Queue
 func (r *MessageService) Ack(ctx context.Context, queueID string, params MessageAckParams, opts ...option.RequestOption) (res *MessageAckResponse, err error) {
 	var env MessageAckResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -55,7 +55,7 @@ func (r *MessageService) Ack(ctx context.Context, queueID string, params Message
 	return
 }
 
-// Pull a batch of messages from a Queue.
+// Pull a batch of messages from a Queue
 func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *[]MessagePullResponse, err error) {
 	var env MessagePullResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -104,9 +104,11 @@ func (r messageAckResponseJSON) RawJSON() string {
 }
 
 type MessagePullResponse struct {
-	ID          string                  `json:"id"`
-	Attempts    float64                 `json:"attempts"`
-	Body        string                  `json:"body"`
+	ID       string  `json:"id"`
+	Attempts float64 `json:"attempts"`
+	Body     string  `json:"body"`
+	// An ID that represents an "in-flight" message that has been pulled from a Queue.
+	// You must hold on to this ID and use it to acknowledge this message.
 	LeaseID     string                  `json:"lease_id"`
 	Metadata    interface{}             `json:"metadata"`
 	TimestampMs float64                 `json:"timestamp_ms"`
@@ -135,7 +137,7 @@ func (r messagePullResponseJSON) RawJSON() string {
 }
 
 type MessageAckParams struct {
-	// Identifier.
+	// A Resource identifier.
 	AccountID param.Field[string]                  `path:"account_id,required"`
 	Acks      param.Field[[]MessageAckParamsAck]   `json:"acks"`
 	Retries   param.Field[[]MessageAckParamsRetry] `json:"retries"`
@@ -146,7 +148,8 @@ func (r MessageAckParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MessageAckParamsAck struct {
-	// Lease ID for a message to acknowledge.
+	// An ID that represents an "in-flight" message that has been pulled from a Queue.
+	// You must hold on to this ID and use it to acknowledge this message.
 	LeaseID param.Field[string] `json:"lease_id"`
 }
 
@@ -158,7 +161,8 @@ type MessageAckParamsRetry struct {
 	// The number of seconds to delay before making the message available for another
 	// attempt.
 	DelaySeconds param.Field[float64] `json:"delay_seconds"`
-	// Lease ID for a message to retry.
+	// An ID that represents an "in-flight" message that has been pulled from a Queue.
+	// You must hold on to this ID and use it to acknowledge this message.
 	LeaseID param.Field[string] `json:"lease_id"`
 }
 
@@ -167,13 +171,12 @@ func (r MessageAckParamsRetry) MarshalJSON() (data []byte, err error) {
 }
 
 type MessageAckResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MessageAckResponse    `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    MessageAckResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo MessageAckResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       messageAckResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   MessageAckResponse    `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success MessageAckResponseEnvelopeSuccess `json:"success"`
+	JSON    messageAckResponseEnvelopeJSON    `json:"-"`
 }
 
 // messageAckResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -183,7 +186,6 @@ type messageAckResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -196,7 +198,7 @@ func (r messageAckResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicates if the API call was successful or not.
 type MessageAckResponseEnvelopeSuccess bool
 
 const (
@@ -211,45 +213,14 @@ func (r MessageAckResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type MessageAckResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64                                  `json:"total_count"`
-	JSON       messageAckResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// messageAckResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [MessageAckResponseEnvelopeResultInfo]
-type messageAckResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MessageAckResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r messageAckResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type MessagePullParams struct {
-	// Identifier.
+	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The maximum number of messages to include in a batch.
 	BatchSize param.Field[float64] `json:"batch_size"`
 	// The number of milliseconds that a message is exclusively leased. After the
 	// timeout, the message becomes available for another attempt.
-	VisibilityTimeout param.Field[float64] `json:"visibility_timeout"`
+	VisibilityTimeoutMs param.Field[float64] `json:"visibility_timeout_ms"`
 }
 
 func (r MessagePullParams) MarshalJSON() (data []byte, err error) {
@@ -257,13 +228,12 @@ func (r MessagePullParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MessagePullResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []MessagePullResponse `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    MessagePullResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo MessagePullResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       messagePullResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   []MessagePullResponse `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success MessagePullResponseEnvelopeSuccess `json:"success"`
+	JSON    messagePullResponseEnvelopeJSON    `json:"-"`
 }
 
 // messagePullResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -273,7 +243,6 @@ type messagePullResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -286,7 +255,7 @@ func (r messagePullResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicates if the API call was successful or not.
 type MessagePullResponseEnvelopeSuccess bool
 
 const (
@@ -299,35 +268,4 @@ func (r MessagePullResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type MessagePullResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64                                   `json:"total_count"`
-	JSON       messagePullResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// messagePullResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [MessagePullResponseEnvelopeResultInfo]
-type messagePullResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MessagePullResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r messagePullResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

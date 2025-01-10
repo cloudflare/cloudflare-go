@@ -8,12 +8,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // BGPLeakEventService contains methods and other services that help with
@@ -59,18 +59,16 @@ func (r *BGPLeakEventService) ListAutoPaging(ctx context.Context, query BGPLeakE
 }
 
 type BGPLeakEventListResponse struct {
-	Result     BGPLeakEventListResponseResult     `json:"result,required"`
-	ResultInfo BGPLeakEventListResponseResultInfo `json:"result_info,required"`
-	Success    bool                               `json:"success,required"`
-	JSON       bgpLeakEventListResponseJSON       `json:"-"`
+	ASNInfo []BGPLeakEventListResponseASNInfo `json:"asn_info,required"`
+	Events  []BGPLeakEventListResponseEvent   `json:"events,required"`
+	JSON    bgpLeakEventListResponseJSON      `json:"-"`
 }
 
 // bgpLeakEventListResponseJSON contains the JSON metadata for the struct
 // [BGPLeakEventListResponse]
 type bgpLeakEventListResponseJSON struct {
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
+	ASNInfo     apijson.Field
+	Events      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -83,39 +81,16 @@ func (r bgpLeakEventListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type BGPLeakEventListResponseResult struct {
-	ASNInfo []BGPLeakEventListResponseResultASNInfo `json:"asn_info,required"`
-	Events  []BGPLeakEventListResponseResultEvent   `json:"events,required"`
-	JSON    bgpLeakEventListResponseResultJSON      `json:"-"`
+type BGPLeakEventListResponseASNInfo struct {
+	ASN         int64                               `json:"asn,required"`
+	CountryCode string                              `json:"country_code,required"`
+	OrgName     string                              `json:"org_name,required"`
+	JSON        bgpLeakEventListResponseASNInfoJSON `json:"-"`
 }
 
-// bgpLeakEventListResponseResultJSON contains the JSON metadata for the struct
-// [BGPLeakEventListResponseResult]
-type bgpLeakEventListResponseResultJSON struct {
-	ASNInfo     apijson.Field
-	Events      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPLeakEventListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpLeakEventListResponseResultJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPLeakEventListResponseResultASNInfo struct {
-	ASN         int64                                     `json:"asn,required"`
-	CountryCode string                                    `json:"country_code,required"`
-	OrgName     string                                    `json:"org_name,required"`
-	JSON        bgpLeakEventListResponseResultASNInfoJSON `json:"-"`
-}
-
-// bgpLeakEventListResponseResultASNInfoJSON contains the JSON metadata for the
-// struct [BGPLeakEventListResponseResultASNInfo]
-type bgpLeakEventListResponseResultASNInfoJSON struct {
+// bgpLeakEventListResponseASNInfoJSON contains the JSON metadata for the struct
+// [BGPLeakEventListResponseASNInfo]
+type bgpLeakEventListResponseASNInfoJSON struct {
 	ASN         apijson.Field
 	CountryCode apijson.Field
 	OrgName     apijson.Field
@@ -123,34 +98,34 @@ type bgpLeakEventListResponseResultASNInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BGPLeakEventListResponseResultASNInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *BGPLeakEventListResponseASNInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bgpLeakEventListResponseResultASNInfoJSON) RawJSON() string {
+func (r bgpLeakEventListResponseASNInfoJSON) RawJSON() string {
 	return r.raw
 }
 
-type BGPLeakEventListResponseResultEvent struct {
-	ID          int64                                   `json:"id,required"`
-	Countries   []string                                `json:"countries,required"`
-	DetectedTs  string                                  `json:"detected_ts,required"`
-	Finished    bool                                    `json:"finished,required"`
-	LeakASN     int64                                   `json:"leak_asn,required"`
-	LeakCount   int64                                   `json:"leak_count,required"`
-	LeakSeg     []int64                                 `json:"leak_seg,required"`
-	LeakType    int64                                   `json:"leak_type,required"`
-	MaxTs       string                                  `json:"max_ts,required"`
-	MinTs       string                                  `json:"min_ts,required"`
-	OriginCount int64                                   `json:"origin_count,required"`
-	PeerCount   int64                                   `json:"peer_count,required"`
-	PrefixCount int64                                   `json:"prefix_count,required"`
-	JSON        bgpLeakEventListResponseResultEventJSON `json:"-"`
+type BGPLeakEventListResponseEvent struct {
+	ID          int64                             `json:"id,required"`
+	Countries   []string                          `json:"countries,required"`
+	DetectedTs  string                            `json:"detected_ts,required"`
+	Finished    bool                              `json:"finished,required"`
+	LeakASN     int64                             `json:"leak_asn,required"`
+	LeakCount   int64                             `json:"leak_count,required"`
+	LeakSeg     []int64                           `json:"leak_seg,required"`
+	LeakType    int64                             `json:"leak_type,required"`
+	MaxTs       string                            `json:"max_ts,required"`
+	MinTs       string                            `json:"min_ts,required"`
+	OriginCount int64                             `json:"origin_count,required"`
+	PeerCount   int64                             `json:"peer_count,required"`
+	PrefixCount int64                             `json:"prefix_count,required"`
+	JSON        bgpLeakEventListResponseEventJSON `json:"-"`
 }
 
-// bgpLeakEventListResponseResultEventJSON contains the JSON metadata for the
-// struct [BGPLeakEventListResponseResultEvent]
-type bgpLeakEventListResponseResultEventJSON struct {
+// bgpLeakEventListResponseEventJSON contains the JSON metadata for the struct
+// [BGPLeakEventListResponseEvent]
+type bgpLeakEventListResponseEventJSON struct {
 	ID          apijson.Field
 	Countries   apijson.Field
 	DetectedTs  apijson.Field
@@ -168,38 +143,11 @@ type bgpLeakEventListResponseResultEventJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BGPLeakEventListResponseResultEvent) UnmarshalJSON(data []byte) (err error) {
+func (r *BGPLeakEventListResponseEvent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bgpLeakEventListResponseResultEventJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPLeakEventListResponseResultInfo struct {
-	Count      int64                                  `json:"count,required"`
-	Page       int64                                  `json:"page,required"`
-	PerPage    int64                                  `json:"per_page,required"`
-	TotalCount int64                                  `json:"total_count,required"`
-	JSON       bgpLeakEventListResponseResultInfoJSON `json:"-"`
-}
-
-// bgpLeakEventListResponseResultInfoJSON contains the JSON metadata for the struct
-// [BGPLeakEventListResponseResultInfo]
-type bgpLeakEventListResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPLeakEventListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpLeakEventListResponseResultInfoJSON) RawJSON() string {
+func (r bgpLeakEventListResponseEventJSON) RawJSON() string {
 	return r.raw
 }
 

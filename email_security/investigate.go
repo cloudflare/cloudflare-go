@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InvestigateService contains methods and other services that help with
@@ -26,7 +26,14 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewInvestigateService] method instead.
 type InvestigateService struct {
-	Options []option.RequestOption
+	Options    []option.RequestOption
+	Detections *InvestigateDetectionService
+	Preview    *InvestigatePreviewService
+	Raw        *InvestigateRawService
+	Trace      *InvestigateTraceService
+	Move       *InvestigateMoveService
+	Reclassify *InvestigateReclassifyService
+	Release    *InvestigateReleaseService
 }
 
 // NewInvestigateService generates a new service that applies the given options to
@@ -35,11 +42,17 @@ type InvestigateService struct {
 func NewInvestigateService(opts ...option.RequestOption) (r *InvestigateService) {
 	r = &InvestigateService{}
 	r.Options = opts
+	r.Detections = NewInvestigateDetectionService(opts...)
+	r.Preview = NewInvestigatePreviewService(opts...)
+	r.Raw = NewInvestigateRawService(opts...)
+	r.Trace = NewInvestigateTraceService(opts...)
+	r.Move = NewInvestigateMoveService(opts...)
+	r.Reclassify = NewInvestigateReclassifyService(opts...)
+	r.Release = NewInvestigateReleaseService(opts...)
 	return
 }
 
-// This endpoint returns information for each email that matches the search
-// parameter(s).
+// Returns information for each email that matches the search parameter(s).
 func (r *InvestigateService) List(ctx context.Context, params InvestigateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InvestigateListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -61,32 +74,9 @@ func (r *InvestigateService) List(ctx context.Context, params InvestigateListPar
 	return res, nil
 }
 
-// This endpoint returns information for each email that matches the search
-// parameter(s).
+// Returns information for each email that matches the search parameter(s).
 func (r *InvestigateService) ListAutoPaging(ctx context.Context, params InvestigateListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InvestigateListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
-}
-
-// For emails that have a detection, this endpoint returns detection details such
-// as threat categories, sender information, and links.
-func (r *InvestigateService) Detections(ctx context.Context, postfixID string, query InvestigateDetectionsParams, opts ...option.RequestOption) (res *InvestigateDetectionsResponse, err error) {
-	var env InvestigateDetectionsResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if postfixID == "" {
-		err = errors.New("missing required postfix_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/detections", query.AccountID, postfixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
 }
 
 // Get message details
@@ -110,71 +100,6 @@ func (r *InvestigateService) Get(ctx context.Context, postfixID string, query In
 	return
 }
 
-// For emails that have a detection, this endpoint returns a preview of the message
-// body as a base64 encoded PNG image.
-func (r *InvestigateService) Preview(ctx context.Context, postfixID string, query InvestigatePreviewParams, opts ...option.RequestOption) (res *InvestigatePreviewResponse, err error) {
-	var env InvestigatePreviewResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if postfixID == "" {
-		err = errors.New("missing required postfix_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/preview", query.AccountID, postfixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// For emails that have a detection, this endpoint returns the raw email as an EML
-// file.
-func (r *InvestigateService) Raw(ctx context.Context, postfixID string, query InvestigateRawParams, opts ...option.RequestOption) (res *InvestigateRawResponse, err error) {
-	var env InvestigateRawResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if postfixID == "" {
-		err = errors.New("missing required postfix_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/raw", query.AccountID, postfixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Get email trace
-func (r *InvestigateService) Trace(ctx context.Context, postfixID string, query InvestigateTraceParams, opts ...option.RequestOption) (res *InvestigateTraceResponse, err error) {
-	var env InvestigateTraceResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if postfixID == "" {
-		err = errors.New("missing required postfix_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/trace", query.AccountID, postfixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 type InvestigateListResponse struct {
 	ID                string      `json:"id,required"`
 	ActionLog         interface{} `json:"action_log,required"`
@@ -182,8 +107,7 @@ type InvestigateListResponse struct {
 	DetectionReasons  []string    `json:"detection_reasons,required"`
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
-	MessageID         string      `json:"message_id,required"`
-	// Message identifier
+	// The identifier of the message.
 	PostfixID        string                                  `json:"postfix_id,required"`
 	Ts               string                                  `json:"ts,required"`
 	AlertID          string                                  `json:"alert_id,nullable"`
@@ -192,6 +116,7 @@ type InvestigateListResponse struct {
 	FinalDisposition InvestigateListResponseFinalDisposition `json:"final_disposition,nullable"`
 	From             string                                  `json:"from,nullable"`
 	FromName         string                                  `json:"from_name,nullable"`
+	MessageID        string                                  `json:"message_id,nullable"`
 	SentDate         string                                  `json:"sent_date,nullable"`
 	Subject          string                                  `json:"subject,nullable"`
 	ThreatCategories []string                                `json:"threat_categories,nullable"`
@@ -210,7 +135,6 @@ type investigateListResponseJSON struct {
 	DetectionReasons  apijson.Field
 	IsPhishSubmission apijson.Field
 	IsQuarantined     apijson.Field
-	MessageID         apijson.Field
 	PostfixID         apijson.Field
 	Ts                apijson.Field
 	AlertID           apijson.Field
@@ -219,6 +143,7 @@ type investigateListResponseJSON struct {
 	FinalDisposition  apijson.Field
 	From              apijson.Field
 	FromName          apijson.Field
+	MessageID         apijson.Field
 	SentDate          apijson.Field
 	Subject           apijson.Field
 	ThreatCategories  apijson.Field
@@ -365,299 +290,6 @@ func (r InvestigateListResponseValidationSPF) IsKnown() bool {
 	return false
 }
 
-type InvestigateDetectionsResponse struct {
-	Action           string                                        `json:"action,required"`
-	Attachments      []InvestigateDetectionsResponseAttachment     `json:"attachments,required"`
-	Headers          []InvestigateDetectionsResponseHeader         `json:"headers,required"`
-	Links            []InvestigateDetectionsResponseLink           `json:"links,required"`
-	SenderInfo       InvestigateDetectionsResponseSenderInfo       `json:"sender_info,required"`
-	ThreatCategories []InvestigateDetectionsResponseThreatCategory `json:"threat_categories,required"`
-	Validation       InvestigateDetectionsResponseValidation       `json:"validation,required"`
-	FinalDisposition InvestigateDetectionsResponseFinalDisposition `json:"final_disposition,nullable"`
-	JSON             investigateDetectionsResponseJSON             `json:"-"`
-}
-
-// investigateDetectionsResponseJSON contains the JSON metadata for the struct
-// [InvestigateDetectionsResponse]
-type investigateDetectionsResponseJSON struct {
-	Action           apijson.Field
-	Attachments      apijson.Field
-	Headers          apijson.Field
-	Links            apijson.Field
-	SenderInfo       apijson.Field
-	ThreatCategories apijson.Field
-	Validation       apijson.Field
-	FinalDisposition apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *InvestigateDetectionsResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateDetectionsResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateDetectionsResponseAttachment struct {
-	Size        int64                                             `json:"size,required"`
-	ContentType string                                            `json:"content_type,nullable"`
-	Detection   InvestigateDetectionsResponseAttachmentsDetection `json:"detection,nullable"`
-	Encrypted   bool                                              `json:"encrypted,nullable"`
-	Name        string                                            `json:"name,nullable"`
-	JSON        investigateDetectionsResponseAttachmentJSON       `json:"-"`
-}
-
-// investigateDetectionsResponseAttachmentJSON contains the JSON metadata for the
-// struct [InvestigateDetectionsResponseAttachment]
-type investigateDetectionsResponseAttachmentJSON struct {
-	Size        apijson.Field
-	ContentType apijson.Field
-	Detection   apijson.Field
-	Encrypted   apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateDetectionsResponseAttachment) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateDetectionsResponseAttachmentJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateDetectionsResponseAttachmentsDetection string
-
-const (
-	InvestigateDetectionsResponseAttachmentsDetectionMalicious    InvestigateDetectionsResponseAttachmentsDetection = "MALICIOUS"
-	InvestigateDetectionsResponseAttachmentsDetectionMaliciousBec InvestigateDetectionsResponseAttachmentsDetection = "MALICIOUS-BEC"
-	InvestigateDetectionsResponseAttachmentsDetectionSuspicious   InvestigateDetectionsResponseAttachmentsDetection = "SUSPICIOUS"
-	InvestigateDetectionsResponseAttachmentsDetectionSpoof        InvestigateDetectionsResponseAttachmentsDetection = "SPOOF"
-	InvestigateDetectionsResponseAttachmentsDetectionSpam         InvestigateDetectionsResponseAttachmentsDetection = "SPAM"
-	InvestigateDetectionsResponseAttachmentsDetectionBulk         InvestigateDetectionsResponseAttachmentsDetection = "BULK"
-	InvestigateDetectionsResponseAttachmentsDetectionEncrypted    InvestigateDetectionsResponseAttachmentsDetection = "ENCRYPTED"
-	InvestigateDetectionsResponseAttachmentsDetectionExternal     InvestigateDetectionsResponseAttachmentsDetection = "EXTERNAL"
-	InvestigateDetectionsResponseAttachmentsDetectionUnknown      InvestigateDetectionsResponseAttachmentsDetection = "UNKNOWN"
-	InvestigateDetectionsResponseAttachmentsDetectionNone         InvestigateDetectionsResponseAttachmentsDetection = "NONE"
-)
-
-func (r InvestigateDetectionsResponseAttachmentsDetection) IsKnown() bool {
-	switch r {
-	case InvestigateDetectionsResponseAttachmentsDetectionMalicious, InvestigateDetectionsResponseAttachmentsDetectionMaliciousBec, InvestigateDetectionsResponseAttachmentsDetectionSuspicious, InvestigateDetectionsResponseAttachmentsDetectionSpoof, InvestigateDetectionsResponseAttachmentsDetectionSpam, InvestigateDetectionsResponseAttachmentsDetectionBulk, InvestigateDetectionsResponseAttachmentsDetectionEncrypted, InvestigateDetectionsResponseAttachmentsDetectionExternal, InvestigateDetectionsResponseAttachmentsDetectionUnknown, InvestigateDetectionsResponseAttachmentsDetectionNone:
-		return true
-	}
-	return false
-}
-
-type InvestigateDetectionsResponseHeader struct {
-	Name  string                                  `json:"name,required"`
-	Value string                                  `json:"value,required"`
-	JSON  investigateDetectionsResponseHeaderJSON `json:"-"`
-}
-
-// investigateDetectionsResponseHeaderJSON contains the JSON metadata for the
-// struct [InvestigateDetectionsResponseHeader]
-type investigateDetectionsResponseHeaderJSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateDetectionsResponseHeader) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateDetectionsResponseHeaderJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateDetectionsResponseLink struct {
-	Href string                                `json:"href,required"`
-	Text string                                `json:"text,nullable"`
-	JSON investigateDetectionsResponseLinkJSON `json:"-"`
-}
-
-// investigateDetectionsResponseLinkJSON contains the JSON metadata for the struct
-// [InvestigateDetectionsResponseLink]
-type investigateDetectionsResponseLinkJSON struct {
-	Href        apijson.Field
-	Text        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateDetectionsResponseLink) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateDetectionsResponseLinkJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateDetectionsResponseSenderInfo struct {
-	// Name of the autonomous system
-	AsName string `json:"as_name,nullable"`
-	// Number of the autonomous system
-	AsNumber int64                                       `json:"as_number,nullable"`
-	Geo      string                                      `json:"geo,nullable"`
-	IP       string                                      `json:"ip,nullable"`
-	Pld      string                                      `json:"pld,nullable"`
-	JSON     investigateDetectionsResponseSenderInfoJSON `json:"-"`
-}
-
-// investigateDetectionsResponseSenderInfoJSON contains the JSON metadata for the
-// struct [InvestigateDetectionsResponseSenderInfo]
-type investigateDetectionsResponseSenderInfoJSON struct {
-	AsName      apijson.Field
-	AsNumber    apijson.Field
-	Geo         apijson.Field
-	IP          apijson.Field
-	Pld         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateDetectionsResponseSenderInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateDetectionsResponseSenderInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateDetectionsResponseThreatCategory struct {
-	ID          int64                                           `json:"id,required"`
-	Description string                                          `json:"description,nullable"`
-	Name        string                                          `json:"name,nullable"`
-	JSON        investigateDetectionsResponseThreatCategoryJSON `json:"-"`
-}
-
-// investigateDetectionsResponseThreatCategoryJSON contains the JSON metadata for
-// the struct [InvestigateDetectionsResponseThreatCategory]
-type investigateDetectionsResponseThreatCategoryJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateDetectionsResponseThreatCategory) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateDetectionsResponseThreatCategoryJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateDetectionsResponseValidation struct {
-	Comment string                                       `json:"comment,nullable"`
-	DKIM    InvestigateDetectionsResponseValidationDKIM  `json:"dkim,nullable"`
-	DMARC   InvestigateDetectionsResponseValidationDMARC `json:"dmarc,nullable"`
-	SPF     InvestigateDetectionsResponseValidationSPF   `json:"spf,nullable"`
-	JSON    investigateDetectionsResponseValidationJSON  `json:"-"`
-}
-
-// investigateDetectionsResponseValidationJSON contains the JSON metadata for the
-// struct [InvestigateDetectionsResponseValidation]
-type investigateDetectionsResponseValidationJSON struct {
-	Comment     apijson.Field
-	DKIM        apijson.Field
-	DMARC       apijson.Field
-	SPF         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateDetectionsResponseValidation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateDetectionsResponseValidationJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateDetectionsResponseValidationDKIM string
-
-const (
-	InvestigateDetectionsResponseValidationDKIMPass    InvestigateDetectionsResponseValidationDKIM = "pass"
-	InvestigateDetectionsResponseValidationDKIMNeutral InvestigateDetectionsResponseValidationDKIM = "neutral"
-	InvestigateDetectionsResponseValidationDKIMFail    InvestigateDetectionsResponseValidationDKIM = "fail"
-	InvestigateDetectionsResponseValidationDKIMError   InvestigateDetectionsResponseValidationDKIM = "error"
-	InvestigateDetectionsResponseValidationDKIMNone    InvestigateDetectionsResponseValidationDKIM = "none"
-)
-
-func (r InvestigateDetectionsResponseValidationDKIM) IsKnown() bool {
-	switch r {
-	case InvestigateDetectionsResponseValidationDKIMPass, InvestigateDetectionsResponseValidationDKIMNeutral, InvestigateDetectionsResponseValidationDKIMFail, InvestigateDetectionsResponseValidationDKIMError, InvestigateDetectionsResponseValidationDKIMNone:
-		return true
-	}
-	return false
-}
-
-type InvestigateDetectionsResponseValidationDMARC string
-
-const (
-	InvestigateDetectionsResponseValidationDMARCPass    InvestigateDetectionsResponseValidationDMARC = "pass"
-	InvestigateDetectionsResponseValidationDMARCNeutral InvestigateDetectionsResponseValidationDMARC = "neutral"
-	InvestigateDetectionsResponseValidationDMARCFail    InvestigateDetectionsResponseValidationDMARC = "fail"
-	InvestigateDetectionsResponseValidationDMARCError   InvestigateDetectionsResponseValidationDMARC = "error"
-	InvestigateDetectionsResponseValidationDMARCNone    InvestigateDetectionsResponseValidationDMARC = "none"
-)
-
-func (r InvestigateDetectionsResponseValidationDMARC) IsKnown() bool {
-	switch r {
-	case InvestigateDetectionsResponseValidationDMARCPass, InvestigateDetectionsResponseValidationDMARCNeutral, InvestigateDetectionsResponseValidationDMARCFail, InvestigateDetectionsResponseValidationDMARCError, InvestigateDetectionsResponseValidationDMARCNone:
-		return true
-	}
-	return false
-}
-
-type InvestigateDetectionsResponseValidationSPF string
-
-const (
-	InvestigateDetectionsResponseValidationSPFPass    InvestigateDetectionsResponseValidationSPF = "pass"
-	InvestigateDetectionsResponseValidationSPFNeutral InvestigateDetectionsResponseValidationSPF = "neutral"
-	InvestigateDetectionsResponseValidationSPFFail    InvestigateDetectionsResponseValidationSPF = "fail"
-	InvestigateDetectionsResponseValidationSPFError   InvestigateDetectionsResponseValidationSPF = "error"
-	InvestigateDetectionsResponseValidationSPFNone    InvestigateDetectionsResponseValidationSPF = "none"
-)
-
-func (r InvestigateDetectionsResponseValidationSPF) IsKnown() bool {
-	switch r {
-	case InvestigateDetectionsResponseValidationSPFPass, InvestigateDetectionsResponseValidationSPFNeutral, InvestigateDetectionsResponseValidationSPFFail, InvestigateDetectionsResponseValidationSPFError, InvestigateDetectionsResponseValidationSPFNone:
-		return true
-	}
-	return false
-}
-
-type InvestigateDetectionsResponseFinalDisposition string
-
-const (
-	InvestigateDetectionsResponseFinalDispositionMalicious    InvestigateDetectionsResponseFinalDisposition = "MALICIOUS"
-	InvestigateDetectionsResponseFinalDispositionMaliciousBec InvestigateDetectionsResponseFinalDisposition = "MALICIOUS-BEC"
-	InvestigateDetectionsResponseFinalDispositionSuspicious   InvestigateDetectionsResponseFinalDisposition = "SUSPICIOUS"
-	InvestigateDetectionsResponseFinalDispositionSpoof        InvestigateDetectionsResponseFinalDisposition = "SPOOF"
-	InvestigateDetectionsResponseFinalDispositionSpam         InvestigateDetectionsResponseFinalDisposition = "SPAM"
-	InvestigateDetectionsResponseFinalDispositionBulk         InvestigateDetectionsResponseFinalDisposition = "BULK"
-	InvestigateDetectionsResponseFinalDispositionEncrypted    InvestigateDetectionsResponseFinalDisposition = "ENCRYPTED"
-	InvestigateDetectionsResponseFinalDispositionExternal     InvestigateDetectionsResponseFinalDisposition = "EXTERNAL"
-	InvestigateDetectionsResponseFinalDispositionUnknown      InvestigateDetectionsResponseFinalDisposition = "UNKNOWN"
-	InvestigateDetectionsResponseFinalDispositionNone         InvestigateDetectionsResponseFinalDisposition = "NONE"
-)
-
-func (r InvestigateDetectionsResponseFinalDisposition) IsKnown() bool {
-	switch r {
-	case InvestigateDetectionsResponseFinalDispositionMalicious, InvestigateDetectionsResponseFinalDispositionMaliciousBec, InvestigateDetectionsResponseFinalDispositionSuspicious, InvestigateDetectionsResponseFinalDispositionSpoof, InvestigateDetectionsResponseFinalDispositionSpam, InvestigateDetectionsResponseFinalDispositionBulk, InvestigateDetectionsResponseFinalDispositionEncrypted, InvestigateDetectionsResponseFinalDispositionExternal, InvestigateDetectionsResponseFinalDispositionUnknown, InvestigateDetectionsResponseFinalDispositionNone:
-		return true
-	}
-	return false
-}
-
 type InvestigateGetResponse struct {
 	ID                string      `json:"id,required"`
 	ActionLog         interface{} `json:"action_log,required"`
@@ -665,8 +297,7 @@ type InvestigateGetResponse struct {
 	DetectionReasons  []string    `json:"detection_reasons,required"`
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
-	MessageID         string      `json:"message_id,required"`
-	// Message identifier
+	// The identifier of the message.
 	PostfixID        string                                 `json:"postfix_id,required"`
 	Ts               string                                 `json:"ts,required"`
 	AlertID          string                                 `json:"alert_id,nullable"`
@@ -675,6 +306,7 @@ type InvestigateGetResponse struct {
 	FinalDisposition InvestigateGetResponseFinalDisposition `json:"final_disposition,nullable"`
 	From             string                                 `json:"from,nullable"`
 	FromName         string                                 `json:"from_name,nullable"`
+	MessageID        string                                 `json:"message_id,nullable"`
 	SentDate         string                                 `json:"sent_date,nullable"`
 	Subject          string                                 `json:"subject,nullable"`
 	ThreatCategories []string                               `json:"threat_categories,nullable"`
@@ -693,7 +325,6 @@ type investigateGetResponseJSON struct {
 	DetectionReasons  apijson.Field
 	IsPhishSubmission apijson.Field
 	IsQuarantined     apijson.Field
-	MessageID         apijson.Field
 	PostfixID         apijson.Field
 	Ts                apijson.Field
 	AlertID           apijson.Field
@@ -702,6 +333,7 @@ type investigateGetResponseJSON struct {
 	FinalDisposition  apijson.Field
 	From              apijson.Field
 	FromName          apijson.Field
+	MessageID         apijson.Field
 	SentDate          apijson.Field
 	Subject           apijson.Field
 	ThreatCategories  apijson.Field
@@ -848,188 +480,29 @@ func (r InvestigateGetResponseValidationSPF) IsKnown() bool {
 	return false
 }
 
-type InvestigatePreviewResponse struct {
-	// Base64 encoded PNG image
-	Screenshot string                         `json:"screenshot,required"`
-	JSON       investigatePreviewResponseJSON `json:"-"`
-}
-
-// investigatePreviewResponseJSON contains the JSON metadata for the struct
-// [InvestigatePreviewResponse]
-type investigatePreviewResponseJSON struct {
-	Screenshot  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigatePreviewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigatePreviewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateRawResponse struct {
-	// UTF-8 encoded eml file
-	Raw  string                     `json:"raw,required"`
-	JSON investigateRawResponseJSON `json:"-"`
-}
-
-// investigateRawResponseJSON contains the JSON metadata for the struct
-// [InvestigateRawResponse]
-type investigateRawResponseJSON struct {
-	Raw         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateRawResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateRawResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateTraceResponse struct {
-	Inbound  InvestigateTraceResponseInbound  `json:"inbound,required"`
-	Outbound InvestigateTraceResponseOutbound `json:"outbound,required"`
-	JSON     investigateTraceResponseJSON     `json:"-"`
-}
-
-// investigateTraceResponseJSON contains the JSON metadata for the struct
-// [InvestigateTraceResponse]
-type investigateTraceResponseJSON struct {
-	Inbound     apijson.Field
-	Outbound    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateTraceResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateTraceResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateTraceResponseInbound struct {
-	Lines []InvestigateTraceResponseInboundLine `json:"lines,nullable"`
-	JSON  investigateTraceResponseInboundJSON   `json:"-"`
-}
-
-// investigateTraceResponseInboundJSON contains the JSON metadata for the struct
-// [InvestigateTraceResponseInbound]
-type investigateTraceResponseInboundJSON struct {
-	Lines       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateTraceResponseInbound) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateTraceResponseInboundJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateTraceResponseInboundLine struct {
-	Lineno  int64                                   `json:"lineno,required"`
-	Message string                                  `json:"message,required"`
-	Ts      time.Time                               `json:"ts,required" format:"date-time"`
-	JSON    investigateTraceResponseInboundLineJSON `json:"-"`
-}
-
-// investigateTraceResponseInboundLineJSON contains the JSON metadata for the
-// struct [InvestigateTraceResponseInboundLine]
-type investigateTraceResponseInboundLineJSON struct {
-	Lineno      apijson.Field
-	Message     apijson.Field
-	Ts          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateTraceResponseInboundLine) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateTraceResponseInboundLineJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateTraceResponseOutbound struct {
-	Lines []InvestigateTraceResponseOutboundLine `json:"lines,nullable"`
-	JSON  investigateTraceResponseOutboundJSON   `json:"-"`
-}
-
-// investigateTraceResponseOutboundJSON contains the JSON metadata for the struct
-// [InvestigateTraceResponseOutbound]
-type investigateTraceResponseOutboundJSON struct {
-	Lines       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateTraceResponseOutbound) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateTraceResponseOutboundJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateTraceResponseOutboundLine struct {
-	Lineno  int64                                    `json:"lineno,required"`
-	Message string                                   `json:"message,required"`
-	Ts      time.Time                                `json:"ts,required" format:"date-time"`
-	JSON    investigateTraceResponseOutboundLineJSON `json:"-"`
-}
-
-// investigateTraceResponseOutboundLineJSON contains the JSON metadata for the
-// struct [InvestigateTraceResponseOutboundLine]
-type investigateTraceResponseOutboundLineJSON struct {
-	Lineno      apijson.Field
-	Message     apijson.Field
-	Ts          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateTraceResponseOutboundLine) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateTraceResponseOutboundLineJSON) RawJSON() string {
-	return r.raw
-}
-
 type InvestigateListParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Controls whether the message action log in included in the response.
+	// Determines if the message action log is included in the response.
 	ActionLog param.Field[bool]   `query:"action_log"`
 	AlertID   param.Field[string] `query:"alert_id"`
-	// If `false`, the search includes non-detections.
+	// Determines if the search results will include detections or not.
 	DetectionsOnly param.Field[bool] `query:"detections_only"`
-	// Filter by the sender domain
+	// The sender domains the search filters by.
 	Domain param.Field[string] `query:"domain"`
 	// The end of the search date range. Defaults to `now`.
 	End param.Field[time.Time] `query:"end" format:"date-time"`
-	// Filter messages by the provided disposition.
+	// The dispositions the search filters by.
 	FinalDisposition param.Field[InvestigateListParamsFinalDisposition] `query:"final_disposition"`
-	// Filter messages by actions applied to them
+	// The message actions the search filters by.
 	MessageAction param.Field[InvestigateListParamsMessageAction] `query:"message_action"`
 	MessageID     param.Field[string]                             `query:"message_id"`
 	Metric        param.Field[string]                             `query:"metric"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page param.Field[int64] `query:"page"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
-	// Space delimited query term(s). The search is case-insensitive.
+	// The space-delimited term used in the query. The search is case-insensitive.
 	//
 	// The content of the following email metadata fields are searched:
 	//
@@ -1068,7 +541,7 @@ func (r InvestigateListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Filter messages by the provided disposition.
+// The dispositions the search filters by.
 type InvestigateListParamsFinalDisposition string
 
 const (
@@ -1087,7 +560,7 @@ func (r InvestigateListParamsFinalDisposition) IsKnown() bool {
 	return false
 }
 
-// Filter messages by actions applied to them
+// The message actions the search filters by.
 type InvestigateListParamsMessageAction string
 
 const (
@@ -1102,38 +575,6 @@ func (r InvestigateListParamsMessageAction) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type InvestigateDetectionsParams struct {
-	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type InvestigateDetectionsResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   InvestigateDetectionsResponse             `json:"result,required"`
-	Success  bool                                      `json:"success,required"`
-	JSON     investigateDetectionsResponseEnvelopeJSON `json:"-"`
-}
-
-// investigateDetectionsResponseEnvelopeJSON contains the JSON metadata for the
-// struct [InvestigateDetectionsResponseEnvelope]
-type investigateDetectionsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateDetectionsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateDetectionsResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }
 
 type InvestigateGetParams struct {
@@ -1165,101 +606,5 @@ func (r *InvestigateGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r investigateGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigatePreviewParams struct {
-	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type InvestigatePreviewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                  `json:"messages,required"`
-	Result   InvestigatePreviewResponse             `json:"result,required"`
-	Success  bool                                   `json:"success,required"`
-	JSON     investigatePreviewResponseEnvelopeJSON `json:"-"`
-}
-
-// investigatePreviewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [InvestigatePreviewResponseEnvelope]
-type investigatePreviewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigatePreviewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigatePreviewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateRawParams struct {
-	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type InvestigateRawResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   InvestigateRawResponse             `json:"result,required"`
-	Success  bool                               `json:"success,required"`
-	JSON     investigateRawResponseEnvelopeJSON `json:"-"`
-}
-
-// investigateRawResponseEnvelopeJSON contains the JSON metadata for the struct
-// [InvestigateRawResponseEnvelope]
-type investigateRawResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateRawResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateRawResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateTraceParams struct {
-	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type InvestigateTraceResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                `json:"errors,required"`
-	Messages []shared.ResponseInfo                `json:"messages,required"`
-	Result   InvestigateTraceResponse             `json:"result,required"`
-	Success  bool                                 `json:"success,required"`
-	JSON     investigateTraceResponseEnvelopeJSON `json:"-"`
-}
-
-// investigateTraceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [InvestigateTraceResponseEnvelope]
-type investigateTraceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateTraceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateTraceResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }

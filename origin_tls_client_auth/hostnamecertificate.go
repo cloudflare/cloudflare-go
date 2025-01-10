@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HostnameCertificateService contains methods and other services that help with
@@ -55,7 +55,7 @@ func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCer
 }
 
 // List Certificates
-func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AuthenticatedOriginPull], err error) {
+func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[HostnameCertificateListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,7 +77,7 @@ func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCer
 }
 
 // List Certificates
-func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AuthenticatedOriginPull] {
+func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[HostnameCertificateListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -185,6 +185,46 @@ func (r HostnameCertificateNewResponseStatus) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type HostnameCertificateListResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// Identifier
+	CERTID string `json:"cert_id"`
+	// The hostname certificate.
+	Certificate string `json:"certificate"`
+	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
+	// value voids the association.
+	Enabled bool `json:"enabled,nullable"`
+	// The hostname on the origin for which the client certificate uploaded will be
+	// used.
+	Hostname string `json:"hostname"`
+	// The hostname certificate's private key.
+	PrivateKey string                              `json:"private_key"`
+	JSON       hostnameCertificateListResponseJSON `json:"-"`
+	AuthenticatedOriginPull
+}
+
+// hostnameCertificateListResponseJSON contains the JSON metadata for the struct
+// [HostnameCertificateListResponse]
+type hostnameCertificateListResponseJSON struct {
+	ID          apijson.Field
+	CERTID      apijson.Field
+	Certificate apijson.Field
+	Enabled     apijson.Field
+	Hostname    apijson.Field
+	PrivateKey  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameCertificateListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameCertificateListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type HostnameCertificateDeleteResponse struct {

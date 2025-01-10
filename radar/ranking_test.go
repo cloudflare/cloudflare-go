@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestRankingTimeseriesGroupsWithOptionalParams(t *testing.T) {
@@ -29,14 +29,14 @@ func TestRankingTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Ranking.TimeseriesGroups(context.TODO(), radar.RankingTimeseriesGroupsParams{
-		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Domains:     cloudflare.F([]string{"string", "string", "string"}),
+		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
+		DateRange:   cloudflare.F([]string{"7d"}),
+		DateStart:   cloudflare.F([]time.Time{time.Now()}),
+		Domains:     cloudflare.F([]string{"string"}),
 		Format:      cloudflare.F(radar.RankingTimeseriesGroupsParamsFormatJson),
 		Limit:       cloudflare.F(int64(5)),
-		Location:    cloudflare.F([]string{"string", "string", "string"}),
-		Name:        cloudflare.F([]string{"string", "string", "string"}),
+		Location:    cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"string"}),
 		RankingType: cloudflare.F(radar.RankingTimeseriesGroupsParamsRankingTypePopular),
 	})
 	if err != nil {
@@ -62,11 +62,11 @@ func TestRankingTopWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Ranking.Top(context.TODO(), radar.RankingTopParams{
-		Date:        cloudflare.F([]string{"string", "string", "string"}),
+		Date:        cloudflare.F([]time.Time{time.Now()}),
 		Format:      cloudflare.F(radar.RankingTopParamsFormatJson),
 		Limit:       cloudflare.F(int64(5)),
-		Location:    cloudflare.F([]string{"string", "string", "string"}),
-		Name:        cloudflare.F([]string{"string", "string", "string"}),
+		Location:    cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"string"}),
 		RankingType: cloudflare.F(radar.RankingTopParamsRankingTypePopular),
 	})
 	if err != nil {

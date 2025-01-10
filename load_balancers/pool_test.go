@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/load_balancers"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/load_balancers"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestPoolNewWithOptionalParams(t *testing.T) {
@@ -34,25 +34,7 @@ func TestPoolNewWithOptionalParams(t *testing.T) {
 			Address: cloudflare.F("0.0.0.0"),
 			Enabled: cloudflare.F(true),
 			Header: cloudflare.F(load_balancers.HeaderParam{
-				Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
-			}),
-			Name:             cloudflare.F("app-server-1"),
-			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
-			Weight:           cloudflare.F(0.600000),
-		}, {
-			Address: cloudflare.F("0.0.0.0"),
-			Enabled: cloudflare.F(true),
-			Header: cloudflare.F(load_balancers.HeaderParam{
-				Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
-			}),
-			Name:             cloudflare.F("app-server-1"),
-			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
-			Weight:           cloudflare.F(0.600000),
-		}, {
-			Address: cloudflare.F("0.0.0.0"),
-			Enabled: cloudflare.F(true),
-			Header: cloudflare.F(load_balancers.HeaderParam{
-				Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
+				Host: cloudflare.F([]load_balancers.HostParam{"example.com"}),
 			}),
 			Name:             cloudflare.F("app-server-1"),
 			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -117,25 +99,7 @@ func TestPoolUpdateWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
-				}),
-				Name:             cloudflare.F("app-server-1"),
-				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
-				Weight:           cloudflare.F(0.600000),
-			}, {
-				Address: cloudflare.F("0.0.0.0"),
-				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
-				}),
-				Name:             cloudflare.F("app-server-1"),
-				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
-				Weight:           cloudflare.F(0.600000),
-			}, {
-				Address: cloudflare.F("0.0.0.0"),
-				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostParam{"example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -234,6 +198,32 @@ func TestPoolDelete(t *testing.T) {
 	}
 }
 
+func TestPoolBulkEditWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.LoadBalancers.Pools.BulkEdit(context.TODO(), load_balancers.PoolBulkEditParams{
+		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		NotificationEmail: cloudflare.F(load_balancers.PoolBulkEditParamsNotificationEmailEmpty),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestPoolEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -284,25 +274,7 @@ func TestPoolEditWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
-				}),
-				Name:             cloudflare.F("app-server-1"),
-				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
-				Weight:           cloudflare.F(0.600000),
-			}, {
-				Address: cloudflare.F("0.0.0.0"),
-				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
-				}),
-				Name:             cloudflare.F("app-server-1"),
-				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
-				Weight:           cloudflare.F(0.600000),
-			}, {
-				Address: cloudflare.F("0.0.0.0"),
-				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostParam{"example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),

@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessPolicyService contains methods and other services that help with
@@ -143,6 +143,48 @@ func (r *AccessPolicyService) Get(ctx context.Context, policyID string, query Ac
 	return
 }
 
+// A group of email addresses that can approve a temporary authentication request.
+type ApprovalGroup struct {
+	// The number of approvals needed to obtain access.
+	ApprovalsNeeded float64 `json:"approvals_needed,required"`
+	// A list of emails that can approve the access request.
+	EmailAddresses []string `json:"email_addresses"`
+	// The UUID of an re-usable email list.
+	EmailListUUID string            `json:"email_list_uuid"`
+	JSON          approvalGroupJSON `json:"-"`
+}
+
+// approvalGroupJSON contains the JSON metadata for the struct [ApprovalGroup]
+type approvalGroupJSON struct {
+	ApprovalsNeeded apijson.Field
+	EmailAddresses  apijson.Field
+	EmailListUUID   apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *ApprovalGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r approvalGroupJSON) RawJSON() string {
+	return r.raw
+}
+
+// A group of email addresses that can approve a temporary authentication request.
+type ApprovalGroupParam struct {
+	// The number of approvals needed to obtain access.
+	ApprovalsNeeded param.Field[float64] `json:"approvals_needed,required"`
+	// A list of emails that can approve the access request.
+	EmailAddresses param.Field[[]string] `json:"email_addresses"`
+	// The UUID of an re-usable email list.
+	EmailListUUID param.Field[string] `json:"email_list_uuid"`
+}
+
+func (r ApprovalGroupParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessPolicyNewResponse struct {
 	// The UUID of the policy
 	ID string `json:"id"`
@@ -154,7 +196,8 @@ type AccessPolicyNewResponse struct {
 	// session.
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy.
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
@@ -240,7 +283,8 @@ type AccessPolicyUpdateResponse struct {
 	// session.
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy.
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
@@ -326,7 +370,8 @@ type AccessPolicyListResponse struct {
 	// session.
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy.
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
@@ -434,7 +479,8 @@ type AccessPolicyGetResponse struct {
 	// session.
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy.
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
@@ -512,7 +558,8 @@ func (r AccessPolicyGetResponseReusable) IsKnown() bool {
 type AccessPolicyNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The action Access will take if a user matches this policy.
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
@@ -594,7 +641,8 @@ func (r AccessPolicyNewResponseEnvelopeSuccess) IsKnown() bool {
 type AccessPolicyUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The action Access will take if a user matches this policy.
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.

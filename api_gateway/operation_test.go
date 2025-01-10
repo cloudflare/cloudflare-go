@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/api_gateway"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/api_gateway"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestOperationNew(t *testing.T) {
@@ -28,20 +28,10 @@ func TestOperationNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Operations.New(context.TODO(), api_gateway.OperationNewParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body: []api_gateway.OperationNewParamsBody{{
-			Endpoint: cloudflare.F("/api/v1/users/{var1}"),
-			Host:     cloudflare.F("www.example.com"),
-			Method:   cloudflare.F(api_gateway.OperationNewParamsBodyMethodGet),
-		}, {
-			Endpoint: cloudflare.F("/api/v1/users/{var1}"),
-			Host:     cloudflare.F("www.example.com"),
-			Method:   cloudflare.F(api_gateway.OperationNewParamsBodyMethodGet),
-		}, {
-			Endpoint: cloudflare.F("/api/v1/users/{var1}"),
-			Host:     cloudflare.F("www.example.com"),
-			Method:   cloudflare.F(api_gateway.OperationNewParamsBodyMethodGet),
-		}},
+		ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Endpoint: cloudflare.F("/api/v1/users/{var1}"),
+		Host:     cloudflare.F("www.example.com"),
+		Method:   cloudflare.F(api_gateway.OperationNewParamsMethodGet),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -105,6 +95,61 @@ func TestOperationDelete(t *testing.T) {
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestOperationBulkNew(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.APIGateway.Operations.BulkNew(context.TODO(), api_gateway.OperationBulkNewParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body: []api_gateway.OperationBulkNewParamsBody{{
+			Endpoint: cloudflare.F("/api/v1/users/{var1}"),
+			Host:     cloudflare.F("www.example.com"),
+			Method:   cloudflare.F(api_gateway.OperationBulkNewParamsBodyMethodGet),
+		}},
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestOperationBulkDelete(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.APIGateway.Operations.BulkDelete(context.TODO(), api_gateway.OperationBulkDeleteParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

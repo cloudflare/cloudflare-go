@@ -9,13 +9,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/firewall"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/firewall"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestLockdownNewWithOptionalParams(t *testing.T) {
+func TestLockdownNew(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,17 +29,14 @@ func TestLockdownNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.Lockdowns.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		firewall.LockdownNewParams{
-			Configurations: cloudflare.F[firewall.ConfigurationUnionParam](firewall.LockdownIPConfigurationParam{
-				Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
-				Value:  cloudflare.F("198.51.100.4"),
-			}),
-			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
-		},
-	)
+	_, err := client.Firewall.Lockdowns.New(context.TODO(), firewall.LockdownNewParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Configurations: cloudflare.F(firewall.ConfigurationParam{firewall.LockdownIPConfigurationParam{
+			Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
+			Value:  cloudflare.F("198.51.100.4"),
+		}}),
+		URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -49,7 +46,7 @@ func TestLockdownNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLockdownUpdateWithOptionalParams(t *testing.T) {
+func TestLockdownUpdate(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -65,14 +62,14 @@ func TestLockdownUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.Lockdowns.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		firewall.LockdownUpdateParams{
-			Configurations: cloudflare.F[firewall.ConfigurationUnionParam](firewall.LockdownIPConfigurationParam{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Configurations: cloudflare.F(firewall.ConfigurationParam{firewall.LockdownIPConfigurationParam{
 				Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
-			}),
-			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
+			}}),
+			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
 		},
 	)
 	if err != nil {
@@ -97,23 +94,20 @@ func TestLockdownListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.Lockdowns.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		firewall.LockdownListParams{
-			CreatedOn:         cloudflare.F(time.Now()),
-			Description:       cloudflare.F("endpoints"),
-			DescriptionSearch: cloudflare.F("endpoints"),
-			IP:                cloudflare.F("1.2.3.4"),
-			IPRangeSearch:     cloudflare.F("1.2.3.0/16"),
-			IPSearch:          cloudflare.F("1.2.3.4"),
-			ModifiedOn:        cloudflare.F(time.Now()),
-			Page:              cloudflare.F(1.000000),
-			PerPage:           cloudflare.F(1.000000),
-			Priority:          cloudflare.F(5.000000),
-			URISearch:         cloudflare.F("/some/path"),
-		},
-	)
+	_, err := client.Firewall.Lockdowns.List(context.TODO(), firewall.LockdownListParams{
+		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		CreatedOn:         cloudflare.F(time.Now()),
+		Description:       cloudflare.F("endpoints"),
+		DescriptionSearch: cloudflare.F("endpoints"),
+		IP:                cloudflare.F("1.2.3.4"),
+		IPRangeSearch:     cloudflare.F("1.2.3.0/16"),
+		IPSearch:          cloudflare.F("1.2.3.4"),
+		ModifiedOn:        cloudflare.F(time.Now()),
+		Page:              cloudflare.F(1.000000),
+		PerPage:           cloudflare.F(1.000000),
+		Priority:          cloudflare.F(5.000000),
+		URISearch:         cloudflare.F("/some/path"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -138,8 +132,10 @@ func TestLockdownDelete(t *testing.T) {
 	)
 	_, err := client.Firewall.Lockdowns.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
+		firewall.LockdownDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -165,8 +161,10 @@ func TestLockdownGet(t *testing.T) {
 	)
 	_, err := client.Firewall.Lockdowns.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
+		firewall.LockdownGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

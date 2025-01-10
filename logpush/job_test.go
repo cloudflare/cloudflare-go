@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/logpush"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/logpush"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestJobNewWithOptionalParams(t *testing.T) {
@@ -92,6 +92,7 @@ func TestJobUpdateWithOptionalParams(t *testing.T) {
 			MaxUploadBytes:           cloudflare.F(int64(5000000)),
 			MaxUploadIntervalSeconds: cloudflare.F(int64(30)),
 			MaxUploadRecords:         cloudflare.F(int64(1000)),
+			Name:                     cloudflare.F("example.com"),
 			OutputOptions: cloudflare.F(logpush.OutputOptionsParam{
 				BatchPrefix:     cloudflare.F("batch_prefix"),
 				BatchSuffix:     cloudflare.F("batch_suffix"),

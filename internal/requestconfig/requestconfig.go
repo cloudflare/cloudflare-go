@@ -17,10 +17,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 )
 
 func getDefaultHeaders() map[string]string {
@@ -137,6 +137,7 @@ func NewRequestConfig(ctx context.Context, method string, u string, body interfa
 	}
 
 	req.Header.Set("Accept", "application/json")
+	req.Header.Set("X-Stainless-Retry-Count", "0")
 	for k, v := range getDefaultHeaders() {
 		req.Header.Add(k, v)
 	}
@@ -301,6 +302,10 @@ func retryDelay(res *http.Response, retryCount int) time.Duration {
 }
 
 func (cfg *RequestConfig) Execute() (err error) {
+	if cfg.BaseURL == nil {
+		return fmt.Errorf("requestconfig: base url is not set")
+	}
+
 	cfg.Request.URL, err = cfg.BaseURL.Parse(strings.TrimLeft(cfg.Request.URL.String(), "/"))
 	if err != nil {
 		return err
@@ -334,6 +339,9 @@ func (cfg *RequestConfig) Execute() (err error) {
 		handler = applyMiddleware(cfg.Middlewares[i], handler)
 	}
 
+	// Don't send the current retry count in the headers if the caller modified the header defaults.
+	shouldSendRetryCount := cfg.Request.Header.Get("X-Stainless-Retry-Count") == "0"
+
 	var res *http.Response
 	for retryCount := 0; retryCount <= cfg.MaxRetries; retryCount += 1 {
 		ctx := cfg.Request.Context()
@@ -343,7 +351,12 @@ func (cfg *RequestConfig) Execute() (err error) {
 			defer cancel()
 		}
 
-		res, err = handler(cfg.Request.Clone(ctx))
+		req := cfg.Request.Clone(ctx)
+		if shouldSendRetryCount {
+			req.Header.Set("X-Stainless-Retry-Count", strconv.Itoa(retryCount))
+		}
+
+		res, err = handler(req)
 		if ctx != nil && ctx.Err() != nil {
 			return ctx.Err()
 		}

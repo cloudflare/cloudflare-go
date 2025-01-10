@@ -9,14 +9,14 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/accounts"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/accounts"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // MembershipService contains methods and other services that help with interacting
@@ -121,7 +121,7 @@ type Membership struct {
 	APIAccessEnabled bool `json:"api_access_enabled,nullable"`
 	// All access permissions for the user at the account.
 	Permissions MembershipPermissions `json:"permissions"`
-	// List of role names for the user at the account.
+	// List of role names the membership has for this account.
 	Roles []string `json:"roles"`
 	// Status of this membership.
 	Status MembershipStatus `json:"status"`
@@ -220,7 +220,7 @@ type MembershipUpdateResponse struct {
 	Permissions MembershipUpdateResponsePermissions `json:"permissions"`
 	// Access policy for the membership
 	Policies []MembershipUpdateResponsePolicy `json:"policies"`
-	// List of role names for the user at the account.
+	// List of role names the membership has for this account.
 	Roles []string `json:"roles"`
 	// Status of this membership.
 	Status MembershipUpdateResponseStatus `json:"status"`
@@ -553,7 +553,7 @@ type MembershipGetResponse struct {
 	Permissions MembershipGetResponsePermissions `json:"permissions"`
 	// Access policy for the membership
 	Policies []MembershipGetResponsePolicy `json:"policies"`
-	// List of role names for the user at the account.
+	// List of role names the membership has for this account.
 	Roles []string `json:"roles"`
 	// Status of this membership.
 	Status MembershipGetResponseStatus `json:"status"`

@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RegionalTieredCacheService contains methods and other services that help with
@@ -88,27 +88,25 @@ func (r RegionalTieredCache) IsKnown() bool {
 	return false
 }
 
-// Instructs Cloudflare to check a regional hub data center on the way to your
-// upper tier. This can help improve performance for smart and custom tiered cache
-// topologies.
 type RegionalTieredCacheEditResponse struct {
 	// ID of the zone setting.
 	ID RegionalTieredCache `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
-	// Instructs Cloudflare to check a regional hub data center on the way to your
-	// upper tier. This can help improve performance for smart and custom tiered cache
-	// topologies.
+	// Whether the setting is editable
+	Editable bool `json:"editable,required"`
+	// The value of the feature
 	Value RegionalTieredCacheEditResponseValue `json:"value,required"`
-	JSON  regionalTieredCacheEditResponseJSON  `json:"-"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
+	JSON       regionalTieredCacheEditResponseJSON `json:"-"`
 }
 
 // regionalTieredCacheEditResponseJSON contains the JSON metadata for the struct
 // [RegionalTieredCacheEditResponse]
 type regionalTieredCacheEditResponseJSON struct {
 	ID          apijson.Field
-	ModifiedOn  apijson.Field
+	Editable    apijson.Field
 	Value       apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -121,55 +119,41 @@ func (r regionalTieredCacheEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Instructs Cloudflare to check a regional hub data center on the way to your
-// upper tier. This can help improve performance for smart and custom tiered cache
-// topologies.
-type RegionalTieredCacheEditResponseValue struct {
-	// ID of the zone setting.
-	ID RegionalTieredCache `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                `json:"modified_on,required,nullable" format:"date-time"`
-	JSON       regionalTieredCacheEditResponseValueJSON `json:"-"`
+// The value of the feature
+type RegionalTieredCacheEditResponseValue string
+
+const (
+	RegionalTieredCacheEditResponseValueOn  RegionalTieredCacheEditResponseValue = "on"
+	RegionalTieredCacheEditResponseValueOff RegionalTieredCacheEditResponseValue = "off"
+)
+
+func (r RegionalTieredCacheEditResponseValue) IsKnown() bool {
+	switch r {
+	case RegionalTieredCacheEditResponseValueOn, RegionalTieredCacheEditResponseValueOff:
+		return true
+	}
+	return false
 }
 
-// regionalTieredCacheEditResponseValueJSON contains the JSON metadata for the
-// struct [RegionalTieredCacheEditResponseValue]
-type regionalTieredCacheEditResponseValueJSON struct {
-	ID          apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionalTieredCacheEditResponseValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionalTieredCacheEditResponseValueJSON) RawJSON() string {
-	return r.raw
-}
-
-// Instructs Cloudflare to check a regional hub data center on the way to your
-// upper tier. This can help improve performance for smart and custom tiered cache
-// topologies.
 type RegionalTieredCacheGetResponse struct {
 	// ID of the zone setting.
 	ID RegionalTieredCache `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
-	// Instructs Cloudflare to check a regional hub data center on the way to your
-	// upper tier. This can help improve performance for smart and custom tiered cache
-	// topologies.
+	// Whether the setting is editable
+	Editable bool `json:"editable,required"`
+	// The value of the feature
 	Value RegionalTieredCacheGetResponseValue `json:"value,required"`
-	JSON  regionalTieredCacheGetResponseJSON  `json:"-"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
+	JSON       regionalTieredCacheGetResponseJSON `json:"-"`
 }
 
 // regionalTieredCacheGetResponseJSON contains the JSON metadata for the struct
 // [RegionalTieredCacheGetResponse]
 type regionalTieredCacheGetResponseJSON struct {
 	ID          apijson.Field
-	ModifiedOn  apijson.Field
+	Editable    apijson.Field
 	Value       apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -182,32 +166,20 @@ func (r regionalTieredCacheGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Instructs Cloudflare to check a regional hub data center on the way to your
-// upper tier. This can help improve performance for smart and custom tiered cache
-// topologies.
-type RegionalTieredCacheGetResponseValue struct {
-	// ID of the zone setting.
-	ID RegionalTieredCache `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                               `json:"modified_on,required,nullable" format:"date-time"`
-	JSON       regionalTieredCacheGetResponseValueJSON `json:"-"`
-}
+// The value of the feature
+type RegionalTieredCacheGetResponseValue string
 
-// regionalTieredCacheGetResponseValueJSON contains the JSON metadata for the
-// struct [RegionalTieredCacheGetResponseValue]
-type regionalTieredCacheGetResponseValueJSON struct {
-	ID          apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	RegionalTieredCacheGetResponseValueOn  RegionalTieredCacheGetResponseValue = "on"
+	RegionalTieredCacheGetResponseValueOff RegionalTieredCacheGetResponseValue = "off"
+)
 
-func (r *RegionalTieredCacheGetResponseValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionalTieredCacheGetResponseValueJSON) RawJSON() string {
-	return r.raw
+func (r RegionalTieredCacheGetResponseValue) IsKnown() bool {
+	switch r {
+	case RegionalTieredCacheGetResponseValueOn, RegionalTieredCacheGetResponseValueOff:
+		return true
+	}
+	return false
 }
 
 type RegionalTieredCacheEditParams struct {
@@ -240,12 +212,9 @@ func (r RegionalTieredCacheEditParamsValue) IsKnown() bool {
 type RegionalTieredCacheEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Instructs Cloudflare to check a regional hub data center on the way to your
-	// upper tier. This can help improve performance for smart and custom tiered cache
-	// topologies.
-	Result RegionalTieredCacheEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RegionalTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  RegionalTieredCacheEditResponse                `json:"result"`
 	JSON    regionalTieredCacheEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -254,8 +223,8 @@ type RegionalTieredCacheEditResponseEnvelope struct {
 type regionalTieredCacheEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -291,12 +260,9 @@ type RegionalTieredCacheGetParams struct {
 type RegionalTieredCacheGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Instructs Cloudflare to check a regional hub data center on the way to your
-	// upper tier. This can help improve performance for smart and custom tiered cache
-	// topologies.
-	Result RegionalTieredCacheGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RegionalTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  RegionalTieredCacheGetResponse                `json:"result"`
 	JSON    regionalTieredCacheGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -305,8 +271,8 @@ type RegionalTieredCacheGetResponseEnvelope struct {
 type regionalTieredCacheGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

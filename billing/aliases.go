@@ -3,8 +3,8 @@
 package billing
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 type Error = apierror.Error
@@ -128,13 +128,53 @@ const CloudflareTunnelTunTypeCNI = shared.CloudflareTunnelTunTypeCNI
 type ErrorData = shared.ErrorData
 
 // This is an alias to an internal type.
-type MemberParam = shared.MemberParam
+type Member = shared.Member
 
 // This is an alias to an internal type.
-type MemberRoleParam = shared.MemberRoleParam
+type MemberPolicy = shared.MemberPolicy
 
+// Allow or deny operations against the resources.
+//
 // This is an alias to an internal type.
-type MemberRolesPermissionsParam = shared.MemberRolesPermissionsParam
+type MemberPoliciesAccess = shared.MemberPoliciesAccess
+
+// This is an alias to an internal value.
+const MemberPoliciesAccessAllow = shared.MemberPoliciesAccessAllow
+
+// This is an alias to an internal value.
+const MemberPoliciesAccessDeny = shared.MemberPoliciesAccessDeny
+
+// A named group of permissions that map to a group of operations against
+// resources.
+//
+// This is an alias to an internal type.
+type MemberPoliciesPermissionGroup = shared.MemberPoliciesPermissionGroup
+
+// Attributes associated to the permission group.
+//
+// This is an alias to an internal type.
+type MemberPoliciesPermissionGroupsMeta = shared.MemberPoliciesPermissionGroupsMeta
+
+// A group of scoped resources.
+//
+// This is an alias to an internal type.
+type MemberPoliciesResourceGroup = shared.MemberPoliciesResourceGroup
+
+// A scope is a combination of scope objects which provides additional context.
+//
+// This is an alias to an internal type.
+type MemberPoliciesResourceGroupsScope = shared.MemberPoliciesResourceGroupsScope
+
+// A scope object represents any resource that can have actions applied against
+// invite.
+//
+// This is an alias to an internal type.
+type MemberPoliciesResourceGroupsScopeObject = shared.MemberPoliciesResourceGroupsScopeObject
+
+// Attributes associated to the resource group.
+//
+// This is an alias to an internal type.
+type MemberPoliciesResourceGroupsMeta = shared.MemberPoliciesResourceGroupsMeta
 
 // A member's status in the account.
 //
@@ -150,7 +190,7 @@ const MemberStatusPending = shared.MemberStatusPending
 // Details of the user associated to the membership.
 //
 // This is an alias to an internal type.
-type MemberUserParam = shared.MemberUserParam
+type MemberUser = shared.MemberUser
 
 // This is an alias to an internal type.
 type Permission = shared.Permission
@@ -176,6 +216,15 @@ type ResponseInfo = shared.ResponseInfo
 
 // This is an alias to an internal type.
 type Role = shared.Role
+
+// This is an alias to an internal type.
+type RolePermissions = shared.RolePermissions
+
+// This is an alias to an internal type.
+type RoleParam = shared.RoleParam
+
+// This is an alias to an internal type.
+type RolePermissionsParam = shared.RolePermissionsParam
 
 // Direction to order DNS records in.
 //
@@ -236,3 +285,93 @@ const SubscriptionStateExpired = shared.SubscriptionStateExpired
 
 // This is an alias to an internal type.
 type SubscriptionParam = shared.SubscriptionParam
+
+// This is an alias to an internal type.
+type Token = shared.Token
+
+// This is an alias to an internal type.
+type TokenCondition = shared.TokenCondition
+
+// Client IP restrictions.
+//
+// This is an alias to an internal type.
+type TokenConditionRequestIP = shared.TokenConditionRequestIP
+
+// Status of the token.
+//
+// This is an alias to an internal type.
+type TokenStatus = shared.TokenStatus
+
+// This is an alias to an internal value.
+const TokenStatusActive = shared.TokenStatusActive
+
+// This is an alias to an internal value.
+const TokenStatusDisabled = shared.TokenStatusDisabled
+
+// This is an alias to an internal value.
+const TokenStatusExpired = shared.TokenStatusExpired
+
+// This is an alias to an internal type.
+type TokenParam = shared.TokenParam
+
+// This is an alias to an internal type.
+type TokenConditionParam = shared.TokenConditionParam
+
+// Client IP restrictions.
+//
+// This is an alias to an internal type.
+type TokenConditionRequestIPParam = shared.TokenConditionRequestIPParam
+
+// IPv4/IPv6 CIDR.
+//
+// This is an alias to an internal type.
+type TokenConditionCIDRList = shared.TokenConditionCIDRList
+
+// IPv4/IPv6 CIDR.
+//
+// This is an alias to an internal type.
+type TokenConditionCIDRListParam = shared.TokenConditionCIDRListParam
+
+// This is an alias to an internal type.
+type TokenPolicy = shared.TokenPolicy
+
+// Allow or deny operations against the resources.
+//
+// This is an alias to an internal type.
+type TokenPolicyEffect = shared.TokenPolicyEffect
+
+// This is an alias to an internal value.
+const TokenPolicyEffectAllow = shared.TokenPolicyEffectAllow
+
+// This is an alias to an internal value.
+const TokenPolicyEffectDeny = shared.TokenPolicyEffectDeny
+
+// A named group of permissions that map to a group of operations against
+// resources.
+//
+// This is an alias to an internal type.
+type TokenPolicyPermissionGroup = shared.TokenPolicyPermissionGroup
+
+// Attributes associated to the permission group.
+//
+// This is an alias to an internal type.
+type TokenPolicyPermissionGroupsMeta = shared.TokenPolicyPermissionGroupsMeta
+
+// This is an alias to an internal type.
+type TokenPolicyParam = shared.TokenPolicyParam
+
+// A named group of permissions that map to a group of operations against
+// resources.
+//
+// This is an alias to an internal type.
+type TokenPolicyPermissionGroupParam = shared.TokenPolicyPermissionGroupParam
+
+// Attributes associated to the permission group.
+//
+// This is an alias to an internal type.
+type TokenPolicyPermissionGroupsMetaParam = shared.TokenPolicyPermissionGroupsMetaParam
+
+// The token value.
+//
+// This is an alias to an internal type.
+type TokenValue = shared.TokenValue

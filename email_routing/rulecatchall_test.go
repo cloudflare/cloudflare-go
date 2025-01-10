@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/email_routing"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/email_routing"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestRuleCatchAllUpdateWithOptionalParams(t *testing.T) {
@@ -31,19 +31,9 @@ func TestRuleCatchAllUpdateWithOptionalParams(t *testing.T) {
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Actions: cloudflare.F([]email_routing.CatchAllActionParam{{
 			Type:  cloudflare.F(email_routing.CatchAllActionTypeDrop),
-			Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
-		}, {
-			Type:  cloudflare.F(email_routing.CatchAllActionTypeDrop),
-			Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
-		}, {
-			Type:  cloudflare.F(email_routing.CatchAllActionTypeDrop),
-			Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
+			Value: cloudflare.F([]string{"destinationaddress@example.net"}),
 		}}),
 		Matchers: cloudflare.F([]email_routing.CatchAllMatcherParam{{
-			Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
-		}, {
-			Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
-		}, {
 			Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
 		}}),
 		Enabled: cloudflare.F(email_routing.RuleCatchAllUpdateParamsEnabledTrue),

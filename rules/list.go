@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ListService contains methods and other services that help with interacting with
@@ -168,8 +168,6 @@ func (r hostnameJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Hostname) ImplementsRulesListItemGetResponseUnion() {}
-
 // Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 // 0 to 9, wildcards (\*), and the hyphen (-).
 type HostnameParam struct {
@@ -275,8 +273,6 @@ func (r redirectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Redirect) ImplementsRulesListItemGetResponseUnion() {}
-
 type RedirectStatusCode int64
 
 const (
@@ -309,10 +305,6 @@ func (r RedirectParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ListNewResponse = interface{}
-
-type ListUpdateResponse = interface{}
-
 type ListDeleteResponse struct {
 	// The unique ID of the item in the List.
 	ID   string                 `json:"id"`
@@ -334,8 +326,6 @@ func (r *ListDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 func (r listDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
-
-type ListGetResponse = interface{}
 
 type ListNewParams struct {
 	// Identifier
@@ -375,7 +365,7 @@ func (r ListNewParamsKind) IsKnown() bool {
 type ListNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListsList             `json:"result,required,nullable"`
+	Result   ListsList             `json:"result,required"`
 	// Whether the API call was successful
 	Success ListNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listNewResponseEnvelopeJSON    `json:"-"`
@@ -429,7 +419,7 @@ func (r ListUpdateParams) MarshalJSON() (data []byte, err error) {
 type ListUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListsList             `json:"result,required,nullable"`
+	Result   ListsList             `json:"result,required"`
 	// Whether the API call was successful
 	Success ListUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listUpdateResponseEnvelopeJSON    `json:"-"`
@@ -482,7 +472,7 @@ type ListDeleteParams struct {
 type ListDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListDeleteResponse    `json:"result,required,nullable"`
+	Result   ListDeleteResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success ListDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listDeleteResponseEnvelopeJSON    `json:"-"`
@@ -530,7 +520,7 @@ type ListGetParams struct {
 type ListGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListsList             `json:"result,required,nullable"`
+	Result   ListsList             `json:"result,required"`
 	// Whether the API call was successful
 	Success ListGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listGetResponseEnvelopeJSON    `json:"-"`

@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RouteService contains methods and other services that help with interacting with
@@ -106,6 +106,25 @@ func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDel
 	}
 	path := fmt.Sprintf("accounts/%s/magic/routes/%s", body.AccountID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Update multiple Magic static routes. Use `?validate_only=true` as an optional
+// query parameter to run validation only without persisting changes. Only fields
+// for a route that need to be changed need be provided.
+func (r *RouteService) BulkUpdate(ctx context.Context, params RouteBulkUpdateParams, opts ...option.RequestOption) (res *RouteBulkUpdateResponse, err error) {
+	var env RouteBulkUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/routes", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -460,6 +479,75 @@ func (r routeDeleteResponseDeletedRouteJSON) RawJSON() string {
 	return r.raw
 }
 
+type RouteBulkUpdateResponse struct {
+	Modified       bool                                   `json:"modified"`
+	ModifiedRoutes []RouteBulkUpdateResponseModifiedRoute `json:"modified_routes"`
+	JSON           routeBulkUpdateResponseJSON            `json:"-"`
+}
+
+// routeBulkUpdateResponseJSON contains the JSON metadata for the struct
+// [RouteBulkUpdateResponse]
+type routeBulkUpdateResponseJSON struct {
+	Modified       apijson.Field
+	ModifiedRoutes apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RouteBulkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeBulkUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteBulkUpdateResponseModifiedRoute struct {
+	// The next-hop IP Address for the static route.
+	Nexthop string `json:"nexthop,required"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Prefix string `json:"prefix,required"`
+	// Priority of the static route.
+	Priority int64 `json:"priority,required"`
+	// Identifier
+	ID string `json:"id"`
+	// When the route was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional human provided description of the static route.
+	Description string `json:"description"`
+	// When the route was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Used only for ECMP routes.
+	Scope Scope `json:"scope"`
+	// Optional weight of the ECMP scope - if provided.
+	Weight int64                                    `json:"weight"`
+	JSON   routeBulkUpdateResponseModifiedRouteJSON `json:"-"`
+}
+
+// routeBulkUpdateResponseModifiedRouteJSON contains the JSON metadata for the
+// struct [RouteBulkUpdateResponseModifiedRoute]
+type routeBulkUpdateResponseModifiedRouteJSON struct {
+	Nexthop     apijson.Field
+	Prefix      apijson.Field
+	Priority    apijson.Field
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Description apijson.Field
+	ModifiedOn  apijson.Field
+	Scope       apijson.Field
+	Weight      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteBulkUpdateResponseModifiedRoute) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeBulkUpdateResponseModifiedRouteJSON) RawJSON() string {
+	return r.raw
+}
+
 type RouteEmptyResponse struct {
 	Deleted       bool                             `json:"deleted"`
 	DeletedRoutes []RouteEmptyResponseDeletedRoute `json:"deleted_routes"`
@@ -804,6 +892,80 @@ const (
 func (r RouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case RouteDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RouteBulkUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string]                       `path:"account_id,required"`
+	Routes    param.Field[[]RouteBulkUpdateParamsRoute] `json:"routes,required"`
+}
+
+func (r RouteBulkUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RouteBulkUpdateParamsRoute struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	// The next-hop IP Address for the static route.
+	Nexthop param.Field[string] `json:"nexthop,required"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Prefix param.Field[string] `json:"prefix,required"`
+	// Priority of the static route.
+	Priority param.Field[int64] `json:"priority,required"`
+	// An optional human provided description of the static route.
+	Description param.Field[string] `json:"description"`
+	// Used only for ECMP routes.
+	Scope param.Field[ScopeParam] `json:"scope"`
+	// Optional weight of the ECMP scope - if provided.
+	Weight param.Field[int64] `json:"weight"`
+}
+
+func (r RouteBulkUpdateParamsRoute) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RouteBulkUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   RouteBulkUpdateResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success RouteBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    routeBulkUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// routeBulkUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RouteBulkUpdateResponseEnvelope]
+type routeBulkUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteBulkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeBulkUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RouteBulkUpdateResponseEnvelopeSuccess bool
+
+const (
+	RouteBulkUpdateResponseEnvelopeSuccessTrue RouteBulkUpdateResponseEnvelopeSuccess = true
+)
+
+func (r RouteBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteBulkUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

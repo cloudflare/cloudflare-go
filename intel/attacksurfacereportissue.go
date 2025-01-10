@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AttackSurfaceReportIssueService contains methods and other services that help
@@ -167,21 +167,23 @@ func (r SeverityQueryParam) IsKnown() bool {
 }
 
 type AttackSurfaceReportIssueListResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success AttackSurfaceReportIssueListResponseSuccess `json:"success,required"`
-	Result  AttackSurfaceReportIssueListResponseResult  `json:"result"`
-	JSON    attackSurfaceReportIssueListResponseJSON    `json:"-"`
+	// Total number of results
+	Count  int64                                       `json:"count"`
+	Issues []AttackSurfaceReportIssueListResponseIssue `json:"issues"`
+	// Current page within paginated list of results
+	Page int64 `json:"page"`
+	// Number of results per page of results
+	PerPage int64                                    `json:"per_page"`
+	JSON    attackSurfaceReportIssueListResponseJSON `json:"-"`
 }
 
 // attackSurfaceReportIssueListResponseJSON contains the JSON metadata for the
 // struct [AttackSurfaceReportIssueListResponse]
 type attackSurfaceReportIssueListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
+	Count       apijson.Field
+	Issues      apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -194,69 +196,24 @@ func (r attackSurfaceReportIssueListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
-type AttackSurfaceReportIssueListResponseSuccess bool
-
-const (
-	AttackSurfaceReportIssueListResponseSuccessTrue AttackSurfaceReportIssueListResponseSuccess = true
-)
-
-func (r AttackSurfaceReportIssueListResponseSuccess) IsKnown() bool {
-	switch r {
-	case AttackSurfaceReportIssueListResponseSuccessTrue:
-		return true
-	}
-	return false
+type AttackSurfaceReportIssueListResponseIssue struct {
+	ID          string                                             `json:"id"`
+	Dismissed   bool                                               `json:"dismissed"`
+	IssueClass  string                                             `json:"issue_class"`
+	IssueType   IssueType                                          `json:"issue_type"`
+	Payload     interface{}                                        `json:"payload"`
+	ResolveLink string                                             `json:"resolve_link"`
+	ResolveText string                                             `json:"resolve_text"`
+	Severity    AttackSurfaceReportIssueListResponseIssuesSeverity `json:"severity"`
+	Since       time.Time                                          `json:"since" format:"date-time"`
+	Subject     string                                             `json:"subject"`
+	Timestamp   time.Time                                          `json:"timestamp" format:"date-time"`
+	JSON        attackSurfaceReportIssueListResponseIssueJSON      `json:"-"`
 }
 
-type AttackSurfaceReportIssueListResponseResult struct {
-	// Total number of results
-	Count  int64                                             `json:"count"`
-	Issues []AttackSurfaceReportIssueListResponseResultIssue `json:"issues"`
-	// Current page within paginated list of results
-	Page int64 `json:"page"`
-	// Number of results per page of results
-	PerPage int64                                          `json:"per_page"`
-	JSON    attackSurfaceReportIssueListResponseResultJSON `json:"-"`
-}
-
-// attackSurfaceReportIssueListResponseResultJSON contains the JSON metadata for
-// the struct [AttackSurfaceReportIssueListResponseResult]
-type attackSurfaceReportIssueListResponseResultJSON struct {
-	Count       apijson.Field
-	Issues      apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackSurfaceReportIssueListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackSurfaceReportIssueListResponseResultJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackSurfaceReportIssueListResponseResultIssue struct {
-	ID          string                                                   `json:"id"`
-	Dismissed   bool                                                     `json:"dismissed"`
-	IssueClass  string                                                   `json:"issue_class"`
-	IssueType   IssueType                                                `json:"issue_type"`
-	Payload     interface{}                                              `json:"payload"`
-	ResolveLink string                                                   `json:"resolve_link"`
-	ResolveText string                                                   `json:"resolve_text"`
-	Severity    AttackSurfaceReportIssueListResponseResultIssuesSeverity `json:"severity"`
-	Since       time.Time                                                `json:"since" format:"date-time"`
-	Subject     string                                                   `json:"subject"`
-	Timestamp   time.Time                                                `json:"timestamp" format:"date-time"`
-	JSON        attackSurfaceReportIssueListResponseResultIssueJSON      `json:"-"`
-}
-
-// attackSurfaceReportIssueListResponseResultIssueJSON contains the JSON metadata
-// for the struct [AttackSurfaceReportIssueListResponseResultIssue]
-type attackSurfaceReportIssueListResponseResultIssueJSON struct {
+// attackSurfaceReportIssueListResponseIssueJSON contains the JSON metadata for the
+// struct [AttackSurfaceReportIssueListResponseIssue]
+type attackSurfaceReportIssueListResponseIssueJSON struct {
 	ID          apijson.Field
 	Dismissed   apijson.Field
 	IssueClass  apijson.Field
@@ -272,25 +229,25 @@ type attackSurfaceReportIssueListResponseResultIssueJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AttackSurfaceReportIssueListResponseResultIssue) UnmarshalJSON(data []byte) (err error) {
+func (r *AttackSurfaceReportIssueListResponseIssue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r attackSurfaceReportIssueListResponseResultIssueJSON) RawJSON() string {
+func (r attackSurfaceReportIssueListResponseIssueJSON) RawJSON() string {
 	return r.raw
 }
 
-type AttackSurfaceReportIssueListResponseResultIssuesSeverity string
+type AttackSurfaceReportIssueListResponseIssuesSeverity string
 
 const (
-	AttackSurfaceReportIssueListResponseResultIssuesSeverityLow      AttackSurfaceReportIssueListResponseResultIssuesSeverity = "Low"
-	AttackSurfaceReportIssueListResponseResultIssuesSeverityModerate AttackSurfaceReportIssueListResponseResultIssuesSeverity = "Moderate"
-	AttackSurfaceReportIssueListResponseResultIssuesSeverityCritical AttackSurfaceReportIssueListResponseResultIssuesSeverity = "Critical"
+	AttackSurfaceReportIssueListResponseIssuesSeverityLow      AttackSurfaceReportIssueListResponseIssuesSeverity = "Low"
+	AttackSurfaceReportIssueListResponseIssuesSeverityModerate AttackSurfaceReportIssueListResponseIssuesSeverity = "Moderate"
+	AttackSurfaceReportIssueListResponseIssuesSeverityCritical AttackSurfaceReportIssueListResponseIssuesSeverity = "Critical"
 )
 
-func (r AttackSurfaceReportIssueListResponseResultIssuesSeverity) IsKnown() bool {
+func (r AttackSurfaceReportIssueListResponseIssuesSeverity) IsKnown() bool {
 	switch r {
-	case AttackSurfaceReportIssueListResponseResultIssuesSeverityLow, AttackSurfaceReportIssueListResponseResultIssuesSeverityModerate, AttackSurfaceReportIssueListResponseResultIssuesSeverityCritical:
+	case AttackSurfaceReportIssueListResponseIssuesSeverityLow, AttackSurfaceReportIssueListResponseIssuesSeverityModerate, AttackSurfaceReportIssueListResponseIssuesSeverityCritical:
 		return true
 	}
 	return false

@@ -11,13 +11,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -41,15 +41,15 @@ func NewLockdownService(opts ...option.RequestOption) (r *LockdownService) {
 }
 
 // Creates a new Zone Lockdown rule.
-func (r *LockdownService) New(ctx context.Context, zoneIdentifier string, body LockdownNewParams, opts ...option.RequestOption) (res *Lockdown, err error) {
+func (r *LockdownService) New(ctx context.Context, params LockdownNewParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/lockdowns", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/lockdowns", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,19 +58,19 @@ func (r *LockdownService) New(ctx context.Context, zoneIdentifier string, body L
 }
 
 // Updates an existing Zone Lockdown rule.
-func (r *LockdownService) Update(ctx context.Context, zoneIdentifier string, id string, body LockdownUpdateParams, opts ...option.RequestOption) (res *Lockdown, err error) {
+func (r *LockdownService) Update(ctx context.Context, lockDownsID string, params LockdownUpdateParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if lockDownsID == "" {
+		err = errors.New("missing required lock_downs_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", params.ZoneID, lockDownsID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -80,16 +80,16 @@ func (r *LockdownService) Update(ctx context.Context, zoneIdentifier string, id 
 
 // Fetches Zone Lockdown rules. You can filter the results using several optional
 // parameters.
-func (r *LockdownService) List(ctx context.Context, zoneIdentifier string, query LockdownListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Lockdown], err error) {
+func (r *LockdownService) List(ctx context.Context, params LockdownListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Lockdown], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/lockdowns", zoneIdentifier)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/lockdowns", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -103,23 +103,23 @@ func (r *LockdownService) List(ctx context.Context, zoneIdentifier string, query
 
 // Fetches Zone Lockdown rules. You can filter the results using several optional
 // parameters.
-func (r *LockdownService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query LockdownListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Lockdown] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
+func (r *LockdownService) ListAutoPaging(ctx context.Context, params LockdownListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Lockdown] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing Zone Lockdown rule.
-func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
+func (r *LockdownService) Delete(ctx context.Context, lockDownsID string, body LockdownDeleteParams, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
 	var env LockdownDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if lockDownsID == "" {
+		err = errors.New("missing required lock_downs_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
+	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", body.ZoneID, lockDownsID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -129,18 +129,18 @@ func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id 
 }
 
 // Fetches the details of a Zone Lockdown rule.
-func (r *LockdownService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *Lockdown, err error) {
+func (r *LockdownService) Get(ctx context.Context, lockDownsID string, query LockdownGetParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if lockDownsID == "" {
+		err = errors.New("missing required lock_downs_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
+	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", query.ZoneID, lockDownsID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -149,34 +149,34 @@ func (r *LockdownService) Get(ctx context.Context, zoneIdentifier string, id str
 	return
 }
 
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-type Configuration struct {
+type Configuration []ConfigurationItem
+
+type ConfigurationItem struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
 	// address in the Zone Lockdown rule.
-	Target ConfigurationTarget `json:"target"`
+	Target ConfigurationItemTarget `json:"target"`
 	// The IP address to match. This address will be compared to the IP address of
 	// incoming requests.
-	Value string            `json:"value"`
-	JSON  configurationJSON `json:"-"`
-	union ConfigurationUnion
+	Value string                `json:"value"`
+	JSON  configurationItemJSON `json:"-"`
+	union ConfigurationItemUnion
 }
 
-// configurationJSON contains the JSON metadata for the struct [Configuration]
-type configurationJSON struct {
+// configurationItemJSON contains the JSON metadata for the struct
+// [ConfigurationItem]
+type configurationItemJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r configurationJSON) RawJSON() string {
+func (r configurationItemJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *Configuration) UnmarshalJSON(data []byte) (err error) {
-	*r = Configuration{}
+func (r *ConfigurationItem) UnmarshalJSON(data []byte) (err error) {
+	*r = ConfigurationItem{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -184,28 +184,24 @@ func (r *Configuration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [ConfigurationUnion] interface which you can cast to the
+// AsUnion returns a [ConfigurationItemUnion] interface which you can cast to the
 // specific types for more type safety.
 //
 // Possible runtime types of the union are [firewall.LockdownIPConfiguration],
 // [firewall.LockdownCIDRConfiguration].
-func (r Configuration) AsUnion() ConfigurationUnion {
+func (r ConfigurationItem) AsUnion() ConfigurationItemUnion {
 	return r.union
 }
 
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-//
 // Union satisfied by [firewall.LockdownIPConfiguration] or
 // [firewall.LockdownCIDRConfiguration].
-type ConfigurationUnion interface {
-	implementsFirewallConfiguration()
+type ConfigurationItemUnion interface {
+	implementsFirewallConfigurationItem()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ConfigurationUnion)(nil)).Elem(),
+		reflect.TypeOf((*ConfigurationItemUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -220,47 +216,42 @@ func init() {
 
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the Zone Lockdown rule.
-type ConfigurationTarget string
+type ConfigurationItemTarget string
 
 const (
-	ConfigurationTargetIP      ConfigurationTarget = "ip"
-	ConfigurationTargetIPRange ConfigurationTarget = "ip_range"
+	ConfigurationItemTargetIP      ConfigurationItemTarget = "ip"
+	ConfigurationItemTargetIPRange ConfigurationItemTarget = "ip_range"
 )
 
-func (r ConfigurationTarget) IsKnown() bool {
+func (r ConfigurationItemTarget) IsKnown() bool {
 	switch r {
-	case ConfigurationTargetIP, ConfigurationTargetIPRange:
+	case ConfigurationItemTargetIP, ConfigurationItemTargetIPRange:
 		return true
 	}
 	return false
 }
 
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-type ConfigurationParam struct {
+type ConfigurationParam []ConfigurationItemUnionParam
+
+type ConfigurationItemParam struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
 	// address in the Zone Lockdown rule.
-	Target param.Field[ConfigurationTarget] `json:"target"`
+	Target param.Field[ConfigurationItemTarget] `json:"target"`
 	// The IP address to match. This address will be compared to the IP address of
 	// incoming requests.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r ConfigurationParam) MarshalJSON() (data []byte, err error) {
+func (r ConfigurationItemParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigurationParam) implementsFirewallConfigurationUnionParam() {}
+func (r ConfigurationItemParam) implementsFirewallConfigurationItemUnionParam() {}
 
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-//
 // Satisfied by [firewall.LockdownIPConfigurationParam],
-// [firewall.LockdownCIDRConfigurationParam], [ConfigurationParam].
-type ConfigurationUnionParam interface {
-	implementsFirewallConfigurationUnionParam()
+// [firewall.LockdownCIDRConfigurationParam], [ConfigurationItemParam].
+type ConfigurationItemUnionParam interface {
+	implementsFirewallConfigurationItemUnionParam()
 }
 
 type Lockdown struct {
@@ -332,7 +323,7 @@ func (r lockdownCIDRConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r LockdownCIDRConfiguration) implementsFirewallConfiguration() {}
+func (r LockdownCIDRConfiguration) implementsFirewallConfigurationItem() {}
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the Zone Lockdown rule.
@@ -362,7 +353,7 @@ func (r LockdownCIDRConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r LockdownCIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
+func (r LockdownCIDRConfigurationParam) implementsFirewallConfigurationItemUnionParam() {}
 
 type LockdownIPConfiguration struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
@@ -391,7 +382,7 @@ func (r lockdownIPConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r LockdownIPConfiguration) implementsFirewallConfiguration() {}
+func (r LockdownIPConfiguration) implementsFirewallConfigurationItem() {}
 
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the Zone Lockdown rule.
@@ -422,7 +413,7 @@ func (r LockdownIPConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r LockdownIPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
+func (r LockdownIPConfigurationParam) implementsFirewallConfigurationItemUnionParam() {}
 
 type LockdownURL = string
 
@@ -449,10 +440,12 @@ func (r lockdownDeleteResponseJSON) RawJSON() string {
 }
 
 type LockdownNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 	// specified in the Zone Lockdown rule. You can include any number of `ip` or
 	// `ip_range` configurations.
-	Configurations param.Field[ConfigurationUnionParam] `json:"configurations,required"`
+	Configurations param.Field[ConfigurationParam] `json:"configurations,required"`
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
@@ -507,10 +500,12 @@ func (r LockdownNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LockdownUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 	// specified in the Zone Lockdown rule. You can include any number of `ip` or
 	// `ip_range` configurations.
-	Configurations param.Field[ConfigurationUnionParam] `json:"configurations,required"`
+	Configurations param.Field[ConfigurationParam] `json:"configurations,required"`
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
@@ -565,6 +560,8 @@ func (r LockdownUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LockdownListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The timestamp of when the rule was created.
 	CreatedOn param.Field[time.Time] `query:"created_on" format:"date-time"`
 	// A string to search for in the description of existing rules.
@@ -600,6 +597,11 @@ func (r LockdownListParams) URLQuery() (v url.Values) {
 	})
 }
 
+type LockdownDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type LockdownDeleteResponseEnvelope struct {
 	Result LockdownDeleteResponse             `json:"result"`
 	JSON   lockdownDeleteResponseEnvelopeJSON `json:"-"`
@@ -619,6 +621,11 @@ func (r *LockdownDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 
 func (r lockdownDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+type LockdownGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type LockdownGetResponseEnvelope struct {

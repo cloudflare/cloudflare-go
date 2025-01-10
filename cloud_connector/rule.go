@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RuleService contains methods and other services that help with interacting with
@@ -231,51 +231,51 @@ type RuleUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// List of Cloud Connector rules
-	Body []RuleUpdateParamsBody `json:"body,required"`
+	Rules []RuleUpdateParamsRule `json:"rules,required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r.Rules)
 }
 
-type RuleUpdateParamsBody struct {
+type RuleUpdateParamsRule struct {
 	ID          param.Field[string] `json:"id"`
 	Description param.Field[string] `json:"description"`
 	Enabled     param.Field[bool]   `json:"enabled"`
 	Expression  param.Field[string] `json:"expression"`
 	// Parameters of Cloud Connector Rule
-	Parameters param.Field[RuleUpdateParamsBodyParameters] `json:"parameters"`
+	Parameters param.Field[RuleUpdateParamsRulesParameters] `json:"parameters"`
 	// Cloud Provider type
-	Provider param.Field[RuleUpdateParamsBodyProvider] `json:"provider"`
+	Provider param.Field[RuleUpdateParamsRulesProvider] `json:"provider"`
 }
 
-func (r RuleUpdateParamsBody) MarshalJSON() (data []byte, err error) {
+func (r RuleUpdateParamsRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Parameters of Cloud Connector Rule
-type RuleUpdateParamsBodyParameters struct {
+type RuleUpdateParamsRulesParameters struct {
 	// Host to perform Cloud Connection to
 	Host param.Field[string] `json:"host"`
 }
 
-func (r RuleUpdateParamsBodyParameters) MarshalJSON() (data []byte, err error) {
+func (r RuleUpdateParamsRulesParameters) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Cloud Provider type
-type RuleUpdateParamsBodyProvider string
+type RuleUpdateParamsRulesProvider string
 
 const (
-	RuleUpdateParamsBodyProviderAwsS3        RuleUpdateParamsBodyProvider = "aws_s3"
-	RuleUpdateParamsBodyProviderR2           RuleUpdateParamsBodyProvider = "r2"
-	RuleUpdateParamsBodyProviderGcpStorage   RuleUpdateParamsBodyProvider = "gcp_storage"
-	RuleUpdateParamsBodyProviderAzureStorage RuleUpdateParamsBodyProvider = "azure_storage"
+	RuleUpdateParamsRulesProviderAwsS3        RuleUpdateParamsRulesProvider = "aws_s3"
+	RuleUpdateParamsRulesProviderR2           RuleUpdateParamsRulesProvider = "r2"
+	RuleUpdateParamsRulesProviderGcpStorage   RuleUpdateParamsRulesProvider = "gcp_storage"
+	RuleUpdateParamsRulesProviderAzureStorage RuleUpdateParamsRulesProvider = "azure_storage"
 )
 
-func (r RuleUpdateParamsBodyProvider) IsKnown() bool {
+func (r RuleUpdateParamsRulesProvider) IsKnown() bool {
 	switch r {
-	case RuleUpdateParamsBodyProviderAwsS3, RuleUpdateParamsBodyProviderR2, RuleUpdateParamsBodyProviderGcpStorage, RuleUpdateParamsBodyProviderAzureStorage:
+	case RuleUpdateParamsRulesProviderAwsS3, RuleUpdateParamsRulesProviderR2, RuleUpdateParamsRulesProviderGcpStorage, RuleUpdateParamsRulesProviderAzureStorage:
 		return true
 	}
 	return false

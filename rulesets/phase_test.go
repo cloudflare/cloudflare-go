@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/rulesets"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/rulesets"
 )
 
 func TestPhaseUpdateWithOptionalParams(t *testing.T) {
@@ -44,43 +44,23 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
+				ExposedCredentialCheck: cloudflare.F(rulesets.BlockRuleExposedCredentialCheckParam{
+					PasswordExpression: cloudflare.F("url_decode(http.request.body.form[\\\"password\\\"][0])"),
+					UsernameExpression: cloudflare.F("url_decode(http.request.body.form[\\\"username\\\"][0])"),
+				}),
+				Expression: cloudflare.F("ip.src ne 1.1.1.1"),
 				Logging: cloudflare.F(rulesets.LoggingParam{
 					Enabled: cloudflare.F(true),
 				}),
-				Ref: cloudflare.F("my_ref"),
-			}, rulesets.BlockRuleParam{
-				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
-				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
-					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
-						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
-						ContentType: cloudflare.F("application/json"),
-						StatusCode:  cloudflare.F(int64(400)),
-					}),
-				}),
-				Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
-				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging: cloudflare.F(rulesets.LoggingParam{
-					Enabled: cloudflare.F(true),
-				}),
-				Ref: cloudflare.F("my_ref"),
-			}, rulesets.BlockRuleParam{
-				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
-				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
-					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
-						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
-						ContentType: cloudflare.F("application/json"),
-						StatusCode:  cloudflare.F(int64(400)),
-					}),
-				}),
-				Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
-				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging: cloudflare.F(rulesets.LoggingParam{
-					Enabled: cloudflare.F(true),
+				Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
+					Characteristics:         cloudflare.F([]string{"ip.src"}),
+					Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod10),
+					CountingExpression:      cloudflare.F("http.request.body.raw eq \"abcd\""),
+					MitigationTimeout:       cloudflare.F(int64(600)),
+					RequestsPerPeriod:       cloudflare.F(int64(1000)),
+					RequestsToOrigin:        cloudflare.F(true),
+					ScorePerPeriod:          cloudflare.F(int64(400)),
+					ScoreResponseHeaderName: cloudflare.F("my-score"),
 				}),
 				Ref: cloudflare.F("my_ref"),
 			}}),

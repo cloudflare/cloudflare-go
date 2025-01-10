@@ -7,11 +7,11 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // EntityService contains methods and other services that help with interacting
@@ -108,7 +108,7 @@ func (r entityGetResponseIPJSON) RawJSON() string {
 
 type EntityGetParams struct {
 	// IP address.
-	IP param.Field[string] `query:"ip,required"`
+	IP param.Field[string] `query:"ip,required" format:"ip"`
 	// Format results are returned in.
 	Format param.Field[EntityGetParamsFormat] `query:"format"`
 }

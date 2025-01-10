@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HostnameService contains methods and other services that help with interacting
@@ -185,8 +185,6 @@ func (r hostnameJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Hostname) ImplementsRulesListItemGetResponseUnion() {}
-
 // Status of the hostname's activation.
 type HostnameStatus string
 
@@ -247,6 +245,8 @@ func (r hostnameDeleteResponseJSON) RawJSON() string {
 type HostnameNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// The hostname that will point to the target gateway via CNAME.
+	Name param.Field[string] `json:"name,required"`
 	// Target gateway of the hostname.
 	Target param.Field[HostnameNewParamsTarget] `json:"target,required"`
 	// An optional description of the hostname.

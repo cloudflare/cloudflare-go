@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DispatchNamespaceScriptSecretService contains methods and other services that
@@ -122,6 +122,35 @@ func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatch
 	}
 	res = &env.Result
 	return
+}
+
+type WorkersSecretModelParam struct {
+	// The name of this secret, this is what will be used to access it inside the
+	// Worker.
+	Name param.Field[string] `json:"name"`
+	// The value of the secret.
+	Text param.Field[string] `json:"text"`
+	// The type of secret to put.
+	Type param.Field[WorkersSecretModelType] `json:"type"`
+}
+
+func (r WorkersSecretModelParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of secret to put.
+type WorkersSecretModelType string
+
+const (
+	WorkersSecretModelTypeSecretText WorkersSecretModelType = "secret_text"
+)
+
+func (r WorkersSecretModelType) IsKnown() bool {
+	switch r {
+	case WorkersSecretModelTypeSecretText:
+		return true
+	}
+	return false
 }
 
 type DispatchNamespaceScriptSecretUpdateResponse struct {
@@ -249,33 +278,12 @@ func (r DispatchNamespaceScriptSecretGetResponseType) IsKnown() bool {
 
 type DispatchNamespaceScriptSecretUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The name of this secret, this is what will be used to access it inside the
-	// Worker.
-	Name param.Field[string] `json:"name"`
-	// The value of the secret.
-	Text param.Field[string] `json:"text"`
-	// The type of secret to put.
-	Type param.Field[DispatchNamespaceScriptSecretUpdateParamsType] `json:"type"`
+	AccountID          param.Field[string]     `path:"account_id,required"`
+	WorkersSecretModel WorkersSecretModelParam `json:"workers_secret_model,required"`
 }
 
 func (r DispatchNamespaceScriptSecretUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of secret to put.
-type DispatchNamespaceScriptSecretUpdateParamsType string
-
-const (
-	DispatchNamespaceScriptSecretUpdateParamsTypeSecretText DispatchNamespaceScriptSecretUpdateParamsType = "secret_text"
-)
-
-func (r DispatchNamespaceScriptSecretUpdateParamsType) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptSecretUpdateParamsTypeSecretText:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.WorkersSecretModel)
 }
 
 type DispatchNamespaceScriptSecretUpdateResponseEnvelope struct {

@@ -11,12 +11,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -80,20 +81,30 @@ func (r *AppService) Update(ctx context.Context, appID string, params AppUpdateP
 }
 
 // Retrieves a list of currently existing Spectrum applications inside a zone.
-func (r *AppService) List(ctx context.Context, params AppListParams, opts ...option.RequestOption) (res *AppListResponseUnion, err error) {
-	var env AppListResponseEnvelope
+func (r *AppService) List(ctx context.Context, params AppListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AppListResponseUnion], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/spectrum/apps", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Retrieves a list of currently existing Spectrum applications inside a zone.
+func (r *AppService) ListAutoPaging(ctx context.Context, params AppListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AppListResponseUnion] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a previously existing application.
@@ -139,24 +150,27 @@ func (r *AppService) Get(ctx context.Context, appID string, query AppGetParams, 
 }
 
 type AppNewResponse struct {
-	// When the Application was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// App identifier.
 	ID string `json:"id,required"`
+	// When the Application was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// The name and type of DNS record for the Spectrum application.
+	DNS DNS `json:"dns,required"`
 	// When the Application was last modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The port configuration at Cloudflare's edge. May specify a single port, for
+	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
+	Protocol string `json:"protocol,required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
-	// The name and type of DNS record for the Spectrum application.
-	DNS DNS `json:"dns,required"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs EdgeIPs `json:"edge_ips"`
 	// Enables IP Access Rules for this application. Notes: Only available for TCP
 	// applications.
 	IPFirewall bool `json:"ip_firewall"`
 	// This field can have the runtime type of [[]string].
-	OriginDirect interface{} `json:"origin_direct,required"`
+	OriginDirect interface{} `json:"origin_direct"`
 	// The name and type of DNS record for the Spectrum application.
 	OriginDNS OriginDNS `json:"origin_dns"`
 	// The destination port at the origin. Only specified in conjunction with
@@ -165,9 +179,6 @@ type AppNewResponse struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort OriginPortUnion `json:"origin_port"`
-	// The port configuration at Cloudflare's edge. May specify a single port, for
-	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
-	Protocol string `json:"protocol,required"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -187,17 +198,17 @@ type AppNewResponse struct {
 
 // appNewResponseJSON contains the JSON metadata for the struct [AppNewResponse]
 type appNewResponseJSON struct {
-	CreatedOn        apijson.Field
 	ID               apijson.Field
-	ModifiedOn       apijson.Field
-	ArgoSmartRouting apijson.Field
+	CreatedOn        apijson.Field
 	DNS              apijson.Field
+	ModifiedOn       apijson.Field
+	Protocol         apijson.Field
+	ArgoSmartRouting apijson.Field
 	EdgeIPs          apijson.Field
 	IPFirewall       apijson.Field
 	OriginDirect     apijson.Field
 	OriginDNS        apijson.Field
 	OriginPort       apijson.Field
-	Protocol         apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	TrafficType      apijson.Field
@@ -489,24 +500,27 @@ func (r AppNewResponseTrafficType) IsKnown() bool {
 }
 
 type AppUpdateResponse struct {
-	// When the Application was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// App identifier.
 	ID string `json:"id,required"`
+	// When the Application was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// The name and type of DNS record for the Spectrum application.
+	DNS DNS `json:"dns,required"`
 	// When the Application was last modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The port configuration at Cloudflare's edge. May specify a single port, for
+	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
+	Protocol string `json:"protocol,required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
-	// The name and type of DNS record for the Spectrum application.
-	DNS DNS `json:"dns,required"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs EdgeIPs `json:"edge_ips"`
 	// Enables IP Access Rules for this application. Notes: Only available for TCP
 	// applications.
 	IPFirewall bool `json:"ip_firewall"`
 	// This field can have the runtime type of [[]string].
-	OriginDirect interface{} `json:"origin_direct,required"`
+	OriginDirect interface{} `json:"origin_direct"`
 	// The name and type of DNS record for the Spectrum application.
 	OriginDNS OriginDNS `json:"origin_dns"`
 	// The destination port at the origin. Only specified in conjunction with
@@ -515,9 +529,6 @@ type AppUpdateResponse struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort OriginPortUnion `json:"origin_port"`
-	// The port configuration at Cloudflare's edge. May specify a single port, for
-	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
-	Protocol string `json:"protocol,required"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -538,17 +549,17 @@ type AppUpdateResponse struct {
 // appUpdateResponseJSON contains the JSON metadata for the struct
 // [AppUpdateResponse]
 type appUpdateResponseJSON struct {
-	CreatedOn        apijson.Field
 	ID               apijson.Field
-	ModifiedOn       apijson.Field
-	ArgoSmartRouting apijson.Field
+	CreatedOn        apijson.Field
 	DNS              apijson.Field
+	ModifiedOn       apijson.Field
+	Protocol         apijson.Field
+	ArgoSmartRouting apijson.Field
 	EdgeIPs          apijson.Field
 	IPFirewall       apijson.Field
 	OriginDirect     apijson.Field
 	OriginDNS        apijson.Field
 	OriginPort       apijson.Field
-	Protocol         apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	TrafficType      apijson.Field
@@ -1023,24 +1034,27 @@ func (r appDeleteResponseJSON) RawJSON() string {
 }
 
 type AppGetResponse struct {
-	// When the Application was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// App identifier.
 	ID string `json:"id,required"`
+	// When the Application was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// The name and type of DNS record for the Spectrum application.
+	DNS DNS `json:"dns,required"`
 	// When the Application was last modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The port configuration at Cloudflare's edge. May specify a single port, for
+	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
+	Protocol string `json:"protocol,required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
-	// The name and type of DNS record for the Spectrum application.
-	DNS DNS `json:"dns,required"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs EdgeIPs `json:"edge_ips"`
 	// Enables IP Access Rules for this application. Notes: Only available for TCP
 	// applications.
 	IPFirewall bool `json:"ip_firewall"`
 	// This field can have the runtime type of [[]string].
-	OriginDirect interface{} `json:"origin_direct,required"`
+	OriginDirect interface{} `json:"origin_direct"`
 	// The name and type of DNS record for the Spectrum application.
 	OriginDNS OriginDNS `json:"origin_dns"`
 	// The destination port at the origin. Only specified in conjunction with
@@ -1049,9 +1063,6 @@ type AppGetResponse struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort OriginPortUnion `json:"origin_port"`
-	// The port configuration at Cloudflare's edge. May specify a single port, for
-	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
-	Protocol string `json:"protocol,required"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1071,17 +1082,17 @@ type AppGetResponse struct {
 
 // appGetResponseJSON contains the JSON metadata for the struct [AppGetResponse]
 type appGetResponseJSON struct {
-	CreatedOn        apijson.Field
 	ID               apijson.Field
-	ModifiedOn       apijson.Field
-	ArgoSmartRouting apijson.Field
+	CreatedOn        apijson.Field
 	DNS              apijson.Field
+	ModifiedOn       apijson.Field
+	Protocol         apijson.Field
+	ArgoSmartRouting apijson.Field
 	EdgeIPs          apijson.Field
 	IPFirewall       apijson.Field
 	OriginDirect     apijson.Field
 	OriginDNS        apijson.Field
 	OriginPort       apijson.Field
-	Protocol         apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	TrafficType      apijson.Field
@@ -1383,17 +1394,20 @@ func (r AppNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AppNewParamsBody struct {
+	// The name and type of DNS record for the Spectrum application.
+	DNS param.Field[DNSParam] `json:"dns,required"`
+	// The port configuration at Cloudflare's edge. May specify a single port, for
+	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
+	Protocol param.Field[string] `json:"protocol,required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// applications with traffic_type set to "direct".
 	ArgoSmartRouting param.Field[bool] `json:"argo_smart_routing"`
-	// The name and type of DNS record for the Spectrum application.
-	DNS param.Field[DNSParam] `json:"dns,required"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs param.Field[EdgeIPsUnionParam] `json:"edge_ips"`
 	// Enables IP Access Rules for this application. Notes: Only available for TCP
 	// applications.
 	IPFirewall   param.Field[bool]        `json:"ip_firewall"`
-	OriginDirect param.Field[interface{}] `json:"origin_direct,required"`
+	OriginDirect param.Field[interface{}] `json:"origin_direct"`
 	// The name and type of DNS record for the Spectrum application.
 	OriginDNS param.Field[OriginDNSParam] `json:"origin_dns"`
 	// The destination port at the origin. Only specified in conjunction with
@@ -1402,9 +1416,6 @@ type AppNewParamsBody struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort param.Field[OriginPortUnionParam] `json:"origin_port"`
-	// The port configuration at Cloudflare's edge. May specify a single port, for
-	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
-	Protocol param.Field[string] `json:"protocol,required"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1669,17 +1680,20 @@ func (r AppUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AppUpdateParamsBody struct {
+	// The name and type of DNS record for the Spectrum application.
+	DNS param.Field[DNSParam] `json:"dns,required"`
+	// The port configuration at Cloudflare's edge. May specify a single port, for
+	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
+	Protocol param.Field[string] `json:"protocol,required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// applications with traffic_type set to "direct".
 	ArgoSmartRouting param.Field[bool] `json:"argo_smart_routing"`
-	// The name and type of DNS record for the Spectrum application.
-	DNS param.Field[DNSParam] `json:"dns,required"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs param.Field[EdgeIPsUnionParam] `json:"edge_ips"`
 	// Enables IP Access Rules for this application. Notes: Only available for TCP
 	// applications.
 	IPFirewall   param.Field[bool]        `json:"ip_firewall"`
-	OriginDirect param.Field[interface{}] `json:"origin_direct,required"`
+	OriginDirect param.Field[interface{}] `json:"origin_direct"`
 	// The name and type of DNS record for the Spectrum application.
 	OriginDNS param.Field[OriginDNSParam] `json:"origin_dns"`
 	// The destination port at the origin. Only specified in conjunction with
@@ -1688,9 +1702,6 @@ type AppUpdateParamsBody struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort param.Field[OriginPortUnionParam] `json:"origin_port"`
-	// The port configuration at Cloudflare's edge. May specify a single port, for
-	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
-	Protocol param.Field[string] `json:"protocol,required"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -2002,82 +2013,6 @@ func (r AppListParamsOrder) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type AppListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    AppListResponseEnvelopeSuccess    `json:"success,required"`
-	Result     AppListResponseUnion              `json:"result"`
-	ResultInfo AppListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       appListResponseEnvelopeJSON       `json:"-"`
-}
-
-// appListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AppListResponseEnvelope]
-type appListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AppListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r appListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AppListResponseEnvelopeSuccess bool
-
-const (
-	AppListResponseEnvelopeSuccessTrue AppListResponseEnvelopeSuccess = true
-)
-
-func (r AppListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AppListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AppListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                               `json:"total_count"`
-	JSON       appListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// appListResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [AppListResponseEnvelopeResultInfo]
-type appListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AppListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r appListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type AppDeleteParams struct {

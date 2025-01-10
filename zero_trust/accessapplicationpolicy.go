@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessApplicationPolicyService contains methods and other services that help
@@ -39,7 +39,7 @@ func NewAccessApplicationPolicyService(opts ...option.RequestOption) (r *AccessA
 // users or groups who can reach it. We recommend creating a reusable policy
 // instead and subsequently referencing its ID in the application's 'policies'
 // array.
-func (r *AccessApplicationPolicyService) New(ctx context.Context, appID string, params AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *ApplicationPolicy, err error) {
+func (r *AccessApplicationPolicyService) New(ctx context.Context, appID string, params AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *AccessApplicationPolicyNewResponse, err error) {
 	var env AccessApplicationPolicyNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -75,7 +75,7 @@ func (r *AccessApplicationPolicyService) New(ctx context.Context, appID string, 
 
 // Updates an Access policy specific to an application. To update a reusable
 // policy, use the /account or zones/{account or zone_id}/policies/{uid} endpoint.
-func (r *AccessApplicationPolicyService) Update(ctx context.Context, appID string, policyID string, params AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *ApplicationPolicy, err error) {
+func (r *AccessApplicationPolicyService) Update(ctx context.Context, appID string, policyID string, params AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *AccessApplicationPolicyUpdateResponse, err error) {
 	var env AccessApplicationPolicyUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -115,7 +115,7 @@ func (r *AccessApplicationPolicyService) Update(ctx context.Context, appID strin
 
 // Lists Access policies configured for an application. Returns both exclusively
 // scoped and reusable policies used by the application.
-func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ApplicationPolicy], err error) {
+func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationPolicyListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -156,7 +156,7 @@ func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string,
 
 // Lists Access policies configured for an application. Returns both exclusively
 // scoped and reusable policies used by the application.
-func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, appID string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ApplicationPolicy] {
+func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, appID string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessApplicationPolicyListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, appID, query, opts...))
 }
 
@@ -202,7 +202,7 @@ func (r *AccessApplicationPolicyService) Delete(ctx context.Context, appID strin
 
 // Fetches a single Access policy configured for an application. Returns both
 // exclusively owned and reusable policies used by the application.
-func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, policyID string, query AccessApplicationPolicyGetParams, opts ...option.RequestOption) (res *ApplicationPolicy, err error) {
+func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, policyID string, query AccessApplicationPolicyGetParams, opts ...option.RequestOption) (res *AccessApplicationPolicyGetResponse, err error) {
 	var env AccessApplicationPolicyGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -240,46 +240,76 @@ func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, 
 	return
 }
 
-// A group of email addresses that can approve a temporary authentication request.
-type ApprovalGroup struct {
-	// The number of approvals needed to obtain access.
-	ApprovalsNeeded float64 `json:"approvals_needed,required"`
-	// A list of emails that can approve the access request.
-	EmailAddresses []string `json:"email_addresses"`
-	// The UUID of an re-usable email list.
-	EmailListUUID string            `json:"email_list_uuid"`
-	JSON          approvalGroupJSON `json:"-"`
+type AccessApplicationPolicyNewResponse struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                  `json:"precedence"`
+	JSON       accessApplicationPolicyNewResponseJSON `json:"-"`
+	ApplicationPolicy
 }
 
-// approvalGroupJSON contains the JSON metadata for the struct [ApprovalGroup]
-type approvalGroupJSON struct {
-	ApprovalsNeeded apijson.Field
-	EmailAddresses  apijson.Field
-	EmailListUUID   apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+// accessApplicationPolicyNewResponseJSON contains the JSON metadata for the struct
+// [AccessApplicationPolicyNewResponse]
+type accessApplicationPolicyNewResponseJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r *ApprovalGroup) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r approvalGroupJSON) RawJSON() string {
+func (r accessApplicationPolicyNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A group of email addresses that can approve a temporary authentication request.
-type ApprovalGroupParam struct {
-	// The number of approvals needed to obtain access.
-	ApprovalsNeeded param.Field[float64] `json:"approvals_needed,required"`
-	// A list of emails that can approve the access request.
-	EmailAddresses param.Field[[]string] `json:"email_addresses"`
-	// The UUID of an re-usable email list.
-	EmailListUUID param.Field[string] `json:"email_list_uuid"`
+type AccessApplicationPolicyUpdateResponse struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                     `json:"precedence"`
+	JSON       accessApplicationPolicyUpdateResponseJSON `json:"-"`
+	ApplicationPolicy
 }
 
-func (r ApprovalGroupParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// accessApplicationPolicyUpdateResponseJSON contains the JSON metadata for the
+// struct [AccessApplicationPolicyUpdateResponse]
+type accessApplicationPolicyUpdateResponseJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyListResponse struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                   `json:"precedence"`
+	JSON       accessApplicationPolicyListResponseJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationPolicyListResponseJSON contains the JSON metadata for the
+// struct [AccessApplicationPolicyListResponse]
+type accessApplicationPolicyListResponseJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessApplicationPolicyDeleteResponse struct {
@@ -304,14 +334,31 @@ func (r accessApplicationPolicyDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type AccessApplicationPolicyGetResponse struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                  `json:"precedence"`
+	JSON       accessApplicationPolicyGetResponseJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationPolicyGetResponseJSON contains the JSON metadata for the struct
+// [AccessApplicationPolicyGetResponse]
+type accessApplicationPolicyGetResponseJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessApplicationPolicyNewParams struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -321,9 +368,6 @@ type AccessApplicationPolicyNewParams struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -335,9 +379,6 @@ type AccessApplicationPolicyNewParams struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -353,7 +394,7 @@ type AccessApplicationPolicyNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  ApplicationPolicy                                 `json:"result"`
+	Result  AccessApplicationPolicyNewResponse                `json:"result"`
 	JSON    accessApplicationPolicyNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -392,13 +433,6 @@ func (r AccessApplicationPolicyNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessApplicationPolicyUpdateParams struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -408,9 +442,6 @@ type AccessApplicationPolicyUpdateParams struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -422,9 +453,6 @@ type AccessApplicationPolicyUpdateParams struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -440,7 +468,7 @@ type AccessApplicationPolicyUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  ApplicationPolicy                                    `json:"result"`
+	Result  AccessApplicationPolicyUpdateResponse                `json:"result"`
 	JSON    accessApplicationPolicyUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -547,7 +575,7 @@ type AccessApplicationPolicyGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ApplicationPolicy                                 `json:"result"`
+	Result  AccessApplicationPolicyGetResponse                `json:"result"`
 	JSON    accessApplicationPolicyGetResponseEnvelopeJSON    `json:"-"`
 }
 

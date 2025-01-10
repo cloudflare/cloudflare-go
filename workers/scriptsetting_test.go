@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/workers"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
 func TestScriptSettingEditWithOptionalParams(t *testing.T) {
@@ -34,15 +34,11 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ScriptSetting: workers.ScriptSettingParam{
 				Logpush: cloudflare.F(false),
+				Observability: cloudflare.F(workers.ScriptSettingObservabilityParam{
+					Enabled:          cloudflare.F(true),
+					HeadSamplingRate: cloudflare.F(0.100000),
+				}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
-					Service:     cloudflare.F("my-log-consumer"),
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-				}, {
-					Service:     cloudflare.F("my-log-consumer"),
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-				}, {
 					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),

@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // LoadBalancerService contains methods and other services that help with
@@ -381,7 +381,7 @@ type LoadBalancer struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools map[string][]string `json:"pop_pools"`
+	POPPools map[string][]string `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied bool `json:"proxied"`
 	// Configures pool weights.
@@ -401,7 +401,7 @@ type LoadBalancer struct {
 	// execute.
 	Rules []Rules `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded
@@ -480,7 +480,7 @@ type loadBalancerJSON struct {
 	ModifiedOn                apijson.Field
 	Name                      apijson.Field
 	Networks                  apijson.Field
-	PopPools                  apijson.Field
+	POPPools                  apijson.Field
 	Proxied                   apijson.Field
 	RandomSteering            apijson.Field
 	RegionPools               apijson.Field
@@ -643,13 +643,13 @@ func (r locationStrategyJSON) RawJSON() string {
 type LocationStrategyMode string
 
 const (
-	LocationStrategyModePop        LocationStrategyMode = "pop"
+	LocationStrategyModePOP        LocationStrategyMode = "pop"
 	LocationStrategyModeResolverIP LocationStrategyMode = "resolver_ip"
 )
 
 func (r LocationStrategyMode) IsKnown() bool {
 	switch r {
-	case LocationStrategyModePop, LocationStrategyModeResolverIP:
+	case LocationStrategyModePOP, LocationStrategyModeResolverIP:
 		return true
 	}
 	return false
@@ -936,8 +936,8 @@ type RandomSteering struct {
 	DefaultWeight float64 `json:"default_weight"`
 	// A mapping of pool IDs to custom weights. The weight is relative to other pools
 	// in the load balancer.
-	PoolWeights RandomSteeringPoolWeights `json:"pool_weights"`
-	JSON        randomSteeringJSON        `json:"-"`
+	PoolWeights map[string]float64 `json:"pool_weights"`
+	JSON        randomSteeringJSON `json:"-"`
 }
 
 // randomSteeringJSON contains the JSON metadata for the struct [RandomSteering]
@@ -956,33 +956,6 @@ func (r randomSteeringJSON) RawJSON() string {
 	return r.raw
 }
 
-// A mapping of pool IDs to custom weights. The weight is relative to other pools
-// in the load balancer.
-type RandomSteeringPoolWeights struct {
-	// Pool ID
-	Key string `json:"key"`
-	// Weight
-	Value float64                       `json:"value"`
-	JSON  randomSteeringPoolWeightsJSON `json:"-"`
-}
-
-// randomSteeringPoolWeightsJSON contains the JSON metadata for the struct
-// [RandomSteeringPoolWeights]
-type randomSteeringPoolWeightsJSON struct {
-	Key         apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RandomSteeringPoolWeights) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r randomSteeringPoolWeightsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Configures pool weights.
 //
 //   - `steering_policy="random"`: A random pool is selected with probability
@@ -997,23 +970,10 @@ type RandomSteeringParam struct {
 	DefaultWeight param.Field[float64] `json:"default_weight"`
 	// A mapping of pool IDs to custom weights. The weight is relative to other pools
 	// in the load balancer.
-	PoolWeights param.Field[RandomSteeringPoolWeightsParam] `json:"pool_weights"`
+	PoolWeights param.Field[map[string]float64] `json:"pool_weights"`
 }
 
 func (r RandomSteeringParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A mapping of pool IDs to custom weights. The weight is relative to other pools
-// in the load balancer.
-type RandomSteeringPoolWeightsParam struct {
-	// Pool ID
-	Key param.Field[string] `json:"key"`
-	// Weight
-	Value param.Field[float64] `json:"value"`
-}
-
-func (r RandomSteeringPoolWeightsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1130,7 +1090,7 @@ type RulesOverrides struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools map[string][]string `json:"pop_pools"`
+	POPPools map[string][]string `json:"pop_pools"`
 	// Configures pool weights.
 	//
 	//   - `steering_policy="random"`: A random pool is selected with probability
@@ -1145,7 +1105,7 @@ type RulesOverrides struct {
 	// back to using default_pools.
 	RegionPools map[string][]string `json:"region_pools"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded
@@ -1217,7 +1177,7 @@ type rulesOverridesJSON struct {
 	DefaultPools              apijson.Field
 	FallbackPool              apijson.Field
 	LocationStrategy          apijson.Field
-	PopPools                  apijson.Field
+	POPPools                  apijson.Field
 	RandomSteering            apijson.Field
 	RegionPools               apijson.Field
 	SessionAffinity           apijson.Field
@@ -1316,7 +1276,7 @@ type RulesOverridesParam struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[map[string][]string] `json:"pop_pools"`
+	POPPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Configures pool weights.
 	//
 	//   - `steering_policy="random"`: A random pool is selected with probability
@@ -1331,7 +1291,7 @@ type RulesOverridesParam struct {
 	// back to using default_pools.
 	RegionPools param.Field[map[string][]string] `json:"region_pools"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded
@@ -1400,7 +1360,7 @@ func (r RulesOverridesParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
+// specified as `"none"`. The supported types are:
 //
 //   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 //     generated, encoding information of which origin the request will be forwarded
@@ -1429,12 +1389,11 @@ const (
 	SessionAffinityCookie   SessionAffinity = "cookie"
 	SessionAffinityIPCookie SessionAffinity = "ip_cookie"
 	SessionAffinityHeader   SessionAffinity = "header"
-	SessionAffinityEmpty    SessionAffinity = ""
 )
 
 func (r SessionAffinity) IsKnown() bool {
 	switch r {
-	case SessionAffinityNone, SessionAffinityCookie, SessionAffinityIPCookie, SessionAffinityHeader, SessionAffinityEmpty:
+	case SessionAffinityNone, SessionAffinityCookie, SessionAffinityIPCookie, SessionAffinityHeader:
 		return true
 	}
 	return false
@@ -1727,7 +1686,7 @@ type LoadBalancerNewParams struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[map[string][]string] `json:"pop_pools"`
+	POPPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
@@ -1747,7 +1706,7 @@ type LoadBalancerNewParams struct {
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded
@@ -1894,7 +1853,7 @@ type LoadBalancerUpdateParams struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[map[string][]string] `json:"pop_pools"`
+	POPPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
@@ -1914,7 +1873,7 @@ type LoadBalancerUpdateParams struct {
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded
@@ -2110,7 +2069,7 @@ type LoadBalancerEditParams struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[map[string][]string] `json:"pop_pools"`
+	POPPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
@@ -2130,7 +2089,7 @@ type LoadBalancerEditParams struct {
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded

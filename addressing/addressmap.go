@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AddressMapService contains methods and other services that help with interacting
@@ -146,7 +146,7 @@ func (r *AddressMapService) Get(ctx context.Context, addressMapID string, query 
 }
 
 type AddressMap struct {
-	// Identifier
+	// Identifier of an Address Map.
 	ID string `json:"id"`
 	// If set to false, then the Address Map cannot be deleted via API. This is true
 	// for Cloudflare-managed maps.
@@ -210,7 +210,7 @@ func (r Kind) IsKnown() bool {
 }
 
 type AddressMapNewResponse struct {
-	// Identifier
+	// Identifier of an Address Map.
 	ID string `json:"id"`
 	// If set to false, then the Address Map cannot be deleted via API. This is true
 	// for Cloudflare-managed maps.
@@ -394,7 +394,7 @@ func (r addressMapDeleteResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapGetResponse struct {
-	// Identifier
+	// Identifier of an Address Map.
 	ID string `json:"id"`
 	// If set to false, then the Address Map cannot be deleted via API. This is true
 	// for Cloudflare-managed maps.
@@ -504,7 +504,7 @@ func (r addressMapGetResponseMembershipJSON) RawJSON() string {
 }
 
 type AddressMapNewParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// An optional description field which may be used to describe the types of IPs or
 	// zones on the map.
@@ -577,17 +577,17 @@ func (r AddressMapNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AddressMapListParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressMapDeleteParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressMapEditParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// If you have legacy TLS clients which do not send the TLS server name indicator,
 	// then you can specify one default SNI on the map. If Cloudflare receives a TLS
@@ -651,7 +651,7 @@ func (r AddressMapEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AddressMapGetParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

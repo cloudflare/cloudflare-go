@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/addressing"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/addressing"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestPrefixDelegationNew(t *testing.T) {
@@ -29,9 +29,9 @@ func TestPrefixDelegationNew(t *testing.T) {
 	)
 	_, err := client.Addressing.Prefixes.Delegations.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"2af39739cc4e3b5910c918468bb89828",
 		addressing.PrefixDelegationNewParams{
-			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:          cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
 			CIDR:               cloudflare.F("192.0.2.0/24"),
 			DelegatedAccountID: cloudflare.F("b1946ac92492d2347c6235b4d2611184"),
 		},
@@ -60,9 +60,9 @@ func TestPrefixDelegationList(t *testing.T) {
 	)
 	_, err := client.Addressing.Prefixes.Delegations.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"2af39739cc4e3b5910c918468bb89828",
 		addressing.PrefixDelegationListParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
 		},
 	)
 	if err != nil {
@@ -89,10 +89,10 @@ func TestPrefixDelegationDelete(t *testing.T) {
 	)
 	_, err := client.Addressing.Prefixes.Delegations.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"2af39739cc4e3b5910c918468bb89828",
 		"d933b1530bc56c9953cf8ce166da8004",
 		addressing.PrefixDelegationDeleteParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
 		},
 	)
 	if err != nil {

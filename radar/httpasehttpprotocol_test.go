@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestHTTPAseHTTPProtocolGetWithOptionalParams(t *testing.T) {
@@ -32,21 +32,21 @@ func TestHTTPAseHTTPProtocolGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		radar.HTTPAseHTTPProtocolGetParamsHTTPProtocolHTTP,
 		radar.HTTPAseHTTPProtocolGetParams{
-			ASN:           cloudflare.F([]string{"string", "string", "string"}),
-			BotClass:      cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsBotClass{radar.HTTPAseHTTPProtocolGetParamsBotClassLikelyAutomated, radar.HTTPAseHTTPProtocolGetParamsBotClassLikelyHuman}),
-			BrowserFamily: cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsBrowserFamily{radar.HTTPAseHTTPProtocolGetParamsBrowserFamilyChrome, radar.HTTPAseHTTPProtocolGetParamsBrowserFamilyEdge, radar.HTTPAseHTTPProtocolGetParamsBrowserFamilyFirefox}),
-			Continent:     cloudflare.F([]string{"string", "string", "string"}),
-			DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DateRange:     cloudflare.F([]string{"7d", "7d", "7d"}),
-			DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DeviceType:    cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsDeviceType{radar.HTTPAseHTTPProtocolGetParamsDeviceTypeDesktop, radar.HTTPAseHTTPProtocolGetParamsDeviceTypeMobile, radar.HTTPAseHTTPProtocolGetParamsDeviceTypeOther}),
+			ASN:           cloudflare.F([]string{"string"}),
+			BotClass:      cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsBotClass{radar.HTTPAseHTTPProtocolGetParamsBotClassLikelyAutomated}),
+			BrowserFamily: cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsBrowserFamily{radar.HTTPAseHTTPProtocolGetParamsBrowserFamilyChrome}),
+			Continent:     cloudflare.F([]string{"string"}),
+			DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+			DateRange:     cloudflare.F([]string{"7d"}),
+			DateStart:     cloudflare.F([]time.Time{time.Now()}),
+			DeviceType:    cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsDeviceType{radar.HTTPAseHTTPProtocolGetParamsDeviceTypeDesktop}),
 			Format:        cloudflare.F(radar.HTTPAseHTTPProtocolGetParamsFormatJson),
-			IPVersion:     cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsIPVersion{radar.HTTPAseHTTPProtocolGetParamsIPVersionIPv4, radar.HTTPAseHTTPProtocolGetParamsIPVersionIPv6}),
+			IPVersion:     cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsIPVersion{radar.HTTPAseHTTPProtocolGetParamsIPVersionIPv4}),
 			Limit:         cloudflare.F(int64(5)),
-			Location:      cloudflare.F([]string{"string", "string", "string"}),
-			Name:          cloudflare.F([]string{"string", "string", "string"}),
-			OS:            cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsOS{radar.HTTPAseHTTPProtocolGetParamsOSWindows, radar.HTTPAseHTTPProtocolGetParamsOSMacosx, radar.HTTPAseHTTPProtocolGetParamsOSIos}),
-			TLSVersion:    cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsTLSVersion{radar.HTTPAseHTTPProtocolGetParamsTLSVersionTlSv1_0, radar.HTTPAseHTTPProtocolGetParamsTLSVersionTlSv1_1, radar.HTTPAseHTTPProtocolGetParamsTLSVersionTlSv1_2}),
+			Location:      cloudflare.F([]string{"string"}),
+			Name:          cloudflare.F([]string{"string"}),
+			OS:            cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsOS{radar.HTTPAseHTTPProtocolGetParamsOSWindows}),
+			TLSVersion:    cloudflare.F([]radar.HTTPAseHTTPProtocolGetParamsTLSVersion{radar.HTTPAseHTTPProtocolGetParamsTLSVersionTlSv1_0}),
 		},
 	)
 	if err != nil {

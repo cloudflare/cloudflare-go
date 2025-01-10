@@ -12,13 +12,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/kv"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/kv"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestNamespaceValueUpdate(t *testing.T) {
+func TestNamespaceValueUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -37,9 +37,11 @@ func TestNamespaceValueUpdate(t *testing.T) {
 		"0f2ac74b498b48028cb68387c421e279",
 		"My-Key",
 		kv.NamespaceValueUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Metadata:  cloudflare.F("{\"someMetadataKey\": \"someMetadataValue\"}"),
-			Value:     cloudflare.F("Some Value"),
+			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Metadata:      cloudflare.F("{\"someMetadataKey\": \"someMetadataValue\"}"),
+			Value:         cloudflare.F("Some Value"),
+			Expiration:    cloudflare.F(1578435000.000000),
+			ExpirationTTL: cloudflare.F(300.000000),
 		},
 	)
 	if err != nil {

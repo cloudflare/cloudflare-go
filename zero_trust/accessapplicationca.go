@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessApplicationCAService contains methods and other services that help with
@@ -36,7 +36,7 @@ func NewAccessApplicationCAService(opts ...option.RequestOption) (r *AccessAppli
 }
 
 // Generates a new short-lived certificate CA and public key.
-func (r *AccessApplicationCAService) New(ctx context.Context, appID string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *AccessApplicationCANewResponse, err error) {
+func (r *AccessApplicationCAService) New(ctx context.Context, appID string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *CA, err error) {
 	var env AccessApplicationCANewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -147,7 +147,7 @@ func (r *AccessApplicationCAService) Delete(ctx context.Context, appID string, b
 }
 
 // Fetches a short-lived certificate CA and its public key.
-func (r *AccessApplicationCAService) Get(ctx context.Context, appID string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *AccessApplicationCAGetResponse, err error) {
+func (r *AccessApplicationCAService) Get(ctx context.Context, appID string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *CA, err error) {
 	var env AccessApplicationCAGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -209,8 +209,6 @@ func (r caJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessApplicationCANewResponse = interface{}
-
 type AccessApplicationCADeleteResponse struct {
 	// The ID of the CA.
 	ID   string                                `json:"id"`
@@ -233,8 +231,6 @@ func (r accessApplicationCADeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessApplicationCAGetResponse = interface{}
-
 type AccessApplicationCANewParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -247,7 +243,7 @@ type AccessApplicationCANewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCANewResponseEnvelopeSuccess `json:"success,required"`
-	Result  AccessApplicationCANewResponse                `json:"result"`
+	Result  CA                                            `json:"result"`
 	JSON    accessApplicationCANewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -354,7 +350,7 @@ type AccessApplicationCAGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCAGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  AccessApplicationCAGetResponse                `json:"result"`
+	Result  CA                                            `json:"result"`
 	JSON    accessApplicationCAGetResponseEnvelopeJSON    `json:"-"`
 }
 

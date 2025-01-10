@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/waiting_rooms"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/waiting_rooms"
 )
 
 func TestRuleNewWithOptionalParams(t *testing.T) {
@@ -31,11 +31,13 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		waiting_rooms.RuleNewParams{
-			ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Action:      cloudflare.F(waiting_rooms.RuleNewParamsActionBypassWaitingRoom),
-			Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
-			Description: cloudflare.F("allow all traffic from 10.20.30.40"),
-			Enabled:     cloudflare.F(true),
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Rules: waiting_rooms.RuleNewParamsRules{
+				Action:      cloudflare.F(waiting_rooms.RuleNewParamsRulesActionBypassWaitingRoom),
+				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
+				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
+				Enabled:     cloudflare.F(true),
+			},
 		},
 	)
 	if err != nil {
@@ -65,18 +67,8 @@ func TestRuleUpdate(t *testing.T) {
 		"699d98642c564d2e855e9661899b7252",
 		waiting_rooms.RuleUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: []waiting_rooms.RuleUpdateParamsBody{{
-				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsBodyActionBypassWaitingRoom),
-				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
-				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
-				Enabled:     cloudflare.F(true),
-			}, {
-				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsBodyActionBypassWaitingRoom),
-				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
-				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
-				Enabled:     cloudflare.F(true),
-			}, {
-				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsBodyActionBypassWaitingRoom),
+			Rules: []waiting_rooms.RuleUpdateParamsRule{{
+				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsRulesActionBypassWaitingRoom),
 				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),

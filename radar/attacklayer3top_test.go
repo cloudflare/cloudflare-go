@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestAttackLayer3TopAttacksWithOptionalParams(t *testing.T) {
@@ -29,19 +29,19 @@ func TestAttackLayer3TopAttacksWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Top.Attacks(context.TODO(), radar.AttackLayer3TopAttacksParams{
-		Continent:        cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:          cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:        cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:        cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		Continent:        cloudflare.F([]string{"string"}),
+		DateEnd:          cloudflare.F([]time.Time{time.Now()}),
+		DateRange:        cloudflare.F([]string{"7d"}),
+		DateStart:        cloudflare.F([]time.Time{time.Now()}),
 		Format:           cloudflare.F(radar.AttackLayer3TopAttacksParamsFormatJson),
-		IPVersion:        cloudflare.F([]radar.AttackLayer3TopAttacksParamsIPVersion{radar.AttackLayer3TopAttacksParamsIPVersionIPv4, radar.AttackLayer3TopAttacksParamsIPVersionIPv6}),
+		IPVersion:        cloudflare.F([]radar.AttackLayer3TopAttacksParamsIPVersion{radar.AttackLayer3TopAttacksParamsIPVersionIPv4}),
 		Limit:            cloudflare.F(int64(5)),
 		LimitDirection:   cloudflare.F(radar.AttackLayer3TopAttacksParamsLimitDirectionOrigin),
 		LimitPerLocation: cloudflare.F(int64(10)),
-		Location:         cloudflare.F([]string{"string", "string", "string"}),
-		Name:             cloudflare.F([]string{"string", "string", "string"}),
+		Location:         cloudflare.F([]string{"string"}),
+		Name:             cloudflare.F([]string{"string"}),
 		Normalization:    cloudflare.F(radar.AttackLayer3TopAttacksParamsNormalizationPercentage),
-		Protocol:         cloudflare.F([]radar.AttackLayer3TopAttacksParamsProtocol{radar.AttackLayer3TopAttacksParamsProtocolUdp, radar.AttackLayer3TopAttacksParamsProtocolTCP, radar.AttackLayer3TopAttacksParamsProtocolIcmp}),
+		Protocol:         cloudflare.F([]radar.AttackLayer3TopAttacksParamsProtocol{radar.AttackLayer3TopAttacksParamsProtocolUdp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -66,16 +66,16 @@ func TestAttackLayer3TopIndustryWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Top.Industry(context.TODO(), radar.AttackLayer3TopIndustryParams{
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+		DateRange: cloudflare.F([]string{"7d"}),
+		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.AttackLayer3TopIndustryParamsFormatJson),
-		IPVersion: cloudflare.F([]radar.AttackLayer3TopIndustryParamsIPVersion{radar.AttackLayer3TopIndustryParamsIPVersionIPv4, radar.AttackLayer3TopIndustryParamsIPVersionIPv6}),
+		IPVersion: cloudflare.F([]radar.AttackLayer3TopIndustryParamsIPVersion{radar.AttackLayer3TopIndustryParamsIPVersionIPv4}),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3TopIndustryParamsProtocol{radar.AttackLayer3TopIndustryParamsProtocolUdp, radar.AttackLayer3TopIndustryParamsProtocolTCP, radar.AttackLayer3TopIndustryParamsProtocolIcmp}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3TopIndustryParamsProtocol{radar.AttackLayer3TopIndustryParamsProtocolUdp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -100,16 +100,16 @@ func TestAttackLayer3TopVerticalWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Top.Vertical(context.TODO(), radar.AttackLayer3TopVerticalParams{
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+		DateRange: cloudflare.F([]string{"7d"}),
+		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.AttackLayer3TopVerticalParamsFormatJson),
-		IPVersion: cloudflare.F([]radar.AttackLayer3TopVerticalParamsIPVersion{radar.AttackLayer3TopVerticalParamsIPVersionIPv4, radar.AttackLayer3TopVerticalParamsIPVersionIPv6}),
+		IPVersion: cloudflare.F([]radar.AttackLayer3TopVerticalParamsIPVersion{radar.AttackLayer3TopVerticalParamsIPVersionIPv4}),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3TopVerticalParamsProtocol{radar.AttackLayer3TopVerticalParamsProtocolUdp, radar.AttackLayer3TopVerticalParamsProtocolTCP, radar.AttackLayer3TopVerticalParamsProtocolIcmp}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3TopVerticalParamsProtocol{radar.AttackLayer3TopVerticalParamsProtocolUdp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

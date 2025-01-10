@@ -10,14 +10,14 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/ssl"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/ssl"
 )
 
 // OriginCACertificateService contains methods and other services that help with
@@ -39,8 +39,8 @@ func NewOriginCACertificateService(opts ...option.RequestOption) (r *OriginCACer
 	return
 }
 
-// Create an Origin CA certificate. Use your Origin CA Key as your User Service Key
-// when calling this endpoint ([see above](#requests)).
+// Create an Origin CA certificate. You can use an Origin CA Key as your User
+// Service Key or an API token when calling this endpoint ([see above](#requests)).
 func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACertificateNewParams, opts ...option.RequestOption) (res *OriginCACertificate, err error) {
 	var env OriginCACertificateNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -53,8 +53,8 @@ func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACerti
 	return
 }
 
-// List all existing Origin CA certificates for a given zone. Use your Origin CA
-// Key as your User Service Key when calling this endpoint
+// List all existing Origin CA certificates for a given zone. You can use an Origin
+// CA Key as your User Service Key or an API token when calling this endpoint
 // ([see above](#requests)).
 func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[OriginCACertificate], err error) {
 	var raw *http.Response
@@ -73,16 +73,16 @@ func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACer
 	return res, nil
 }
 
-// List all existing Origin CA certificates for a given zone. Use your Origin CA
-// Key as your User Service Key when calling this endpoint
+// List all existing Origin CA certificates for a given zone. You can use an Origin
+// CA Key as your User Service Key or an API token when calling this endpoint
 // ([see above](#requests)).
 func (r *OriginCACertificateService) ListAutoPaging(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OriginCACertificate] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Revoke an existing Origin CA certificate by its serial number. Use your Origin
-// CA Key as your User Service Key when calling this endpoint
-// ([see above](#requests)).
+// Revoke an existing Origin CA certificate by its serial number. You can use an
+// Origin CA Key as your User Service Key or an API token when calling this
+// endpoint ([see above](#requests)).
 func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateDeleteResponse, err error) {
 	var env OriginCACertificateDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,9 +99,9 @@ func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID s
 	return
 }
 
-// Get an existing Origin CA certificate by its serial number. Use your Origin CA
-// Key as your User Service Key when calling this endpoint
-// ([see above](#requests)).
+// Get an existing Origin CA certificate by its serial number. You can use an
+// Origin CA Key as your User Service Key or an API token when calling this
+// endpoint ([see above](#requests)).
 func (r *OriginCACertificateService) Get(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificate, err error) {
 	var env OriginCACertificateGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

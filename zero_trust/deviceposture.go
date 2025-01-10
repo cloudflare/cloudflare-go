@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -322,133 +322,136 @@ func (r CrowdstrikeInputParam) implementsZeroTrustDeviceInputUnionParam() {}
 
 // The value to be checked against.
 type DeviceInput struct {
-	// Whether or not file exists
-	Exists bool `json:"exists"`
-	// Operating system
-	OperatingSystem DeviceInputOperatingSystem `json:"operating_system"`
-	// File path.
-	Path string `json:"path"`
-	// SHA-256.
-	Sha256 string `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint string `json:"thumbprint"`
 	// List ID.
 	ID string `json:"id"`
-	// Domain
-	Domain string `json:"domain"`
-	// operator
-	Operator DeviceInputOperator `json:"operator"`
-	// Operating System Distribution Name (linux only)
-	OSDistroName string `json:"os_distro_name"`
-	// Version of OS Distribution (linux only)
-	OSDistroRevision string `json:"os_distro_revision"`
-	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
-	// the kernel release version. (Mac, iOS, and Linux only)
-	OSVersionExtra string `json:"os_version_extra"`
-	// Version of OS
-	Version string `json:"version"`
-	// Enabled
-	Enabled bool `json:"enabled"`
-	// This field can have the runtime type of [[]CarbonblackInput].
-	CheckDisks interface{} `json:"checkDisks,required"`
-	// Whether to check all disks for encryption.
-	RequireAll bool `json:"requireAll"`
+	// The Number of active threats.
+	ActiveThreats float64 `json:"active_threats"`
 	// UUID of Cloudflare managed certificate.
 	CertificateID string `json:"certificate_id"`
-	// Common Name that is protected by the certificate
-	Cn string `json:"cn"`
 	// Confirm the certificate was not imported from another device. We recommend
 	// keeping this enabled unless the certificate was deployed without a private key.
 	CheckPrivateKey bool `json:"check_private_key"`
-	// This field can have the runtime type of
-	// [[]DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage].
-	ExtendedKeyUsage interface{} `json:"extended_key_usage,required"`
-	// This field can have the runtime type of
-	// [DeviceInputTeamsDevicesClientCertificateV2InputRequestLocations].
-	Locations interface{} `json:"locations,required"`
+	// This field can have the runtime type of [[]CarbonblackInput].
+	CheckDisks interface{} `json:"checkDisks"`
+	// Common Name that is protected by the certificate
+	Cn string `json:"cn"`
 	// Compliance Status
 	ComplianceStatus DeviceInputComplianceStatus `json:"compliance_status"`
 	// Posture Integration ID.
 	ConnectionID string `json:"connection_id"`
-	// For more details on last seen, please refer to the Crowdstrike documentation.
-	LastSeen string `json:"last_seen"`
-	// Os Version
-	OS string `json:"os"`
-	// overall
-	Overall string `json:"overall"`
-	// SensorConfig
-	SensorConfig string `json:"sensor_config"`
-	// For more details on state, please refer to the Crowdstrike documentation.
-	State DeviceInputState `json:"state"`
-	// Version Operator
-	VersionOperator DeviceInputVersionOperator `json:"versionOperator"`
 	// Count Operator
 	CountOperator DeviceInputCountOperator `json:"countOperator"`
-	// The Number of Issues.
-	IssueCount string `json:"issue_count"`
+	// Domain
+	Domain string `json:"domain"`
 	// For more details on eid last seen, refer to the Tanium documentation.
 	EidLastSeen string `json:"eid_last_seen"`
-	// For more details on risk level, refer to the Tanium documentation.
-	RiskLevel DeviceInputRiskLevel `json:"risk_level"`
-	// Score Operator
-	ScoreOperator DeviceInputScoreOperator `json:"scoreOperator"`
-	// For more details on total score, refer to the Tanium documentation.
-	TotalScore float64 `json:"total_score"`
-	// The Number of active threats.
-	ActiveThreats float64 `json:"active_threats"`
+	// Enabled
+	Enabled bool `json:"enabled"`
+	// Whether or not file exists
+	Exists bool `json:"exists"`
+	// This field can have the runtime type of
+	// [[]DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage].
+	ExtendedKeyUsage interface{} `json:"extended_key_usage"`
 	// Whether device is infected.
 	Infected bool `json:"infected"`
 	// Whether device is active.
 	IsActive bool `json:"is_active"`
+	// The Number of Issues.
+	IssueCount string `json:"issue_count"`
+	// For more details on last seen, please refer to the Crowdstrike documentation.
+	LastSeen string `json:"last_seen"`
+	// This field can have the runtime type of
+	// [DeviceInputTeamsDevicesClientCertificateV2InputRequestLocations].
+	Locations interface{} `json:"locations"`
 	// Network status of device.
 	NetworkStatus DeviceInputNetworkStatus `json:"network_status"`
+	// Operating system
+	OperatingSystem DeviceInputOperatingSystem `json:"operating_system"`
+	// Agent operational state.
+	OperationalState DeviceInputOperationalState `json:"operational_state"`
+	// operator
+	Operator DeviceInputOperator `json:"operator"`
+	// Os Version
+	OS string `json:"os"`
+	// Operating System Distribution Name (linux only)
+	OSDistroName string `json:"os_distro_name"`
+	// Version of OS Distribution (linux only)
+	OSDistroRevision string `json:"os_distro_revision"`
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only)
+	OSVersionExtra string `json:"os_version_extra"`
+	// overall
+	Overall string `json:"overall"`
+	// File path.
+	Path string `json:"path"`
+	// Whether to check all disks for encryption.
+	RequireAll bool `json:"requireAll"`
+	// For more details on risk level, refer to the Tanium documentation.
+	RiskLevel DeviceInputRiskLevel `json:"risk_level"`
 	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
-	Score float64         `json:"score"`
-	JSON  deviceInputJSON `json:"-"`
-	union DeviceInputUnion
+	Score float64 `json:"score"`
+	// Score Operator
+	ScoreOperator DeviceInputScoreOperator `json:"scoreOperator"`
+	// SensorConfig
+	SensorConfig string `json:"sensor_config"`
+	// SHA-256.
+	Sha256 string `json:"sha256"`
+	// For more details on state, please refer to the Crowdstrike documentation.
+	State DeviceInputState `json:"state"`
+	// Signing certificate thumbprint.
+	Thumbprint string `json:"thumbprint"`
+	// For more details on total score, refer to the Tanium documentation.
+	TotalScore float64 `json:"total_score"`
+	// Version of OS
+	Version string `json:"version"`
+	// Version Operator
+	VersionOperator DeviceInputVersionOperator `json:"versionOperator"`
+	JSON            deviceInputJSON            `json:"-"`
+	union           DeviceInputUnion
 }
 
 // deviceInputJSON contains the JSON metadata for the struct [DeviceInput]
 type deviceInputJSON struct {
-	Exists           apijson.Field
-	OperatingSystem  apijson.Field
-	Path             apijson.Field
-	Sha256           apijson.Field
-	Thumbprint       apijson.Field
 	ID               apijson.Field
+	ActiveThreats    apijson.Field
+	CertificateID    apijson.Field
+	CheckPrivateKey  apijson.Field
+	CheckDisks       apijson.Field
+	Cn               apijson.Field
+	ComplianceStatus apijson.Field
+	ConnectionID     apijson.Field
+	CountOperator    apijson.Field
 	Domain           apijson.Field
+	EidLastSeen      apijson.Field
+	Enabled          apijson.Field
+	Exists           apijson.Field
+	ExtendedKeyUsage apijson.Field
+	Infected         apijson.Field
+	IsActive         apijson.Field
+	IssueCount       apijson.Field
+	LastSeen         apijson.Field
+	Locations        apijson.Field
+	NetworkStatus    apijson.Field
+	OperatingSystem  apijson.Field
+	OperationalState apijson.Field
 	Operator         apijson.Field
+	OS               apijson.Field
 	OSDistroName     apijson.Field
 	OSDistroRevision apijson.Field
 	OSVersionExtra   apijson.Field
-	Version          apijson.Field
-	Enabled          apijson.Field
-	CheckDisks       apijson.Field
-	RequireAll       apijson.Field
-	CertificateID    apijson.Field
-	Cn               apijson.Field
-	CheckPrivateKey  apijson.Field
-	ExtendedKeyUsage apijson.Field
-	Locations        apijson.Field
-	ComplianceStatus apijson.Field
-	ConnectionID     apijson.Field
-	LastSeen         apijson.Field
-	OS               apijson.Field
 	Overall          apijson.Field
-	SensorConfig     apijson.Field
-	State            apijson.Field
-	VersionOperator  apijson.Field
-	CountOperator    apijson.Field
-	IssueCount       apijson.Field
-	EidLastSeen      apijson.Field
+	Path             apijson.Field
+	RequireAll       apijson.Field
 	RiskLevel        apijson.Field
-	ScoreOperator    apijson.Field
-	TotalScore       apijson.Field
-	ActiveThreats    apijson.Field
-	Infected         apijson.Field
-	IsActive         apijson.Field
-	NetworkStatus    apijson.Field
 	Score            apijson.Field
+	ScoreOperator    apijson.Field
+	SensorConfig     apijson.Field
+	Sha256           apijson.Field
+	State            apijson.Field
+	Thumbprint       apijson.Field
+	TotalScore       apijson.Field
+	Version          apijson.Field
+	VersionOperator  apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -847,45 +850,6 @@ func (r DeviceInputTeamsDevicesCustomS2sInputRequestOperator) IsKnown() bool {
 	return false
 }
 
-// Operating system
-type DeviceInputOperatingSystem string
-
-const (
-	DeviceInputOperatingSystemWindows  DeviceInputOperatingSystem = "windows"
-	DeviceInputOperatingSystemLinux    DeviceInputOperatingSystem = "linux"
-	DeviceInputOperatingSystemMac      DeviceInputOperatingSystem = "mac"
-	DeviceInputOperatingSystemAndroid  DeviceInputOperatingSystem = "android"
-	DeviceInputOperatingSystemIos      DeviceInputOperatingSystem = "ios"
-	DeviceInputOperatingSystemChromeos DeviceInputOperatingSystem = "chromeos"
-)
-
-func (r DeviceInputOperatingSystem) IsKnown() bool {
-	switch r {
-	case DeviceInputOperatingSystemWindows, DeviceInputOperatingSystemLinux, DeviceInputOperatingSystemMac, DeviceInputOperatingSystemAndroid, DeviceInputOperatingSystemIos, DeviceInputOperatingSystemChromeos:
-		return true
-	}
-	return false
-}
-
-// operator
-type DeviceInputOperator string
-
-const (
-	DeviceInputOperatorLess            DeviceInputOperator = "<"
-	DeviceInputOperatorLessOrEquals    DeviceInputOperator = "<="
-	DeviceInputOperatorGreater         DeviceInputOperator = ">"
-	DeviceInputOperatorGreaterOrEquals DeviceInputOperator = ">="
-	DeviceInputOperatorEquals          DeviceInputOperator = "=="
-)
-
-func (r DeviceInputOperator) IsKnown() bool {
-	switch r {
-	case DeviceInputOperatorLess, DeviceInputOperatorLessOrEquals, DeviceInputOperatorGreater, DeviceInputOperatorGreaterOrEquals, DeviceInputOperatorEquals:
-		return true
-	}
-	return false
-}
-
 // Compliance Status
 type DeviceInputComplianceStatus string
 
@@ -906,42 +870,6 @@ func (r DeviceInputComplianceStatus) IsKnown() bool {
 	return false
 }
 
-// For more details on state, please refer to the Crowdstrike documentation.
-type DeviceInputState string
-
-const (
-	DeviceInputStateOnline  DeviceInputState = "online"
-	DeviceInputStateOffline DeviceInputState = "offline"
-	DeviceInputStateUnknown DeviceInputState = "unknown"
-)
-
-func (r DeviceInputState) IsKnown() bool {
-	switch r {
-	case DeviceInputStateOnline, DeviceInputStateOffline, DeviceInputStateUnknown:
-		return true
-	}
-	return false
-}
-
-// Version Operator
-type DeviceInputVersionOperator string
-
-const (
-	DeviceInputVersionOperatorLess            DeviceInputVersionOperator = "<"
-	DeviceInputVersionOperatorLessOrEquals    DeviceInputVersionOperator = "<="
-	DeviceInputVersionOperatorGreater         DeviceInputVersionOperator = ">"
-	DeviceInputVersionOperatorGreaterOrEquals DeviceInputVersionOperator = ">="
-	DeviceInputVersionOperatorEquals          DeviceInputVersionOperator = "=="
-)
-
-func (r DeviceInputVersionOperator) IsKnown() bool {
-	switch r {
-	case DeviceInputVersionOperatorLess, DeviceInputVersionOperatorLessOrEquals, DeviceInputVersionOperatorGreater, DeviceInputVersionOperatorGreaterOrEquals, DeviceInputVersionOperatorEquals:
-		return true
-	}
-	return false
-}
-
 // Count Operator
 type DeviceInputCountOperator string
 
@@ -956,6 +884,84 @@ const (
 func (r DeviceInputCountOperator) IsKnown() bool {
 	switch r {
 	case DeviceInputCountOperatorLess, DeviceInputCountOperatorLessOrEquals, DeviceInputCountOperatorGreater, DeviceInputCountOperatorGreaterOrEquals, DeviceInputCountOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// Network status of device.
+type DeviceInputNetworkStatus string
+
+const (
+	DeviceInputNetworkStatusConnected     DeviceInputNetworkStatus = "connected"
+	DeviceInputNetworkStatusDisconnected  DeviceInputNetworkStatus = "disconnected"
+	DeviceInputNetworkStatusDisconnecting DeviceInputNetworkStatus = "disconnecting"
+	DeviceInputNetworkStatusConnecting    DeviceInputNetworkStatus = "connecting"
+)
+
+func (r DeviceInputNetworkStatus) IsKnown() bool {
+	switch r {
+	case DeviceInputNetworkStatusConnected, DeviceInputNetworkStatusDisconnected, DeviceInputNetworkStatusDisconnecting, DeviceInputNetworkStatusConnecting:
+		return true
+	}
+	return false
+}
+
+// Operating system
+type DeviceInputOperatingSystem string
+
+const (
+	DeviceInputOperatingSystemWindows  DeviceInputOperatingSystem = "windows"
+	DeviceInputOperatingSystemLinux    DeviceInputOperatingSystem = "linux"
+	DeviceInputOperatingSystemMac      DeviceInputOperatingSystem = "mac"
+	DeviceInputOperatingSystemAndroid  DeviceInputOperatingSystem = "android"
+	DeviceInputOperatingSystemIos      DeviceInputOperatingSystem = "ios"
+	DeviceInputOperatingSystemChromeos DeviceInputOperatingSystem = "chromeos"
+)
+
+func (r DeviceInputOperatingSystem) IsKnown() bool {
+	switch r {
+	case DeviceInputOperatingSystemWindows, DeviceInputOperatingSystemLinux, DeviceInputOperatingSystemMac, DeviceInputOperatingSystemAndroid, DeviceInputOperatingSystemIos, DeviceInputOperatingSystemChromeos:
+		return true
+	}
+	return false
+}
+
+// Agent operational state.
+type DeviceInputOperationalState string
+
+const (
+	DeviceInputOperationalStateNa                    DeviceInputOperationalState = "na"
+	DeviceInputOperationalStatePartiallyDisabled     DeviceInputOperationalState = "partially_disabled"
+	DeviceInputOperationalStateAutoFullyDisabled     DeviceInputOperationalState = "auto_fully_disabled"
+	DeviceInputOperationalStateFullyDisabled         DeviceInputOperationalState = "fully_disabled"
+	DeviceInputOperationalStateAutoPartiallyDisabled DeviceInputOperationalState = "auto_partially_disabled"
+	DeviceInputOperationalStateDisabledError         DeviceInputOperationalState = "disabled_error"
+	DeviceInputOperationalStateDBCorruption          DeviceInputOperationalState = "db_corruption"
+)
+
+func (r DeviceInputOperationalState) IsKnown() bool {
+	switch r {
+	case DeviceInputOperationalStateNa, DeviceInputOperationalStatePartiallyDisabled, DeviceInputOperationalStateAutoFullyDisabled, DeviceInputOperationalStateFullyDisabled, DeviceInputOperationalStateAutoPartiallyDisabled, DeviceInputOperationalStateDisabledError, DeviceInputOperationalStateDBCorruption:
+		return true
+	}
+	return false
+}
+
+// operator
+type DeviceInputOperator string
+
+const (
+	DeviceInputOperatorLess            DeviceInputOperator = "<"
+	DeviceInputOperatorLessOrEquals    DeviceInputOperator = "<="
+	DeviceInputOperatorGreater         DeviceInputOperator = ">"
+	DeviceInputOperatorGreaterOrEquals DeviceInputOperator = ">="
+	DeviceInputOperatorEquals          DeviceInputOperator = "=="
+)
+
+func (r DeviceInputOperator) IsKnown() bool {
+	switch r {
+	case DeviceInputOperatorLess, DeviceInputOperatorLessOrEquals, DeviceInputOperatorGreater, DeviceInputOperatorGreaterOrEquals, DeviceInputOperatorEquals:
 		return true
 	}
 	return false
@@ -998,19 +1004,37 @@ func (r DeviceInputScoreOperator) IsKnown() bool {
 	return false
 }
 
-// Network status of device.
-type DeviceInputNetworkStatus string
+// For more details on state, please refer to the Crowdstrike documentation.
+type DeviceInputState string
 
 const (
-	DeviceInputNetworkStatusConnected     DeviceInputNetworkStatus = "connected"
-	DeviceInputNetworkStatusDisconnected  DeviceInputNetworkStatus = "disconnected"
-	DeviceInputNetworkStatusDisconnecting DeviceInputNetworkStatus = "disconnecting"
-	DeviceInputNetworkStatusConnecting    DeviceInputNetworkStatus = "connecting"
+	DeviceInputStateOnline  DeviceInputState = "online"
+	DeviceInputStateOffline DeviceInputState = "offline"
+	DeviceInputStateUnknown DeviceInputState = "unknown"
 )
 
-func (r DeviceInputNetworkStatus) IsKnown() bool {
+func (r DeviceInputState) IsKnown() bool {
 	switch r {
-	case DeviceInputNetworkStatusConnected, DeviceInputNetworkStatusDisconnected, DeviceInputNetworkStatusDisconnecting, DeviceInputNetworkStatusConnecting:
+	case DeviceInputStateOnline, DeviceInputStateOffline, DeviceInputStateUnknown:
+		return true
+	}
+	return false
+}
+
+// Version Operator
+type DeviceInputVersionOperator string
+
+const (
+	DeviceInputVersionOperatorLess            DeviceInputVersionOperator = "<"
+	DeviceInputVersionOperatorLessOrEquals    DeviceInputVersionOperator = "<="
+	DeviceInputVersionOperatorGreater         DeviceInputVersionOperator = ">"
+	DeviceInputVersionOperatorGreaterOrEquals DeviceInputVersionOperator = ">="
+	DeviceInputVersionOperatorEquals          DeviceInputVersionOperator = "=="
+)
+
+func (r DeviceInputVersionOperator) IsKnown() bool {
+	switch r {
+	case DeviceInputVersionOperatorLess, DeviceInputVersionOperatorLessOrEquals, DeviceInputVersionOperatorGreater, DeviceInputVersionOperatorGreaterOrEquals, DeviceInputVersionOperatorEquals:
 		return true
 	}
 	return false
@@ -1018,83 +1042,85 @@ func (r DeviceInputNetworkStatus) IsKnown() bool {
 
 // The value to be checked against.
 type DeviceInputParam struct {
-	// Whether or not file exists
-	Exists param.Field[bool] `json:"exists"`
-	// Operating system
-	OperatingSystem param.Field[DeviceInputOperatingSystem] `json:"operating_system"`
-	// File path.
-	Path param.Field[string] `json:"path"`
-	// SHA-256.
-	Sha256 param.Field[string] `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint param.Field[string] `json:"thumbprint"`
 	// List ID.
 	ID param.Field[string] `json:"id"`
-	// Domain
-	Domain param.Field[string] `json:"domain"`
-	// operator
-	Operator param.Field[DeviceInputOperator] `json:"operator"`
-	// Operating System Distribution Name (linux only)
-	OSDistroName param.Field[string] `json:"os_distro_name"`
-	// Version of OS Distribution (linux only)
-	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
-	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
-	// the kernel release version. (Mac, iOS, and Linux only)
-	OSVersionExtra param.Field[string] `json:"os_version_extra"`
-	// Version of OS
-	Version param.Field[string] `json:"version"`
-	// Enabled
-	Enabled    param.Field[bool]        `json:"enabled"`
-	CheckDisks param.Field[interface{}] `json:"checkDisks,required"`
-	// Whether to check all disks for encryption.
-	RequireAll param.Field[bool] `json:"requireAll"`
+	// The Number of active threats.
+	ActiveThreats param.Field[float64] `json:"active_threats"`
 	// UUID of Cloudflare managed certificate.
 	CertificateID param.Field[string] `json:"certificate_id"`
-	// Common Name that is protected by the certificate
-	Cn param.Field[string] `json:"cn"`
 	// Confirm the certificate was not imported from another device. We recommend
 	// keeping this enabled unless the certificate was deployed without a private key.
-	CheckPrivateKey  param.Field[bool]        `json:"check_private_key"`
-	ExtendedKeyUsage param.Field[interface{}] `json:"extended_key_usage,required"`
-	Locations        param.Field[interface{}] `json:"locations,required"`
+	CheckPrivateKey param.Field[bool]        `json:"check_private_key"`
+	CheckDisks      param.Field[interface{}] `json:"checkDisks"`
+	// Common Name that is protected by the certificate
+	Cn param.Field[string] `json:"cn"`
 	// Compliance Status
 	ComplianceStatus param.Field[DeviceInputComplianceStatus] `json:"compliance_status"`
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id"`
-	// For more details on last seen, please refer to the Crowdstrike documentation.
-	LastSeen param.Field[string] `json:"last_seen"`
-	// Os Version
-	OS param.Field[string] `json:"os"`
-	// overall
-	Overall param.Field[string] `json:"overall"`
-	// SensorConfig
-	SensorConfig param.Field[string] `json:"sensor_config"`
-	// For more details on state, please refer to the Crowdstrike documentation.
-	State param.Field[DeviceInputState] `json:"state"`
-	// Version Operator
-	VersionOperator param.Field[DeviceInputVersionOperator] `json:"versionOperator"`
 	// Count Operator
 	CountOperator param.Field[DeviceInputCountOperator] `json:"countOperator"`
-	// The Number of Issues.
-	IssueCount param.Field[string] `json:"issue_count"`
+	// Domain
+	Domain param.Field[string] `json:"domain"`
 	// For more details on eid last seen, refer to the Tanium documentation.
 	EidLastSeen param.Field[string] `json:"eid_last_seen"`
-	// For more details on risk level, refer to the Tanium documentation.
-	RiskLevel param.Field[DeviceInputRiskLevel] `json:"risk_level"`
-	// Score Operator
-	ScoreOperator param.Field[DeviceInputScoreOperator] `json:"scoreOperator"`
-	// For more details on total score, refer to the Tanium documentation.
-	TotalScore param.Field[float64] `json:"total_score"`
-	// The Number of active threats.
-	ActiveThreats param.Field[float64] `json:"active_threats"`
+	// Enabled
+	Enabled param.Field[bool] `json:"enabled"`
+	// Whether or not file exists
+	Exists           param.Field[bool]        `json:"exists"`
+	ExtendedKeyUsage param.Field[interface{}] `json:"extended_key_usage"`
 	// Whether device is infected.
 	Infected param.Field[bool] `json:"infected"`
 	// Whether device is active.
 	IsActive param.Field[bool] `json:"is_active"`
+	// The Number of Issues.
+	IssueCount param.Field[string] `json:"issue_count"`
+	// For more details on last seen, please refer to the Crowdstrike documentation.
+	LastSeen  param.Field[string]      `json:"last_seen"`
+	Locations param.Field[interface{}] `json:"locations"`
 	// Network status of device.
 	NetworkStatus param.Field[DeviceInputNetworkStatus] `json:"network_status"`
+	// Operating system
+	OperatingSystem param.Field[DeviceInputOperatingSystem] `json:"operating_system"`
+	// Agent operational state.
+	OperationalState param.Field[DeviceInputOperationalState] `json:"operational_state"`
+	// operator
+	Operator param.Field[DeviceInputOperator] `json:"operator"`
+	// Os Version
+	OS param.Field[string] `json:"os"`
+	// Operating System Distribution Name (linux only)
+	OSDistroName param.Field[string] `json:"os_distro_name"`
+	// Version of OS Distribution (linux only)
+	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only)
+	OSVersionExtra param.Field[string] `json:"os_version_extra"`
+	// overall
+	Overall param.Field[string] `json:"overall"`
+	// File path.
+	Path param.Field[string] `json:"path"`
+	// Whether to check all disks for encryption.
+	RequireAll param.Field[bool] `json:"requireAll"`
+	// For more details on risk level, refer to the Tanium documentation.
+	RiskLevel param.Field[DeviceInputRiskLevel] `json:"risk_level"`
 	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
 	Score param.Field[float64] `json:"score"`
+	// Score Operator
+	ScoreOperator param.Field[DeviceInputScoreOperator] `json:"scoreOperator"`
+	// SensorConfig
+	SensorConfig param.Field[string] `json:"sensor_config"`
+	// SHA-256.
+	Sha256 param.Field[string] `json:"sha256"`
+	// For more details on state, please refer to the Crowdstrike documentation.
+	State param.Field[DeviceInputState] `json:"state"`
+	// Signing certificate thumbprint.
+	Thumbprint param.Field[string] `json:"thumbprint"`
+	// For more details on total score, refer to the Tanium documentation.
+	TotalScore param.Field[float64] `json:"total_score"`
+	// Version of OS
+	Version param.Field[string] `json:"version"`
+	// Version Operator
+	VersionOperator param.Field[DeviceInputVersionOperator] `json:"versionOperator"`
 }
 
 func (r DeviceInputParam) MarshalJSON() (data []byte, err error) {
@@ -1690,7 +1716,7 @@ type OSVersionInput struct {
 	OSDistroName string `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
 	OSDistroRevision string `json:"os_distro_revision"`
-	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
 	OSVersionExtra string             `json:"os_version_extra"`
 	JSON           osVersionInputJSON `json:"-"`
@@ -1763,7 +1789,7 @@ type OSVersionInputParam struct {
 	OSDistroName param.Field[string] `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
 	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
-	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
 	OSVersionExtra param.Field[string] `json:"os_version_extra"`
 }
@@ -1852,6 +1878,8 @@ type SentineloneS2sInput struct {
 	IsActive bool `json:"is_active"`
 	// Network status of device.
 	NetworkStatus SentineloneS2sInputNetworkStatus `json:"network_status"`
+	// Agent operational state.
+	OperationalState SentineloneS2sInputOperationalState `json:"operational_state"`
 	// operator
 	Operator SentineloneS2sInputOperator `json:"operator"`
 	JSON     sentineloneS2sInputJSON     `json:"-"`
@@ -1860,14 +1888,15 @@ type SentineloneS2sInput struct {
 // sentineloneS2sInputJSON contains the JSON metadata for the struct
 // [SentineloneS2sInput]
 type sentineloneS2sInputJSON struct {
-	ConnectionID  apijson.Field
-	ActiveThreats apijson.Field
-	Infected      apijson.Field
-	IsActive      apijson.Field
-	NetworkStatus apijson.Field
-	Operator      apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ConnectionID     apijson.Field
+	ActiveThreats    apijson.Field
+	Infected         apijson.Field
+	IsActive         apijson.Field
+	NetworkStatus    apijson.Field
+	OperationalState apijson.Field
+	Operator         apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *SentineloneS2sInput) UnmarshalJSON(data []byte) (err error) {
@@ -1893,6 +1922,27 @@ const (
 func (r SentineloneS2sInputNetworkStatus) IsKnown() bool {
 	switch r {
 	case SentineloneS2sInputNetworkStatusConnected, SentineloneS2sInputNetworkStatusDisconnected, SentineloneS2sInputNetworkStatusDisconnecting, SentineloneS2sInputNetworkStatusConnecting:
+		return true
+	}
+	return false
+}
+
+// Agent operational state.
+type SentineloneS2sInputOperationalState string
+
+const (
+	SentineloneS2sInputOperationalStateNa                    SentineloneS2sInputOperationalState = "na"
+	SentineloneS2sInputOperationalStatePartiallyDisabled     SentineloneS2sInputOperationalState = "partially_disabled"
+	SentineloneS2sInputOperationalStateAutoFullyDisabled     SentineloneS2sInputOperationalState = "auto_fully_disabled"
+	SentineloneS2sInputOperationalStateFullyDisabled         SentineloneS2sInputOperationalState = "fully_disabled"
+	SentineloneS2sInputOperationalStateAutoPartiallyDisabled SentineloneS2sInputOperationalState = "auto_partially_disabled"
+	SentineloneS2sInputOperationalStateDisabledError         SentineloneS2sInputOperationalState = "disabled_error"
+	SentineloneS2sInputOperationalStateDBCorruption          SentineloneS2sInputOperationalState = "db_corruption"
+)
+
+func (r SentineloneS2sInputOperationalState) IsKnown() bool {
+	switch r {
+	case SentineloneS2sInputOperationalStateNa, SentineloneS2sInputOperationalStatePartiallyDisabled, SentineloneS2sInputOperationalStateAutoFullyDisabled, SentineloneS2sInputOperationalStateFullyDisabled, SentineloneS2sInputOperationalStateAutoPartiallyDisabled, SentineloneS2sInputOperationalStateDisabledError, SentineloneS2sInputOperationalStateDBCorruption:
 		return true
 	}
 	return false
@@ -1928,6 +1978,8 @@ type SentineloneS2sInputParam struct {
 	IsActive param.Field[bool] `json:"is_active"`
 	// Network status of device.
 	NetworkStatus param.Field[SentineloneS2sInputNetworkStatus] `json:"network_status"`
+	// Agent operational state.
+	OperationalState param.Field[SentineloneS2sInputOperationalState] `json:"operational_state"`
 	// operator
 	Operator param.Field[SentineloneS2sInputOperator] `json:"operator"`
 }

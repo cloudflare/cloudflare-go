@@ -9,12 +9,12 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -387,7 +387,7 @@ func (r rankingTimeseriesGroupsResponseEnvelopeJSON) RawJSON() string {
 
 type RankingTopParams struct {
 	// Array of dates to filter the ranking.
-	Date param.Field[[]string] `query:"date"`
+	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Format results are returned in.
 	Format param.Field[RankingTopParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.

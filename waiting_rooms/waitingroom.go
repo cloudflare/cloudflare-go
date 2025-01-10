@@ -10,12 +10,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // WaitingRoomService contains methods and other services that help with
@@ -573,6 +573,18 @@ type QueryParam struct {
 	// Suspends or allows traffic going to the waiting room. If set to `true`, the
 	// traffic will not go to the waiting room.
 	Suspended param.Field[bool] `json:"suspended"`
+	// Which action to take when a bot is detected using Turnstile. `log` will have no
+	// impact on queueing behavior, simply keeping track of how many bots are detected
+	// in Waiting Room Analytics. `infinite_queue` will send bots to a false queueing
+	// state, where they will never reach your origin. `infinite_queue` requires
+	// Advanced Waiting Room.
+	TurnstileAction param.Field[QueryTurnstileAction] `json:"turnstile_action"`
+	// Which Turnstile widget type to use for detecting bot traffic. See
+	// [the Turnstile documentation](https://developers.cloudflare.com/turnstile/concepts/widget/#widget-types)
+	// for the definitions of these widget types. Set to `off` to disable the Turnstile
+	// integration entirely. Setting this to anything other than `off` or `invisible`
+	// requires Advanced Waiting Room.
+	TurnstileMode param.Field[QueryTurnstileMode] `json:"turnstile_mode"`
 }
 
 func (r QueryParam) MarshalJSON() (data []byte, err error) {
@@ -601,11 +613,32 @@ const (
 	QueryDefaultTemplateLanguageArEg QueryDefaultTemplateLanguage = "ar-EG"
 	QueryDefaultTemplateLanguageRuRu QueryDefaultTemplateLanguage = "ru-RU"
 	QueryDefaultTemplateLanguageFaIr QueryDefaultTemplateLanguage = "fa-IR"
+	QueryDefaultTemplateLanguageBgBg QueryDefaultTemplateLanguage = "bg-BG"
+	QueryDefaultTemplateLanguageHrHr QueryDefaultTemplateLanguage = "hr-HR"
+	QueryDefaultTemplateLanguageCsCz QueryDefaultTemplateLanguage = "cs-CZ"
+	QueryDefaultTemplateLanguageDaDK QueryDefaultTemplateLanguage = "da-DK"
+	QueryDefaultTemplateLanguageFiFi QueryDefaultTemplateLanguage = "fi-FI"
+	QueryDefaultTemplateLanguageLtLt QueryDefaultTemplateLanguage = "lt-LT"
+	QueryDefaultTemplateLanguageMsMy QueryDefaultTemplateLanguage = "ms-MY"
+	QueryDefaultTemplateLanguageNbNo QueryDefaultTemplateLanguage = "nb-NO"
+	QueryDefaultTemplateLanguageRoRo QueryDefaultTemplateLanguage = "ro-RO"
+	QueryDefaultTemplateLanguageElGr QueryDefaultTemplateLanguage = "el-GR"
+	QueryDefaultTemplateLanguageHeIl QueryDefaultTemplateLanguage = "he-IL"
+	QueryDefaultTemplateLanguageHiIn QueryDefaultTemplateLanguage = "hi-IN"
+	QueryDefaultTemplateLanguageHuHu QueryDefaultTemplateLanguage = "hu-HU"
+	QueryDefaultTemplateLanguageSrBa QueryDefaultTemplateLanguage = "sr-BA"
+	QueryDefaultTemplateLanguageSkSk QueryDefaultTemplateLanguage = "sk-SK"
+	QueryDefaultTemplateLanguageSlSi QueryDefaultTemplateLanguage = "sl-SI"
+	QueryDefaultTemplateLanguageSvSe QueryDefaultTemplateLanguage = "sv-SE"
+	QueryDefaultTemplateLanguageTlPh QueryDefaultTemplateLanguage = "tl-PH"
+	QueryDefaultTemplateLanguageThTh QueryDefaultTemplateLanguage = "th-TH"
+	QueryDefaultTemplateLanguageUkUA QueryDefaultTemplateLanguage = "uk-UA"
+	QueryDefaultTemplateLanguageViVn QueryDefaultTemplateLanguage = "vi-VN"
 )
 
 func (r QueryDefaultTemplateLanguage) IsKnown() bool {
 	switch r {
-	case QueryDefaultTemplateLanguageEnUs, QueryDefaultTemplateLanguageEsEs, QueryDefaultTemplateLanguageDeDe, QueryDefaultTemplateLanguageFrFr, QueryDefaultTemplateLanguageItIt, QueryDefaultTemplateLanguageJaJp, QueryDefaultTemplateLanguageKoKr, QueryDefaultTemplateLanguagePtBr, QueryDefaultTemplateLanguageZhCn, QueryDefaultTemplateLanguageZhTw, QueryDefaultTemplateLanguageNlNl, QueryDefaultTemplateLanguagePlPl, QueryDefaultTemplateLanguageIDID, QueryDefaultTemplateLanguageTrTr, QueryDefaultTemplateLanguageArEg, QueryDefaultTemplateLanguageRuRu, QueryDefaultTemplateLanguageFaIr:
+	case QueryDefaultTemplateLanguageEnUs, QueryDefaultTemplateLanguageEsEs, QueryDefaultTemplateLanguageDeDe, QueryDefaultTemplateLanguageFrFr, QueryDefaultTemplateLanguageItIt, QueryDefaultTemplateLanguageJaJp, QueryDefaultTemplateLanguageKoKr, QueryDefaultTemplateLanguagePtBr, QueryDefaultTemplateLanguageZhCn, QueryDefaultTemplateLanguageZhTw, QueryDefaultTemplateLanguageNlNl, QueryDefaultTemplateLanguagePlPl, QueryDefaultTemplateLanguageIDID, QueryDefaultTemplateLanguageTrTr, QueryDefaultTemplateLanguageArEg, QueryDefaultTemplateLanguageRuRu, QueryDefaultTemplateLanguageFaIr, QueryDefaultTemplateLanguageBgBg, QueryDefaultTemplateLanguageHrHr, QueryDefaultTemplateLanguageCsCz, QueryDefaultTemplateLanguageDaDK, QueryDefaultTemplateLanguageFiFi, QueryDefaultTemplateLanguageLtLt, QueryDefaultTemplateLanguageMsMy, QueryDefaultTemplateLanguageNbNo, QueryDefaultTemplateLanguageRoRo, QueryDefaultTemplateLanguageElGr, QueryDefaultTemplateLanguageHeIl, QueryDefaultTemplateLanguageHiIn, QueryDefaultTemplateLanguageHuHu, QueryDefaultTemplateLanguageSrBa, QueryDefaultTemplateLanguageSkSk, QueryDefaultTemplateLanguageSlSi, QueryDefaultTemplateLanguageSvSe, QueryDefaultTemplateLanguageTlPh, QueryDefaultTemplateLanguageThTh, QueryDefaultTemplateLanguageUkUA, QueryDefaultTemplateLanguageViVn:
 		return true
 	}
 	return false
@@ -681,6 +714,48 @@ const (
 func (r QueryQueueingStatusCode) IsKnown() bool {
 	switch r {
 	case QueryQueueingStatusCode200, QueryQueueingStatusCode202, QueryQueueingStatusCode429:
+		return true
+	}
+	return false
+}
+
+// Which action to take when a bot is detected using Turnstile. `log` will have no
+// impact on queueing behavior, simply keeping track of how many bots are detected
+// in Waiting Room Analytics. `infinite_queue` will send bots to a false queueing
+// state, where they will never reach your origin. `infinite_queue` requires
+// Advanced Waiting Room.
+type QueryTurnstileAction string
+
+const (
+	QueryTurnstileActionLog           QueryTurnstileAction = "log"
+	QueryTurnstileActionInfiniteQueue QueryTurnstileAction = "infinite_queue"
+)
+
+func (r QueryTurnstileAction) IsKnown() bool {
+	switch r {
+	case QueryTurnstileActionLog, QueryTurnstileActionInfiniteQueue:
+		return true
+	}
+	return false
+}
+
+// Which Turnstile widget type to use for detecting bot traffic. See
+// [the Turnstile documentation](https://developers.cloudflare.com/turnstile/concepts/widget/#widget-types)
+// for the definitions of these widget types. Set to `off` to disable the Turnstile
+// integration entirely. Setting this to anything other than `off` or `invisible`
+// requires Advanced Waiting Room.
+type QueryTurnstileMode string
+
+const (
+	QueryTurnstileModeOff                   QueryTurnstileMode = "off"
+	QueryTurnstileModeInvisible             QueryTurnstileMode = "invisible"
+	QueryTurnstileModeVisibleNonInteractive QueryTurnstileMode = "visible_non_interactive"
+	QueryTurnstileModeVisibleManaged        QueryTurnstileMode = "visible_managed"
+)
+
+func (r QueryTurnstileMode) IsKnown() bool {
+	switch r {
+	case QueryTurnstileModeOff, QueryTurnstileModeInvisible, QueryTurnstileModeVisibleNonInteractive, QueryTurnstileModeVisibleManaged:
 		return true
 	}
 	return false
@@ -951,8 +1026,20 @@ type WaitingRoom struct {
 	// the route. It is possible to have a situation where there are more or less
 	// active users sessions on the route based on the traffic patterns at that time
 	// around the world.
-	TotalActiveUsers int64           `json:"total_active_users"`
-	JSON             waitingRoomJSON `json:"-"`
+	TotalActiveUsers int64 `json:"total_active_users"`
+	// Which action to take when a bot is detected using Turnstile. `log` will have no
+	// impact on queueing behavior, simply keeping track of how many bots are detected
+	// in Waiting Room Analytics. `infinite_queue` will send bots to a false queueing
+	// state, where they will never reach your origin. `infinite_queue` requires
+	// Advanced Waiting Room.
+	TurnstileAction WaitingRoomTurnstileAction `json:"turnstile_action"`
+	// Which Turnstile widget type to use for detecting bot traffic. See
+	// [the Turnstile documentation](https://developers.cloudflare.com/turnstile/concepts/widget/#widget-types)
+	// for the definitions of these widget types. Set to `off` to disable the Turnstile
+	// integration entirely. Setting this to anything other than `off` or `invisible`
+	// requires Advanced Waiting Room.
+	TurnstileMode WaitingRoomTurnstileMode `json:"turnstile_mode"`
+	JSON          waitingRoomJSON          `json:"-"`
 }
 
 // waitingRoomJSON contains the JSON metadata for the struct [WaitingRoom]
@@ -981,6 +1068,8 @@ type waitingRoomJSON struct {
 	SessionDuration            apijson.Field
 	Suspended                  apijson.Field
 	TotalActiveUsers           apijson.Field
+	TurnstileAction            apijson.Field
+	TurnstileMode              apijson.Field
 	raw                        string
 	ExtraFields                map[string]apijson.Field
 }
@@ -1015,11 +1104,32 @@ const (
 	WaitingRoomDefaultTemplateLanguageArEg WaitingRoomDefaultTemplateLanguage = "ar-EG"
 	WaitingRoomDefaultTemplateLanguageRuRu WaitingRoomDefaultTemplateLanguage = "ru-RU"
 	WaitingRoomDefaultTemplateLanguageFaIr WaitingRoomDefaultTemplateLanguage = "fa-IR"
+	WaitingRoomDefaultTemplateLanguageBgBg WaitingRoomDefaultTemplateLanguage = "bg-BG"
+	WaitingRoomDefaultTemplateLanguageHrHr WaitingRoomDefaultTemplateLanguage = "hr-HR"
+	WaitingRoomDefaultTemplateLanguageCsCz WaitingRoomDefaultTemplateLanguage = "cs-CZ"
+	WaitingRoomDefaultTemplateLanguageDaDK WaitingRoomDefaultTemplateLanguage = "da-DK"
+	WaitingRoomDefaultTemplateLanguageFiFi WaitingRoomDefaultTemplateLanguage = "fi-FI"
+	WaitingRoomDefaultTemplateLanguageLtLt WaitingRoomDefaultTemplateLanguage = "lt-LT"
+	WaitingRoomDefaultTemplateLanguageMsMy WaitingRoomDefaultTemplateLanguage = "ms-MY"
+	WaitingRoomDefaultTemplateLanguageNbNo WaitingRoomDefaultTemplateLanguage = "nb-NO"
+	WaitingRoomDefaultTemplateLanguageRoRo WaitingRoomDefaultTemplateLanguage = "ro-RO"
+	WaitingRoomDefaultTemplateLanguageElGr WaitingRoomDefaultTemplateLanguage = "el-GR"
+	WaitingRoomDefaultTemplateLanguageHeIl WaitingRoomDefaultTemplateLanguage = "he-IL"
+	WaitingRoomDefaultTemplateLanguageHiIn WaitingRoomDefaultTemplateLanguage = "hi-IN"
+	WaitingRoomDefaultTemplateLanguageHuHu WaitingRoomDefaultTemplateLanguage = "hu-HU"
+	WaitingRoomDefaultTemplateLanguageSrBa WaitingRoomDefaultTemplateLanguage = "sr-BA"
+	WaitingRoomDefaultTemplateLanguageSkSk WaitingRoomDefaultTemplateLanguage = "sk-SK"
+	WaitingRoomDefaultTemplateLanguageSlSi WaitingRoomDefaultTemplateLanguage = "sl-SI"
+	WaitingRoomDefaultTemplateLanguageSvSe WaitingRoomDefaultTemplateLanguage = "sv-SE"
+	WaitingRoomDefaultTemplateLanguageTlPh WaitingRoomDefaultTemplateLanguage = "tl-PH"
+	WaitingRoomDefaultTemplateLanguageThTh WaitingRoomDefaultTemplateLanguage = "th-TH"
+	WaitingRoomDefaultTemplateLanguageUkUA WaitingRoomDefaultTemplateLanguage = "uk-UA"
+	WaitingRoomDefaultTemplateLanguageViVn WaitingRoomDefaultTemplateLanguage = "vi-VN"
 )
 
 func (r WaitingRoomDefaultTemplateLanguage) IsKnown() bool {
 	switch r {
-	case WaitingRoomDefaultTemplateLanguageEnUs, WaitingRoomDefaultTemplateLanguageEsEs, WaitingRoomDefaultTemplateLanguageDeDe, WaitingRoomDefaultTemplateLanguageFrFr, WaitingRoomDefaultTemplateLanguageItIt, WaitingRoomDefaultTemplateLanguageJaJp, WaitingRoomDefaultTemplateLanguageKoKr, WaitingRoomDefaultTemplateLanguagePtBr, WaitingRoomDefaultTemplateLanguageZhCn, WaitingRoomDefaultTemplateLanguageZhTw, WaitingRoomDefaultTemplateLanguageNlNl, WaitingRoomDefaultTemplateLanguagePlPl, WaitingRoomDefaultTemplateLanguageIDID, WaitingRoomDefaultTemplateLanguageTrTr, WaitingRoomDefaultTemplateLanguageArEg, WaitingRoomDefaultTemplateLanguageRuRu, WaitingRoomDefaultTemplateLanguageFaIr:
+	case WaitingRoomDefaultTemplateLanguageEnUs, WaitingRoomDefaultTemplateLanguageEsEs, WaitingRoomDefaultTemplateLanguageDeDe, WaitingRoomDefaultTemplateLanguageFrFr, WaitingRoomDefaultTemplateLanguageItIt, WaitingRoomDefaultTemplateLanguageJaJp, WaitingRoomDefaultTemplateLanguageKoKr, WaitingRoomDefaultTemplateLanguagePtBr, WaitingRoomDefaultTemplateLanguageZhCn, WaitingRoomDefaultTemplateLanguageZhTw, WaitingRoomDefaultTemplateLanguageNlNl, WaitingRoomDefaultTemplateLanguagePlPl, WaitingRoomDefaultTemplateLanguageIDID, WaitingRoomDefaultTemplateLanguageTrTr, WaitingRoomDefaultTemplateLanguageArEg, WaitingRoomDefaultTemplateLanguageRuRu, WaitingRoomDefaultTemplateLanguageFaIr, WaitingRoomDefaultTemplateLanguageBgBg, WaitingRoomDefaultTemplateLanguageHrHr, WaitingRoomDefaultTemplateLanguageCsCz, WaitingRoomDefaultTemplateLanguageDaDK, WaitingRoomDefaultTemplateLanguageFiFi, WaitingRoomDefaultTemplateLanguageLtLt, WaitingRoomDefaultTemplateLanguageMsMy, WaitingRoomDefaultTemplateLanguageNbNo, WaitingRoomDefaultTemplateLanguageRoRo, WaitingRoomDefaultTemplateLanguageElGr, WaitingRoomDefaultTemplateLanguageHeIl, WaitingRoomDefaultTemplateLanguageHiIn, WaitingRoomDefaultTemplateLanguageHuHu, WaitingRoomDefaultTemplateLanguageSrBa, WaitingRoomDefaultTemplateLanguageSkSk, WaitingRoomDefaultTemplateLanguageSlSi, WaitingRoomDefaultTemplateLanguageSvSe, WaitingRoomDefaultTemplateLanguageTlPh, WaitingRoomDefaultTemplateLanguageThTh, WaitingRoomDefaultTemplateLanguageUkUA, WaitingRoomDefaultTemplateLanguageViVn:
 		return true
 	}
 	return false
@@ -1095,6 +1205,48 @@ const (
 func (r WaitingRoomQueueingStatusCode) IsKnown() bool {
 	switch r {
 	case WaitingRoomQueueingStatusCode200, WaitingRoomQueueingStatusCode202, WaitingRoomQueueingStatusCode429:
+		return true
+	}
+	return false
+}
+
+// Which action to take when a bot is detected using Turnstile. `log` will have no
+// impact on queueing behavior, simply keeping track of how many bots are detected
+// in Waiting Room Analytics. `infinite_queue` will send bots to a false queueing
+// state, where they will never reach your origin. `infinite_queue` requires
+// Advanced Waiting Room.
+type WaitingRoomTurnstileAction string
+
+const (
+	WaitingRoomTurnstileActionLog           WaitingRoomTurnstileAction = "log"
+	WaitingRoomTurnstileActionInfiniteQueue WaitingRoomTurnstileAction = "infinite_queue"
+)
+
+func (r WaitingRoomTurnstileAction) IsKnown() bool {
+	switch r {
+	case WaitingRoomTurnstileActionLog, WaitingRoomTurnstileActionInfiniteQueue:
+		return true
+	}
+	return false
+}
+
+// Which Turnstile widget type to use for detecting bot traffic. See
+// [the Turnstile documentation](https://developers.cloudflare.com/turnstile/concepts/widget/#widget-types)
+// for the definitions of these widget types. Set to `off` to disable the Turnstile
+// integration entirely. Setting this to anything other than `off` or `invisible`
+// requires Advanced Waiting Room.
+type WaitingRoomTurnstileMode string
+
+const (
+	WaitingRoomTurnstileModeOff                   WaitingRoomTurnstileMode = "off"
+	WaitingRoomTurnstileModeInvisible             WaitingRoomTurnstileMode = "invisible"
+	WaitingRoomTurnstileModeVisibleNonInteractive WaitingRoomTurnstileMode = "visible_non_interactive"
+	WaitingRoomTurnstileModeVisibleManaged        WaitingRoomTurnstileMode = "visible_managed"
+)
+
+func (r WaitingRoomTurnstileMode) IsKnown() bool {
+	switch r {
+	case WaitingRoomTurnstileModeOff, WaitingRoomTurnstileModeInvisible, WaitingRoomTurnstileModeVisibleNonInteractive, WaitingRoomTurnstileModeVisibleManaged:
 		return true
 	}
 	return false

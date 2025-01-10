@@ -7,16 +7,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
 	"mime/multipart"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptContentService contains methods and other services that help with
@@ -41,6 +40,12 @@ func NewScriptContentService(opts ...option.RequestOption) (r *ScriptContentServ
 // Put script content without touching config or metadata
 func (r *ScriptContentService) Update(ctx context.Context, scriptName string, params ScriptContentUpdateParams, opts ...option.RequestOption) (res *Script, err error) {
 	var env ScriptContentUpdateResponseEnvelope
+	if params.CfWorkerBodyPart.Present {
+		opts = append(opts, option.WithHeader("CF-WORKER-BODY-PART", fmt.Sprintf("%s", params.CfWorkerBodyPart)))
+	}
+	if params.CfWorkerMainModulePart.Present {
+		opts = append(opts, option.WithHeader("CF-WORKER-MAIN-MODULE-PART", fmt.Sprintf("%s", params.CfWorkerMainModulePart)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -79,15 +84,8 @@ func (r *ScriptContentService) Get(ctx context.Context, scriptName string, query
 type ScriptContentUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A module comprising a Worker script, often a javascript file. Multiple modules
-	// may be provided as separate named parts, but at least one module must be
-	// present. This should be referenced either in the metadata as `main_module`
-	// (esm)/`body_part` (service worker) or as a header `CF-WORKER-MAIN-MODULE-PART`
-	// (esm) /`CF-WORKER-BODY-PART` (service worker) by part name. Source maps may also
-	// be included using the `application/source-map` content type.
-	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata               param.Field[WorkerMetadataParam] `json:"metadata"`
+	Metadata               param.Field[WorkerMetadataParam] `json:"metadata,required"`
 	CfWorkerBodyPart       param.Field[string]              `header:"CF-WORKER-BODY-PART"`
 	CfWorkerMainModulePart param.Field[string]              `header:"CF-WORKER-MAIN-MODULE-PART"`
 }

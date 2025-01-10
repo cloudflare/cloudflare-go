@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HostnameService contains methods and other services that help with interacting
@@ -42,7 +42,7 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 // even if activated at the zone level. 100 maximum associations on a single
 // certificate are allowed. Note: Use a null value for parameter _enabled_ to
 // invalidate the association.
-func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *[]AuthenticatedOriginPull, err error) {
+func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *[]HostnameUpdateResponse, err error) {
 	var env HostnameUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -184,6 +184,46 @@ func (r AuthenticatedOriginPullStatus) IsKnown() bool {
 	return false
 }
 
+type HostnameUpdateResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// Identifier
+	CERTID string `json:"cert_id"`
+	// The hostname certificate.
+	Certificate string `json:"certificate"`
+	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
+	// value voids the association.
+	Enabled bool `json:"enabled,nullable"`
+	// The hostname on the origin for which the client certificate uploaded will be
+	// used.
+	Hostname string `json:"hostname"`
+	// The hostname certificate's private key.
+	PrivateKey string                     `json:"private_key"`
+	JSON       hostnameUpdateResponseJSON `json:"-"`
+	AuthenticatedOriginPull
+}
+
+// hostnameUpdateResponseJSON contains the JSON metadata for the struct
+// [HostnameUpdateResponse]
+type hostnameUpdateResponseJSON struct {
+	ID          apijson.Field
+	CERTID      apijson.Field
+	Certificate apijson.Field
+	Enabled     apijson.Field
+	Hostname    apijson.Field
+	PrivateKey  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type HostnameUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string]                       `path:"zone_id,required"`
@@ -214,7 +254,7 @@ type HostnameUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    HostnameUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []AuthenticatedOriginPull                `json:"result"`
+	Result     []HostnameUpdateResponse                 `json:"result"`
 	ResultInfo HostnameUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       hostnameUpdateResponseEnvelopeJSON       `json:"-"`
 }

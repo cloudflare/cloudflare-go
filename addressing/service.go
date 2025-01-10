@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // ServiceService contains methods and other services that help with interacting
@@ -68,7 +68,8 @@ func (r *ServiceService) ListAutoPaging(ctx context.Context, query ServiceListPa
 }
 
 type ServiceListResponse struct {
-	// Identifier
+	// Identifier of a Service on the Cloudflare network. Available services and their
+	// IDs may be found in the **List Services** endpoint.
 	ID string `json:"id"`
 	// Name of a service running on the Cloudflare network
 	Name string                  `json:"name"`
@@ -93,6 +94,6 @@ func (r serviceListResponseJSON) RawJSON() string {
 }
 
 type ServiceListParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

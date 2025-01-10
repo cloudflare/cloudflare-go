@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // StreamService contains methods and other services that help with interacting
@@ -69,6 +69,18 @@ func NewStreamService(opts ...option.RequestOption) (r *StreamService) {
 // where the content should be uploaded. Refer to https://tus.io for protocol
 // details.
 func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ...option.RequestOption) (err error) {
+	if params.TusResumable.Present {
+		opts = append(opts, option.WithHeader("Tus-Resumable", fmt.Sprintf("%s", params.TusResumable)))
+	}
+	if params.UploadLength.Present {
+		opts = append(opts, option.WithHeader("Upload-Length", fmt.Sprintf("%s", params.UploadLength)))
+	}
+	if params.UploadCreator.Present {
+		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%s", params.UploadCreator)))
+	}
+	if params.UploadMetadata.Present {
+		opts = append(opts, option.WithHeader("Upload-Metadata", fmt.Sprintf("%s", params.UploadMetadata)))
+	}
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if params.AccountID.Value == "" {
@@ -123,6 +135,27 @@ func (r *StreamService) Delete(ctx context.Context, identifier string, body Stre
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	return
+}
+
+// Edit details for a single video.
+func (r *StreamService) Edit(ctx context.Context, identifier string, params StreamEditParams, opts ...option.RequestOption) (res *Video, err error) {
+	var env StreamEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/stream/%s", params.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -457,6 +490,87 @@ func (r StreamListParamsStatus) IsKnown() bool {
 type StreamDeleteParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type StreamEditParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Lists the origins allowed to display the video. Enter allowed origin domains in
+	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
+	// viewed on any origin.
+	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowedOrigins"`
+	// A user-defined identifier for the media creator.
+	Creator param.Field[string] `json:"creator"`
+	// The maximum duration in seconds for a video upload. Can be set for a video that
+	// is not yet uploaded to limit its duration. Uploads that exceed the specified
+	// duration will fail during processing. A value of `-1` means the value is
+	// unknown.
+	MaxDurationSeconds param.Field[int64] `json:"maxDurationSeconds"`
+	// A user modifiable key-value store used to reference other systems of record for
+	// managing videos.
+	Meta param.Field[interface{}] `json:"meta"`
+	// Indicates whether the video can be a accessed using the UID. When set to `true`,
+	// a signed token must be generated with a signing key to view the video.
+	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
+	// Indicates the date and time at which the video will be deleted. Omit the field
+	// to indicate no change, or include with a `null` value to remove an existing
+	// scheduled deletion. If specified, must be at least 30 days from upload time.
+	ScheduledDeletion param.Field[time.Time] `json:"scheduledDeletion" format:"date-time"`
+	// The timestamp for a thumbnail image calculated as a percentage value of the
+	// video's duration. To convert from a second-wise timestamp to a percentage,
+	// divide the desired timestamp by the total duration of the video. If this value
+	// is not set, the default thumbnail image is taken from 0s of the video.
+	ThumbnailTimestampPct param.Field[float64] `json:"thumbnailTimestampPct"`
+	// The date and time when the video upload URL is no longer valid for direct user
+	// uploads.
+	UploadExpiry param.Field[time.Time] `json:"uploadExpiry" format:"date-time"`
+}
+
+func (r StreamEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type StreamEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success StreamEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  Video                             `json:"result"`
+	JSON    streamEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// streamEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [StreamEditResponseEnvelope]
+type streamEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type StreamEditResponseEnvelopeSuccess bool
+
+const (
+	StreamEditResponseEnvelopeSuccessTrue StreamEditResponseEnvelopeSuccess = true
+)
+
+func (r StreamEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case StreamEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type StreamGetParams struct {

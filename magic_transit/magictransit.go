@@ -3,9 +3,13 @@
 package magic_transit
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"reflect"
+
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/tidwall/gjson"
 )
 
 // MagicTransitService contains methods and other services that help with
@@ -44,13 +48,6 @@ func NewMagicTransitService(opts ...option.RequestOption) (r *MagicTransitServic
 }
 
 type HealthCheck struct {
-	// The direction of the flow of the healthcheck. Either unidirectional, where the
-	// probe comes to you via the tunnel and the result comes back to Cloudflare via
-	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
-	Direction HealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
@@ -59,8 +56,10 @@ type HealthCheck struct {
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
 	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
-	Target string `json:"target"`
+	// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+	// object form if the x-magic-new-hc-target header is set to true and string form
+	// if x-magic-new-hc-target is absent or set to false.
+	Target HealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
 	Type HealthCheckType `json:"type"`
 	JSON healthCheckJSON `json:"-"`
@@ -68,7 +67,6 @@ type HealthCheck struct {
 
 // healthCheckJSON contains the JSON metadata for the struct [HealthCheck]
 type healthCheckJSON struct {
-	Direction   apijson.Field
 	Enabled     apijson.Field
 	Rate        apijson.Field
 	Target      apijson.Field
@@ -85,35 +83,71 @@ func (r healthCheckJSON) RawJSON() string {
 	return r.raw
 }
 
-// The direction of the flow of the healthcheck. Either unidirectional, where the
-// probe comes to you via the tunnel and the result comes back to Cloudflare via
-// the open Internet, or bidirectional where both the probe and result come and go
-// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-// in health_check is ignored as the interface_address is used to send traffic into
-// the tunnel.
-type HealthCheckDirection string
-
-const (
-	HealthCheckDirectionUnidirectional HealthCheckDirection = "unidirectional"
-	HealthCheckDirectionBidirectional  HealthCheckDirection = "bidirectional"
-)
-
-func (r HealthCheckDirection) IsKnown() bool {
-	switch r {
-	case HealthCheckDirectionUnidirectional, HealthCheckDirectionBidirectional:
-		return true
-	}
-	return false
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+// object form if the x-magic-new-hc-target header is set to true and string form
+// if x-magic-new-hc-target is absent or set to false.
+//
+// Union satisfied by [magic_transit.HealthCheckTargetMagicHealthCheckTarget] or
+// [shared.UnionString].
+type HealthCheckTargetUnion interface {
+	ImplementsMagicTransitHealthCheckTargetUnion()
 }
 
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*HealthCheckTargetUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(HealthCheckTargetMagicHealthCheckTarget{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target.
+type HealthCheckTargetMagicHealthCheckTarget struct {
+	// The effective health check target. If 'saved' is empty, then this field will be
+	// populated with the calculated default value on GET requests. Ignored in POST,
+	// PUT, and PATCH requests.
+	Effective string `json:"effective"`
+	// The saved health check target. Setting the value to the empty string indicates
+	// that the calculated default value will be used.
+	Saved string                                      `json:"saved"`
+	JSON  healthCheckTargetMagicHealthCheckTargetJSON `json:"-"`
+}
+
+// healthCheckTargetMagicHealthCheckTargetJSON contains the JSON metadata for the
+// struct [HealthCheckTargetMagicHealthCheckTarget]
+type healthCheckTargetMagicHealthCheckTargetJSON struct {
+	Effective   apijson.Field
+	Saved       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HealthCheckTargetMagicHealthCheckTarget) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthCheckTargetMagicHealthCheckTargetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r HealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitHealthCheckTargetUnion() {}
+
 type HealthCheckParam struct {
-	// The direction of the flow of the healthcheck. Either unidirectional, where the
-	// probe comes to you via the tunnel and the result comes back to Cloudflare via
-	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
-	Direction param.Field[HealthCheckDirection] `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled param.Field[bool] `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
@@ -122,14 +156,48 @@ type HealthCheckParam struct {
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
 	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
-	Target param.Field[string] `json:"target"`
+	// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+	// object form if the x-magic-new-hc-target header is set to true and string form
+	// if x-magic-new-hc-target is absent or set to false.
+	Target param.Field[HealthCheckTargetUnionParam] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
 	Type param.Field[HealthCheckType] `json:"type"`
 }
 
 func (r HealthCheckParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+// object form if the x-magic-new-hc-target header is set to true and string form
+// if x-magic-new-hc-target is absent or set to false.
+//
+// Satisfied by [magic_transit.HealthCheckTargetMagicHealthCheckTargetParam],
+// [shared.UnionString].
+type HealthCheckTargetUnionParam interface {
+	ImplementsMagicTransitHealthCheckTargetUnionParam()
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target.
+type HealthCheckTargetMagicHealthCheckTargetParam struct {
+	// The saved health check target. Setting the value to the empty string indicates
+	// that the calculated default value will be used.
+	Saved param.Field[string] `json:"saved"`
+}
+
+func (r HealthCheckTargetMagicHealthCheckTargetParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r HealthCheckTargetMagicHealthCheckTargetParam) ImplementsMagicTransitHealthCheckTargetUnionParam() {
 }
 
 // How frequent the health check is run. The default value is `mid`.

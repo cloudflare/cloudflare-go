@@ -11,13 +11,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -57,7 +57,7 @@ func (r *SettingTrustedDomainService) New(ctx context.Context, params SettingTru
 	return
 }
 
-// List, search, and sort an account's trusted email domains.
+// Lists, searches, and sorts an account’s trusted email domains.
 func (r *SettingTrustedDomainService) List(ctx context.Context, params SettingTrustedDomainListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingTrustedDomainListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -79,20 +79,20 @@ func (r *SettingTrustedDomainService) List(ctx context.Context, params SettingTr
 	return res, nil
 }
 
-// List, search, and sort an account's trusted email domains.
+// Lists, searches, and sorts an account’s trusted email domains.
 func (r *SettingTrustedDomainService) ListAutoPaging(ctx context.Context, params SettingTrustedDomainListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingTrustedDomainListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a trusted email domain
-func (r *SettingTrustedDomainService) Delete(ctx context.Context, patternID int64, body SettingTrustedDomainDeleteParams, opts ...option.RequestOption) (res *SettingTrustedDomainDeleteResponse, err error) {
+func (r *SettingTrustedDomainService) Delete(ctx context.Context, trustedDomainID int64, body SettingTrustedDomainDeleteParams, opts ...option.RequestOption) (res *SettingTrustedDomainDeleteResponse, err error) {
 	var env SettingTrustedDomainDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/email-security/settings/trusted_domains/%v", body.AccountID, patternID)
+	path := fmt.Sprintf("accounts/%s/email-security/settings/trusted_domains/%v", body.AccountID, trustedDomainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -102,14 +102,14 @@ func (r *SettingTrustedDomainService) Delete(ctx context.Context, patternID int6
 }
 
 // Update a trusted email domain
-func (r *SettingTrustedDomainService) Edit(ctx context.Context, patternID int64, params SettingTrustedDomainEditParams, opts ...option.RequestOption) (res *SettingTrustedDomainEditResponse, err error) {
+func (r *SettingTrustedDomainService) Edit(ctx context.Context, trustedDomainID int64, params SettingTrustedDomainEditParams, opts ...option.RequestOption) (res *SettingTrustedDomainEditResponse, err error) {
 	var env SettingTrustedDomainEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/email-security/settings/trusted_domains/%v", params.AccountID, patternID)
+	path := fmt.Sprintf("accounts/%s/email-security/settings/trusted_domains/%v", params.AccountID, trustedDomainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -119,14 +119,14 @@ func (r *SettingTrustedDomainService) Edit(ctx context.Context, patternID int64,
 }
 
 // Get a trusted email domain
-func (r *SettingTrustedDomainService) Get(ctx context.Context, patternID int64, query SettingTrustedDomainGetParams, opts ...option.RequestOption) (res *SettingTrustedDomainGetResponse, err error) {
+func (r *SettingTrustedDomainService) Get(ctx context.Context, trustedDomainID int64, query SettingTrustedDomainGetParams, opts ...option.RequestOption) (res *SettingTrustedDomainGetResponse, err error) {
 	var env SettingTrustedDomainGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/email-security/settings/trusted_domains/%v", query.AccountID, patternID)
+	path := fmt.Sprintf("accounts/%s/email-security/settings/trusted_domains/%v", query.AccountID, trustedDomainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -158,10 +158,15 @@ func init() {
 }
 
 type SettingTrustedDomainNewResponseEmailSecurityTrustedDomain struct {
-	ID           int64                                                         `json:"id,required"`
-	CreatedAt    time.Time                                                     `json:"created_at,required" format:"date-time"`
-	IsRecent     bool                                                          `json:"is_recent,required"`
-	IsRegex      bool                                                          `json:"is_regex,required"`
+	// The unique identifier for the trusted domain.
+	ID        int64     `json:"id,required"`
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent bool `json:"is_recent,required"`
+	IsRegex  bool `json:"is_regex,required"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool                                                          `json:"is_similarity,required"`
 	LastModified time.Time                                                     `json:"last_modified,required" format:"date-time"`
 	Pattern      string                                                        `json:"pattern,required"`
@@ -202,10 +207,15 @@ func (r SettingTrustedDomainNewResponseArray) implementsEmailSecuritySettingTrus
 }
 
 type SettingTrustedDomainNewResponseArrayItem struct {
-	ID           int64                                        `json:"id,required"`
-	CreatedAt    time.Time                                    `json:"created_at,required" format:"date-time"`
-	IsRecent     bool                                         `json:"is_recent,required"`
-	IsRegex      bool                                         `json:"is_regex,required"`
+	// The unique identifier for the trusted domain.
+	ID        int64     `json:"id,required"`
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent bool `json:"is_recent,required"`
+	IsRegex  bool `json:"is_regex,required"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool                                         `json:"is_similarity,required"`
 	LastModified time.Time                                    `json:"last_modified,required" format:"date-time"`
 	Pattern      string                                       `json:"pattern,required"`
@@ -237,10 +247,15 @@ func (r settingTrustedDomainNewResponseArrayItemJSON) RawJSON() string {
 }
 
 type SettingTrustedDomainListResponse struct {
-	ID           int64                                `json:"id,required"`
-	CreatedAt    time.Time                            `json:"created_at,required" format:"date-time"`
-	IsRecent     bool                                 `json:"is_recent,required"`
-	IsRegex      bool                                 `json:"is_regex,required"`
+	// The unique identifier for the trusted domain.
+	ID        int64     `json:"id,required"`
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent bool `json:"is_recent,required"`
+	IsRegex  bool `json:"is_regex,required"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool                                 `json:"is_similarity,required"`
 	LastModified time.Time                            `json:"last_modified,required" format:"date-time"`
 	Pattern      string                               `json:"pattern,required"`
@@ -272,6 +287,7 @@ func (r settingTrustedDomainListResponseJSON) RawJSON() string {
 }
 
 type SettingTrustedDomainDeleteResponse struct {
+	// The unique identifier for the trusted domain.
 	ID   int64                                  `json:"id,required"`
 	JSON settingTrustedDomainDeleteResponseJSON `json:"-"`
 }
@@ -293,10 +309,15 @@ func (r settingTrustedDomainDeleteResponseJSON) RawJSON() string {
 }
 
 type SettingTrustedDomainEditResponse struct {
-	ID           int64                                `json:"id,required"`
-	CreatedAt    time.Time                            `json:"created_at,required" format:"date-time"`
-	IsRecent     bool                                 `json:"is_recent,required"`
-	IsRegex      bool                                 `json:"is_regex,required"`
+	// The unique identifier for the trusted domain.
+	ID        int64     `json:"id,required"`
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent bool `json:"is_recent,required"`
+	IsRegex  bool `json:"is_regex,required"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool                                 `json:"is_similarity,required"`
 	LastModified time.Time                            `json:"last_modified,required" format:"date-time"`
 	Pattern      string                               `json:"pattern,required"`
@@ -328,10 +349,15 @@ func (r settingTrustedDomainEditResponseJSON) RawJSON() string {
 }
 
 type SettingTrustedDomainGetResponse struct {
-	ID           int64                               `json:"id,required"`
-	CreatedAt    time.Time                           `json:"created_at,required" format:"date-time"`
-	IsRecent     bool                                `json:"is_recent,required"`
-	IsRegex      bool                                `json:"is_regex,required"`
+	// The unique identifier for the trusted domain.
+	ID        int64     `json:"id,required"`
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent bool `json:"is_recent,required"`
+	IsRegex  bool `json:"is_regex,required"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool                                `json:"is_similarity,required"`
 	LastModified time.Time                           `json:"last_modified,required" format:"date-time"`
 	Pattern      string                              `json:"pattern,required"`
@@ -380,8 +406,12 @@ type SettingTrustedDomainNewParamsBodyUnion interface {
 }
 
 type SettingTrustedDomainNewParamsBodyEmailSecurityCreateTrustedDomain struct {
-	IsRecent     param.Field[bool]   `json:"is_recent,required"`
-	IsRegex      param.Field[bool]   `json:"is_regex,required"`
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent param.Field[bool] `json:"is_recent,required"`
+	IsRegex  param.Field[bool] `json:"is_regex,required"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity param.Field[bool]   `json:"is_similarity,required"`
 	Pattern      param.Field[string] `json:"pattern,required"`
 	Comments     param.Field[string] `json:"comments"`
@@ -394,9 +424,25 @@ func (r SettingTrustedDomainNewParamsBodyEmailSecurityCreateTrustedDomain) Marsh
 func (r SettingTrustedDomainNewParamsBodyEmailSecurityCreateTrustedDomain) implementsEmailSecuritySettingTrustedDomainNewParamsBodyUnion() {
 }
 
-type SettingTrustedDomainNewParamsBodyArray []SettingTrustedDomainNewParamsBodyArray
+type SettingTrustedDomainNewParamsBodyArray []SettingTrustedDomainNewParamsBodyArrayItem
 
 func (r SettingTrustedDomainNewParamsBodyArray) implementsEmailSecuritySettingTrustedDomainNewParamsBodyUnion() {
+}
+
+type SettingTrustedDomainNewParamsBodyArrayItem struct {
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent param.Field[bool] `json:"is_recent,required"`
+	IsRegex  param.Field[bool] `json:"is_regex,required"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
+	IsSimilarity param.Field[bool]   `json:"is_similarity,required"`
+	Pattern      param.Field[string] `json:"pattern,required"`
+	Comments     param.Field[string] `json:"comments"`
+}
+
+func (r SettingTrustedDomainNewParamsBodyArrayItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type SettingTrustedDomainNewResponseEnvelope struct {
@@ -435,9 +481,9 @@ type SettingTrustedDomainListParams struct {
 	IsSimilarity param.Field[bool]                                    `query:"is_similarity"`
 	// The field to sort by.
 	Order param.Field[SettingTrustedDomainListParamsOrder] `query:"order"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page param.Field[int64] `query:"page"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Allows searching in multiple properties of a record simultaneously. This
 	// parameter is intended for human users, not automation. Its exact behavior is
@@ -520,10 +566,14 @@ func (r settingTrustedDomainDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SettingTrustedDomainEditParams struct {
 	// Account Identifier
-	AccountID    param.Field[string] `path:"account_id,required"`
-	Comments     param.Field[string] `json:"comments"`
-	IsRecent     param.Field[bool]   `json:"is_recent"`
-	IsRegex      param.Field[bool]   `json:"is_regex"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Comments  param.Field[string] `json:"comments"`
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent param.Field[bool] `json:"is_recent"`
+	IsRegex  param.Field[bool] `json:"is_regex"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity param.Field[bool]   `json:"is_similarity"`
 	Pattern      param.Field[string] `json:"pattern"`
 }

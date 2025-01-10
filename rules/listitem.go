@@ -8,16 +8,14 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ListItemService contains methods and other services that help with interacting
@@ -147,7 +145,7 @@ func (r *ListItemService) Delete(ctx context.Context, listID string, body ListIt
 }
 
 // Fetches a list item in the list.
-func (r *ListItemService) Get(ctx context.Context, accountIdentifier string, listID string, itemID string, opts ...option.RequestOption) (res *ListItemGetResponseUnion, err error) {
+func (r *ListItemService) Get(ctx context.Context, accountIdentifier string, listID string, itemID string, opts ...option.RequestOption) (res *ListItemGetResponse, err error) {
 	var env ListItemGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -237,7 +235,50 @@ func (r listItemUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ListItemListResponse = interface{}
+type ListItemListResponse struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname Hostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect Redirect                 `json:"redirect"`
+	JSON     listItemListResponseJSON `json:"-"`
+}
+
+// listItemListResponseJSON contains the JSON metadata for the struct
+// [ListItemListResponse]
+type listItemListResponseJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemListResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type ListItemDeleteResponse struct {
 	// The unique operation ID of the asynchronous action.
@@ -261,36 +302,49 @@ func (r listItemDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
-// maximum of /64.
-//
-// Union satisfied by [shared.UnionString], [rules.Redirect], [rules.Hostname] or
-// [shared.UnionInt].
-type ListItemGetResponseUnion interface {
-	ImplementsRulesListItemGetResponseUnion()
+type ListItemGetResponse struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname Hostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect Redirect                `json:"redirect"`
+	JSON     listItemGetResponseJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ListItemGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(Redirect{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(Hostname{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionInt(0)),
-		},
-	)
+// listItemGetResponseJSON contains the JSON metadata for the struct
+// [ListItemGetResponse]
+type listItemGetResponseJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ListItemNewParams struct {
@@ -325,7 +379,7 @@ func (r ListItemNewParamsBody) MarshalJSON() (data []byte, err error) {
 type ListItemNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListItemNewResponse   `json:"result,required,nullable"`
+	Result   ListItemNewResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemNewResponseEnvelopeJSON    `json:"-"`
@@ -397,7 +451,7 @@ func (r ListItemUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 type ListItemUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo  `json:"errors,required"`
 	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   ListItemUpdateResponse `json:"result,required,nullable"`
+	Result   ListItemUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemUpdateResponseEnvelopeJSON    `json:"-"`
@@ -470,7 +524,7 @@ type ListItemDeleteParams struct {
 type ListItemDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo  `json:"errors,required"`
 	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   ListItemDeleteResponse `json:"result,required,nullable"`
+	Result   ListItemDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemDeleteResponseEnvelopeJSON    `json:"-"`
@@ -513,9 +567,7 @@ func (r ListItemDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type ListItemGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
-	// maximum of /64.
-	Result ListItemGetResponseUnion `json:"result,required,nullable"`
+	Result   ListItemGetResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemGetResponseEnvelopeJSON    `json:"-"`

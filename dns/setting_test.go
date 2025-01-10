@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/dns"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/dns"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestSettingEditWithOptionalParams(t *testing.T) {
@@ -30,16 +30,16 @@ func TestSettingEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.DNS.Settings.Edit(context.TODO(), dns.SettingEditParams{
 		AccountID: cloudflare.F("account_id"),
-		ZoneDefaults: cloudflare.F(dns.DNSSettingParam{
+		ZoneDefaults: cloudflare.F(dns.SettingEditParamsZoneDefaults{
 			FlattenAllCNAMEs: cloudflare.F(false),
 			FoundationDNS:    cloudflare.F(false),
 			MultiProvider:    cloudflare.F(false),
-			Nameservers: cloudflare.F(dns.NameserverParam{
-				Type: cloudflare.F(dns.NameserverTypeCloudflareStandard),
+			Nameservers: cloudflare.F(dns.SettingEditParamsZoneDefaultsNameservers{
+				Type: cloudflare.F(dns.SettingEditParamsZoneDefaultsNameserversTypeCloudflareStandard),
 			}),
 			NSTTL:              cloudflare.F(86400.000000),
 			SecondaryOverrides: cloudflare.F(false),
-			SOA: cloudflare.F(dns.DNSSettingSOAParam{
+			SOA: cloudflare.F(dns.SettingEditParamsZoneDefaultsSOA{
 				Expire:  cloudflare.F(604800.000000),
 				MinTTL:  cloudflare.F(1800.000000),
 				MNAME:   cloudflare.F("kristina.ns.cloudflare.com"),
@@ -48,7 +48,7 @@ func TestSettingEditWithOptionalParams(t *testing.T) {
 				RNAME:   cloudflare.F("admin.example.com"),
 				TTL:     cloudflare.F(3600.000000),
 			}),
-			ZoneMode: cloudflare.F(dns.DNSSettingZoneModeStandard),
+			ZoneMode: cloudflare.F(dns.SettingEditParamsZoneDefaultsZoneModeStandard),
 		}),
 	})
 	if err != nil {

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
@@ -40,14 +40,6 @@ func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
 			Name:        cloudflare.F("HTTP dash health check"),
 			Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
 			TargetPolicies: cloudflare.F([]zero_trust.SchemaHTTPTargetPolicyParam{{
-				ID:      cloudflare.F("id"),
-				Default: cloudflare.F(true),
-				Name:    cloudflare.F("name"),
-			}, {
-				ID:      cloudflare.F("id"),
-				Default: cloudflare.F(true),
-				Name:    cloudflare.F("name"),
-			}, {
 				ID:      cloudflare.F("id"),
 				Default: cloudflare.F(true),
 				Name:    cloudflare.F("name"),
@@ -93,14 +85,6 @@ func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 				Name:        cloudflare.F("HTTP dash health check"),
 				Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
 				TargetPolicies: cloudflare.F([]zero_trust.SchemaHTTPTargetPolicyParam{{
-					ID:      cloudflare.F("id"),
-					Default: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-				}, {
-					ID:      cloudflare.F("id"),
-					Default: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-				}, {
 					ID:      cloudflare.F("id"),
 					Default: cloudflare.F(true),
 					Name:    cloudflare.F("name"),
@@ -187,7 +171,7 @@ func TestDeviceDEXTestGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.DEXTests.Get(
 		context.TODO(),
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		"372e67954025e0ba6aaa6d586b9e0b59",
 		zero_trust.DeviceDEXTestGetParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},

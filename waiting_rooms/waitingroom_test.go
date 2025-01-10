@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/waiting_rooms"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/waiting_rooms"
 )
 
 func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
@@ -37,12 +37,6 @@ func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
 			AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
 				Host: cloudflare.F("shop2.example.com"),
 				Path: cloudflare.F("/shop2/checkout"),
-			}, {
-				Host: cloudflare.F("shop2.example.com"),
-				Path: cloudflare.F("/shop2/checkout"),
-			}, {
-				Host: cloudflare.F("shop2.example.com"),
-				Path: cloudflare.F("/shop2/checkout"),
 			}}),
 			CookieAttributes: cloudflare.F(waiting_rooms.CookieAttributesParam{
 				Samesite: cloudflare.F(waiting_rooms.CookieAttributesSamesiteAuto),
@@ -61,6 +55,8 @@ func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
 			QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode200),
 			SessionDuration:         cloudflare.F(int64(1)),
 			Suspended:               cloudflare.F(true),
+			TurnstileAction:         cloudflare.F(waiting_rooms.QueryTurnstileActionLog),
+			TurnstileMode:           cloudflare.F(waiting_rooms.QueryTurnstileModeOff),
 		},
 	})
 	if err != nil {
@@ -98,12 +94,6 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 				AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
 					Host: cloudflare.F("shop2.example.com"),
 					Path: cloudflare.F("/shop2/checkout"),
-				}, {
-					Host: cloudflare.F("shop2.example.com"),
-					Path: cloudflare.F("/shop2/checkout"),
-				}, {
-					Host: cloudflare.F("shop2.example.com"),
-					Path: cloudflare.F("/shop2/checkout"),
 				}}),
 				CookieAttributes: cloudflare.F(waiting_rooms.CookieAttributesParam{
 					Samesite: cloudflare.F(waiting_rooms.CookieAttributesSamesiteAuto),
@@ -122,6 +112,8 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 				QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode200),
 				SessionDuration:         cloudflare.F(int64(1)),
 				Suspended:               cloudflare.F(true),
+				TurnstileAction:         cloudflare.F(waiting_rooms.QueryTurnstileActionLog),
+				TurnstileMode:           cloudflare.F(waiting_rooms.QueryTurnstileModeOff),
 			},
 		},
 	)
@@ -216,12 +208,6 @@ func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
 				AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
 					Host: cloudflare.F("shop2.example.com"),
 					Path: cloudflare.F("/shop2/checkout"),
-				}, {
-					Host: cloudflare.F("shop2.example.com"),
-					Path: cloudflare.F("/shop2/checkout"),
-				}, {
-					Host: cloudflare.F("shop2.example.com"),
-					Path: cloudflare.F("/shop2/checkout"),
 				}}),
 				CookieAttributes: cloudflare.F(waiting_rooms.CookieAttributesParam{
 					Samesite: cloudflare.F(waiting_rooms.CookieAttributesSamesiteAuto),
@@ -240,6 +226,8 @@ func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
 				QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode200),
 				SessionDuration:         cloudflare.F(int64(1)),
 				Suspended:               cloudflare.F(true),
+				TurnstileAction:         cloudflare.F(waiting_rooms.QueryTurnstileActionLog),
+				TurnstileMode:           cloudflare.F(waiting_rooms.QueryTurnstileModeOff),
 			},
 		},
 	)

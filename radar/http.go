@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // HTTPService contains methods and other services that help with interacting with
@@ -220,6 +220,9 @@ type HTTPTimeseriesParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
+	// Filter for bot class. Refer to
+	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
+	BotClass param.Field[[]HTTPTimeseriesParamsBotClass] `query:"botClass"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
 	// Europe, but includes results from North America.
@@ -232,8 +235,16 @@ type HTTPTimeseriesParams struct {
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Filter for device type.
+	DeviceType param.Field[[]HTTPTimeseriesParamsDeviceType] `query:"deviceType"`
 	// Format results are returned in.
 	Format param.Field[HTTPTimeseriesParamsFormat] `query:"format"`
+	// Filter for http protocol.
+	HTTPProtocol param.Field[[]HTTPTimeseriesParamsHTTPProtocol] `query:"httpProtocol"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]HTTPTimeseriesParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]HTTPTimeseriesParamsIPVersion] `query:"ipVersion"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -243,6 +254,10 @@ type HTTPTimeseriesParams struct {
 	// Normalization method applied. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 	Normalization param.Field[HTTPTimeseriesParamsNormalization] `query:"normalization"`
+	// Filter for os name.
+	OS param.Field[[]HTTPTimeseriesParamsOS] `query:"os"`
+	// Filter for tls version.
+	TLSVersion param.Field[[]HTTPTimeseriesParamsTLSVersion] `query:"tlsVersion"`
 }
 
 // URLQuery serializes [HTTPTimeseriesParams]'s query parameters as `url.Values`.
@@ -273,6 +288,37 @@ func (r HTTPTimeseriesParamsAggInterval) IsKnown() bool {
 	return false
 }
 
+type HTTPTimeseriesParamsBotClass string
+
+const (
+	HTTPTimeseriesParamsBotClassLikelyAutomated HTTPTimeseriesParamsBotClass = "LIKELY_AUTOMATED"
+	HTTPTimeseriesParamsBotClassLikelyHuman     HTTPTimeseriesParamsBotClass = "LIKELY_HUMAN"
+)
+
+func (r HTTPTimeseriesParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsBotClassLikelyAutomated, HTTPTimeseriesParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesParamsDeviceType string
+
+const (
+	HTTPTimeseriesParamsDeviceTypeDesktop HTTPTimeseriesParamsDeviceType = "DESKTOP"
+	HTTPTimeseriesParamsDeviceTypeMobile  HTTPTimeseriesParamsDeviceType = "MOBILE"
+	HTTPTimeseriesParamsDeviceTypeOther   HTTPTimeseriesParamsDeviceType = "OTHER"
+)
+
+func (r HTTPTimeseriesParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsDeviceTypeDesktop, HTTPTimeseriesParamsDeviceTypeMobile, HTTPTimeseriesParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type HTTPTimeseriesParamsFormat string
 
@@ -284,6 +330,52 @@ const (
 func (r HTTPTimeseriesParamsFormat) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesParamsFormatJson, HTTPTimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesParamsHTTPProtocol string
+
+const (
+	HTTPTimeseriesParamsHTTPProtocolHTTP  HTTPTimeseriesParamsHTTPProtocol = "HTTP"
+	HTTPTimeseriesParamsHTTPProtocolHTTPS HTTPTimeseriesParamsHTTPProtocol = "HTTPS"
+)
+
+func (r HTTPTimeseriesParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsHTTPProtocolHTTP, HTTPTimeseriesParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesParamsHTTPVersion string
+
+const (
+	HTTPTimeseriesParamsHTTPVersionHttPv1 HTTPTimeseriesParamsHTTPVersion = "HTTPv1"
+	HTTPTimeseriesParamsHTTPVersionHttPv2 HTTPTimeseriesParamsHTTPVersion = "HTTPv2"
+	HTTPTimeseriesParamsHTTPVersionHttPv3 HTTPTimeseriesParamsHTTPVersion = "HTTPv3"
+)
+
+func (r HTTPTimeseriesParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsHTTPVersionHttPv1, HTTPTimeseriesParamsHTTPVersionHttPv2, HTTPTimeseriesParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesParamsIPVersion string
+
+const (
+	HTTPTimeseriesParamsIPVersionIPv4 HTTPTimeseriesParamsIPVersion = "IPv4"
+	HTTPTimeseriesParamsIPVersionIPv6 HTTPTimeseriesParamsIPVersion = "IPv6"
+)
+
+func (r HTTPTimeseriesParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsIPVersionIPv4, HTTPTimeseriesParamsIPVersionIPv6:
 		return true
 	}
 	return false
@@ -301,6 +393,44 @@ const (
 func (r HTTPTimeseriesParamsNormalization) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesParamsNormalizationPercentageChange, HTTPTimeseriesParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesParamsOS string
+
+const (
+	HTTPTimeseriesParamsOSWindows  HTTPTimeseriesParamsOS = "WINDOWS"
+	HTTPTimeseriesParamsOSMacosx   HTTPTimeseriesParamsOS = "MACOSX"
+	HTTPTimeseriesParamsOSIos      HTTPTimeseriesParamsOS = "IOS"
+	HTTPTimeseriesParamsOSAndroid  HTTPTimeseriesParamsOS = "ANDROID"
+	HTTPTimeseriesParamsOSChromeos HTTPTimeseriesParamsOS = "CHROMEOS"
+	HTTPTimeseriesParamsOSLinux    HTTPTimeseriesParamsOS = "LINUX"
+	HTTPTimeseriesParamsOSSmartTv  HTTPTimeseriesParamsOS = "SMART_TV"
+)
+
+func (r HTTPTimeseriesParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsOSWindows, HTTPTimeseriesParamsOSMacosx, HTTPTimeseriesParamsOSIos, HTTPTimeseriesParamsOSAndroid, HTTPTimeseriesParamsOSChromeos, HTTPTimeseriesParamsOSLinux, HTTPTimeseriesParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesParamsTLSVersion string
+
+const (
+	HTTPTimeseriesParamsTLSVersionTlSv1_0  HTTPTimeseriesParamsTLSVersion = "TLSv1_0"
+	HTTPTimeseriesParamsTLSVersionTlSv1_1  HTTPTimeseriesParamsTLSVersion = "TLSv1_1"
+	HTTPTimeseriesParamsTLSVersionTlSv1_2  HTTPTimeseriesParamsTLSVersion = "TLSv1_2"
+	HTTPTimeseriesParamsTLSVersionTlSv1_3  HTTPTimeseriesParamsTLSVersion = "TLSv1_3"
+	HTTPTimeseriesParamsTLSVersionTlSvQuic HTTPTimeseriesParamsTLSVersion = "TLSvQUIC"
+)
+
+func (r HTTPTimeseriesParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsTLSVersionTlSv1_0, HTTPTimeseriesParamsTLSVersionTlSv1_1, HTTPTimeseriesParamsTLSVersionTlSv1_2, HTTPTimeseriesParamsTLSVersionTlSv1_3, HTTPTimeseriesParamsTLSVersionTlSvQuic:
 		return true
 	}
 	return false

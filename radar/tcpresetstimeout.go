@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // TCPResetsTimeoutService contains methods and other services that help with
@@ -362,22 +362,13 @@ func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON
 }
 
 type TCPResetsTimeoutTimeseriesGroupsResponseSerie0 struct {
-	// Connection resets within the first 10 packets from the client, but after the
-	// server has received multiple data packets.
-	LaterInFlow []string `json:"later_in_flow,required"`
-	// All other connections.
-	NoMatch []string `json:"no_match,required"`
-	// Connection resets or timeouts after the server received both a SYN packet and an
-	// ACK packet, meaning the connection was successfully established.
-	PostAck []string `json:"post_ack,required"`
-	// Connection resets or timeouts after the server received a packet with PSH flag
-	// set, following connection establishment.
-	PostPsh []string `json:"post_psh,required"`
-	// Connection resets or timeouts after the server received only a single SYN
-	// packet.
-	PostSyn    []string                                           `json:"post_syn,required"`
-	Timestamps []time.Time                                        `json:"timestamps,required" format:"date-time"`
-	JSON       tcpResetsTimeoutTimeseriesGroupsResponseSerie0JSON `json:"-"`
+	LaterInFlow []string                                           `json:"later_in_flow,required"`
+	NoMatch     []string                                           `json:"no_match,required"`
+	PostAck     []string                                           `json:"post_ack,required"`
+	PostPsh     []string                                           `json:"post_psh,required"`
+	PostSyn     []string                                           `json:"post_syn,required"`
+	Timestamps  []time.Time                                        `json:"timestamps,required" format:"date-time"`
+	JSON        tcpResetsTimeoutTimeseriesGroupsResponseSerie0JSON `json:"-"`
 }
 
 // tcpResetsTimeoutTimeseriesGroupsResponseSerie0JSON contains the JSON metadata

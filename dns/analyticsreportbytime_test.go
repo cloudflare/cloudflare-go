@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/dns"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/dns"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestAnalyticsReportBytimeGetWithOptionalParams(t *testing.T) {
@@ -36,7 +36,7 @@ func TestAnalyticsReportBytimeGetWithOptionalParams(t *testing.T) {
 		Metrics:    cloudflare.F("queryCount,uncachedCount"),
 		Since:      cloudflare.F(time.Now()),
 		Sort:       cloudflare.F("+responseCode,-queryName"),
-		TimeDelta:  cloudflare.F(dns.DeltaAll),
+		TimeDelta:  cloudflare.F(dns.AnalyticsReportBytimeGetParamsTimeDeltaAll),
 		Until:      cloudflare.F(time.Now()),
 	})
 	if err != nil {

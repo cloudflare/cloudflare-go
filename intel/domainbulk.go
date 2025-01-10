@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DomainBulkService contains methods and other services that help with interacting
@@ -36,7 +36,7 @@ func NewDomainBulkService(opts ...option.RequestOption) (r *DomainBulkService) {
 	return
 }
 
-// Get Multiple Domain Details
+// Same as summary
 func (r *DomainBulkService) Get(ctx context.Context, params DomainBulkGetParams, opts ...option.RequestOption) (res *[]DomainBulkGetResponse, err error) {
 	var env DomainBulkGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -57,9 +57,8 @@ type DomainBulkGetResponse struct {
 	// Additional information related to the host name.
 	AdditionalInformation DomainBulkGetResponseAdditionalInformation `json:"additional_information"`
 	// Application that the hostname belongs to.
-	Application DomainBulkGetResponseApplication `json:"application"`
-	// Current content categories.
-	ContentCategories          []interface{}                                   `json:"content_categories"`
+	Application                DomainBulkGetResponseApplication                `json:"application"`
+	ContentCategories          []DomainBulkGetResponseContentCategory          `json:"content_categories"`
 	Domain                     string                                          `json:"domain"`
 	InheritedContentCategories []DomainBulkGetResponseInheritedContentCategory `json:"inherited_content_categories"`
 	// Domain from which `inherited_content_categories` and `inherited_risk_types` are
@@ -71,9 +70,9 @@ type DomainBulkGetResponse struct {
 	PopularityRank int64 `json:"popularity_rank"`
 	// Hostname risk score, which is a value between 0 (lowest risk) to 1 (highest
 	// risk).
-	RiskScore float64                   `json:"risk_score"`
-	RiskTypes []interface{}             `json:"risk_types"`
-	JSON      domainBulkGetResponseJSON `json:"-"`
+	RiskScore float64                         `json:"risk_score"`
+	RiskTypes []DomainBulkGetResponseRiskType `json:"risk_types"`
+	JSON      domainBulkGetResponseJSON       `json:"-"`
 }
 
 // domainBulkGetResponseJSON contains the JSON metadata for the struct
@@ -148,6 +147,32 @@ func (r domainBulkGetResponseApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
+// Current content categories.
+type DomainBulkGetResponseContentCategory struct {
+	ID              int64                                    `json:"id"`
+	Name            string                                   `json:"name"`
+	SuperCategoryID int64                                    `json:"super_category_id"`
+	JSON            domainBulkGetResponseContentCategoryJSON `json:"-"`
+}
+
+// domainBulkGetResponseContentCategoryJSON contains the JSON metadata for the
+// struct [DomainBulkGetResponseContentCategory]
+type domainBulkGetResponseContentCategoryJSON struct {
+	ID              apijson.Field
+	Name            apijson.Field
+	SuperCategoryID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DomainBulkGetResponseContentCategory) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainBulkGetResponseContentCategoryJSON) RawJSON() string {
+	return r.raw
+}
+
 type DomainBulkGetResponseInheritedContentCategory struct {
 	ID              int64                                             `json:"id"`
 	Name            string                                            `json:"name"`
@@ -195,6 +220,31 @@ func (r *DomainBulkGetResponseInheritedRiskType) UnmarshalJSON(data []byte) (err
 }
 
 func (r domainBulkGetResponseInheritedRiskTypeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DomainBulkGetResponseRiskType struct {
+	ID              int64                             `json:"id"`
+	Name            string                            `json:"name"`
+	SuperCategoryID int64                             `json:"super_category_id"`
+	JSON            domainBulkGetResponseRiskTypeJSON `json:"-"`
+}
+
+// domainBulkGetResponseRiskTypeJSON contains the JSON metadata for the struct
+// [DomainBulkGetResponseRiskType]
+type domainBulkGetResponseRiskTypeJSON struct {
+	ID              apijson.Field
+	Name            apijson.Field
+	SuperCategoryID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DomainBulkGetResponseRiskType) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainBulkGetResponseRiskTypeJSON) RawJSON() string {
 	return r.raw
 }
 

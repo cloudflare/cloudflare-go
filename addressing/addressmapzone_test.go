@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/addressing"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/addressing"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestAddressMapZoneUpdate(t *testing.T) {
@@ -29,10 +29,10 @@ func TestAddressMapZoneUpdate(t *testing.T) {
 	)
 	_, err := client.Addressing.AddressMaps.Zones.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"055817b111884e0227e1be16a0be6ee0",
 		addressing.AddressMapZoneUpdateParams{
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("8ac8489932db6327334c9b6d58544cfe"),
+			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
 			Body:      map[string]interface{}{},
 		},
 	)
@@ -60,10 +60,10 @@ func TestAddressMapZoneDelete(t *testing.T) {
 	)
 	_, err := client.Addressing.AddressMaps.Zones.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"055817b111884e0227e1be16a0be6ee0",
 		addressing.AddressMapZoneDeleteParams{
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("8ac8489932db6327334c9b6d58544cfe"),
+			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
 		},
 	)
 	if err != nil {

@@ -7,11 +7,12 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
@@ -34,9 +35,14 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		Description:   cloudflare.F("Block bad websites based on their host name."),
 		DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 		Enabled:       cloudflare.F(true),
-		Filters:       cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
-		Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
-		Precedence:    cloudflare.F(int64(0)),
+		Expiration: cloudflare.F(zero_trust.GatewayRuleNewParamsExpiration{
+			ExpiresAt: cloudflare.F(time.Now()),
+			Duration:  cloudflare.F(int64(10)),
+			Expired:   cloudflare.F(false),
+		}),
+		Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
+		Identity:   cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
+		Precedence: cloudflare.F(int64(0)),
 		RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
 			AddHeaders: cloudflare.F(map[string]string{
 				"foo": "string",
@@ -65,28 +71,8 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
 					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				}, {
-					IP:                         cloudflare.F("2.2.2.2"),
-					Port:                       cloudflare.F(int64(5053)),
-					RouteThroughPrivateNetwork: cloudflare.F(true),
-					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				}, {
-					IP:                         cloudflare.F("2.2.2.2"),
-					Port:                       cloudflare.F(int64(5053)),
-					RouteThroughPrivateNetwork: cloudflare.F(true),
-					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				}}),
 				IPV6: cloudflare.F([]zero_trust.DNSResolverSettingsV6Param{{
-					IP:                         cloudflare.F("2001:DB8::"),
-					Port:                       cloudflare.F(int64(5053)),
-					RouteThroughPrivateNetwork: cloudflare.F(true),
-					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				}, {
-					IP:                         cloudflare.F("2001:DB8::"),
-					Port:                       cloudflare.F(int64(5053)),
-					RouteThroughPrivateNetwork: cloudflare.F(true),
-					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				}, {
 					IP:                         cloudflare.F("2001:DB8::"),
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
@@ -115,6 +101,9 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
 			PayloadLog: cloudflare.F(zero_trust.RuleSettingPayloadLogParam{
 				Enabled: cloudflare.F(true),
+			}),
+			Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
+				FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe}),
 			}),
 			ResolveDNSThroughCloudflare: cloudflare.F(true),
 			UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
@@ -165,9 +154,14 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 			Description:   cloudflare.F("Block bad websites based on their host name."),
 			DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 			Enabled:       cloudflare.F(true),
-			Filters:       cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
-			Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
-			Precedence:    cloudflare.F(int64(0)),
+			Expiration: cloudflare.F(zero_trust.GatewayRuleUpdateParamsExpiration{
+				ExpiresAt: cloudflare.F(time.Now()),
+				Duration:  cloudflare.F(int64(10)),
+				Expired:   cloudflare.F(false),
+			}),
+			Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
+			Identity:   cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
+			Precedence: cloudflare.F(int64(0)),
 			RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
 				AddHeaders: cloudflare.F(map[string]string{
 					"foo": "string",
@@ -196,28 +190,8 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
 						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
-						IP:                         cloudflare.F("2.2.2.2"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
-						IP:                         cloudflare.F("2.2.2.2"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					}}),
 					IPV6: cloudflare.F([]zero_trust.DNSResolverSettingsV6Param{{
-						IP:                         cloudflare.F("2001:DB8::"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
-						IP:                         cloudflare.F("2001:DB8::"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
 						IP:                         cloudflare.F("2001:DB8::"),
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
@@ -246,6 +220,9 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
 				PayloadLog: cloudflare.F(zero_trust.RuleSettingPayloadLogParam{
 					Enabled: cloudflare.F(true),
+				}),
+				Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
+					FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe}),
 				}),
 				ResolveDNSThroughCloudflare: cloudflare.F(true),
 				UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
@@ -345,6 +322,35 @@ func TestGatewayRuleGet(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayRuleGetParams{
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestGatewayRuleResetExpiration(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.ZeroTrust.Gateway.Rules.ResetExpiration(
+		context.TODO(),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		zero_trust.GatewayRuleResetExpirationParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)

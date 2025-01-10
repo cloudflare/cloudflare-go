@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // WidgetService contains methods and other services that help with interacting
@@ -180,6 +180,8 @@ type Widget struct {
 	// When the widget was created.
 	CreatedOn time.Time      `json:"created_on,required" format:"date-time"`
 	Domains   []WidgetDomain `json:"domains,required"`
+	// Return the Ephemeral ID in /siteverify (ENT only).
+	EphemeralID bool `json:"ephemeral_id,required"`
 	// Widget Mode
 	Mode WidgetMode `json:"mode,required"`
 	// When the widget was modified.
@@ -205,6 +207,7 @@ type widgetJSON struct {
 	ClearanceLevel apijson.Field
 	CreatedOn      apijson.Field
 	Domains        apijson.Field
+	EphemeralID    apijson.Field
 	Mode           apijson.Field
 	ModifiedOn     apijson.Field
 	Name           apijson.Field
@@ -290,6 +293,8 @@ type WidgetListResponse struct {
 	// When the widget was created.
 	CreatedOn time.Time      `json:"created_on,required" format:"date-time"`
 	Domains   []WidgetDomain `json:"domains,required"`
+	// Return the Ephemeral ID in /siteverify (ENT only).
+	EphemeralID bool `json:"ephemeral_id,required"`
 	// Widget Mode
 	Mode WidgetListResponseMode `json:"mode,required"`
 	// When the widget was modified.
@@ -314,6 +319,7 @@ type widgetListResponseJSON struct {
 	ClearanceLevel apijson.Field
 	CreatedOn      apijson.Field
 	Domains        apijson.Field
+	EphemeralID    apijson.Field
 	Mode           apijson.Field
 	ModifiedOn     apijson.Field
 	Name           apijson.Field
@@ -407,6 +413,8 @@ type WidgetNewParams struct {
 	// If Turnstile is embedded on a Cloudflare site and the widget should grant
 	// challenge clearance, this setting can determine the clearance level to be set
 	ClearanceLevel param.Field[WidgetNewParamsClearanceLevel] `json:"clearance_level"`
+	// Return the Ephemeral ID in /siteverify (ENT only).
+	EphemeralID param.Field[bool] `json:"ephemeral_id"`
 	// Do not show any Cloudflare branding on the widget (ENT only).
 	Offlabel param.Field[bool] `json:"offlabel"`
 	// Region where this widget can be used.
@@ -589,6 +597,8 @@ type WidgetUpdateParams struct {
 	// If Turnstile is embedded on a Cloudflare site and the widget should grant
 	// challenge clearance, this setting can determine the clearance level to be set
 	ClearanceLevel param.Field[WidgetUpdateParamsClearanceLevel] `json:"clearance_level"`
+	// Return the Ephemeral ID in /siteverify (ENT only).
+	EphemeralID param.Field[bool] `json:"ephemeral_id"`
 	// Do not show any Cloudflare branding on the widget (ENT only).
 	Offlabel param.Field[bool] `json:"offlabel"`
 }

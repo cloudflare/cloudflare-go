@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CertificatePackService contains methods and other services that help with
@@ -26,7 +26,6 @@ import (
 // the [NewCertificatePackService] method instead.
 type CertificatePackService struct {
 	Options []option.RequestOption
-	Order   *CertificatePackOrderService
 	Quota   *CertificatePackQuotaService
 }
 
@@ -36,8 +35,24 @@ type CertificatePackService struct {
 func NewCertificatePackService(opts ...option.RequestOption) (r *CertificatePackService) {
 	r = &CertificatePackService{}
 	r.Options = opts
-	r.Order = NewCertificatePackOrderService(opts...)
 	r.Quota = NewCertificatePackQuotaService(opts...)
+	return
+}
+
+// For a given zone, order an advanced certificate pack.
+func (r *CertificatePackService) New(ctx context.Context, params CertificatePackNewParams, opts ...option.RequestOption) (res *CertificatePackNewResponse, err error) {
+	var env CertificatePackNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/order", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -89,9 +104,9 @@ func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID s
 	return
 }
 
-// For a given zone, restart validation for an advanced certificate pack. This is
-// only a validation operation for a Certificate Pack in a validation_timed_out
-// status.
+// For a given zone, restart validation or add cloudflare branding for an advanced
+// certificate pack. The former is only a validation operation for a Certificate
+// Pack in a validation_timed_out status.
 func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID string, params CertificatePackEditParams, opts ...option.RequestOption) (res *CertificatePackEditResponse, err error) {
 	var env CertificatePackEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -210,6 +225,122 @@ func (r ValidationMethod) IsKnown() bool {
 	return false
 }
 
+type CertificatePackNewResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// Certificate Authority selected for the order. For information on any certificate
+	// authority specific details or restrictions
+	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	CertificateAuthority CertificatePackNewResponseCertificateAuthority `json:"certificate_authority"`
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
+	CloudflareBranding bool `json:"cloudflare_branding"`
+	// Comma separated list of valid host names for the certificate packs. Must contain
+	// the zone apex, may not contain more than 50 hosts, and may not be empty.
+	Hosts []Host `json:"hosts"`
+	// Status of certificate pack.
+	Status Status `json:"status"`
+	// Type of certificate pack.
+	Type CertificatePackNewResponseType `json:"type"`
+	// Validation Method selected for the order.
+	ValidationMethod CertificatePackNewResponseValidationMethod `json:"validation_method"`
+	// Validity Days selected for the order.
+	ValidityDays CertificatePackNewResponseValidityDays `json:"validity_days"`
+	JSON         certificatePackNewResponseJSON         `json:"-"`
+}
+
+// certificatePackNewResponseJSON contains the JSON metadata for the struct
+// [CertificatePackNewResponse]
+type certificatePackNewResponseJSON struct {
+	ID                   apijson.Field
+	CertificateAuthority apijson.Field
+	CloudflareBranding   apijson.Field
+	Hosts                apijson.Field
+	Status               apijson.Field
+	Type                 apijson.Field
+	ValidationMethod     apijson.Field
+	ValidityDays         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *CertificatePackNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Certificate Authority selected for the order. For information on any certificate
+// authority specific details or restrictions
+// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+type CertificatePackNewResponseCertificateAuthority string
+
+const (
+	CertificatePackNewResponseCertificateAuthorityGoogle      CertificatePackNewResponseCertificateAuthority = "google"
+	CertificatePackNewResponseCertificateAuthorityLetsEncrypt CertificatePackNewResponseCertificateAuthority = "lets_encrypt"
+	CertificatePackNewResponseCertificateAuthoritySSLCom      CertificatePackNewResponseCertificateAuthority = "ssl_com"
+)
+
+func (r CertificatePackNewResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificatePackNewResponseCertificateAuthorityGoogle, CertificatePackNewResponseCertificateAuthorityLetsEncrypt, CertificatePackNewResponseCertificateAuthoritySSLCom:
+		return true
+	}
+	return false
+}
+
+// Type of certificate pack.
+type CertificatePackNewResponseType string
+
+const (
+	CertificatePackNewResponseTypeAdvanced CertificatePackNewResponseType = "advanced"
+)
+
+func (r CertificatePackNewResponseType) IsKnown() bool {
+	switch r {
+	case CertificatePackNewResponseTypeAdvanced:
+		return true
+	}
+	return false
+}
+
+// Validation Method selected for the order.
+type CertificatePackNewResponseValidationMethod string
+
+const (
+	CertificatePackNewResponseValidationMethodTXT   CertificatePackNewResponseValidationMethod = "txt"
+	CertificatePackNewResponseValidationMethodHTTP  CertificatePackNewResponseValidationMethod = "http"
+	CertificatePackNewResponseValidationMethodEmail CertificatePackNewResponseValidationMethod = "email"
+)
+
+func (r CertificatePackNewResponseValidationMethod) IsKnown() bool {
+	switch r {
+	case CertificatePackNewResponseValidationMethodTXT, CertificatePackNewResponseValidationMethodHTTP, CertificatePackNewResponseValidationMethodEmail:
+		return true
+	}
+	return false
+}
+
+// Validity Days selected for the order.
+type CertificatePackNewResponseValidityDays int64
+
+const (
+	CertificatePackNewResponseValidityDays14  CertificatePackNewResponseValidityDays = 14
+	CertificatePackNewResponseValidityDays30  CertificatePackNewResponseValidityDays = 30
+	CertificatePackNewResponseValidityDays90  CertificatePackNewResponseValidityDays = 90
+	CertificatePackNewResponseValidityDays365 CertificatePackNewResponseValidityDays = 365
+)
+
+func (r CertificatePackNewResponseValidityDays) IsKnown() bool {
+	switch r {
+	case CertificatePackNewResponseValidityDays14, CertificatePackNewResponseValidityDays30, CertificatePackNewResponseValidityDays90, CertificatePackNewResponseValidityDays365:
+		return true
+	}
+	return false
+}
+
 type CertificatePackListResponse = interface{}
 
 type CertificatePackDeleteResponse struct {
@@ -241,8 +372,8 @@ type CertificatePackEditResponse struct {
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
 	CertificateAuthority CertificatePackEditResponseCertificateAuthority `json:"certificate_authority"`
-	// Whether or not to add Cloudflare Branding for the order. This will add
-	// sni.cloudflaressl.com as the Common Name if set true.
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding bool `json:"cloudflare_branding"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
@@ -352,6 +483,143 @@ func (r CertificatePackEditResponseValidityDays) IsKnown() bool {
 
 type CertificatePackGetResponse = interface{}
 
+type CertificatePackNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Certificate Authority selected for the order. For information on any certificate
+	// authority specific details or restrictions
+	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	CertificateAuthority param.Field[CertificatePackNewParamsCertificateAuthority] `json:"certificate_authority,required"`
+	// Comma separated list of valid host names for the certificate packs. Must contain
+	// the zone apex, may not contain more than 50 hosts, and may not be empty.
+	Hosts param.Field[[]HostParam] `json:"hosts,required"`
+	// Type of certificate pack.
+	Type param.Field[CertificatePackNewParamsType] `json:"type,required"`
+	// Validation Method selected for the order.
+	ValidationMethod param.Field[CertificatePackNewParamsValidationMethod] `json:"validation_method,required"`
+	// Validity Days selected for the order.
+	ValidityDays param.Field[CertificatePackNewParamsValidityDays] `json:"validity_days,required"`
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
+	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
+}
+
+func (r CertificatePackNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Certificate Authority selected for the order. For information on any certificate
+// authority specific details or restrictions
+// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+type CertificatePackNewParamsCertificateAuthority string
+
+const (
+	CertificatePackNewParamsCertificateAuthorityGoogle      CertificatePackNewParamsCertificateAuthority = "google"
+	CertificatePackNewParamsCertificateAuthorityLetsEncrypt CertificatePackNewParamsCertificateAuthority = "lets_encrypt"
+	CertificatePackNewParamsCertificateAuthoritySSLCom      CertificatePackNewParamsCertificateAuthority = "ssl_com"
+)
+
+func (r CertificatePackNewParamsCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificatePackNewParamsCertificateAuthorityGoogle, CertificatePackNewParamsCertificateAuthorityLetsEncrypt, CertificatePackNewParamsCertificateAuthoritySSLCom:
+		return true
+	}
+	return false
+}
+
+// Type of certificate pack.
+type CertificatePackNewParamsType string
+
+const (
+	CertificatePackNewParamsTypeAdvanced CertificatePackNewParamsType = "advanced"
+)
+
+func (r CertificatePackNewParamsType) IsKnown() bool {
+	switch r {
+	case CertificatePackNewParamsTypeAdvanced:
+		return true
+	}
+	return false
+}
+
+// Validation Method selected for the order.
+type CertificatePackNewParamsValidationMethod string
+
+const (
+	CertificatePackNewParamsValidationMethodTXT   CertificatePackNewParamsValidationMethod = "txt"
+	CertificatePackNewParamsValidationMethodHTTP  CertificatePackNewParamsValidationMethod = "http"
+	CertificatePackNewParamsValidationMethodEmail CertificatePackNewParamsValidationMethod = "email"
+)
+
+func (r CertificatePackNewParamsValidationMethod) IsKnown() bool {
+	switch r {
+	case CertificatePackNewParamsValidationMethodTXT, CertificatePackNewParamsValidationMethodHTTP, CertificatePackNewParamsValidationMethodEmail:
+		return true
+	}
+	return false
+}
+
+// Validity Days selected for the order.
+type CertificatePackNewParamsValidityDays int64
+
+const (
+	CertificatePackNewParamsValidityDays14  CertificatePackNewParamsValidityDays = 14
+	CertificatePackNewParamsValidityDays30  CertificatePackNewParamsValidityDays = 30
+	CertificatePackNewParamsValidityDays90  CertificatePackNewParamsValidityDays = 90
+	CertificatePackNewParamsValidityDays365 CertificatePackNewParamsValidityDays = 365
+)
+
+func (r CertificatePackNewParamsValidityDays) IsKnown() bool {
+	switch r {
+	case CertificatePackNewParamsValidityDays14, CertificatePackNewParamsValidityDays30, CertificatePackNewParamsValidityDays90, CertificatePackNewParamsValidityDays365:
+		return true
+	}
+	return false
+}
+
+type CertificatePackNewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success CertificatePackNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  CertificatePackNewResponse                `json:"result"`
+	JSON    certificatePackNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// certificatePackNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CertificatePackNewResponseEnvelope]
+type certificatePackNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificatePackNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificatePackNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type CertificatePackNewResponseEnvelopeSuccess bool
+
+const (
+	CertificatePackNewResponseEnvelopeSuccessTrue CertificatePackNewResponseEnvelopeSuccess = true
+)
+
+func (r CertificatePackNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CertificatePackNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CertificatePackListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -434,11 +702,13 @@ func (r CertificatePackDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type CertificatePackEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
+	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
 }
 
 func (r CertificatePackEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type CertificatePackEditResponseEnvelope struct {

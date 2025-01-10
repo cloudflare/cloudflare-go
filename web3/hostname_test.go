@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/web3"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/web3"
 )
 
 func TestHostnameNewWithOptionalParams(t *testing.T) {
@@ -29,6 +29,7 @@ func TestHostnameNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Web3.Hostnames.New(context.TODO(), web3.HostnameNewParams{
 		ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:        cloudflare.F("gateway.example.com"),
 		Target:      cloudflare.F(web3.HostnameNewParamsTargetEthereum),
 		Description: cloudflare.F("This is my IPFS gateway."),
 		Dnslink:     cloudflare.F("/ipns/onboarding.ipfs.cloudflare.com"),

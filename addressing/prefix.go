@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PrefixService contains methods and other services that help with interacting
@@ -24,9 +24,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewPrefixService] method instead.
 type PrefixService struct {
-	Options     []option.RequestOption
-	BGP         *PrefixBGPService
-	Delegations *PrefixDelegationService
+	Options             []option.RequestOption
+	ServiceBindings     *PrefixServiceBindingService
+	BGPPrefixes         *PrefixBGPPrefixService
+	AdvertisementStatus *PrefixAdvertisementStatusService
+	Delegations         *PrefixDelegationService
 }
 
 // NewPrefixService generates a new service that applies the given options to each
@@ -35,7 +37,9 @@ type PrefixService struct {
 func NewPrefixService(opts ...option.RequestOption) (r *PrefixService) {
 	r = &PrefixService{}
 	r.Options = opts
-	r.BGP = NewPrefixBGPService(opts...)
+	r.ServiceBindings = NewPrefixServiceBindingService(opts...)
+	r.BGPPrefixes = NewPrefixBGPPrefixService(opts...)
+	r.AdvertisementStatus = NewPrefixAdvertisementStatusService(opts...)
 	r.Delegations = NewPrefixDelegationService(opts...)
 	return
 }
@@ -143,9 +147,9 @@ func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGe
 }
 
 type Prefix struct {
-	// Identifier
+	// Identifier of an IP Prefix.
 	ID string `json:"id"`
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID string `json:"account_id"`
 	// Prefix advertisement status to the Internet. This field is only not 'null' if on
 	// demand is enabled.
@@ -276,7 +280,7 @@ func (r prefixDeleteResponseResultInfoJSON) RawJSON() string {
 }
 
 type PrefixNewParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
 	ASN param.Field[int64] `json:"asn,required"`
@@ -334,17 +338,17 @@ func (r PrefixNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PrefixListParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PrefixDeleteParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PrefixEditParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Description of the prefix.
 	Description param.Field[string] `json:"description,required"`
@@ -398,7 +402,7 @@ func (r PrefixEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PrefixGetParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

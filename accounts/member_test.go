@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/accounts"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/accounts"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 func TestMemberNewWithOptionalParams(t *testing.T) {
@@ -33,7 +33,7 @@ func TestMemberNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		Body: accounts.MemberNewParamsBodyIAMCreateMemberWithRoles{
 			Email:  cloudflare.F("user@example.com"),
-			Roles:  cloudflare.F([]string{"3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb"}),
+			Roles:  cloudflare.F([]string{"3536bcfad5faccb999b47003c79917fb"}),
 			Status: cloudflare.F(accounts.MemberNewParamsBodyIAMCreateMemberWithRolesStatusAccepted),
 		},
 	})
@@ -65,12 +65,8 @@ func TestMemberUpdateWithOptionalParams(t *testing.T) {
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberUpdateParams{
 			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
-			Body: shared.MemberParam{
-				Roles: cloudflare.F([]shared.MemberRoleParam{{
-					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
-				}, {
-					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
-				}, {
+			Body: accounts.MemberUpdateParamsBodyIAMUpdateMemberWithRoles{
+				Roles: cloudflare.F([]shared.RoleParam{{
 					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
 				}}),
 			},

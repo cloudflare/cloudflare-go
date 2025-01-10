@@ -3,7 +3,7 @@
 package email_security
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // EmailSecurityService contains methods and other services that help with
@@ -15,8 +15,8 @@ import (
 type EmailSecurityService struct {
 	Options     []option.RequestOption
 	Investigate *InvestigateService
-	Phishguard  *PhishguardService
 	Settings    *SettingService
+	Submissions *SubmissionService
 }
 
 // NewEmailSecurityService generates a new service that applies the given options
@@ -26,7 +26,7 @@ func NewEmailSecurityService(opts ...option.RequestOption) (r *EmailSecurityServ
 	r = &EmailSecurityService{}
 	r.Options = opts
 	r.Investigate = NewInvestigateService(opts...)
-	r.Phishguard = NewPhishguardService(opts...)
 	r.Settings = NewSettingService(opts...)
+	r.Submissions = NewSubmissionService(opts...)
 	return
 }
