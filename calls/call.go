@@ -3,7 +3,7 @@
 package calls
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // CallService contains methods and other services that help with interacting with
