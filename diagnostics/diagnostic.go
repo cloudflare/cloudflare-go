@@ -3,7 +3,7 @@
 package diagnostics
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // DiagnosticService contains methods and other services that help with interacting

@@ -3,8 +3,8 @@
 package api_gateway
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // SettingService contains methods and other services that help with interacting
