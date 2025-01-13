@@ -431,11 +431,13 @@ const (
 	LogListParamsFiltersKeyRequestType         LogListParamsFiltersKey = "request_type"
 	LogListParamsFiltersKeyMetadataKey         LogListParamsFiltersKey = "metadata.key"
 	LogListParamsFiltersKeyMetadataValue       LogListParamsFiltersKey = "metadata.value"
+	LogListParamsFiltersKeyPromptsPromptID     LogListParamsFiltersKey = "prompts.prompt_id"
+	LogListParamsFiltersKeyPromptsVersionID    LogListParamsFiltersKey = "prompts.version_id"
 )
 
 func (r LogListParamsFiltersKey) IsKnown() bool {
 	switch r {
-	case LogListParamsFiltersKeyID, LogListParamsFiltersKeyCreatedAt, LogListParamsFiltersKeyRequestContentType, LogListParamsFiltersKeyResponseContentType, LogListParamsFiltersKeySuccess, LogListParamsFiltersKeyCached, LogListParamsFiltersKeyProvider, LogListParamsFiltersKeyModel, LogListParamsFiltersKeyModelType, LogListParamsFiltersKeyCost, LogListParamsFiltersKeyTokens, LogListParamsFiltersKeyTokensIn, LogListParamsFiltersKeyTokensOut, LogListParamsFiltersKeyDuration, LogListParamsFiltersKeyFeedback, LogListParamsFiltersKeyEventID, LogListParamsFiltersKeyRequestType, LogListParamsFiltersKeyMetadataKey, LogListParamsFiltersKeyMetadataValue:
+	case LogListParamsFiltersKeyID, LogListParamsFiltersKeyCreatedAt, LogListParamsFiltersKeyRequestContentType, LogListParamsFiltersKeyResponseContentType, LogListParamsFiltersKeySuccess, LogListParamsFiltersKeyCached, LogListParamsFiltersKeyProvider, LogListParamsFiltersKeyModel, LogListParamsFiltersKeyModelType, LogListParamsFiltersKeyCost, LogListParamsFiltersKeyTokens, LogListParamsFiltersKeyTokensIn, LogListParamsFiltersKeyTokensOut, LogListParamsFiltersKeyDuration, LogListParamsFiltersKeyFeedback, LogListParamsFiltersKeyEventID, LogListParamsFiltersKeyRequestType, LogListParamsFiltersKeyMetadataKey, LogListParamsFiltersKeyMetadataValue, LogListParamsFiltersKeyPromptsPromptID, LogListParamsFiltersKeyPromptsVersionID:
 		return true
 	}
 	return false
@@ -550,11 +552,13 @@ const (
 	LogDeleteParamsFiltersKeyRequestType         LogDeleteParamsFiltersKey = "request_type"
 	LogDeleteParamsFiltersKeyMetadataKey         LogDeleteParamsFiltersKey = "metadata.key"
 	LogDeleteParamsFiltersKeyMetadataValue       LogDeleteParamsFiltersKey = "metadata.value"
+	LogDeleteParamsFiltersKeyPromptsPromptID     LogDeleteParamsFiltersKey = "prompts.prompt_id"
+	LogDeleteParamsFiltersKeyPromptsVersionID    LogDeleteParamsFiltersKey = "prompts.version_id"
 )
 
 func (r LogDeleteParamsFiltersKey) IsKnown() bool {
 	switch r {
-	case LogDeleteParamsFiltersKeyID, LogDeleteParamsFiltersKeyCreatedAt, LogDeleteParamsFiltersKeyRequestContentType, LogDeleteParamsFiltersKeyResponseContentType, LogDeleteParamsFiltersKeySuccess, LogDeleteParamsFiltersKeyCached, LogDeleteParamsFiltersKeyProvider, LogDeleteParamsFiltersKeyModel, LogDeleteParamsFiltersKeyModelType, LogDeleteParamsFiltersKeyCost, LogDeleteParamsFiltersKeyTokens, LogDeleteParamsFiltersKeyTokensIn, LogDeleteParamsFiltersKeyTokensOut, LogDeleteParamsFiltersKeyDuration, LogDeleteParamsFiltersKeyFeedback, LogDeleteParamsFiltersKeyEventID, LogDeleteParamsFiltersKeyRequestType, LogDeleteParamsFiltersKeyMetadataKey, LogDeleteParamsFiltersKeyMetadataValue:
+	case LogDeleteParamsFiltersKeyID, LogDeleteParamsFiltersKeyCreatedAt, LogDeleteParamsFiltersKeyRequestContentType, LogDeleteParamsFiltersKeyResponseContentType, LogDeleteParamsFiltersKeySuccess, LogDeleteParamsFiltersKeyCached, LogDeleteParamsFiltersKeyProvider, LogDeleteParamsFiltersKeyModel, LogDeleteParamsFiltersKeyModelType, LogDeleteParamsFiltersKeyCost, LogDeleteParamsFiltersKeyTokens, LogDeleteParamsFiltersKeyTokensIn, LogDeleteParamsFiltersKeyTokensOut, LogDeleteParamsFiltersKeyDuration, LogDeleteParamsFiltersKeyFeedback, LogDeleteParamsFiltersKeyEventID, LogDeleteParamsFiltersKeyRequestType, LogDeleteParamsFiltersKeyMetadataKey, LogDeleteParamsFiltersKeyMetadataValue, LogDeleteParamsFiltersKeyPromptsPromptID, LogDeleteParamsFiltersKeyPromptsVersionID:
 		return true
 	}
 	return false
