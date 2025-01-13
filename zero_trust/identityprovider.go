@@ -2011,13 +2011,15 @@ type IdentityProviderSCIMConfig struct {
 	// SCIM user resource. With "no_action" identities will not be changed by SCIM
 	// updates in any way and users will not be prompted to reauthenticate.
 	IdentityUpdateBehavior IdentityProviderSCIMConfigIdentityUpdateBehavior `json:"identity_update_behavior"`
+	// The base URL of Cloudflare's SCIM V2.0 API endpoint.
+	SCIMBaseURL string `json:"scim_base_url"`
 	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
 	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
 	// enabled.
 	SeatDeprovision bool `json:"seat_deprovision"`
 	// A read-only token generated when the SCIM integration is enabled for the first
 	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	// refresh it at /access/identity_providers/:idpID/refresh_scim_secret.
 	Secret string `json:"secret"`
 	// A flag to enable revoking a user's session in Access and Gateway when they have
 	// been deprovisioned in the Identity Provider.
@@ -2030,6 +2032,7 @@ type IdentityProviderSCIMConfig struct {
 type identityProviderSCIMConfigJSON struct {
 	Enabled                apijson.Field
 	IdentityUpdateBehavior apijson.Field
+	SCIMBaseURL            apijson.Field
 	SeatDeprovision        apijson.Field
 	Secret                 apijson.Field
 	UserDeprovision        apijson.Field
