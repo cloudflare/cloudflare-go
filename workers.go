@@ -188,8 +188,8 @@ type WorkerMetaData struct {
 	TailConsumers    *[]WorkersTailConsumer `json:"tail_consumers,omitempty"`
 	LastDeployedFrom *string                `json:"last_deployed_from,omitempty"`
 	DeploymentId     *string                `json:"deployment_id,omitempty"`
-	PlacementMode    *PlacementMode         `json:"placement_mode,omitempty"`
-	PipelineHash     *string                `json:"pipeline_hash,omitempty"`
+	PlacementFields
+	PipelineHash *string `json:"pipeline_hash,omitempty"`
 }
 
 // WorkerListResponse wrapper struct for API response to worker script list API call.
@@ -228,8 +228,29 @@ const (
 	PlacementModeSmart PlacementMode = "smart"
 )
 
+type PlacementStatus string
+
+// Placement contains all the worker placement information.
 type Placement struct {
+
+	// Mode is the placement mode for the worker (e.g. "smart").
 	Mode PlacementMode `json:"mode"`
+
+	// Status is the status of the placement (readonly).
+	Status PlacementStatus `json:"status,omitempty"`
+}
+
+// PlacementFields contains all the worker placement fields (deprecated and nested).
+// This struct is meant to be embedded, it exists for locality of deprecated and regular fields.
+type PlacementFields struct {
+
+	// PlacementMode.
+	//
+	// Deprecated: Use Placement.Mode instead.
+	PlacementMode *PlacementMode `json:"placement_mode,omitempty"`
+
+	// Placement.
+	Placement *Placement `json:"placement,omitempty"`
 }
 
 // DeleteWorker deletes a single Worker.
