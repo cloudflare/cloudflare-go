@@ -2753,34 +2753,231 @@ func (r accessApplicationNewResponseSelfHostedApplicationJSON) RawJSON() string 
 func (r AccessApplicationNewResponseSelfHostedApplication) implementsZeroTrustAccessApplicationNewResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewResponseSelfHostedApplicationDestination struct {
-	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationNewResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                            `json:"port_range"`
+	Type      AccessApplicationNewResponseSelfHostedApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationNewResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                           `json:"vnet_id"`
+	JSON   accessApplicationNewResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion
 }
 
 // accessApplicationNewResponseSelfHostedApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationNewResponseSelfHostedApplicationDestination]
 type accessApplicationNewResponseSelfHostedApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseSelfHostedApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination].
+func (r AccessApplicationNewResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination].
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationNewResponseSelfHostedApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                             `json:"uri"`
+	JSON accessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationNewResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationNewResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationNewResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationTypePublic AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                              `json:"port_range"`
+	Type      AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                              `json:"vnet_id"`
+	JSON   accessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationNewResponseSelfHostedApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsL4ProtocolTCP AccessApplicationNewResponseSelfHostedApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsL4ProtocolUdp AccessApplicationNewResponseSelfHostedApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsL4ProtocolTCP, AccessApplicationNewResponseSelfHostedApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsType string
@@ -3829,34 +4026,231 @@ func (r accessApplicationNewResponseBrowserSSHApplicationJSON) RawJSON() string 
 func (r AccessApplicationNewResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationNewResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewResponseBrowserSSHApplicationDestination struct {
-	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                            `json:"port_range"`
+	Type      AccessApplicationNewResponseBrowserSSHApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationNewResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                           `json:"vnet_id"`
+	JSON   accessApplicationNewResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion
 }
 
 // accessApplicationNewResponseBrowserSSHApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationNewResponseBrowserSSHApplicationDestination]
 type accessApplicationNewResponseBrowserSSHApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseBrowserSSHApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination].
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination].
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationNewResponseBrowserSSHApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                             `json:"uri"`
+	JSON accessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationNewResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationNewResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationNewResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationTypePublic AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                              `json:"port_range"`
+	Type      AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                              `json:"vnet_id"`
+	JSON   accessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationNewResponseBrowserSSHApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4ProtocolTCP AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4ProtocolUdp AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4ProtocolTCP, AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsType string
@@ -4344,34 +4738,231 @@ func (r accessApplicationNewResponseBrowserVNCApplicationJSON) RawJSON() string 
 func (r AccessApplicationNewResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationNewResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewResponseBrowserVNCApplicationDestination struct {
-	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                            `json:"port_range"`
+	Type      AccessApplicationNewResponseBrowserVNCApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationNewResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                           `json:"vnet_id"`
+	JSON   accessApplicationNewResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion
 }
 
 // accessApplicationNewResponseBrowserVNCApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationNewResponseBrowserVNCApplicationDestination]
 type accessApplicationNewResponseBrowserVNCApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseBrowserVNCApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination].
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination].
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationNewResponseBrowserVNCApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                             `json:"uri"`
+	JSON accessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationNewResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationNewResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationNewResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationTypePublic AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                              `json:"port_range"`
+	Type      AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                              `json:"vnet_id"`
+	JSON   accessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationNewResponseBrowserVNCApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4ProtocolTCP AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4ProtocolUdp AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4ProtocolTCP, AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsType string
@@ -7437,34 +8028,231 @@ func (r accessApplicationUpdateResponseSelfHostedApplicationJSON) RawJSON() stri
 func (r AccessApplicationUpdateResponseSelfHostedApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateResponseSelfHostedApplicationDestination struct {
-	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                               `json:"port_range"`
+	Type      AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                              `json:"uri"`
-	JSON accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                              `json:"vnet_id"`
+	JSON   accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion
 }
 
 // accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationUpdateResponseSelfHostedApplicationDestination]
 type accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseSelfHostedApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination].
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination].
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationUpdateResponseSelfHostedApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                                `json:"uri"`
+	JSON accessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationUpdateResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationTypePublic AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                                 `json:"port_range"`
+	Type      AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                                 `json:"vnet_id"`
+	JSON   accessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationUpdateResponseSelfHostedApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4ProtocolTCP AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4ProtocolUdp AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4ProtocolTCP, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType string
@@ -8514,34 +9302,231 @@ func (r accessApplicationUpdateResponseBrowserSSHApplicationJSON) RawJSON() stri
 func (r AccessApplicationUpdateResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestination struct {
-	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                               `json:"port_range"`
+	Type      AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                              `json:"uri"`
-	JSON accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                              `json:"vnet_id"`
+	JSON   accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion
 }
 
 // accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationUpdateResponseBrowserSSHApplicationDestination]
 type accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseBrowserSSHApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination].
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination].
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationUpdateResponseBrowserSSHApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                                `json:"uri"`
+	JSON accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationUpdateResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationTypePublic AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                                 `json:"port_range"`
+	Type      AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                                 `json:"vnet_id"`
+	JSON   accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationUpdateResponseBrowserSSHApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4ProtocolTCP AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4ProtocolUdp AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4ProtocolTCP, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType string
@@ -9029,34 +10014,231 @@ func (r accessApplicationUpdateResponseBrowserVNCApplicationJSON) RawJSON() stri
 func (r AccessApplicationUpdateResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestination struct {
-	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                               `json:"port_range"`
+	Type      AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                              `json:"uri"`
-	JSON accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                              `json:"vnet_id"`
+	JSON   accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion
 }
 
 // accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationUpdateResponseBrowserVNCApplicationDestination]
 type accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseBrowserVNCApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination].
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination].
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationUpdateResponseBrowserVNCApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                                `json:"uri"`
+	JSON accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationUpdateResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationTypePublic AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                                 `json:"port_range"`
+	Type      AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                                 `json:"vnet_id"`
+	JSON   accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationUpdateResponseBrowserVNCApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4ProtocolTCP AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4ProtocolUdp AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4ProtocolTCP, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType string
@@ -12123,34 +13305,231 @@ func (r accessApplicationListResponseSelfHostedApplicationJSON) RawJSON() string
 func (r AccessApplicationListResponseSelfHostedApplication) implementsZeroTrustAccessApplicationListResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationListResponseSelfHostedApplicationDestination struct {
-	Type AccessApplicationListResponseSelfHostedApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationListResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                             `json:"port_range"`
+	Type      AccessApplicationListResponseSelfHostedApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                            `json:"uri"`
-	JSON accessApplicationListResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                            `json:"vnet_id"`
+	JSON   accessApplicationListResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationListResponseSelfHostedApplicationDestinationsUnion
 }
 
 // accessApplicationListResponseSelfHostedApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationListResponseSelfHostedApplicationDestination]
 type accessApplicationListResponseSelfHostedApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseSelfHostedApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination].
+func (r AccessApplicationListResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationListResponseSelfHostedApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination].
+type AccessApplicationListResponseSelfHostedApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationListResponseSelfHostedApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationListResponseSelfHostedApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                              `json:"uri"`
+	JSON accessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination]
+type accessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationListResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationListResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationListResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationTypePublic AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                               `json:"port_range"`
+	Type      AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                               `json:"vnet_id"`
+	JSON   accessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination]
+type accessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationListResponseSelfHostedApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsL4ProtocolTCP AccessApplicationListResponseSelfHostedApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationListResponseSelfHostedApplicationDestinationsL4ProtocolUdp AccessApplicationListResponseSelfHostedApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsL4ProtocolTCP, AccessApplicationListResponseSelfHostedApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseSelfHostedApplicationDestinationsType string
@@ -13199,34 +14578,231 @@ func (r accessApplicationListResponseBrowserSSHApplicationJSON) RawJSON() string
 func (r AccessApplicationListResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationListResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationListResponseBrowserSSHApplicationDestination struct {
-	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationListResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                             `json:"port_range"`
+	Type      AccessApplicationListResponseBrowserSSHApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                            `json:"uri"`
-	JSON accessApplicationListResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                            `json:"vnet_id"`
+	JSON   accessApplicationListResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion
 }
 
 // accessApplicationListResponseBrowserSSHApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationListResponseBrowserSSHApplicationDestination]
 type accessApplicationListResponseBrowserSSHApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseBrowserSSHApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination].
+func (r AccessApplicationListResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination].
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationListResponseBrowserSSHApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                              `json:"uri"`
+	JSON accessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationListResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationListResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationListResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationTypePublic AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                               `json:"port_range"`
+	Type      AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                               `json:"vnet_id"`
+	JSON   accessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationListResponseBrowserSSHApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsL4ProtocolTCP AccessApplicationListResponseBrowserSSHApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsL4ProtocolUdp AccessApplicationListResponseBrowserSSHApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsL4ProtocolTCP, AccessApplicationListResponseBrowserSSHApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsType string
@@ -13714,34 +15290,231 @@ func (r accessApplicationListResponseBrowserVNCApplicationJSON) RawJSON() string
 func (r AccessApplicationListResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationListResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationListResponseBrowserVNCApplicationDestination struct {
-	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationListResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                             `json:"port_range"`
+	Type      AccessApplicationListResponseBrowserVNCApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                            `json:"uri"`
-	JSON accessApplicationListResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                            `json:"vnet_id"`
+	JSON   accessApplicationListResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion
 }
 
 // accessApplicationListResponseBrowserVNCApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationListResponseBrowserVNCApplicationDestination]
 type accessApplicationListResponseBrowserVNCApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseBrowserVNCApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination].
+func (r AccessApplicationListResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination].
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationListResponseBrowserVNCApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                              `json:"uri"`
+	JSON accessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationListResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationListResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationListResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationTypePublic AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                               `json:"port_range"`
+	Type      AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                               `json:"vnet_id"`
+	JSON   accessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationListResponseBrowserVNCApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsL4ProtocolTCP AccessApplicationListResponseBrowserVNCApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsL4ProtocolUdp AccessApplicationListResponseBrowserVNCApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsL4ProtocolTCP, AccessApplicationListResponseBrowserVNCApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsType string
@@ -16829,34 +18602,231 @@ func (r accessApplicationGetResponseSelfHostedApplicationJSON) RawJSON() string 
 func (r AccessApplicationGetResponseSelfHostedApplication) implementsZeroTrustAccessApplicationGetResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationGetResponseSelfHostedApplicationDestination struct {
-	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationGetResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                            `json:"port_range"`
+	Type      AccessApplicationGetResponseSelfHostedApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationGetResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                           `json:"vnet_id"`
+	JSON   accessApplicationGetResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion
 }
 
 // accessApplicationGetResponseSelfHostedApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationGetResponseSelfHostedApplicationDestination]
 type accessApplicationGetResponseSelfHostedApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseSelfHostedApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination].
+func (r AccessApplicationGetResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination].
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationGetResponseSelfHostedApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                             `json:"uri"`
+	JSON accessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationGetResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationGetResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationGetResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationTypePublic AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                              `json:"port_range"`
+	Type      AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                              `json:"vnet_id"`
+	JSON   accessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationGetResponseSelfHostedApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsL4ProtocolTCP AccessApplicationGetResponseSelfHostedApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsL4ProtocolUdp AccessApplicationGetResponseSelfHostedApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsL4ProtocolTCP, AccessApplicationGetResponseSelfHostedApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsType string
@@ -17905,34 +19875,231 @@ func (r accessApplicationGetResponseBrowserSSHApplicationJSON) RawJSON() string 
 func (r AccessApplicationGetResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationGetResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationGetResponseBrowserSSHApplicationDestination struct {
-	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                            `json:"port_range"`
+	Type      AccessApplicationGetResponseBrowserSSHApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationGetResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                           `json:"vnet_id"`
+	JSON   accessApplicationGetResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion
 }
 
 // accessApplicationGetResponseBrowserSSHApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationGetResponseBrowserSSHApplicationDestination]
 type accessApplicationGetResponseBrowserSSHApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseBrowserSSHApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination].
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination].
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationGetResponseBrowserSSHApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                             `json:"uri"`
+	JSON accessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationGetResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationGetResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationGetResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationTypePublic AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                              `json:"port_range"`
+	Type      AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                              `json:"vnet_id"`
+	JSON   accessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationGetResponseBrowserSSHApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4ProtocolTCP AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4ProtocolUdp AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4ProtocolTCP, AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsType string
@@ -18420,34 +20587,231 @@ func (r accessApplicationGetResponseBrowserVNCApplicationJSON) RawJSON() string 
 func (r AccessApplicationGetResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationGetResponse() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationGetResponseBrowserVNCApplicationDestination struct {
-	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                            `json:"port_range"`
+	Type      AccessApplicationGetResponseBrowserVNCApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationGetResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	URI string `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                           `json:"vnet_id"`
+	JSON   accessApplicationGetResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	union  AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion
 }
 
 // accessApplicationGetResponseBrowserVNCApplicationDestinationJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationGetResponseBrowserVNCApplicationDestination]
 type accessApplicationGetResponseBrowserVNCApplicationDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	URI         apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseBrowserVNCApplicationDestination{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination].
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion {
+	return r.union
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Union satisfied by
+// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination]
+// or
+// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination].
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion interface {
+	implementsZeroTrustAccessApplicationGetResponseBrowserVNCApplicationDestination()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination{}),
+		},
+	)
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination struct {
+	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationType `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI  string                                                                             `json:"uri"`
+	JSON accessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationGetResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationGetResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationGetResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationTypePublic AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR string `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname string `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange string                                                                              `json:"port_range"`
+	Type      AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationType `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID string                                                                              `json:"vnet_id"`
+	JSON   accessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON struct {
+	CIDR        apijson.Field
+	Hostname    apijson.Field
+	L4Protocol  apijson.Field
+	PortRange   apijson.Field
+	Type        apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationGetResponseBrowserVNCApplicationDestination() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4ProtocolTCP AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4ProtocolUdp AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4ProtocolTCP, AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsType string
@@ -21272,7 +23636,7 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationDestination] `json:"destinations"`
+	Destinations param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -21323,19 +23687,148 @@ func (r AccessApplicationNewParamsBodySelfHostedApplication) MarshalJSON() (data
 func (r AccessApplicationNewParamsBodySelfHostedApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewParamsBodySelfHostedApplicationDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                              `json:"port_range"`
+	Type      param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
 	URI param.Field[string] `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationDestination) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestination) implementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewParamsBodySelfHostedApplicationDestination].
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion()
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                                                `json:"port_range"`
+	Type      param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationType] `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4ProtocolTCP AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4ProtocolUdp AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4ProtocolTCP, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType string
@@ -22142,7 +24635,7 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationDestination] `json:"destinations"`
+	Destinations param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -22193,19 +24686,148 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplication) MarshalJSON() (data
 func (r AccessApplicationNewParamsBodyBrowserSSHApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                              `json:"port_range"`
+	Type      param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
 	URI param.Field[string] `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestination) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestination) implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewParamsBodyBrowserSSHApplicationDestination].
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion()
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationTypePublic AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                                                `json:"port_range"`
+	Type      param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationType] `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4ProtocolTCP AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4ProtocolUdp AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4ProtocolTCP, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType string
@@ -22574,7 +25196,7 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationDestination] `json:"destinations"`
+	Destinations param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -22625,19 +25247,148 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplication) MarshalJSON() (data
 func (r AccessApplicationNewParamsBodyBrowserVNCApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                              `json:"port_range"`
+	Type      param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
 	URI param.Field[string] `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestination) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestination) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewParamsBodyBrowserVNCApplicationDestination].
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion()
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationTypePublic AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                                                `json:"port_range"`
+	Type      param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationType] `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4ProtocolTCP AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4ProtocolUdp AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4ProtocolTCP, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType string
@@ -24665,7 +27416,7 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationDestination] `json:"destinations"`
+	Destinations param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -24716,19 +27467,148 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplication) MarshalJSON() (d
 func (r AccessApplicationUpdateParamsBodySelfHostedApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                                 `json:"port_range"`
+	Type      param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
 	URI param.Field[string] `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestination) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestination) implementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateParamsBodySelfHostedApplicationDestination].
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion()
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                                                   `json:"port_range"`
+	Type      param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationType] `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4ProtocolTCP AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4ProtocolUdp AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4ProtocolTCP, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType string
@@ -25535,7 +28415,7 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination] `json:"destinations"`
+	Destinations param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -25586,19 +28466,148 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) MarshalJSON() (d
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                                 `json:"port_range"`
+	Type      param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
 	URI param.Field[string] `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination].
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion()
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationTypePublic AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                                                   `json:"port_range"`
+	Type      param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationType] `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4ProtocolTCP AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4ProtocolUdp AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4ProtocolTCP, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType string
@@ -25967,7 +28976,7 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination] `json:"destinations"`
+	Destinations param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -26018,19 +29027,148 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) MarshalJSON() (d
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
 }
 
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                                 `json:"port_range"`
+	Type      param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
 	URI param.Field[string] `json:"uri"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+//
+// Satisfied by
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination].
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion()
+}
+
+// A public hostname that Access will secure. Public destinations support
+// sub-domain and path. Wildcard '\*' can be used in the definition.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType] `json:"type"`
+	// The URI of the destination. Public destinations' URIs can include a domain and
+	// path with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestination) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationTypePublic AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationTypePublic:
+		return true
+	}
+	return false
+}
+
+// Private destinations are an early access feature and gated behind a feature
+// flag.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestination struct {
+	// The CIDR range of the destination. Single IPs will be computed as /32.
+	CIDR param.Field[string] `json:"cidr"`
+	// The hostname of the destination. Matches a valid SNI served by an HTTPS origin.
+	Hostname param.Field[string] `json:"hostname"`
+	// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+	// match.
+	L4Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol] `json:"l4_protocol"`
+	// The port range of the destination. Can be a single port or a range of ports.
+	// When omitted, all ports will match.
+	PortRange param.Field[string]                                                                                   `json:"port_range"`
+	Type      param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationType] `json:"type"`
+	// The VNET ID to match the destination. When omitted, all VNETs will match.
+	VnetID param.Field[string] `json:"vnet_id"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestination) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "tcp"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolTCP, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationL4ProtocolUdp:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationType = "private"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestinationTypePrivate:
+		return true
+	}
+	return false
+}
+
+// The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
+// match.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4Protocol string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4ProtocolTCP AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4Protocol = "tcp"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4ProtocolUdp AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4Protocol = "udp"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4Protocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4ProtocolTCP, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4ProtocolUdp:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType string
