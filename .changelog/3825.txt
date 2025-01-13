@@ -1,0 +1,7 @@
+```release-note:note
+fix: The `placement_mode` attribute in script upload responses has been deprecated. The new attribute `placement.mode` should be used instead.
+```
+
+```release-note:enhancement
+feat: Add new `placement` attribute object in script upload responses. It contains the `mode` and `status` attributes.
+```
