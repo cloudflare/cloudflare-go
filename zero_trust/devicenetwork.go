@@ -220,10 +220,8 @@ func (r DeviceNetworkType) IsKnown() bool {
 }
 
 type DeviceNetworkNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The configuration object containing information for the WARP client to detect
-	// the managed network.
-	Config param.Field[DeviceNetworkNewParamsConfig] `json:"config,required"`
+	AccountID param.Field[string]                       `path:"account_id,required"`
+	Config    param.Field[DeviceNetworkNewParamsConfig] `json:"config,required"`
 	// The name of the device managed network. This name must be unique.
 	Name param.Field[string] `json:"name,required"`
 	// The type of device managed network.
@@ -234,8 +232,6 @@ func (r DeviceNetworkNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The configuration object containing information for the WARP client to detect
-// the managed network.
 type DeviceNetworkNewParamsConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
@@ -309,10 +305,8 @@ func (r DeviceNetworkNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceNetworkUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The configuration object containing information for the WARP client to detect
-	// the managed network.
-	Config param.Field[DeviceNetworkUpdateParamsConfig] `json:"config"`
+	AccountID param.Field[string]                          `path:"account_id,required"`
+	Config    param.Field[DeviceNetworkUpdateParamsConfig] `json:"config"`
 	// The name of the device managed network. This name must be unique.
 	Name param.Field[string] `json:"name"`
 	// The type of device managed network.
@@ -323,8 +317,6 @@ func (r DeviceNetworkUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The configuration object containing information for the WARP client to detect
-// the managed network.
 type DeviceNetworkUpdateParamsConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
