@@ -284,14 +284,10 @@ type AnalyticsEventBytimeGetParams struct {
 	// | duration90th   | 90th percentile connection duration | 1.0     | Time in milliseconds  |
 	// | duration99th   | 99th percentile connection duration | 1.0     | Time in milliseconds. |
 	Metrics param.Field[[]AnalyticsEventBytimeGetParamsMetric] `query:"metrics"`
-	// Start of time interval to query, defaults to `until` - 6 hours. Timestamp must
-	// be in RFC3339 format and uses UTC unless otherwise specified.
-	Since param.Field[time.Time] `query:"since" format:"date-time"`
+	Since   param.Field[time.Time]                             `query:"since" format:"date-time"`
 	// The sort order for the result set; sort fields must be included in `metrics` or
 	// `dimensions`.
-	Sort param.Field[[]string] `query:"sort"`
-	// End of time interval to query, defaults to current time. Timestamp must be in
-	// RFC3339 format and uses UTC unless otherwise specified.
+	Sort  param.Field[[]string]  `query:"sort"`
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
 

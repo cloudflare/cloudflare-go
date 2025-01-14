@@ -29,7 +29,7 @@ func TestSeatEdit(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Seats.Edit(context.TODO(), zero_trust.SeatEditParams{
-		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: []zero_trust.SeatEditParamsBody{{
 			AccessSeat:  cloudflare.F(false),
 			GatewaySeat: cloudflare.F(false),
