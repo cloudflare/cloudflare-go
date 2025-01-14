@@ -29,9 +29,7 @@ func TestDNSFirewallNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNSFirewall.New(context.TODO(), dns_firewall.DNSFirewallNewParams{
-		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Name:        cloudflare.F("My Awesome DNS Firewall cluster"),
-		UpstreamIPs: cloudflare.F([]dns_firewall.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		AttackMitigation: cloudflare.F(dns_firewall.AttackMitigationParam{
 			Enabled:                   cloudflare.F(true),
 			OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
@@ -40,9 +38,11 @@ func TestDNSFirewallNewWithOptionalParams(t *testing.T) {
 		ECSFallback:          cloudflare.F(false),
 		MaximumCacheTTL:      cloudflare.F(900.000000),
 		MinimumCacheTTL:      cloudflare.F(60.000000),
+		Name:                 cloudflare.F("My Awesome DNS Firewall cluster"),
 		NegativeCacheTTL:     cloudflare.F(900.000000),
 		Ratelimit:            cloudflare.F(600.000000),
 		Retries:              cloudflare.F(2.000000),
+		UpstreamIPs:          cloudflare.F([]dns_firewall.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

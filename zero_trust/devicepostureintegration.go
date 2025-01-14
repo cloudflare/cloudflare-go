@@ -145,7 +145,7 @@ func (r *DevicePostureIntegrationService) Get(ctx context.Context, integrationID
 type Integration struct {
 	// API UUID.
 	ID string `json:"id"`
-	// The configuration object containing third-party integration information.
+	// The Workspace One Config Response.
 	Config IntegrationConfig `json:"config"`
 	// The interval between each posture check with the third-party API. Use `m` for
 	// minutes (e.g. `5m`) and `h` for hours (e.g. `12h`).
@@ -176,7 +176,7 @@ func (r integrationJSON) RawJSON() string {
 	return r.raw
 }
 
-// The configuration object containing third-party integration information.
+// The Workspace One Config Response.
 type IntegrationConfig struct {
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
 	APIURL string `json:"api_url,required"`

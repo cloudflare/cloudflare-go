@@ -78,7 +78,7 @@ func (r *ReverseDNSService) Get(ctx context.Context, dnsFirewallID string, query
 
 type ReverseDNSEditResponse struct {
 	// Map of cluster IP addresses to PTR record contents
-	PTR  map[string]string          `json:"ptr,required"`
+	PTR  map[string]string          `json:"ptr"`
 	JSON reverseDNSEditResponseJSON `json:"-"`
 }
 
@@ -100,7 +100,7 @@ func (r reverseDNSEditResponseJSON) RawJSON() string {
 
 type ReverseDNSGetResponse struct {
 	// Map of cluster IP addresses to PTR record contents
-	PTR  map[string]string         `json:"ptr,required"`
+	PTR  map[string]string         `json:"ptr"`
 	JSON reverseDNSGetResponseJSON `json:"-"`
 }
 

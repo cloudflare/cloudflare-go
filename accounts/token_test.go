@@ -89,7 +89,15 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 		accounts.TokenUpdateParams{
 			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 			Token: shared.TokenParam{
-				Name: cloudflare.F("readonly token"),
+				Condition: cloudflare.F(shared.TokenConditionParam{
+					RequestIP: cloudflare.F(shared.TokenConditionRequestIPParam{
+						In:    cloudflare.F([]shared.TokenConditionCIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
+						NotIn: cloudflare.F([]shared.TokenConditionCIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
+					}),
+				}),
+				ExpiresOn: cloudflare.F(time.Now()),
+				Name:      cloudflare.F("readonly token"),
+				NotBefore: cloudflare.F(time.Now()),
 				Policies: cloudflare.F([]shared.TokenPolicyParam{{
 					Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
 					PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
@@ -109,14 +117,6 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 					}),
 				}}),
 				Status: cloudflare.F(shared.TokenStatusActive),
-				Condition: cloudflare.F(shared.TokenConditionParam{
-					RequestIP: cloudflare.F(shared.TokenConditionRequestIPParam{
-						In:    cloudflare.F([]shared.TokenConditionCIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
-						NotIn: cloudflare.F([]shared.TokenConditionCIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
-					}),
-				}),
-				ExpiresOn: cloudflare.F(time.Now()),
-				NotBefore: cloudflare.F(time.Now()),
 			},
 		},
 	)

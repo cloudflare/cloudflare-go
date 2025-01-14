@@ -399,13 +399,11 @@ func (r AppNewResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 }
 
 type AppNewResponseSpectrumConfigPaygoAppConfig struct {
-	// App identifier.
-	ID string `json:"id,required"`
-	// When the Application was created.
+	// Identifier
+	ID        string    `json:"id,required"`
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// The name and type of DNS record for the Spectrum application.
-	DNS DNS `json:"dns,required"`
-	// When the Application was last modified.
+	DNS        DNS       `json:"dns,required"`
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
@@ -750,13 +748,11 @@ func (r AppUpdateResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 }
 
 type AppUpdateResponseSpectrumConfigPaygoAppConfig struct {
-	// App identifier.
-	ID string `json:"id,required"`
-	// When the Application was created.
+	// Identifier
+	ID        string    `json:"id,required"`
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// The name and type of DNS record for the Spectrum application.
-	DNS DNS `json:"dns,required"`
-	// When the Application was last modified.
+	DNS        DNS       `json:"dns,required"`
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
@@ -1283,13 +1279,11 @@ func (r AppGetResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 }
 
 type AppGetResponseSpectrumConfigPaygoAppConfig struct {
-	// App identifier.
-	ID string `json:"id,required"`
-	// When the Application was created.
+	// Identifier
+	ID        string    `json:"id,required"`
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// The name and type of DNS record for the Spectrum application.
-	DNS DNS `json:"dns,required"`
-	// When the Application was last modified.
+	DNS        DNS       `json:"dns,required"`
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
@@ -1384,7 +1378,7 @@ func (r AppGetResponseTrafficType) IsKnown() bool {
 }
 
 type AppNewParams struct {
-	// Zone identifier.
+	// Identifier
 	ZoneID param.Field[string]   `path:"zone_id,required"`
 	Body   AppNewParamsBodyUnion `json:"body,required"`
 }
@@ -1550,6 +1544,8 @@ func (r AppNewParamsBodySpectrumConfigAppConfigTrafficType) IsKnown() bool {
 }
 
 type AppNewParamsBodySpectrumConfigPaygoAppConfig struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
 	// The name and type of DNS record for the Spectrum application.
 	DNS param.Field[DNSParam] `json:"dns,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
@@ -1670,7 +1666,7 @@ func (r AppNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AppUpdateParams struct {
-	// Zone identifier.
+	// Identifier
 	ZoneID param.Field[string]      `path:"zone_id,required"`
 	Body   AppUpdateParamsBodyUnion `json:"body,required"`
 }
@@ -1837,6 +1833,8 @@ func (r AppUpdateParamsBodySpectrumConfigAppConfigTrafficType) IsKnown() bool {
 }
 
 type AppUpdateParamsBodySpectrumConfigPaygoAppConfig struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
 	// The name and type of DNS record for the Spectrum application.
 	DNS param.Field[DNSParam] `json:"dns,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
@@ -1958,7 +1956,7 @@ func (r AppUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AppListParams struct {
-	// Zone identifier.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Sets the direction by which results are ordered.
 	Direction param.Field[AppListParamsDirection] `query:"direction"`
@@ -2016,7 +2014,7 @@ func (r AppListParamsOrder) IsKnown() bool {
 }
 
 type AppDeleteParams struct {
-	// Zone identifier.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -2064,7 +2062,7 @@ func (r AppDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AppGetParams struct {
-	// Zone identifier.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 

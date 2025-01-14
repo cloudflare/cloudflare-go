@@ -56,7 +56,7 @@ func TestDetectionUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.LeakedCredentialChecks.Detections.Update(
 		context.TODO(),
-		"18a14bafaa8eb1df04ce683ec18c765e",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		leaked_credential_checks.DetectionUpdateParams{
 			ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Password: cloudflare.F("lookup_json_string(http.request.body.raw, \"secret\")"),
@@ -112,7 +112,7 @@ func TestDetectionDelete(t *testing.T) {
 	)
 	_, err := client.LeakedCredentialChecks.Detections.Delete(
 		context.TODO(),
-		"18a14bafaa8eb1df04ce683ec18c765e",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		leaked_credential_checks.DetectionDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
