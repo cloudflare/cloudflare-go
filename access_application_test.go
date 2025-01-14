@@ -294,7 +294,14 @@ func TestCreateAccessApplications(t *testing.T) {
 				"domain_type": "public",
 				"destinations": [
 					{"type": "public", "uri": "test.example.com/admin"},
-					{"type": "public", "uri": "test.example.com/admin2"}
+					{"type": "private", "hostname": "test.private.domain"},
+					{
+						"type": "private",
+						"cidr": "192.168.1.0/24",
+						"port_range": "8080-8081",
+						"vnet_id": "e69219cb-095a-4839-a352-b25b3d43aaac",
+						"l4_protocol": "udp"
+					}
 				],
 				"type": "self_hosted",
 				"session_duration": "24h",
@@ -342,8 +349,21 @@ func TestCreateAccessApplications(t *testing.T) {
 		Domain:     "test.example.com/admin",
 		DomainType: AccessDestinationPublic,
 		Destinations: []AccessDestination{
-			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
-			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+			{
+				Type: AccessDestinationPublic,
+				URI:  "test.example.com/admin",
+			},
+			{
+				Type:     AccessDestinationPrivate,
+				Hostname: "test.private.domain",
+			},
+			{
+				Type:       AccessDestinationPrivate,
+				CIDR:       "192.168.1.0/24",
+				PortRange:  "8080-8081",
+				VnetID:     "e69219cb-095a-4839-a352-b25b3d43aaac",
+				L4Protocol: "udp",
+			},
 		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
@@ -429,7 +449,14 @@ func TestUpdateAccessApplication(t *testing.T) {
 				"domain_type": "public",
 				"destinations": [
 					{"type": "public", "uri": "test.example.com/admin"},
-					{"type": "public", "uri": "test.example.com/admin2"}
+					{"type": "private", "hostname": "test.private.domain"},
+					{
+						"type": "private",
+						"cidr": "192.168.1.0/24",
+						"port_range": "8080-8081",
+						"vnet_id": "e69219cb-095a-4839-a352-b25b3d43aaac",
+						"l4_protocol": "udp"
+					}
 				],
 				"type": "self_hosted",
 				"session_duration": "24h",
@@ -476,7 +503,14 @@ func TestUpdateAccessApplication(t *testing.T) {
 		DomainType: AccessDestinationPublic,
 		Destinations: []AccessDestination{
 			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
-			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+			{Type: AccessDestinationPrivate, Hostname: "test.private.domain"},
+			{
+				Type:       AccessDestinationPrivate,
+				CIDR:       "192.168.1.0/24",
+				PortRange:  "8080-8081",
+				VnetID:     "e69219cb-095a-4839-a352-b25b3d43aaac",
+				L4Protocol: "udp",
+			},
 		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
@@ -519,7 +553,14 @@ func TestUpdateAccessApplication(t *testing.T) {
 		DomainType: AccessDestinationPublic,
 		Destinations: []AccessDestination{
 			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
-			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+			{Type: AccessDestinationPrivate, Hostname: "test.private.domain"},
+			{
+				Type:       AccessDestinationPrivate,
+				CIDR:       "192.168.1.0/24",
+				PortRange:  "8080-8081",
+				VnetID:     "e69219cb-095a-4839-a352-b25b3d43aaac",
+				L4Protocol: "udp",
+			},
 		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
@@ -557,7 +598,14 @@ func TestUpdateAccessApplication(t *testing.T) {
 		DomainType: AccessDestinationPublic,
 		Destinations: []AccessDestination{
 			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
-			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+			{Type: AccessDestinationPrivate, Hostname: "test.private.domain"},
+			{
+				Type:       AccessDestinationPrivate,
+				CIDR:       "192.168.1.0/24",
+				PortRange:  "8080-8081",
+				VnetID:     "e69219cb-095a-4839-a352-b25b3d43aaac",
+				L4Protocol: "udp",
+			},
 		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
