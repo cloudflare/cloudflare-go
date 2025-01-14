@@ -48,6 +48,7 @@ func TestSiteACLNewWithOptionalParams(t *testing.T) {
 			Description:    cloudflare.F("Allows local traffic between PIN pads and cash register."),
 			ForwardLocally: cloudflare.F(true),
 			Protocols:      cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP}),
+			Unidirectional: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -92,8 +93,9 @@ func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
 				Ports:   cloudflare.F([]int64{int64(1)}),
 				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1"}),
 			}),
-			Name:      cloudflare.F("PIN Pad - Cash Register"),
-			Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP}),
+			Name:           cloudflare.F("PIN Pad - Cash Register"),
+			Protocols:      cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP}),
+			Unidirectional: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -197,8 +199,9 @@ func TestSiteACLEditWithOptionalParams(t *testing.T) {
 				Ports:   cloudflare.F([]int64{int64(1)}),
 				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1"}),
 			}),
-			Name:      cloudflare.F("PIN Pad - Cash Register"),
-			Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP}),
+			Name:           cloudflare.F("PIN Pad - Cash Register"),
+			Protocols:      cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP}),
+			Unidirectional: cloudflare.F(true),
 		},
 	)
 	if err != nil {
