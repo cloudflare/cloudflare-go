@@ -5443,8 +5443,7 @@ type SetCacheSettingsRuleActionParametersCacheKeyCustomKey struct {
 	Header SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHeader `json:"header"`
 	// Whether to use the original host or the resolved host in the cache key.
 	Host SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHost `json:"host"`
-	// Use the presence or absence of parameters in the query string to build the cache
-	// key.
+	// Use the presence of parameters in the query string to build the cache key.
 	QueryString SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString `json:"query_string"`
 	// Characteristics of the request user agent used in building the cache key.
 	User SetCacheSettingsRuleActionParametersCacheKeyCustomKeyUser `json:"user"`
@@ -5562,16 +5561,16 @@ func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyHostJSON) RawJSON()
 	return r.raw
 }
 
-// Use the presence or absence of parameters in the query string to build the cache
-// key.
+// Use the presence of parameters in the query string to build the cache key.
 type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString struct {
-	// build the cache key using all query string parameters EXCECPT these excluded
-	// parameters
-	Exclude SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExclude `json:"exclude"`
-	// build the cache key using a list of query string parameters that ARE in the
-	// request.
-	Include SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringInclude `json:"include"`
-	JSON    setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringJSON    `json:"-"`
+	// This field can have the runtime type of
+	// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude].
+	Exclude interface{} `json:"exclude"`
+	// This field can have the runtime type of
+	// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude].
+	Include interface{}                                                          `json:"include"`
+	JSON    setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringJSON `json:"-"`
+	union   SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion
 }
 
 // setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringJSON contains
@@ -5584,70 +5583,360 @@ type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringJSON struct
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringJSON) RawJSON() string {
 	return r.raw
 }
 
-// build the cache key using all query string parameters EXCECPT these excluded
-// parameters
-type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExclude struct {
-	// Exclude all query string parameters from use in building the cache key.
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString) UnmarshalJSON(data []byte) (err error) {
+	*r = SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters].
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString) AsUnion() SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion {
+	return r.union
+}
+
+// Use the presence of parameters in the query string to build the cache key.
+//
+// Union satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters]
+// or
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion interface {
+	implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters{}),
+		},
+	)
+}
+
+// Use the presence of parameters in the query string to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters struct {
+	// A list of query string parameters used to build the cache key.
+	Include SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude `json:"include"`
+	JSON    setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersJSON    `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersJSON struct {
+	Include     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString() {
+}
+
+// A list of query string parameters used to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude struct {
+	// Determines whether to include all query string parameters in the cache key.
 	All bool `json:"all"`
+	// This field can have the runtime type of [[]string].
+	List  interface{}                                                                                              `json:"list"`
+	JSON  setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeJSON `json:"-"`
+	union SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeJSON struct {
+	All         apijson.Field
+	List        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude) UnmarshalJSON(data []byte) (err error) {
+	*r = SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters].
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude) AsUnion() SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion {
+	return r.union
+}
+
+// A list of query string parameters used to build the cache key.
+//
+// Union satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters]
+// or
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion interface {
+	implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters{}),
+		},
+	)
+}
+
+// A list of query string parameters used to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters struct {
+	List []string                                                                                                                          `json:"list"`
+	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersJSON struct {
+	List        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude() {
+}
+
+// Build the cache key using ALL query string parameters that are in the request.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters struct {
+	// Determines whether to include all query string parameters in the cache key.
+	All  bool                                                                                                                             `json:"all"`
+	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersJSON struct {
+	All         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude() {
+}
+
+// Use the absence of parameters in the query string to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters struct {
 	// A list of query string parameters NOT used to build the cache key. All
 	// parameters present in the request but missing in this list will be used to build
 	// the cache key.
-	List []string                                                                    `json:"list"`
-	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeJSON `json:"-"`
+	Exclude SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude `json:"exclude"`
+	JSON    setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersJSON    `json:"-"`
 }
 
-// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeJSON
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersJSON
 // contains the JSON metadata for the struct
-// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExclude]
-type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeJSON struct {
-	All         apijson.Field
-	List        apijson.Field
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersJSON struct {
+	Exclude     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExclude) UnmarshalJSON(data []byte) (err error) {
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeJSON) RawJSON() string {
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersJSON) RawJSON() string {
 	return r.raw
 }
 
-// build the cache key using a list of query string parameters that ARE in the
-// request.
-type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringInclude struct {
-	// Use all query string parameters in the cache key.
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString() {
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude struct {
+	// Determines whether to exclude all query string parameters from the cache key.
 	All bool `json:"all"`
-	// A list of query string parameters used to build the cache key.
-	List []string                                                                    `json:"list"`
-	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeJSON `json:"-"`
+	// This field can have the runtime type of [[]string].
+	List  interface{}                                                                                              `json:"list"`
+	JSON  setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeJSON `json:"-"`
+	union SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion
 }
 
-// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeJSON
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeJSON
 // contains the JSON metadata for the struct
-// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringInclude]
-type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeJSON struct {
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeJSON struct {
 	All         apijson.Field
 	List        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringInclude) UnmarshalJSON(data []byte) (err error) {
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude) UnmarshalJSON(data []byte) (err error) {
+	*r = SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters].
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude) AsUnion() SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion {
+	return r.union
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+//
+// Union satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters]
+// or
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion interface {
+	implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters{}),
+		},
+	)
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters struct {
+	List []string                                                                                                                          `json:"list"`
+	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersJSON struct {
+	List        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeJSON) RawJSON() string {
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude() {
+}
+
+// Build the cache key excluding ALL query string parameters that are in the
+// request.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters struct {
+	// Determines whether to exclude all query string parameters from the cache key.
+	All  bool                                                                                                                             `json:"all"`
+	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersJSON struct {
+	All         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude() {
 }
 
 // Characteristics of the request user agent used in building the cache key.
@@ -6057,9 +6346,8 @@ type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyParam struct {
 	Header param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHeaderParam] `json:"header"`
 	// Whether to use the original host or the resolved host in the cache key.
 	Host param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHostParam] `json:"host"`
-	// Use the presence or absence of parameters in the query string to build the cache
-	// key.
-	QueryString param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringParam] `json:"query_string"`
+	// Use the presence of parameters in the query string to build the cache key.
+	QueryString param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam] `json:"query_string"`
 	// Characteristics of the request user agent used in building the cache key.
 	User param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyUserParam] `json:"user"`
 }
@@ -6113,47 +6401,160 @@ func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHostParam) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-// Use the presence or absence of parameters in the query string to build the cache
-// key.
+// Use the presence of parameters in the query string to build the cache key.
 type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringParam struct {
-	// build the cache key using all query string parameters EXCECPT these excluded
-	// parameters
-	Exclude param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeParam] `json:"exclude"`
-	// build the cache key using a list of query string parameters that ARE in the
-	// request.
-	Include param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeParam] `json:"include"`
+	Exclude param.Field[interface{}] `json:"exclude"`
+	Include param.Field[interface{}] `json:"include"`
 }
 
 func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// build the cache key using all query string parameters EXCECPT these excluded
-// parameters
-type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeParam struct {
-	// Exclude all query string parameters from use in building the cache key.
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringParam) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam() {
+}
+
+// Use the presence of parameters in the query string to build the cache key.
+//
+// Satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersParam],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersParam],
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringParam].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam interface {
+	implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam()
+}
+
+// Use the presence of parameters in the query string to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersParam struct {
+	// A list of query string parameters used to build the cache key.
+	Include param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam] `json:"include"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersParam) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam() {
+}
+
+// A list of query string parameters used to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeParam struct {
+	// Determines whether to include all query string parameters in the cache key.
+	All  param.Field[bool]        `json:"all"`
+	List param.Field[interface{}] `json:"list"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeParam) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam() {
+}
+
+// A list of query string parameters used to build the cache key.
+//
+// Satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersParam],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersParam],
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeParam].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam interface {
+	implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam()
+}
+
+// A list of query string parameters used to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersParam struct {
+	List param.Field[[]string] `json:"list"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersParam) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam() {
+}
+
+// Build the cache key using ALL query string parameters that are in the request.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersParam struct {
+	// Determines whether to include all query string parameters in the cache key.
 	All param.Field[bool] `json:"all"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersParam) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam() {
+}
+
+// Use the absence of parameters in the query string to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersParam struct {
 	// A list of query string parameters NOT used to build the cache key. All
 	// parameters present in the request but missing in this list will be used to build
 	// the cache key.
-	List param.Field[[]string] `json:"list"`
+	Exclude param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam] `json:"exclude"`
 }
 
-func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeParam) MarshalJSON() (data []byte, err error) {
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// build the cache key using a list of query string parameters that ARE in the
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersParam) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam() {
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeParam struct {
+	// Determines whether to exclude all query string parameters from the cache key.
+	All  param.Field[bool]        `json:"all"`
+	List param.Field[interface{}] `json:"list"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeParam) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam() {
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+//
+// Satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersParam],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersParam],
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeParam].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam interface {
+	implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam()
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersParam struct {
+	List param.Field[[]string] `json:"list"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersParam) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam() {
+}
+
+// Build the cache key excluding ALL query string parameters that are in the
 // request.
-type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeParam struct {
-	// Use all query string parameters in the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersParam struct {
+	// Determines whether to exclude all query string parameters from the cache key.
 	All param.Field[bool] `json:"all"`
-	// A list of query string parameters used to build the cache key.
-	List param.Field[[]string] `json:"list"`
 }
 
-func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeParam) MarshalJSON() (data []byte, err error) {
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersParam) implementsRulesetsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam() {
 }
 
 // Characteristics of the request user agent used in building the cache key.
