@@ -203,7 +203,11 @@ type ACL struct {
 	// The name of the ACL.
 	Name      string            `json:"name"`
 	Protocols []AllowedProtocol `json:"protocols"`
-	JSON      aclJSON           `json:"-"`
+	// The desired traffic direction for this ACL policy. If set to "false", the policy
+	// will allow bidirectional traffic. If set to "true", the policy will only allow
+	// traffic in one direction. If not included in request, will default to false.
+	Unidirectional bool    `json:"unidirectional"`
+	JSON           aclJSON `json:"-"`
 }
 
 // aclJSON contains the JSON metadata for the struct [ACL]
@@ -215,6 +219,7 @@ type aclJSON struct {
 	LAN2           apijson.Field
 	Name           apijson.Field
 	Protocols      apijson.Field
+	Unidirectional apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -314,6 +319,10 @@ type SiteACLNewParams struct {
 	// to false.
 	ForwardLocally param.Field[bool]              `json:"forward_locally"`
 	Protocols      param.Field[[]AllowedProtocol] `json:"protocols"`
+	// The desired traffic direction for this ACL policy. If set to "false", the policy
+	// will allow bidirectional traffic. If set to "true", the policy will only allow
+	// traffic in one direction. If not included in request, will default to false.
+	Unidirectional param.Field[bool] `json:"unidirectional"`
 }
 
 func (r SiteACLNewParams) MarshalJSON() (data []byte, err error) {
@@ -379,6 +388,10 @@ type SiteACLUpdateParams struct {
 	// The name of the ACL.
 	Name      param.Field[string]            `json:"name"`
 	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
+	// The desired traffic direction for this ACL policy. If set to "false", the policy
+	// will allow bidirectional traffic. If set to "true", the policy will only allow
+	// traffic in one direction. If not included in request, will default to false.
+	Unidirectional param.Field[bool] `json:"unidirectional"`
 }
 
 func (r SiteACLUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -498,6 +511,10 @@ type SiteACLEditParams struct {
 	// The name of the ACL.
 	Name      param.Field[string]            `json:"name"`
 	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
+	// The desired traffic direction for this ACL policy. If set to "false", the policy
+	// will allow bidirectional traffic. If set to "true", the policy will only allow
+	// traffic in one direction. If not included in request, will default to false.
+	Unidirectional param.Field[bool] `json:"unidirectional"`
 }
 
 func (r SiteACLEditParams) MarshalJSON() (data []byte, err error) {
