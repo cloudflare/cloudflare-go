@@ -15,7 +15,6 @@
 package cloudflare
 
 import (
-	"reflect"
 	"time"
 )
 
@@ -42,10 +41,8 @@ import (
 //	var _ *uint16 = AnyPtr(uint16(16)).(*uint16)
 //	var _ *uint32 = AnyPtr(uint32(32)).(*uint32)
 //	var _ *uint64 = AnyPtr(uint64(64)).(*uint64)
-func AnyPtr(v interface{}) interface{} {
-	r := reflect.New(reflect.TypeOf(v))
-	reflect.ValueOf(r.Interface()).Elem().Set(reflect.ValueOf(v))
-	return r.Interface()
+func AnyPtr[T any](v T) *T {
+	return &v
 }
 
 // BytePtr is a helper routine that allocates a new byte value to store v and
