@@ -1,4 +1,23 @@
-## 0.114.0 (Unreleased)
+## 0.115.0 (Unreleased)
+
+## 0.114.0 (January 15th, 2025)
+
+NOTES:
+
+* rulesets: remove `http_request_sbfm` phase ([#3824](https://github.com/cloudflare/cloudflare-go/issues/3824))
+* workers: The `placement_mode` attribute in script upload responses has been deprecated. The new attribute `placement.mode` should be used instead. ([#3825](https://github.com/cloudflare/cloudflare-go/issues/3825))
+
+ENHANCEMENTS:
+
+* access_application: added more fields to private destinations ([#3829](https://github.com/cloudflare/cloudflare-go/issues/3829))
+* teams_rules: add support for `resolve_dns_internally` settings on dns_resolver rules ([#3779](https://github.com/cloudflare/cloudflare-go/issues/3779))
+* waiting_room: add waiting room turnstile integration fields ([#3764](https://github.com/cloudflare/cloudflare-go/issues/3764))
+* workers: Add new `placement` attribute object in script upload responses. It contains the `mode` and `status` attributes. ([#3825](https://github.com/cloudflare/cloudflare-go/issues/3825))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.33.0 to 0.34.0 ([#3796](https://github.com/cloudflare/cloudflare-go/issues/3796))
+* deps: bumps golang.org/x/time from 0.8.0 to 0.9.0 ([#3783](https://github.com/cloudflare/cloudflare-go/issues/3783))
 
 ## 0.113.0 (January 1st, 2025)
 

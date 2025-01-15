@@ -240,7 +240,7 @@ type (
 		CompatibilityDate *string                `json:"compatibility_date,omitempty"`
 		Logpush           *bool                  `json:"logpush,omitempty"`
 		TailConsumers     *[]WorkersTailConsumer `json:"tail_consumers,omitempty"`
-		PlacementMode     *string                `json:"placement_mode,omitempty"`
+		PlacementFields
 	}
 	workersTestResponseOpt func(r *WorkersTestScriptResponse)
 )
@@ -307,8 +307,16 @@ func withWorkerLogpush(logpush *bool) workersTestResponseOpt {
 }
 
 //nolint:unused
-func withWorkerPlacementMode(mode *string) workersTestResponseOpt {
-	return func(r *WorkersTestScriptResponse) { r.PlacementMode = mode }
+func withWorkerPlacementMode(mode *PlacementMode) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) {
+		if mode == nil {
+			r.PlacementMode = nil
+			r.Placement = nil
+		} else {
+			r.PlacementMode = mode
+			r.Placement = &Placement{Mode: *mode}
+		}
+	}
 }
 
 //nolint:unused
@@ -1268,7 +1276,7 @@ func TestUploadWorker_WithSmartPlacementEnabled(t *testing.T) {
 	defer teardown()
 
 	placementMode := PlacementModeSmart
-	response := workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript), withWorkerPlacementMode(StringPtr("smart")))
+	response := workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript), withWorkerPlacementMode(AnyPtr(PlacementModeSmart)))
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
@@ -1293,6 +1301,8 @@ func TestUploadWorker_WithSmartPlacementEnabled(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.Equal(t, placementMode, *worker.PlacementMode)
+		assert.NotNil(t, worker.Placement)
+		assert.Equal(t, placementMode, worker.Placement.Mode)
 	})
 
 	t.Run("Test disabling placement", func(t *testing.T) {
@@ -1308,6 +1318,7 @@ func TestUploadWorker_WithSmartPlacementEnabled(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.Nil(t, worker.PlacementMode)
+		assert.Nil(t, worker.Placement)
 	})
 }
 

@@ -35,7 +35,18 @@ const (
 
 type AccessDestination struct {
 	Type AccessDestinationType `json:"type"`
-	URI  string                `json:"uri"`
+	// URI is required and only used for public destinations.
+	URI string `json:"uri,omitempty"`
+	// Hostname can only be used for private destinations.
+	Hostname string `json:"hostname,omitempty"`
+	// CIDR can only be used for private destinations.
+	CIDR string `json:"cidr,omitempty"`
+	// PortRange can only be used for private destinations.
+	PortRange string `json:"port_range,omitempty"`
+	// L4Protocol can only be used for private destinations.
+	L4Protocol string `json:"l4_protocol,omitempty"`
+	// VnetID can only be used for private destinations.
+	VnetID string `json:"vnet_id,omitempty"`
 }
 
 // AccessApplication represents an Access application.

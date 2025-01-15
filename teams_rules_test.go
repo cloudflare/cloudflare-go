@@ -106,6 +106,40 @@ func TestTeamsRules(t *testing.T) {
 					},
 					"resolve_dns_through_cloudflare": true
 				  }
+				},
+				{
+				  "id": "7559a944-3dd7-41bf-b183-360a814a8caa",
+				  "name": "rule3",
+				  "description": "internal dns",
+				  "precedence": 3000,
+				  "enabled": true,
+				  "action": "resolve",
+				  "filters": [
+					"dns_resolver"
+				  ],
+				  "created_at": "2014-01-01T05:20:00.12345Z",
+				  "updated_at": "2014-01-01T05:20:00.12345Z",
+				  "deleted_at": null,
+				  "traffic": "dns.domain == \"example.com\"",
+				  "identity": "",
+				  "version": 1,
+				  "rule_settings": {
+					"block_page_enabled": false,
+					"block_reason": "",
+					"override_ips": null,
+					"override_host": "",
+					"l4override": null,
+					"biso_admin_controls": null,
+					"add_headers": null,
+					"check_session": null,
+                    "insecure_disable_dnssec_validation": false,
+					"resolve_dns_through_cloudflare": false,
+					"dns_resolvers": null,
+					"resolve_dns_internally": {
+					  "view_id": "fake_view_id",
+					  "fallback": "public_dns"
+					}
+				  }
 				}
 			]
 		}
@@ -115,69 +149,70 @@ func TestTeamsRules(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
-	want := []TeamsRule{{
-		ID:            "7559a944-3dd7-41bf-b183-360a814a8c36",
-		Name:          "rule1",
-		Description:   "rule description",
-		Precedence:    1000,
-		Enabled:       false,
-		Action:        Isolate,
-		Filters:       []TeamsFilterType{HttpFilter},
-		Traffic:       `http.host == "example.com"`,
-		DevicePosture: "",
-		Identity:      "",
-		Version:       1,
-		RuleSettings: TeamsRuleSettings{
-			BlockPageEnabled:  false,
-			BlockReason:       "",
-			OverrideIPs:       nil,
-			OverrideHost:      "",
-			L4Override:        nil,
-			AddHeaders:        nil,
-			BISOAdminControls: nil,
-			CheckSession: &TeamsCheckSessionSettings{
-				Enforce:  true,
-				Duration: Duration{900 * time.Second},
-			},
-			InsecureDisableDNSSECValidation: false,
-			UntrustedCertSettings: &UntrustedCertSettings{
-				Action: UntrustedCertError,
-			},
-			IgnoreCNAMECategoryMatches: BoolPtr(true),
-			DnsResolverSettings: &TeamsDnsResolverSettings{
-				V4Resolvers: []TeamsDnsResolverAddressV4{
-					{
-						TeamsDnsResolverAddress{
-							IP:   "10.0.0.2",
-							Port: IntPtr(5053),
+	want := []TeamsRule{
+		{
+			ID:            "7559a944-3dd7-41bf-b183-360a814a8c36",
+			Name:          "rule1",
+			Description:   "rule description",
+			Precedence:    1000,
+			Enabled:       false,
+			Action:        Isolate,
+			Filters:       []TeamsFilterType{HttpFilter},
+			Traffic:       `http.host == "example.com"`,
+			DevicePosture: "",
+			Identity:      "",
+			Version:       1,
+			RuleSettings: TeamsRuleSettings{
+				BlockPageEnabled:  false,
+				BlockReason:       "",
+				OverrideIPs:       nil,
+				OverrideHost:      "",
+				L4Override:        nil,
+				AddHeaders:        nil,
+				BISOAdminControls: nil,
+				CheckSession: &TeamsCheckSessionSettings{
+					Enforce:  true,
+					Duration: Duration{900 * time.Second},
+				},
+				InsecureDisableDNSSECValidation: false,
+				UntrustedCertSettings: &UntrustedCertSettings{
+					Action: UntrustedCertError,
+				},
+				IgnoreCNAMECategoryMatches: BoolPtr(true),
+				DnsResolverSettings: &TeamsDnsResolverSettings{
+					V4Resolvers: []TeamsDnsResolverAddressV4{
+						{
+							TeamsDnsResolverAddress{
+								IP:   "10.0.0.2",
+								Port: IntPtr(5053),
+							},
+						},
+						{
+							TeamsDnsResolverAddress{
+								IP:                         "192.168.0.2",
+								VnetID:                     "16fd7a32-11f0-4687-a0bb-7031d241e184",
+								RouteThroughPrivateNetwork: BoolPtr(true),
+							},
 						},
 					},
-					{
-						TeamsDnsResolverAddress{
-							IP:                         "192.168.0.2",
-							VnetID:                     "16fd7a32-11f0-4687-a0bb-7031d241e184",
-							RouteThroughPrivateNetwork: BoolPtr(true),
+					V6Resolvers: []TeamsDnsResolverAddressV6{
+						{
+							TeamsDnsResolverAddress{
+								IP: "2460::1",
+							},
 						},
 					},
 				},
-				V6Resolvers: []TeamsDnsResolverAddressV6{
-					{
-						TeamsDnsResolverAddress{
-							IP: "2460::1",
-						},
-					},
+				NotificationSettings: &TeamsNotificationSettings{
+					Enabled:    BoolPtr(true),
+					Message:    "message",
+					SupportURL: "https://hello.com",
 				},
 			},
-			NotificationSettings: &TeamsNotificationSettings{
-				Enabled:    BoolPtr(true),
-				Message:    "message",
-				SupportURL: "https://hello.com",
-			},
+			CreatedAt: &createdAt,
+			UpdatedAt: &updatedAt,
+			DeletedAt: nil,
 		},
-		CreatedAt: &createdAt,
-		UpdatedAt: &updatedAt,
-		DeletedAt: nil,
-	},
 		{
 			ID:            "9ae57318-f32e-46b3-b889-48dd6dcc49af",
 			Name:          "rule2",
@@ -209,7 +244,42 @@ func TestTeamsRules(t *testing.T) {
 			CreatedAt: &createdAt,
 			UpdatedAt: &updatedAt,
 			DeletedAt: nil,
-		}}
+		},
+		{
+			ID:            "7559a944-3dd7-41bf-b183-360a814a8caa",
+			Name:          "rule3",
+			Description:   "internal dns",
+			Precedence:    3000,
+			Enabled:       true,
+			Action:        Resolve,
+			Filters:       []TeamsFilterType{DnsResolverFilter},
+			Traffic:       `dns.domain == "example.com"`,
+			Identity:      "",
+			DevicePosture: "",
+			Version:       1,
+			RuleSettings: TeamsRuleSettings{
+				BlockPageEnabled:                false,
+				BlockReason:                     "",
+				OverrideIPs:                     nil,
+				OverrideHost:                    "",
+				L4Override:                      nil,
+				AddHeaders:                      nil,
+				BISOAdminControls:               nil,
+				CheckSession:                    nil,
+				InsecureDisableDNSSECValidation: false,
+				UntrustedCertSettings:           nil,
+				ResolveDnsInternallySettings: &TeamsResolveDnsInternallySettings{
+					ViewID:   "fake_view_id",
+					Fallback: PublicDns,
+				},
+				ResolveDnsThroughCloudflare: BoolPtr(false),
+				DnsResolverSettings:         nil,
+			},
+			CreatedAt: &createdAt,
+			UpdatedAt: &updatedAt,
+			DeletedAt: nil,
+		},
+	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/rules", handler)
 
@@ -534,7 +604,7 @@ func TestTeamsCreateL4Rule(t *testing.T) {
 	}
 }
 
-func TestTeamsCreateResolverPolicy(t *testing.T) {
+func TestTeamsCreateResolverPolicyWithResolveDnsThroughCloudlare(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -590,6 +660,81 @@ func TestTeamsCreateResolverPolicy(t *testing.T) {
 				CommandLogging: true,
 			},
 			ResolveDnsThroughCloudflare: BoolPtr(true),
+		},
+		DeletedAt: nil,
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/rules", handler)
+
+	actual, err := client.TeamsCreateRule(context.Background(), testAccountID, want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestTeamsCreateResolverPolicyWithResolveDnsInternally(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"name": "resolve 4.4.4.4",
+				"description": "rule description",
+				"precedence": 1000,
+				"enabled": true,
+				"action": "resolve",
+				"filters": [
+					"dns_resolver"
+				],
+				"traffic": "any(dns.domains[*] == \"scottstots.com\")",
+				"identity": "",
+				"rule_settings": {					
+					"resolve_dns_through_cloudflare": false,
+					"dns_resolvers": null,
+					"resolve_dns_internally": {
+					  "view_id": "fake_view_id",
+					  "fallback": "none"
+					}
+				}
+			}
+		}
+		`)
+	}
+
+	want := TeamsRule{
+		Name:          "resolve 4.4.4.4",
+		Description:   "rule description",
+		Precedence:    1000,
+		Enabled:       true,
+		Action:        Resolve,
+		Filters:       []TeamsFilterType{DnsResolverFilter},
+		Traffic:       `any(dns.domains[*] == "scottstots.com")`,
+		Identity:      "",
+		DevicePosture: "",
+		RuleSettings: TeamsRuleSettings{
+			BlockPageEnabled:                false,
+			BlockReason:                     "",
+			OverrideIPs:                     nil,
+			OverrideHost:                    "",
+			L4Override:                      nil,
+			AddHeaders:                      nil,
+			BISOAdminControls:               nil,
+			CheckSession:                    nil,
+			InsecureDisableDNSSECValidation: false,
+			EgressSettings:                  nil,
+			ResolveDnsThroughCloudflare:     BoolPtr(false),
+			DnsResolverSettings:             nil,
+			ResolveDnsInternallySettings: &TeamsResolveDnsInternallySettings{
+				ViewID:   "fake_view_id",
+				Fallback: None,
+			},
 		},
 		DeletedAt: nil,
 	}

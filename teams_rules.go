@@ -67,6 +67,8 @@ type TeamsRuleSettings struct {
 	// Resolver policy settings.
 	DnsResolverSettings *TeamsDnsResolverSettings `json:"dns_resolvers,omitempty"`
 
+	ResolveDnsInternallySettings *TeamsResolveDnsInternallySettings `json:"resolve_dns_internally,omitempty"`
+
 	NotificationSettings *TeamsNotificationSettings `json:"notification_settings"`
 	Quarantine           *TeamsQuarantine           `json:"quarantine,omitempty"`
 	ForensicCopySettings *TeamsForensicCopySettings `json:"forensic_copy,omitempty"`
@@ -150,6 +152,18 @@ type (
 		VnetID                     string `json:"vnet_id,omitempty"`
 		RouteThroughPrivateNetwork *bool  `json:"route_through_private_network,omitempty"`
 	}
+
+	TeamsResolveDnsInternallySettings struct {
+		ViewID   string                                    `json:"view_id"`
+		Fallback TeamsResolveDnsInternallyFallbackStrategy `json:"fallback"`
+	}
+
+	TeamsResolveDnsInternallyFallbackStrategy string
+)
+
+const (
+	None      TeamsResolveDnsInternallyFallbackStrategy = "none"
+	PublicDns TeamsResolveDnsInternallyFallbackStrategy = "public_dns"
 )
 
 type TeamsDlpPayloadLogSettings struct {

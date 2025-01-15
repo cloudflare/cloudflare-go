@@ -1,0 +1,3 @@
+```release-note:enhancement
+teams_rules: add support for `resolve_dns_internally` settings on dns_resolver rules
+```
