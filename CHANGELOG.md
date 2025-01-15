@@ -1,4 +1,6 @@
-## 0.114.0 (Unreleased)
+## 0.115.0 (Unreleased)
+
+## 0.114.0 (January 15th, 2025)
 
 NOTES:
 
