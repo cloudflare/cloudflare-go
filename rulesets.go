@@ -35,7 +35,6 @@ const (
 	RulesetPhaseHTTPRequestOrigin            RulesetPhase = "http_request_origin"
 	RulesetPhaseHTTPRequestRedirect          RulesetPhase = "http_request_redirect"
 	RulesetPhaseHTTPRequestSanitize          RulesetPhase = "http_request_sanitize"
-	RulesetPhaseHTTPRequestSBFM              RulesetPhase = "http_request_sbfm"
 	RulesetPhaseHTTPRequestTransform         RulesetPhase = "http_request_transform"
 	RulesetPhaseHTTPResponseCompression      RulesetPhase = "http_response_compression"
 	RulesetPhaseHTTPResponseFirewallManaged  RulesetPhase = "http_response_firewall_managed"
@@ -104,7 +103,6 @@ func RulesetPhaseValues() []string {
 		string(RulesetPhaseHTTPRequestOrigin),
 		string(RulesetPhaseHTTPRequestRedirect),
 		string(RulesetPhaseHTTPRequestSanitize),
-		string(RulesetPhaseHTTPRequestSBFM),
 		string(RulesetPhaseHTTPRequestTransform),
 		string(RulesetPhaseHTTPResponseCompression),
 		string(RulesetPhaseHTTPResponseFirewallManaged),

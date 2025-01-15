@@ -1,0 +1,3 @@
+```release-note:note
+rulesets: remove `http_request_sbfm` phase
+```
