@@ -19,6 +19,7 @@ import (
 // the [NewAccessService] method instead.
 type AccessService struct {
 	Options        []option.RequestOption
+	GatewayCA      *AccessGatewayCAService
 	Infrastructure *AccessInfrastructureService
 	Applications   *AccessApplicationService
 	Certificates   *AccessCertificateService
@@ -39,6 +40,7 @@ type AccessService struct {
 func NewAccessService(opts ...option.RequestOption) (r *AccessService) {
 	r = &AccessService{}
 	r.Options = opts
+	r.GatewayCA = NewAccessGatewayCAService(opts...)
 	r.Infrastructure = NewAccessInfrastructureService(opts...)
 	r.Applications = NewAccessApplicationService(opts...)
 	r.Certificates = NewAccessCertificateService(opts...)

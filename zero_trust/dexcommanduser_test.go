@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workers_test
+package zero_trust_test
 
 import (
 	"context"
@@ -11,10 +11,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/workers"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
-func TestAIRunWithOptionalParams(t *testing.T) {
+func TestDEXCommandUserListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,16 +27,10 @@ func TestAIRunWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.AI.Run(
-		context.TODO(),
-		"model_name",
-		workers.AIRunParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: workers.AIRunParamsBodyTextClassification{
-				Text: cloudflare.F("x"),
-			},
-		},
-	)
+	_, err := client.ZeroTrust.DEX.Commands.Users.List(context.TODO(), zero_trust.DEXCommandUserListParams{
+		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
+		Search:    cloudflare.F("search"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

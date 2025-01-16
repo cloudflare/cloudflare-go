@@ -76,16 +76,16 @@ type OrganizationDOHUpdateResponse struct {
 	// `CF-Access-Client-ID` request header.
 	ClientID  string    `json:"client_id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The duration the DoH JWT is valid for. Must be in the format `300ms` or `2h45m`.
+	// Valid time units are: ns, us (or µs), ms, s, m, h. Note that the maximum
+	// duration for this setting is the same as the key rotation period on the account.
+	// Default expiration is 24h
+	DOHJWTDuration string `json:"doh_jwt_duration"`
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
 	Duration  string    `json:"duration"`
 	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
-	// The duration the DoH JWT is valid for. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are: ns, us (or µs), ms, s, m, h. Note that the maximum
-	// duration for this setting is the same as the key rotation period on the account.
-	// Default expiration is 24h
-	JWTDuration string `json:"jwt_duration"`
 	// The name of the service token.
 	Name      string                            `json:"name"`
 	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
@@ -95,16 +95,16 @@ type OrganizationDOHUpdateResponse struct {
 // organizationDOHUpdateResponseJSON contains the JSON metadata for the struct
 // [OrganizationDOHUpdateResponse]
 type organizationDOHUpdateResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	ExpiresAt   apijson.Field
-	JWTDuration apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	ClientID       apijson.Field
+	CreatedAt      apijson.Field
+	DOHJWTDuration apijson.Field
+	Duration       apijson.Field
+	ExpiresAt      apijson.Field
+	Name           apijson.Field
+	UpdatedAt      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *OrganizationDOHUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -122,15 +122,15 @@ type OrganizationDOHGetResponse struct {
 	// `CF-Access-Client-ID` request header.
 	ClientID  string    `json:"client_id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The duration the DoH JWT is valid for. Must be in the format `300ms` or `2h45m`.
+	// Valid time units are: ns, us (or µs), ms, s, m, h. Note that the maximum
+	// duration for this setting is the same as the key rotation period on the account.
+	DOHJWTDuration string `json:"doh_jwt_duration"`
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
 	Duration  string    `json:"duration"`
 	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
-	// The duration the DoH JWT is valid for. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are: ns, us (or µs), ms, s, m, h. Note that the maximum
-	// duration for this setting is the same as the key rotation period on the account.
-	JWTDuration string `json:"jwt_duration"`
 	// The name of the service token.
 	Name      string                         `json:"name"`
 	UpdatedAt time.Time                      `json:"updated_at" format:"date-time"`
@@ -140,16 +140,16 @@ type OrganizationDOHGetResponse struct {
 // organizationDOHGetResponseJSON contains the JSON metadata for the struct
 // [OrganizationDOHGetResponse]
 type organizationDOHGetResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	ExpiresAt   apijson.Field
-	JWTDuration apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	ClientID       apijson.Field
+	CreatedAt      apijson.Field
+	DOHJWTDuration apijson.Field
+	Duration       apijson.Field
+	ExpiresAt      apijson.Field
+	Name           apijson.Field
+	UpdatedAt      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *OrganizationDOHGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -167,7 +167,7 @@ type OrganizationDOHUpdateParams struct {
 	// Valid time units are: ns, us (or µs), ms, s, m, h. Note that the maximum
 	// duration for this setting is the same as the key rotation period on the account.
 	// Default expiration is 24h
-	JWTDuration param.Field[string] `json:"jwt_duration"`
+	DOHJWTDuration param.Field[string] `json:"doh_jwt_duration"`
 	// The uuid of the service token you want to use for DoH authentication
 	ServiceTokenID param.Field[string] `json:"service_token_id"`
 }
