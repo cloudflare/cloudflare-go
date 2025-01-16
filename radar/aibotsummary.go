@@ -50,7 +50,7 @@ func (r *AIBotSummaryService) UserAgent(ctx context.Context, query AIBotSummaryU
 
 type AIBotSummaryUserAgentResponse struct {
 	Meta     AIBotSummaryUserAgentResponseMeta `json:"meta,required"`
-	Summary0 map[string][]string               `json:"summary_0,required"`
+	Summary0 map[string]string                 `json:"summary_0,required"`
 	JSON     aiBotSummaryUserAgentResponseJSON `json:"-"`
 }
 
@@ -199,6 +199,9 @@ type AIBotSummaryUserAgentParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AIBotSummaryUserAgentParamsFormat] `query:"format"`
+	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
+	// the time range.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.

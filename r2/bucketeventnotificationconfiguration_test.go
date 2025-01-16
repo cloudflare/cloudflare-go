@@ -32,8 +32,8 @@ func TestBucketEventNotificationConfigurationGetWithOptionalParams(t *testing.T)
 		context.TODO(),
 		"example-bucket",
 		r2.BucketEventNotificationConfigurationGetParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketEventNotificationConfigurationGetParamsCfR2JurisdictionDefault),
+			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Jurisdiction: cloudflare.F(r2.BucketEventNotificationConfigurationGetParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {

@@ -36,9 +36,13 @@ func TestRecordNewWithOptionalParams(t *testing.T) {
 			Content: cloudflare.F("198.51.100.4"),
 			Name:    cloudflare.F("example.com"),
 			Proxied: cloudflare.F(true),
-			Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
-			TTL:     cloudflare.F(dns.TTL1),
-			Type:    cloudflare.F(dns.ARecordTypeA),
+			Settings: cloudflare.F(dns.ARecordSettingsParam{
+				IPV4Only: cloudflare.F(true),
+				IPV6Only: cloudflare.F(true),
+			}),
+			Tags: cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
+			TTL:  cloudflare.F(dns.TTL1),
+			Type: cloudflare.F(dns.ARecordTypeA),
 		},
 	})
 	if err != nil {
@@ -74,9 +78,13 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 				Content: cloudflare.F("198.51.100.4"),
 				Name:    cloudflare.F("example.com"),
 				Proxied: cloudflare.F(true),
-				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
-				TTL:     cloudflare.F(dns.TTL1),
-				Type:    cloudflare.F(dns.ARecordTypeA),
+				Settings: cloudflare.F(dns.ARecordSettingsParam{
+					IPV4Only: cloudflare.F(true),
+					IPV6Only: cloudflare.F(true),
+				}),
+				Tags: cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
+				TTL:  cloudflare.F(dns.TTL1),
+				Type: cloudflare.F(dns.ARecordTypeA),
 			},
 		},
 	)
@@ -90,6 +98,7 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestRecordListWithOptionalParams(t *testing.T) {
+	t.Skip("mock server returns invalid data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -199,15 +208,19 @@ func TestRecordBatchWithOptionalParams(t *testing.T) {
 		Deletes: cloudflare.F([]dns.RecordBatchParamsDelete{{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}}),
-		Patches: cloudflare.F([]dns.RecordBatchParamsPatchUnion{dns.RecordBatchParamsPatchesARecord(dns.RecordBatchParamsPatchesARecord{
+		Patches: cloudflare.F([]dns.BatchPatchUnionParam{dns.BatchPatchARecordParam(dns.BatchPatchARecordParam{
 			ARecordParam: dns.ARecordParam{
 				Comment: cloudflare.F("Domain verification record"),
 				Content: cloudflare.F("198.51.100.4"),
 				Name:    cloudflare.F("example.com"),
 				Proxied: cloudflare.F(true),
-				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
-				TTL:     cloudflare.F(dns.TTL1),
-				Type:    cloudflare.F(dns.ARecordTypeA),
+				Settings: cloudflare.F(dns.ARecordSettingsParam{
+					IPV4Only: cloudflare.F(true),
+					IPV6Only: cloudflare.F(true),
+				}),
+				Tags: cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
+				TTL:  cloudflare.F(dns.TTL1),
+				Type: cloudflare.F(dns.ARecordTypeA),
 			},
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		})}),
@@ -216,19 +229,27 @@ func TestRecordBatchWithOptionalParams(t *testing.T) {
 			Content: cloudflare.F("198.51.100.4"),
 			Name:    cloudflare.F("example.com"),
 			Proxied: cloudflare.F(true),
-			Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
-			TTL:     cloudflare.F(dns.TTL1),
-			Type:    cloudflare.F(dns.ARecordTypeA),
+			Settings: cloudflare.F(dns.ARecordSettingsParam{
+				IPV4Only: cloudflare.F(true),
+				IPV6Only: cloudflare.F(true),
+			}),
+			Tags: cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
+			TTL:  cloudflare.F(dns.TTL1),
+			Type: cloudflare.F(dns.ARecordTypeA),
 		}}),
-		Puts: cloudflare.F([]dns.RecordBatchParamsPutUnion{dns.RecordBatchParamsPutsARecord(dns.RecordBatchParamsPutsARecord{
+		Puts: cloudflare.F([]dns.BatchPutUnionParam{dns.BatchPutARecordParam(dns.BatchPutARecordParam{
 			ARecordParam: dns.ARecordParam{
 				Comment: cloudflare.F("Domain verification record"),
 				Content: cloudflare.F("198.51.100.4"),
 				Name:    cloudflare.F("example.com"),
 				Proxied: cloudflare.F(true),
-				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
-				TTL:     cloudflare.F(dns.TTL1),
-				Type:    cloudflare.F(dns.ARecordTypeA),
+				Settings: cloudflare.F(dns.ARecordSettingsParam{
+					IPV4Only: cloudflare.F(true),
+					IPV6Only: cloudflare.F(true),
+				}),
+				Tags: cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
+				TTL:  cloudflare.F(dns.TTL1),
+				Type: cloudflare.F(dns.ARecordTypeA),
 			},
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		})}),
@@ -266,9 +287,13 @@ func TestRecordEditWithOptionalParams(t *testing.T) {
 				Content: cloudflare.F("198.51.100.4"),
 				Name:    cloudflare.F("example.com"),
 				Proxied: cloudflare.F(true),
-				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
-				TTL:     cloudflare.F(dns.TTL1),
-				Type:    cloudflare.F(dns.ARecordTypeA),
+				Settings: cloudflare.F(dns.ARecordSettingsParam{
+					IPV4Only: cloudflare.F(true),
+					IPV6Only: cloudflare.F(true),
+				}),
+				Tags: cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
+				TTL:  cloudflare.F(dns.TTL1),
+				Type: cloudflare.F(dns.ARecordTypeA),
 			},
 		},
 	)
@@ -307,6 +332,7 @@ func TestRecordExport(t *testing.T) {
 }
 
 func TestRecordGet(t *testing.T) {
+	t.Skip("mock server returns invalid data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

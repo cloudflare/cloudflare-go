@@ -189,9 +189,12 @@ func (r *SiteWANService) Get(ctx context.Context, siteID string, wanID string, q
 
 type WAN struct {
 	// Identifier
-	ID       string `json:"id"`
-	Name     string `json:"name"`
-	Physport int64  `json:"physport"`
+	ID string `json:"id"`
+	// Magic WAN health check rate for tunnels created on this link. The default value
+	// is `mid`.
+	HealthCheckRate WANHealthCheckRate `json:"health_check_rate"`
+	Name            string             `json:"name"`
+	Physport        int64              `json:"physport"`
 	// Priority of WAN for traffic loadbalancing.
 	Priority int64 `json:"priority"`
 	// Identifier
@@ -207,6 +210,7 @@ type WAN struct {
 // wanJSON contains the JSON metadata for the struct [WAN]
 type wanJSON struct {
 	ID               apijson.Field
+	HealthCheckRate  apijson.Field
 	Name             apijson.Field
 	Physport         apijson.Field
 	Priority         apijson.Field
@@ -223,6 +227,24 @@ func (r *WAN) UnmarshalJSON(data []byte) (err error) {
 
 func (r wanJSON) RawJSON() string {
 	return r.raw
+}
+
+// Magic WAN health check rate for tunnels created on this link. The default value
+// is `mid`.
+type WANHealthCheckRate string
+
+const (
+	WANHealthCheckRateLow  WANHealthCheckRate = "low"
+	WANHealthCheckRateMid  WANHealthCheckRate = "mid"
+	WANHealthCheckRateHigh WANHealthCheckRate = "high"
+)
+
+func (r WANHealthCheckRate) IsKnown() bool {
+	switch r {
+	case WANHealthCheckRateLow, WANHealthCheckRateMid, WANHealthCheckRateHigh:
+		return true
+	}
+	return false
 }
 
 // (optional) if omitted, use DHCP. Submit secondary_address when site is in high

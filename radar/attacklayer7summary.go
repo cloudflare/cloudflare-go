@@ -274,9 +274,9 @@ func (r attackLayer7SummaryGetResponseSummary0JSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryHTTPMethodResponse struct {
-	Meta     AttackLayer7SummaryHTTPMethodResponseMeta     `json:"meta,required"`
-	Summary0 AttackLayer7SummaryHTTPMethodResponseSummary0 `json:"summary_0,required"`
-	JSON     attackLayer7SummaryHTTPMethodResponseJSON     `json:"-"`
+	Meta     AttackLayer7SummaryHTTPMethodResponseMeta `json:"meta,required"`
+	Summary0 map[string]string                         `json:"summary_0,required"`
+	JSON     attackLayer7SummaryHTTPMethodResponseJSON `json:"-"`
 }
 
 // attackLayer7SummaryHTTPMethodResponseJSON contains the JSON metadata for the
@@ -403,29 +403,6 @@ func (r *AttackLayer7SummaryHTTPMethodResponseMetaConfidenceInfoAnnotation) Unma
 }
 
 func (r attackLayer7SummaryHTTPMethodResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer7SummaryHTTPMethodResponseSummary0 struct {
-	Get  string                                            `json:"GET,required"`
-	Post string                                            `json:"POST,required"`
-	JSON attackLayer7SummaryHTTPMethodResponseSummary0JSON `json:"-"`
-}
-
-// attackLayer7SummaryHTTPMethodResponseSummary0JSON contains the JSON metadata for
-// the struct [AttackLayer7SummaryHTTPMethodResponseSummary0]
-type attackLayer7SummaryHTTPMethodResponseSummary0JSON struct {
-	Get         apijson.Field
-	Post        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer7SummaryHTTPMethodResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer7SummaryHTTPMethodResponseSummary0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -744,7 +721,7 @@ func (r attackLayer7SummaryIPVersionResponseSummary0JSON) RawJSON() string {
 
 type AttackLayer7SummaryManagedRulesResponse struct {
 	Meta     AttackLayer7SummaryManagedRulesResponseMeta `json:"meta,required"`
-	Summary0 map[string][]string                         `json:"summary_0,required"`
+	Summary0 map[string]string                           `json:"summary_0,required"`
 	JSON     attackLayer7SummaryManagedRulesResponseJSON `json:"-"`
 }
 
@@ -876,9 +853,9 @@ func (r attackLayer7SummaryManagedRulesResponseMetaConfidenceInfoAnnotationJSON)
 }
 
 type AttackLayer7SummaryMitigationProductResponse struct {
-	Meta     AttackLayer7SummaryMitigationProductResponseMeta     `json:"meta,required"`
-	Summary0 AttackLayer7SummaryMitigationProductResponseSummary0 `json:"summary_0,required"`
-	JSON     attackLayer7SummaryMitigationProductResponseJSON     `json:"-"`
+	Meta     AttackLayer7SummaryMitigationProductResponseMeta `json:"meta,required"`
+	Summary0 map[string]string                                `json:"summary_0,required"`
+	JSON     attackLayer7SummaryMitigationProductResponseJSON `json:"-"`
 }
 
 // attackLayer7SummaryMitigationProductResponseJSON contains the JSON metadata for
@@ -1009,29 +986,6 @@ func (r attackLayer7SummaryMitigationProductResponseMetaConfidenceInfoAnnotation
 	return r.raw
 }
 
-type AttackLayer7SummaryMitigationProductResponseSummary0 struct {
-	DDoS string                                                   `json:"DDOS,required"`
-	WAF  string                                                   `json:"WAF,required"`
-	JSON attackLayer7SummaryMitigationProductResponseSummary0JSON `json:"-"`
-}
-
-// attackLayer7SummaryMitigationProductResponseSummary0JSON contains the JSON
-// metadata for the struct [AttackLayer7SummaryMitigationProductResponseSummary0]
-type attackLayer7SummaryMitigationProductResponseSummary0JSON struct {
-	DDoS        apijson.Field
-	WAF         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer7SummaryMitigationProductResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer7SummaryMitigationProductResponseSummary0JSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer7SummaryGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
@@ -1130,6 +1084,9 @@ type AttackLayer7SummaryHTTPMethodParams struct {
 	HTTPVersion param.Field[[]AttackLayer7SummaryHTTPMethodParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer7SummaryHTTPMethodParamsIPVersion] `query:"ipVersion"`
+	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
+	// the time range.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -1615,6 +1572,9 @@ type AttackLayer7SummaryManagedRulesParams struct {
 	HTTPVersion param.Field[[]AttackLayer7SummaryManagedRulesParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer7SummaryManagedRulesParamsIPVersion] `query:"ipVersion"`
+	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
+	// the time range.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -1808,6 +1768,9 @@ type AttackLayer7SummaryMitigationProductParams struct {
 	HTTPVersion param.Field[[]AttackLayer7SummaryMitigationProductParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer7SummaryMitigationProductParamsIPVersion] `query:"ipVersion"`
+	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
+	// the time range.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.

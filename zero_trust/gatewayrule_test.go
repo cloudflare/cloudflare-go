@@ -105,6 +105,10 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
 				FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe}),
 			}),
+			ResolveDNSInternally: cloudflare.F(zero_trust.RuleSettingResolveDNSInternallyParam{
+				Fallback: cloudflare.F(zero_trust.RuleSettingResolveDNSInternallyFallbackNone),
+				ViewID:   cloudflare.F("view_id"),
+			}),
 			ResolveDNSThroughCloudflare: cloudflare.F(true),
 			UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
 				Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionPassThrough),
@@ -223,6 +227,10 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
 					FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe}),
+				}),
+				ResolveDNSInternally: cloudflare.F(zero_trust.RuleSettingResolveDNSInternallyParam{
+					Fallback: cloudflare.F(zero_trust.RuleSettingResolveDNSInternallyFallbackNone),
+					ViewID:   cloudflare.F("view_id"),
 				}),
 				ResolveDNSThroughCloudflare: cloudflare.F(true),
 				UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{

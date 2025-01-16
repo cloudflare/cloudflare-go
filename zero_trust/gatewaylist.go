@@ -57,7 +57,8 @@ func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParam
 	return
 }
 
-// Updates a configured Zero Trust list.
+// Updates a configured Zero Trust list. Skips updating list items if not included
+// in the payload.
 func (r *GatewayListService) Update(ctx context.Context, listID string, params GatewayListUpdateParams, opts ...option.RequestOption) (res *GatewayList, err error) {
 	var env GatewayListUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -404,6 +405,8 @@ type GatewayListUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The description of the list.
 	Description param.Field[string] `json:"description"`
+	// The items in the list.
+	Items param.Field[[]GatewayItemParam] `json:"items"`
 }
 
 func (r GatewayListUpdateParams) MarshalJSON() (data []byte, err error) {

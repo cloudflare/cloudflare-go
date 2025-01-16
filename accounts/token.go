@@ -220,7 +220,7 @@ func (r tokenNewResponseJSON) RawJSON() string {
 
 type TokenNewResponseCondition struct {
 	// Client IP restrictions.
-	RequestIP TokenNewResponseConditionRequestIP `json:"request.ip"`
+	RequestIP TokenNewResponseConditionRequestIP `json:"request_ip"`
 	JSON      tokenNewResponseConditionJSON      `json:"-"`
 }
 
@@ -375,7 +375,7 @@ func (r TokenNewParams) MarshalJSON() (data []byte, err error) {
 
 type TokenNewParamsCondition struct {
 	// Client IP restrictions.
-	RequestIP param.Field[TokenNewParamsConditionRequestIP] `json:"request.ip"`
+	RequestIP param.Field[TokenNewParamsConditionRequestIP] `json:"request_ip"`
 }
 
 func (r TokenNewParamsCondition) MarshalJSON() (data []byte, err error) {

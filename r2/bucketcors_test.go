@@ -43,7 +43,7 @@ func TestBucketCORSUpdateWithOptionalParams(t *testing.T) {
 				ExposeHeaders: cloudflare.F([]string{"Content-Encoding"}),
 				MaxAgeSeconds: cloudflare.F(3600.000000),
 			}}),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketCORSUpdateParamsCfR2JurisdictionDefault),
+			Jurisdiction: cloudflare.F(r2.BucketCORSUpdateParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -73,8 +73,8 @@ func TestBucketCORSDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketCORSDeleteParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketCORSDeleteParamsCfR2JurisdictionDefault),
+			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Jurisdiction: cloudflare.F(r2.BucketCORSDeleteParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -104,8 +104,8 @@ func TestBucketCORSGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketCORSGetParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketCORSGetParamsCfR2JurisdictionDefault),
+			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Jurisdiction: cloudflare.F(r2.BucketCORSGetParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {

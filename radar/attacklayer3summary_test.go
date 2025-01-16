@@ -195,16 +195,17 @@ func TestAttackLayer3SummaryVectorWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.Vector(context.TODO(), radar.AttackLayer3SummaryVectorParams{
-		Continent: cloudflare.F([]string{"string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
-		DateRange: cloudflare.F([]string{"7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Direction: cloudflare.F(radar.AttackLayer3SummaryVectorParamsDirectionOrigin),
-		Format:    cloudflare.F(radar.AttackLayer3SummaryVectorParamsFormatJson),
-		IPVersion: cloudflare.F([]radar.AttackLayer3SummaryVectorParamsIPVersion{radar.AttackLayer3SummaryVectorParamsIPVersionIPv4}),
-		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3SummaryVectorParamsProtocol{radar.AttackLayer3SummaryVectorParamsProtocolUdp}),
+		Continent:     cloudflare.F([]string{"string"}),
+		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+		DateRange:     cloudflare.F([]string{"7d"}),
+		DateStart:     cloudflare.F([]time.Time{time.Now()}),
+		Direction:     cloudflare.F(radar.AttackLayer3SummaryVectorParamsDirectionOrigin),
+		Format:        cloudflare.F(radar.AttackLayer3SummaryVectorParamsFormatJson),
+		IPVersion:     cloudflare.F([]radar.AttackLayer3SummaryVectorParamsIPVersion{radar.AttackLayer3SummaryVectorParamsIPVersionIPv4}),
+		LimitPerGroup: cloudflare.F(int64(10)),
+		Location:      cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"string"}),
+		Protocol:      cloudflare.F([]radar.AttackLayer3SummaryVectorParamsProtocol{radar.AttackLayer3SummaryVectorParamsProtocolUdp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

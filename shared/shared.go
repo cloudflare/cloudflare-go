@@ -1070,7 +1070,7 @@ func (r tokenJSON) RawJSON() string {
 
 type TokenCondition struct {
 	// Client IP restrictions.
-	RequestIP TokenConditionRequestIP `json:"request.ip"`
+	RequestIP TokenConditionRequestIP `json:"request_ip"`
 	JSON      tokenConditionJSON      `json:"-"`
 }
 
@@ -1153,7 +1153,7 @@ func (r TokenParam) MarshalJSON() (data []byte, err error) {
 
 type TokenConditionParam struct {
 	// Client IP restrictions.
-	RequestIP param.Field[TokenConditionRequestIPParam] `json:"request.ip"`
+	RequestIP param.Field[TokenConditionRequestIPParam] `json:"request_ip"`
 }
 
 func (r TokenConditionParam) MarshalJSON() (data []byte, err error) {
@@ -1184,8 +1184,8 @@ type TokenPolicy struct {
 	// A set of permission groups that are specified to the policy.
 	PermissionGroups []TokenPolicyPermissionGroup `json:"permission_groups,required"`
 	// A list of resource names that the policy applies to.
-	Resources TokenPolicyResources `json:"resources,required"`
-	JSON      tokenPolicyJSON      `json:"-"`
+	Resources map[string]string `json:"resources,required"`
+	JSON      tokenPolicyJSON   `json:"-"`
 }
 
 // tokenPolicyJSON contains the JSON metadata for the struct [TokenPolicy]
@@ -1276,37 +1276,13 @@ func (r tokenPolicyPermissionGroupsMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-// A list of resource names that the policy applies to.
-type TokenPolicyResources struct {
-	Resource string                   `json:"resource"`
-	Scope    string                   `json:"scope"`
-	JSON     tokenPolicyResourcesJSON `json:"-"`
-}
-
-// tokenPolicyResourcesJSON contains the JSON metadata for the struct
-// [TokenPolicyResources]
-type tokenPolicyResourcesJSON struct {
-	Resource    apijson.Field
-	Scope       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TokenPolicyResources) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tokenPolicyResourcesJSON) RawJSON() string {
-	return r.raw
-}
-
 type TokenPolicyParam struct {
 	// Allow or deny operations against the resources.
 	Effect param.Field[TokenPolicyEffect] `json:"effect,required"`
 	// A set of permission groups that are specified to the policy.
 	PermissionGroups param.Field[[]TokenPolicyPermissionGroupParam] `json:"permission_groups,required"`
 	// A list of resource names that the policy applies to.
-	Resources param.Field[TokenPolicyResourcesParam] `json:"resources,required"`
+	Resources param.Field[map[string]string] `json:"resources,required"`
 }
 
 func (r TokenPolicyParam) MarshalJSON() (data []byte, err error) {
@@ -1331,16 +1307,6 @@ type TokenPolicyPermissionGroupsMetaParam struct {
 }
 
 func (r TokenPolicyPermissionGroupsMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A list of resource names that the policy applies to.
-type TokenPolicyResourcesParam struct {
-	Resource param.Field[string] `json:"resource"`
-	Scope    param.Field[string] `json:"scope"`
-}
-
-func (r TokenPolicyResourcesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

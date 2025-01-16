@@ -161,15 +161,16 @@ func TestAS112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.QueryType(context.TODO(), radar.AS112TimeseriesGroupQueryTypeParams{
-		AggInterval: cloudflare.F(radar.AS112TimeseriesGroupQueryTypeParamsAggInterval15m),
-		ASN:         cloudflare.F([]string{"string"}),
-		Continent:   cloudflare.F([]string{"string"}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.AS112TimeseriesGroupQueryTypeParamsFormatJson),
-		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"string"}),
+		AggInterval:   cloudflare.F(radar.AS112TimeseriesGroupQueryTypeParamsAggInterval15m),
+		ASN:           cloudflare.F([]string{"string"}),
+		Continent:     cloudflare.F([]string{"string"}),
+		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+		DateRange:     cloudflare.F([]string{"7d"}),
+		DateStart:     cloudflare.F([]time.Time{time.Now()}),
+		Format:        cloudflare.F(radar.AS112TimeseriesGroupQueryTypeParamsFormatJson),
+		LimitPerGroup: cloudflare.F(int64(10)),
+		Location:      cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -194,15 +195,16 @@ func TestAS112TimeseriesGroupResponseCodesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.ResponseCodes(context.TODO(), radar.AS112TimeseriesGroupResponseCodesParams{
-		AggInterval: cloudflare.F(radar.AS112TimeseriesGroupResponseCodesParamsAggInterval15m),
-		ASN:         cloudflare.F([]string{"string"}),
-		Continent:   cloudflare.F([]string{"string"}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.AS112TimeseriesGroupResponseCodesParamsFormatJson),
-		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"string"}),
+		AggInterval:   cloudflare.F(radar.AS112TimeseriesGroupResponseCodesParamsAggInterval15m),
+		ASN:           cloudflare.F([]string{"string"}),
+		Continent:     cloudflare.F([]string{"string"}),
+		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+		DateRange:     cloudflare.F([]string{"7d"}),
+		DateStart:     cloudflare.F([]time.Time{time.Now()}),
+		Format:        cloudflare.F(radar.AS112TimeseriesGroupResponseCodesParamsFormatJson),
+		LimitPerGroup: cloudflare.F(int64(10)),
+		Location:      cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
