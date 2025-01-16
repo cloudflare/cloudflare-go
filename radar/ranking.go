@@ -387,7 +387,7 @@ func (r rankingTimeseriesGroupsResponseEnvelopeJSON) RawJSON() string {
 
 type RankingTopParams struct {
 	// Array of dates to filter the ranking.
-	Date param.Field[[]string] `query:"date"`
+	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Format results are returned in.
 	Format param.Field[RankingTopParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.

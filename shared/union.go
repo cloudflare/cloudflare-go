@@ -17,8 +17,6 @@ type UnionString string
 
 func (UnionString) ImplementsLogsReceivedGetParamsEndUnion()                                    {}
 func (UnionString) ImplementsLogsReceivedGetParamsStartUnion()                                  {}
-func (UnionString) ImplementsWorkersAIRunResponseUnion()                                        {}
-func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion()                    {}
 func (UnionString) ImplementsSpectrumOriginPortUnionParam()                                     {}
 func (UnionString) ImplementsSpectrumOriginPortUnion()                                          {}
 func (UnionString) ImplementsMagicTransitHealthCheckTargetUnionParam()                          {}
@@ -91,6 +89,8 @@ func (UnionString) ImplementsAIGatewayEvaluationGetResponseDatasetsFiltersValueU
 func (UnionString) ImplementsWorkflowsInstanceGetResponseOutputUnion()                        {}
 func (UnionString) ImplementsWorkflowsInstanceGetResponseStepsObjectConfigRetriesDelayUnion() {}
 func (UnionString) ImplementsWorkflowsInstanceGetResponseStepsObjectConfigTimeoutUnion()      {}
+func (UnionString) ImplementsAIAIRunResponseUnion()                                           {}
+func (UnionString) ImplementsAIAIRunParamsBodyTextEmbeddingsTextUnion()                       {}
 
 type UnionBool bool
 
@@ -111,10 +111,14 @@ func (UnionBool) ImplementsAIGatewayEvaluationGetResponseDatasetsFiltersValueUni
 
 type UnionInt int64
 
-func (UnionInt) ImplementsLogsReceivedGetParamsEndUnion()   {}
-func (UnionInt) ImplementsLogsReceivedGetParamsStartUnion() {}
-func (UnionInt) ImplementsSpectrumOriginPortUnionParam()    {}
-func (UnionInt) ImplementsSpectrumOriginPortUnion()         {}
+func (UnionInt) ImplementsLogsReceivedGetParamsEndUnion()                                  {}
+func (UnionInt) ImplementsLogsReceivedGetParamsStartUnion()                                {}
+func (UnionInt) ImplementsPageRulesPageRuleActionsCacheTTLByStatusValueUnion()             {}
+func (UnionInt) ImplementsPageRulesPageRuleNewParamsActionsCacheTTLByStatusValueUnion()    {}
+func (UnionInt) ImplementsPageRulesPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion() {}
+func (UnionInt) ImplementsPageRulesPageRuleEditParamsActionsCacheTTLByStatusValueUnion()   {}
+func (UnionInt) ImplementsSpectrumOriginPortUnionParam()                                   {}
+func (UnionInt) ImplementsSpectrumOriginPortUnion()                                        {}
 
 type UnionFloat float64
 

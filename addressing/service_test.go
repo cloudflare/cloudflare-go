@@ -28,7 +28,7 @@ func TestServiceList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Services.List(context.TODO(), addressing.ServiceListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

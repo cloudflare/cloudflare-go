@@ -7,9 +7,11 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/cloudflare/cloudflare-go/v4/abuse_reports"
 	"github.com/cloudflare/cloudflare-go/v4/accounts"
 	"github.com/cloudflare/cloudflare-go/v4/acm"
 	"github.com/cloudflare/cloudflare-go/v4/addressing"
+	"github.com/cloudflare/cloudflare-go/v4/ai"
 	"github.com/cloudflare/cloudflare-go/v4/ai_gateway"
 	"github.com/cloudflare/cloudflare-go/v4/alerting"
 	"github.com/cloudflare/cloudflare-go/v4/api_gateway"
@@ -184,6 +186,8 @@ type Client struct {
 	ResourceSharing             *resource_sharing.ResourceSharingService
 	LeakedCredentialChecks      *leaked_credential_checks.LeakedCredentialCheckService
 	ContentScanning             *content_scanning.ContentScanningService
+	AbuseReports                *abuse_reports.AbuseReportService
+	AI                          *ai.AIService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -293,6 +297,8 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.ResourceSharing = resource_sharing.NewResourceSharingService(opts...)
 	r.LeakedCredentialChecks = leaked_credential_checks.NewLeakedCredentialCheckService(opts...)
 	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
+	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
+	r.AI = ai.NewAIService(opts...)
 
 	return
 }

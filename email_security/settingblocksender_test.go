@@ -28,13 +28,11 @@ func TestSettingBlockSenderNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.BlockSenders.New(context.TODO(), email_security.SettingBlockSenderNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body: email_security.SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSender{
-			IsRegex:     cloudflare.F(false),
-			Pattern:     cloudflare.F("test@example.com"),
-			PatternType: cloudflare.F(email_security.SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternTypeEmail),
-			Comments:    cloudflare.F("block sender with email test@example.com"),
-		},
+		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		IsRegex:     cloudflare.F(false),
+		Pattern:     cloudflare.F("test@example.com"),
+		PatternType: cloudflare.F(email_security.SettingBlockSenderNewParamsPatternTypeEmail),
+		Comments:    cloudflare.F("block sender with email test@example.com"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

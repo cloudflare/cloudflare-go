@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/url_scanner"
 )
 
 func TestResponseGet(t *testing.T) {
@@ -28,8 +29,10 @@ func TestResponseGet(t *testing.T) {
 	)
 	_, err := client.URLScanner.Responses.Get(
 		context.TODO(),
-		"accountId",
-		"responseId",
+		"response_id",
+		url_scanner.ResponseGetParams{
+			AccountID: cloudflare.F("account_id"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

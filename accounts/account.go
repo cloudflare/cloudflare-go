@@ -31,6 +31,7 @@ type AccountService struct {
 	Roles         *RoleService
 	Subscriptions *SubscriptionService
 	Tokens        *TokenService
+	Logs          *LogService
 }
 
 // NewAccountService generates a new service that applies the given options to each
@@ -43,6 +44,7 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r.Roles = NewRoleService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
 	r.Tokens = NewTokenService(opts...)
+	r.Logs = NewLogService(opts...)
 	return
 }
 

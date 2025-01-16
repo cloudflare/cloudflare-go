@@ -17,6 +17,7 @@ type DLPService struct {
 	Datasets    *DLPDatasetService
 	Patterns    *DLPPatternService
 	PayloadLogs *DLPPayloadLogService
+	Email       *DLPEmailService
 	Profiles    *DLPProfileService
 	Limits      *DLPLimitService
 	Entries     *DLPEntryService
@@ -31,6 +32,7 @@ func NewDLPService(opts ...option.RequestOption) (r *DLPService) {
 	r.Datasets = NewDLPDatasetService(opts...)
 	r.Patterns = NewDLPPatternService(opts...)
 	r.PayloadLogs = NewDLPPayloadLogService(opts...)
+	r.Email = NewDLPEmailService(opts...)
 	r.Profiles = NewDLPProfileService(opts...)
 	r.Limits = NewDLPLimitService(opts...)
 	r.Entries = NewDLPEntryService(opts...)
