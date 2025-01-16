@@ -684,6 +684,10 @@ type JobUpdateParams struct {
 	// lines than this. This parameter is not available for jobs with `edge` as its
 	// kind.
 	MaxUploadRecords param.Field[int64] `json:"max_upload_records"`
+	// Optional human readable job name. Not unique. Cloudflare suggests that you set
+	// this to a meaningful string, like the domain name, to make it easier to identify
+	// your job.
+	Name param.Field[string] `json:"name"`
 	// The structured replacement for `logpull_options`. When including this field, the
 	// `logpull_option` field will be ignored.
 	OutputOptions param.Field[OutputOptionsParam] `json:"output_options"`

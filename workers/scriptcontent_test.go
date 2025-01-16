@@ -36,8 +36,7 @@ func TestScriptContentUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"this-is_my_script-01",
 		workers.ScriptContentUpdateParams{
-			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Metadata: cloudflare.F(workers.WorkerMetadataParam{
 				BodyPart:   cloudflare.F("worker.js"),
 				MainModule: cloudflare.F("worker.js"),

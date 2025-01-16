@@ -39,7 +39,7 @@ func TestLogListWithOptionalParams(t *testing.T) {
 			EndDate:   cloudflare.F(time.Now()),
 			Feedback:  cloudflare.F(ai_gateway.LogListParamsFeedback0),
 			Filters: cloudflare.F([]ai_gateway.LogListParamsFilter{{
-				Key:      cloudflare.F(ai_gateway.LogListParamsFiltersKeyCreatedAt),
+				Key:      cloudflare.F(ai_gateway.LogListParamsFiltersKeyID),
 				Operator: cloudflare.F(ai_gateway.LogListParamsFiltersOperatorEq),
 				Value:    cloudflare.F([]ai_gateway.LogListParamsFiltersValueUnion{shared.UnionString("string")}),
 			}}),
@@ -96,7 +96,7 @@ func TestLogDeleteWithOptionalParams(t *testing.T) {
 		ai_gateway.LogDeleteParams{
 			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
 			Filters: cloudflare.F([]ai_gateway.LogDeleteParamsFilter{{
-				Key:      cloudflare.F(ai_gateway.LogDeleteParamsFiltersKeyCreatedAt),
+				Key:      cloudflare.F(ai_gateway.LogDeleteParamsFiltersKeyID),
 				Operator: cloudflare.F(ai_gateway.LogDeleteParamsFiltersOperatorEq),
 				Value:    cloudflare.F([]ai_gateway.LogDeleteParamsFiltersValueUnion{shared.UnionString("string")}),
 			}}),

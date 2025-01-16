@@ -662,7 +662,7 @@ type IndexDeleteParams struct {
 type IndexDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   interface{}           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexDeleteResponseEnvelopeJSON    `json:"-"`

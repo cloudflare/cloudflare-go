@@ -59,7 +59,7 @@ func TestBucketLifecycleUpdateWithOptionalParams(t *testing.T) {
 					StorageClass: cloudflare.F(r2.BucketLifecycleUpdateParamsRulesStorageClassTransitionsStorageClassInfrequentAccess),
 				}}),
 			}}),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketLifecycleUpdateParamsCfR2JurisdictionDefault),
+			Jurisdiction: cloudflare.F(r2.BucketLifecycleUpdateParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -89,8 +89,8 @@ func TestBucketLifecycleGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketLifecycleGetParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketLifecycleGetParamsCfR2JurisdictionDefault),
+			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Jurisdiction: cloudflare.F(r2.BucketLifecycleGetParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {

@@ -731,9 +731,9 @@ func (r as112SummaryProtocolResponseSummary0JSON) RawJSON() string {
 }
 
 type AS112SummaryQueryTypeResponse struct {
-	Meta     AS112SummaryQueryTypeResponseMeta     `json:"meta,required"`
-	Summary0 AS112SummaryQueryTypeResponseSummary0 `json:"summary_0,required"`
-	JSON     as112SummaryQueryTypeResponseJSON     `json:"-"`
+	Meta     AS112SummaryQueryTypeResponseMeta `json:"meta,required"`
+	Summary0 map[string]string                 `json:"summary_0,required"`
+	JSON     as112SummaryQueryTypeResponseJSON `json:"-"`
 }
 
 // as112SummaryQueryTypeResponseJSON contains the JSON metadata for the struct
@@ -862,39 +862,10 @@ func (r as112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON) RawJSON()
 	return r.raw
 }
 
-type AS112SummaryQueryTypeResponseSummary0 struct {
-	A    string                                    `json:"A,required"`
-	AAAA string                                    `json:"AAAA,required"`
-	PTR  string                                    `json:"PTR,required"`
-	SOA  string                                    `json:"SOA,required"`
-	SRV  string                                    `json:"SRV,required"`
-	JSON as112SummaryQueryTypeResponseSummary0JSON `json:"-"`
-}
-
-// as112SummaryQueryTypeResponseSummary0JSON contains the JSON metadata for the
-// struct [AS112SummaryQueryTypeResponseSummary0]
-type as112SummaryQueryTypeResponseSummary0JSON struct {
-	A           apijson.Field
-	AAAA        apijson.Field
-	PTR         apijson.Field
-	SOA         apijson.Field
-	SRV         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AS112SummaryQueryTypeResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112SummaryQueryTypeResponseSummary0JSON) RawJSON() string {
-	return r.raw
-}
-
 type AS112SummaryResponseCodesResponse struct {
-	Meta     AS112SummaryResponseCodesResponseMeta     `json:"meta,required"`
-	Summary0 AS112SummaryResponseCodesResponseSummary0 `json:"summary_0,required"`
-	JSON     as112SummaryResponseCodesResponseJSON     `json:"-"`
+	Meta     AS112SummaryResponseCodesResponseMeta `json:"meta,required"`
+	Summary0 map[string]string                     `json:"summary_0,required"`
+	JSON     as112SummaryResponseCodesResponseJSON `json:"-"`
 }
 
 // as112SummaryResponseCodesResponseJSON contains the JSON metadata for the struct
@@ -1020,29 +991,6 @@ func (r *AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation) Unmarsha
 }
 
 func (r as112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112SummaryResponseCodesResponseSummary0 struct {
-	Noerror  string                                        `json:"NOERROR,required"`
-	Nxdomain string                                        `json:"NXDOMAIN,required"`
-	JSON     as112SummaryResponseCodesResponseSummary0JSON `json:"-"`
-}
-
-// as112SummaryResponseCodesResponseSummary0JSON contains the JSON metadata for the
-// struct [AS112SummaryResponseCodesResponseSummary0]
-type as112SummaryResponseCodesResponseSummary0JSON struct {
-	Noerror     apijson.Field
-	Nxdomain    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AS112SummaryResponseCodesResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112SummaryResponseCodesResponseSummary0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1364,6 +1312,9 @@ type AS112SummaryQueryTypeParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AS112SummaryQueryTypeParamsFormat] `query:"format"`
+	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
+	// the time range.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -1439,6 +1390,9 @@ type AS112SummaryResponseCodesParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AS112SummaryResponseCodesParamsFormat] `query:"format"`
+	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
+	// the time range.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
