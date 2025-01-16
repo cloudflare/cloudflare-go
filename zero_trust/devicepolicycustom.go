@@ -166,7 +166,7 @@ type DevicePolicyCustomNewParams struct {
 	AllowUpdates param.Field[bool] `json:"allow_updates"`
 	// Whether to allow devices to leave the organization.
 	AllowedToLeave param.Field[bool] `json:"allowed_to_leave"`
-	// The amount of time in minutes to reconnect after having been disabled.
+	// The amount of time in seconds to reconnect after having been disabled.
 	AutoConnect param.Field[float64] `json:"auto_connect"`
 	// Turn on the captive portal after the specified amount of time.
 	CaptivePortal param.Field[float64] `json:"captive_portal"`
@@ -348,7 +348,7 @@ type DevicePolicyCustomEditParams struct {
 	AllowUpdates param.Field[bool] `json:"allow_updates"`
 	// Whether to allow devices to leave the organization.
 	AllowedToLeave param.Field[bool] `json:"allowed_to_leave"`
-	// The amount of time in minutes to reconnect after having been disabled.
+	// The amount of time in seconds to reconnect after having been disabled.
 	AutoConnect param.Field[float64] `json:"auto_connect"`
 	// Turn on the captive portal after the specified amount of time.
 	CaptivePortal param.Field[float64] `json:"captive_portal"`

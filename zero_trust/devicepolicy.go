@@ -89,7 +89,7 @@ type SettingsPolicy struct {
 	AllowUpdates bool `json:"allow_updates"`
 	// Whether to allow devices to leave the organization.
 	AllowedToLeave bool `json:"allowed_to_leave"`
-	// The amount of time in minutes to reconnect after having been disabled.
+	// The amount of time in seconds to reconnect after having been disabled.
 	AutoConnect float64 `json:"auto_connect"`
 	// Turn on the captive portal after the specified amount of time.
 	CaptivePortal float64 `json:"captive_portal"`
