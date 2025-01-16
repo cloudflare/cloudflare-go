@@ -94,16 +94,16 @@ func (r LabeledRegionValue) IsKnown() bool {
 // The Lighthouse report.
 type LighthouseReport struct {
 	// Cumulative Layout Shift.
-	CLS float64 `json:"cls"`
+	Cls float64 `json:"cls"`
 	// The type of device.
 	DeviceType LighthouseReportDeviceType `json:"deviceType"`
 	Error      LighthouseReportError      `json:"error"`
 	// First Contentful Paint.
-	FCP float64 `json:"fcp"`
+	Fcp float64 `json:"fcp"`
 	// The URL to the full Lighthouse JSON report.
 	JsonReportURL string `json:"jsonReportUrl"`
 	// Largest Contentful Paint.
-	LCP float64 `json:"lcp"`
+	Lcp float64 `json:"lcp"`
 	// The Lighthouse performance score.
 	PerformanceScore float64 `json:"performanceScore"`
 	// Speed Index.
@@ -111,29 +111,29 @@ type LighthouseReport struct {
 	// The state of the Lighthouse report.
 	State LighthouseReportState `json:"state"`
 	// Total Blocking Time.
-	TBT float64 `json:"tbt"`
+	Tbt float64 `json:"tbt"`
 	// Time To First Byte.
-	TTFB float64 `json:"ttfb"`
+	Ttfb float64 `json:"ttfb"`
 	// Time To Interactive.
-	TTI  float64              `json:"tti"`
+	Tti  float64              `json:"tti"`
 	JSON lighthouseReportJSON `json:"-"`
 }
 
 // lighthouseReportJSON contains the JSON metadata for the struct
 // [LighthouseReport]
 type lighthouseReportJSON struct {
-	CLS              apijson.Field
+	Cls              apijson.Field
 	DeviceType       apijson.Field
 	Error            apijson.Field
-	FCP              apijson.Field
+	Fcp              apijson.Field
 	JsonReportURL    apijson.Field
-	LCP              apijson.Field
+	Lcp              apijson.Field
 	PerformanceScore apijson.Field
 	Si               apijson.Field
 	State            apijson.Field
-	TBT              apijson.Field
-	TTFB             apijson.Field
-	TTI              apijson.Field
+	Tbt              apijson.Field
+	Ttfb             apijson.Field
+	Tti              apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -228,34 +228,34 @@ func (r LighthouseReportState) IsKnown() bool {
 
 type Trend struct {
 	// Cumulative Layout Shift trend.
-	CLS []float64 `json:"cls"`
+	Cls []float64 `json:"cls"`
 	// First Contentful Paint trend.
-	FCP []float64 `json:"fcp"`
+	Fcp []float64 `json:"fcp"`
 	// Largest Contentful Paint trend.
-	LCP []float64 `json:"lcp"`
+	Lcp []float64 `json:"lcp"`
 	// The Lighthouse score trend.
 	PerformanceScore []float64 `json:"performanceScore"`
 	// Speed Index trend.
 	Si []float64 `json:"si"`
 	// Total Blocking Time trend.
-	TBT []float64 `json:"tbt"`
+	Tbt []float64 `json:"tbt"`
 	// Time To First Byte trend.
-	TTFB []float64 `json:"ttfb"`
+	Ttfb []float64 `json:"ttfb"`
 	// Time To Interactive trend.
-	TTI  []float64 `json:"tti"`
+	Tti  []float64 `json:"tti"`
 	JSON trendJSON `json:"-"`
 }
 
 // trendJSON contains the JSON metadata for the struct [Trend]
 type trendJSON struct {
-	CLS              apijson.Field
-	FCP              apijson.Field
-	LCP              apijson.Field
+	Cls              apijson.Field
+	Fcp              apijson.Field
+	Lcp              apijson.Field
 	PerformanceScore apijson.Field
 	Si               apijson.Field
-	TBT              apijson.Field
-	TTFB             apijson.Field
-	TTI              apijson.Field
+	Tbt              apijson.Field
+	Ttfb             apijson.Field
+	Tti              apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }

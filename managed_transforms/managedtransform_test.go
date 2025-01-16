@@ -15,7 +15,6 @@ import (
 )
 
 func TestManagedTransformList(t *testing.T) {
-	t.Skip("TODO: investigate unauthorized HTTP response")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,33 +28,7 @@ func TestManagedTransformList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ManagedTransforms.List(context.TODO(), managed_transforms.ManagedTransformListParams{
-		ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestManagedTransformDelete(t *testing.T) {
-	t.Skip("TODO: investigate unauthorized HTTP response")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	err := client.ManagedTransforms.Delete(context.TODO(), managed_transforms.ManagedTransformDeleteParams{
-		ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -67,7 +40,6 @@ func TestManagedTransformDelete(t *testing.T) {
 }
 
 func TestManagedTransformEdit(t *testing.T) {
-	t.Skip("TODO: investigate unauthorized HTTP response")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -81,13 +53,13 @@ func TestManagedTransformEdit(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ManagedTransforms.Edit(context.TODO(), managed_transforms.ManagedTransformEditParams{
-		ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
-		ManagedRequestHeaders: cloudflare.F([]managed_transforms.ManagedTransformEditParamsManagedRequestHeader{{
-			ID:      cloudflare.F("add_bot_protection_headers"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ManagedRequestHeaders: cloudflare.F([]managed_transforms.RequestModelParam{{
+			ID:      cloudflare.F("add_cf-bot-score_header"),
 			Enabled: cloudflare.F(true),
 		}}),
-		ManagedResponseHeaders: cloudflare.F([]managed_transforms.ManagedTransformEditParamsManagedResponseHeader{{
-			ID:      cloudflare.F("add_security_headers"),
+		ManagedResponseHeaders: cloudflare.F([]managed_transforms.RequestModelParam{{
+			ID:      cloudflare.F("add_cf-bot-score_header"),
 			Enabled: cloudflare.F(true),
 		}}),
 	})

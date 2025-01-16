@@ -38,7 +38,8 @@ func TestDispatchNamespaceScriptContentUpdateWithOptionalParams(t *testing.T) {
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
 		workers_for_platforms.DispatchNamespaceScriptContentUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			Metadata: cloudflare.F(workers.WorkerMetadataParam{
 				BodyPart:   cloudflare.F("worker.js"),
 				MainModule: cloudflare.F("worker.js"),

@@ -47,7 +47,7 @@ func (r *DeviceFleetStatusService) Get(ctx context.Context, deviceID string, par
 		err = errors.New("missing required device_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dex/devices/%s/fleet-status/live", params.AccountID, deviceID)
+	path := fmt.Sprintf("accounts/%s/devices/%s/fleet-status/live", params.AccountID, deviceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
 }

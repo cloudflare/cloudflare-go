@@ -27,8 +27,6 @@ import (
 // the [NewDEXCommandService] method instead.
 type DEXCommandService struct {
 	Options   []option.RequestOption
-	Users     *DEXCommandUserService
-	Devices   *DEXCommandDeviceService
 	Downloads *DEXCommandDownloadService
 	Quota     *DEXCommandQuotaService
 }
@@ -39,8 +37,6 @@ type DEXCommandService struct {
 func NewDEXCommandService(opts ...option.RequestOption) (r *DEXCommandService) {
 	r = &DEXCommandService{}
 	r.Options = opts
-	r.Users = NewDEXCommandUserService(opts...)
-	r.Devices = NewDEXCommandDeviceService(opts...)
 	r.Downloads = NewDEXCommandDownloadService(opts...)
 	r.Quota = NewDEXCommandQuotaService(opts...)
 	return
@@ -54,7 +50,7 @@ func (r *DEXCommandService) New(ctx context.Context, params DEXCommandNewParams,
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dex/commands", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/commands", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -73,7 +69,7 @@ func (r *DEXCommandService) List(ctx context.Context, params DEXCommandListParam
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dex/commands", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/commands", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
