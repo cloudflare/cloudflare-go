@@ -28,7 +28,7 @@ func TestAddressMapNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.AddressMaps.New(context.TODO(), addressing.AddressMapNewParams{
-		AccountID:   cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Description: cloudflare.F("My Ecommerce zones"),
 		Enabled:     cloudflare.F(true),
 		IPs:         cloudflare.F([]string{"192.0.2.1"}),
@@ -60,7 +60,7 @@ func TestAddressMapList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.AddressMaps.List(context.TODO(), addressing.AddressMapListParams{
-		AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -86,9 +86,9 @@ func TestAddressMapDelete(t *testing.T) {
 	)
 	_, err := client.Addressing.AddressMaps.Delete(
 		context.TODO(),
-		"055817b111884e0227e1be16a0be6ee0",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.AddressMapDeleteParams{
-			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -115,9 +115,9 @@ func TestAddressMapEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Addressing.AddressMaps.Edit(
 		context.TODO(),
-		"055817b111884e0227e1be16a0be6ee0",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.AddressMapEditParams{
-			AccountID:   cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			DefaultSNI:  cloudflare.F("*.example.com"),
 			Description: cloudflare.F("My Ecommerce zones"),
 			Enabled:     cloudflare.F(true),
@@ -147,9 +147,9 @@ func TestAddressMapGet(t *testing.T) {
 	)
 	_, err := client.Addressing.AddressMaps.Get(
 		context.TODO(),
-		"055817b111884e0227e1be16a0be6ee0",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.AddressMapGetParams{
-			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

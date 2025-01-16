@@ -231,51 +231,51 @@ type RuleUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// List of Cloud Connector rules
-	Rules []RuleUpdateParamsRule `json:"rules,required"`
+	Body []RuleUpdateParamsBody `json:"body,required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Rules)
+	return apijson.MarshalRoot(r.Body)
 }
 
-type RuleUpdateParamsRule struct {
+type RuleUpdateParamsBody struct {
 	ID          param.Field[string] `json:"id"`
 	Description param.Field[string] `json:"description"`
 	Enabled     param.Field[bool]   `json:"enabled"`
 	Expression  param.Field[string] `json:"expression"`
 	// Parameters of Cloud Connector Rule
-	Parameters param.Field[RuleUpdateParamsRulesParameters] `json:"parameters"`
+	Parameters param.Field[RuleUpdateParamsBodyParameters] `json:"parameters"`
 	// Cloud Provider type
-	Provider param.Field[RuleUpdateParamsRulesProvider] `json:"provider"`
+	Provider param.Field[RuleUpdateParamsBodyProvider] `json:"provider"`
 }
 
-func (r RuleUpdateParamsRule) MarshalJSON() (data []byte, err error) {
+func (r RuleUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Parameters of Cloud Connector Rule
-type RuleUpdateParamsRulesParameters struct {
+type RuleUpdateParamsBodyParameters struct {
 	// Host to perform Cloud Connection to
 	Host param.Field[string] `json:"host"`
 }
 
-func (r RuleUpdateParamsRulesParameters) MarshalJSON() (data []byte, err error) {
+func (r RuleUpdateParamsBodyParameters) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Cloud Provider type
-type RuleUpdateParamsRulesProvider string
+type RuleUpdateParamsBodyProvider string
 
 const (
-	RuleUpdateParamsRulesProviderAwsS3        RuleUpdateParamsRulesProvider = "aws_s3"
-	RuleUpdateParamsRulesProviderR2           RuleUpdateParamsRulesProvider = "r2"
-	RuleUpdateParamsRulesProviderGcpStorage   RuleUpdateParamsRulesProvider = "gcp_storage"
-	RuleUpdateParamsRulesProviderAzureStorage RuleUpdateParamsRulesProvider = "azure_storage"
+	RuleUpdateParamsBodyProviderAwsS3        RuleUpdateParamsBodyProvider = "aws_s3"
+	RuleUpdateParamsBodyProviderR2           RuleUpdateParamsBodyProvider = "r2"
+	RuleUpdateParamsBodyProviderGcpStorage   RuleUpdateParamsBodyProvider = "gcp_storage"
+	RuleUpdateParamsBodyProviderAzureStorage RuleUpdateParamsBodyProvider = "azure_storage"
 )
 
-func (r RuleUpdateParamsRulesProvider) IsKnown() bool {
+func (r RuleUpdateParamsBodyProvider) IsKnown() bool {
 	switch r {
-	case RuleUpdateParamsRulesProviderAwsS3, RuleUpdateParamsRulesProviderR2, RuleUpdateParamsRulesProviderGcpStorage, RuleUpdateParamsRulesProviderAzureStorage:
+	case RuleUpdateParamsBodyProviderAwsS3, RuleUpdateParamsBodyProviderR2, RuleUpdateParamsBodyProviderGcpStorage, RuleUpdateParamsBodyProviderAzureStorage:
 		return true
 	}
 	return false

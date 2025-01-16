@@ -223,9 +223,9 @@ func (r addressMapZoneDeleteResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapZoneUpdateParams struct {
-	// Identifier of a zone.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	Body      interface{}         `json:"body,required"`
 }
@@ -235,8 +235,8 @@ func (r AddressMapZoneUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapZoneDeleteParams struct {
-	// Identifier of a zone.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }

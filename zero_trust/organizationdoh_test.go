@@ -29,7 +29,7 @@ func TestOrganizationDOHUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Organizations.DOH.Update(context.TODO(), zero_trust.OrganizationDOHUpdateParams{
 		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		DOHJWTDuration: cloudflare.F("800h"),
+		JWTDuration:    cloudflare.F("800h"),
 		ServiceTokenID: cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 	})
 	if err != nil {

@@ -44,7 +44,7 @@ func (r *DEXCommandQuotaService) Get(ctx context.Context, query DEXCommandQuotaG
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dex/commands/quota", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/commands/quota", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
