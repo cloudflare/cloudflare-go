@@ -1,0 +1,3 @@
+```release-note:enhancement
+access_service_token: add `last_seen_at` field
+```

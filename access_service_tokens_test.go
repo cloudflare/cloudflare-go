@@ -29,7 +29,8 @@ func TestAccessServiceTokens(t *testing.T) {
 					"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 					"name": "CI/CD token",
 					"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com",
-					"duration": "8760h"
+					"duration": "8760h",
+					"last_seen_at": "2014-02-03T06:07:00.12345Z"
 				}
 			]
 		}
@@ -39,16 +40,18 @@ func TestAccessServiceTokens(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	expiresAt, _ := time.Parse(time.RFC3339, "2015-01-01T05:20:00.12345Z")
+	lastSeenAt, _ := time.Parse(time.RFC3339, "2014-02-03T06:07:00.12345Z")
 
 	want := []AccessServiceToken{
 		{
-			CreatedAt: &createdAt,
-			UpdatedAt: &updatedAt,
-			ExpiresAt: &expiresAt,
-			ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-			Name:      "CI/CD token",
-			ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
-			Duration:  "8760h",
+			CreatedAt:  &createdAt,
+			UpdatedAt:  &updatedAt,
+			ExpiresAt:  &expiresAt,
+			ID:         "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+			Name:       "CI/CD token",
+			ClientID:   "88bf3b6d86161464f6509f7219099e57.access.example.com",
+			Duration:   "8760h",
+			LastSeenAt: &lastSeenAt,
 		},
 	}
 
@@ -140,20 +143,27 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 				"name": "CI/CD token",
 				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com",
-				"duration": "8760h"
+				"duration": "8760h",
+				"last_seen_at": "2014-02-03T06:07:00.12345Z"
 			}
 		}
 		`)
 	}
 
+	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	expiresAt, _ := time.Parse(time.RFC3339, "2015-01-01T05:20:00.12345Z")
+	lastSeenAt, _ := time.Parse(time.RFC3339, "2014-02-03T06:07:00.12345Z")
+
 	expected := AccessServiceTokenUpdateResponse{
-		CreatedAt: &createdAt,
-		UpdatedAt: &updatedAt,
-		ExpiresAt: &expiresAt,
-		ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		Name:      "CI/CD token",
-		ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
-		Duration:  "8760h",
+		CreatedAt:  &createdAt,
+		UpdatedAt:  &updatedAt,
+		ExpiresAt:  &expiresAt,
+		ID:         "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		Name:       "CI/CD token",
+		ClientID:   "88bf3b6d86161464f6509f7219099e57.access.example.com",
+		Duration:   "8760h",
+		LastSeenAt: &lastSeenAt,
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
@@ -191,20 +201,27 @@ func TestRefreshAccessServiceToken(t *testing.T) {
 				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 				"name": "CI/CD token",
 				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com",
-				"duration": "8760h"
+				"duration": "8760h",
+				"last_seen_at": "2014-02-03T06:07:00.12345Z"
 			}
 		}
 		`)
 	}
 
+	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	expiresAt, _ := time.Parse(time.RFC3339, "2015-01-01T05:20:00.12345Z")
+	lastSeenAt, _ := time.Parse(time.RFC3339, "2014-02-03T06:07:00.12345Z")
+
 	expected := AccessServiceTokenRefreshResponse{
-		CreatedAt: &createdAt,
-		UpdatedAt: &updatedAt,
-		ExpiresAt: &expiresAt,
-		ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		Name:      "CI/CD token",
-		ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
-		Duration:  "8760h",
+		CreatedAt:  &createdAt,
+		UpdatedAt:  &updatedAt,
+		ExpiresAt:  &expiresAt,
+		ID:         "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		Name:       "CI/CD token",
+		ClientID:   "88bf3b6d86161464f6509f7219099e57.access.example.com",
+		Duration:   "8760h",
+		LastSeenAt: &lastSeenAt,
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/refresh", handler)

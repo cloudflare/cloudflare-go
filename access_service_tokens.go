@@ -16,38 +16,41 @@ var (
 
 // AccessServiceToken represents an Access Service Token.
 type AccessServiceToken struct {
-	ClientID  string     `json:"client_id"`
-	CreatedAt *time.Time `json:"created_at"`
-	ExpiresAt *time.Time `json:"expires_at"`
-	ID        string     `json:"id"`
-	Name      string     `json:"name"`
-	UpdatedAt *time.Time `json:"updated_at"`
-	Duration  string     `json:"duration,omitempty"`
+	ClientID   string     `json:"client_id"`
+	CreatedAt  *time.Time `json:"created_at"`
+	ExpiresAt  *time.Time `json:"expires_at"`
+	ID         string     `json:"id"`
+	Name       string     `json:"name"`
+	UpdatedAt  *time.Time `json:"updated_at"`
+	Duration   string     `json:"duration,omitempty"`
+	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
 }
 
 // AccessServiceTokenUpdateResponse represents the response from the API
 // when a new Service Token is updated. This base struct is also used in the
 // Create as they are very similar responses.
 type AccessServiceTokenUpdateResponse struct {
-	CreatedAt *time.Time `json:"created_at"`
-	UpdatedAt *time.Time `json:"updated_at"`
-	ExpiresAt *time.Time `json:"expires_at"`
-	ID        string     `json:"id"`
-	Name      string     `json:"name"`
-	ClientID  string     `json:"client_id"`
-	Duration  string     `json:"duration,omitempty"`
+	CreatedAt  *time.Time `json:"created_at"`
+	UpdatedAt  *time.Time `json:"updated_at"`
+	ExpiresAt  *time.Time `json:"expires_at"`
+	ID         string     `json:"id"`
+	Name       string     `json:"name"`
+	ClientID   string     `json:"client_id"`
+	Duration   string     `json:"duration,omitempty"`
+	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
 }
 
 // AccessServiceTokenRefreshResponse represents the response from the API
 // when an existing service token is refreshed to last longer.
 type AccessServiceTokenRefreshResponse struct {
-	CreatedAt *time.Time `json:"created_at"`
-	UpdatedAt *time.Time `json:"updated_at"`
-	ExpiresAt *time.Time `json:"expires_at"`
-	ID        string     `json:"id"`
-	Name      string     `json:"name"`
-	ClientID  string     `json:"client_id"`
-	Duration  string     `json:"duration,omitempty"`
+	CreatedAt  *time.Time `json:"created_at"`
+	UpdatedAt  *time.Time `json:"updated_at"`
+	ExpiresAt  *time.Time `json:"expires_at"`
+	ID         string     `json:"id"`
+	Name       string     `json:"name"`
+	ClientID   string     `json:"client_id"`
+	Duration   string     `json:"duration,omitempty"`
+	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
 }
 
 // AccessServiceTokenCreateResponse is the same API response as the Update
