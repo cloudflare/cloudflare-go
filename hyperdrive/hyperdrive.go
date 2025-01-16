@@ -68,7 +68,7 @@ type HyperdriveOrigin struct {
 	Scheme HyperdriveOriginScheme `json:"scheme,required"`
 	// The user of your origin database.
 	User string `json:"user,required"`
-	// The Client ID of the Access token to use when connecting to the origin database
+	// The Client ID of the Access token to use when connecting to the origin database.
 	AccessClientID string `json:"access_client_id"`
 	// The port (default: 5432 for Postgres) of your origin database.
 	Port  int64                `json:"port"`
@@ -186,7 +186,7 @@ func (r HyperdriveOriginPublicDatabaseScheme) IsKnown() bool {
 }
 
 type HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel struct {
-	// The Client ID of the Access token to use when connecting to the origin database
+	// The Client ID of the Access token to use when connecting to the origin database.
 	AccessClientID string `json:"access_client_id,required"`
 	// The name of your origin database.
 	Database string `json:"database,required"`
@@ -402,7 +402,7 @@ type HyperdriveOriginParam struct {
 	Scheme param.Field[HyperdriveOriginScheme] `json:"scheme,required"`
 	// The user of your origin database.
 	User param.Field[string] `json:"user,required"`
-	// The Client ID of the Access token to use when connecting to the origin database
+	// The Client ID of the Access token to use when connecting to the origin database.
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// The Client Secret of the Access token to use when connecting to the origin
 	// database. This value is write-only and never returned by the API.
@@ -447,7 +447,7 @@ func (r HyperdriveOriginPublicDatabaseParam) MarshalJSON() (data []byte, err err
 func (r HyperdriveOriginPublicDatabaseParam) implementsHyperdriveHyperdriveOriginUnionParam() {}
 
 type HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam struct {
-	// The Client ID of the Access token to use when connecting to the origin database
+	// The Client ID of the Access token to use when connecting to the origin database.
 	AccessClientID param.Field[string] `json:"access_client_id,required"`
 	// The Client Secret of the Access token to use when connecting to the origin
 	// database. This value is write-only and never returned by the API.
