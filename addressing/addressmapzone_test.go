@@ -29,10 +29,10 @@ func TestAddressMapZoneUpdate(t *testing.T) {
 	)
 	_, err := client.Addressing.AddressMaps.Zones.Update(
 		context.TODO(),
-		"055817b111884e0227e1be16a0be6ee0",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.AddressMapZoneUpdateParams{
-			ZoneID:    cloudflare.F("8ac8489932db6327334c9b6d58544cfe"),
-			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body:      map[string]interface{}{},
 		},
 	)
@@ -60,10 +60,10 @@ func TestAddressMapZoneDelete(t *testing.T) {
 	)
 	_, err := client.Addressing.AddressMaps.Zones.Delete(
 		context.TODO(),
-		"055817b111884e0227e1be16a0be6ee0",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.AddressMapZoneDeleteParams{
-			ZoneID:    cloudflare.F("8ac8489932db6327334c9b6d58544cfe"),
-			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

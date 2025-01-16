@@ -35,12 +35,7 @@ func NewSmartTieredCacheService(opts ...option.RequestOption) (r *SmartTieredCac
 	return
 }
 
-// Smart Tiered Cache dynamically selects the single closest upper tier for each of
-// your website’s origins with no configuration required, using our in-house
-// performance and routing data. Cloudflare collects latency data for each request
-// to an origin, and uses the latency data to determine how well any upper-tier
-// data center is connected with an origin. As a result, Cloudflare can select the
-// data center with the lowest latency to be the upper-tier for an origin.
+// Remvoves enablement of Smart Tiered Cache
 func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCacheDeleteParams, opts ...option.RequestOption) (res *SmartTieredCacheDeleteResponse, err error) {
 	var env SmartTieredCacheDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -57,12 +52,7 @@ func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCa
 	return
 }
 
-// Smart Tiered Cache dynamically selects the single closest upper tier for each of
-// your website’s origins with no configuration required, using our in-house
-// performance and routing data. Cloudflare collects latency data for each request
-// to an origin, and uses the latency data to determine how well any upper-tier
-// data center is connected with an origin. As a result, Cloudflare can select the
-// data center with the lowest latency to be the upper-tier for an origin.
+// Updates enablement of Tiered Cache
 func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCacheEditParams, opts ...option.RequestOption) (res *SmartTieredCacheEditResponse, err error) {
 	var env SmartTieredCacheEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -79,12 +69,7 @@ func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCa
 	return
 }
 
-// Smart Tiered Cache dynamically selects the single closest upper tier for each of
-// your website’s origins with no configuration required, using our in-house
-// performance and routing data. Cloudflare collects latency data for each request
-// to an origin, and uses the latency data to determine how well any upper-tier
-// data center is connected with an origin. As a result, Cloudflare can select the
-// data center with the lowest latency to be the upper-tier for an origin.
+// Get Smart Tiered Cache setting
 func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCacheGetParams, opts ...option.RequestOption) (res *SmartTieredCacheGetResponse, err error) {
 	var env SmartTieredCacheGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -102,13 +87,15 @@ func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCach
 }
 
 type SmartTieredCacheDeleteResponse struct {
-	// ID of the zone setting.
-	ID SmartTieredCacheDeleteResponseID `json:"id,required"`
+	// The identifier of the caching setting
+	ID string `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
-	// Last time this setting was modified.
-	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
-	JSON       smartTieredCacheDeleteResponseJSON `json:"-"`
+	// The time when the setting was last modified
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The status of the feature being on / off
+	Value SmartTieredCacheDeleteResponseValue `json:"value,required"`
+	JSON  smartTieredCacheDeleteResponseJSON  `json:"-"`
 }
 
 // smartTieredCacheDeleteResponseJSON contains the JSON metadata for the struct
@@ -117,6 +104,7 @@ type smartTieredCacheDeleteResponseJSON struct {
 	ID          apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -129,31 +117,32 @@ func (r smartTieredCacheDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
-type SmartTieredCacheDeleteResponseID string
+// The status of the feature being on / off
+type SmartTieredCacheDeleteResponseValue string
 
 const (
-	SmartTieredCacheDeleteResponseIDTieredCacheSmartTopologyEnable SmartTieredCacheDeleteResponseID = "tiered_cache_smart_topology_enable"
+	SmartTieredCacheDeleteResponseValueOn  SmartTieredCacheDeleteResponseValue = "on"
+	SmartTieredCacheDeleteResponseValueOff SmartTieredCacheDeleteResponseValue = "off"
 )
 
-func (r SmartTieredCacheDeleteResponseID) IsKnown() bool {
+func (r SmartTieredCacheDeleteResponseValue) IsKnown() bool {
 	switch r {
-	case SmartTieredCacheDeleteResponseIDTieredCacheSmartTopologyEnable:
+	case SmartTieredCacheDeleteResponseValueOn, SmartTieredCacheDeleteResponseValueOff:
 		return true
 	}
 	return false
 }
 
 type SmartTieredCacheEditResponse struct {
-	// ID of the zone setting.
-	ID SmartTieredCacheEditResponseID `json:"id,required"`
+	// The identifier of the caching setting
+	ID string `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
-	// The value of the feature
+	// The time when the setting was last modified
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The status of the feature being on / off
 	Value SmartTieredCacheEditResponseValue `json:"value,required"`
-	// Last time this setting was modified.
-	ModifiedOn time.Time                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       smartTieredCacheEditResponseJSON `json:"-"`
+	JSON  smartTieredCacheEditResponseJSON  `json:"-"`
 }
 
 // smartTieredCacheEditResponseJSON contains the JSON metadata for the struct
@@ -161,8 +150,8 @@ type SmartTieredCacheEditResponse struct {
 type smartTieredCacheEditResponseJSON struct {
 	ID          apijson.Field
 	Editable    apijson.Field
-	Value       apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -175,22 +164,7 @@ func (r smartTieredCacheEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
-type SmartTieredCacheEditResponseID string
-
-const (
-	SmartTieredCacheEditResponseIDTieredCacheSmartTopologyEnable SmartTieredCacheEditResponseID = "tiered_cache_smart_topology_enable"
-)
-
-func (r SmartTieredCacheEditResponseID) IsKnown() bool {
-	switch r {
-	case SmartTieredCacheEditResponseIDTieredCacheSmartTopologyEnable:
-		return true
-	}
-	return false
-}
-
-// The value of the feature
+// The status of the feature being on / off
 type SmartTieredCacheEditResponseValue string
 
 const (
@@ -207,15 +181,15 @@ func (r SmartTieredCacheEditResponseValue) IsKnown() bool {
 }
 
 type SmartTieredCacheGetResponse struct {
-	// ID of the zone setting.
-	ID SmartTieredCacheGetResponseID `json:"id,required"`
+	// The identifier of the caching setting
+	ID string `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
-	// The value of the feature
+	// The time when the setting was last modified
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The status of the feature being on / off
 	Value SmartTieredCacheGetResponseValue `json:"value,required"`
-	// Last time this setting was modified.
-	ModifiedOn time.Time                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       smartTieredCacheGetResponseJSON `json:"-"`
+	JSON  smartTieredCacheGetResponseJSON  `json:"-"`
 }
 
 // smartTieredCacheGetResponseJSON contains the JSON metadata for the struct
@@ -223,8 +197,8 @@ type SmartTieredCacheGetResponse struct {
 type smartTieredCacheGetResponseJSON struct {
 	ID          apijson.Field
 	Editable    apijson.Field
-	Value       apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -237,22 +211,7 @@ func (r smartTieredCacheGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
-type SmartTieredCacheGetResponseID string
-
-const (
-	SmartTieredCacheGetResponseIDTieredCacheSmartTopologyEnable SmartTieredCacheGetResponseID = "tiered_cache_smart_topology_enable"
-)
-
-func (r SmartTieredCacheGetResponseID) IsKnown() bool {
-	switch r {
-	case SmartTieredCacheGetResponseIDTieredCacheSmartTopologyEnable:
-		return true
-	}
-	return false
-}
-
-// The value of the feature
+// The status of the feature being on / off
 type SmartTieredCacheGetResponseValue string
 
 const (
@@ -274,11 +233,11 @@ type SmartTieredCacheDeleteParams struct {
 }
 
 type SmartTieredCacheDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   SmartTieredCacheDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  SmartTieredCacheDeleteResponse                `json:"result"`
 	JSON    smartTieredCacheDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -287,8 +246,8 @@ type SmartTieredCacheDeleteResponseEnvelope struct {
 type smartTieredCacheDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -344,11 +303,11 @@ func (r SmartTieredCacheEditParamsValue) IsKnown() bool {
 }
 
 type SmartTieredCacheEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   SmartTieredCacheEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  SmartTieredCacheEditResponse                `json:"result"`
 	JSON    smartTieredCacheEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -357,8 +316,8 @@ type SmartTieredCacheEditResponseEnvelope struct {
 type smartTieredCacheEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -392,11 +351,11 @@ type SmartTieredCacheGetParams struct {
 }
 
 type SmartTieredCacheGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   SmartTieredCacheGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  SmartTieredCacheGetResponse                `json:"result"`
 	JSON    smartTieredCacheGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -405,8 +364,8 @@ type SmartTieredCacheGetResponseEnvelope struct {
 type smartTieredCacheGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

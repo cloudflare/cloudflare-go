@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package ai
+package workers
 
 import (
 	"context"
@@ -24,11 +24,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAIService] method instead.
 type AIService struct {
-	Options   []option.RequestOption
-	Finetunes *FinetuneService
-	Authors   *AuthorService
-	Tasks     *TaskService
-	Models    *ModelService
+	Options []option.RequestOption
+	Models  *AIModelService
 }
 
 // NewAIService generates a new service that applies the given options to each
@@ -37,10 +34,7 @@ type AIService struct {
 func NewAIService(opts ...option.RequestOption) (r *AIService) {
 	r = &AIService{}
 	r.Options = opts
-	r.Finetunes = NewFinetuneService(opts...)
-	r.Authors = NewAuthorService(opts...)
-	r.Tasks = NewTaskService(opts...)
-	r.Models = NewModelService(opts...)
+	r.Models = NewAIModelService(opts...)
 	return
 }
 
@@ -75,14 +69,16 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 
 // An array of classification results for the input text
 //
-// Union satisfied by [ai.AIRunResponseTextClassification], [shared.UnionString],
-// [ai.AIRunResponseAudio], [ai.AIRunResponseTextEmbeddings],
-// [ai.AIRunResponseAutomaticSpeechRecognition],
-// [ai.AIRunResponseImageClassification], [ai.AIRunResponseObjectDetection],
-// [ai.AIRunResponseObject], [ai.AIRunResponseTranslation],
-// [ai.AIRunResponseSummarization] or [ai.AIRunResponseImageToText].
+// Union satisfied by [workers.AIRunResponseTextClassification],
+// [shared.UnionString], [workers.AIRunResponseAudio],
+// [workers.AIRunResponseTextEmbeddings],
+// [workers.AIRunResponseAutomaticSpeechRecognition],
+// [workers.AIRunResponseImageClassification],
+// [workers.AIRunResponseObjectDetection], [workers.AIRunResponseObject],
+// [workers.AIRunResponseTranslation], [workers.AIRunResponseSummarization] or
+// [workers.AIRunResponseImageToText].
 type AIRunResponseUnion interface {
-	ImplementsAIAIRunResponseUnion()
+	ImplementsWorkersAIRunResponseUnion()
 }
 
 func init() {
@@ -138,7 +134,7 @@ func init() {
 
 type AIRunResponseTextClassification []AIRunResponseTextClassificationItem
 
-func (r AIRunResponseTextClassification) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseTextClassification) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseTextClassificationItem struct {
 	// The classification label assigned to the text (e.g., 'POSITIVE' or 'NEGATIVE')
@@ -188,7 +184,7 @@ func (r aiRunResponseAudioJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseAudio) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseAudio) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseTextEmbeddings struct {
 	// Embeddings of the requested text values
@@ -214,7 +210,7 @@ func (r aiRunResponseTextEmbeddingsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseTextEmbeddings) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseTextEmbeddings) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseAutomaticSpeechRecognition struct {
 	// The transcription
@@ -244,7 +240,7 @@ func (r aiRunResponseAutomaticSpeechRecognitionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseAutomaticSpeechRecognition) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseAutomaticSpeechRecognition) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseAutomaticSpeechRecognitionWord struct {
 	// The ending second when the word completes
@@ -275,7 +271,7 @@ func (r aiRunResponseAutomaticSpeechRecognitionWordJSON) RawJSON() string {
 
 type AIRunResponseImageClassification []AIRunResponseImageClassificationItem
 
-func (r AIRunResponseImageClassification) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseImageClassification) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseImageClassificationItem struct {
 	// The predicted category or class for the input image based on analysis
@@ -305,7 +301,7 @@ func (r aiRunResponseImageClassificationItemJSON) RawJSON() string {
 
 type AIRunResponseObjectDetection []AIRunResponseObjectDetectionItem
 
-func (r AIRunResponseObjectDetection) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseObjectDetection) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseObjectDetectionItem struct {
 	// Coordinates defining the bounding box around the detected object
@@ -392,7 +388,7 @@ func (r aiRunResponseObjectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseObject) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseObject) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseObjectToolCall struct {
 	// The arguments passed to be passed to the tool call request
@@ -441,7 +437,7 @@ func (r aiRunResponseTranslationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseTranslation) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseTranslation) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseSummarization struct {
 	// The summarized version of the input text
@@ -465,7 +461,7 @@ func (r aiRunResponseSummarizationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseSummarization) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseSummarization) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseImageToText struct {
 	Description string                       `json:"description"`
@@ -488,7 +484,7 @@ func (r aiRunResponseImageToTextJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseImageToText) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseImageToText) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunParams struct {
 	AccountID param.Field[string]  `path:"account_id,required"`
@@ -572,18 +568,19 @@ func (r AIRunParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBody) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBody) implementsWorkersAIRunParamsBodyUnion() {}
 
-// Satisfied by [ai.AIRunParamsBodyTextClassification],
-// [ai.AIRunParamsBodyTextToImage], [ai.AIRunParamsBodyTextToSpeech],
-// [ai.AIRunParamsBodyTextEmbeddings],
-// [ai.AIRunParamsBodyAutomaticSpeechRecognition],
-// [ai.AIRunParamsBodyImageClassification], [ai.AIRunParamsBodyObjectDetection],
-// [ai.AIRunParamsBodyPrompt], [ai.AIRunParamsBodyMessages],
-// [ai.AIRunParamsBodyTranslation], [ai.AIRunParamsBodySummarization],
-// [ai.AIRunParamsBodyImageToText], [AIRunParamsBody].
+// Satisfied by [workers.AIRunParamsBodyTextClassification],
+// [workers.AIRunParamsBodyTextToImage], [workers.AIRunParamsBodyTextToSpeech],
+// [workers.AIRunParamsBodyTextEmbeddings],
+// [workers.AIRunParamsBodyAutomaticSpeechRecognition],
+// [workers.AIRunParamsBodyImageClassification],
+// [workers.AIRunParamsBodyObjectDetection], [workers.AIRunParamsBodyPrompt],
+// [workers.AIRunParamsBodyMessages], [workers.AIRunParamsBodyTranslation],
+// [workers.AIRunParamsBodySummarization], [workers.AIRunParamsBodyImageToText],
+// [AIRunParamsBody].
 type AIRunParamsBodyUnion interface {
-	implementsAIAIRunParamsBodyUnion()
+	implementsWorkersAIRunParamsBodyUnion()
 }
 
 type AIRunParamsBodyTextClassification struct {
@@ -595,7 +592,7 @@ func (r AIRunParamsBodyTextClassification) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextClassification) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyTextClassification) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTextToImage struct {
 	// A text description of the image you want to generate
@@ -630,7 +627,7 @@ func (r AIRunParamsBodyTextToImage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextToImage) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyTextToImage) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTextToSpeech struct {
 	// A text description of the image you want to generate
@@ -644,7 +641,7 @@ func (r AIRunParamsBodyTextToSpeech) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextToSpeech) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyTextToSpeech) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTextEmbeddings struct {
 	// The text to embed
@@ -655,18 +652,19 @@ func (r AIRunParamsBodyTextEmbeddings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextEmbeddings) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyTextEmbeddings) implementsWorkersAIRunParamsBodyUnion() {}
 
 // The text to embed
 //
-// Satisfied by [shared.UnionString], [ai.AIRunParamsBodyTextEmbeddingsTextArray].
+// Satisfied by [shared.UnionString],
+// [workers.AIRunParamsBodyTextEmbeddingsTextArray].
 type AIRunParamsBodyTextEmbeddingsTextUnion interface {
-	ImplementsAIAIRunParamsBodyTextEmbeddingsTextUnion()
+	ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion()
 }
 
 type AIRunParamsBodyTextEmbeddingsTextArray []string
 
-func (r AIRunParamsBodyTextEmbeddingsTextArray) ImplementsAIAIRunParamsBodyTextEmbeddingsTextUnion() {
+func (r AIRunParamsBodyTextEmbeddingsTextArray) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion() {
 }
 
 type AIRunParamsBodyAutomaticSpeechRecognition struct {
@@ -684,7 +682,7 @@ func (r AIRunParamsBodyAutomaticSpeechRecognition) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyAutomaticSpeechRecognition) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyAutomaticSpeechRecognition) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyImageClassification struct {
 	// An array of integers that represent the image data constrained to 8-bit unsigned
@@ -696,7 +694,7 @@ func (r AIRunParamsBodyImageClassification) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyImageClassification) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyImageClassification) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyObjectDetection struct {
 	// An array of integers that represent the image data constrained to 8-bit unsigned
@@ -708,7 +706,7 @@ func (r AIRunParamsBodyObjectDetection) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyObjectDetection) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyObjectDetection) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyPrompt struct {
 	// The input text prompt for the model to generate a response.
@@ -748,7 +746,7 @@ func (r AIRunParamsBodyPrompt) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyPrompt) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyPrompt) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyMessages struct {
 	// An array of message objects representing the conversation history.
@@ -785,7 +783,7 @@ func (r AIRunParamsBodyMessages) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyMessages) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyMessages) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyMessagesMessage struct {
 	// The content of the message as a string.
@@ -822,12 +820,12 @@ func (r AIRunParamsBodyMessagesTool) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyMessagesTool) implementsAIAIRunParamsBodyMessagesToolUnion() {}
+func (r AIRunParamsBodyMessagesTool) implementsWorkersAIRunParamsBodyMessagesToolUnion() {}
 
-// Satisfied by [ai.AIRunParamsBodyMessagesToolsObject],
-// [ai.AIRunParamsBodyMessagesToolsObject], [AIRunParamsBodyMessagesTool].
+// Satisfied by [workers.AIRunParamsBodyMessagesToolsObject],
+// [workers.AIRunParamsBodyMessagesToolsObject], [AIRunParamsBodyMessagesTool].
 type AIRunParamsBodyMessagesToolUnion interface {
-	implementsAIAIRunParamsBodyMessagesToolUnion()
+	implementsWorkersAIRunParamsBodyMessagesToolUnion()
 }
 
 type AIRunParamsBodyMessagesToolsObject struct {
@@ -843,7 +841,7 @@ func (r AIRunParamsBodyMessagesToolsObject) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyMessagesToolsObject) implementsAIAIRunParamsBodyMessagesToolUnion() {}
+func (r AIRunParamsBodyMessagesToolsObject) implementsWorkersAIRunParamsBodyMessagesToolUnion() {}
 
 // Schema defining the parameters accepted by the tool.
 type AIRunParamsBodyMessagesToolsObjectParameters struct {
@@ -884,7 +882,7 @@ func (r AIRunParamsBodyTranslation) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTranslation) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyTranslation) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodySummarization struct {
 	// The text that you want the model to summarize
@@ -897,7 +895,7 @@ func (r AIRunParamsBodySummarization) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodySummarization) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodySummarization) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyImageToText struct {
 	// An array of integers that represent the image data constrained to 8-bit unsigned
@@ -919,7 +917,7 @@ func (r AIRunParamsBodyImageToText) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyImageToText) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyImageToText) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunResponseEnvelope struct {
 	// An array of classification results for the input text

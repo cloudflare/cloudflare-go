@@ -40,7 +40,6 @@ func TestVariantDelete(t *testing.T) {
 }
 
 func TestVariantEditWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate HTTP 422 errors on test suite")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -79,7 +78,6 @@ func TestVariantEditWithOptionalParams(t *testing.T) {
 }
 
 func TestVariantGet(t *testing.T) {
-	t.Skip("TODO: investigate HTTP 422 errors on test suite")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

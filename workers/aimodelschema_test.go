@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package ai_test
+package workers_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/ai"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
-func TestFinetunePublicListWithOptionalParams(t *testing.T) {
+func TestAIModelSchemaGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,11 +27,9 @@ func TestFinetunePublicListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.AI.Finetunes.Public.List(context.TODO(), ai.FinetunePublicListParams{
+	_, err := client.Workers.AI.Models.Schema.Get(context.TODO(), workers.AIModelSchemaGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Limit:     cloudflare.F(0.000000),
-		Offset:    cloudflare.F(0.000000),
-		OrderBy:   cloudflare.F("orderBy"),
+		Model:     cloudflare.F("model"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
