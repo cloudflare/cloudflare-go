@@ -563,27 +563,56 @@ func (r ruleSettingAuditSSHJSON) RawJSON() string {
 
 // Configure how browser isolation behaves.
 type RuleSettingBISOAdminControls struct {
-	// Set to false to enable copy-pasting.
+	// Configure whether copy is enabled or not. When set with "remote_only", copying
+	// isolated content from the remote browser to the user's local clipboard is
+	// disabled. When absent, copy is enabled. Only applies when `version == "v2"`.
+	Copy RuleSettingBISOAdminControlsCopy `json:"copy"`
+	// Set to false to enable copy-pasting. Only applies when `version == "v1"`.
 	DCP bool `json:"dcp"`
-	// Set to false to enable downloading.
+	// Set to false to enable downloading. Only applies when `version == "v1"`.
 	DD bool `json:"dd"`
-	// Set to false to enable keyboard usage.
+	// Set to false to enable keyboard usage. Only applies when `version == "v1"`.
 	DK bool `json:"dk"`
-	// Set to false to enable printing.
+	// Configure whether downloading enabled or not. When absent, downloading is
+	// enabled. Only applies when `version == "v2"`.
+	Download RuleSettingBISOAdminControlsDownload `json:"download"`
+	// Set to false to enable printing. Only applies when `version == "v1"`.
 	DP bool `json:"dp"`
-	// Set to false to enable uploading.
-	DU   bool                             `json:"du"`
-	JSON ruleSettingBISOAdminControlsJSON `json:"-"`
+	// Set to false to enable uploading. Only applies when `version == "v1"`.
+	DU bool `json:"du"`
+	// Configure whether keyboard usage is enabled or not. When absent, keyboard usage
+	// is enabled. Only applies when `version == "v2"`.
+	Keyboard RuleSettingBISOAdminControlsKeyboard `json:"keyboard"`
+	// Configure whether pasting is enabled or not. When set with "remote_only",
+	// pasting content from the user's local clipboard into isolated pages is disabled.
+	// When absent, paste is enabled. Only applies when `version == "v2"`.
+	Paste RuleSettingBISOAdminControlsPaste `json:"paste"`
+	// Configure whether printing is enabled or not. When absent, printing is enabled.
+	// Only applies when `version == "v2"`.
+	Printing RuleSettingBISOAdminControlsPrinting `json:"printing"`
+	// Configure whether uploading is enabled or not. When absent, uploading is
+	// enabled. Only applies when `version == "v2"`.
+	Upload RuleSettingBISOAdminControlsUpload `json:"upload"`
+	// Indicates which version of the browser isolation controls should apply.
+	Version RuleSettingBISOAdminControlsVersion `json:"version"`
+	JSON    ruleSettingBISOAdminControlsJSON    `json:"-"`
 }
 
 // ruleSettingBISOAdminControlsJSON contains the JSON metadata for the struct
 // [RuleSettingBISOAdminControls]
 type ruleSettingBISOAdminControlsJSON struct {
+	Copy        apijson.Field
 	DCP         apijson.Field
 	DD          apijson.Field
 	DK          apijson.Field
+	Download    apijson.Field
 	DP          apijson.Field
 	DU          apijson.Field
+	Keyboard    apijson.Field
+	Paste       apijson.Field
+	Printing    apijson.Field
+	Upload      apijson.Field
+	Version     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -594,6 +623,128 @@ func (r *RuleSettingBISOAdminControls) UnmarshalJSON(data []byte) (err error) {
 
 func (r ruleSettingBISOAdminControlsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configure whether copy is enabled or not. When set with "remote_only", copying
+// isolated content from the remote browser to the user's local clipboard is
+// disabled. When absent, copy is enabled. Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsCopy string
+
+const (
+	RuleSettingBISOAdminControlsCopyEnabled    RuleSettingBISOAdminControlsCopy = "enabled"
+	RuleSettingBISOAdminControlsCopyDisabled   RuleSettingBISOAdminControlsCopy = "disabled"
+	RuleSettingBISOAdminControlsCopyRemoteOnly RuleSettingBISOAdminControlsCopy = "remote_only"
+)
+
+func (r RuleSettingBISOAdminControlsCopy) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsCopyEnabled, RuleSettingBISOAdminControlsCopyDisabled, RuleSettingBISOAdminControlsCopyRemoteOnly:
+		return true
+	}
+	return false
+}
+
+// Configure whether downloading enabled or not. When absent, downloading is
+// enabled. Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsDownload string
+
+const (
+	RuleSettingBISOAdminControlsDownloadEnabled  RuleSettingBISOAdminControlsDownload = "enabled"
+	RuleSettingBISOAdminControlsDownloadDisabled RuleSettingBISOAdminControlsDownload = "disabled"
+)
+
+func (r RuleSettingBISOAdminControlsDownload) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsDownloadEnabled, RuleSettingBISOAdminControlsDownloadDisabled:
+		return true
+	}
+	return false
+}
+
+// Configure whether keyboard usage is enabled or not. When absent, keyboard usage
+// is enabled. Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsKeyboard string
+
+const (
+	RuleSettingBISOAdminControlsKeyboardEnabled  RuleSettingBISOAdminControlsKeyboard = "enabled"
+	RuleSettingBISOAdminControlsKeyboardDisabled RuleSettingBISOAdminControlsKeyboard = "disabled"
+)
+
+func (r RuleSettingBISOAdminControlsKeyboard) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsKeyboardEnabled, RuleSettingBISOAdminControlsKeyboardDisabled:
+		return true
+	}
+	return false
+}
+
+// Configure whether pasting is enabled or not. When set with "remote_only",
+// pasting content from the user's local clipboard into isolated pages is disabled.
+// When absent, paste is enabled. Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsPaste string
+
+const (
+	RuleSettingBISOAdminControlsPasteEnabled    RuleSettingBISOAdminControlsPaste = "enabled"
+	RuleSettingBISOAdminControlsPasteDisabled   RuleSettingBISOAdminControlsPaste = "disabled"
+	RuleSettingBISOAdminControlsPasteRemoteOnly RuleSettingBISOAdminControlsPaste = "remote_only"
+)
+
+func (r RuleSettingBISOAdminControlsPaste) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsPasteEnabled, RuleSettingBISOAdminControlsPasteDisabled, RuleSettingBISOAdminControlsPasteRemoteOnly:
+		return true
+	}
+	return false
+}
+
+// Configure whether printing is enabled or not. When absent, printing is enabled.
+// Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsPrinting string
+
+const (
+	RuleSettingBISOAdminControlsPrintingEnabled  RuleSettingBISOAdminControlsPrinting = "enabled"
+	RuleSettingBISOAdminControlsPrintingDisabled RuleSettingBISOAdminControlsPrinting = "disabled"
+)
+
+func (r RuleSettingBISOAdminControlsPrinting) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsPrintingEnabled, RuleSettingBISOAdminControlsPrintingDisabled:
+		return true
+	}
+	return false
+}
+
+// Configure whether uploading is enabled or not. When absent, uploading is
+// enabled. Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsUpload string
+
+const (
+	RuleSettingBISOAdminControlsUploadEnabled  RuleSettingBISOAdminControlsUpload = "enabled"
+	RuleSettingBISOAdminControlsUploadDisabled RuleSettingBISOAdminControlsUpload = "disabled"
+)
+
+func (r RuleSettingBISOAdminControlsUpload) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsUploadEnabled, RuleSettingBISOAdminControlsUploadDisabled:
+		return true
+	}
+	return false
+}
+
+// Indicates which version of the browser isolation controls should apply.
+type RuleSettingBISOAdminControlsVersion string
+
+const (
+	RuleSettingBISOAdminControlsVersionV1 RuleSettingBISOAdminControlsVersion = "v1"
+	RuleSettingBISOAdminControlsVersionV2 RuleSettingBISOAdminControlsVersion = "v2"
+)
+
+func (r RuleSettingBISOAdminControlsVersion) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsVersionV1, RuleSettingBISOAdminControlsVersionV2:
+		return true
+	}
+	return false
 }
 
 // Configure how session check behaves.
@@ -986,16 +1137,38 @@ func (r RuleSettingAuditSSHParam) MarshalJSON() (data []byte, err error) {
 
 // Configure how browser isolation behaves.
 type RuleSettingBISOAdminControlsParam struct {
-	// Set to false to enable copy-pasting.
+	// Configure whether copy is enabled or not. When set with "remote_only", copying
+	// isolated content from the remote browser to the user's local clipboard is
+	// disabled. When absent, copy is enabled. Only applies when `version == "v2"`.
+	Copy param.Field[RuleSettingBISOAdminControlsCopy] `json:"copy"`
+	// Set to false to enable copy-pasting. Only applies when `version == "v1"`.
 	DCP param.Field[bool] `json:"dcp"`
-	// Set to false to enable downloading.
+	// Set to false to enable downloading. Only applies when `version == "v1"`.
 	DD param.Field[bool] `json:"dd"`
-	// Set to false to enable keyboard usage.
+	// Set to false to enable keyboard usage. Only applies when `version == "v1"`.
 	DK param.Field[bool] `json:"dk"`
-	// Set to false to enable printing.
+	// Configure whether downloading enabled or not. When absent, downloading is
+	// enabled. Only applies when `version == "v2"`.
+	Download param.Field[RuleSettingBISOAdminControlsDownload] `json:"download"`
+	// Set to false to enable printing. Only applies when `version == "v1"`.
 	DP param.Field[bool] `json:"dp"`
-	// Set to false to enable uploading.
+	// Set to false to enable uploading. Only applies when `version == "v1"`.
 	DU param.Field[bool] `json:"du"`
+	// Configure whether keyboard usage is enabled or not. When absent, keyboard usage
+	// is enabled. Only applies when `version == "v2"`.
+	Keyboard param.Field[RuleSettingBISOAdminControlsKeyboard] `json:"keyboard"`
+	// Configure whether pasting is enabled or not. When set with "remote_only",
+	// pasting content from the user's local clipboard into isolated pages is disabled.
+	// When absent, paste is enabled. Only applies when `version == "v2"`.
+	Paste param.Field[RuleSettingBISOAdminControlsPaste] `json:"paste"`
+	// Configure whether printing is enabled or not. When absent, printing is enabled.
+	// Only applies when `version == "v2"`.
+	Printing param.Field[RuleSettingBISOAdminControlsPrinting] `json:"printing"`
+	// Configure whether uploading is enabled or not. When absent, uploading is
+	// enabled. Only applies when `version == "v2"`.
+	Upload param.Field[RuleSettingBISOAdminControlsUpload] `json:"upload"`
+	// Indicates which version of the browser isolation controls should apply.
+	Version param.Field[RuleSettingBISOAdminControlsVersion] `json:"version"`
 }
 
 func (r RuleSettingBISOAdminControlsParam) MarshalJSON() (data []byte, err error) {

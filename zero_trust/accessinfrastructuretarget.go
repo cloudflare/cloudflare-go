@@ -76,9 +76,8 @@ func (r *AccessInfrastructureTargetService) Update(ctx context.Context, targetID
 	return
 }
 
-// Lists and sorts an account’s targets. Filters are optional and are ORed
-// together. However, when a timestamp is specified with both its before and after
-// counterparts, the timestamp filters are ANDed.
+// Lists and sorts an account’s targets. Filters are optional and are ANDed
+// together.
 func (r *AccessInfrastructureTargetService) List(ctx context.Context, params AccessInfrastructureTargetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessInfrastructureTargetListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -100,9 +99,8 @@ func (r *AccessInfrastructureTargetService) List(ctx context.Context, params Acc
 	return res, nil
 }
 
-// Lists and sorts an account’s targets. Filters are optional and are ORed
-// together. However, when a timestamp is specified with both its before and after
-// counterparts, the timestamp filters are ANDed.
+// Lists and sorts an account’s targets. Filters are optional and are ANDed
+// together.
 func (r *AccessInfrastructureTargetService) ListAutoPaging(ctx context.Context, params AccessInfrastructureTargetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessInfrastructureTargetListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
