@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
@@ -34,23 +33,18 @@ func NewResponseService(opts ...option.RequestOption) (r *ResponseService) {
 
 // Returns the raw response of the network request. If HTML, a plain text response
 // will be returned.
-func (r *ResponseService) Get(ctx context.Context, responseID string, query ResponseGetParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *ResponseService) Get(ctx context.Context, accountID string, responseID string, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
 		return
 	}
 	if responseID == "" {
-		err = errors.New("missing required response_id parameter")
+		err = errors.New("missing required responseId parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/urlscanner/v2/responses/%s", query.AccountID, responseID)
+	path := fmt.Sprintf("accounts/%s/urlscanner/v2/responses/%s", accountID, responseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
-}
-
-type ResponseGetParams struct {
-	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
 }

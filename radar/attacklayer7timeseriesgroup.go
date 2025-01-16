@@ -330,14 +330,15 @@ func (r attackLayer7TimeseriesGroupHTTPMethodResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7TimeseriesGroupHTTPMethodResponseSerie0 struct {
-	Timestamps  []string                                                `json:"timestamps,required"`
-	ExtraFields map[string][]string                                     `json:"-,extras"`
-	JSON        attackLayer7TimeseriesGroupHTTPMethodResponseSerie0JSON `json:"-"`
+	Get        []string                                                `json:"GET,required"`
+	Timestamps []string                                                `json:"timestamps,required"`
+	JSON       attackLayer7TimeseriesGroupHTTPMethodResponseSerie0JSON `json:"-"`
 }
 
 // attackLayer7TimeseriesGroupHTTPMethodResponseSerie0JSON contains the JSON
 // metadata for the struct [AttackLayer7TimeseriesGroupHTTPMethodResponseSerie0]
 type attackLayer7TimeseriesGroupHTTPMethodResponseSerie0JSON struct {
+	Get         apijson.Field
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -376,8 +377,6 @@ func (r attackLayer7TimeseriesGroupHTTPVersionResponseJSON) RawJSON() string {
 
 type AttackLayer7TimeseriesGroupHTTPVersionResponseSerie0 struct {
 	HTTP1X     []string                                                 `json:"HTTP/1.x,required"`
-	HTTP2      []string                                                 `json:"HTTP/2,required"`
-	HTTP3      []string                                                 `json:"HTTP/3,required"`
 	Timestamps []string                                                 `json:"timestamps,required"`
 	JSON       attackLayer7TimeseriesGroupHTTPVersionResponseSerie0JSON `json:"-"`
 }
@@ -386,8 +385,6 @@ type AttackLayer7TimeseriesGroupHTTPVersionResponseSerie0 struct {
 // metadata for the struct [AttackLayer7TimeseriesGroupHTTPVersionResponseSerie0]
 type attackLayer7TimeseriesGroupHTTPVersionResponseSerie0JSON struct {
 	HTTP1X      apijson.Field
-	HTTP2       apijson.Field
-	HTTP3       apijson.Field
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -563,15 +560,16 @@ func (r attackLayer7TimeseriesGroupMitigationProductResponseJSON) RawJSON() stri
 }
 
 type AttackLayer7TimeseriesGroupMitigationProductResponseSerie0 struct {
-	Timestamps  []string                                                       `json:"timestamps,required"`
-	ExtraFields map[string][]string                                            `json:"-,extras"`
-	JSON        attackLayer7TimeseriesGroupMitigationProductResponseSerie0JSON `json:"-"`
+	DDoS       []string                                                       `json:"DDOS,required"`
+	Timestamps []string                                                       `json:"timestamps,required"`
+	JSON       attackLayer7TimeseriesGroupMitigationProductResponseSerie0JSON `json:"-"`
 }
 
 // attackLayer7TimeseriesGroupMitigationProductResponseSerie0JSON contains the JSON
 // metadata for the struct
 // [AttackLayer7TimeseriesGroupMitigationProductResponseSerie0]
 type attackLayer7TimeseriesGroupMitigationProductResponseSerie0JSON struct {
+	DDoS        apijson.Field
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -756,9 +754,6 @@ type AttackLayer7TimeseriesGroupHTTPMethodParams struct {
 	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
-	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -1616,9 +1611,6 @@ type AttackLayer7TimeseriesGroupManagedRulesParams struct {
 	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
-	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -1857,9 +1849,6 @@ type AttackLayer7TimeseriesGroupMitigationProductParams struct {
 	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer7TimeseriesGroupMitigationProductParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
-	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.

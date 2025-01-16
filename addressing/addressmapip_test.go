@@ -29,10 +29,10 @@ func TestAddressMapIPUpdate(t *testing.T) {
 	)
 	_, err := client.Addressing.AddressMaps.IPs.Update(
 		context.TODO(),
-		"055817b111884e0227e1be16a0be6ee0",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		"192.0.2.1",
 		addressing.AddressMapIPUpdateParams{
-			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body:      map[string]interface{}{},
 		},
 	)
@@ -60,10 +60,10 @@ func TestAddressMapIPDelete(t *testing.T) {
 	)
 	_, err := client.Addressing.AddressMaps.IPs.Delete(
 		context.TODO(),
-		"055817b111884e0227e1be16a0be6ee0",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		"192.0.2.1",
 		addressing.AddressMapIPDeleteParams{
-			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

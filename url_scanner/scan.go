@@ -37,15 +37,15 @@ func NewScanService(opts ...option.RequestOption) (r *ScanService) {
 
 // Submit a URL to scan. Check limits at
 // https://developers.cloudflare.com/security-center/investigate/scan-limits/.
-func (r *ScanService) New(ctx context.Context, params ScanNewParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env ScanNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/urlscanner/v2/scan", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/urlscanner/v2/scan", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,14 +63,14 @@ func (r *ScanService) New(ctx context.Context, params ScanNewParams, opts ...opt
 // last 7 days with any request path that ends with "okta-sign-in.min.js"<br/>-
 // 'page.asn:AS24940 AND hash:xxx': Websites hosted in AS24940 where a resource
 // with the given hash was downloaded.
-func (r *ScanService) List(ctx context.Context, params ScanListParams, opts ...option.RequestOption) (res *ScanListResponse, err error) {
+func (r *ScanService) List(ctx context.Context, accountID string, query ScanListParams, opts ...option.RequestOption) (res *ScanListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/urlscanner/v2/search", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/urlscanner/v2/search", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -78,82 +78,82 @@ func (r *ScanService) List(ctx context.Context, params ScanListParams, opts ...o
 // https://developers.cloudflare.com/security-center/investigate/scan-limits/ and
 // take into account scans submitted in bulk have lower priority and may take
 // longer to finish.
-func (r *ScanService) BulkNew(ctx context.Context, params ScanBulkNewParams, opts ...option.RequestOption) (res *[]ScanBulkNewResponse, err error) {
+func (r *ScanService) BulkNew(ctx context.Context, accountID string, body ScanBulkNewParams, opts ...option.RequestOption) (res *[]ScanBulkNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/urlscanner/v2/bulk", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/urlscanner/v2/bulk", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
 // Returns a plain text response, with the scan's DOM content as rendered by
 // Chrome.
-func (r *ScanService) DOM(ctx context.Context, scanID string, query ScanDOMParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *ScanService) DOM(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
 		return
 	}
 	if scanID == "" {
-		err = errors.New("missing required scan_id parameter")
+		err = errors.New("missing required scanId parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/urlscanner/v2/dom/%s", query.AccountID, scanID)
+	path := fmt.Sprintf("accounts/%s/urlscanner/v2/dom/%s", accountID, scanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Get URL scan by uuid
-func (r *ScanService) Get(ctx context.Context, scanID string, query ScanGetParams, opts ...option.RequestOption) (res *ScanGetResponse, err error) {
+func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *ScanGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
 		return
 	}
 	if scanID == "" {
-		err = errors.New("missing required scan_id parameter")
+		err = errors.New("missing required scanId parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/urlscanner/v2/result/%s", query.AccountID, scanID)
+	path := fmt.Sprintf("accounts/%s/urlscanner/v2/result/%s", accountID, scanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Get a URL scan's HAR file. See HAR spec at
 // http://www.softwareishard.com/blog/har-12-spec/.
-func (r *ScanService) HAR(ctx context.Context, scanID string, query ScanHARParams, opts ...option.RequestOption) (res *ScanHARResponse, err error) {
+func (r *ScanService) HAR(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *ScanHARResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
 		return
 	}
 	if scanID == "" {
-		err = errors.New("missing required scan_id parameter")
+		err = errors.New("missing required scanId parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/urlscanner/v2/har/%s", query.AccountID, scanID)
+	path := fmt.Sprintf("accounts/%s/urlscanner/v2/har/%s", accountID, scanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Get scan's screenshot by resolution (desktop/mobile/tablet).
-func (r *ScanService) Screenshot(ctx context.Context, scanID string, params ScanScreenshotParams, opts ...option.RequestOption) (res *http.Response, err error) {
+func (r *ScanService) Screenshot(ctx context.Context, accountID string, scanID string, query ScanScreenshotParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/png")}, opts...)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
+	if accountID == "" {
+		err = errors.New("missing required accountId parameter")
 		return
 	}
 	if scanID == "" {
-		err = errors.New("missing required scan_id parameter")
+		err = errors.New("missing required scanId parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/urlscanner/v2/screenshots/%s.png", params.AccountID, scanID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/urlscanner/v2/screenshots/%s.png", accountID, scanID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -2555,8 +2555,6 @@ func (r scanHARResponseLogPagesPageTimingsJSON) RawJSON() string {
 }
 
 type ScanNewParams struct {
-	// Account ID.
-	AccountID   param.Field[string] `path:"account_id,required"`
 	URL         param.Field[string] `json:"url,required"`
 	Customagent param.Field[string] `json:"customagent"`
 	// Set custom headers.
@@ -2673,8 +2671,6 @@ func (r scanNewResponseEnvelopeOptionsJSON) RawJSON() string {
 }
 
 type ScanListParams struct {
-	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
 	// Filter scans
 	Q param.Field[string] `query:"q"`
 	// Limit the number of objects in the response.
@@ -2690,8 +2686,6 @@ func (r ScanListParams) URLQuery() (v url.Values) {
 }
 
 type ScanBulkNewParams struct {
-	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
 	// List of urls to scan (up to a 100).
 	Body []ScanBulkNewParamsBody `json:"body,required"`
 }
@@ -2757,24 +2751,7 @@ func (r ScanBulkNewParamsBodyVisibility) IsKnown() bool {
 	return false
 }
 
-type ScanDOMParams struct {
-	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ScanGetParams struct {
-	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ScanHARParams struct {
-	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
 type ScanScreenshotParams struct {
-	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
 	// Target device type.
 	Resolution param.Field[ScanScreenshotParamsResolution] `query:"resolution"`
 }

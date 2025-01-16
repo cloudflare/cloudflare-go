@@ -152,11 +152,8 @@ type Dataset struct {
 	NumCells        int64           `json:"num_cells,required"`
 	Secret          bool            `json:"secret,required"`
 	Status          DatasetStatus   `json:"status,required"`
-	// When the dataset was last updated.
-	//
-	// This includes name or description changes as well as uploads.
-	UpdatedAt time.Time       `json:"updated_at,required" format:"date-time"`
-	Uploads   []DatasetUpload `json:"uploads,required"`
+	UpdatedAt       time.Time       `json:"updated_at,required" format:"date-time"`
+	Uploads         []DatasetUpload `json:"uploads,required"`
 	// The description of the dataset
 	Description string      `json:"description,nullable"`
 	JSON        datasetJSON `json:"-"`
