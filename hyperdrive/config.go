@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
@@ -36,7 +37,7 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 }
 
 // Creates and returns a new Hyperdrive configuration.
-func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
+func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *ConfigNewResponse, err error) {
 	var env ConfigNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -53,7 +54,7 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 }
 
 // Updates and returns the specified Hyperdrive configuration.
-func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params ConfigUpdateParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
+func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params ConfigUpdateParams, opts ...option.RequestOption) (res *ConfigUpdateResponse, err error) {
 	var env ConfigUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -74,7 +75,7 @@ func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params 
 }
 
 // Returns a list of Hyperdrives
-func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Hyperdrive], err error) {
+func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ConfigListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -96,7 +97,7 @@ func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts .
 }
 
 // Returns a list of Hyperdrives
-func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Hyperdrive] {
+func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ConfigListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -123,7 +124,7 @@ func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body Co
 
 // Patches and returns the specified Hyperdrive configuration. Custom caching
 // settings are not kept if caching is disabled.
-func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params ConfigEditParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
+func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params ConfigEditParams, opts ...option.RequestOption) (res *ConfigEditResponse, err error) {
 	var env ConfigEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -144,7 +145,7 @@ func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params Co
 }
 
 // Returns the specified Hyperdrive configuration.
-func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query ConfigGetParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
+func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query ConfigGetParams, opts ...option.RequestOption) (res *ConfigGetResponse, err error) {
 	var env ConfigGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -164,7 +165,137 @@ func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query Conf
 	return
 }
 
+type ConfigNewResponse struct {
+	// When the Hyperdrive configuration was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// When the Hyperdrive configuration was last modified.
+	ModifiedOn time.Time             `json:"modified_on" format:"date-time"`
+	JSON       configNewResponseJSON `json:"-"`
+	Hyperdrive
+}
+
+// configNewResponseJSON contains the JSON metadata for the struct
+// [ConfigNewResponse]
+type configNewResponseJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConfigUpdateResponse struct {
+	// When the Hyperdrive configuration was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// When the Hyperdrive configuration was last modified.
+	ModifiedOn time.Time                `json:"modified_on" format:"date-time"`
+	JSON       configUpdateResponseJSON `json:"-"`
+	Hyperdrive
+}
+
+// configUpdateResponseJSON contains the JSON metadata for the struct
+// [ConfigUpdateResponse]
+type configUpdateResponseJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConfigListResponse struct {
+	// When the Hyperdrive configuration was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// When the Hyperdrive configuration was last modified.
+	ModifiedOn time.Time              `json:"modified_on" format:"date-time"`
+	JSON       configListResponseJSON `json:"-"`
+	Hyperdrive
+}
+
+// configListResponseJSON contains the JSON metadata for the struct
+// [ConfigListResponse]
+type configListResponseJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ConfigDeleteResponse = interface{}
+
+type ConfigEditResponse struct {
+	// When the Hyperdrive configuration was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// When the Hyperdrive configuration was last modified.
+	ModifiedOn time.Time              `json:"modified_on" format:"date-time"`
+	JSON       configEditResponseJSON `json:"-"`
+	Hyperdrive
+}
+
+// configEditResponseJSON contains the JSON metadata for the struct
+// [ConfigEditResponse]
+type configEditResponseJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConfigGetResponse struct {
+	// When the Hyperdrive configuration was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// When the Hyperdrive configuration was last modified.
+	ModifiedOn time.Time             `json:"modified_on" format:"date-time"`
+	JSON       configGetResponseJSON `json:"-"`
+	Hyperdrive
+}
+
+// configGetResponseJSON contains the JSON metadata for the struct
+// [ConfigGetResponse]
+type configGetResponseJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configGetResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type ConfigNewParams struct {
 	// Identifier
@@ -179,7 +310,7 @@ func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
 type ConfigNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required"`
+	Result   ConfigNewResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configNewResponseEnvelopeJSON    `json:"-"`
@@ -232,7 +363,7 @@ func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
 type ConfigUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required"`
+	Result   ConfigUpdateResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configUpdateResponseEnvelopeJSON    `json:"-"`
@@ -393,7 +524,7 @@ func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) implementsHyp
 }
 
 type ConfigEditParamsOrigin struct {
-	// The Client ID of the Access token to use when connecting to the origin database
+	// The Client ID of the Access token to use when connecting to the origin database.
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// The Client Secret of the Access token to use when connecting to the origin
 	// database. This value is write-only and never returned by the API.
@@ -477,7 +608,7 @@ func (r ConfigEditParamsOriginHyperdriveHyperdriveInternetOrigin) implementsHype
 }
 
 type ConfigEditParamsOriginHyperdriveHyperdriveOverAccessOrigin struct {
-	// The Client ID of the Access token to use when connecting to the origin database
+	// The Client ID of the Access token to use when connecting to the origin database.
 	AccessClientID param.Field[string] `json:"access_client_id,required"`
 	// The Client Secret of the Access token to use when connecting to the origin
 	// database. This value is write-only and never returned by the API.
@@ -512,7 +643,7 @@ func (r ConfigEditParamsOriginScheme) IsKnown() bool {
 type ConfigEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required"`
+	Result   ConfigEditResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configEditResponseEnvelopeJSON    `json:"-"`
@@ -560,7 +691,7 @@ type ConfigGetParams struct {
 type ConfigGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required"`
+	Result   ConfigGetResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configGetResponseEnvelopeJSON    `json:"-"`
