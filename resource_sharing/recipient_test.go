@@ -31,8 +31,8 @@ func TestRecipientNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"3fd85f74b32742f1bff64a85009dda07",
 		resource_sharing.RecipientNewParams{
-			PathAccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			BodyAccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID1:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID2:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			OrganizationID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
