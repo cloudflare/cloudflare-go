@@ -84,8 +84,9 @@ type OrganizationDOHUpdateResponse struct {
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
-	Duration  string    `json:"duration"`
-	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
+	Duration   string    `json:"duration"`
+	ExpiresAt  time.Time `json:"expires_at" format:"date-time"`
+	LastSeenAt time.Time `json:"last_seen_at" format:"date-time"`
 	// The name of the service token.
 	Name      string                            `json:"name"`
 	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
@@ -101,6 +102,7 @@ type organizationDOHUpdateResponseJSON struct {
 	DOHJWTDuration apijson.Field
 	Duration       apijson.Field
 	ExpiresAt      apijson.Field
+	LastSeenAt     apijson.Field
 	Name           apijson.Field
 	UpdatedAt      apijson.Field
 	raw            string
@@ -129,8 +131,9 @@ type OrganizationDOHGetResponse struct {
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
-	Duration  string    `json:"duration"`
-	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
+	Duration   string    `json:"duration"`
+	ExpiresAt  time.Time `json:"expires_at" format:"date-time"`
+	LastSeenAt time.Time `json:"last_seen_at" format:"date-time"`
 	// The name of the service token.
 	Name      string                         `json:"name"`
 	UpdatedAt time.Time                      `json:"updated_at" format:"date-time"`
@@ -146,6 +149,7 @@ type organizationDOHGetResponseJSON struct {
 	DOHJWTDuration apijson.Field
 	Duration       apijson.Field
 	ExpiresAt      apijson.Field
+	LastSeenAt     apijson.Field
 	Name           apijson.Field
 	UpdatedAt      apijson.Field
 	raw            string
