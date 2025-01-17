@@ -4436,7 +4436,8 @@ type SettingEditResponse struct {
 	// for the domain. If development mode has never been enabled, this value is false.
 	TimeRemaining float64 `json:"time_remaining"`
 	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
-	// [AlwaysOnlineValue], [SettingEditResponseZonesSchemasAlwaysUseHTTPSValue],
+	// [SettingEditResponseZonesCacheRulesAegisValue], [AlwaysOnlineValue],
+	// [SettingEditResponseZonesSchemasAlwaysUseHTTPSValue],
 	// [SettingEditResponseZonesSchemasAutomaticHTTPSRewritesValue], [BrotliValue],
 	// [SettingEditResponseZonesSchemasBrowserCacheTTLValue],
 	// [SettingEditResponseZonesSchemasBrowserCheckValue],
@@ -4451,7 +4452,8 @@ type SettingEditResponse struct {
 	// [SettingEditResponseZonesSchemasMirageValue], [NELValue],
 	// [SettingEditResponseZonesSchemasOpportunisticEncryptionValue],
 	// [OpportunisticOnionValue], [OrangeToOrangeValue],
-	// [SettingEditResponseZonesSchemasOriginErrorPagePassThruValue],
+	// [SettingEditResponseZonesSchemasOriginErrorPagePassThruValue], [int64],
+	// [SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue],
 	// [SettingEditResponseZonesSchemasPolishValue], [PrefetchPreloadValue], [float64],
 	// [PseudoIPV4Value], [SettingEditResponseZonesReplaceInsecureJSValue],
 	// [SettingEditResponseZonesSchemasResponseBufferingValue],
@@ -4499,7 +4501,8 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are [zones.ZeroRTT], [zones.AdvancedDDoS],
-// [zones.AlwaysOnline], [zones.SettingEditResponseZonesSchemasAlwaysUseHTTPS],
+// [zones.SettingEditResponseZonesCacheRulesAegis], [zones.AlwaysOnline],
+// [zones.SettingEditResponseZonesSchemasAlwaysUseHTTPS],
 // [zones.SettingEditResponseZonesSchemasAutomaticHTTPSRewrites], [zones.Brotli],
 // [zones.SettingEditResponseZonesSchemasBrowserCacheTTL],
 // [zones.SettingEditResponseZonesSchemasBrowserCheck],
@@ -4516,6 +4519,8 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.SettingEditResponseZonesSchemasOpportunisticEncryption],
 // [zones.OpportunisticOnion], [zones.OrangeToOrange],
 // [zones.SettingEditResponseZonesSchemasOriginErrorPagePassThru],
+// [zones.SettingEditResponseZonesCacheRulesOriginH2MaxStreams],
+// [zones.SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingEditResponseZonesSchemasPolish], [zones.PrefetchPreload],
 // [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingEditResponseZonesReplaceInsecureJS],
@@ -4536,7 +4541,8 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 
 // 0-RTT session resumption enabled for this zone.
 //
-// Union satisfied by [zones.ZeroRTT], [zones.AdvancedDDoS], [zones.AlwaysOnline],
+// Union satisfied by [zones.ZeroRTT], [zones.AdvancedDDoS],
+// [zones.SettingEditResponseZonesCacheRulesAegis], [zones.AlwaysOnline],
 // [zones.SettingEditResponseZonesSchemasAlwaysUseHTTPS],
 // [zones.SettingEditResponseZonesSchemasAutomaticHTTPSRewrites], [zones.Brotli],
 // [zones.SettingEditResponseZonesSchemasBrowserCacheTTL],
@@ -4554,6 +4560,8 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [zones.SettingEditResponseZonesSchemasOpportunisticEncryption],
 // [zones.OpportunisticOnion], [zones.OrangeToOrange],
 // [zones.SettingEditResponseZonesSchemasOriginErrorPagePassThru],
+// [zones.SettingEditResponseZonesCacheRulesOriginH2MaxStreams],
+// [zones.SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingEditResponseZonesSchemasPolish], [zones.PrefetchPreload],
 // [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingEditResponseZonesReplaceInsecureJS],
@@ -4583,6 +4591,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AdvancedDDoS{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesCacheRulesAegis{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -4702,6 +4714,14 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesCacheRulesOriginH2MaxStreams{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SettingEditResponseZonesSchemasPolish{}),
 		},
 		apijson.UnionVariant{
@@ -4789,6 +4809,82 @@ func init() {
 			Type:       reflect.TypeOf(Websocket{}),
 		},
 	)
+}
+
+// Aegis provides dedicated egress IPs (from Cloudflare to your origin) for your
+// layer 7 WAF and CDN services. The egress IPs are reserved exclusively for your
+// account so that you can increase your origin security by only allowing traffic
+// from a small list of IP addresses.
+type SettingEditResponseZonesCacheRulesAegis struct {
+	// ID of the zone setting.
+	ID SettingEditResponseZonesCacheRulesAegisID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value SettingEditResponseZonesCacheRulesAegisValue `json:"value"`
+	JSON  settingEditResponseZonesCacheRulesAegisJSON  `json:"-"`
+}
+
+// settingEditResponseZonesCacheRulesAegisJSON contains the JSON metadata for the
+// struct [SettingEditResponseZonesCacheRulesAegis]
+type settingEditResponseZonesCacheRulesAegisJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesCacheRulesAegis) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesCacheRulesAegisJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesCacheRulesAegis) implementsZonesSettingEditResponse() {}
+
+// ID of the zone setting.
+type SettingEditResponseZonesCacheRulesAegisID string
+
+const (
+	SettingEditResponseZonesCacheRulesAegisIDAegis SettingEditResponseZonesCacheRulesAegisID = "aegis"
+)
+
+func (r SettingEditResponseZonesCacheRulesAegisID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesCacheRulesAegisIDAegis:
+		return true
+	}
+	return false
+}
+
+// Value of the zone setting.
+type SettingEditResponseZonesCacheRulesAegisValue struct {
+	// Whether the feature is enabled or not.
+	Enabled bool `json:"enabled"`
+	// Egress pool id which refers to a grouping of dedicated egress IPs through which
+	// Cloudflare will connect to origin.
+	PoolID string                                           `json:"pool_id"`
+	JSON   settingEditResponseZonesCacheRulesAegisValueJSON `json:"-"`
+}
+
+// settingEditResponseZonesCacheRulesAegisValueJSON contains the JSON metadata for
+// the struct [SettingEditResponseZonesCacheRulesAegisValue]
+type settingEditResponseZonesCacheRulesAegisValueJSON struct {
+	Enabled     apijson.Field
+	PoolID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesCacheRulesAegisValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesCacheRulesAegisValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
@@ -5941,6 +6037,125 @@ func (r SettingEditResponseZonesSchemasOriginErrorPagePassThruEditable) IsKnown(
 	return false
 }
 
+// Origin H2 Max Streams configures the max number of concurrent requests that
+// Cloudflare will send within the same connection when communicating with the
+// origin server, if the origin supports it. Note that if your origin does not
+// support H2 multiplexing, 5xx errors may be observed, particularly 520s. Also
+// note that the default value is `100` for all plan types except Enterprise where
+// it is `1`. `1` means that H2 multiplexing is disabled.
+type SettingEditResponseZonesCacheRulesOriginH2MaxStreams struct {
+	// Value of the zone setting.
+	ID SettingEditResponseZonesCacheRulesOriginH2MaxStreamsID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the Origin H2 Max Streams Setting.
+	Value int64                                                    `json:"value"`
+	JSON  settingEditResponseZonesCacheRulesOriginH2MaxStreamsJSON `json:"-"`
+}
+
+// settingEditResponseZonesCacheRulesOriginH2MaxStreamsJSON contains the JSON
+// metadata for the struct [SettingEditResponseZonesCacheRulesOriginH2MaxStreams]
+type settingEditResponseZonesCacheRulesOriginH2MaxStreamsJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesCacheRulesOriginH2MaxStreams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesCacheRulesOriginH2MaxStreamsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesCacheRulesOriginH2MaxStreams) implementsZonesSettingEditResponse() {}
+
+// Value of the zone setting.
+type SettingEditResponseZonesCacheRulesOriginH2MaxStreamsID string
+
+const (
+	SettingEditResponseZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams SettingEditResponseZonesCacheRulesOriginH2MaxStreamsID = "origin_h2_max_streams"
+)
+
+func (r SettingEditResponseZonesCacheRulesOriginH2MaxStreamsID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams:
+		return true
+	}
+	return false
+}
+
+// Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
+// attempt to use with your origin. This setting allows Cloudflare to make HTTP/2
+// requests to your origin. (Refer to
+// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+// for more information.). The default value is "2" for all plan types except
+// Enterprise where it is "1"
+type SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion struct {
+	// Value of the zone setting.
+	ID SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the Origin Max HTTP Version Setting.
+	Value SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue `json:"value"`
+	JSON  settingEditResponseZonesCacheRulesOriginMaxHTTPVersionJSON  `json:"-"`
+}
+
+// settingEditResponseZonesCacheRulesOriginMaxHTTPVersionJSON contains the JSON
+// metadata for the struct [SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion]
+type settingEditResponseZonesCacheRulesOriginMaxHTTPVersionJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesCacheRulesOriginMaxHTTPVersionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion) implementsZonesSettingEditResponse() {
+}
+
+// Value of the zone setting.
+type SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionID string
+
+const (
+	SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionID = "origin_max_http_version"
+)
+
+func (r SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion:
+		return true
+	}
+	return false
+}
+
+// Value of the Origin Max HTTP Version Setting.
+type SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue string
+
+const (
+	SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue2 SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue = "2"
+	SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue1 SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue = "1"
+)
+
+func (r SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue2, SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue1:
+		return true
+	}
+	return false
+}
+
 // Removes metadata and compresses your images for faster page load times. Basic
 // (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
 // quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
@@ -6988,6 +7203,7 @@ type SettingEditResponseID string
 const (
 	SettingEditResponseID0rtt                          SettingEditResponseID = "0rtt"
 	SettingEditResponseIDAdvancedDDoS                  SettingEditResponseID = "advanced_ddos"
+	SettingEditResponseIDAegis                         SettingEditResponseID = "aegis"
 	SettingEditResponseIDAlwaysOnline                  SettingEditResponseID = "always_online"
 	SettingEditResponseIDAlwaysUseHTTPS                SettingEditResponseID = "always_use_https"
 	SettingEditResponseIDAutomaticHTTPSRewrites        SettingEditResponseID = "automatic_https_rewrites"
@@ -7017,6 +7233,8 @@ const (
 	SettingEditResponseIDOpportunisticOnion            SettingEditResponseID = "opportunistic_onion"
 	SettingEditResponseIDOrangeToOrange                SettingEditResponseID = "orange_to_orange"
 	SettingEditResponseIDOriginErrorPagePassThru       SettingEditResponseID = "origin_error_page_pass_thru"
+	SettingEditResponseIDOriginH2MaxStreams            SettingEditResponseID = "origin_h2_max_streams"
+	SettingEditResponseIDOriginMaxHTTPVersion          SettingEditResponseID = "origin_max_http_version"
 	SettingEditResponseIDPolish                        SettingEditResponseID = "polish"
 	SettingEditResponseIDPrefetchPreload               SettingEditResponseID = "prefetch_preload"
 	SettingEditResponseIDProxyReadTimeout              SettingEditResponseID = "proxy_read_timeout"
@@ -7043,7 +7261,7 @@ const (
 
 func (r SettingEditResponseID) IsKnown() bool {
 	switch r {
-	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
+	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -7082,7 +7300,8 @@ type SettingGetResponse struct {
 	// for the domain. If development mode has never been enabled, this value is false.
 	TimeRemaining float64 `json:"time_remaining"`
 	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
-	// [AlwaysOnlineValue], [SettingGetResponseZonesSchemasAlwaysUseHTTPSValue],
+	// [SettingGetResponseZonesCacheRulesAegisValue], [AlwaysOnlineValue],
+	// [SettingGetResponseZonesSchemasAlwaysUseHTTPSValue],
 	// [SettingGetResponseZonesSchemasAutomaticHTTPSRewritesValue], [BrotliValue],
 	// [SettingGetResponseZonesSchemasBrowserCacheTTLValue],
 	// [SettingGetResponseZonesSchemasBrowserCheckValue],
@@ -7097,7 +7316,8 @@ type SettingGetResponse struct {
 	// [SettingGetResponseZonesSchemasMirageValue], [NELValue],
 	// [SettingGetResponseZonesSchemasOpportunisticEncryptionValue],
 	// [OpportunisticOnionValue], [OrangeToOrangeValue],
-	// [SettingGetResponseZonesSchemasOriginErrorPagePassThruValue],
+	// [SettingGetResponseZonesSchemasOriginErrorPagePassThruValue], [int64],
+	// [SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue],
 	// [SettingGetResponseZonesSchemasPolishValue], [PrefetchPreloadValue], [float64],
 	// [PseudoIPV4Value], [SettingGetResponseZonesReplaceInsecureJSValue],
 	// [SettingGetResponseZonesSchemasResponseBufferingValue],
@@ -7145,7 +7365,8 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are [zones.ZeroRTT], [zones.AdvancedDDoS],
-// [zones.AlwaysOnline], [zones.SettingGetResponseZonesSchemasAlwaysUseHTTPS],
+// [zones.SettingGetResponseZonesCacheRulesAegis], [zones.AlwaysOnline],
+// [zones.SettingGetResponseZonesSchemasAlwaysUseHTTPS],
 // [zones.SettingGetResponseZonesSchemasAutomaticHTTPSRewrites], [zones.Brotli],
 // [zones.SettingGetResponseZonesSchemasBrowserCacheTTL],
 // [zones.SettingGetResponseZonesSchemasBrowserCheck],
@@ -7162,6 +7383,8 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.SettingGetResponseZonesSchemasOpportunisticEncryption],
 // [zones.OpportunisticOnion], [zones.OrangeToOrange],
 // [zones.SettingGetResponseZonesSchemasOriginErrorPagePassThru],
+// [zones.SettingGetResponseZonesCacheRulesOriginH2MaxStreams],
+// [zones.SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingGetResponseZonesSchemasPolish], [zones.PrefetchPreload],
 // [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingGetResponseZonesReplaceInsecureJS],
@@ -7181,7 +7404,8 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 
 // 0-RTT session resumption enabled for this zone.
 //
-// Union satisfied by [zones.ZeroRTT], [zones.AdvancedDDoS], [zones.AlwaysOnline],
+// Union satisfied by [zones.ZeroRTT], [zones.AdvancedDDoS],
+// [zones.SettingGetResponseZonesCacheRulesAegis], [zones.AlwaysOnline],
 // [zones.SettingGetResponseZonesSchemasAlwaysUseHTTPS],
 // [zones.SettingGetResponseZonesSchemasAutomaticHTTPSRewrites], [zones.Brotli],
 // [zones.SettingGetResponseZonesSchemasBrowserCacheTTL],
@@ -7199,6 +7423,8 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [zones.SettingGetResponseZonesSchemasOpportunisticEncryption],
 // [zones.OpportunisticOnion], [zones.OrangeToOrange],
 // [zones.SettingGetResponseZonesSchemasOriginErrorPagePassThru],
+// [zones.SettingGetResponseZonesCacheRulesOriginH2MaxStreams],
+// [zones.SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingGetResponseZonesSchemasPolish], [zones.PrefetchPreload],
 // [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingGetResponseZonesReplaceInsecureJS],
@@ -7227,6 +7453,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AdvancedDDoS{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesCacheRulesAegis{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -7346,6 +7576,14 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesCacheRulesOriginH2MaxStreams{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SettingGetResponseZonesSchemasPolish{}),
 		},
 		apijson.UnionVariant{
@@ -7433,6 +7671,82 @@ func init() {
 			Type:       reflect.TypeOf(Websocket{}),
 		},
 	)
+}
+
+// Aegis provides dedicated egress IPs (from Cloudflare to your origin) for your
+// layer 7 WAF and CDN services. The egress IPs are reserved exclusively for your
+// account so that you can increase your origin security by only allowing traffic
+// from a small list of IP addresses.
+type SettingGetResponseZonesCacheRulesAegis struct {
+	// ID of the zone setting.
+	ID SettingGetResponseZonesCacheRulesAegisID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value SettingGetResponseZonesCacheRulesAegisValue `json:"value"`
+	JSON  settingGetResponseZonesCacheRulesAegisJSON  `json:"-"`
+}
+
+// settingGetResponseZonesCacheRulesAegisJSON contains the JSON metadata for the
+// struct [SettingGetResponseZonesCacheRulesAegis]
+type settingGetResponseZonesCacheRulesAegisJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesCacheRulesAegis) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesCacheRulesAegisJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesCacheRulesAegis) implementsZonesSettingGetResponse() {}
+
+// ID of the zone setting.
+type SettingGetResponseZonesCacheRulesAegisID string
+
+const (
+	SettingGetResponseZonesCacheRulesAegisIDAegis SettingGetResponseZonesCacheRulesAegisID = "aegis"
+)
+
+func (r SettingGetResponseZonesCacheRulesAegisID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesCacheRulesAegisIDAegis:
+		return true
+	}
+	return false
+}
+
+// Value of the zone setting.
+type SettingGetResponseZonesCacheRulesAegisValue struct {
+	// Whether the feature is enabled or not.
+	Enabled bool `json:"enabled"`
+	// Egress pool id which refers to a grouping of dedicated egress IPs through which
+	// Cloudflare will connect to origin.
+	PoolID string                                          `json:"pool_id"`
+	JSON   settingGetResponseZonesCacheRulesAegisValueJSON `json:"-"`
+}
+
+// settingGetResponseZonesCacheRulesAegisValueJSON contains the JSON metadata for
+// the struct [SettingGetResponseZonesCacheRulesAegisValue]
+type settingGetResponseZonesCacheRulesAegisValueJSON struct {
+	Enabled     apijson.Field
+	PoolID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesCacheRulesAegisValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesCacheRulesAegisValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
@@ -8583,6 +8897,124 @@ func (r SettingGetResponseZonesSchemasOriginErrorPagePassThruEditable) IsKnown()
 	return false
 }
 
+// Origin H2 Max Streams configures the max number of concurrent requests that
+// Cloudflare will send within the same connection when communicating with the
+// origin server, if the origin supports it. Note that if your origin does not
+// support H2 multiplexing, 5xx errors may be observed, particularly 520s. Also
+// note that the default value is `100` for all plan types except Enterprise where
+// it is `1`. `1` means that H2 multiplexing is disabled.
+type SettingGetResponseZonesCacheRulesOriginH2MaxStreams struct {
+	// Value of the zone setting.
+	ID SettingGetResponseZonesCacheRulesOriginH2MaxStreamsID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the Origin H2 Max Streams Setting.
+	Value int64                                                   `json:"value"`
+	JSON  settingGetResponseZonesCacheRulesOriginH2MaxStreamsJSON `json:"-"`
+}
+
+// settingGetResponseZonesCacheRulesOriginH2MaxStreamsJSON contains the JSON
+// metadata for the struct [SettingGetResponseZonesCacheRulesOriginH2MaxStreams]
+type settingGetResponseZonesCacheRulesOriginH2MaxStreamsJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesCacheRulesOriginH2MaxStreams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesCacheRulesOriginH2MaxStreamsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesCacheRulesOriginH2MaxStreams) implementsZonesSettingGetResponse() {}
+
+// Value of the zone setting.
+type SettingGetResponseZonesCacheRulesOriginH2MaxStreamsID string
+
+const (
+	SettingGetResponseZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams SettingGetResponseZonesCacheRulesOriginH2MaxStreamsID = "origin_h2_max_streams"
+)
+
+func (r SettingGetResponseZonesCacheRulesOriginH2MaxStreamsID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams:
+		return true
+	}
+	return false
+}
+
+// Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
+// attempt to use with your origin. This setting allows Cloudflare to make HTTP/2
+// requests to your origin. (Refer to
+// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+// for more information.). The default value is "2" for all plan types except
+// Enterprise where it is "1"
+type SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion struct {
+	// Value of the zone setting.
+	ID SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the Origin Max HTTP Version Setting.
+	Value SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue `json:"value"`
+	JSON  settingGetResponseZonesCacheRulesOriginMaxHTTPVersionJSON  `json:"-"`
+}
+
+// settingGetResponseZonesCacheRulesOriginMaxHTTPVersionJSON contains the JSON
+// metadata for the struct [SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion]
+type settingGetResponseZonesCacheRulesOriginMaxHTTPVersionJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesCacheRulesOriginMaxHTTPVersionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion) implementsZonesSettingGetResponse() {}
+
+// Value of the zone setting.
+type SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionID string
+
+const (
+	SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionID = "origin_max_http_version"
+)
+
+func (r SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion:
+		return true
+	}
+	return false
+}
+
+// Value of the Origin Max HTTP Version Setting.
+type SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue string
+
+const (
+	SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue2 SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue = "2"
+	SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue1 SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue = "1"
+)
+
+func (r SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue2, SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue1:
+		return true
+	}
+	return false
+}
+
 // Removes metadata and compresses your images for faster page load times. Basic
 // (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
 // quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
@@ -9629,6 +10061,7 @@ type SettingGetResponseID string
 const (
 	SettingGetResponseID0rtt                          SettingGetResponseID = "0rtt"
 	SettingGetResponseIDAdvancedDDoS                  SettingGetResponseID = "advanced_ddos"
+	SettingGetResponseIDAegis                         SettingGetResponseID = "aegis"
 	SettingGetResponseIDAlwaysOnline                  SettingGetResponseID = "always_online"
 	SettingGetResponseIDAlwaysUseHTTPS                SettingGetResponseID = "always_use_https"
 	SettingGetResponseIDAutomaticHTTPSRewrites        SettingGetResponseID = "automatic_https_rewrites"
@@ -9658,6 +10091,8 @@ const (
 	SettingGetResponseIDOpportunisticOnion            SettingGetResponseID = "opportunistic_onion"
 	SettingGetResponseIDOrangeToOrange                SettingGetResponseID = "orange_to_orange"
 	SettingGetResponseIDOriginErrorPagePassThru       SettingGetResponseID = "origin_error_page_pass_thru"
+	SettingGetResponseIDOriginH2MaxStreams            SettingGetResponseID = "origin_h2_max_streams"
+	SettingGetResponseIDOriginMaxHTTPVersion          SettingGetResponseID = "origin_max_http_version"
 	SettingGetResponseIDPolish                        SettingGetResponseID = "polish"
 	SettingGetResponseIDPrefetchPreload               SettingGetResponseID = "prefetch_preload"
 	SettingGetResponseIDProxyReadTimeout              SettingGetResponseID = "proxy_read_timeout"
@@ -9684,7 +10119,7 @@ const (
 
 func (r SettingGetResponseID) IsKnown() bool {
 	switch r {
-	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
+	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -9736,7 +10171,7 @@ func (r SettingEditParamsBody) implementsZonesSettingEditParamsBodyUnion() {}
 // 0-RTT session resumption enabled for this zone.
 //
 // Satisfied by [zones.ZeroRTTParam], [zones.AdvancedDDoSParam],
-// [zones.AlwaysOnlineParam],
+// [zones.SettingEditParamsBodyZonesCacheRulesAegis], [zones.AlwaysOnlineParam],
 // [zones.SettingEditParamsBodyZonesSchemasAlwaysUseHTTPS],
 // [zones.SettingEditParamsBodyZonesSchemasAutomaticHTTPSRewrites],
 // [zones.BrotliParam], [zones.SettingEditParamsBodyZonesSchemasBrowserCacheTTL],
@@ -9754,6 +10189,8 @@ func (r SettingEditParamsBody) implementsZonesSettingEditParamsBodyUnion() {}
 // [zones.SettingEditParamsBodyZonesSchemasOpportunisticEncryption],
 // [zones.OpportunisticOnionParam], [zones.OrangeToOrangeParam],
 // [zones.SettingEditParamsBodyZonesSchemasOriginErrorPagePassThru],
+// [zones.SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreams],
+// [zones.SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingEditParamsBodyZonesSchemasPolish], [zones.PrefetchPreloadParam],
 // [zones.ProxyReadTimeoutParam], [zones.PseudoIPV4Param],
 // [zones.SettingEditParamsBodyZonesReplaceInsecureJS],
@@ -9772,6 +10209,51 @@ func (r SettingEditParamsBody) implementsZonesSettingEditParamsBodyUnion() {}
 // [zones.WebsocketParam], [SettingEditParamsBody].
 type SettingEditParamsBodyUnion interface {
 	implementsZonesSettingEditParamsBodyUnion()
+}
+
+// Aegis provides dedicated egress IPs (from Cloudflare to your origin) for your
+// layer 7 WAF and CDN services. The egress IPs are reserved exclusively for your
+// account so that you can increase your origin security by only allowing traffic
+// from a small list of IP addresses.
+type SettingEditParamsBodyZonesCacheRulesAegis struct {
+	// ID of the zone setting.
+	ID param.Field[SettingEditParamsBodyZonesCacheRulesAegisID] `json:"id,required"`
+	// Value of the zone setting.
+	Value param.Field[SettingEditParamsBodyZonesCacheRulesAegisValue] `json:"value"`
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesAegis) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesAegis) implementsZonesSettingEditParamsBodyUnion() {}
+
+// ID of the zone setting.
+type SettingEditParamsBodyZonesCacheRulesAegisID string
+
+const (
+	SettingEditParamsBodyZonesCacheRulesAegisIDAegis SettingEditParamsBodyZonesCacheRulesAegisID = "aegis"
+)
+
+func (r SettingEditParamsBodyZonesCacheRulesAegisID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyZonesCacheRulesAegisIDAegis:
+		return true
+	}
+	return false
+}
+
+// Value of the zone setting.
+type SettingEditParamsBodyZonesCacheRulesAegisValue struct {
+	// Whether the feature is enabled or not.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Egress pool id which refers to a grouping of dedicated egress IPs through which
+	// Cloudflare will connect to origin.
+	PoolID param.Field[string] `json:"pool_id"`
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesAegisValue) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
@@ -10655,6 +11137,92 @@ func (r SettingEditParamsBodyZonesSchemasOriginErrorPagePassThruEditable) IsKnow
 	return false
 }
 
+// Origin H2 Max Streams configures the max number of concurrent requests that
+// Cloudflare will send within the same connection when communicating with the
+// origin server, if the origin supports it. Note that if your origin does not
+// support H2 multiplexing, 5xx errors may be observed, particularly 520s. Also
+// note that the default value is `100` for all plan types except Enterprise where
+// it is `1`. `1` means that H2 multiplexing is disabled.
+type SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreams struct {
+	// Value of the zone setting.
+	ID param.Field[SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsID] `json:"id,required"`
+	// Value of the Origin H2 Max Streams Setting.
+	Value param.Field[int64] `json:"value"`
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreams) implementsZonesSettingEditParamsBodyUnion() {
+}
+
+// Value of the zone setting.
+type SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsID string
+
+const (
+	SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsID = "origin_h2_max_streams"
+)
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams:
+		return true
+	}
+	return false
+}
+
+// Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
+// attempt to use with your origin. This setting allows Cloudflare to make HTTP/2
+// requests to your origin. (Refer to
+// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+// for more information.). The default value is "2" for all plan types except
+// Enterprise where it is "1"
+type SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersion struct {
+	// Value of the zone setting.
+	ID param.Field[SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionID] `json:"id,required"`
+	// Value of the Origin Max HTTP Version Setting.
+	Value param.Field[SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue] `json:"value"`
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersion) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersion) implementsZonesSettingEditParamsBodyUnion() {
+}
+
+// Value of the zone setting.
+type SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionID string
+
+const (
+	SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionID = "origin_max_http_version"
+)
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion:
+		return true
+	}
+	return false
+}
+
+// Value of the Origin Max HTTP Version Setting.
+type SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue string
+
+const (
+	SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue2 SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue = "2"
+	SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue1 SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue = "1"
+)
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue2, SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue1:
+		return true
+	}
+	return false
+}
+
 // Removes metadata and compresses your images for faster page load times. Basic
 // (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
 // quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
@@ -11451,6 +12019,7 @@ type SettingEditParamsBodyID string
 const (
 	SettingEditParamsBodyID0rtt                          SettingEditParamsBodyID = "0rtt"
 	SettingEditParamsBodyIDAdvancedDDoS                  SettingEditParamsBodyID = "advanced_ddos"
+	SettingEditParamsBodyIDAegis                         SettingEditParamsBodyID = "aegis"
 	SettingEditParamsBodyIDAlwaysOnline                  SettingEditParamsBodyID = "always_online"
 	SettingEditParamsBodyIDAlwaysUseHTTPS                SettingEditParamsBodyID = "always_use_https"
 	SettingEditParamsBodyIDAutomaticHTTPSRewrites        SettingEditParamsBodyID = "automatic_https_rewrites"
@@ -11480,6 +12049,8 @@ const (
 	SettingEditParamsBodyIDOpportunisticOnion            SettingEditParamsBodyID = "opportunistic_onion"
 	SettingEditParamsBodyIDOrangeToOrange                SettingEditParamsBodyID = "orange_to_orange"
 	SettingEditParamsBodyIDOriginErrorPagePassThru       SettingEditParamsBodyID = "origin_error_page_pass_thru"
+	SettingEditParamsBodyIDOriginH2MaxStreams            SettingEditParamsBodyID = "origin_h2_max_streams"
+	SettingEditParamsBodyIDOriginMaxHTTPVersion          SettingEditParamsBodyID = "origin_max_http_version"
 	SettingEditParamsBodyIDPolish                        SettingEditParamsBodyID = "polish"
 	SettingEditParamsBodyIDPrefetchPreload               SettingEditParamsBodyID = "prefetch_preload"
 	SettingEditParamsBodyIDProxyReadTimeout              SettingEditParamsBodyID = "proxy_read_timeout"
@@ -11506,7 +12077,7 @@ const (
 
 func (r SettingEditParamsBodyID) IsKnown() bool {
 	switch r {
-	case SettingEditParamsBodyID0rtt, SettingEditParamsBodyIDAdvancedDDoS, SettingEditParamsBodyIDAlwaysOnline, SettingEditParamsBodyIDAlwaysUseHTTPS, SettingEditParamsBodyIDAutomaticHTTPSRewrites, SettingEditParamsBodyIDBrotli, SettingEditParamsBodyIDBrowserCacheTTL, SettingEditParamsBodyIDBrowserCheck, SettingEditParamsBodyIDCacheLevel, SettingEditParamsBodyIDChallengeTTL, SettingEditParamsBodyIDCiphers, SettingEditParamsBodyIDCNAMEFlattening, SettingEditParamsBodyIDDevelopmentMode, SettingEditParamsBodyIDEarlyHints, SettingEditParamsBodyIDEdgeCacheTTL, SettingEditParamsBodyIDEmailObfuscation, SettingEditParamsBodyIDH2Prioritization, SettingEditParamsBodyIDHotlinkProtection, SettingEditParamsBodyIDHTTP2, SettingEditParamsBodyIDHTTP3, SettingEditParamsBodyIDImageResizing, SettingEditParamsBodyIDIPGeolocation, SettingEditParamsBodyIDIPV6, SettingEditParamsBodyIDMaxUpload, SettingEditParamsBodyIDMinTLSVersion, SettingEditParamsBodyIDMirage, SettingEditParamsBodyIDNEL, SettingEditParamsBodyIDOpportunisticEncryption, SettingEditParamsBodyIDOpportunisticOnion, SettingEditParamsBodyIDOrangeToOrange, SettingEditParamsBodyIDOriginErrorPagePassThru, SettingEditParamsBodyIDPolish, SettingEditParamsBodyIDPrefetchPreload, SettingEditParamsBodyIDProxyReadTimeout, SettingEditParamsBodyIDPseudoIPV4, SettingEditParamsBodyIDReplaceInsecureJS, SettingEditParamsBodyIDResponseBuffering, SettingEditParamsBodyIDRocketLoader, SettingEditParamsBodyIDAutomaticPlatformOptimization, SettingEditParamsBodyIDSecurityHeader, SettingEditParamsBodyIDSecurityLevel, SettingEditParamsBodyIDServerSideExclude, SettingEditParamsBodyIDSha1Support, SettingEditParamsBodyIDSortQueryStringForCache, SettingEditParamsBodyIDSSL, SettingEditParamsBodyIDSSLRecommender, SettingEditParamsBodyIDTLS1_2Only, SettingEditParamsBodyIDTLS1_3, SettingEditParamsBodyIDTLSClientAuth, SettingEditParamsBodyIDTrueClientIPHeader, SettingEditParamsBodyIDWAF, SettingEditParamsBodyIDWebP, SettingEditParamsBodyIDWebsockets:
+	case SettingEditParamsBodyID0rtt, SettingEditParamsBodyIDAdvancedDDoS, SettingEditParamsBodyIDAegis, SettingEditParamsBodyIDAlwaysOnline, SettingEditParamsBodyIDAlwaysUseHTTPS, SettingEditParamsBodyIDAutomaticHTTPSRewrites, SettingEditParamsBodyIDBrotli, SettingEditParamsBodyIDBrowserCacheTTL, SettingEditParamsBodyIDBrowserCheck, SettingEditParamsBodyIDCacheLevel, SettingEditParamsBodyIDChallengeTTL, SettingEditParamsBodyIDCiphers, SettingEditParamsBodyIDCNAMEFlattening, SettingEditParamsBodyIDDevelopmentMode, SettingEditParamsBodyIDEarlyHints, SettingEditParamsBodyIDEdgeCacheTTL, SettingEditParamsBodyIDEmailObfuscation, SettingEditParamsBodyIDH2Prioritization, SettingEditParamsBodyIDHotlinkProtection, SettingEditParamsBodyIDHTTP2, SettingEditParamsBodyIDHTTP3, SettingEditParamsBodyIDImageResizing, SettingEditParamsBodyIDIPGeolocation, SettingEditParamsBodyIDIPV6, SettingEditParamsBodyIDMaxUpload, SettingEditParamsBodyIDMinTLSVersion, SettingEditParamsBodyIDMirage, SettingEditParamsBodyIDNEL, SettingEditParamsBodyIDOpportunisticEncryption, SettingEditParamsBodyIDOpportunisticOnion, SettingEditParamsBodyIDOrangeToOrange, SettingEditParamsBodyIDOriginErrorPagePassThru, SettingEditParamsBodyIDOriginH2MaxStreams, SettingEditParamsBodyIDOriginMaxHTTPVersion, SettingEditParamsBodyIDPolish, SettingEditParamsBodyIDPrefetchPreload, SettingEditParamsBodyIDProxyReadTimeout, SettingEditParamsBodyIDPseudoIPV4, SettingEditParamsBodyIDReplaceInsecureJS, SettingEditParamsBodyIDResponseBuffering, SettingEditParamsBodyIDRocketLoader, SettingEditParamsBodyIDAutomaticPlatformOptimization, SettingEditParamsBodyIDSecurityHeader, SettingEditParamsBodyIDSecurityLevel, SettingEditParamsBodyIDServerSideExclude, SettingEditParamsBodyIDSha1Support, SettingEditParamsBodyIDSortQueryStringForCache, SettingEditParamsBodyIDSSL, SettingEditParamsBodyIDSSLRecommender, SettingEditParamsBodyIDTLS1_2Only, SettingEditParamsBodyIDTLS1_3, SettingEditParamsBodyIDTLSClientAuth, SettingEditParamsBodyIDTrueClientIPHeader, SettingEditParamsBodyIDWAF, SettingEditParamsBodyIDWebP, SettingEditParamsBodyIDWebsockets:
 		return true
 	}
 	return false
