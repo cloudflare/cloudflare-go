@@ -18,7 +18,7 @@ import (
 var ErrMissingBINDContents = errors.New("required BIND config contents missing")
 
 type DNSRecordSettings struct {
-	FlattenCNAME bool `json:"flatten_cname,omitempty"`
+	FlattenCNAME *bool `json:"flatten_cname,omitempty"`
 }
 
 // DNSRecord represents a DNS record in a zone.

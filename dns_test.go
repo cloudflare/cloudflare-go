@@ -689,7 +689,7 @@ func TestCreateDNSRecordSettings(t *testing.T) {
 		Priority: &priority,
 		Proxied:  &proxied,
 		Settings: DNSRecordSettings{
-			FlattenCNAME: true,
+			FlattenCNAME: BoolPtr(true),
 		},
 	}
 
@@ -748,7 +748,7 @@ func TestCreateDNSRecordSettings(t *testing.T) {
 			"source":     "primary",
 		},
 		Settings: DNSRecordSettings{
-			FlattenCNAME: true,
+			FlattenCNAME: BoolPtr(true),
 		},
 	}
 
@@ -763,7 +763,7 @@ func TestCreateDNSRecordSettings(t *testing.T) {
 		Priority: &priority,
 		Proxied:  &proxied,
 		Settings: DNSRecordSettings{
-			FlattenCNAME: true,
+			FlattenCNAME: BoolPtr(true),
 		},
 	})
 	require.NoError(t, err)
