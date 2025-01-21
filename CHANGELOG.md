@@ -1,5 +1,43 @@
 # Changelog
 
+## 4.1.0 (2025-01-21)
+
+Full Changelog: [v4.0.0...v4.1.0](https://github.com/cloudflare/cloudflare-go/compare/v4.0.0...v4.1.0)
+
+### Features
+
+* **api:** api update ([#3823](https://github.com/cloudflare/cloudflare-go/issues/3823)) ([a2148ec](https://github.com/cloudflare/cloudflare-go/commit/a2148ecbab4ca0f0a36a02bff404903f1fcf6d86))
+* **api:** api update ([#3826](https://github.com/cloudflare/cloudflare-go/issues/3826)) ([eb42f67](https://github.com/cloudflare/cloudflare-go/commit/eb42f67915df89a58f86f93b4fd5ede739d62e71))
+* **api:** api update ([#3827](https://github.com/cloudflare/cloudflare-go/issues/3827)) ([c991f3a](https://github.com/cloudflare/cloudflare-go/commit/c991f3ab6036259474591de23b138d7d25e65315))
+* **api:** api update ([#3828](https://github.com/cloudflare/cloudflare-go/issues/3828)) ([06efef2](https://github.com/cloudflare/cloudflare-go/commit/06efef20b218317624c316ea847ed3939c16431c))
+* **api:** api update ([#3830](https://github.com/cloudflare/cloudflare-go/issues/3830)) ([1a7c06e](https://github.com/cloudflare/cloudflare-go/commit/1a7c06e1c110c91e9b3507e3af8c08424ff45700))
+* **api:** api update ([#3832](https://github.com/cloudflare/cloudflare-go/issues/3832)) ([3ad5d07](https://github.com/cloudflare/cloudflare-go/commit/3ad5d07b18b6313acf891a5aa6ea44e08c31a684))
+* **api:** api update ([#3833](https://github.com/cloudflare/cloudflare-go/issues/3833)) ([3154b9e](https://github.com/cloudflare/cloudflare-go/commit/3154b9eb71b228d14850d9f504cec092ab1d5be3))
+* **api:** api update ([#3836](https://github.com/cloudflare/cloudflare-go/issues/3836)) ([3b48a31](https://github.com/cloudflare/cloudflare-go/commit/3b48a318cc5ef54edda45301e3b3a1d74264d992))
+* **api:** api update ([#3837](https://github.com/cloudflare/cloudflare-go/issues/3837)) ([3bfebb3](https://github.com/cloudflare/cloudflare-go/commit/3bfebb32422a488391ecce8f1826d71d8336d465))
+* **api:** api update ([#3839](https://github.com/cloudflare/cloudflare-go/issues/3839)) ([6a20409](https://github.com/cloudflare/cloudflare-go/commit/6a20409799be7cf1f78ef0e061f5c744814782c7))
+* **api:** api update ([#3840](https://github.com/cloudflare/cloudflare-go/issues/3840)) ([b74c06f](https://github.com/cloudflare/cloudflare-go/commit/b74c06f805bc32c24a93689ba101c70a1e000977))
+* **api:** api update ([#3849](https://github.com/cloudflare/cloudflare-go/issues/3849)) ([db97d16](https://github.com/cloudflare/cloudflare-go/commit/db97d16ab7faa17ee10014e66f16bd1143b7dd8b))
+* **api:** manual updates ([#3845](https://github.com/cloudflare/cloudflare-go/issues/3845)) ([cad98f0](https://github.com/cloudflare/cloudflare-go/commit/cad98f0b811a21e13707653c806a74937875b9a1))
+* **custom_ns:** mark endpoints as deprecated ([#3847](https://github.com/cloudflare/cloudflare-go/issues/3847)) ([c730ef6](https://github.com/cloudflare/cloudflare-go/commit/c730ef693a660c1e867d7ffff5a6373fe314df95))
+* support deprecated markers ([#3850](https://github.com/cloudflare/cloudflare-go/issues/3850)) ([783a316](https://github.com/cloudflare/cloudflare-go/commit/783a3169ff93fc923451a430ad204eb4da25a506))
+
+
+### Bug Fixes
+
+* fix apijson.Port for embedded structs ([#3844](https://github.com/cloudflare/cloudflare-go/issues/3844)) ([75a6433](https://github.com/cloudflare/cloudflare-go/commit/75a64336634d8dbcf9812a666e38aaba79c15ed2))
+* fix apijson.Port for embedded structs ([#3846](https://github.com/cloudflare/cloudflare-go/issues/3846)) ([bd55d31](https://github.com/cloudflare/cloudflare-go/commit/bd55d31920d0fbad83e0743cfd0c24d5ee73db8d))
+
+
+### Chores
+
+* **api:** remove empty policies.subresources ([#3834](https://github.com/cloudflare/cloudflare-go/issues/3834)) ([8217d36](https://github.com/cloudflare/cloudflare-go/commit/8217d36bbe148943f0f5c015428b98fb38139f04))
+* **internal:** codegen related update ([#3831](https://github.com/cloudflare/cloudflare-go/issues/3831)) ([91aa91e](https://github.com/cloudflare/cloudflare-go/commit/91aa91e702449bac11b1779978e678533be267af))
+* **internal:** codegen related update ([#3841](https://github.com/cloudflare/cloudflare-go/issues/3841)) ([fb87827](https://github.com/cloudflare/cloudflare-go/commit/fb878271f3b0650739193ab902438cc6135609ca))
+* **internal:** version bump ([#3819](https://github.com/cloudflare/cloudflare-go/issues/3819)) ([c99f848](https://github.com/cloudflare/cloudflare-go/commit/c99f848745efe7fb4f865dae0ffb3a462146c72a))
+* trigger rebuild ([#3835](https://github.com/cloudflare/cloudflare-go/issues/3835)) ([3e9450c](https://github.com/cloudflare/cloudflare-go/commit/3e9450c5c98306e9140ef527dfe9b0248caa9537))
+* updates ([#3822](https://github.com/cloudflare/cloudflare-go/issues/3822)) ([fa8c3c8](https://github.com/cloudflare/cloudflare-go/commit/fa8c3c8acf2de6543b6ae8c91e1db241674811bf))
+
 ## 4.0.0 (2025-01-10)
 
 Full Changelog: [v3.1.0...v4.0.0](https://github.com/cloudflare/cloudflare-go/compare/v3.1.0...v4.0.0)
