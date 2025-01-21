@@ -42,6 +42,10 @@ func NewCustomNameserverService(opts ...option.RequestOption) (r *CustomNameserv
 //
 // Deprecated in favor of
 // [Update DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-a-zone-update-dns-settings).
+//
+// Deprecated: Use
+// [DNS settings API](https://developers.cloudflare.com/api/resources/dns/subresources/settings/methods/put/)
+// instead.
 func (r *CustomNameserverService) Update(ctx context.Context, params CustomNameserverUpdateParams, opts ...option.RequestOption) (res *[]string, err error) {
 	var env CustomNameserverUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -62,6 +66,10 @@ func (r *CustomNameserverService) Update(ctx context.Context, params CustomNames
 //
 // Deprecated in favor of
 // [Show DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-a-zone-list-dns-settings).
+//
+// Deprecated: Use
+// [DNS settings API](https://developers.cloudflare.com/api/resources/dns/subresources/settings/methods/get/)
+// instead.
 func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *CustomNameserverGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
