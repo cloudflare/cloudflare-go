@@ -24,6 +24,11 @@ import (
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewFilterService] method instead.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 type FilterService struct {
 	Options []option.RequestOption
 }

@@ -21,6 +21,8 @@ import (
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewCustomNameserverService] method instead.
+//
+// Deprecated: Use DNS settings API instead.
 type CustomNameserverService struct {
 	Options []option.RequestOption
 }

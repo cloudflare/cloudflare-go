@@ -151,12 +151,15 @@ type SettingAllowPolicyNewResponse struct {
 	PatternType     SettingAllowPolicyNewResponsePatternType `json:"pattern_type,required"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
-	VerifySender bool                              `json:"verify_sender,required"`
-	Comments     string                            `json:"comments,nullable"`
-	IsRecipient  bool                              `json:"is_recipient"`
-	IsSender     bool                              `json:"is_sender"`
-	IsSpoof      bool                              `json:"is_spoof"`
-	JSON         settingAllowPolicyNewResponseJSON `json:"-"`
+	VerifySender bool   `json:"verify_sender,required"`
+	Comments     string `json:"comments,nullable"`
+	// Deprecated: deprecated
+	IsRecipient bool `json:"is_recipient"`
+	// Deprecated: deprecated
+	IsSender bool `json:"is_sender"`
+	// Deprecated: deprecated
+	IsSpoof bool                              `json:"is_spoof"`
+	JSON    settingAllowPolicyNewResponseJSON `json:"-"`
 }
 
 // settingAllowPolicyNewResponseJSON contains the JSON metadata for the struct
@@ -223,12 +226,15 @@ type SettingAllowPolicyListResponse struct {
 	PatternType     SettingAllowPolicyListResponsePatternType `json:"pattern_type,required"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
-	VerifySender bool                               `json:"verify_sender,required"`
-	Comments     string                             `json:"comments,nullable"`
-	IsRecipient  bool                               `json:"is_recipient"`
-	IsSender     bool                               `json:"is_sender"`
-	IsSpoof      bool                               `json:"is_spoof"`
-	JSON         settingAllowPolicyListResponseJSON `json:"-"`
+	VerifySender bool   `json:"verify_sender,required"`
+	Comments     string `json:"comments,nullable"`
+	// Deprecated: deprecated
+	IsRecipient bool `json:"is_recipient"`
+	// Deprecated: deprecated
+	IsSender bool `json:"is_sender"`
+	// Deprecated: deprecated
+	IsSpoof bool                               `json:"is_spoof"`
+	JSON    settingAllowPolicyListResponseJSON `json:"-"`
 }
 
 // settingAllowPolicyListResponseJSON contains the JSON metadata for the struct
@@ -317,12 +323,15 @@ type SettingAllowPolicyEditResponse struct {
 	PatternType     SettingAllowPolicyEditResponsePatternType `json:"pattern_type,required"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
-	VerifySender bool                               `json:"verify_sender,required"`
-	Comments     string                             `json:"comments,nullable"`
-	IsRecipient  bool                               `json:"is_recipient"`
-	IsSender     bool                               `json:"is_sender"`
-	IsSpoof      bool                               `json:"is_spoof"`
-	JSON         settingAllowPolicyEditResponseJSON `json:"-"`
+	VerifySender bool   `json:"verify_sender,required"`
+	Comments     string `json:"comments,nullable"`
+	// Deprecated: deprecated
+	IsRecipient bool `json:"is_recipient"`
+	// Deprecated: deprecated
+	IsSender bool `json:"is_sender"`
+	// Deprecated: deprecated
+	IsSpoof bool                               `json:"is_spoof"`
+	JSON    settingAllowPolicyEditResponseJSON `json:"-"`
 }
 
 // settingAllowPolicyEditResponseJSON contains the JSON metadata for the struct
@@ -389,12 +398,15 @@ type SettingAllowPolicyGetResponse struct {
 	PatternType     SettingAllowPolicyGetResponsePatternType `json:"pattern_type,required"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
-	VerifySender bool                              `json:"verify_sender,required"`
-	Comments     string                            `json:"comments,nullable"`
-	IsRecipient  bool                              `json:"is_recipient"`
-	IsSender     bool                              `json:"is_sender"`
-	IsSpoof      bool                              `json:"is_spoof"`
-	JSON         settingAllowPolicyGetResponseJSON `json:"-"`
+	VerifySender bool   `json:"verify_sender,required"`
+	Comments     string `json:"comments,nullable"`
+	// Deprecated: deprecated
+	IsRecipient bool `json:"is_recipient"`
+	// Deprecated: deprecated
+	IsSender bool `json:"is_sender"`
+	// Deprecated: deprecated
+	IsSpoof bool                              `json:"is_spoof"`
+	JSON    settingAllowPolicyGetResponseJSON `json:"-"`
 }
 
 // settingAllowPolicyGetResponseJSON contains the JSON metadata for the struct

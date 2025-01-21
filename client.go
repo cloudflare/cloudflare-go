@@ -101,35 +101,43 @@ import (
 // interacting with the cloudflare API. You should not instantiate this client
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
-	Options                     []option.RequestOption
-	Accounts                    *accounts.AccountService
-	OriginCACertificates        *origin_ca_certificates.OriginCACertificateService
-	IPs                         *ips.IPService
-	Memberships                 *memberships.MembershipService
-	User                        *user.UserService
-	Zones                       *zones.ZoneService
-	LoadBalancers               *load_balancers.LoadBalancerService
-	Cache                       *cache.CacheService
-	SSL                         *ssl.SSLService
-	ACM                         *acm.ACMService
-	Argo                        *argo.ArgoService
-	CertificateAuthorities      *certificate_authorities.CertificateAuthorityService
-	ClientCertificates          *client_certificates.ClientCertificateService
-	CustomCertificates          *custom_certificates.CustomCertificateService
-	CustomHostnames             *custom_hostnames.CustomHostnameService
-	CustomNameservers           *custom_nameservers.CustomNameserverService
-	DNSFirewall                 *dns_firewall.DNSFirewallService
-	DNS                         *dns.DNSService
-	EmailSecurity               *email_security.EmailSecurityService
-	EmailRouting                *email_routing.EmailRoutingService
-	Filters                     *filters.FilterService
-	Firewall                    *firewall.FirewallService
-	Healthchecks                *healthchecks.HealthcheckService
-	KeylessCertificates         *keyless_certificates.KeylessCertificateService
-	Logpush                     *logpush.LogpushService
-	Logs                        *logs.LogService
-	OriginTLSClientAuth         *origin_tls_client_auth.OriginTLSClientAuthService
-	PageRules                   *page_rules.PageRuleService
+	Options                []option.RequestOption
+	Accounts               *accounts.AccountService
+	OriginCACertificates   *origin_ca_certificates.OriginCACertificateService
+	IPs                    *ips.IPService
+	Memberships            *memberships.MembershipService
+	User                   *user.UserService
+	Zones                  *zones.ZoneService
+	LoadBalancers          *load_balancers.LoadBalancerService
+	Cache                  *cache.CacheService
+	SSL                    *ssl.SSLService
+	ACM                    *acm.ACMService
+	Argo                   *argo.ArgoService
+	CertificateAuthorities *certificate_authorities.CertificateAuthorityService
+	ClientCertificates     *client_certificates.ClientCertificateService
+	CustomCertificates     *custom_certificates.CustomCertificateService
+	CustomHostnames        *custom_hostnames.CustomHostnameService
+	CustomNameservers      *custom_nameservers.CustomNameserverService
+	DNSFirewall            *dns_firewall.DNSFirewallService
+	DNS                    *dns.DNSService
+	EmailSecurity          *email_security.EmailSecurityService
+	EmailRouting           *email_routing.EmailRoutingService
+	// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+	// See
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+	// for full details.
+	Filters             *filters.FilterService
+	Firewall            *firewall.FirewallService
+	Healthchecks        *healthchecks.HealthcheckService
+	KeylessCertificates *keyless_certificates.KeylessCertificateService
+	Logpush             *logpush.LogpushService
+	Logs                *logs.LogService
+	OriginTLSClientAuth *origin_tls_client_auth.OriginTLSClientAuthService
+	PageRules           *page_rules.PageRuleService
+	// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+	// Engine. See
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+	// for full details.
 	RateLimits                  *rate_limits.RateLimitService
 	WaitingRooms                *waiting_rooms.WaitingRoomService
 	Web3                        *web3.Web3Service

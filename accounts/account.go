@@ -184,6 +184,8 @@ type AccountSettings struct {
 	//
 	// Deprecated in favor of
 	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
+	//
+	// Deprecated: deprecated
 	DefaultNameservers AccountSettingsDefaultNameservers `json:"default_nameservers"`
 	// Indicates whether membership in this account requires that Two-Factor
 	// Authentication is enabled
@@ -193,6 +195,8 @@ type AccountSettings struct {
 	//
 	// Deprecated in favor of
 	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
+	//
+	// Deprecated: deprecated
 	UseAccountCustomNSByDefault bool                `json:"use_account_custom_ns_by_default"`
 	JSON                        accountSettingsJSON `json:"-"`
 }
@@ -272,6 +276,8 @@ type AccountSettingsParam struct {
 	//
 	// Deprecated in favor of
 	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
+	//
+	// Deprecated: deprecated
 	DefaultNameservers param.Field[AccountSettingsDefaultNameservers] `json:"default_nameservers"`
 	// Indicates whether membership in this account requires that Two-Factor
 	// Authentication is enabled
@@ -281,6 +287,8 @@ type AccountSettingsParam struct {
 	//
 	// Deprecated in favor of
 	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
+	//
+	// Deprecated: deprecated
 	UseAccountCustomNSByDefault param.Field[bool] `json:"use_account_custom_ns_by_default"`
 }
 
