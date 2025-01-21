@@ -26,9 +26,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewZoneService] method instead.
 type ZoneService struct {
-	Options           []option.RequestOption
-	ActivationCheck   *ActivationCheckService
-	Settings          *SettingService
+	Options         []option.RequestOption
+	ActivationCheck *ActivationCheckService
+	Settings        *SettingService
+	// Deprecated: Use DNS settings API instead.
 	CustomNameservers *CustomNameserverService
 	Holds             *HoldService
 	Subscriptions     *SubscriptionService
