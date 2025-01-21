@@ -119,13 +119,35 @@ type TeamsL4OverrideSettings struct {
 }
 
 type TeamsBISOAdminControlSettings struct {
-	DisablePrinting             bool `json:"dp"`
-	DisableCopyPaste            bool `json:"dcp"`
-	DisableDownload             bool `json:"dd"`
-	DisableUpload               bool `json:"du"`
-	DisableKeyboard             bool `json:"dk"`
-	DisableClipboardRedirection bool `json:"dcr"`
+	DisablePrinting             bool                                    `json:"dp"`
+	DisableCopyPaste            bool                                    `json:"dcp"`
+	DisableDownload             bool                                    `json:"dd"`
+	DisableUpload               bool                                    `json:"du"`
+	DisableKeyboard             bool                                    `json:"dk"`
+	DisableClipboardRedirection bool                                    `json:"dcr"`
+	Copy                        TeamsTeamsBISOAdminControlSettingsValue `json:"copy"`
+	Download                    TeamsTeamsBISOAdminControlSettingsValue `json:"download"`
+	Keyboard                    TeamsTeamsBISOAdminControlSettingsValue `json:"keyboard"`
+	Paste                       TeamsTeamsBISOAdminControlSettingsValue `json:"paste"`
+	Printing                    TeamsTeamsBISOAdminControlSettingsValue `json:"printing"`
+	Upload                      TeamsTeamsBISOAdminControlSettingsValue `json:"upload"`
+	Version                     TeamsBISOAdminControlSettingsVersion    `json:"version"`
 }
+
+type TeamsBISOAdminControlSettingsVersion string
+
+const (
+	TeamsBISOAdminControlSettingsV1 TeamsBISOAdminControlSettingsVersion = "v1"
+	TeamsBISOAdminControlSettingsV2 TeamsBISOAdminControlSettingsVersion = "v2"
+)
+
+type TeamsTeamsBISOAdminControlSettingsValue string
+
+const (
+	TeamsBISOAdminControlEnabled    TeamsTeamsBISOAdminControlSettingsValue = "enabled"
+	TeamsBISOAdminControlDisabled   TeamsTeamsBISOAdminControlSettingsValue = "disabled"
+	TeamsBISOAdminControlRemoteOnly TeamsTeamsBISOAdminControlSettingsValue = "remote_only"
+)
 
 type TeamsCheckSessionSettings struct {
 	Enforce  bool     `json:"enforce"`
