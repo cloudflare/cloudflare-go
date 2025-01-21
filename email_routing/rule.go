@@ -214,6 +214,8 @@ type EmailRoutingRule struct {
 	// Priority of the routing rule.
 	Priority float64 `json:"priority"`
 	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
+	//
+	// Deprecated: deprecated
 	Tag  string               `json:"tag"`
 	JSON emailRoutingRuleJSON `json:"-"`
 }

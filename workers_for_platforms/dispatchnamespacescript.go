@@ -174,9 +174,13 @@ type DispatchNamespaceScriptUpdateResponse struct {
 	Placement DispatchNamespaceScriptUpdateResponsePlacement `json:"placement"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	//
+	// Deprecated: deprecated
 	PlacementMode DispatchNamespaceScriptUpdateResponsePlacementMode `json:"placement_mode"`
 	// Status of
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	//
+	// Deprecated: deprecated
 	PlacementStatus DispatchNamespaceScriptUpdateResponsePlacementStatus `json:"placement_status"`
 	StartupTimeMs   int64                                                `json:"startup_time_ms"`
 	// List of Workers that will consume logs from the attached Worker.

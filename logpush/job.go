@@ -222,6 +222,8 @@ type LogpushJob struct {
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting
 	// frequency to low sends logs in smaller quantities of larger files.
+	//
+	// Deprecated: deprecated
 	Frequency LogpushJobFrequency `json:"frequency,nullable"`
 	// The kind parameter (optional) is used to differentiate between Logpush and Edge
 	// Log Delivery jobs. Currently, Edge Log Delivery is only supported for the
@@ -241,6 +243,8 @@ type LogpushJob struct {
 	// the logpull api, copy the url (full url or just the query string) of your call
 	// here, and logpush will keep on making this call for you, setting start and end
 	// times appropriately.
+	//
+	// Deprecated: deprecated
 	LogpullOptions string `json:"logpull_options,nullable" format:"uri-reference"`
 	// The maximum uncompressed file size of a batch of logs. This setting value must
 	// be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a

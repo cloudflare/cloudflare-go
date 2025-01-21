@@ -113,6 +113,8 @@ type CustomNameserver struct {
 	// The FQDN of the name server.
 	NSName string `json:"ns_name,required" format:"hostname"`
 	// Verification status of the nameserver.
+	//
+	// Deprecated: deprecated
 	Status CustomNameserverStatus `json:"status,required"`
 	// Identifier
 	ZoneTag string `json:"zone_tag,required"`
