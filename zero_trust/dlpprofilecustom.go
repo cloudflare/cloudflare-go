@@ -1649,6 +1649,7 @@ type DLPProfileCustomNewParamsBodyUnion interface {
 	implementsZeroTrustDLPProfileCustomNewParamsBodyUnion()
 }
 
+// Deprecated: deprecated
 type DLPProfileCustomNewParamsBodyProfiles struct {
 	Profiles param.Field[[]DLPProfileCustomNewParamsBodyProfilesProfile] `json:"profiles,required"`
 }

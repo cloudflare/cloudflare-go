@@ -2689,6 +2689,8 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -3962,6 +3964,8 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -4674,6 +4678,8 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -7964,6 +7970,8 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -9238,6 +9246,8 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -9950,6 +9960,8 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -13241,6 +13253,8 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -14514,6 +14528,8 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -15226,6 +15242,8 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -18538,6 +18556,8 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -19811,6 +19831,8 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -20523,6 +20545,8 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -23666,6 +23690,8 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -24665,6 +24691,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -25226,6 +25254,8 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -27446,6 +27476,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -28445,6 +28477,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -29006,6 +29040,8 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// List of public domains that Access will secure. This field is deprecated in
 	// favor of `destinations` and will be supported until **November 21, 2025.** If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	//
+	// Deprecated: deprecated
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
