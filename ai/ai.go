@@ -372,7 +372,9 @@ type AIRunResponseObject struct {
 	Response string `json:"response"`
 	// An array of tool calls requests made during the response generation
 	ToolCalls []AIRunResponseObjectToolCall `json:"tool_calls"`
-	JSON      aiRunResponseObjectJSON       `json:"-"`
+	// Usage statistics for the inference request
+	Usage AIRunResponseObjectUsage `json:"usage"`
+	JSON  aiRunResponseObjectJSON  `json:"-"`
 }
 
 // aiRunResponseObjectJSON contains the JSON metadata for the struct
@@ -380,6 +382,7 @@ type AIRunResponseObject struct {
 type aiRunResponseObjectJSON struct {
 	Response    apijson.Field
 	ToolCalls   apijson.Field
+	Usage       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -416,6 +419,35 @@ func (r *AIRunResponseObjectToolCall) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r aiRunResponseObjectToolCallJSON) RawJSON() string {
+	return r.raw
+}
+
+// Usage statistics for the inference request
+type AIRunResponseObjectUsage struct {
+	// Total number of tokens in output
+	CompletionTokens float64 `json:"completion_tokens"`
+	// Total number of tokens in input
+	PromptTokens float64 `json:"prompt_tokens"`
+	// Total number of input and output tokens
+	TotalTokens float64                      `json:"total_tokens"`
+	JSON        aiRunResponseObjectUsageJSON `json:"-"`
+}
+
+// aiRunResponseObjectUsageJSON contains the JSON metadata for the struct
+// [AIRunResponseObjectUsage]
+type aiRunResponseObjectUsageJSON struct {
+	CompletionTokens apijson.Field
+	PromptTokens     apijson.Field
+	TotalTokens      apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AIRunResponseObjectUsage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseObjectUsageJSON) RawJSON() string {
 	return r.raw
 }
 
