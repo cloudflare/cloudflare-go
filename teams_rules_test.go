@@ -915,3 +915,73 @@ func TestTeamsDeleteRule(t *testing.T) {
 
 	assert.NoError(t, err)
 }
+
+func TestTeamsCreateHttpPolicyWithBisoV2(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"name": "biso v2",
+				"description": "biso v2",
+				"precedence": 1000,
+				"enabled": true,
+				"action": "isolate",
+				"filters": [
+					"http"
+				],
+				"traffic": "http.conn.src.ip == 1.2.3.4",
+				"rule_settings": {					
+					"biso_admin_controls": {
+					  	"version": "v2",
+					  	"copy": "remote_only",
+					  	"paste": "enabled",
+					  	"download": "disabled",
+					  	"keyboard": "enabled",
+						"printing": "disabled",
+						"upload": "enabled"
+					}
+				}
+			}
+		}
+		`)
+	}
+
+	want := TeamsRule{
+		Name:          "biso v2",
+		Description:   "biso v2",
+		Precedence:    1000,
+		Enabled:       true,
+		Action:        Isolate,
+		Filters:       []TeamsFilterType{HttpFilter},
+		Traffic:       `http.conn.src.ip == 1.2.3.4`,
+		Identity:      "",
+		DevicePosture: "",
+		RuleSettings: TeamsRuleSettings{
+			BISOAdminControls: &TeamsBISOAdminControlSettings{
+				Version:  TeamsBISOAdminControlSettingsV2,
+				Copy:     TeamsBISOAdminControlRemoteOnly,
+				Paste:    TeamsBISOAdminControlEnabled,
+				Download: TeamsBISOAdminControlDisabled,
+				Keyboard: TeamsBISOAdminControlEnabled,
+				Printing: TeamsBISOAdminControlDisabled,
+				Upload:   TeamsBISOAdminControlEnabled,
+			},
+		},
+		DeletedAt: nil,
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/rules", handler)
+
+	actual, err := client.TeamsCreateRule(context.Background(), testAccountID, want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
