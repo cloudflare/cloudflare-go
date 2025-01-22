@@ -106,11 +106,12 @@ const (
 	StatusGetResponseStatusEventPrequeueing StatusGetResponseStatus = "event_prequeueing"
 	StatusGetResponseStatusNotQueueing      StatusGetResponseStatus = "not_queueing"
 	StatusGetResponseStatusQueueing         StatusGetResponseStatus = "queueing"
+	StatusGetResponseStatusSuspended        StatusGetResponseStatus = "suspended"
 )
 
 func (r StatusGetResponseStatus) IsKnown() bool {
 	switch r {
-	case StatusGetResponseStatusEventPrequeueing, StatusGetResponseStatusNotQueueing, StatusGetResponseStatusQueueing:
+	case StatusGetResponseStatusEventPrequeueing, StatusGetResponseStatusNotQueueing, StatusGetResponseStatusQueueing, StatusGetResponseStatusSuspended:
 		return true
 	}
 	return false
