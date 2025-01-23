@@ -3,11 +3,15 @@
 package zero_trust
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"io"
+	"mime/multipart"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
@@ -107,11 +111,22 @@ func (r DLPDatasetVersionEntryNewResponseUploadStatus) IsKnown() bool {
 
 type DLPDatasetVersionEntryNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      string              `json:"body,required"`
+	Body      io.Reader           `json:"body,required" format:"binary"`
 }
 
-func (r DLPDatasetVersionEntryNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+func (r DLPDatasetVersionEntryNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
 type DLPDatasetVersionEntryNewResponseEnvelope struct {
