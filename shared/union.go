@@ -69,6 +69,14 @@ func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnr
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
+func (UnionString) ImplementsZeroTrustDLPEmailRuleNewResponseConditionsValueUnion()           {}
+func (UnionString) ImplementsZeroTrustDLPEmailRuleUpdateResponseConditionsValueUnion()        {}
+func (UnionString) ImplementsZeroTrustDLPEmailRuleListResponseConditionsValueUnion()          {}
+func (UnionString) ImplementsZeroTrustDLPEmailRuleDeleteResponseConditionsValueUnion()        {}
+func (UnionString) ImplementsZeroTrustDLPEmailRuleBulkEditResponseConditionsValueUnion()      {}
+func (UnionString) ImplementsZeroTrustDLPEmailRuleGetResponseConditionsValueUnion()           {}
+func (UnionString) ImplementsZeroTrustDLPEmailRuleNewParamsConditionsValueUnion()             {}
+func (UnionString) ImplementsZeroTrustDLPEmailRuleUpdateParamsConditionsValueUnion()          {}
 func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()                {}
 func (UnionString) ImplementsHostnamesSettingValueUnionParam()                                {}
 func (UnionString) ImplementsHostnamesSettingValueUnion()                                     {}

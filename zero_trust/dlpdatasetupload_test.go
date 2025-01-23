@@ -3,8 +3,10 @@
 package zero_trust_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
@@ -63,7 +65,7 @@ func TestDLPDatasetUploadEdit(t *testing.T) {
 		int64(0),
 		zero_trust.DLPDatasetUploadEditParams{
 			AccountID: cloudflare.F("account_id"),
-			Body:      "body",
+			Body:      io.Reader(bytes.NewBuffer([]byte("some file contents"))),
 		},
 	)
 	if err != nil {
