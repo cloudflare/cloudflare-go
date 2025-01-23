@@ -577,9 +577,14 @@ type ScriptUpdateParamsMetadataAssetsConfig struct {
 	// Determines the response when a request does not match a static asset, and there
 	// is no Worker script.
 	NotFoundHandling param.Field[ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
+	// When true, requests will always invoke the Worker script. Otherwise, attempt to
+	// serve an asset matching the request, falling back to the Worker script.
+	RunWorkerFirst param.Field[bool] `json:"run_worker_first"`
 	// When true and the incoming request matches an asset, that will be served instead
 	// of invoking the Worker script. When false, requests will always invoke the
 	// Worker script.
+	//
+	// Deprecated: deprecated
 	ServeDirectly param.Field[bool] `json:"serve_directly"`
 }
 
