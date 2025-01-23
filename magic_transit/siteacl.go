@@ -237,8 +237,12 @@ type ACLConfiguration struct {
 	LANID string `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
 	LANName string `json:"lan_name"`
+	// Array of port ranges on the provided LAN that will be included in the ACL. If no
+	// ports or port rangess are provided, communication on any port on this LAN is
+	// allowed.
+	PortRanges []string `json:"port_ranges"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
-	// are provided, communication on any port on this LAN is allowed.
+	// or port ranges are provided, communication on any port on this LAN is allowed.
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
@@ -251,6 +255,7 @@ type ACLConfiguration struct {
 type aclConfigurationJSON struct {
 	LANID       apijson.Field
 	LANName     apijson.Field
+	PortRanges  apijson.Field
 	Ports       apijson.Field
 	Subnets     apijson.Field
 	raw         string
@@ -270,8 +275,12 @@ type ACLConfigurationParam struct {
 	LANID param.Field[string] `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
 	LANName param.Field[string] `json:"lan_name"`
+	// Array of port ranges on the provided LAN that will be included in the ACL. If no
+	// ports or port rangess are provided, communication on any port on this LAN is
+	// allowed.
+	PortRanges param.Field[[]string] `json:"port_ranges"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
-	// are provided, communication on any port on this LAN is allowed.
+	// or port ranges are provided, communication on any port on this LAN is allowed.
 	Ports param.Field[[]int64] `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
