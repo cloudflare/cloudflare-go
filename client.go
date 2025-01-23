@@ -60,6 +60,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/managed_transforms"
 	"github.com/cloudflare/cloudflare-go/v4/memberships"
 	"github.com/cloudflare/cloudflare-go/v4/mtls_certificates"
+	"github.com/cloudflare/cloudflare-go/v4/network_interconnects"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/origin_ca_certificates"
 	"github.com/cloudflare/cloudflare-go/v4/origin_post_quantum_encryption"
@@ -160,6 +161,7 @@ type Client struct {
 	Intel                       *intel.IntelService
 	MagicTransit                *magic_transit.MagicTransitService
 	MagicNetworkMonitoring      *magic_network_monitoring.MagicNetworkMonitoringService
+	NetworkInterconnects        *network_interconnects.NetworkInterconnectService
 	MTLSCertificates            *mtls_certificates.MTLSCertificateService
 	Pages                       *pages.PageService
 	Registrar                   *registrar.RegistrarService
@@ -271,6 +273,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Intel = intel.NewIntelService(opts...)
 	r.MagicTransit = magic_transit.NewMagicTransitService(opts...)
 	r.MagicNetworkMonitoring = magic_network_monitoring.NewMagicNetworkMonitoringService(opts...)
+	r.NetworkInterconnects = network_interconnects.NewNetworkInterconnectService(opts...)
 	r.MTLSCertificates = mtls_certificates.NewMTLSCertificateService(opts...)
 	r.Pages = pages.NewPageService(opts...)
 	r.Registrar = registrar.NewRegistrarService(opts...)
