@@ -569,9 +569,8 @@ type AIRunParamsBody struct {
 	// model's expected formatting.
 	Raw param.Field[bool] `json:"raw"`
 	// Penalty for repeated tokens; higher values discourage repetition.
-	RepetitionPenalty param.Field[float64] `json:"repetition_penalty"`
-	// Random seed for reproducibility of the image generation
-	Seed param.Field[int64] `json:"seed"`
+	RepetitionPenalty param.Field[float64]     `json:"repetition_penalty"`
+	Seed              param.Field[interface{}] `json:"seed"`
 	// The language of the recorded audio
 	SourceLang param.Field[string] `json:"source_lang"`
 	// If true, the response will be streamed back incrementally using SSE, Server Sent
@@ -588,10 +587,7 @@ type AIRunParamsBody struct {
 	Temperature param.Field[float64]     `json:"temperature"`
 	Text        param.Field[interface{}] `json:"text"`
 	Tools       param.Field[interface{}] `json:"tools"`
-	// Limits the AI to choose from the top 'k' most probable words. Lower values make
-	// responses more focused; higher values introduce more variety and potential
-	// surprises.
-	TopK param.Field[int64] `json:"top_k"`
+	TopK        param.Field[interface{}] `json:"top_k"`
 	// Adjusts the creativity of the AI's responses by controlling how many possible
 	// words it considers. Lower values make outputs more predictable; higher values
 	// allow for more varied and creative responses.
@@ -935,16 +931,32 @@ type AIRunParamsBodyImageToText struct {
 	// An array of integers that represent the image data constrained to 8-bit unsigned
 	// integer values
 	Image param.Field[[]float64] `json:"image,required"`
+	// Decreases the likelihood of the model repeating the same lines verbatim.
+	FrequencyPenalty param.Field[float64] `json:"frequency_penalty"`
 	// The maximum number of tokens to generate in the response.
 	MaxTokens param.Field[int64] `json:"max_tokens"`
+	// Increases the likelihood of the model introducing new topics.
+	PresencePenalty param.Field[float64] `json:"presence_penalty"`
 	// The input text prompt for the model to generate a response.
 	Prompt param.Field[string] `json:"prompt"`
 	// If true, a chat template is not applied and you must adhere to the specific
 	// model's expected formatting.
 	Raw param.Field[bool] `json:"raw"`
+	// Penalty for repeated tokens; higher values discourage repetition.
+	RepetitionPenalty param.Field[float64] `json:"repetition_penalty"`
+	// Random seed for reproducibility of the generation.
+	Seed param.Field[float64] `json:"seed"`
 	// Controls the randomness of the output; higher values produce more random
 	// results.
 	Temperature param.Field[float64] `json:"temperature"`
+	// Limits the AI to choose from the top 'k' most probable words. Lower values make
+	// responses more focused; higher values introduce more variety and potential
+	// surprises.
+	TopK param.Field[float64] `json:"top_k"`
+	// Controls the creativity of the AI's responses by adjusting how many possible
+	// words it considers. Lower values make outputs more predictable; higher values
+	// allow for more varied and creative responses.
+	TopP param.Field[float64] `json:"top_p"`
 }
 
 func (r AIRunParamsBodyImageToText) MarshalJSON() (data []byte, err error) {
