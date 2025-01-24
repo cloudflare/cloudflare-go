@@ -138,37 +138,129 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	return
 }
 
-type Mechanism map[string][]MechanismItem
-
-type MechanismItem struct {
-	// UUID
-	ID   string            `json:"id"`
-	JSON mechanismItemJSON `json:"-"`
+// List of IDs that will be used when dispatching a notification. IDs for email
+// type will be the email address.
+type Mechanism struct {
+	Email     []MechanismEmail     `json:"email"`
+	Pagerduty []MechanismPagerduty `json:"pagerduty"`
+	Webhooks  []MechanismWebhook   `json:"webhooks"`
+	JSON      mechanismJSON        `json:"-"`
 }
 
-// mechanismItemJSON contains the JSON metadata for the struct [MechanismItem]
-type mechanismItemJSON struct {
+// mechanismJSON contains the JSON metadata for the struct [Mechanism]
+type mechanismJSON struct {
+	Email       apijson.Field
+	Pagerduty   apijson.Field
+	Webhooks    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Mechanism) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mechanismJSON) RawJSON() string {
+	return r.raw
+}
+
+type MechanismEmail struct {
+	// The email address
+	ID   string             `json:"id"`
+	JSON mechanismEmailJSON `json:"-"`
+}
+
+// mechanismEmailJSON contains the JSON metadata for the struct [MechanismEmail]
+type mechanismEmailJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MechanismItem) UnmarshalJSON(data []byte) (err error) {
+func (r *MechanismEmail) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r mechanismItemJSON) RawJSON() string {
+func (r mechanismEmailJSON) RawJSON() string {
 	return r.raw
 }
 
-type MechanismParam map[string][]MechanismItemParam
-
-type MechanismItemParam struct {
+type MechanismPagerduty struct {
 	// UUID
+	ID   string                 `json:"id"`
+	JSON mechanismPagerdutyJSON `json:"-"`
+}
+
+// mechanismPagerdutyJSON contains the JSON metadata for the struct
+// [MechanismPagerduty]
+type mechanismPagerdutyJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MechanismPagerduty) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mechanismPagerdutyJSON) RawJSON() string {
+	return r.raw
+}
+
+type MechanismWebhook struct {
+	// UUID
+	ID   string               `json:"id"`
+	JSON mechanismWebhookJSON `json:"-"`
+}
+
+// mechanismWebhookJSON contains the JSON metadata for the struct
+// [MechanismWebhook]
+type mechanismWebhookJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MechanismWebhook) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mechanismWebhookJSON) RawJSON() string {
+	return r.raw
+}
+
+// List of IDs that will be used when dispatching a notification. IDs for email
+// type will be the email address.
+type MechanismParam struct {
+	Email     param.Field[[]MechanismEmailParam]     `json:"email"`
+	Pagerduty param.Field[[]MechanismPagerdutyParam] `json:"pagerduty"`
+	Webhooks  param.Field[[]MechanismWebhookParam]   `json:"webhooks"`
+}
+
+func (r MechanismParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type MechanismEmailParam struct {
+	// The email address
 	ID param.Field[string] `json:"id"`
 }
 
-func (r MechanismItemParam) MarshalJSON() (data []byte, err error) {
+func (r MechanismEmailParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type MechanismPagerdutyParam struct {
+}
+
+func (r MechanismPagerdutyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type MechanismWebhookParam struct {
+}
+
+func (r MechanismWebhookParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
