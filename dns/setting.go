@@ -125,8 +125,6 @@ type SettingEditResponseZoneDefaults struct {
 	FlattenAllCNAMEs bool `json:"flatten_all_cnames"`
 	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
 	FoundationDNS bool `json:"foundation_dns"`
-	// Settings for this internal zone.
-	InternalDNS SettingEditResponseZoneDefaultsInternalDNS `json:"internal_dns"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
@@ -150,7 +148,6 @@ type SettingEditResponseZoneDefaults struct {
 type settingEditResponseZoneDefaultsJSON struct {
 	FlattenAllCNAMEs   apijson.Field
 	FoundationDNS      apijson.Field
-	InternalDNS        apijson.Field
 	MultiProvider      apijson.Field
 	Nameservers        apijson.Field
 	NSTTL              apijson.Field
@@ -166,29 +163,6 @@ func (r *SettingEditResponseZoneDefaults) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r settingEditResponseZoneDefaultsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Settings for this internal zone.
-type SettingEditResponseZoneDefaultsInternalDNS struct {
-	// The ID of the zone to fallback to.
-	ReferenceZoneID string                                         `json:"reference_zone_id"`
-	JSON            settingEditResponseZoneDefaultsInternalDNSJSON `json:"-"`
-}
-
-// settingEditResponseZoneDefaultsInternalDNSJSON contains the JSON metadata for
-// the struct [SettingEditResponseZoneDefaultsInternalDNS]
-type settingEditResponseZoneDefaultsInternalDNSJSON struct {
-	ReferenceZoneID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *SettingEditResponseZoneDefaultsInternalDNS) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEditResponseZoneDefaultsInternalDNSJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -322,8 +296,6 @@ type SettingGetResponseZoneDefaults struct {
 	FlattenAllCNAMEs bool `json:"flatten_all_cnames"`
 	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
 	FoundationDNS bool `json:"foundation_dns"`
-	// Settings for this internal zone.
-	InternalDNS SettingGetResponseZoneDefaultsInternalDNS `json:"internal_dns"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
@@ -347,7 +319,6 @@ type SettingGetResponseZoneDefaults struct {
 type settingGetResponseZoneDefaultsJSON struct {
 	FlattenAllCNAMEs   apijson.Field
 	FoundationDNS      apijson.Field
-	InternalDNS        apijson.Field
 	MultiProvider      apijson.Field
 	Nameservers        apijson.Field
 	NSTTL              apijson.Field
@@ -363,29 +334,6 @@ func (r *SettingGetResponseZoneDefaults) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r settingGetResponseZoneDefaultsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Settings for this internal zone.
-type SettingGetResponseZoneDefaultsInternalDNS struct {
-	// The ID of the zone to fallback to.
-	ReferenceZoneID string                                        `json:"reference_zone_id"`
-	JSON            settingGetResponseZoneDefaultsInternalDNSJSON `json:"-"`
-}
-
-// settingGetResponseZoneDefaultsInternalDNSJSON contains the JSON metadata for the
-// struct [SettingGetResponseZoneDefaultsInternalDNS]
-type settingGetResponseZoneDefaultsInternalDNSJSON struct {
-	ReferenceZoneID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *SettingGetResponseZoneDefaultsInternalDNS) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingGetResponseZoneDefaultsInternalDNSJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -510,8 +458,6 @@ type SettingEditParamsZoneDefaults struct {
 	FlattenAllCNAMEs param.Field[bool] `json:"flatten_all_cnames"`
 	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
 	FoundationDNS param.Field[bool] `json:"foundation_dns"`
-	// Settings for this internal zone.
-	InternalDNS param.Field[SettingEditParamsZoneDefaultsInternalDNS] `json:"internal_dns"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
@@ -530,16 +476,6 @@ type SettingEditParamsZoneDefaults struct {
 }
 
 func (r SettingEditParamsZoneDefaults) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Settings for this internal zone.
-type SettingEditParamsZoneDefaultsInternalDNS struct {
-	// The ID of the zone to fallback to.
-	ReferenceZoneID param.Field[string] `json:"reference_zone_id"`
-}
-
-func (r SettingEditParamsZoneDefaultsInternalDNS) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
