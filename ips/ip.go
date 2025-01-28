@@ -79,7 +79,7 @@ func (r ipsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IPs) implementsIPsIPListResponse() {}
+func (r IPs) implementsIPListResponse() {}
 
 type JDCloudIPs struct {
 	// A digest of the IP data. Useful for determining if the data has changed.
@@ -111,7 +111,7 @@ func (r JDCloudIPsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r JDCloudIPs) implementsIPsIPListResponse() {}
+func (r JDCloudIPs) implementsIPListResponse() {}
 
 type IPListResponse struct {
 	// A digest of the IP data. Useful for determining if the data has changed.
@@ -159,7 +159,7 @@ func (r IPListResponse) AsUnion() IPListResponseUnion {
 
 // Union satisfied by [ips.IPs] or [ips.JDCloudIPs].
 type IPListResponseUnion interface {
-	implementsIPsIPListResponse()
+	implementsIPListResponse()
 }
 
 func init() {

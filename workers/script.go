@@ -670,8 +670,7 @@ func (r ScriptUpdateParamsMetadataBinding) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBinding) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
-}
+func (r ScriptUpdateParamsMetadataBinding) implementsScriptUpdateParamsMetadataBindingUnion() {}
 
 // A binding to allow the Worker to communicate with resources
 //
@@ -697,7 +696,7 @@ func (r ScriptUpdateParamsMetadataBinding) implementsWorkersScriptUpdateParamsMe
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata],
 // [ScriptUpdateParamsMetadataBinding].
 type ScriptUpdateParamsMetadataBindingUnion interface {
-	implementsWorkersScriptUpdateParamsMetadataBindingUnion()
+	implementsScriptUpdateParamsMetadataBindingUnion()
 }
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAny struct {
@@ -712,7 +711,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAny) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAny) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAny) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI struct {
@@ -726,7 +725,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -757,7 +756,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) Mar
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -786,7 +785,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -815,7 +814,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -846,7 +845,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -879,7 +878,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace) M
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -942,7 +941,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDo) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDo) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDo) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -973,7 +972,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1004,7 +1003,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1035,7 +1034,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1066,7 +1065,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERT) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERT) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERT) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1097,7 +1096,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText) MarshalJS
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1128,7 +1127,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1159,7 +1158,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1190,7 +1189,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecret) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecret) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecret) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1223,7 +1222,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindService) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindService) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindService) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1254,7 +1253,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer) Marsha
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1285,7 +1284,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize) MarshalJS
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1314,7 +1313,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata) Mar
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -1351,8 +1350,7 @@ func (r ScriptUpdateParamsMetadataMigrations) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataMigrations) implementsWorkersScriptUpdateParamsMetadataMigrationsUnion() {
-}
+func (r ScriptUpdateParamsMetadataMigrations) implementsScriptUpdateParamsMetadataMigrationsUnion() {}
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
@@ -1360,7 +1358,7 @@ func (r ScriptUpdateParamsMetadataMigrations) implementsWorkersScriptUpdateParam
 // [workers.ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations],
 // [ScriptUpdateParamsMetadataMigrations].
 type ScriptUpdateParamsMetadataMigrationsUnion interface {
-	implementsWorkersScriptUpdateParamsMetadataMigrationsUnion()
+	implementsScriptUpdateParamsMetadataMigrationsUnion()
 }
 
 type ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations struct {
@@ -1377,7 +1375,7 @@ func (r ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations) implementsWorkersScriptUpdateParamsMetadataMigrationsUnion() {
+func (r ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations) implementsScriptUpdateParamsMetadataMigrationsUnion() {
 }
 
 // Observability settings for the Worker.

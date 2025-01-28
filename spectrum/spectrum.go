@@ -137,7 +137,7 @@ func (r EdgeIPs) AsUnion() EdgeIPsUnion {
 //
 // Union satisfied by [spectrum.EdgeIPsObject] or [spectrum.EdgeIPsObject].
 type EdgeIPsUnion interface {
-	implementsSpectrumEdgeIPs()
+	implementsEdgeIPs()
 }
 
 func init() {
@@ -181,7 +181,7 @@ func (r edgeIPsObjectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EdgeIPsObject) implementsSpectrumEdgeIPs() {}
+func (r EdgeIPsObject) implementsEdgeIPs() {}
 
 // The IP versions supported for inbound connections on Spectrum anycast IPs.
 type EdgeIPsObjectConnectivity string
@@ -267,14 +267,14 @@ func (r EdgeIPsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EdgeIPsParam) implementsSpectrumEdgeIPsUnionParam() {}
+func (r EdgeIPsParam) implementsEdgeIPsUnionParam() {}
 
 // The anycast edge IP configuration for the hostname of this application.
 //
 // Satisfied by [spectrum.EdgeIPsObjectParam], [spectrum.EdgeIPsObjectParam],
 // [EdgeIPsParam].
 type EdgeIPsUnionParam interface {
-	implementsSpectrumEdgeIPsUnionParam()
+	implementsEdgeIPsUnionParam()
 }
 
 type EdgeIPsObjectParam struct {
@@ -290,7 +290,7 @@ func (r EdgeIPsObjectParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EdgeIPsObjectParam) implementsSpectrumEdgeIPsUnionParam() {}
+func (r EdgeIPsObjectParam) implementsEdgeIPsUnionParam() {}
 
 // The name and type of DNS record for the Spectrum application.
 type OriginDNS struct {
@@ -363,7 +363,7 @@ func (r OriginDNSParam) MarshalJSON() (data []byte, err error) {
 //
 // Union satisfied by [shared.UnionInt] or [shared.UnionString].
 type OriginPortUnion interface {
-	ImplementsSpectrumOriginPortUnion()
+	ImplementsOriginPortUnion()
 }
 
 func init() {
@@ -389,5 +389,5 @@ func init() {
 //
 // Satisfied by [shared.UnionInt], [shared.UnionString].
 type OriginPortUnionParam interface {
-	ImplementsSpectrumOriginPortUnionParam()
+	ImplementsOriginPortUnionParam()
 }

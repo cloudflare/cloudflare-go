@@ -94,7 +94,7 @@ func (r healthCheckJSON) RawJSON() string {
 // Union satisfied by [magic_transit.HealthCheckTargetMagicHealthCheckTarget] or
 // [shared.UnionString].
 type HealthCheckTargetUnion interface {
-	ImplementsMagicTransitHealthCheckTargetUnion()
+	ImplementsHealthCheckTargetUnion()
 }
 
 func init() {
@@ -145,7 +145,7 @@ func (r healthCheckTargetMagicHealthCheckTargetJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r HealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitHealthCheckTargetUnion() {}
+func (r HealthCheckTargetMagicHealthCheckTarget) ImplementsHealthCheckTargetUnion() {}
 
 type HealthCheckParam struct {
 	// Determines whether to run healthchecks for a tunnel.
@@ -179,7 +179,7 @@ func (r HealthCheckParam) MarshalJSON() (data []byte, err error) {
 // Satisfied by [magic_transit.HealthCheckTargetMagicHealthCheckTargetParam],
 // [shared.UnionString].
 type HealthCheckTargetUnionParam interface {
-	ImplementsMagicTransitHealthCheckTargetUnionParam()
+	ImplementsHealthCheckTargetUnionParam()
 }
 
 // The destination address in a request type health check. After the healthcheck is
@@ -197,8 +197,7 @@ func (r HealthCheckTargetMagicHealthCheckTargetParam) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r HealthCheckTargetMagicHealthCheckTargetParam) ImplementsMagicTransitHealthCheckTargetUnionParam() {
-}
+func (r HealthCheckTargetMagicHealthCheckTargetParam) ImplementsHealthCheckTargetUnionParam() {}
 
 // How frequent the health check is run. The default value is `mid`.
 type HealthCheckRate string

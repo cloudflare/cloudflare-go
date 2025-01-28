@@ -919,13 +919,13 @@ func (r DatabaseImportParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DatabaseImportParamsBody) implementsD1DatabaseImportParamsBodyUnion() {}
+func (r DatabaseImportParamsBody) implementsDatabaseImportParamsBodyUnion() {}
 
 // Satisfied by [d1.DatabaseImportParamsBodyObject],
 // [d1.DatabaseImportParamsBodyObject], [d1.DatabaseImportParamsBodyObject],
 // [DatabaseImportParamsBody].
 type DatabaseImportParamsBodyUnion interface {
-	implementsD1DatabaseImportParamsBodyUnion()
+	implementsDatabaseImportParamsBodyUnion()
 }
 
 type DatabaseImportParamsBodyObject struct {
@@ -941,7 +941,7 @@ func (r DatabaseImportParamsBodyObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DatabaseImportParamsBodyObject) implementsD1DatabaseImportParamsBodyUnion() {}
+func (r DatabaseImportParamsBodyObject) implementsDatabaseImportParamsBodyUnion() {}
 
 // Indicates you have a new SQL file to upload.
 type DatabaseImportParamsBodyObjectAction string

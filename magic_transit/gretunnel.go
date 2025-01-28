@@ -323,7 +323,7 @@ func (r GRETunnelNewResponseGRETunnelsHealthCheckDirection) IsKnown() bool {
 // [magic_transit.GRETunnelNewResponseGRETunnelsHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type GRETunnelNewResponseGRETunnelsHealthCheckTargetUnion interface {
-	ImplementsMagicTransitGRETunnelNewResponseGRETunnelsHealthCheckTargetUnion()
+	ImplementsGRETunnelNewResponseGRETunnelsHealthCheckTargetUnion()
 }
 
 func init() {
@@ -375,7 +375,7 @@ func (r greTunnelNewResponseGRETunnelsHealthCheckTargetMagicHealthCheckTargetJSO
 	return r.raw
 }
 
-func (r GRETunnelNewResponseGRETunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelNewResponseGRETunnelsHealthCheckTargetUnion() {
+func (r GRETunnelNewResponseGRETunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsGRETunnelNewResponseGRETunnelsHealthCheckTargetUnion() {
 }
 
 type GRETunnelUpdateResponse struct {
@@ -530,7 +530,7 @@ func (r GRETunnelUpdateResponseModifiedGRETunnelHealthCheckDirection) IsKnown() 
 // [magic_transit.GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion interface {
-	ImplementsMagicTransitGRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion()
+	ImplementsGRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion()
 }
 
 func init() {
@@ -582,7 +582,7 @@ func (r greTunnelUpdateResponseModifiedGRETunnelHealthCheckTargetMagicHealthChec
 	return r.raw
 }
 
-func (r GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion() {
+func (r GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsGRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion() {
 }
 
 type GRETunnelListResponse struct {
@@ -735,7 +735,7 @@ func (r GRETunnelListResponseGRETunnelsHealthCheckDirection) IsKnown() bool {
 // [magic_transit.GRETunnelListResponseGRETunnelsHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type GRETunnelListResponseGRETunnelsHealthCheckTargetUnion interface {
-	ImplementsMagicTransitGRETunnelListResponseGRETunnelsHealthCheckTargetUnion()
+	ImplementsGRETunnelListResponseGRETunnelsHealthCheckTargetUnion()
 }
 
 func init() {
@@ -787,7 +787,7 @@ func (r greTunnelListResponseGRETunnelsHealthCheckTargetMagicHealthCheckTargetJS
 	return r.raw
 }
 
-func (r GRETunnelListResponseGRETunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelListResponseGRETunnelsHealthCheckTargetUnion() {
+func (r GRETunnelListResponseGRETunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsGRETunnelListResponseGRETunnelsHealthCheckTargetUnion() {
 }
 
 type GRETunnelDeleteResponse struct {
@@ -942,7 +942,7 @@ func (r GRETunnelDeleteResponseDeletedGRETunnelHealthCheckDirection) IsKnown() b
 // [magic_transit.GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion interface {
-	ImplementsMagicTransitGRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion()
+	ImplementsGRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion()
 }
 
 func init() {
@@ -994,7 +994,7 @@ func (r greTunnelDeleteResponseDeletedGRETunnelHealthCheckTargetMagicHealthCheck
 	return r.raw
 }
 
-func (r GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion() {
+func (r GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsGRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion() {
 }
 
 type GRETunnelBulkUpdateResponse struct {
@@ -1150,7 +1150,7 @@ func (r GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirection) IsKno
 // [magic_transit.GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion interface {
-	ImplementsMagicTransitGRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion()
+	ImplementsGRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion()
 }
 
 func init() {
@@ -1202,7 +1202,7 @@ func (r greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealt
 	return r.raw
 }
 
-func (r GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion() {
+func (r GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsGRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion() {
 }
 
 type GRETunnelGetResponse struct {
@@ -1355,7 +1355,7 @@ func (r GRETunnelGetResponseGRETunnelHealthCheckDirection) IsKnown() bool {
 // [magic_transit.GRETunnelGetResponseGRETunnelHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type GRETunnelGetResponseGRETunnelHealthCheckTargetUnion interface {
-	ImplementsMagicTransitGRETunnelGetResponseGRETunnelHealthCheckTargetUnion()
+	ImplementsGRETunnelGetResponseGRETunnelHealthCheckTargetUnion()
 }
 
 func init() {
@@ -1407,7 +1407,7 @@ func (r greTunnelGetResponseGRETunnelHealthCheckTargetMagicHealthCheckTargetJSON
 	return r.raw
 }
 
-func (r GRETunnelGetResponseGRETunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelGetResponseGRETunnelHealthCheckTargetUnion() {
+func (r GRETunnelGetResponseGRETunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsGRETunnelGetResponseGRETunnelHealthCheckTargetUnion() {
 }
 
 type GRETunnelNewParams struct {
@@ -1550,7 +1550,7 @@ func (r GRETunnelUpdateParamsHealthCheckDirection) IsKnown() bool {
 // [magic_transit.GRETunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget],
 // [shared.UnionString].
 type GRETunnelUpdateParamsHealthCheckTargetUnion interface {
-	ImplementsMagicTransitGRETunnelUpdateParamsHealthCheckTargetUnion()
+	ImplementsGRETunnelUpdateParamsHealthCheckTargetUnion()
 }
 
 // The destination address in a request type health check. After the healthcheck is
@@ -1568,7 +1568,7 @@ func (r GRETunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r GRETunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelUpdateParamsHealthCheckTargetUnion() {
+func (r GRETunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsGRETunnelUpdateParamsHealthCheckTargetUnion() {
 }
 
 type GRETunnelUpdateResponseEnvelope struct {

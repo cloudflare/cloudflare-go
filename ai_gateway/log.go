@@ -463,7 +463,7 @@ func (r LogListParamsFiltersOperator) IsKnown() bool {
 
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type LogListParamsFiltersValueUnion interface {
-	ImplementsAIGatewayLogListParamsFiltersValueUnion()
+	ImplementsLogListParamsFiltersValueUnion()
 }
 
 type LogListParamsOrderBy string
@@ -584,7 +584,7 @@ func (r LogDeleteParamsFiltersOperator) IsKnown() bool {
 
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type LogDeleteParamsFiltersValueUnion interface {
-	ImplementsAIGatewayLogDeleteParamsFiltersValueUnion()
+	ImplementsLogDeleteParamsFiltersValueUnion()
 }
 
 type LogDeleteParamsOrderBy string
@@ -639,7 +639,7 @@ func (r LogEditParams) MarshalJSON() (data []byte, err error) {
 
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type LogEditParamsMetadataUnion interface {
-	ImplementsAIGatewayLogEditParamsMetadataUnion()
+	ImplementsLogEditParamsMetadataUnion()
 }
 
 type LogEditResponseEnvelope struct {

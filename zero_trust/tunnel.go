@@ -243,7 +243,7 @@ func (r TunnelNewResponse) AsUnion() TunnelNewResponseUnion {
 // Union satisfied by [shared.CloudflareTunnel] or
 // [zero_trust.TunnelNewResponseTunnelWARPConnectorTunnel].
 type TunnelNewResponseUnion interface {
-	ImplementsZeroTrustTunnelNewResponse()
+	ImplementsTunnelNewResponse()
 }
 
 func init() {
@@ -320,7 +320,7 @@ func (r tunnelNewResponseTunnelWARPConnectorTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r TunnelNewResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelNewResponse() {}
+func (r TunnelNewResponseTunnelWARPConnectorTunnel) ImplementsTunnelNewResponse() {}
 
 type TunnelNewResponseTunnelWARPConnectorTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
@@ -532,7 +532,7 @@ func (r TunnelListResponse) AsUnion() TunnelListResponseUnion {
 // Union satisfied by [shared.CloudflareTunnel] or
 // [zero_trust.TunnelListResponseTunnelWARPConnectorTunnel].
 type TunnelListResponseUnion interface {
-	ImplementsZeroTrustTunnelListResponse()
+	ImplementsTunnelListResponse()
 }
 
 func init() {
@@ -609,7 +609,7 @@ func (r tunnelListResponseTunnelWARPConnectorTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r TunnelListResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelListResponse() {}
+func (r TunnelListResponseTunnelWARPConnectorTunnel) ImplementsTunnelListResponse() {}
 
 type TunnelListResponseTunnelWARPConnectorTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
@@ -821,7 +821,7 @@ func (r TunnelDeleteResponse) AsUnion() TunnelDeleteResponseUnion {
 // Union satisfied by [shared.CloudflareTunnel] or
 // [zero_trust.TunnelDeleteResponseTunnelWARPConnectorTunnel].
 type TunnelDeleteResponseUnion interface {
-	ImplementsZeroTrustTunnelDeleteResponse()
+	ImplementsTunnelDeleteResponse()
 }
 
 func init() {
@@ -898,7 +898,7 @@ func (r tunnelDeleteResponseTunnelWARPConnectorTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r TunnelDeleteResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelDeleteResponse() {}
+func (r TunnelDeleteResponseTunnelWARPConnectorTunnel) ImplementsTunnelDeleteResponse() {}
 
 type TunnelDeleteResponseTunnelWARPConnectorTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
@@ -1111,7 +1111,7 @@ func (r TunnelEditResponse) AsUnion() TunnelEditResponseUnion {
 // Union satisfied by [shared.CloudflareTunnel] or
 // [zero_trust.TunnelEditResponseTunnelWARPConnectorTunnel].
 type TunnelEditResponseUnion interface {
-	ImplementsZeroTrustTunnelEditResponse()
+	ImplementsTunnelEditResponse()
 }
 
 func init() {
@@ -1188,7 +1188,7 @@ func (r tunnelEditResponseTunnelWARPConnectorTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r TunnelEditResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelEditResponse() {}
+func (r TunnelEditResponseTunnelWARPConnectorTunnel) ImplementsTunnelEditResponse() {}
 
 type TunnelEditResponseTunnelWARPConnectorTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
@@ -1400,7 +1400,7 @@ func (r TunnelGetResponse) AsUnion() TunnelGetResponseUnion {
 // Union satisfied by [shared.CloudflareTunnel] or
 // [zero_trust.TunnelGetResponseTunnelWARPConnectorTunnel].
 type TunnelGetResponseUnion interface {
-	ImplementsZeroTrustTunnelGetResponse()
+	ImplementsTunnelGetResponse()
 }
 
 func init() {
@@ -1477,7 +1477,7 @@ func (r tunnelGetResponseTunnelWARPConnectorTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r TunnelGetResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelGetResponse() {}
+func (r TunnelGetResponseTunnelWARPConnectorTunnel) ImplementsTunnelGetResponse() {}
 
 type TunnelGetResponseTunnelWARPConnectorTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.

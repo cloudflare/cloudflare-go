@@ -270,7 +270,7 @@ func (r DevicePostureIntegrationNewParamsConfig) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationNewParamsConfig) implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion() {
+func (r DevicePostureIntegrationNewParamsConfig) implementsDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
 // The configuration object containing third-party integration information.
@@ -286,7 +286,7 @@ func (r DevicePostureIntegrationNewParamsConfig) implementsZeroTrustDevicePostur
 // [zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest],
 // [DevicePostureIntegrationNewParamsConfig].
 type DevicePostureIntegrationNewParamsConfigUnion interface {
-	implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion()
+	implementsDevicePostureIntegrationNewParamsConfigUnion()
 }
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest struct {
@@ -304,7 +304,7 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigReq
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest) implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion() {
+func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest) implementsDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesCrowdstrikeConfigRequest struct {
@@ -322,7 +322,7 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCrowdstrikeConfigRequ
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCrowdstrikeConfigRequest) implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion() {
+func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCrowdstrikeConfigRequest) implementsDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesUptycsConfigRequest struct {
@@ -340,7 +340,7 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesUptycsConfigRequest) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesUptycsConfigRequest) implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion() {
+func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesUptycsConfigRequest) implementsDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesIntuneConfigRequest struct {
@@ -356,7 +356,7 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesIntuneConfigRequest) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesIntuneConfigRequest) implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion() {
+func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesIntuneConfigRequest) implementsDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesKolideConfigRequest struct {
@@ -370,7 +370,7 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesKolideConfigRequest) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesKolideConfigRequest) implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion() {
+func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesKolideConfigRequest) implementsDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesTaniumConfigRequest struct {
@@ -390,7 +390,7 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesTaniumConfigRequest) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesTaniumConfigRequest) implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion() {
+func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesTaniumConfigRequest) implementsDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigRequest struct {
@@ -404,7 +404,7 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigR
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigRequest) implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion() {
+func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigRequest) implementsDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest struct {
@@ -422,7 +422,7 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigReques
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest) implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion() {
+func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest) implementsDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
 // The type of device posture integration.
@@ -584,7 +584,7 @@ func (r DevicePostureIntegrationEditParamsConfig) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationEditParamsConfig) implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion() {
+func (r DevicePostureIntegrationEditParamsConfig) implementsDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
 // The configuration object containing third-party integration information.
@@ -600,7 +600,7 @@ func (r DevicePostureIntegrationEditParamsConfig) implementsZeroTrustDevicePostu
 // [zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest],
 // [DevicePostureIntegrationEditParamsConfig].
 type DevicePostureIntegrationEditParamsConfigUnion interface {
-	implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion()
+	implementsDevicePostureIntegrationEditParamsConfigUnion()
 }
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest struct {
@@ -618,7 +618,7 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRe
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest) implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion() {
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest) implementsDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesCrowdstrikeConfigRequest struct {
@@ -636,7 +636,7 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCrowdstrikeConfigReq
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCrowdstrikeConfigRequest) implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion() {
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCrowdstrikeConfigRequest) implementsDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesUptycsConfigRequest struct {
@@ -654,7 +654,7 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesUptycsConfigRequest)
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesUptycsConfigRequest) implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion() {
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesUptycsConfigRequest) implementsDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesIntuneConfigRequest struct {
@@ -670,7 +670,7 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesIntuneConfigRequest)
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesIntuneConfigRequest) implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion() {
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesIntuneConfigRequest) implementsDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest struct {
@@ -684,7 +684,7 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest)
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest) implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion() {
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest) implementsDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest struct {
@@ -704,7 +704,7 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest)
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest) implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion() {
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest) implementsDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfigRequest struct {
@@ -718,7 +718,7 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfig
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfigRequest) implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion() {
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfigRequest) implementsDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest struct {
@@ -736,7 +736,7 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigReque
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest) implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion() {
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest) implementsDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
 // The type of device posture integration.

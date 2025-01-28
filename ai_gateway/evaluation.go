@@ -293,7 +293,7 @@ func (r EvaluationNewResponseDatasetsFiltersOperator) IsKnown() bool {
 // Union satisfied by [shared.UnionString], [shared.UnionFloat] or
 // [shared.UnionBool].
 type EvaluationNewResponseDatasetsFiltersValueUnion interface {
-	ImplementsAIGatewayEvaluationNewResponseDatasetsFiltersValueUnion()
+	ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()
 }
 
 func init() {
@@ -507,7 +507,7 @@ func (r EvaluationListResponseDatasetsFiltersOperator) IsKnown() bool {
 // Union satisfied by [shared.UnionString], [shared.UnionFloat] or
 // [shared.UnionBool].
 type EvaluationListResponseDatasetsFiltersValueUnion interface {
-	ImplementsAIGatewayEvaluationListResponseDatasetsFiltersValueUnion()
+	ImplementsEvaluationListResponseDatasetsFiltersValueUnion()
 }
 
 func init() {
@@ -721,7 +721,7 @@ func (r EvaluationDeleteResponseDatasetsFiltersOperator) IsKnown() bool {
 // Union satisfied by [shared.UnionString], [shared.UnionFloat] or
 // [shared.UnionBool].
 type EvaluationDeleteResponseDatasetsFiltersValueUnion interface {
-	ImplementsAIGatewayEvaluationDeleteResponseDatasetsFiltersValueUnion()
+	ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()
 }
 
 func init() {
@@ -935,7 +935,7 @@ func (r EvaluationGetResponseDatasetsFiltersOperator) IsKnown() bool {
 // Union satisfied by [shared.UnionString], [shared.UnionFloat] or
 // [shared.UnionBool].
 type EvaluationGetResponseDatasetsFiltersValueUnion interface {
-	ImplementsAIGatewayEvaluationGetResponseDatasetsFiltersValueUnion()
+	ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()
 }
 
 func init() {
