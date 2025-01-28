@@ -201,11 +201,9 @@ func (r singleStepMigrationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SingleStepMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
-}
+func (r SingleStepMigration) ImplementsDispatchNamespaceScriptSettingEditResponseMigrations() {}
 
-func (r SingleStepMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
-}
+func (r SingleStepMigration) ImplementsDispatchNamespaceScriptSettingGetResponseMigrations() {}
 
 type SingleStepMigrationRenamedClass struct {
 	From string                              `json:"from"`
@@ -279,12 +277,12 @@ func (r SingleStepMigrationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SingleStepMigrationParam) implementsWorkersScriptUpdateParamsMetadataMigrationsUnion() {}
+func (r SingleStepMigrationParam) implementsScriptUpdateParamsMetadataMigrationsUnion() {}
 
-func (r SingleStepMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsMetadataMigrationsUnion() {
+func (r SingleStepMigrationParam) ImplementsDispatchNamespaceScriptUpdateParamsMetadataMigrationsUnion() {
 }
 
-func (r SingleStepMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
+func (r SingleStepMigrationParam) ImplementsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
 }
 
 type SingleStepMigrationRenamedClassParam struct {

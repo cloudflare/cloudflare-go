@@ -312,7 +312,7 @@ func (r BucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition) AsUnion
 // or
 // [r2.BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition].
 type BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionUnion interface {
-	implementsR2BucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition()
+	implementsBucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition()
 }
 
 func init() {
@@ -356,7 +356,7 @@ func (r bucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2Lifecyc
 	return r.raw
 }
 
-func (r BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition) implementsR2BucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition() {
+func (r BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition) implementsBucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition() {
 }
 
 type BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleAgeConditionType string
@@ -398,7 +398,7 @@ func (r bucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2Lifecyc
 	return r.raw
 }
 
-func (r BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition) implementsR2BucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition() {
+func (r BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition) implementsBucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition() {
 }
 
 type BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleDateConditionType string
@@ -508,7 +508,7 @@ func (r BucketLifecycleGetResponseRulesStorageClassTransitionsCondition) AsUnion
 // or
 // [r2.BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleDateCondition].
 type BucketLifecycleGetResponseRulesStorageClassTransitionsConditionUnion interface {
-	implementsR2BucketLifecycleGetResponseRulesStorageClassTransitionsCondition()
+	implementsBucketLifecycleGetResponseRulesStorageClassTransitionsCondition()
 }
 
 func init() {
@@ -552,7 +552,7 @@ func (r bucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2Lifecyc
 	return r.raw
 }
 
-func (r BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleAgeCondition) implementsR2BucketLifecycleGetResponseRulesStorageClassTransitionsCondition() {
+func (r BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleAgeCondition) implementsBucketLifecycleGetResponseRulesStorageClassTransitionsCondition() {
 }
 
 type BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleAgeConditionType string
@@ -594,7 +594,7 @@ func (r bucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2Lifecyc
 	return r.raw
 }
 
-func (r BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleDateCondition) implementsR2BucketLifecycleGetResponseRulesStorageClassTransitionsCondition() {
+func (r BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleDateCondition) implementsBucketLifecycleGetResponseRulesStorageClassTransitionsCondition() {
 }
 
 type BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleDateConditionType string
@@ -742,7 +742,7 @@ func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionCondition) Marsha
 	return apijson.MarshalRoot(r)
 }
 
-func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionCondition) implementsR2BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionUnion() {
+func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionCondition) implementsBucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionUnion() {
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
@@ -753,7 +753,7 @@ func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionCondition) implem
 // [r2.BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition],
 // [BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionCondition].
 type BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionUnion interface {
-	implementsR2BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionUnion()
+	implementsBucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionUnion()
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
@@ -767,7 +767,7 @@ func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2Lifecy
 	return apijson.MarshalRoot(r)
 }
 
-func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition) implementsR2BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionUnion() {
+func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition) implementsBucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionUnion() {
 }
 
 type BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleAgeConditionType string
@@ -794,7 +794,7 @@ func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2Lifecy
 	return apijson.MarshalRoot(r)
 }
 
-func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition) implementsR2BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionUnion() {
+func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleDateCondition) implementsBucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionUnion() {
 }
 
 type BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleDateConditionType string
@@ -849,7 +849,7 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsCondition) Marsha
 	return apijson.MarshalRoot(r)
 }
 
-func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsCondition) implementsR2BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionUnion() {
+func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsCondition) implementsBucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionUnion() {
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
@@ -860,7 +860,7 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsCondition) implem
 // [r2.BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleDateCondition],
 // [BucketLifecycleUpdateParamsRulesStorageClassTransitionsCondition].
 type BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionUnion interface {
-	implementsR2BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionUnion()
+	implementsBucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionUnion()
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
@@ -874,7 +874,7 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2Lifecy
 	return apijson.MarshalRoot(r)
 }
 
-func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleAgeCondition) implementsR2BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionUnion() {
+func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleAgeCondition) implementsBucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionUnion() {
 }
 
 type BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleAgeConditionType string
@@ -901,7 +901,7 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2Lifecy
 	return apijson.MarshalRoot(r)
 }
 
-func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleDateCondition) implementsR2BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionUnion() {
+func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleDateCondition) implementsBucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionUnion() {
 }
 
 type BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleDateConditionType string

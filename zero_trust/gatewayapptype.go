@@ -116,7 +116,7 @@ func (r AppType) AsUnion() AppTypeUnion {
 // Union satisfied by [zero_trust.AppTypeZeroTrustGatewayApplication] or
 // [zero_trust.AppTypeZeroTrustGatewayApplicationType].
 type AppTypeUnion interface {
-	implementsZeroTrustAppType()
+	implementsAppType()
 }
 
 func init() {
@@ -165,7 +165,7 @@ func (r appTypeZeroTrustGatewayApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppTypeZeroTrustGatewayApplication) implementsZeroTrustAppType() {}
+func (r AppTypeZeroTrustGatewayApplication) implementsAppType() {}
 
 type AppTypeZeroTrustGatewayApplicationType struct {
 	// The identifier for the type of this application. There can be many applications
@@ -198,7 +198,7 @@ func (r appTypeZeroTrustGatewayApplicationTypeJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppTypeZeroTrustGatewayApplicationType) implementsZeroTrustAppType() {}
+func (r AppTypeZeroTrustGatewayApplicationType) implementsAppType() {}
 
 type GatewayAppTypeListParams struct {
 	// Identifier

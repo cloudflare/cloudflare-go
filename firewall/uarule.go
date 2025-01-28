@@ -275,7 +275,7 @@ func (r UARuleNewParamsConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r UARuleNewParamsConfiguration) implementsFirewallUARuleNewParamsConfigurationUnion() {}
+func (r UARuleNewParamsConfiguration) implementsUARuleNewParamsConfigurationUnion() {}
 
 // The rule configuration.
 //
@@ -284,7 +284,7 @@ func (r UARuleNewParamsConfiguration) implementsFirewallUARuleNewParamsConfigura
 // [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
 // [UARuleNewParamsConfiguration].
 type UARuleNewParamsConfigurationUnion interface {
-	implementsFirewallUARuleNewParamsConfigurationUnion()
+	implementsUARuleNewParamsConfigurationUnion()
 }
 
 // The configuration target. You must set the target to `ip` when specifying an IP
@@ -396,7 +396,7 @@ func (r UARuleUpdateParamsConfiguration) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r UARuleUpdateParamsConfiguration) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
+func (r UARuleUpdateParamsConfiguration) implementsUARuleUpdateParamsConfigurationUnion() {}
 
 // The rule configuration.
 //
@@ -405,7 +405,7 @@ func (r UARuleUpdateParamsConfiguration) implementsFirewallUARuleUpdateParamsCon
 // [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
 // [UARuleUpdateParamsConfiguration].
 type UARuleUpdateParamsConfigurationUnion interface {
-	implementsFirewallUARuleUpdateParamsConfigurationUnion()
+	implementsUARuleUpdateParamsConfigurationUnion()
 }
 
 // The configuration target. You must set the target to `ip` when specifying an IP

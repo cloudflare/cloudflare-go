@@ -259,7 +259,7 @@ func (r firewallFilterJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r FirewallFilter) ImplementsFirewallFirewallRuleFilter() {}
+func (r FirewallFilter) ImplementsFirewallRuleFilter() {}
 
 type FirewallFilterParam struct {
 	// An informative summary of the filter.

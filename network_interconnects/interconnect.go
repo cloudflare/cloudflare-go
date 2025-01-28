@@ -187,7 +187,7 @@ func (r InterconnectNewResponse) AsUnion() InterconnectNewResponseUnion {
 // [network_interconnects.InterconnectNewResponseNscInterconnectPhysicalBody] or
 // [network_interconnects.InterconnectNewResponseNscInterconnectGcpPartnerBody].
 type InterconnectNewResponseUnion interface {
-	implementsNetworkInterconnectsInterconnectNewResponse()
+	implementsInterconnectNewResponse()
 }
 
 func init() {
@@ -241,8 +241,7 @@ func (r interconnectNewResponseNscInterconnectPhysicalBodyJSON) RawJSON() string
 	return r.raw
 }
 
-func (r InterconnectNewResponseNscInterconnectPhysicalBody) implementsNetworkInterconnectsInterconnectNewResponse() {
-}
+func (r InterconnectNewResponseNscInterconnectPhysicalBody) implementsInterconnectNewResponse() {}
 
 type InterconnectNewResponseNscInterconnectPhysicalBodyFacility struct {
 	Address []string                                                       `json:"address,required"`
@@ -297,8 +296,7 @@ func (r interconnectNewResponseNscInterconnectGcpPartnerBodyJSON) RawJSON() stri
 	return r.raw
 }
 
-func (r InterconnectNewResponseNscInterconnectGcpPartnerBody) implementsNetworkInterconnectsInterconnectNewResponse() {
-}
+func (r InterconnectNewResponseNscInterconnectGcpPartnerBody) implementsInterconnectNewResponse() {}
 
 type InterconnectListResponse struct {
 	Items []InterconnectListResponseItem `json:"items,required"`
@@ -384,7 +382,7 @@ func (r InterconnectListResponseItem) AsUnion() InterconnectListResponseItemsUni
 // or
 // [network_interconnects.InterconnectListResponseItemsNscInterconnectGcpPartnerBody].
 type InterconnectListResponseItemsUnion interface {
-	implementsNetworkInterconnectsInterconnectListResponseItem()
+	implementsInterconnectListResponseItem()
 }
 
 func init() {
@@ -439,7 +437,7 @@ func (r interconnectListResponseItemsNscInterconnectPhysicalBodyJSON) RawJSON() 
 	return r.raw
 }
 
-func (r InterconnectListResponseItemsNscInterconnectPhysicalBody) implementsNetworkInterconnectsInterconnectListResponseItem() {
+func (r InterconnectListResponseItemsNscInterconnectPhysicalBody) implementsInterconnectListResponseItem() {
 }
 
 type InterconnectListResponseItemsNscInterconnectPhysicalBodyFacility struct {
@@ -496,7 +494,7 @@ func (r interconnectListResponseItemsNscInterconnectGcpPartnerBodyJSON) RawJSON(
 	return r.raw
 }
 
-func (r InterconnectListResponseItemsNscInterconnectGcpPartnerBody) implementsNetworkInterconnectsInterconnectListResponseItem() {
+func (r InterconnectListResponseItemsNscInterconnectGcpPartnerBody) implementsInterconnectListResponseItem() {
 }
 
 type InterconnectGetResponse struct {
@@ -559,7 +557,7 @@ func (r InterconnectGetResponse) AsUnion() InterconnectGetResponseUnion {
 // [network_interconnects.InterconnectGetResponseNscInterconnectPhysicalBody] or
 // [network_interconnects.InterconnectGetResponseNscInterconnectGcpPartnerBody].
 type InterconnectGetResponseUnion interface {
-	implementsNetworkInterconnectsInterconnectGetResponse()
+	implementsInterconnectGetResponse()
 }
 
 func init() {
@@ -613,8 +611,7 @@ func (r interconnectGetResponseNscInterconnectPhysicalBodyJSON) RawJSON() string
 	return r.raw
 }
 
-func (r InterconnectGetResponseNscInterconnectPhysicalBody) implementsNetworkInterconnectsInterconnectGetResponse() {
-}
+func (r InterconnectGetResponseNscInterconnectPhysicalBody) implementsInterconnectGetResponse() {}
 
 type InterconnectGetResponseNscInterconnectPhysicalBodyFacility struct {
 	Address []string                                                       `json:"address,required"`
@@ -669,8 +666,7 @@ func (r interconnectGetResponseNscInterconnectGcpPartnerBodyJSON) RawJSON() stri
 	return r.raw
 }
 
-func (r InterconnectGetResponseNscInterconnectGcpPartnerBody) implementsNetworkInterconnectsInterconnectGetResponse() {
-}
+func (r InterconnectGetResponseNscInterconnectGcpPartnerBody) implementsInterconnectGetResponse() {}
 
 type InterconnectStatusResponse struct {
 	State InterconnectStatusResponseState `json:"state,required"`
@@ -719,7 +715,7 @@ func (r InterconnectStatusResponse) AsUnion() InterconnectStatusResponseUnion {
 // [network_interconnects.InterconnectStatusResponseUnhealthy] or
 // [network_interconnects.InterconnectStatusResponseHealthy].
 type InterconnectStatusResponseUnion interface {
-	implementsNetworkInterconnectsInterconnectStatusResponse()
+	implementsInterconnectStatusResponse()
 }
 
 func init() {
@@ -770,8 +766,7 @@ func (r interconnectStatusResponsePendingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r InterconnectStatusResponsePending) implementsNetworkInterconnectsInterconnectStatusResponse() {
-}
+func (r InterconnectStatusResponsePending) implementsInterconnectStatusResponse() {}
 
 type InterconnectStatusResponsePendingState string
 
@@ -811,7 +806,7 @@ func (r interconnectStatusResponseDownJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r InterconnectStatusResponseDown) implementsNetworkInterconnectsInterconnectStatusResponse() {}
+func (r InterconnectStatusResponseDown) implementsInterconnectStatusResponse() {}
 
 type InterconnectStatusResponseDownState string
 
@@ -851,8 +846,7 @@ func (r interconnectStatusResponseUnhealthyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r InterconnectStatusResponseUnhealthy) implementsNetworkInterconnectsInterconnectStatusResponse() {
-}
+func (r InterconnectStatusResponseUnhealthy) implementsInterconnectStatusResponse() {}
 
 type InterconnectStatusResponseUnhealthyState string
 
@@ -889,8 +883,7 @@ func (r interconnectStatusResponseHealthyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r InterconnectStatusResponseHealthy) implementsNetworkInterconnectsInterconnectStatusResponse() {
-}
+func (r InterconnectStatusResponseHealthy) implementsInterconnectStatusResponse() {}
 
 type InterconnectStatusResponseHealthyState string
 
@@ -948,14 +941,14 @@ func (r InterconnectNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r InterconnectNewParamsBody) implementsNetworkInterconnectsInterconnectNewParamsBodyUnion() {}
+func (r InterconnectNewParamsBody) implementsInterconnectNewParamsBodyUnion() {}
 
 // Satisfied by
 // [network_interconnects.InterconnectNewParamsBodyNscInterconnectCreatePhysicalBody],
 // [network_interconnects.InterconnectNewParamsBodyNscInterconnectCreateGcpPartnerBody],
 // [InterconnectNewParamsBody].
 type InterconnectNewParamsBodyUnion interface {
-	implementsNetworkInterconnectsInterconnectNewParamsBodyUnion()
+	implementsInterconnectNewParamsBodyUnion()
 }
 
 type InterconnectNewParamsBodyNscInterconnectCreatePhysicalBody struct {
@@ -969,7 +962,7 @@ func (r InterconnectNewParamsBodyNscInterconnectCreatePhysicalBody) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r InterconnectNewParamsBodyNscInterconnectCreatePhysicalBody) implementsNetworkInterconnectsInterconnectNewParamsBodyUnion() {
+func (r InterconnectNewParamsBodyNscInterconnectCreatePhysicalBody) implementsInterconnectNewParamsBodyUnion() {
 }
 
 type InterconnectNewParamsBodyNscInterconnectCreateGcpPartnerBody struct {
@@ -985,7 +978,7 @@ func (r InterconnectNewParamsBodyNscInterconnectCreateGcpPartnerBody) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r InterconnectNewParamsBodyNscInterconnectCreateGcpPartnerBody) implementsNetworkInterconnectsInterconnectNewParamsBodyUnion() {
+func (r InterconnectNewParamsBodyNscInterconnectCreateGcpPartnerBody) implementsInterconnectNewParamsBodyUnion() {
 }
 
 // Bandwidth structure as visible through the customer-facing API.

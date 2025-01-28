@@ -280,7 +280,7 @@ func (r DispatchNamespaceScriptSettingEditResponseBinding) AsUnion() DispatchNam
 // or
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadata].
 type DispatchNamespaceScriptSettingEditResponseBindingsUnion interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding()
+	implementsDispatchNamespaceScriptSettingEditResponseBinding()
 }
 
 func init() {
@@ -397,7 +397,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnyJ
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAny) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAny) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAI struct {
@@ -426,7 +426,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAIJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAI) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAI) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -473,7 +473,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnal
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -517,7 +517,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAsse
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAssets) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAssets) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -561,7 +561,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrow
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrowserRendering) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrowserRendering) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -608,7 +608,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1JS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -658,7 +658,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDisp
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespace) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespace) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -770,7 +770,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDoJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDo) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDo) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -817,7 +817,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHype
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdrive) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdrive) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -864,7 +864,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -911,7 +911,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNa
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespace) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespace) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -958,7 +958,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMtls
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCERT) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCERT) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -1005,7 +1005,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlai
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -1052,7 +1052,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueu
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -1099,7 +1099,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2JS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -1146,7 +1146,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecr
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecret) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecret) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -1196,7 +1196,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindServ
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindService) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindService) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -1243,7 +1243,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTail
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTailConsumer) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTailConsumer) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -1290,7 +1290,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVect
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorize) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorize) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -1334,7 +1334,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVers
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadata) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadata) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -1442,7 +1442,7 @@ func (r DispatchNamespaceScriptSettingEditResponseMigrations) AsUnion() Dispatch
 // Union satisfied by [workers.SingleStepMigration] or
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations].
 type DispatchNamespaceScriptSettingEditResponseMigrationsUnion interface {
-	ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations()
+	ImplementsDispatchNamespaceScriptSettingEditResponseMigrations()
 }
 
 func init() {
@@ -1490,7 +1490,7 @@ func (r dispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepM
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
+func (r DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations) ImplementsDispatchNamespaceScriptSettingEditResponseMigrations() {
 }
 
 // Observability settings for the Worker.
@@ -1767,7 +1767,7 @@ func (r DispatchNamespaceScriptSettingGetResponseBinding) AsUnion() DispatchName
 // or
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadata].
 type DispatchNamespaceScriptSettingGetResponseBindingsUnion interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding()
+	implementsDispatchNamespaceScriptSettingGetResponseBinding()
 }
 
 func init() {
@@ -1884,7 +1884,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnyJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAny) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAny) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAI struct {
@@ -1913,7 +1913,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAIJSO
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAI) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAI) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -1960,7 +1960,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnaly
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2004,7 +2004,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAsset
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAssets) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAssets) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2048,7 +2048,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrows
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrowserRendering) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrowserRendering) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2095,7 +2095,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1JSO
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2145,7 +2145,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispa
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespace) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespace) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2257,7 +2257,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDoJSO
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDo) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDo) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2304,7 +2304,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyper
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdrive) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdrive) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2351,7 +2351,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonJ
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2398,7 +2398,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNam
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespace) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespace) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2445,7 +2445,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMtlsc
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCERT) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCERT) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2492,7 +2492,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlain
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2539,7 +2539,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2586,7 +2586,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2JSO
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2633,7 +2633,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecre
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecret) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecret) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2683,7 +2683,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindServi
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindService) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindService) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2730,7 +2730,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTailC
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTailConsumer) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTailConsumer) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2777,7 +2777,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVecto
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorize) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorize) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2821,7 +2821,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersi
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadata) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadata) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
@@ -2929,7 +2929,7 @@ func (r DispatchNamespaceScriptSettingGetResponseMigrations) AsUnion() DispatchN
 // Union satisfied by [workers.SingleStepMigration] or
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations].
 type DispatchNamespaceScriptSettingGetResponseMigrationsUnion interface {
-	ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations()
+	ImplementsDispatchNamespaceScriptSettingGetResponseMigrations()
 }
 
 func init() {
@@ -2977,7 +2977,7 @@ func (r dispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMi
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
+func (r DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations) ImplementsDispatchNamespaceScriptSettingGetResponseMigrations() {
 }
 
 // Observability settings for the Worker.
@@ -3161,7 +3161,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // A binding to allow the Worker to communicate with resources
@@ -3189,7 +3189,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) implementsWorke
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadata],
 // [DispatchNamespaceScriptSettingEditParamsSettingsBinding].
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingUnion interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion()
+	implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion()
 }
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAny struct {
@@ -3204,7 +3204,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAny) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAny) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAI struct {
@@ -3218,7 +3218,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAI) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAI) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3249,7 +3249,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngine) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngine) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3278,7 +3278,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAssets) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAssets) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3307,7 +3307,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRendering) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRendering) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3338,7 +3338,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindD1) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindD1) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3371,7 +3371,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespace) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespace) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3434,7 +3434,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDo) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDo) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3465,7 +3465,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindHyperdrive) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindHyperdrive) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3496,7 +3496,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJson) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJson) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3527,7 +3527,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespace) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespace) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3558,7 +3558,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCERT) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCERT) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3589,7 +3589,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPlainText) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPlainText) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3620,7 +3620,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindQueue) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindQueue) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3651,7 +3651,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3682,7 +3682,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecret) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecret) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3715,7 +3715,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindService) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindService) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3746,7 +3746,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumer) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumer) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3777,7 +3777,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVectorize) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVectorize) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3806,7 +3806,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadata) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadata) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -3853,7 +3853,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) ImplementsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
@@ -3862,7 +3862,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) ImplementsWo
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsMigrationsWorkersMultipleStepMigrations],
 // [DispatchNamespaceScriptSettingEditParamsSettingsMigrations].
 type DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion interface {
-	ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion()
+	ImplementsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion()
 }
 
 type DispatchNamespaceScriptSettingEditParamsSettingsMigrationsWorkersMultipleStepMigrations struct {
@@ -3879,7 +3879,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrationsWorkersMultipl
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrationsWorkersMultipleStepMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrationsWorkersMultipleStepMigrations) ImplementsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
 }
 
 // Observability settings for the Worker.

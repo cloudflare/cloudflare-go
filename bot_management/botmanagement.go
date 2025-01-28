@@ -175,9 +175,9 @@ func (r botFightModeConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BotFightModeConfiguration) implementsBotManagementBotManagementUpdateResponse() {}
+func (r BotFightModeConfiguration) implementsBotManagementUpdateResponse() {}
 
-func (r BotFightModeConfiguration) implementsBotManagementBotManagementGetResponse() {}
+func (r BotFightModeConfiguration) implementsBotManagementGetResponse() {}
 
 // Enable rule to block AI Scrapers and Crawlers.
 type BotFightModeConfigurationAIBotsProtection string
@@ -250,7 +250,7 @@ func (r BotFightModeConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BotFightModeConfigurationParam) implementsBotManagementBotManagementUpdateParamsBodyUnion() {}
+func (r BotFightModeConfigurationParam) implementsBotManagementUpdateParamsBodyUnion() {}
 
 // A read-only field that shows which unauthorized settings are currently active on
 // the zone. These settings typically result from upgrades or downgrades.
@@ -318,9 +318,9 @@ func (r subscriptionConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SubscriptionConfiguration) implementsBotManagementBotManagementUpdateResponse() {}
+func (r SubscriptionConfiguration) implementsBotManagementUpdateResponse() {}
 
-func (r SubscriptionConfiguration) implementsBotManagementBotManagementGetResponse() {}
+func (r SubscriptionConfiguration) implementsBotManagementGetResponse() {}
 
 // Enable rule to block AI Scrapers and Crawlers.
 type SubscriptionConfigurationAIBotsProtection string
@@ -398,7 +398,7 @@ func (r SubscriptionConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SubscriptionConfigurationParam) implementsBotManagementBotManagementUpdateParamsBodyUnion() {}
+func (r SubscriptionConfigurationParam) implementsBotManagementUpdateParamsBodyUnion() {}
 
 // A read-only field that shows which unauthorized settings are currently active on
 // the zone. These settings typically result from upgrades or downgrades.
@@ -471,10 +471,9 @@ func (r superBotFightModeDefinitelyConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementBotManagementUpdateResponse() {
-}
+func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementUpdateResponse() {}
 
-func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementBotManagementGetResponse() {}
+func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementGetResponse() {}
 
 // Enable rule to block AI Scrapers and Crawlers.
 type SuperBotFightModeDefinitelyConfigurationAIBotsProtection string
@@ -576,7 +575,7 @@ func (r SuperBotFightModeDefinitelyConfigurationParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r SuperBotFightModeDefinitelyConfigurationParam) implementsBotManagementBotManagementUpdateParamsBodyUnion() {
+func (r SuperBotFightModeDefinitelyConfigurationParam) implementsBotManagementUpdateParamsBodyUnion() {
 }
 
 // A read-only field that shows which unauthorized settings are currently active on
@@ -644,9 +643,9 @@ func (r superBotFightModeLikelyConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementBotManagementUpdateResponse() {}
+func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementUpdateResponse() {}
 
-func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementBotManagementGetResponse() {}
+func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementGetResponse() {}
 
 // Enable rule to block AI Scrapers and Crawlers.
 type SuperBotFightModeLikelyConfigurationAIBotsProtection string
@@ -763,8 +762,7 @@ func (r SuperBotFightModeLikelyConfigurationParam) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r SuperBotFightModeLikelyConfigurationParam) implementsBotManagementBotManagementUpdateParamsBodyUnion() {
-}
+func (r SuperBotFightModeLikelyConfigurationParam) implementsBotManagementUpdateParamsBodyUnion() {}
 
 // A read-only field that shows which unauthorized settings are currently active on
 // the zone. These settings typically result from upgrades or downgrades.
@@ -866,7 +864,7 @@ func (r BotManagementUpdateResponse) AsUnion() BotManagementUpdateResponseUnion 
 // [bot_management.SuperBotFightModeLikelyConfiguration] or
 // [bot_management.SubscriptionConfiguration].
 type BotManagementUpdateResponseUnion interface {
-	implementsBotManagementBotManagementUpdateResponse()
+	implementsBotManagementUpdateResponse()
 }
 
 func init() {
@@ -1047,7 +1045,7 @@ func (r BotManagementGetResponse) AsUnion() BotManagementGetResponseUnion {
 // [bot_management.SuperBotFightModeLikelyConfiguration] or
 // [bot_management.SubscriptionConfiguration].
 type BotManagementGetResponseUnion interface {
-	implementsBotManagementBotManagementGetResponse()
+	implementsBotManagementGetResponse()
 }
 
 func init() {
@@ -1183,7 +1181,7 @@ func (r BotManagementUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BotManagementUpdateParamsBody) implementsBotManagementBotManagementUpdateParamsBodyUnion() {}
+func (r BotManagementUpdateParamsBody) implementsBotManagementUpdateParamsBodyUnion() {}
 
 // Satisfied by [bot_management.BotFightModeConfigurationParam],
 // [bot_management.SuperBotFightModeDefinitelyConfigurationParam],
@@ -1191,7 +1189,7 @@ func (r BotManagementUpdateParamsBody) implementsBotManagementBotManagementUpdat
 // [bot_management.SubscriptionConfigurationParam],
 // [BotManagementUpdateParamsBody].
 type BotManagementUpdateParamsBodyUnion interface {
-	implementsBotManagementBotManagementUpdateParamsBodyUnion()
+	implementsBotManagementUpdateParamsBodyUnion()
 }
 
 // Enable rule to block AI Scrapers and Crawlers.

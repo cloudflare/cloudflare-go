@@ -176,7 +176,7 @@ func (r Consumer) AsUnion() ConsumerUnion {
 // Union satisfied by [queues.ConsumerMqWorkerConsumer] or
 // [queues.ConsumerMqHTTPConsumer].
 type ConsumerUnion interface {
-	implementsQueuesConsumer()
+	implementsConsumer()
 }
 
 func init() {
@@ -228,7 +228,7 @@ func (r consumerMqWorkerConsumerJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ConsumerMqWorkerConsumer) implementsQueuesConsumer() {}
+func (r ConsumerMqWorkerConsumer) implementsConsumer() {}
 
 type ConsumerMqWorkerConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
@@ -312,7 +312,7 @@ func (r consumerMqHTTPConsumerJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ConsumerMqHTTPConsumer) implementsQueuesConsumer() {}
+func (r ConsumerMqHTTPConsumer) implementsConsumer() {}
 
 type ConsumerMqHTTPConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
@@ -387,12 +387,12 @@ func (r ConsumerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerParam) implementsQueuesConsumerUnionParam() {}
+func (r ConsumerParam) implementsConsumerUnionParam() {}
 
 // Satisfied by [queues.ConsumerMqWorkerConsumerParam],
 // [queues.ConsumerMqHTTPConsumerParam], [ConsumerParam].
 type ConsumerUnionParam interface {
-	implementsQueuesConsumerUnionParam()
+	implementsConsumerUnionParam()
 }
 
 type ConsumerMqWorkerConsumerParam struct {
@@ -406,7 +406,7 @@ func (r ConsumerMqWorkerConsumerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerMqWorkerConsumerParam) implementsQueuesConsumerUnionParam() {}
+func (r ConsumerMqWorkerConsumerParam) implementsConsumerUnionParam() {}
 
 type ConsumerMqWorkerConsumerSettingsParam struct {
 	// The maximum number of messages to include in a batch.
@@ -437,7 +437,7 @@ func (r ConsumerMqHTTPConsumerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerMqHTTPConsumerParam) implementsQueuesConsumerUnionParam() {}
+func (r ConsumerMqHTTPConsumerParam) implementsConsumerUnionParam() {}
 
 type ConsumerMqHTTPConsumerSettingsParam struct {
 	// The maximum number of messages to include in a batch.
@@ -519,12 +519,12 @@ func (r ConsumerNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerNewParamsBody) implementsQueuesConsumerNewParamsBodyUnion() {}
+func (r ConsumerNewParamsBody) implementsConsumerNewParamsBodyUnion() {}
 
 // Satisfied by [queues.ConsumerNewParamsBodyMqWorkerConsumer],
 // [queues.ConsumerNewParamsBodyMqHTTPConsumer], [ConsumerNewParamsBody].
 type ConsumerNewParamsBodyUnion interface {
-	implementsQueuesConsumerNewParamsBodyUnion()
+	implementsConsumerNewParamsBodyUnion()
 }
 
 type ConsumerNewParamsBodyMqWorkerConsumer struct {
@@ -539,7 +539,7 @@ func (r ConsumerNewParamsBodyMqWorkerConsumer) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerNewParamsBodyMqWorkerConsumer) implementsQueuesConsumerNewParamsBodyUnion() {}
+func (r ConsumerNewParamsBodyMqWorkerConsumer) implementsConsumerNewParamsBodyUnion() {}
 
 type ConsumerNewParamsBodyMqWorkerConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
@@ -585,7 +585,7 @@ func (r ConsumerNewParamsBodyMqHTTPConsumer) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerNewParamsBodyMqHTTPConsumer) implementsQueuesConsumerNewParamsBodyUnion() {}
+func (r ConsumerNewParamsBodyMqHTTPConsumer) implementsConsumerNewParamsBodyUnion() {}
 
 type ConsumerNewParamsBodyMqHTTPConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
@@ -698,12 +698,12 @@ func (r ConsumerUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerUpdateParamsBody) implementsQueuesConsumerUpdateParamsBodyUnion() {}
+func (r ConsumerUpdateParamsBody) implementsConsumerUpdateParamsBodyUnion() {}
 
 // Satisfied by [queues.ConsumerUpdateParamsBodyMqWorkerConsumer],
 // [queues.ConsumerUpdateParamsBodyMqHTTPConsumer], [ConsumerUpdateParamsBody].
 type ConsumerUpdateParamsBodyUnion interface {
-	implementsQueuesConsumerUpdateParamsBodyUnion()
+	implementsConsumerUpdateParamsBodyUnion()
 }
 
 type ConsumerUpdateParamsBodyMqWorkerConsumer struct {
@@ -718,7 +718,7 @@ func (r ConsumerUpdateParamsBodyMqWorkerConsumer) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerUpdateParamsBodyMqWorkerConsumer) implementsQueuesConsumerUpdateParamsBodyUnion() {}
+func (r ConsumerUpdateParamsBodyMqWorkerConsumer) implementsConsumerUpdateParamsBodyUnion() {}
 
 type ConsumerUpdateParamsBodyMqWorkerConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
@@ -764,7 +764,7 @@ func (r ConsumerUpdateParamsBodyMqHTTPConsumer) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerUpdateParamsBodyMqHTTPConsumer) implementsQueuesConsumerUpdateParamsBodyUnion() {}
+func (r ConsumerUpdateParamsBodyMqHTTPConsumer) implementsConsumerUpdateParamsBodyUnion() {}
 
 type ConsumerUpdateParamsBodyMqHTTPConsumerSettings struct {
 	// The maximum number of messages to include in a batch.

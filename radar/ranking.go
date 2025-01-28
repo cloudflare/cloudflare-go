@@ -161,7 +161,7 @@ func (r rankingTimeseriesGroupsResponseSerie0JSON) RawJSON() string {
 
 // Union satisfied by [shared.UnionString] or [shared.UnionFloat].
 type RankingTimeseriesGroupsResponseSerie0Union interface {
-	ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()
+	ImplementsRankingTimeseriesGroupsResponseSerie0Union()
 }
 
 func init() {

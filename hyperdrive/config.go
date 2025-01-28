@@ -483,14 +483,14 @@ func (r ConfigEditParamsCaching) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigEditParamsCaching) implementsHyperdriveConfigEditParamsCachingUnion() {}
+func (r ConfigEditParamsCaching) implementsConfigEditParamsCachingUnion() {}
 
 // Satisfied by
 // [hyperdrive.ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon],
 // [hyperdrive.ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled],
 // [ConfigEditParamsCaching].
 type ConfigEditParamsCachingUnion interface {
-	implementsHyperdriveConfigEditParamsCachingUnion()
+	implementsConfigEditParamsCachingUnion()
 }
 
 type ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon struct {
@@ -502,7 +502,7 @@ func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon) implementsHyperdriveConfigEditParamsCachingUnion() {
+func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon) implementsConfigEditParamsCachingUnion() {
 }
 
 type ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled struct {
@@ -520,7 +520,7 @@ func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) implementsHyperdriveConfigEditParamsCachingUnion() {
+func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) implementsConfigEditParamsCachingUnion() {
 }
 
 type ConfigEditParamsOrigin struct {
@@ -548,14 +548,14 @@ func (r ConfigEditParamsOrigin) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigEditParamsOrigin) implementsHyperdriveConfigEditParamsOriginUnion() {}
+func (r ConfigEditParamsOrigin) implementsConfigEditParamsOriginUnion() {}
 
 // Satisfied by [hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveDatabase],
 // [hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveInternetOrigin],
 // [hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveOverAccessOrigin],
 // [ConfigEditParamsOrigin].
 type ConfigEditParamsOriginUnion interface {
-	implementsHyperdriveConfigEditParamsOriginUnion()
+	implementsConfigEditParamsOriginUnion()
 }
 
 type ConfigEditParamsOriginHyperdriveHyperdriveDatabase struct {
@@ -574,8 +574,7 @@ func (r ConfigEditParamsOriginHyperdriveHyperdriveDatabase) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigEditParamsOriginHyperdriveHyperdriveDatabase) implementsHyperdriveConfigEditParamsOriginUnion() {
-}
+func (r ConfigEditParamsOriginHyperdriveHyperdriveDatabase) implementsConfigEditParamsOriginUnion() {}
 
 // Specifies the URL scheme used to connect to your origin database.
 type ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme string
@@ -604,7 +603,7 @@ func (r ConfigEditParamsOriginHyperdriveHyperdriveInternetOrigin) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigEditParamsOriginHyperdriveHyperdriveInternetOrigin) implementsHyperdriveConfigEditParamsOriginUnion() {
+func (r ConfigEditParamsOriginHyperdriveHyperdriveInternetOrigin) implementsConfigEditParamsOriginUnion() {
 }
 
 type ConfigEditParamsOriginHyperdriveHyperdriveOverAccessOrigin struct {
@@ -621,7 +620,7 @@ func (r ConfigEditParamsOriginHyperdriveHyperdriveOverAccessOrigin) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigEditParamsOriginHyperdriveHyperdriveOverAccessOrigin) implementsHyperdriveConfigEditParamsOriginUnion() {
+func (r ConfigEditParamsOriginHyperdriveHyperdriveOverAccessOrigin) implementsConfigEditParamsOriginUnion() {
 }
 
 // Specifies the URL scheme used to connect to your origin database.

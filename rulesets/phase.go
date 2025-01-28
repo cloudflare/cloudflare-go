@@ -261,7 +261,7 @@ func (r PhaseUpdateResponseRule) AsUnion() PhaseUpdateResponseRulesUnion {
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type PhaseUpdateResponseRulesUnion interface {
-	implementsRulesetsPhaseUpdateResponseRule()
+	implementsPhaseUpdateResponseRule()
 }
 
 func init() {
@@ -419,7 +419,7 @@ func (r phaseUpdateResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PhaseUpdateResponseRulesRulesetsChallengeRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r PhaseUpdateResponseRulesRulesetsChallengeRule) implementsPhaseUpdateResponseRule() {}
 
 // The action to perform when the rule matches.
 type PhaseUpdateResponseRulesRulesetsChallengeRuleAction string
@@ -589,8 +589,7 @@ func (r phaseUpdateResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PhaseUpdateResponseRulesRulesetsJSChallengeRule) implementsRulesetsPhaseUpdateResponseRule() {
-}
+func (r PhaseUpdateResponseRulesRulesetsJSChallengeRule) implementsPhaseUpdateResponseRule() {}
 
 // The action to perform when the rule matches.
 type PhaseUpdateResponseRulesRulesetsJSChallengeRuleAction string
@@ -895,7 +894,7 @@ func (r PhaseGetResponseRule) AsUnion() PhaseGetResponseRulesUnion {
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type PhaseGetResponseRulesUnion interface {
-	implementsRulesetsPhaseGetResponseRule()
+	implementsPhaseGetResponseRule()
 }
 
 func init() {
@@ -1053,7 +1052,7 @@ func (r phaseGetResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PhaseGetResponseRulesRulesetsChallengeRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r PhaseGetResponseRulesRulesetsChallengeRule) implementsPhaseGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type PhaseGetResponseRulesRulesetsChallengeRuleAction string
@@ -1223,7 +1222,7 @@ func (r phaseGetResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PhaseGetResponseRulesRulesetsJSChallengeRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r PhaseGetResponseRulesRulesetsJSChallengeRule) implementsPhaseGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type PhaseGetResponseRulesRulesetsJSChallengeRuleAction string
@@ -1409,7 +1408,7 @@ func (r PhaseUpdateParamsRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PhaseUpdateParamsRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r PhaseUpdateParamsRule) implementsPhaseUpdateParamsRuleUnion() {}
 
 // Satisfied by [rulesets.BlockRuleParam],
 // [rulesets.PhaseUpdateParamsRulesRulesetsChallengeRule],
@@ -1423,7 +1422,7 @@ func (r PhaseUpdateParamsRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 // [rulesets.LogCustomFieldRuleParam], [rulesets.DDoSDynamicRuleParam],
 // [rulesets.ForceConnectionCloseRuleParam], [PhaseUpdateParamsRule].
 type PhaseUpdateParamsRuleUnion interface {
-	implementsRulesetsPhaseUpdateParamsRuleUnion()
+	implementsPhaseUpdateParamsRuleUnion()
 }
 
 type PhaseUpdateParamsRulesRulesetsChallengeRule struct {
@@ -1453,7 +1452,7 @@ func (r PhaseUpdateParamsRulesRulesetsChallengeRule) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r PhaseUpdateParamsRulesRulesetsChallengeRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r PhaseUpdateParamsRulesRulesetsChallengeRule) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type PhaseUpdateParamsRulesRulesetsChallengeRuleAction string
@@ -1557,8 +1556,7 @@ func (r PhaseUpdateParamsRulesRulesetsJSChallengeRule) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r PhaseUpdateParamsRulesRulesetsJSChallengeRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {
-}
+func (r PhaseUpdateParamsRulesRulesetsJSChallengeRule) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type PhaseUpdateParamsRulesRulesetsJSChallengeRuleAction string

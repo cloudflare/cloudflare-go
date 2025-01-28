@@ -125,7 +125,7 @@ func (r analyticsEventBytimeGetResponseDataJSON) RawJSON() string {
 // Union satisfied by [spectrum.AnalyticsEventBytimeGetResponseDataMetricsArray] or
 // [spectrum.AnalyticsEventBytimeGetResponseDataMetricsArray].
 type AnalyticsEventBytimeGetResponseDataMetricsUnion interface {
-	implementsSpectrumAnalyticsEventBytimeGetResponseDataMetricsUnion()
+	implementsAnalyticsEventBytimeGetResponseDataMetricsUnion()
 }
 
 func init() {
@@ -145,7 +145,7 @@ func init() {
 
 type AnalyticsEventBytimeGetResponseDataMetricsArray []float64
 
-func (r AnalyticsEventBytimeGetResponseDataMetricsArray) implementsSpectrumAnalyticsEventBytimeGetResponseDataMetricsUnion() {
+func (r AnalyticsEventBytimeGetResponseDataMetricsArray) implementsAnalyticsEventBytimeGetResponseDataMetricsUnion() {
 }
 
 type AnalyticsEventBytimeGetResponseQuery struct {

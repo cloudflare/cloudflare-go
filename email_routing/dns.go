@@ -235,7 +235,7 @@ func (r DNSDeleteResponse) AsUnion() DNSDeleteResponseUnion {
 // Union satisfied by [email_routing.DNSDeleteResponseEmailAPIResponseCommon] or
 // [email_routing.DNSDeleteResponseEmailDNSSettingsResponseCollection].
 type DNSDeleteResponseUnion interface {
-	implementsEmailRoutingDNSDeleteResponse()
+	implementsDNSDeleteResponse()
 }
 
 func init() {
@@ -279,7 +279,7 @@ func (r dnsDeleteResponseEmailAPIResponseCommonJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DNSDeleteResponseEmailAPIResponseCommon) implementsEmailRoutingDNSDeleteResponse() {}
+func (r DNSDeleteResponseEmailAPIResponseCommon) implementsDNSDeleteResponse() {}
 
 // Whether the API call was successful
 type DNSDeleteResponseEmailAPIResponseCommonSuccess bool
@@ -326,8 +326,7 @@ func (r dnsDeleteResponseEmailDNSSettingsResponseCollectionJSON) RawJSON() strin
 	return r.raw
 }
 
-func (r DNSDeleteResponseEmailDNSSettingsResponseCollection) implementsEmailRoutingDNSDeleteResponse() {
-}
+func (r DNSDeleteResponseEmailDNSSettingsResponseCollection) implementsDNSDeleteResponse() {}
 
 // Whether the API call was successful
 type DNSDeleteResponseEmailDNSSettingsResponseCollectionSuccess bool
@@ -447,7 +446,7 @@ func (r DNSGetResponse) AsUnion() DNSGetResponseUnion {
 // [email_routing.DNSGetResponseEmailEmailRoutingDNSQueryResponse] or
 // [email_routing.DNSGetResponseEmailDNSSettingsResponseCollection].
 type DNSGetResponseUnion interface {
-	implementsEmailRoutingDNSGetResponse()
+	implementsDNSGetResponse()
 }
 
 func init() {
@@ -495,7 +494,7 @@ func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DNSGetResponseEmailEmailRoutingDNSQueryResponse) implementsEmailRoutingDNSGetResponse() {}
+func (r DNSGetResponseEmailEmailRoutingDNSQueryResponse) implementsDNSGetResponse() {}
 
 // Whether the API call was successful
 type DNSGetResponseEmailEmailRoutingDNSQueryResponseSuccess bool
@@ -622,7 +621,7 @@ func (r dnsGetResponseEmailDNSSettingsResponseCollectionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DNSGetResponseEmailDNSSettingsResponseCollection) implementsEmailRoutingDNSGetResponse() {}
+func (r DNSGetResponseEmailDNSSettingsResponseCollection) implementsDNSGetResponse() {}
 
 // Whether the API call was successful
 type DNSGetResponseEmailDNSSettingsResponseCollectionSuccess bool

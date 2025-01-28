@@ -298,7 +298,7 @@ func (r DLPEmailRuleNewResponseConditionsSelector) IsKnown() bool {
 // Union satisfied by [zero_trust.DLPEmailRuleNewResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleNewResponseConditionsValueUnion interface {
-	ImplementsZeroTrustDLPEmailRuleNewResponseConditionsValueUnion()
+	ImplementsDLPEmailRuleNewResponseConditionsValueUnion()
 }
 
 func init() {
@@ -318,7 +318,7 @@ func init() {
 
 type DLPEmailRuleNewResponseConditionsValueArray []string
 
-func (r DLPEmailRuleNewResponseConditionsValueArray) ImplementsZeroTrustDLPEmailRuleNewResponseConditionsValueUnion() {
+func (r DLPEmailRuleNewResponseConditionsValueArray) ImplementsDLPEmailRuleNewResponseConditionsValueUnion() {
 }
 
 type DLPEmailRuleUpdateResponse struct {
@@ -457,7 +457,7 @@ func (r DLPEmailRuleUpdateResponseConditionsSelector) IsKnown() bool {
 // Union satisfied by [zero_trust.DLPEmailRuleUpdateResponseConditionsValueArray]
 // or [shared.UnionString].
 type DLPEmailRuleUpdateResponseConditionsValueUnion interface {
-	ImplementsZeroTrustDLPEmailRuleUpdateResponseConditionsValueUnion()
+	ImplementsDLPEmailRuleUpdateResponseConditionsValueUnion()
 }
 
 func init() {
@@ -477,7 +477,7 @@ func init() {
 
 type DLPEmailRuleUpdateResponseConditionsValueArray []string
 
-func (r DLPEmailRuleUpdateResponseConditionsValueArray) ImplementsZeroTrustDLPEmailRuleUpdateResponseConditionsValueUnion() {
+func (r DLPEmailRuleUpdateResponseConditionsValueArray) ImplementsDLPEmailRuleUpdateResponseConditionsValueUnion() {
 }
 
 type DLPEmailRuleListResponse struct {
@@ -616,7 +616,7 @@ func (r DLPEmailRuleListResponseConditionsSelector) IsKnown() bool {
 // Union satisfied by [zero_trust.DLPEmailRuleListResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleListResponseConditionsValueUnion interface {
-	ImplementsZeroTrustDLPEmailRuleListResponseConditionsValueUnion()
+	ImplementsDLPEmailRuleListResponseConditionsValueUnion()
 }
 
 func init() {
@@ -636,7 +636,7 @@ func init() {
 
 type DLPEmailRuleListResponseConditionsValueArray []string
 
-func (r DLPEmailRuleListResponseConditionsValueArray) ImplementsZeroTrustDLPEmailRuleListResponseConditionsValueUnion() {
+func (r DLPEmailRuleListResponseConditionsValueArray) ImplementsDLPEmailRuleListResponseConditionsValueUnion() {
 }
 
 type DLPEmailRuleDeleteResponse struct {
@@ -775,7 +775,7 @@ func (r DLPEmailRuleDeleteResponseConditionsSelector) IsKnown() bool {
 // Union satisfied by [zero_trust.DLPEmailRuleDeleteResponseConditionsValueArray]
 // or [shared.UnionString].
 type DLPEmailRuleDeleteResponseConditionsValueUnion interface {
-	ImplementsZeroTrustDLPEmailRuleDeleteResponseConditionsValueUnion()
+	ImplementsDLPEmailRuleDeleteResponseConditionsValueUnion()
 }
 
 func init() {
@@ -795,7 +795,7 @@ func init() {
 
 type DLPEmailRuleDeleteResponseConditionsValueArray []string
 
-func (r DLPEmailRuleDeleteResponseConditionsValueArray) ImplementsZeroTrustDLPEmailRuleDeleteResponseConditionsValueUnion() {
+func (r DLPEmailRuleDeleteResponseConditionsValueArray) ImplementsDLPEmailRuleDeleteResponseConditionsValueUnion() {
 }
 
 type DLPEmailRuleBulkEditResponse struct {
@@ -934,7 +934,7 @@ func (r DLPEmailRuleBulkEditResponseConditionsSelector) IsKnown() bool {
 // Union satisfied by [zero_trust.DLPEmailRuleBulkEditResponseConditionsValueArray]
 // or [shared.UnionString].
 type DLPEmailRuleBulkEditResponseConditionsValueUnion interface {
-	ImplementsZeroTrustDLPEmailRuleBulkEditResponseConditionsValueUnion()
+	ImplementsDLPEmailRuleBulkEditResponseConditionsValueUnion()
 }
 
 func init() {
@@ -954,7 +954,7 @@ func init() {
 
 type DLPEmailRuleBulkEditResponseConditionsValueArray []string
 
-func (r DLPEmailRuleBulkEditResponseConditionsValueArray) ImplementsZeroTrustDLPEmailRuleBulkEditResponseConditionsValueUnion() {
+func (r DLPEmailRuleBulkEditResponseConditionsValueArray) ImplementsDLPEmailRuleBulkEditResponseConditionsValueUnion() {
 }
 
 type DLPEmailRuleGetResponse struct {
@@ -1093,7 +1093,7 @@ func (r DLPEmailRuleGetResponseConditionsSelector) IsKnown() bool {
 // Union satisfied by [zero_trust.DLPEmailRuleGetResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleGetResponseConditionsValueUnion interface {
-	ImplementsZeroTrustDLPEmailRuleGetResponseConditionsValueUnion()
+	ImplementsDLPEmailRuleGetResponseConditionsValueUnion()
 }
 
 func init() {
@@ -1113,7 +1113,7 @@ func init() {
 
 type DLPEmailRuleGetResponseConditionsValueArray []string
 
-func (r DLPEmailRuleGetResponseConditionsValueArray) ImplementsZeroTrustDLPEmailRuleGetResponseConditionsValueUnion() {
+func (r DLPEmailRuleGetResponseConditionsValueArray) ImplementsDLPEmailRuleGetResponseConditionsValueUnion() {
 }
 
 type DLPEmailRuleNewParams struct {
@@ -1199,12 +1199,12 @@ func (r DLPEmailRuleNewParamsConditionsSelector) IsKnown() bool {
 // Satisfied by [zero_trust.DLPEmailRuleNewParamsConditionsValueArray],
 // [shared.UnionString].
 type DLPEmailRuleNewParamsConditionsValueUnion interface {
-	ImplementsZeroTrustDLPEmailRuleNewParamsConditionsValueUnion()
+	ImplementsDLPEmailRuleNewParamsConditionsValueUnion()
 }
 
 type DLPEmailRuleNewParamsConditionsValueArray []string
 
-func (r DLPEmailRuleNewParamsConditionsValueArray) ImplementsZeroTrustDLPEmailRuleNewParamsConditionsValueUnion() {
+func (r DLPEmailRuleNewParamsConditionsValueArray) ImplementsDLPEmailRuleNewParamsConditionsValueUnion() {
 }
 
 type DLPEmailRuleNewResponseEnvelope struct {
@@ -1333,12 +1333,12 @@ func (r DLPEmailRuleUpdateParamsConditionsSelector) IsKnown() bool {
 // Satisfied by [zero_trust.DLPEmailRuleUpdateParamsConditionsValueArray],
 // [shared.UnionString].
 type DLPEmailRuleUpdateParamsConditionsValueUnion interface {
-	ImplementsZeroTrustDLPEmailRuleUpdateParamsConditionsValueUnion()
+	ImplementsDLPEmailRuleUpdateParamsConditionsValueUnion()
 }
 
 type DLPEmailRuleUpdateParamsConditionsValueArray []string
 
-func (r DLPEmailRuleUpdateParamsConditionsValueArray) ImplementsZeroTrustDLPEmailRuleUpdateParamsConditionsValueUnion() {
+func (r DLPEmailRuleUpdateParamsConditionsValueArray) ImplementsDLPEmailRuleUpdateParamsConditionsValueUnion() {
 }
 
 type DLPEmailRuleUpdateResponseEnvelope struct {

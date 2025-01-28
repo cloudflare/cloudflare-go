@@ -242,7 +242,7 @@ func (r AppNewResponse) AsUnion() AppNewResponseUnion {
 // Union satisfied by [spectrum.AppNewResponseSpectrumConfigAppConfig] or
 // [spectrum.AppNewResponseSpectrumConfigPaygoAppConfig].
 type AppNewResponseUnion interface {
-	implementsSpectrumAppNewResponse()
+	implementsAppNewResponse()
 }
 
 func init() {
@@ -336,7 +336,7 @@ func (r appNewResponseSpectrumConfigAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppNewResponseSpectrumConfigAppConfig) implementsSpectrumAppNewResponse() {}
+func (r AppNewResponseSpectrumConfigAppConfig) implementsAppNewResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -435,7 +435,7 @@ func (r appNewResponseSpectrumConfigPaygoAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppNewResponseSpectrumConfigPaygoAppConfig) implementsSpectrumAppNewResponse() {}
+func (r AppNewResponseSpectrumConfigPaygoAppConfig) implementsAppNewResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -591,7 +591,7 @@ func (r AppUpdateResponse) AsUnion() AppUpdateResponseUnion {
 // Union satisfied by [spectrum.AppUpdateResponseSpectrumConfigAppConfig] or
 // [spectrum.AppUpdateResponseSpectrumConfigPaygoAppConfig].
 type AppUpdateResponseUnion interface {
-	implementsSpectrumAppUpdateResponse()
+	implementsAppUpdateResponse()
 }
 
 func init() {
@@ -685,7 +685,7 @@ func (r appUpdateResponseSpectrumConfigAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppUpdateResponseSpectrumConfigAppConfig) implementsSpectrumAppUpdateResponse() {}
+func (r AppUpdateResponseSpectrumConfigAppConfig) implementsAppUpdateResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -784,7 +784,7 @@ func (r appUpdateResponseSpectrumConfigPaygoAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppUpdateResponseSpectrumConfigPaygoAppConfig) implementsSpectrumAppUpdateResponse() {}
+func (r AppUpdateResponseSpectrumConfigPaygoAppConfig) implementsAppUpdateResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -849,7 +849,7 @@ func (r AppUpdateResponseTrafficType) IsKnown() bool {
 // Union satisfied by [spectrum.AppListResponseArray] or
 // [spectrum.AppListResponseArray].
 type AppListResponseUnion interface {
-	implementsSpectrumAppListResponseUnion()
+	implementsAppListResponseUnion()
 }
 
 func init() {
@@ -869,7 +869,7 @@ func init() {
 
 type AppListResponseArray []AppListResponseArrayItem
 
-func (r AppListResponseArray) implementsSpectrumAppListResponseUnion() {}
+func (r AppListResponseArray) implementsAppListResponseUnion() {}
 
 type AppListResponseArrayItem struct {
 	// App identifier.
@@ -1122,7 +1122,7 @@ func (r AppGetResponse) AsUnion() AppGetResponseUnion {
 // Union satisfied by [spectrum.AppGetResponseSpectrumConfigAppConfig] or
 // [spectrum.AppGetResponseSpectrumConfigPaygoAppConfig].
 type AppGetResponseUnion interface {
-	implementsSpectrumAppGetResponse()
+	implementsAppGetResponse()
 }
 
 func init() {
@@ -1216,7 +1216,7 @@ func (r appGetResponseSpectrumConfigAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppGetResponseSpectrumConfigAppConfig) implementsSpectrumAppGetResponse() {}
+func (r AppGetResponseSpectrumConfigAppConfig) implementsAppGetResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1315,7 +1315,7 @@ func (r appGetResponseSpectrumConfigPaygoAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppGetResponseSpectrumConfigPaygoAppConfig) implementsSpectrumAppGetResponse() {}
+func (r AppGetResponseSpectrumConfigPaygoAppConfig) implementsAppGetResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1429,12 +1429,12 @@ func (r AppNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppNewParamsBody) implementsSpectrumAppNewParamsBodyUnion() {}
+func (r AppNewParamsBody) implementsAppNewParamsBodyUnion() {}
 
 // Satisfied by [spectrum.AppNewParamsBodySpectrumConfigAppConfig],
 // [spectrum.AppNewParamsBodySpectrumConfigPaygoAppConfig], [AppNewParamsBody].
 type AppNewParamsBodyUnion interface {
-	implementsSpectrumAppNewParamsBodyUnion()
+	implementsAppNewParamsBodyUnion()
 }
 
 type AppNewParamsBodySpectrumConfigAppConfig struct {
@@ -1481,7 +1481,7 @@ func (r AppNewParamsBodySpectrumConfigAppConfig) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppNewParamsBodySpectrumConfigAppConfig) implementsSpectrumAppNewParamsBodyUnion() {}
+func (r AppNewParamsBodySpectrumConfigAppConfig) implementsAppNewParamsBodyUnion() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1560,7 +1560,7 @@ func (r AppNewParamsBodySpectrumConfigPaygoAppConfig) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppNewParamsBodySpectrumConfigPaygoAppConfig) implementsSpectrumAppNewParamsBodyUnion() {}
+func (r AppNewParamsBodySpectrumConfigPaygoAppConfig) implementsAppNewParamsBodyUnion() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1717,13 +1717,13 @@ func (r AppUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppUpdateParamsBody) implementsSpectrumAppUpdateParamsBodyUnion() {}
+func (r AppUpdateParamsBody) implementsAppUpdateParamsBodyUnion() {}
 
 // Satisfied by [spectrum.AppUpdateParamsBodySpectrumConfigAppConfig],
 // [spectrum.AppUpdateParamsBodySpectrumConfigPaygoAppConfig],
 // [AppUpdateParamsBody].
 type AppUpdateParamsBodyUnion interface {
-	implementsSpectrumAppUpdateParamsBodyUnion()
+	implementsAppUpdateParamsBodyUnion()
 }
 
 type AppUpdateParamsBodySpectrumConfigAppConfig struct {
@@ -1770,7 +1770,7 @@ func (r AppUpdateParamsBodySpectrumConfigAppConfig) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppUpdateParamsBodySpectrumConfigAppConfig) implementsSpectrumAppUpdateParamsBodyUnion() {}
+func (r AppUpdateParamsBodySpectrumConfigAppConfig) implementsAppUpdateParamsBodyUnion() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1849,8 +1849,7 @@ func (r AppUpdateParamsBodySpectrumConfigPaygoAppConfig) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppUpdateParamsBodySpectrumConfigPaygoAppConfig) implementsSpectrumAppUpdateParamsBodyUnion() {
-}
+func (r AppUpdateParamsBodySpectrumConfigPaygoAppConfig) implementsAppUpdateParamsBodyUnion() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)

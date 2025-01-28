@@ -134,7 +134,7 @@ func (r settingJSON) RawJSON() string {
 // Union satisfied by [shared.UnionFloat], [shared.UnionString] or
 // [hostnames.SettingValueArray].
 type SettingValueUnion interface {
-	ImplementsHostnamesSettingValueUnion()
+	ImplementsSettingValueUnion()
 }
 
 func init() {
@@ -158,19 +158,19 @@ func init() {
 
 type SettingValueArray []string
 
-func (r SettingValueArray) ImplementsHostnamesSettingValueUnion() {}
+func (r SettingValueArray) ImplementsSettingValueUnion() {}
 
 // The tls setting value.
 //
 // Satisfied by [shared.UnionFloat], [shared.UnionString],
 // [hostnames.SettingValueArrayParam].
 type SettingValueUnionParam interface {
-	ImplementsHostnamesSettingValueUnionParam()
+	ImplementsSettingValueUnionParam()
 }
 
 type SettingValueArrayParam []string
 
-func (r SettingValueArrayParam) ImplementsHostnamesSettingValueUnionParam() {}
+func (r SettingValueArrayParam) ImplementsSettingValueUnionParam() {}
 
 type SettingTLSDeleteResponse struct {
 	// This is the time the tls setting was originally created for this hostname.
