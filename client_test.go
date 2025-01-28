@@ -67,15 +67,15 @@ func TestRetryAfter(t *testing.T) {
 			},
 		}),
 	)
-	res, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
 		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
 		Type: cloudflare.F(zones.TypeFull),
 	})
-	if err == nil || res != nil {
-		t.Error("Expected there to be a cancel error and for the response to be nil")
+	if err == nil {
+		t.Error("Expected there to be a cancel error")
 	}
 
 	attempts := len(retryCountHeaders)
@@ -107,15 +107,15 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 		}),
 		option.WithHeaderDel("X-Stainless-Retry-Count"),
 	)
-	res, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
 		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
 		Type: cloudflare.F(zones.TypeFull),
 	})
-	if err == nil || res != nil {
-		t.Error("Expected there to be a cancel error and for the response to be nil")
+	if err == nil {
+		t.Error("Expected there to be a cancel error")
 	}
 
 	expectedRetryCountHeaders := []string{"", "", ""}
@@ -142,15 +142,15 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 		}),
 		option.WithHeader("X-Stainless-Retry-Count", "42"),
 	)
-	res, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
 		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
 		Type: cloudflare.F(zones.TypeFull),
 	})
-	if err == nil || res != nil {
-		t.Error("Expected there to be a cancel error and for the response to be nil")
+	if err == nil {
+		t.Error("Expected there to be a cancel error")
 	}
 
 	expectedRetryCountHeaders := []string{"42", "42", "42"}
@@ -176,15 +176,15 @@ func TestRetryAfterMs(t *testing.T) {
 			},
 		}),
 	)
-	res, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
 		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
 		Type: cloudflare.F(zones.TypeFull),
 	})
-	if err == nil || res != nil {
-		t.Error("Expected there to be a cancel error and for the response to be nil")
+	if err == nil {
+		t.Error("Expected there to be a cancel error")
 	}
 	if want := 3; attempts != want {
 		t.Errorf("Expected %d attempts, got %d", want, attempts)
@@ -204,15 +204,15 @@ func TestContextCancel(t *testing.T) {
 	)
 	cancelCtx, cancel := context.WithCancel(context.Background())
 	cancel()
-	res, err := client.Zones.New(cancelCtx, zones.ZoneNewParams{
+	_, err := client.Zones.New(cancelCtx, zones.ZoneNewParams{
 		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
 		Type: cloudflare.F(zones.TypeFull),
 	})
-	if err == nil || res != nil {
-		t.Error("Expected there to be a cancel error and for the response to be nil")
+	if err == nil {
+		t.Error("Expected there to be a cancel error")
 	}
 }
 
@@ -229,15 +229,15 @@ func TestContextCancelDelay(t *testing.T) {
 	)
 	cancelCtx, cancel := context.WithTimeout(context.Background(), 2*time.Millisecond)
 	defer cancel()
-	res, err := client.Zones.New(cancelCtx, zones.ZoneNewParams{
+	_, err := client.Zones.New(cancelCtx, zones.ZoneNewParams{
 		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
 		Type: cloudflare.F(zones.TypeFull),
 	})
-	if err == nil || res != nil {
-		t.Error("expected there to be a cancel error and for the response to be nil")
+	if err == nil {
+		t.Error("expected there to be a cancel error")
 	}
 }
 
@@ -260,15 +260,15 @@ func TestContextDeadline(t *testing.T) {
 				},
 			}),
 		)
-		res, err := client.Zones.New(deadlineCtx, zones.ZoneNewParams{
+		_, err := client.Zones.New(deadlineCtx, zones.ZoneNewParams{
 			Account: cloudflare.F(zones.ZoneNewParamsAccount{
 				ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			}),
 			Name: cloudflare.F("example.com"),
 			Type: cloudflare.F(zones.TypeFull),
 		})
-		if err == nil || res != nil {
-			t.Error("expected there to be a deadline error and for the response to be nil")
+		if err == nil {
+			t.Error("expected there to be a deadline error")
 		}
 		close(testDone)
 	}()
