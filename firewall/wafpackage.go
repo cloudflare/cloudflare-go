@@ -147,7 +147,7 @@ func (r WAFPackageGetResponse) AsUnion() WAFPackageGetResponseUnion {
 // Union satisfied by [firewall.WAFPackageGetResponseFirewallAPIResponseSingle] or
 // [firewall.WAFPackageGetResponseResult].
 type WAFPackageGetResponseUnion interface {
-	implementsFirewallWAFPackageGetResponse()
+	implementsWAFPackageGetResponse()
 }
 
 func init() {
@@ -193,7 +193,7 @@ func (r wafPackageGetResponseFirewallAPIResponseSingleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r WAFPackageGetResponseFirewallAPIResponseSingle) implementsFirewallWAFPackageGetResponse() {}
+func (r WAFPackageGetResponseFirewallAPIResponseSingle) implementsWAFPackageGetResponse() {}
 
 // Whether the API call was successful
 type WAFPackageGetResponseFirewallAPIResponseSingleSuccess bool
@@ -231,7 +231,7 @@ func (r wafPackageGetResponseResultJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r WAFPackageGetResponseResult) implementsFirewallWAFPackageGetResponse() {}
+func (r WAFPackageGetResponseResult) implementsWAFPackageGetResponse() {}
 
 // Whether the API call was successful
 type WAFPackageGetResponseSuccess bool

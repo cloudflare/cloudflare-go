@@ -124,13 +124,13 @@ func (r DLPDatasetVersionNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPDatasetVersionNewParamsBody) implementsZeroTrustDLPDatasetVersionNewParamsBodyUnion() {}
+func (r DLPDatasetVersionNewParamsBody) implementsDLPDatasetVersionNewParamsBodyUnion() {}
 
 // Satisfied by [zero_trust.DLPDatasetVersionNewParamsBodyExistingColumn],
 // [zero_trust.DLPDatasetVersionNewParamsBodyNewColumn],
 // [DLPDatasetVersionNewParamsBody].
 type DLPDatasetVersionNewParamsBodyUnion interface {
-	implementsZeroTrustDLPDatasetVersionNewParamsBodyUnion()
+	implementsDLPDatasetVersionNewParamsBodyUnion()
 }
 
 type DLPDatasetVersionNewParamsBodyExistingColumn struct {
@@ -143,7 +143,7 @@ func (r DLPDatasetVersionNewParamsBodyExistingColumn) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPDatasetVersionNewParamsBodyExistingColumn) implementsZeroTrustDLPDatasetVersionNewParamsBodyUnion() {
+func (r DLPDatasetVersionNewParamsBodyExistingColumn) implementsDLPDatasetVersionNewParamsBodyUnion() {
 }
 
 type DLPDatasetVersionNewParamsBodyNewColumn struct {
@@ -156,8 +156,7 @@ func (r DLPDatasetVersionNewParamsBodyNewColumn) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPDatasetVersionNewParamsBodyNewColumn) implementsZeroTrustDLPDatasetVersionNewParamsBodyUnion() {
-}
+func (r DLPDatasetVersionNewParamsBodyNewColumn) implementsDLPDatasetVersionNewParamsBodyUnion() {}
 
 type DLPDatasetVersionNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`

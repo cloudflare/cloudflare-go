@@ -433,7 +433,7 @@ func (r RulesetNewResponseRule) AsUnion() RulesetNewResponseRulesUnion {
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RulesetNewResponseRulesUnion interface {
-	implementsRulesetsRulesetNewResponseRule()
+	implementsRulesetNewResponseRule()
 }
 
 func init() {
@@ -591,7 +591,7 @@ func (r rulesetNewResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RulesetNewResponseRulesRulesetsChallengeRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r RulesetNewResponseRulesRulesetsChallengeRule) implementsRulesetNewResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetNewResponseRulesRulesetsChallengeRuleAction string
@@ -761,7 +761,7 @@ func (r rulesetNewResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RulesetNewResponseRulesRulesetsJSChallengeRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r RulesetNewResponseRulesRulesetsJSChallengeRule) implementsRulesetNewResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetNewResponseRulesRulesetsJSChallengeRuleAction string
@@ -1066,7 +1066,7 @@ func (r RulesetUpdateResponseRule) AsUnion() RulesetUpdateResponseRulesUnion {
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RulesetUpdateResponseRulesUnion interface {
-	implementsRulesetsRulesetUpdateResponseRule()
+	implementsRulesetUpdateResponseRule()
 }
 
 func init() {
@@ -1224,8 +1224,7 @@ func (r rulesetUpdateResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RulesetUpdateResponseRulesRulesetsChallengeRule) implementsRulesetsRulesetUpdateResponseRule() {
-}
+func (r RulesetUpdateResponseRulesRulesetsChallengeRule) implementsRulesetUpdateResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetUpdateResponseRulesRulesetsChallengeRuleAction string
@@ -1396,8 +1395,7 @@ func (r rulesetUpdateResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string 
 	return r.raw
 }
 
-func (r RulesetUpdateResponseRulesRulesetsJSChallengeRule) implementsRulesetsRulesetUpdateResponseRule() {
-}
+func (r RulesetUpdateResponseRulesRulesetsJSChallengeRule) implementsRulesetUpdateResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetUpdateResponseRulesRulesetsJSChallengeRuleAction string
@@ -1743,7 +1741,7 @@ func (r RulesetGetResponseRule) AsUnion() RulesetGetResponseRulesUnion {
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RulesetGetResponseRulesUnion interface {
-	implementsRulesetsRulesetGetResponseRule()
+	implementsRulesetGetResponseRule()
 }
 
 func init() {
@@ -1901,7 +1899,7 @@ func (r rulesetGetResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RulesetGetResponseRulesRulesetsChallengeRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r RulesetGetResponseRulesRulesetsChallengeRule) implementsRulesetGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetGetResponseRulesRulesetsChallengeRuleAction string
@@ -2071,7 +2069,7 @@ func (r rulesetGetResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RulesetGetResponseRulesRulesetsJSChallengeRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r RulesetGetResponseRulesRulesetsJSChallengeRule) implementsRulesetGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetGetResponseRulesRulesetsJSChallengeRuleAction string
@@ -2262,7 +2260,7 @@ func (r RulesetNewParamsRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetNewParamsRule) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r RulesetNewParamsRule) implementsRulesetNewParamsRuleUnion() {}
 
 // Satisfied by [rulesets.BlockRuleParam],
 // [rulesets.RulesetNewParamsRulesRulesetsChallengeRule],
@@ -2276,7 +2274,7 @@ func (r RulesetNewParamsRule) implementsRulesetsRulesetNewParamsRuleUnion() {}
 // [rulesets.LogCustomFieldRuleParam], [rulesets.DDoSDynamicRuleParam],
 // [rulesets.ForceConnectionCloseRuleParam], [RulesetNewParamsRule].
 type RulesetNewParamsRuleUnion interface {
-	implementsRulesetsRulesetNewParamsRuleUnion()
+	implementsRulesetNewParamsRuleUnion()
 }
 
 type RulesetNewParamsRulesRulesetsChallengeRule struct {
@@ -2306,7 +2304,7 @@ func (r RulesetNewParamsRulesRulesetsChallengeRule) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetNewParamsRulesRulesetsChallengeRule) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r RulesetNewParamsRulesRulesetsChallengeRule) implementsRulesetNewParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type RulesetNewParamsRulesRulesetsChallengeRuleAction string
@@ -2410,7 +2408,7 @@ func (r RulesetNewParamsRulesRulesetsJSChallengeRule) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetNewParamsRulesRulesetsJSChallengeRule) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r RulesetNewParamsRulesRulesetsJSChallengeRule) implementsRulesetNewParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type RulesetNewParamsRulesRulesetsJSChallengeRuleAction string
@@ -2716,7 +2714,7 @@ func (r RulesetUpdateParamsRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetUpdateParamsRule) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r RulesetUpdateParamsRule) implementsRulesetUpdateParamsRuleUnion() {}
 
 // Satisfied by [rulesets.BlockRuleParam],
 // [rulesets.RulesetUpdateParamsRulesRulesetsChallengeRule],
@@ -2730,7 +2728,7 @@ func (r RulesetUpdateParamsRule) implementsRulesetsRulesetUpdateParamsRuleUnion(
 // [rulesets.LogCustomFieldRuleParam], [rulesets.DDoSDynamicRuleParam],
 // [rulesets.ForceConnectionCloseRuleParam], [RulesetUpdateParamsRule].
 type RulesetUpdateParamsRuleUnion interface {
-	implementsRulesetsRulesetUpdateParamsRuleUnion()
+	implementsRulesetUpdateParamsRuleUnion()
 }
 
 type RulesetUpdateParamsRulesRulesetsChallengeRule struct {
@@ -2760,8 +2758,7 @@ func (r RulesetUpdateParamsRulesRulesetsChallengeRule) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetUpdateParamsRulesRulesetsChallengeRule) implementsRulesetsRulesetUpdateParamsRuleUnion() {
-}
+func (r RulesetUpdateParamsRulesRulesetsChallengeRule) implementsRulesetUpdateParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type RulesetUpdateParamsRulesRulesetsChallengeRuleAction string
@@ -2865,8 +2862,7 @@ func (r RulesetUpdateParamsRulesRulesetsJSChallengeRule) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetUpdateParamsRulesRulesetsJSChallengeRule) implementsRulesetsRulesetUpdateParamsRuleUnion() {
-}
+func (r RulesetUpdateParamsRulesRulesetsJSChallengeRule) implementsRulesetUpdateParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type RulesetUpdateParamsRulesRulesetsJSChallengeRuleAction string

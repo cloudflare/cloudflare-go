@@ -569,7 +569,7 @@ func (r RuleEditParamsPosition) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsPosition) implementsWaitingRoomsRuleEditParamsPositionUnion() {}
+func (r RuleEditParamsPosition) implementsRuleEditParamsPositionUnion() {}
 
 // Reorder the position of a rule
 //
@@ -577,7 +577,7 @@ func (r RuleEditParamsPosition) implementsWaitingRoomsRuleEditParamsPositionUnio
 // [waiting_rooms.RuleEditParamsPositionBefore],
 // [waiting_rooms.RuleEditParamsPositionAfter], [RuleEditParamsPosition].
 type RuleEditParamsPositionUnion interface {
-	implementsWaitingRoomsRuleEditParamsPositionUnion()
+	implementsRuleEditParamsPositionUnion()
 }
 
 type RuleEditParamsPositionIndex struct {
@@ -592,7 +592,7 @@ func (r RuleEditParamsPositionIndex) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsPositionIndex) implementsWaitingRoomsRuleEditParamsPositionUnion() {}
+func (r RuleEditParamsPositionIndex) implementsRuleEditParamsPositionUnion() {}
 
 type RuleEditParamsPositionBefore struct {
 	// Places the rule before rule <RULE_ID>. Use this argument with an empty rule ID
@@ -604,7 +604,7 @@ func (r RuleEditParamsPositionBefore) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsPositionBefore) implementsWaitingRoomsRuleEditParamsPositionUnion() {}
+func (r RuleEditParamsPositionBefore) implementsRuleEditParamsPositionUnion() {}
 
 type RuleEditParamsPositionAfter struct {
 	// Places the rule after rule <RULE_ID>. Use this argument with an empty rule ID
@@ -616,7 +616,7 @@ func (r RuleEditParamsPositionAfter) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsPositionAfter) implementsWaitingRoomsRuleEditParamsPositionUnion() {}
+func (r RuleEditParamsPositionAfter) implementsRuleEditParamsPositionUnion() {}
 
 type RuleEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`

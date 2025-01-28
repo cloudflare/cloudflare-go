@@ -194,7 +194,7 @@ func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceSc
 // or
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata].
 type DispatchNamespaceScriptBindingGetResponseUnion interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse()
+	implementsDispatchNamespaceScriptBindingGetResponse()
 }
 
 func init() {
@@ -311,7 +311,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnyJSON) RawJ
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAny) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAny) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI struct {
@@ -340,7 +340,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIJSON) RawJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -387,7 +387,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngi
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -431,7 +431,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsJSON) R
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -475,7 +475,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRender
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -522,7 +522,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1JSON) RawJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -572,7 +572,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNames
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -684,7 +684,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDoJSON) RawJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDo) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDo) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -731,7 +731,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveJSO
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -778,7 +778,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonJSON) Raw
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -825,7 +825,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -872,7 +872,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindMtlscertJSON)
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCERT) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCERT) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -919,7 +919,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextJSON
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -966,7 +966,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueJSON) Ra
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1013,7 +1013,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2JSON) RawJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1060,7 +1060,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretJSON) R
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecret) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecret) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1110,7 +1110,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceJSON) 
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1157,7 +1157,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerJ
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1204,7 +1204,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeJSON
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1248,7 +1248,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetada
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.

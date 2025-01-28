@@ -118,7 +118,7 @@ func (r ReceivedGetParams) URLQuery() (v url.Values) {
 //
 // Satisfied by [shared.UnionString], [shared.UnionInt].
 type ReceivedGetParamsEndUnion interface {
-	ImplementsLogsReceivedGetParamsEndUnion()
+	ImplementsReceivedGetParamsEndUnion()
 }
 
 // Sets the (inclusive) beginning of the requested time frame. This can be a unix
@@ -128,7 +128,7 @@ type ReceivedGetParamsEndUnion interface {
 //
 // Satisfied by [shared.UnionString], [shared.UnionInt].
 type ReceivedGetParamsStartUnion interface {
-	ImplementsLogsReceivedGetParamsStartUnion()
+	ImplementsReceivedGetParamsStartUnion()
 }
 
 // By default, timestamps in responses are returned as Unix nanosecond integers.

@@ -115,7 +115,7 @@ func (r HyperdriveOrigin) AsUnion() HyperdriveOriginUnion {
 // Union satisfied by [hyperdrive.HyperdriveOriginPublicDatabase] or
 // [hyperdrive.HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel].
 type HyperdriveOriginUnion interface {
-	implementsHyperdriveHyperdriveOrigin()
+	implementsHyperdriveOrigin()
 }
 
 func init() {
@@ -167,7 +167,7 @@ func (r hyperdriveOriginPublicDatabaseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r HyperdriveOriginPublicDatabase) implementsHyperdriveHyperdriveOrigin() {}
+func (r HyperdriveOriginPublicDatabase) implementsHyperdriveOrigin() {}
 
 // Specifies the URL scheme used to connect to your origin database.
 type HyperdriveOriginPublicDatabaseScheme string
@@ -220,8 +220,7 @@ func (r hyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelJSON) RawJS
 	return r.raw
 }
 
-func (r HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel) implementsHyperdriveHyperdriveOrigin() {
-}
+func (r HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel) implementsHyperdriveOrigin() {}
 
 // Specifies the URL scheme used to connect to your origin database.
 type HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme string
@@ -305,7 +304,7 @@ func (r HyperdriveCaching) AsUnion() HyperdriveCachingUnion {
 // [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingCommon] or
 // [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingEnabled].
 type HyperdriveCachingUnion interface {
-	implementsHyperdriveHyperdriveCaching()
+	implementsHyperdriveCaching()
 }
 
 func init() {
@@ -345,7 +344,7 @@ func (r hyperdriveCachingHyperdriveHyperdriveCachingCommonJSON) RawJSON() string
 	return r.raw
 }
 
-func (r HyperdriveCachingHyperdriveHyperdriveCachingCommon) implementsHyperdriveHyperdriveCaching() {}
+func (r HyperdriveCachingHyperdriveHyperdriveCachingCommon) implementsHyperdriveCaching() {}
 
 type HyperdriveCachingHyperdriveHyperdriveCachingEnabled struct {
 	// When set to true, disables the caching of SQL responses. (Default: false)
@@ -377,8 +376,7 @@ func (r hyperdriveCachingHyperdriveHyperdriveCachingEnabledJSON) RawJSON() strin
 	return r.raw
 }
 
-func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabled) implementsHyperdriveHyperdriveCaching() {
-}
+func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabled) implementsHyperdriveCaching() {}
 
 type HyperdriveParam struct {
 	Name    param.Field[string]                      `json:"name,required"`
@@ -415,13 +413,13 @@ func (r HyperdriveOriginParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r HyperdriveOriginParam) implementsHyperdriveHyperdriveOriginUnionParam() {}
+func (r HyperdriveOriginParam) implementsHyperdriveOriginUnionParam() {}
 
 // Satisfied by [hyperdrive.HyperdriveOriginPublicDatabaseParam],
 // [hyperdrive.HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam],
 // [HyperdriveOriginParam].
 type HyperdriveOriginUnionParam interface {
-	implementsHyperdriveHyperdriveOriginUnionParam()
+	implementsHyperdriveOriginUnionParam()
 }
 
 type HyperdriveOriginPublicDatabaseParam struct {
@@ -444,7 +442,7 @@ func (r HyperdriveOriginPublicDatabaseParam) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r HyperdriveOriginPublicDatabaseParam) implementsHyperdriveHyperdriveOriginUnionParam() {}
+func (r HyperdriveOriginPublicDatabaseParam) implementsHyperdriveOriginUnionParam() {}
 
 type HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam struct {
 	// The Client ID of the Access token to use when connecting to the origin database.
@@ -469,7 +467,7 @@ func (r HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam) Mars
 	return apijson.MarshalRoot(r)
 }
 
-func (r HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam) implementsHyperdriveHyperdriveOriginUnionParam() {
+func (r HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam) implementsHyperdriveOriginUnionParam() {
 }
 
 type HyperdriveCachingParam struct {
@@ -487,14 +485,14 @@ func (r HyperdriveCachingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r HyperdriveCachingParam) implementsHyperdriveHyperdriveCachingUnionParam() {}
+func (r HyperdriveCachingParam) implementsHyperdriveCachingUnionParam() {}
 
 // Satisfied by
 // [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingCommonParam],
 // [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam],
 // [HyperdriveCachingParam].
 type HyperdriveCachingUnionParam interface {
-	implementsHyperdriveHyperdriveCachingUnionParam()
+	implementsHyperdriveCachingUnionParam()
 }
 
 type HyperdriveCachingHyperdriveHyperdriveCachingCommonParam struct {
@@ -506,7 +504,7 @@ func (r HyperdriveCachingHyperdriveHyperdriveCachingCommonParam) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r HyperdriveCachingHyperdriveHyperdriveCachingCommonParam) implementsHyperdriveHyperdriveCachingUnionParam() {
+func (r HyperdriveCachingHyperdriveHyperdriveCachingCommonParam) implementsHyperdriveCachingUnionParam() {
 }
 
 type HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam struct {
@@ -524,5 +522,5 @@ func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam) implementsHyperdriveHyperdriveCachingUnionParam() {
+func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam) implementsHyperdriveCachingUnionParam() {
 }

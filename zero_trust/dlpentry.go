@@ -247,7 +247,7 @@ func (r DLPEntryUpdateResponse) AsUnion() DLPEntryUpdateResponseUnion {
 // [zero_trust.DLPEntryUpdateResponseExactDataEntry] or
 // [zero_trust.DLPEntryUpdateResponseWordListEntry].
 type DLPEntryUpdateResponseUnion interface {
-	implementsZeroTrustDLPEntryUpdateResponse()
+	implementsDLPEntryUpdateResponse()
 }
 
 func init() {
@@ -312,7 +312,7 @@ func (r dlpEntryUpdateResponseCustomEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryUpdateResponseCustomEntry) implementsZeroTrustDLPEntryUpdateResponse() {}
+func (r DLPEntryUpdateResponseCustomEntry) implementsDLPEntryUpdateResponse() {}
 
 type DLPEntryUpdateResponseCustomEntryType string
 
@@ -359,7 +359,7 @@ func (r dlpEntryUpdateResponsePredefinedEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryUpdateResponsePredefinedEntry) implementsZeroTrustDLPEntryUpdateResponse() {}
+func (r DLPEntryUpdateResponsePredefinedEntry) implementsDLPEntryUpdateResponse() {}
 
 type DLPEntryUpdateResponsePredefinedEntryConfidence struct {
 	// Indicates whether this entry can be made more or less sensitive by setting a
@@ -432,7 +432,7 @@ func (r dlpEntryUpdateResponseIntegrationEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryUpdateResponseIntegrationEntry) implementsZeroTrustDLPEntryUpdateResponse() {}
+func (r DLPEntryUpdateResponseIntegrationEntry) implementsDLPEntryUpdateResponse() {}
 
 type DLPEntryUpdateResponseIntegrationEntryType string
 
@@ -481,7 +481,7 @@ func (r dlpEntryUpdateResponseExactDataEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryUpdateResponseExactDataEntry) implementsZeroTrustDLPEntryUpdateResponse() {}
+func (r DLPEntryUpdateResponseExactDataEntry) implementsDLPEntryUpdateResponse() {}
 
 type DLPEntryUpdateResponseExactDataEntryType string
 
@@ -532,7 +532,7 @@ func (r dlpEntryUpdateResponseWordListEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryUpdateResponseWordListEntry) implementsZeroTrustDLPEntryUpdateResponse() {}
+func (r DLPEntryUpdateResponseWordListEntry) implementsDLPEntryUpdateResponse() {}
 
 type DLPEntryUpdateResponseWordListEntryType string
 
@@ -635,7 +635,7 @@ func (r DLPEntryListResponse) AsUnion() DLPEntryListResponseUnion {
 // [zero_trust.DLPEntryListResponseExactDataEntry] or
 // [zero_trust.DLPEntryListResponseWordListEntry].
 type DLPEntryListResponseUnion interface {
-	implementsZeroTrustDLPEntryListResponse()
+	implementsDLPEntryListResponse()
 }
 
 func init() {
@@ -700,7 +700,7 @@ func (r dlpEntryListResponseCustomEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryListResponseCustomEntry) implementsZeroTrustDLPEntryListResponse() {}
+func (r DLPEntryListResponseCustomEntry) implementsDLPEntryListResponse() {}
 
 type DLPEntryListResponseCustomEntryType string
 
@@ -747,7 +747,7 @@ func (r dlpEntryListResponsePredefinedEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryListResponsePredefinedEntry) implementsZeroTrustDLPEntryListResponse() {}
+func (r DLPEntryListResponsePredefinedEntry) implementsDLPEntryListResponse() {}
 
 type DLPEntryListResponsePredefinedEntryConfidence struct {
 	// Indicates whether this entry can be made more or less sensitive by setting a
@@ -820,7 +820,7 @@ func (r dlpEntryListResponseIntegrationEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryListResponseIntegrationEntry) implementsZeroTrustDLPEntryListResponse() {}
+func (r DLPEntryListResponseIntegrationEntry) implementsDLPEntryListResponse() {}
 
 type DLPEntryListResponseIntegrationEntryType string
 
@@ -869,7 +869,7 @@ func (r dlpEntryListResponseExactDataEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryListResponseExactDataEntry) implementsZeroTrustDLPEntryListResponse() {}
+func (r DLPEntryListResponseExactDataEntry) implementsDLPEntryListResponse() {}
 
 type DLPEntryListResponseExactDataEntryType string
 
@@ -920,7 +920,7 @@ func (r dlpEntryListResponseWordListEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryListResponseWordListEntry) implementsZeroTrustDLPEntryListResponse() {}
+func (r DLPEntryListResponseWordListEntry) implementsDLPEntryListResponse() {}
 
 type DLPEntryListResponseWordListEntryType string
 
@@ -1025,7 +1025,7 @@ func (r DLPEntryGetResponse) AsUnion() DLPEntryGetResponseUnion {
 // [zero_trust.DLPEntryGetResponseExactDataEntry] or
 // [zero_trust.DLPEntryGetResponseWordListEntry].
 type DLPEntryGetResponseUnion interface {
-	implementsZeroTrustDLPEntryGetResponse()
+	implementsDLPEntryGetResponse()
 }
 
 func init() {
@@ -1090,7 +1090,7 @@ func (r dlpEntryGetResponseCustomEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryGetResponseCustomEntry) implementsZeroTrustDLPEntryGetResponse() {}
+func (r DLPEntryGetResponseCustomEntry) implementsDLPEntryGetResponse() {}
 
 type DLPEntryGetResponseCustomEntryType string
 
@@ -1137,7 +1137,7 @@ func (r dlpEntryGetResponsePredefinedEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryGetResponsePredefinedEntry) implementsZeroTrustDLPEntryGetResponse() {}
+func (r DLPEntryGetResponsePredefinedEntry) implementsDLPEntryGetResponse() {}
 
 type DLPEntryGetResponsePredefinedEntryConfidence struct {
 	// Indicates whether this entry can be made more or less sensitive by setting a
@@ -1210,7 +1210,7 @@ func (r dlpEntryGetResponseIntegrationEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryGetResponseIntegrationEntry) implementsZeroTrustDLPEntryGetResponse() {}
+func (r DLPEntryGetResponseIntegrationEntry) implementsDLPEntryGetResponse() {}
 
 type DLPEntryGetResponseIntegrationEntryType string
 
@@ -1259,7 +1259,7 @@ func (r dlpEntryGetResponseExactDataEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryGetResponseExactDataEntry) implementsZeroTrustDLPEntryGetResponse() {}
+func (r DLPEntryGetResponseExactDataEntry) implementsDLPEntryGetResponse() {}
 
 type DLPEntryGetResponseExactDataEntryType string
 
@@ -1310,7 +1310,7 @@ func (r dlpEntryGetResponseWordListEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPEntryGetResponseWordListEntry) implementsZeroTrustDLPEntryGetResponse() {}
+func (r DLPEntryGetResponseWordListEntry) implementsDLPEntryGetResponse() {}
 
 type DLPEntryGetResponseWordListEntryType string
 
@@ -1419,13 +1419,13 @@ func (r DLPEntryUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPEntryUpdateParamsBody) implementsZeroTrustDLPEntryUpdateParamsBodyUnion() {}
+func (r DLPEntryUpdateParamsBody) implementsDLPEntryUpdateParamsBodyUnion() {}
 
 // Satisfied by [zero_trust.DLPEntryUpdateParamsBodyObject],
 // [zero_trust.DLPEntryUpdateParamsBodyObject],
 // [zero_trust.DLPEntryUpdateParamsBodyObject], [DLPEntryUpdateParamsBody].
 type DLPEntryUpdateParamsBodyUnion interface {
-	implementsZeroTrustDLPEntryUpdateParamsBodyUnion()
+	implementsDLPEntryUpdateParamsBodyUnion()
 }
 
 type DLPEntryUpdateParamsBodyObject struct {
@@ -1439,7 +1439,7 @@ func (r DLPEntryUpdateParamsBodyObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPEntryUpdateParamsBodyObject) implementsZeroTrustDLPEntryUpdateParamsBodyUnion() {}
+func (r DLPEntryUpdateParamsBodyObject) implementsDLPEntryUpdateParamsBodyUnion() {}
 
 type DLPEntryUpdateParamsBodyObjectType string
 

@@ -275,12 +275,12 @@ func (r BucketSippyUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BucketSippyUpdateParamsBody) implementsR2BucketSippyUpdateParamsBodyUnion() {}
+func (r BucketSippyUpdateParamsBody) implementsBucketSippyUpdateParamsBodyUnion() {}
 
 // Satisfied by [r2.BucketSippyUpdateParamsBodyR2EnableSippyAws],
 // [r2.BucketSippyUpdateParamsBodyR2EnableSippyGcs], [BucketSippyUpdateParamsBody].
 type BucketSippyUpdateParamsBodyUnion interface {
-	implementsR2BucketSippyUpdateParamsBodyUnion()
+	implementsBucketSippyUpdateParamsBodyUnion()
 }
 
 type BucketSippyUpdateParamsBodyR2EnableSippyAws struct {
@@ -294,7 +294,7 @@ func (r BucketSippyUpdateParamsBodyR2EnableSippyAws) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r BucketSippyUpdateParamsBodyR2EnableSippyAws) implementsR2BucketSippyUpdateParamsBodyUnion() {}
+func (r BucketSippyUpdateParamsBodyR2EnableSippyAws) implementsBucketSippyUpdateParamsBodyUnion() {}
 
 // R2 bucket to copy objects to
 type BucketSippyUpdateParamsBodyR2EnableSippyAwsDestination struct {
@@ -361,7 +361,7 @@ func (r BucketSippyUpdateParamsBodyR2EnableSippyGcs) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r BucketSippyUpdateParamsBodyR2EnableSippyGcs) implementsR2BucketSippyUpdateParamsBodyUnion() {}
+func (r BucketSippyUpdateParamsBodyR2EnableSippyGcs) implementsBucketSippyUpdateParamsBodyUnion() {}
 
 // R2 bucket to copy objects to
 type BucketSippyUpdateParamsBodyR2EnableSippyGcsDestination struct {

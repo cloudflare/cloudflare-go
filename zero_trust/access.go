@@ -78,7 +78,7 @@ func (r accessDevicePostureRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessDevicePostureRule) implementsZeroTrustAccessRule() {}
+func (r AccessDevicePostureRule) implementsAccessRule() {}
 
 type AccessDevicePostureRuleDevicePosture struct {
 	// The ID of a device posture integration.
@@ -111,7 +111,7 @@ func (r AccessDevicePostureRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessDevicePostureRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r AccessDevicePostureRuleParam) implementsAccessRuleUnionParam() {}
 
 type AccessDevicePostureRuleDevicePostureParam struct {
 	// The ID of a device posture integration.
@@ -247,7 +247,7 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [zero_trust.IPListRule], [zero_trust.IPRule], [zero_trust.OktaGroupRule],
 // [zero_trust.SAMLGroupRule] or [zero_trust.ServiceTokenRule].
 type AccessRuleUnion interface {
-	implementsZeroTrustAccessRule()
+	implementsAccessRule()
 }
 
 func init() {
@@ -363,7 +363,7 @@ func (r accessRuleAccessAuthContextRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessRuleAccessAuthContextRule) implementsZeroTrustAccessRule() {}
+func (r AccessRuleAccessAuthContextRule) implementsAccessRule() {}
 
 type AccessRuleAccessAuthContextRuleAuthContext struct {
 	// The ID of an Authentication context.
@@ -415,7 +415,7 @@ func (r accessRuleAccessCommonNameRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessRuleAccessCommonNameRule) implementsZeroTrustAccessRule() {}
+func (r AccessRuleAccessCommonNameRule) implementsAccessRule() {}
 
 type AccessRuleAccessCommonNameRuleCommonName struct {
 	// The common name to match.
@@ -468,7 +468,7 @@ func (r AccessRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r AccessRuleParam) implementsAccessRuleUnionParam() {}
 
 // Matches an Access group.
 //
@@ -486,7 +486,7 @@ func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 // [zero_trust.OktaGroupRuleParam], [zero_trust.SAMLGroupRuleParam],
 // [zero_trust.ServiceTokenRuleParam], [AccessRuleParam].
 type AccessRuleUnionParam interface {
-	implementsZeroTrustAccessRuleUnionParam()
+	implementsAccessRuleUnionParam()
 }
 
 // Matches an Azure Authentication Context. Requires an Azure identity provider.
@@ -498,7 +498,7 @@ func (r AccessRuleAccessAuthContextRuleParam) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleAccessAuthContextRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r AccessRuleAccessAuthContextRuleParam) implementsAccessRuleUnionParam() {}
 
 type AccessRuleAccessAuthContextRuleAuthContextParam struct {
 	// The ID of an Authentication context.
@@ -522,7 +522,7 @@ func (r AccessRuleAccessCommonNameRuleParam) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleAccessCommonNameRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r AccessRuleAccessCommonNameRuleParam) implementsAccessRuleUnionParam() {}
 
 type AccessRuleAccessCommonNameRuleCommonNameParam struct {
 	// The common name to match.
@@ -556,7 +556,7 @@ func (r anyValidServiceTokenRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AnyValidServiceTokenRule) implementsZeroTrustAccessRule() {}
+func (r AnyValidServiceTokenRule) implementsAccessRule() {}
 
 // An empty object which matches on all service tokens.
 type AnyValidServiceTokenRuleAnyValidServiceToken struct {
@@ -588,7 +588,7 @@ func (r AnyValidServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsAccessRuleUnionParam() {}
 
 // An empty object which matches on all service tokens.
 type AnyValidServiceTokenRuleAnyValidServiceTokenParam struct {
@@ -620,7 +620,7 @@ func (r authenticationMethodRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AuthenticationMethodRule) implementsZeroTrustAccessRule() {}
+func (r AuthenticationMethodRule) implementsAccessRule() {}
 
 type AuthenticationMethodRuleAuthMethod struct {
 	// The type of authentication method
@@ -654,7 +654,7 @@ func (r AuthenticationMethodRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsAccessRuleUnionParam() {}
 
 type AuthenticationMethodRuleAuthMethodParam struct {
 	// The type of authentication method
@@ -687,7 +687,7 @@ func (r azureGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AzureGroupRule) implementsZeroTrustAccessRule() {}
+func (r AzureGroupRule) implementsAccessRule() {}
 
 type AzureGroupRuleAzureAD struct {
 	// The ID of an Azure group.
@@ -723,7 +723,7 @@ func (r AzureGroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AzureGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsAccessRuleUnionParam() {}
 
 type AzureGroupRuleAzureADParam struct {
 	// The ID of an Azure group.
@@ -757,7 +757,7 @@ func (r certificateRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CertificateRule) implementsZeroTrustAccessRule() {}
+func (r CertificateRule) implementsAccessRule() {}
 
 type CertificateRuleCertificate struct {
 	JSON certificateRuleCertificateJSON `json:"-"`
@@ -787,7 +787,7 @@ func (r CertificateRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r CertificateRuleParam) implementsAccessRuleUnionParam() {}
 
 type CertificateRuleCertificateParam struct {
 }
@@ -817,7 +817,7 @@ func (r countryRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CountryRule) implementsZeroTrustAccessRule() {}
+func (r CountryRule) implementsAccessRule() {}
 
 type CountryRuleGeo struct {
 	// The country code that should be matched.
@@ -849,7 +849,7 @@ func (r CountryRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CountryRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r CountryRuleParam) implementsAccessRuleUnionParam() {}
 
 type CountryRuleGeoParam struct {
 	// The country code that should be matched.
@@ -881,7 +881,7 @@ func (r domainRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DomainRule) implementsZeroTrustAccessRule() {}
+func (r DomainRule) implementsAccessRule() {}
 
 type DomainRuleEmailDomain struct {
 	// The email domain to match.
@@ -914,7 +914,7 @@ func (r DomainRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DomainRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r DomainRuleParam) implementsAccessRuleUnionParam() {}
 
 type DomainRuleEmailDomainParam struct {
 	// The email domain to match.
@@ -946,7 +946,7 @@ func (r emailListRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EmailListRule) implementsZeroTrustAccessRule() {}
+func (r EmailListRule) implementsAccessRule() {}
 
 type EmailListRuleEmailList struct {
 	// The ID of a previously created email list.
@@ -979,7 +979,7 @@ func (r EmailListRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EmailListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r EmailListRuleParam) implementsAccessRuleUnionParam() {}
 
 type EmailListRuleEmailListParam struct {
 	// The ID of a previously created email list.
@@ -1011,7 +1011,7 @@ func (r emailRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EmailRule) implementsZeroTrustAccessRule() {}
+func (r EmailRule) implementsAccessRule() {}
 
 type EmailRuleEmail struct {
 	// The email of the user.
@@ -1043,7 +1043,7 @@ func (r EmailRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EmailRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r EmailRuleParam) implementsAccessRuleUnionParam() {}
 
 type EmailRuleEmailParam struct {
 	// The email of the user.
@@ -1076,7 +1076,7 @@ func (r everyoneRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EveryoneRule) implementsZeroTrustAccessRule() {}
+func (r EveryoneRule) implementsAccessRule() {}
 
 // An empty object which matches on all users.
 type EveryoneRuleEveryone struct {
@@ -1108,7 +1108,7 @@ func (r EveryoneRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsAccessRuleUnionParam() {}
 
 // An empty object which matches on all users.
 type EveryoneRuleEveryoneParam struct {
@@ -1140,7 +1140,7 @@ func (r externalEvaluationRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ExternalEvaluationRule) implementsZeroTrustAccessRule() {}
+func (r ExternalEvaluationRule) implementsAccessRule() {}
 
 type ExternalEvaluationRuleExternalEvaluation struct {
 	// The API endpoint containing your business logic.
@@ -1177,7 +1177,7 @@ func (r ExternalEvaluationRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsAccessRuleUnionParam() {}
 
 type ExternalEvaluationRuleExternalEvaluationParam struct {
 	// The API endpoint containing your business logic.
@@ -1213,7 +1213,7 @@ func (r githubOrganizationRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r GitHubOrganizationRule) implementsZeroTrustAccessRule() {}
+func (r GitHubOrganizationRule) implementsAccessRule() {}
 
 type GitHubOrganizationRuleGitHubOrganization struct {
 	// The ID of your Github identity provider.
@@ -1252,7 +1252,7 @@ func (r GitHubOrganizationRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsAccessRuleUnionParam() {}
 
 type GitHubOrganizationRuleGitHubOrganizationParam struct {
 	// The ID of your Github identity provider.
@@ -1288,7 +1288,7 @@ func (r groupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r GroupRule) implementsZeroTrustAccessRule() {}
+func (r GroupRule) implementsAccessRule() {}
 
 type GroupRuleGroup struct {
 	// The ID of a previously created Access group.
@@ -1320,7 +1320,7 @@ func (r GroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r GroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GroupRuleParam) implementsAccessRuleUnionParam() {}
 
 type GroupRuleGroupParam struct {
 	// The ID of a previously created Access group.
@@ -1353,7 +1353,7 @@ func (r GSuiteGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r GSuiteGroupRule) implementsZeroTrustAccessRule() {}
+func (r GSuiteGroupRule) implementsAccessRule() {}
 
 type GSuiteGroupRuleGSuite struct {
 	// The email of the Google Workspace group.
@@ -1390,7 +1390,7 @@ func (r GSuiteGroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r GSuiteGroupRuleParam) implementsAccessRuleUnionParam() {}
 
 type GSuiteGroupRuleGSuiteParam struct {
 	// The email of the Google Workspace group.
@@ -1424,7 +1424,7 @@ func (r ipListRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IPListRule) implementsZeroTrustAccessRule() {}
+func (r IPListRule) implementsAccessRule() {}
 
 type IPListRuleIPList struct {
 	// The ID of a previously created IP list.
@@ -1457,7 +1457,7 @@ func (r IPListRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IPListRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r IPListRuleParam) implementsAccessRuleUnionParam() {}
 
 type IPListRuleIPListParam struct {
 	// The ID of a previously created IP list.
@@ -1489,7 +1489,7 @@ func (r ipRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IPRule) implementsZeroTrustAccessRule() {}
+func (r IPRule) implementsAccessRule() {}
 
 type IPRuleIP struct {
 	// An IPv4 or IPv6 CIDR block.
@@ -1521,7 +1521,7 @@ func (r IPRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IPRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r IPRuleParam) implementsAccessRuleUnionParam() {}
 
 type IPRuleIPParam struct {
 	// An IPv4 or IPv6 CIDR block.
@@ -1553,7 +1553,7 @@ func (r oktaGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OktaGroupRule) implementsZeroTrustAccessRule() {}
+func (r OktaGroupRule) implementsAccessRule() {}
 
 type OktaGroupRuleOkta struct {
 	// The ID of your Okta identity provider.
@@ -1589,7 +1589,7 @@ func (r OktaGroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsAccessRuleUnionParam() {}
 
 type OktaGroupRuleOktaParam struct {
 	// The ID of your Okta identity provider.
@@ -1623,7 +1623,7 @@ func (r samlGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SAMLGroupRule) implementsZeroTrustAccessRule() {}
+func (r SAMLGroupRule) implementsAccessRule() {}
 
 type SAMLGroupRuleSAML struct {
 	// The name of the SAML attribute.
@@ -1662,7 +1662,7 @@ func (r SAMLGroupRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SAMLGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r SAMLGroupRuleParam) implementsAccessRuleUnionParam() {}
 
 type SAMLGroupRuleSAMLParam struct {
 	// The name of the SAML attribute.
@@ -1699,7 +1699,7 @@ func (r serviceTokenRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ServiceTokenRule) implementsZeroTrustAccessRule() {}
+func (r ServiceTokenRule) implementsAccessRule() {}
 
 type ServiceTokenRuleServiceToken struct {
 	// The ID of a Service Token.
@@ -1732,7 +1732,7 @@ func (r ServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsAccessRuleUnionParam() {}
 
 type ServiceTokenRuleServiceTokenParam struct {
 	// The ID of a Service Token.

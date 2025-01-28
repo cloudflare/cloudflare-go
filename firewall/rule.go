@@ -301,7 +301,7 @@ func (r deletedFilterJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DeletedFilter) ImplementsFirewallFirewallRuleFilter() {}
+func (r DeletedFilter) ImplementsFirewallRuleFilter() {}
 
 type FirewallRule struct {
 	// The unique identifier of the firewall rule.
@@ -401,7 +401,7 @@ func (r FirewallRuleFilter) AsUnion() FirewallRuleFilterUnion {
 
 // Union satisfied by [filters.FirewallFilter] or [firewall.DeletedFilter].
 type FirewallRuleFilterUnion interface {
-	ImplementsFirewallFirewallRuleFilter()
+	ImplementsFirewallRuleFilter()
 }
 
 func init() {

@@ -338,7 +338,7 @@ func (r IndexDimensionConfigurationParam) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-func (r IndexDimensionConfigurationParam) implementsVectorizeIndexNewParamsConfigUnion() {}
+func (r IndexDimensionConfigurationParam) implementsIndexNewParamsConfigUnion() {}
 
 type IndexDeleteByIDsResponse struct {
 	// The unique identifier for the async mutation operation containing the changeset.
@@ -524,7 +524,7 @@ func (r IndexNewParamsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IndexNewParamsConfig) implementsVectorizeIndexNewParamsConfigUnion() {}
+func (r IndexNewParamsConfig) implementsIndexNewParamsConfigUnion() {}
 
 // Specifies the type of configuration to use for the index.
 //
@@ -532,7 +532,7 @@ func (r IndexNewParamsConfig) implementsVectorizeIndexNewParamsConfigUnion() {}
 // [vectorize.IndexNewParamsConfigVectorizeIndexPresetConfiguration],
 // [IndexNewParamsConfig].
 type IndexNewParamsConfigUnion interface {
-	implementsVectorizeIndexNewParamsConfigUnion()
+	implementsIndexNewParamsConfigUnion()
 }
 
 type IndexNewParamsConfigVectorizeIndexPresetConfiguration struct {
@@ -544,7 +544,7 @@ func (r IndexNewParamsConfigVectorizeIndexPresetConfiguration) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r IndexNewParamsConfigVectorizeIndexPresetConfiguration) implementsVectorizeIndexNewParamsConfigUnion() {
+func (r IndexNewParamsConfigVectorizeIndexPresetConfiguration) implementsIndexNewParamsConfigUnion() {
 }
 
 // Specifies the preset to use for the index.
