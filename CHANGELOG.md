@@ -1,4 +1,4 @@
-## 0.115.0 (Unreleased)
+## 0.115.0 (January 29th, 2025)
 
 ENHANCEMENTS:
 
