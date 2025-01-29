@@ -1,5 +1,18 @@
 ## 0.115.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_service_token: add `last_seen_at` field ([#3838](https://github.com/cloudflare/cloudflare-go/issues/3838))
+* dns: Add settings to DNSRecord ([#3670](https://github.com/cloudflare/cloudflare-go/issues/3670))
+* teams_rules: add support for biso admin controls v2 ([#3848](https://github.com/cloudflare/cloudflare-go/issues/3848))
+
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 2.2.0 to 2.3.0 ([#3865](https://github.com/cloudflare/cloudflare-go/issues/3865))
+* deps: bumps github.com/go-git/go-git/v5 from 5.11.0 to 5.13.0 ([#3869](https://github.com/cloudflare/cloudflare-go/issues/3869))
+* deps: bumps github.com/goccy/go-json from 0.10.4 to 0.10.5 ([#3870](https://github.com/cloudflare/cloudflare-go/issues/3870))
+* deps: bumps golang.org/x/net from 0.25.0 to 0.33.0 ([#3868](https://github.com/cloudflare/cloudflare-go/issues/3868))
+
 ## 0.114.0 (January 15th, 2025)
 
 NOTES:
