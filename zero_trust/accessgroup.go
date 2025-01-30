@@ -215,6 +215,65 @@ func (r *AccessGroupService) Get(ctx context.Context, groupID string, query Acce
 	return
 }
 
+type ZeroTrustGroup struct {
+	// The unique Cloudflare-generated Id of the SCIM resource.
+	ID string `json:"id"`
+	// The display name of the SCIM Group resource.
+	DisplayName string `json:"displayName"`
+	// The IdP-generated Id of the SCIM resource.
+	ExternalID string `json:"externalId"`
+	// The metadata of the SCIM resource.
+	Meta ZeroTrustGroupMeta `json:"meta"`
+	// The list of URIs which indicate the attributes contained within a SCIM resource.
+	Schemas []string           `json:"schemas"`
+	JSON    zeroTrustGroupJSON `json:"-"`
+}
+
+// zeroTrustGroupJSON contains the JSON metadata for the struct [ZeroTrustGroup]
+type zeroTrustGroupJSON struct {
+	ID          apijson.Field
+	DisplayName apijson.Field
+	ExternalID  apijson.Field
+	Meta        apijson.Field
+	Schemas     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGroupJSON) RawJSON() string {
+	return r.raw
+}
+
+// The metadata of the SCIM resource.
+type ZeroTrustGroupMeta struct {
+	// The timestamp of when the SCIM resource was created.
+	Created time.Time `json:"created" format:"date-time"`
+	// The timestamp of when the SCIM resource was last modified.
+	LastModified time.Time              `json:"lastModified" format:"date-time"`
+	JSON         zeroTrustGroupMetaJSON `json:"-"`
+}
+
+// zeroTrustGroupMetaJSON contains the JSON metadata for the struct
+// [ZeroTrustGroupMeta]
+type zeroTrustGroupMetaJSON struct {
+	Created      apijson.Field
+	LastModified apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ZeroTrustGroupMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGroupMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessGroupNewResponse struct {
 	// UUID
 	ID        string    `json:"id"`

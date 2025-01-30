@@ -28,6 +28,7 @@ import (
 // the [NewIdentityProviderService] method instead.
 type IdentityProviderService struct {
 	Options []option.RequestOption
+	SCIM    *IdentityProviderSCIMService
 }
 
 // NewIdentityProviderService generates a new service that applies the given
@@ -36,6 +37,7 @@ type IdentityProviderService struct {
 func NewIdentityProviderService(opts ...option.RequestOption) (r *IdentityProviderService) {
 	r = &IdentityProviderService{}
 	r.Options = opts
+	r.SCIM = NewIdentityProviderSCIMService(opts...)
 	return
 }
 
