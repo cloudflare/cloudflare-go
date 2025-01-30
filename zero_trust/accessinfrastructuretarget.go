@@ -943,6 +943,9 @@ type AccessInfrastructureTargetListParams struct {
 	Hostname param.Field[string] `query:"hostname"`
 	// Partial match to the hostname of a target
 	HostnameContains param.Field[string] `query:"hostname_contains"`
+	// Filters for targets whose IP addresses look like the specified string. Supports
+	// `*` as a wildcard character
+	IPLike param.Field[string] `query:"ip_like"`
 	// IPv4 address of the target
 	IPV4 param.Field[string] `query:"ip_v4"`
 	// IPv6 address of the target
@@ -950,6 +953,18 @@ type AccessInfrastructureTargetListParams struct {
 	// Filters for targets that have any of the following IP addresses. Specify `ips`
 	// multiple times in query parameter to build list of candidates.
 	IPs param.Field[[]string] `query:"ips"`
+	// Defines an IPv4 filter range's ending value (inclusive). Requires `ipv4_start`
+	// to be specified as well.
+	IPV4End param.Field[string] `query:"ipv4_end"`
+	// Defines an IPv4 filter range's starting value (inclusive). Requires `ipv4_end`
+	// to be specified as well.
+	IPV4Start param.Field[string] `query:"ipv4_start"`
+	// Defines an IPv6 filter range's ending value (inclusive). Requires `ipv6_start`
+	// to be specified as well.
+	IPV6End param.Field[string] `query:"ipv6_end"`
+	// Defines an IPv6 filter range's starting value (inclusive). Requires `ipv6_end`
+	// to be specified as well.
+	IPV6Start param.Field[string] `query:"ipv6_start"`
 	// Date and time at which the target was modified after (inclusive)
 	ModifiedAfter param.Field[time.Time] `query:"modified_after" format:"date-time"`
 	// Date and time at which the target was modified before (inclusive)
@@ -960,6 +975,9 @@ type AccessInfrastructureTargetListParams struct {
 	Page param.Field[int64] `query:"page"`
 	// Max amount of entries returned per page
 	PerPage param.Field[int64] `query:"per_page"`
+	// Filters for targets that have any of the following UUIDs. Specify `target_ids`
+	// multiple times in query parameter to build list of candidates.
+	TargetIDs param.Field[[]string] `query:"target_ids" format:"uuid"`
 	// Private virtual network identifier of the target
 	VirtualNetworkID param.Field[string] `query:"virtual_network_id" format:"uuid"`
 }
