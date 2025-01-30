@@ -44,7 +44,7 @@ func NewAccessUserService(opts ...option.RequestOption) (r *AccessUserService) {
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) List(ctx context.Context, params AccessUserListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUser], err error) {
+func (r *AccessUserService) List(ctx context.Context, params AccessUserListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUserListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,11 +66,11 @@ func (r *AccessUserService) List(ctx context.Context, params AccessUserListParam
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) ListAutoPaging(ctx context.Context, params AccessUserListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUser] {
+func (r *AccessUserService) ListAutoPaging(ctx context.Context, params AccessUserListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUserListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-type AccessUser struct {
+type AccessUserListResponse struct {
 	// UUID
 	ID string `json:"id"`
 	// True if the user has authenticated with Cloudflare Access.
@@ -89,13 +89,14 @@ type AccessUser struct {
 	// The unique API identifier for the Zero Trust seat.
 	SeatUID string `json:"seat_uid"`
 	// The unique API identifier for the user.
-	UID       string         `json:"uid"`
-	UpdatedAt time.Time      `json:"updated_at" format:"date-time"`
-	JSON      accessUserJSON `json:"-"`
+	UID       string                     `json:"uid"`
+	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
+	JSON      accessUserListResponseJSON `json:"-"`
 }
 
-// accessUserJSON contains the JSON metadata for the struct [AccessUser]
-type accessUserJSON struct {
+// accessUserListResponseJSON contains the JSON metadata for the struct
+// [AccessUserListResponse]
+type accessUserListResponseJSON struct {
 	ID                  apijson.Field
 	AccessSeat          apijson.Field
 	ActiveDeviceCount   apijson.Field
@@ -111,11 +112,11 @@ type accessUserJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *AccessUser) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessUserJSON) RawJSON() string {
+func (r accessUserListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
