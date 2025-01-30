@@ -70,6 +70,97 @@ func (r *AccessUserService) ListAutoPaging(ctx context.Context, params AccessUse
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
+type AccessUser struct {
+	// The unique Cloudflare-generated Id of the SCIM resource.
+	ID string `json:"id"`
+	// Determines the status of the SCIM User resource.
+	Active bool `json:"active"`
+	// The name of the SCIM User resource.
+	DisplayName string            `json:"displayName"`
+	Emails      []AccessUserEmail `json:"emails"`
+	// The IdP-generated Id of the SCIM resource.
+	ExternalID string `json:"externalId"`
+	// The metadata of the SCIM resource.
+	Meta AccessUserMeta `json:"meta"`
+	// The list of URIs which indicate the attributes contained within a SCIM resource.
+	Schemas []string       `json:"schemas"`
+	JSON    accessUserJSON `json:"-"`
+}
+
+// accessUserJSON contains the JSON metadata for the struct [AccessUser]
+type accessUserJSON struct {
+	ID          apijson.Field
+	Active      apijson.Field
+	DisplayName apijson.Field
+	Emails      apijson.Field
+	ExternalID  apijson.Field
+	Meta        apijson.Field
+	Schemas     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUser) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessUserJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessUserEmail struct {
+	// Indicates if the email address is the primary email belonging to the SCIM User
+	// resource.
+	Primary bool `json:"primary"`
+	// Indicates the type of the email address.
+	Type string `json:"type"`
+	// The email address of the SCIM User resource.
+	Value string              `json:"value" format:"email"`
+	JSON  accessUserEmailJSON `json:"-"`
+}
+
+// accessUserEmailJSON contains the JSON metadata for the struct [AccessUserEmail]
+type accessUserEmailJSON struct {
+	Primary     apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserEmail) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessUserEmailJSON) RawJSON() string {
+	return r.raw
+}
+
+// The metadata of the SCIM resource.
+type AccessUserMeta struct {
+	// The timestamp of when the SCIM resource was created.
+	Created time.Time `json:"created" format:"date-time"`
+	// The timestamp of when the SCIM resource was last modified.
+	LastModified time.Time          `json:"lastModified" format:"date-time"`
+	JSON         accessUserMetaJSON `json:"-"`
+}
+
+// accessUserMetaJSON contains the JSON metadata for the struct [AccessUserMeta]
+type accessUserMetaJSON struct {
+	Created      apijson.Field
+	LastModified apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessUserMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessUserMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessUserListResponse struct {
 	// UUID
 	ID string `json:"id"`

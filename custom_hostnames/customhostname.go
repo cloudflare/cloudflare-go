@@ -26,8 +26,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewCustomHostnameService] method instead.
 type CustomHostnameService struct {
-	Options        []option.RequestOption
-	FallbackOrigin *FallbackOriginService
+	Options         []option.RequestOption
+	FallbackOrigin  *FallbackOriginService
+	CertificatePack *CertificatePackService
 }
 
 // NewCustomHostnameService generates a new service that applies the given options
@@ -37,6 +38,7 @@ func NewCustomHostnameService(opts ...option.RequestOption) (r *CustomHostnameSe
 	r = &CustomHostnameService{}
 	r.Options = opts
 	r.FallbackOrigin = NewFallbackOriginService(opts...)
+	r.CertificatePack = NewCertificatePackService(opts...)
 	return
 }
 

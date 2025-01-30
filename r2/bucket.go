@@ -29,6 +29,8 @@ type BucketService struct {
 	CORS               *BucketCORSService
 	Domains            *BucketDomainService
 	EventNotifications *BucketEventNotificationService
+	Locks              *BucketLockService
+	Metrics            *BucketMetricService
 	Sippy              *BucketSippyService
 }
 
@@ -42,6 +44,8 @@ func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 	r.CORS = NewBucketCORSService(opts...)
 	r.Domains = NewBucketDomainService(opts...)
 	r.EventNotifications = NewBucketEventNotificationService(opts...)
+	r.Locks = NewBucketLockService(opts...)
+	r.Metrics = NewBucketMetricService(opts...)
 	r.Sippy = NewBucketSippyService(opts...)
 	return
 }
