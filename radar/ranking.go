@@ -25,8 +25,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewRankingService] method instead.
 type RankingService struct {
-	Options []option.RequestOption
-	Domain  *RankingDomainService
+	Options          []option.RequestOption
+	Domain           *RankingDomainService
+	InternetServices *RankingInternetServiceService
 }
 
 // NewRankingService generates a new service that applies the given options to each
@@ -36,6 +37,7 @@ func NewRankingService(opts ...option.RequestOption) (r *RankingService) {
 	r = &RankingService{}
 	r.Options = opts
 	r.Domain = NewRankingDomainService(opts...)
+	r.InternetServices = NewRankingInternetServiceService(opts...)
 	return
 }
 

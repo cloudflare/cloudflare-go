@@ -78,6 +78,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/rules"
 	"github.com/cloudflare/cloudflare-go/v4/rulesets"
 	"github.com/cloudflare/cloudflare-go/v4/rum"
+	"github.com/cloudflare/cloudflare-go/v4/security_center"
 	"github.com/cloudflare/cloudflare-go/v4/security_txt"
 	"github.com/cloudflare/cloudflare-go/v4/snippets"
 	"github.com/cloudflare/cloudflare-go/v4/spectrum"
@@ -198,6 +199,7 @@ type Client struct {
 	ContentScanning             *content_scanning.ContentScanningService
 	AbuseReports                *abuse_reports.AbuseReportService
 	AI                          *ai.AIService
+	SecurityCenter              *security_center.SecurityCenterService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -310,6 +312,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
 	r.AI = ai.NewAIService(opts...)
+	r.SecurityCenter = security_center.NewSecurityCenterService(opts...)
 
 	return
 }
