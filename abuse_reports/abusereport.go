@@ -54,7 +54,10 @@ type AbuseReportNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The abuse report type
 	Act param.Field[AbuseReportNewParamsAct] `json:"act,required"`
-	// A valid email of the abuse reporter
+	// Can be `0` for false or `1` for true
+	Agree param.Field[AbuseReportNewParamsAgree] `json:"agree,required"`
+	// A valid email of the abuse reporter. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Email param.Field[string] `json:"email,required"`
 	// Should match the value provided in `email`
 	Email2 param.Field[string] `json:"email2,required"`
@@ -69,21 +72,26 @@ type AbuseReportNewParams struct {
 	OwnerNotification param.Field[AbuseReportNewParamsOwnerNotification] `json:"owner_notification,required"`
 	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
 	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
-	// should be unique
+	// should be unique. This field may be released by Cloudflare to third parties such
+	// as the Lumen Database (https://lumendatabase.org/).
 	URLs param.Field[string] `json:"urls,required"`
-	// Text not exceeding 100 characters
+	// Text not exceeding 100 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Address1 param.Field[string] `json:"address1"`
-	// The name of the copyright holder. Text not exceeding 60 characters.
+	// The name of the copyright holder. Text not exceeding 60 characters. This field
+	// may be released by Cloudflare to third parties such as the Lumen Database
+	// (https://lumendatabase.org/).
 	AgentName param.Field[string] `json:"agent_name"`
-	// Can be 0 or 1
-	Agree param.Field[AbuseReportNewParamsAgree] `json:"agree"`
-	// Text not exceeding 255 characters
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	City param.Field[string] `json:"city"`
 	// Any additional comments about the infringement not exceeding 2000 characters
 	Comments param.Field[string] `json:"comments"`
-	// Text not exceeding 100 characters
+	// Text not exceeding 100 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Company param.Field[string] `json:"company"`
-	// Text not exceeding 255 characters
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Country param.Field[string] `json:"country"`
 	// A list of IP addresses separated by ‘ ’ (new line character). The list of
 	// destination IPs should not exceed 30 IP addresses. Each one of the IP addresses
@@ -93,11 +101,13 @@ type AbuseReportNewParams struct {
 	// details and the exact steps needed to view the content, not exceeding 5000
 	// characters
 	Justification param.Field[string] `json:"justification"`
-	// Text not exceeding 255 characters
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Name param.Field[string] `json:"name"`
 	// If the submitter is the target of NCSEI in the URLs of the abuse report
 	NcseiSubjectRepresentation param.Field[bool] `json:"ncsei_subject_representation"`
-	// Text not exceeding 255 characters
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	OriginalWork param.Field[string] `json:"original_work"`
 	// A comma separated list of ports and protocols e.g. 80/TCP, 22/UDP. The total
 	// size of the field should not exceed 2000 characters. Each individual
@@ -112,9 +122,11 @@ type AbuseReportNewParams struct {
 	// IPs should not exceed 30 IP addresses. Each one of the IP addresses ought to be
 	// unique
 	SourceIPs param.Field[string] `json:"source_ips"`
-	// Text not exceeding 255 characters
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	State param.Field[string] `json:"state"`
-	// Text not exceeding 20 characters
+	// Text not exceeding 20 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Tele param.Field[string] `json:"tele"`
 	// Text not exceeding 255 characters
 	Title param.Field[string] `json:"title"`
@@ -174,6 +186,22 @@ func (r AbuseReportNewParamsAct) IsKnown() bool {
 	return false
 }
 
+// Can be `0` for false or `1` for true
+type AbuseReportNewParamsAgree int64
+
+const (
+	AbuseReportNewParamsAgree0 AbuseReportNewParamsAgree = 0
+	AbuseReportNewParamsAgree1 AbuseReportNewParamsAgree = 1
+)
+
+func (r AbuseReportNewParamsAgree) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsAgree0, AbuseReportNewParamsAgree1:
+		return true
+	}
+	return false
+}
+
 // Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 // reports cannot be anonymous.
 type AbuseReportNewParamsHostNotification string
@@ -223,22 +251,6 @@ const (
 func (r AbuseReportNewParamsOwnerNotification) IsKnown() bool {
 	switch r {
 	case AbuseReportNewParamsOwnerNotificationSend, AbuseReportNewParamsOwnerNotificationSendAnon, AbuseReportNewParamsOwnerNotificationNone:
-		return true
-	}
-	return false
-}
-
-// Can be 0 or 1
-type AbuseReportNewParamsAgree int64
-
-const (
-	AbuseReportNewParamsAgree0 AbuseReportNewParamsAgree = 0
-	AbuseReportNewParamsAgree1 AbuseReportNewParamsAgree = 1
-)
-
-func (r AbuseReportNewParamsAgree) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsAgree0, AbuseReportNewParamsAgree1:
 		return true
 	}
 	return false

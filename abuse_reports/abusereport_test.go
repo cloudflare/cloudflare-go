@@ -34,6 +34,7 @@ func TestAbuseReportNewWithOptionalParams(t *testing.T) {
 		abuse_reports.AbuseReportNewParams{
 			AccountID:                  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Act:                        cloudflare.F(abuse_reports.AbuseReportNewParamsActAbuseDmca),
+			Agree:                      cloudflare.F(abuse_reports.AbuseReportNewParamsAgree0),
 			Email:                      cloudflare.F("email"),
 			Email2:                     cloudflare.F("email2"),
 			HostNotification:           cloudflare.F(abuse_reports.AbuseReportNewParamsHostNotificationSend),
@@ -42,7 +43,6 @@ func TestAbuseReportNewWithOptionalParams(t *testing.T) {
 			URLs:                       cloudflare.F("urls"),
 			Address1:                   cloudflare.F("x"),
 			AgentName:                  cloudflare.F("x"),
-			Agree:                      cloudflare.F(abuse_reports.AbuseReportNewParamsAgree0),
 			City:                       cloudflare.F("x"),
 			Comments:                   cloudflare.F("x"),
 			Company:                    cloudflare.F("x"),
