@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
@@ -69,20 +70,30 @@ func (r *PCAPOwnershipService) Delete(ctx context.Context, ownershipID string, b
 }
 
 // List all buckets configured for use with PCAPs API.
-func (r *PCAPOwnershipService) Get(ctx context.Context, query PCAPOwnershipGetParams, opts ...option.RequestOption) (res *[]Ownership, err error) {
-	var env PCAPOwnershipGetResponseEnvelope
+func (r *PCAPOwnershipService) Get(ctx context.Context, query PCAPOwnershipGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Ownership], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List all buckets configured for use with PCAPs API.
+func (r *PCAPOwnershipService) GetAutoPaging(ctx context.Context, query PCAPOwnershipGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Ownership] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }
 
 // Validates buckets added to the packet captures API.
@@ -217,82 +228,6 @@ type PCAPOwnershipDeleteParams struct {
 type PCAPOwnershipGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type PCAPOwnershipGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Ownership           `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    PCAPOwnershipGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PCAPOwnershipGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       pcapOwnershipGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// pcapOwnershipGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PCAPOwnershipGetResponseEnvelope]
-type pcapOwnershipGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPOwnershipGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapOwnershipGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PCAPOwnershipGetResponseEnvelopeSuccess bool
-
-const (
-	PCAPOwnershipGetResponseEnvelopeSuccessTrue PCAPOwnershipGetResponseEnvelopeSuccess = true
-)
-
-func (r PCAPOwnershipGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PCAPOwnershipGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type PCAPOwnershipGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       pcapOwnershipGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// pcapOwnershipGetResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [PCAPOwnershipGetResponseEnvelopeResultInfo]
-type pcapOwnershipGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPOwnershipGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapOwnershipGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type PCAPOwnershipValidateParams struct {

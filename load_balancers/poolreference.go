@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // PoolReferenceService contains methods and other services that help with
@@ -35,9 +35,10 @@ func NewPoolReferenceService(opts ...option.RequestOption) (r *PoolReferenceServ
 }
 
 // Get the list of resources that reference the provided pool.
-func (r *PoolReferenceService) Get(ctx context.Context, poolID string, query PoolReferenceGetParams, opts ...option.RequestOption) (res *[]PoolReferenceGetResponse, err error) {
-	var env PoolReferenceGetResponseEnvelope
+func (r *PoolReferenceService) Get(ctx context.Context, poolID string, query PoolReferenceGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[PoolReferenceGetResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -47,12 +48,21 @@ func (r *PoolReferenceService) Get(ctx context.Context, poolID string, query Poo
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/references", query.AccountID, poolID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get the list of resources that reference the provided pool.
+func (r *PoolReferenceService) GetAutoPaging(ctx context.Context, poolID string, query PoolReferenceGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PoolReferenceGetResponse] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, poolID, query, opts...))
 }
 
 type PoolReferenceGetResponse struct {
@@ -101,48 +111,4 @@ func (r PoolReferenceGetResponseReferenceType) IsKnown() bool {
 type PoolReferenceGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type PoolReferenceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// List of resources that reference a given pool.
-	Result []PoolReferenceGetResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success PoolReferenceGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    poolReferenceGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// poolReferenceGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PoolReferenceGetResponseEnvelope]
-type poolReferenceGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolReferenceGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolReferenceGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PoolReferenceGetResponseEnvelopeSuccess bool
-
-const (
-	PoolReferenceGetResponseEnvelopeSuccessTrue PoolReferenceGetResponseEnvelopeSuccess = true
-)
-
-func (r PoolReferenceGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PoolReferenceGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // PrioritizeService contains methods and other services that help with interacting
@@ -37,20 +37,32 @@ func NewPrioritizeService(opts ...option.RequestOption) (r *PrioritizeService) {
 // If a zone has multiple SSL certificates, you can set the order in which they
 // should be used during a request. The higher priority will break ties across
 // overlapping 'legacy_custom' certificates.
-func (r *PrioritizeService) Update(ctx context.Context, params PrioritizeUpdateParams, opts ...option.RequestOption) (res *[]CustomCertificate, err error) {
-	var env PrioritizeUpdateResponseEnvelope
+func (r *PrioritizeService) Update(ctx context.Context, params PrioritizeUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[CustomCertificate], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/custom_certificates/prioritize", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// If a zone has multiple SSL certificates, you can set the order in which they
+// should be used during a request. The higher priority will break ties across
+// overlapping 'legacy_custom' certificates.
+func (r *PrioritizeService) UpdateAutoPaging(ctx context.Context, params PrioritizeUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CustomCertificate] {
+	return pagination.NewSinglePageAutoPager(r.Update(ctx, params, opts...))
 }
 
 type PrioritizeUpdateParams struct {
@@ -76,80 +88,4 @@ type PrioritizeUpdateParamsCertificate struct {
 
 func (r PrioritizeUpdateParamsCertificate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type PrioritizeUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    PrioritizeUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []CustomCertificate                        `json:"result"`
-	ResultInfo PrioritizeUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       prioritizeUpdateResponseEnvelopeJSON       `json:"-"`
-}
-
-// prioritizeUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PrioritizeUpdateResponseEnvelope]
-type prioritizeUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrioritizeUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prioritizeUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PrioritizeUpdateResponseEnvelopeSuccess bool
-
-const (
-	PrioritizeUpdateResponseEnvelopeSuccessTrue PrioritizeUpdateResponseEnvelopeSuccess = true
-)
-
-func (r PrioritizeUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PrioritizeUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type PrioritizeUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       prioritizeUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// prioritizeUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [PrioritizeUpdateResponseEnvelopeResultInfo]
-type prioritizeUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrioritizeUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prioritizeUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

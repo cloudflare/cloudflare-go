@@ -36,9 +36,10 @@ func NewDispatchNamespaceScriptTagService(opts ...option.RequestOption) (r *Disp
 }
 
 // Put script tags for a script uploaded to a Workers for Platforms namespace.
-func (r *DispatchNamespaceScriptTagService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptTagUpdateParams, opts ...option.RequestOption) (res *[]string, err error) {
-	var env DispatchNamespaceScriptTagUpdateResponseEnvelope
+func (r *DispatchNamespaceScriptTagService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptTagUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -52,12 +53,21 @@ func (r *DispatchNamespaceScriptTagService) Update(ctx context.Context, dispatch
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/tags", params.AccountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Put script tags for a script uploaded to a Workers for Platforms namespace.
+func (r *DispatchNamespaceScriptTagService) UpdateAutoPaging(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptTagUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
+	return pagination.NewSinglePageAutoPager(r.Update(ctx, dispatchNamespace, scriptName, params, opts...))
 }
 
 // Fetch tags from a script uploaded to a Workers for Platforms namespace.
@@ -135,49 +145,6 @@ type DispatchNamespaceScriptTagUpdateParams struct {
 
 func (r DispatchNamespaceScriptTagUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
-}
-
-type DispatchNamespaceScriptTagUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success DispatchNamespaceScriptTagUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  []string                                                `json:"result"`
-	JSON    dispatchNamespaceScriptTagUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// dispatchNamespaceScriptTagUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [DispatchNamespaceScriptTagUpdateResponseEnvelope]
-type dispatchNamespaceScriptTagUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptTagUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptTagUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DispatchNamespaceScriptTagUpdateResponseEnvelopeSuccess bool
-
-const (
-	DispatchNamespaceScriptTagUpdateResponseEnvelopeSuccessTrue DispatchNamespaceScriptTagUpdateResponseEnvelopeSuccess = true
-)
-
-func (r DispatchNamespaceScriptTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptTagUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type DispatchNamespaceScriptTagListParams struct {

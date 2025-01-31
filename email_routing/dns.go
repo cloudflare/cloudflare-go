@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
@@ -57,15 +58,31 @@ func (r *DNSService) New(ctx context.Context, params DNSNewParams, opts ...optio
 
 // Disable your Email Routing zone. Also removes additional MX records previously
 // required for Email Routing to work.
-func (r *DNSService) Delete(ctx context.Context, body DNSDeleteParams, opts ...option.RequestOption) (res *DNSDeleteResponse, err error) {
+func (r *DNSService) Delete(ctx context.Context, body DNSDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[DNSRecord], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/dns", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Disable your Email Routing zone. Also removes additional MX records previously
+// required for Email Routing to work.
+func (r *DNSService) DeleteAutoPaging(ctx context.Context, body DNSDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DNSRecord] {
+	return pagination.NewSinglePageAutoPager(r.Delete(ctx, body, opts...))
 }
 
 // Unlock MX Records previously locked by Email Routing.
@@ -176,215 +193,6 @@ const (
 func (r DNSRecordType) IsKnown() bool {
 	switch r {
 	case DNSRecordTypeA, DNSRecordTypeAAAA, DNSRecordTypeCNAME, DNSRecordTypeHTTPS, DNSRecordTypeTXT, DNSRecordTypeSRV, DNSRecordTypeLOC, DNSRecordTypeMX, DNSRecordTypeNS, DNSRecordTypeCERT, DNSRecordTypeDNSKEY, DNSRecordTypeDS, DNSRecordTypeNAPTR, DNSRecordTypeSMIMEA, DNSRecordTypeSSHFP, DNSRecordTypeSVCB, DNSRecordTypeTLSA, DNSRecordTypeURI:
-		return true
-	}
-	return false
-}
-
-type DNSDeleteResponse struct {
-	// This field can have the runtime type of [[]shared.ResponseInfo].
-	Errors interface{} `json:"errors,required"`
-	// This field can have the runtime type of [[]shared.ResponseInfo].
-	Messages interface{} `json:"messages,required"`
-	// Whether the API call was successful
-	Success DNSDeleteResponseSuccess `json:"success,required"`
-	// This field can have the runtime type of [[]DNSRecord].
-	Result interface{} `json:"result"`
-	// This field can have the runtime type of
-	// [DNSDeleteResponseEmailDNSSettingsResponseCollectionResultInfo].
-	ResultInfo interface{}           `json:"result_info"`
-	JSON       dnsDeleteResponseJSON `json:"-"`
-	union      DNSDeleteResponseUnion
-}
-
-// dnsDeleteResponseJSON contains the JSON metadata for the struct
-// [DNSDeleteResponse]
-type dnsDeleteResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r dnsDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *DNSDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = DNSDeleteResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [DNSDeleteResponseUnion] interface which you can cast to the
-// specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [email_routing.DNSDeleteResponseEmailAPIResponseCommon],
-// [email_routing.DNSDeleteResponseEmailDNSSettingsResponseCollection].
-func (r DNSDeleteResponse) AsUnion() DNSDeleteResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [email_routing.DNSDeleteResponseEmailAPIResponseCommon] or
-// [email_routing.DNSDeleteResponseEmailDNSSettingsResponseCollection].
-type DNSDeleteResponseUnion interface {
-	implementsDNSDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSDeleteResponseEmailAPIResponseCommon{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSDeleteResponseEmailDNSSettingsResponseCollection{}),
-		},
-	)
-}
-
-type DNSDeleteResponseEmailAPIResponseCommon struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success DNSDeleteResponseEmailAPIResponseCommonSuccess `json:"success,required"`
-	JSON    dnsDeleteResponseEmailAPIResponseCommonJSON    `json:"-"`
-}
-
-// dnsDeleteResponseEmailAPIResponseCommonJSON contains the JSON metadata for the
-// struct [DNSDeleteResponseEmailAPIResponseCommon]
-type dnsDeleteResponseEmailAPIResponseCommonJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSDeleteResponseEmailAPIResponseCommon) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsDeleteResponseEmailAPIResponseCommonJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DNSDeleteResponseEmailAPIResponseCommon) implementsDNSDeleteResponse() {}
-
-// Whether the API call was successful
-type DNSDeleteResponseEmailAPIResponseCommonSuccess bool
-
-const (
-	DNSDeleteResponseEmailAPIResponseCommonSuccessTrue DNSDeleteResponseEmailAPIResponseCommonSuccess = true
-)
-
-func (r DNSDeleteResponseEmailAPIResponseCommonSuccess) IsKnown() bool {
-	switch r {
-	case DNSDeleteResponseEmailAPIResponseCommonSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DNSDeleteResponseEmailDNSSettingsResponseCollection struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    DNSDeleteResponseEmailDNSSettingsResponseCollectionSuccess    `json:"success,required"`
-	Result     []DNSRecord                                                   `json:"result"`
-	ResultInfo DNSDeleteResponseEmailDNSSettingsResponseCollectionResultInfo `json:"result_info"`
-	JSON       dnsDeleteResponseEmailDNSSettingsResponseCollectionJSON       `json:"-"`
-}
-
-// dnsDeleteResponseEmailDNSSettingsResponseCollectionJSON contains the JSON
-// metadata for the struct [DNSDeleteResponseEmailDNSSettingsResponseCollection]
-type dnsDeleteResponseEmailDNSSettingsResponseCollectionJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSDeleteResponseEmailDNSSettingsResponseCollection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsDeleteResponseEmailDNSSettingsResponseCollectionJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DNSDeleteResponseEmailDNSSettingsResponseCollection) implementsDNSDeleteResponse() {}
-
-// Whether the API call was successful
-type DNSDeleteResponseEmailDNSSettingsResponseCollectionSuccess bool
-
-const (
-	DNSDeleteResponseEmailDNSSettingsResponseCollectionSuccessTrue DNSDeleteResponseEmailDNSSettingsResponseCollectionSuccess = true
-)
-
-func (r DNSDeleteResponseEmailDNSSettingsResponseCollectionSuccess) IsKnown() bool {
-	switch r {
-	case DNSDeleteResponseEmailDNSSettingsResponseCollectionSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DNSDeleteResponseEmailDNSSettingsResponseCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                           `json:"total_count"`
-	JSON       dnsDeleteResponseEmailDNSSettingsResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// dnsDeleteResponseEmailDNSSettingsResponseCollectionResultInfoJSON contains the
-// JSON metadata for the struct
-// [DNSDeleteResponseEmailDNSSettingsResponseCollectionResultInfo]
-type dnsDeleteResponseEmailDNSSettingsResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSDeleteResponseEmailDNSSettingsResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsDeleteResponseEmailDNSSettingsResponseCollectionResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DNSDeleteResponseSuccess bool
-
-const (
-	DNSDeleteResponseSuccessTrue DNSDeleteResponseSuccess = true
-)
-
-func (r DNSDeleteResponseSuccess) IsKnown() bool {
-	switch r {
-	case DNSDeleteResponseSuccessTrue:
 		return true
 	}
 	return false

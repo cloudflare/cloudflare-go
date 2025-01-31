@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
@@ -80,20 +81,30 @@ func (r *SettingTLSService) Delete(ctx context.Context, settingID SettingTLSDele
 }
 
 // List the requested TLS setting for the hostnames under this zone.
-func (r *SettingTLSService) Get(ctx context.Context, settingID SettingTLSGetParamsSettingID, query SettingTLSGetParams, opts ...option.RequestOption) (res *[]SettingTLSGetResponse, err error) {
-	var env SettingTLSGetResponseEnvelope
+func (r *SettingTLSService) Get(ctx context.Context, settingID SettingTLSGetParamsSettingID, query SettingTLSGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingTLSGetResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v", query.ZoneID, settingID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List the requested TLS setting for the hostnames under this zone.
+func (r *SettingTLSService) GetAutoPaging(ctx context.Context, settingID SettingTLSGetParamsSettingID, query SettingTLSGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SettingTLSGetResponse] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, settingID, query, opts...))
 }
 
 type Setting struct {
@@ -396,83 +407,4 @@ func (r SettingTLSGetParamsSettingID) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type SettingTLSGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    SettingTLSGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []SettingTLSGetResponse                 `json:"result"`
-	ResultInfo SettingTLSGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       settingTLSGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// settingTLSGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingTLSGetResponseEnvelope]
-type settingTLSGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTLSGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTLSGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SettingTLSGetResponseEnvelopeSuccess bool
-
-const (
-	SettingTLSGetResponseEnvelopeSuccessTrue SettingTLSGetResponseEnvelopeSuccess = true
-)
-
-func (r SettingTLSGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SettingTLSGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type SettingTLSGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64 `json:"total_count"`
-	// Total pages available of results
-	TotalPages float64                                     `json:"total_pages"`
-	JSON       settingTLSGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// settingTLSGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [SettingTLSGetResponseEnvelopeResultInfo]
-type settingTLSGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTLSGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTLSGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

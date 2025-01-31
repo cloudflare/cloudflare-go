@@ -8,11 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // AttackSurfaceReportIssueTypeService contains methods and other services that
@@ -35,66 +34,33 @@ func NewAttackSurfaceReportIssueTypeService(opts ...option.RequestOption) (r *At
 }
 
 // Get Security Center Issues Types
-func (r *AttackSurfaceReportIssueTypeService) Get(ctx context.Context, query AttackSurfaceReportIssueTypeGetParams, opts ...option.RequestOption) (res *[]string, err error) {
-	var env AttackSurfaceReportIssueTypeGetResponseEnvelope
+func (r *AttackSurfaceReportIssueTypeService) Get(ctx context.Context, query AttackSurfaceReportIssueTypeGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/intel/attack-surface-report/issue-types", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get Security Center Issues Types
+func (r *AttackSurfaceReportIssueTypeService) GetAutoPaging(ctx context.Context, query AttackSurfaceReportIssueTypeGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }
 
 type AttackSurfaceReportIssueTypeGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type AttackSurfaceReportIssueTypeGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  []string                                               `json:"result"`
-	JSON    attackSurfaceReportIssueTypeGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// attackSurfaceReportIssueTypeGetResponseEnvelopeJSON contains the JSON metadata
-// for the struct [AttackSurfaceReportIssueTypeGetResponseEnvelope]
-type attackSurfaceReportIssueTypeGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackSurfaceReportIssueTypeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackSurfaceReportIssueTypeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccess bool
-
-const (
-	AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccessTrue AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccess = true
-)
-
-func (r AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

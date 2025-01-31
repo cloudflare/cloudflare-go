@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
@@ -110,9 +111,10 @@ func (r *AudioTrackService) Edit(ctx context.Context, identifier string, audioId
 
 // Lists additional audio tracks on a video. Note this API will not return
 // information for audio attached to the video upload.
-func (r *AudioTrackService) Get(ctx context.Context, identifier string, query AudioTrackGetParams, opts ...option.RequestOption) (res *[]Audio, err error) {
-	var env AudioTrackGetResponseEnvelope
+func (r *AudioTrackService) Get(ctx context.Context, identifier string, query AudioTrackGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Audio], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -122,12 +124,22 @@ func (r *AudioTrackService) Get(ctx context.Context, identifier string, query Au
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio", query.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists additional audio tracks on a video. Note this API will not return
+// information for audio attached to the video upload.
+func (r *AudioTrackService) GetAutoPaging(ctx context.Context, identifier string, query AudioTrackGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Audio] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, identifier, query, opts...))
 }
 
 type Audio struct {
@@ -345,47 +357,4 @@ func (r AudioTrackEditResponseEnvelopeSuccess) IsKnown() bool {
 type AudioTrackGetParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type AudioTrackGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success AudioTrackGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  []Audio                              `json:"result"`
-	JSON    audioTrackGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// audioTrackGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AudioTrackGetResponseEnvelope]
-type audioTrackGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AudioTrackGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AudioTrackGetResponseEnvelopeSuccess bool
-
-const (
-	AudioTrackGetResponseEnvelopeSuccessTrue AudioTrackGetResponseEnvelopeSuccess = true
-)
-
-func (r AudioTrackGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AudioTrackGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
