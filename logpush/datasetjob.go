@@ -8,11 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // DatasetJobService contains methods and other services that help with interacting
@@ -35,9 +34,10 @@ func NewDatasetJobService(opts ...option.RequestOption) (r *DatasetJobService) {
 }
 
 // Lists Logpush jobs for an account or zone for a dataset.
-func (r *DatasetJobService) Get(ctx context.Context, datasetID string, query DatasetJobGetParams, opts ...option.RequestOption) (res *[]LogpushJob, err error) {
-	var env DatasetJobGetResponseEnvelope
+func (r *DatasetJobService) Get(ctx context.Context, datasetID string, query DatasetJobGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[LogpushJob], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -61,12 +61,21 @@ func (r *DatasetJobService) Get(ctx context.Context, datasetID string, query Dat
 		return
 	}
 	path := fmt.Sprintf("%s/%s/logpush/datasets/%s/jobs", accountOrZone, accountOrZoneID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists Logpush jobs for an account or zone for a dataset.
+func (r *DatasetJobService) GetAutoPaging(ctx context.Context, datasetID string, query DatasetJobGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LogpushJob] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, datasetID, query, opts...))
 }
 
 type DatasetJobGetParams struct {
@@ -74,47 +83,4 @@ type DatasetJobGetParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-type DatasetJobGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success DatasetJobGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  []LogpushJob                         `json:"result"`
-	JSON    datasetJobGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// datasetJobGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DatasetJobGetResponseEnvelope]
-type datasetJobGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatasetJobGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r datasetJobGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DatasetJobGetResponseEnvelopeSuccess bool
-
-const (
-	DatasetJobGetResponseEnvelopeSuccessTrue DatasetJobGetResponseEnvelopeSuccess = true
-)
-
-func (r DatasetJobGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DatasetJobGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

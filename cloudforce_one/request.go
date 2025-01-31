@@ -85,7 +85,7 @@ func (r *RequestService) Update(ctx context.Context, accountIdentifier string, r
 }
 
 // List Requests
-func (r *RequestService) List(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ListItem], err error) {
+func (r *RequestService) List(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ListItem], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -107,8 +107,8 @@ func (r *RequestService) List(ctx context.Context, accountIdentifier string, bod
 }
 
 // List Requests
-func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ListItem] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, body, opts...))
+func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ListItem] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, accountIdentifier, body, opts...))
 }
 
 // Delete a Request
@@ -183,20 +183,30 @@ func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, op
 }
 
 // Get Request Types
-func (r *RequestService) Types(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestTypes, err error) {
-	var env RequestTypesResponseEnvelope
+func (r *RequestService) Types(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/types", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get Request Types
+func (r *RequestService) TypesAutoPaging(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
+	return pagination.NewSinglePageAutoPager(r.Types(ctx, accountIdentifier, opts...))
 }
 
 type Item struct {
@@ -897,49 +907,6 @@ const (
 func (r RequestQuotaResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case RequestQuotaResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type RequestTypesResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success RequestTypesResponseEnvelopeSuccess `json:"success,required"`
-	Result  RequestTypes                        `json:"result"`
-	JSON    requestTypesResponseEnvelopeJSON    `json:"-"`
-}
-
-// requestTypesResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RequestTypesResponseEnvelope]
-type requestTypesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestTypesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestTypesResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RequestTypesResponseEnvelopeSuccess bool
-
-const (
-	RequestTypesResponseEnvelopeSuccessTrue RequestTypesResponseEnvelopeSuccess = true
-)
-
-func (r RequestTypesResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RequestTypesResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

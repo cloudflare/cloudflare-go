@@ -172,9 +172,10 @@ func (r *DatabaseService) Import(ctx context.Context, databaseID string, params 
 }
 
 // Returns the query result as an object.
-func (r *DatabaseService) Query(ctx context.Context, databaseID string, params DatabaseQueryParams, opts ...option.RequestOption) (res *[]QueryResult, err error) {
-	var env DatabaseQueryResponseEnvelope
+func (r *DatabaseService) Query(ctx context.Context, databaseID string, params DatabaseQueryParams, opts ...option.RequestOption) (res *pagination.SinglePage[QueryResult], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -184,19 +185,29 @@ func (r *DatabaseService) Query(ctx context.Context, databaseID string, params D
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s/query", params.AccountID, databaseID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns the query result as an object.
+func (r *DatabaseService) QueryAutoPaging(ctx context.Context, databaseID string, params DatabaseQueryParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[QueryResult] {
+	return pagination.NewSinglePageAutoPager(r.Query(ctx, databaseID, params, opts...))
 }
 
 // Returns the query result rows as arrays rather than objects. This is a
 // performance-optimized version of the /query endpoint.
-func (r *DatabaseService) Raw(ctx context.Context, databaseID string, params DatabaseRawParams, opts ...option.RequestOption) (res *[]DatabaseRawResponse, err error) {
-	var env DatabaseRawResponseEnvelope
+func (r *DatabaseService) Raw(ctx context.Context, databaseID string, params DatabaseRawParams, opts ...option.RequestOption) (res *pagination.SinglePage[DatabaseRawResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -206,12 +217,22 @@ func (r *DatabaseService) Raw(ctx context.Context, databaseID string, params Dat
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s/raw", params.AccountID, databaseID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns the query result rows as arrays rather than objects. This is a
+// performance-optimized version of the /query endpoint.
+func (r *DatabaseService) RawAutoPaging(ctx context.Context, databaseID string, params DatabaseRawParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DatabaseRawResponse] {
+	return pagination.NewSinglePageAutoPager(r.Raw(ctx, databaseID, params, opts...))
 }
 
 type QueryResult struct {
@@ -1031,49 +1052,6 @@ func (r DatabaseQueryParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type DatabaseQueryResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []QueryResult         `json:"result,required"`
-	// Whether the API call was successful
-	Success DatabaseQueryResponseEnvelopeSuccess `json:"success,required"`
-	JSON    databaseQueryResponseEnvelopeJSON    `json:"-"`
-}
-
-// databaseQueryResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DatabaseQueryResponseEnvelope]
-type databaseQueryResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseQueryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseQueryResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DatabaseQueryResponseEnvelopeSuccess bool
-
-const (
-	DatabaseQueryResponseEnvelopeSuccessTrue DatabaseQueryResponseEnvelopeSuccess = true
-)
-
-func (r DatabaseQueryResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DatabaseQueryResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type DatabaseRawParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1085,47 +1063,4 @@ type DatabaseRawParams struct {
 
 func (r DatabaseRawParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type DatabaseRawResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []DatabaseRawResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success DatabaseRawResponseEnvelopeSuccess `json:"success,required"`
-	JSON    databaseRawResponseEnvelopeJSON    `json:"-"`
-}
-
-// databaseRawResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DatabaseRawResponseEnvelope]
-type databaseRawResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseRawResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseRawResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DatabaseRawResponseEnvelopeSuccess bool
-
-const (
-	DatabaseRawResponseEnvelopeSuccessTrue DatabaseRawResponseEnvelopeSuccess = true
-)
-
-func (r DatabaseRawResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DatabaseRawResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

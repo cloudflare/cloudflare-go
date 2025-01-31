@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
@@ -76,20 +77,30 @@ func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDele
 }
 
 // Lists the video ID and creation date and time when a signing key was created.
-func (r *KeyService) Get(ctx context.Context, query KeyGetParams, opts ...option.RequestOption) (res *[]KeyGetResponse, err error) {
-	var env KeyGetResponseEnvelope
+func (r *KeyService) Get(ctx context.Context, query KeyGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[KeyGetResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/stream/keys", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists the video ID and creation date and time when a signing key was created.
+func (r *KeyService) GetAutoPaging(ctx context.Context, query KeyGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[KeyGetResponse] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }
 
 type Keys struct {
@@ -250,47 +261,4 @@ func (r KeyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type KeyGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type KeyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success KeyGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  []KeyGetResponse              `json:"result"`
-	JSON    keyGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// keyGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [KeyGetResponseEnvelope]
-type keyGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r keyGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type KeyGetResponseEnvelopeSuccess bool
-
-const (
-	KeyGetResponseEnvelopeSuccessTrue KeyGetResponseEnvelopeSuccess = true
-)
-
-func (r KeyGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case KeyGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

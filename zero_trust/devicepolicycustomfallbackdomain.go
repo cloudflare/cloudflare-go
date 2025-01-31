@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // DevicePolicyCustomFallbackDomainService contains methods and other services that
@@ -37,9 +37,10 @@ func NewDevicePolicyCustomFallbackDomainService(opts ...option.RequestOption) (r
 // Sets the list of domains to bypass Gateway DNS resolution. These domains will
 // use the specified local DNS resolver instead. This will only apply to the
 // specified device settings profile.
-func (r *DevicePolicyCustomFallbackDomainService) Update(ctx context.Context, policyID string, params DevicePolicyCustomFallbackDomainUpdateParams, opts ...option.RequestOption) (res *[]FallbackDomain, err error) {
-	var env DevicePolicyCustomFallbackDomainUpdateResponseEnvelope
+func (r *DevicePolicyCustomFallbackDomainService) Update(ctx context.Context, policyID string, params DevicePolicyCustomFallbackDomainUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[FallbackDomain], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -49,20 +50,32 @@ func (r *DevicePolicyCustomFallbackDomainService) Update(ctx context.Context, po
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/fallback_domains", params.AccountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Sets the list of domains to bypass Gateway DNS resolution. These domains will
+// use the specified local DNS resolver instead. This will only apply to the
+// specified device settings profile.
+func (r *DevicePolicyCustomFallbackDomainService) UpdateAutoPaging(ctx context.Context, policyID string, params DevicePolicyCustomFallbackDomainUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[FallbackDomain] {
+	return pagination.NewSinglePageAutoPager(r.Update(ctx, policyID, params, opts...))
 }
 
 // Fetches the list of domains to bypass Gateway DNS resolution from a specified
 // device settings profile. These domains will use the specified local DNS resolver
 // instead.
-func (r *DevicePolicyCustomFallbackDomainService) Get(ctx context.Context, policyID string, query DevicePolicyCustomFallbackDomainGetParams, opts ...option.RequestOption) (res *[]FallbackDomain, err error) {
-	var env DevicePolicyCustomFallbackDomainGetResponseEnvelope
+func (r *DevicePolicyCustomFallbackDomainService) Get(ctx context.Context, policyID string, query DevicePolicyCustomFallbackDomainGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[FallbackDomain], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -72,12 +85,23 @@ func (r *DevicePolicyCustomFallbackDomainService) Get(ctx context.Context, polic
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/fallback_domains", query.AccountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches the list of domains to bypass Gateway DNS resolution from a specified
+// device settings profile. These domains will use the specified local DNS resolver
+// instead.
+func (r *DevicePolicyCustomFallbackDomainService) GetAutoPaging(ctx context.Context, policyID string, query DevicePolicyCustomFallbackDomainGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[FallbackDomain] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, policyID, query, opts...))
 }
 
 type DevicePolicyCustomFallbackDomainUpdateParams struct {
@@ -89,160 +113,6 @@ func (r DevicePolicyCustomFallbackDomainUpdateParams) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r.Domains)
 }
 
-type DevicePolicyCustomFallbackDomainUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []FallbackDomain      `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyCustomFallbackDomainUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyCustomFallbackDomainUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyCustomFallbackDomainUpdateResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyCustomFallbackDomainUpdateResponseEnvelopeJSON contains the JSON
-// metadata for the struct [DevicePolicyCustomFallbackDomainUpdateResponseEnvelope]
-type devicePolicyCustomFallbackDomainUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomFallbackDomainUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomFallbackDomainUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DevicePolicyCustomFallbackDomainUpdateResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyCustomFallbackDomainUpdateResponseEnvelopeSuccessTrue DevicePolicyCustomFallbackDomainUpdateResponseEnvelopeSuccess = true
-)
-
-func (r DevicePolicyCustomFallbackDomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DevicePolicyCustomFallbackDomainUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DevicePolicyCustomFallbackDomainUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                              `json:"total_count"`
-	JSON       devicePolicyCustomFallbackDomainUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyCustomFallbackDomainUpdateResponseEnvelopeResultInfoJSON contains
-// the JSON metadata for the struct
-// [DevicePolicyCustomFallbackDomainUpdateResponseEnvelopeResultInfo]
-type devicePolicyCustomFallbackDomainUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomFallbackDomainUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomFallbackDomainUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type DevicePolicyCustomFallbackDomainGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DevicePolicyCustomFallbackDomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []FallbackDomain      `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyCustomFallbackDomainGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyCustomFallbackDomainGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyCustomFallbackDomainGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyCustomFallbackDomainGetResponseEnvelopeJSON contains the JSON
-// metadata for the struct [DevicePolicyCustomFallbackDomainGetResponseEnvelope]
-type devicePolicyCustomFallbackDomainGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomFallbackDomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomFallbackDomainGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DevicePolicyCustomFallbackDomainGetResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyCustomFallbackDomainGetResponseEnvelopeSuccessTrue DevicePolicyCustomFallbackDomainGetResponseEnvelopeSuccess = true
-)
-
-func (r DevicePolicyCustomFallbackDomainGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DevicePolicyCustomFallbackDomainGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DevicePolicyCustomFallbackDomainGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                           `json:"total_count"`
-	JSON       devicePolicyCustomFallbackDomainGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyCustomFallbackDomainGetResponseEnvelopeResultInfoJSON contains the
-// JSON metadata for the struct
-// [DevicePolicyCustomFallbackDomainGetResponseEnvelopeResultInfo]
-type devicePolicyCustomFallbackDomainGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomFallbackDomainGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomFallbackDomainGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // DevicePolicyDefaultIncludeService contains methods and other services that help
@@ -35,37 +35,57 @@ func NewDevicePolicyDefaultIncludeService(opts ...option.RequestOption) (r *Devi
 }
 
 // Sets the list of routes included in the WARP client's tunnel.
-func (r *DevicePolicyDefaultIncludeService) Update(ctx context.Context, params DevicePolicyDefaultIncludeUpdateParams, opts ...option.RequestOption) (res *[]SplitTunnelInclude, err error) {
-	var env DevicePolicyDefaultIncludeUpdateResponseEnvelope
+func (r *DevicePolicyDefaultIncludeService) Update(ctx context.Context, params DevicePolicyDefaultIncludeUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[SplitTunnelInclude], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/include", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Sets the list of routes included in the WARP client's tunnel.
+func (r *DevicePolicyDefaultIncludeService) UpdateAutoPaging(ctx context.Context, params DevicePolicyDefaultIncludeUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SplitTunnelInclude] {
+	return pagination.NewSinglePageAutoPager(r.Update(ctx, params, opts...))
 }
 
 // Fetches the list of routes included in the WARP client's tunnel.
-func (r *DevicePolicyDefaultIncludeService) Get(ctx context.Context, query DevicePolicyDefaultIncludeGetParams, opts ...option.RequestOption) (res *[]SplitTunnelInclude, err error) {
-	var env DevicePolicyDefaultIncludeGetResponseEnvelope
+func (r *DevicePolicyDefaultIncludeService) Get(ctx context.Context, query DevicePolicyDefaultIncludeGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[SplitTunnelInclude], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/include", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches the list of routes included in the WARP client's tunnel.
+func (r *DevicePolicyDefaultIncludeService) GetAutoPaging(ctx context.Context, query DevicePolicyDefaultIncludeGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SplitTunnelInclude] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }
 
 type DevicePolicyDefaultIncludeUpdateParams struct {
@@ -77,160 +97,6 @@ func (r DevicePolicyDefaultIncludeUpdateParams) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r.Body)
 }
 
-type DevicePolicyDefaultIncludeUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []SplitTunnelInclude  `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyDefaultIncludeUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyDefaultIncludeUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyDefaultIncludeUpdateResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyDefaultIncludeUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [DevicePolicyDefaultIncludeUpdateResponseEnvelope]
-type devicePolicyDefaultIncludeUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDefaultIncludeUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyDefaultIncludeUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DevicePolicyDefaultIncludeUpdateResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyDefaultIncludeUpdateResponseEnvelopeSuccessTrue DevicePolicyDefaultIncludeUpdateResponseEnvelopeSuccess = true
-)
-
-func (r DevicePolicyDefaultIncludeUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DevicePolicyDefaultIncludeUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DevicePolicyDefaultIncludeUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                        `json:"total_count"`
-	JSON       devicePolicyDefaultIncludeUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyDefaultIncludeUpdateResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct
-// [DevicePolicyDefaultIncludeUpdateResponseEnvelopeResultInfo]
-type devicePolicyDefaultIncludeUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDefaultIncludeUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyDefaultIncludeUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type DevicePolicyDefaultIncludeGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DevicePolicyDefaultIncludeGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []SplitTunnelInclude  `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyDefaultIncludeGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyDefaultIncludeGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyDefaultIncludeGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyDefaultIncludeGetResponseEnvelopeJSON contains the JSON metadata for
-// the struct [DevicePolicyDefaultIncludeGetResponseEnvelope]
-type devicePolicyDefaultIncludeGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDefaultIncludeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyDefaultIncludeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DevicePolicyDefaultIncludeGetResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyDefaultIncludeGetResponseEnvelopeSuccessTrue DevicePolicyDefaultIncludeGetResponseEnvelopeSuccess = true
-)
-
-func (r DevicePolicyDefaultIncludeGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DevicePolicyDefaultIncludeGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DevicePolicyDefaultIncludeGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                     `json:"total_count"`
-	JSON       devicePolicyDefaultIncludeGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyDefaultIncludeGetResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct
-// [DevicePolicyDefaultIncludeGetResponseEnvelopeResultInfo]
-type devicePolicyDefaultIncludeGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDefaultIncludeGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyDefaultIncludeGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

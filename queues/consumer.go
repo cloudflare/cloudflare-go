@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
@@ -103,9 +104,10 @@ func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID
 }
 
 // Returns the consumers for a Queue
-func (r *ConsumerService) Get(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) (res *[]Consumer, err error) {
-	var env ConsumerGetResponseEnvelope
+func (r *ConsumerService) Get(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Consumer], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -115,12 +117,21 @@ func (r *ConsumerService) Get(ctx context.Context, queueID string, query Consume
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers", query.AccountID, queueID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns the consumers for a Queue
+func (r *ConsumerService) GetAutoPaging(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Consumer] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, queueID, query, opts...))
 }
 
 type Consumer struct {
@@ -863,47 +874,4 @@ type ConsumerDeleteParams struct {
 type ConsumerGetParams struct {
 	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ConsumerGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   []Consumer            `json:"result"`
-	// Indicates if the API call was successful or not.
-	Success ConsumerGetResponseEnvelopeSuccess `json:"success"`
-	JSON    consumerGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// consumerGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ConsumerGetResponseEnvelope]
-type consumerGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Indicates if the API call was successful or not.
-type ConsumerGetResponseEnvelopeSuccess bool
-
-const (
-	ConsumerGetResponseEnvelopeSuccessTrue ConsumerGetResponseEnvelopeSuccess = true
-)
-
-func (r ConsumerGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ConsumerGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

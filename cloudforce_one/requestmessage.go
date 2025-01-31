@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
@@ -94,9 +95,10 @@ func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier st
 }
 
 // List Request Messages
-func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageGetParams, opts ...option.RequestOption) (res *[]Message, err error) {
-	var env RequestMessageGetResponseEnvelope
+func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Message], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -106,12 +108,21 @@ func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier strin
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message", accountIdentifier, requestIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, body, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List Request Messages
+func (r *RequestMessageService) GetAutoPaging(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Message] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, accountIdentifier, requestIdentifier, body, opts...))
 }
 
 type Message struct {
@@ -325,49 +336,6 @@ const (
 func (r RequestMessageGetParamsSortOrder) IsKnown() bool {
 	switch r {
 	case RequestMessageGetParamsSortOrderAsc, RequestMessageGetParamsSortOrderDesc:
-		return true
-	}
-	return false
-}
-
-type RequestMessageGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success RequestMessageGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  []Message                                `json:"result"`
-	JSON    requestMessageGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// requestMessageGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RequestMessageGetResponseEnvelope]
-type requestMessageGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestMessageGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestMessageGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RequestMessageGetResponseEnvelopeSuccess bool
-
-const (
-	RequestMessageGetResponseEnvelopeSuccessTrue RequestMessageGetResponseEnvelopeSuccess = true
-)
-
-func (r RequestMessageGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RequestMessageGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

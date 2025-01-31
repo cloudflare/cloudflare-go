@@ -37,9 +37,10 @@ func NewSiteLANService(opts ...option.RequestOption) (r *SiteLANService) {
 
 // Creates a new Site LAN. If the site is in high availability mode,
 // static_addressing is required along with secondary and virtual address.
-func (r *SiteLANService) New(ctx context.Context, siteID string, params SiteLANNewParams, opts ...option.RequestOption) (res *[]LAN, err error) {
-	var env SiteLANNewResponseEnvelope
+func (r *SiteLANService) New(ctx context.Context, siteID string, params SiteLANNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[LAN], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -49,12 +50,22 @@ func (r *SiteLANService) New(ctx context.Context, siteID string, params SiteLANN
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans", params.AccountID, siteID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Creates a new Site LAN. If the site is in high availability mode,
+// static_addressing is required along with secondary and virtual address.
+func (r *SiteLANService) NewAutoPaging(ctx context.Context, siteID string, params SiteLANNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LAN] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, siteID, params, opts...))
 }
 
 // Update a specific Site LAN.
@@ -451,49 +462,6 @@ type SiteLANNewParams struct {
 
 func (r SiteLANNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type SiteLANNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []LAN                 `json:"result,required"`
-	// Whether the API call was successful
-	Success SiteLANNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteLANNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// siteLANNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SiteLANNewResponseEnvelope]
-type siteLANNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteLANNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteLANNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SiteLANNewResponseEnvelopeSuccess bool
-
-const (
-	SiteLANNewResponseEnvelopeSuccessTrue SiteLANNewResponseEnvelopeSuccess = true
-)
-
-func (r SiteLANNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SiteLANNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type SiteLANUpdateParams struct {
