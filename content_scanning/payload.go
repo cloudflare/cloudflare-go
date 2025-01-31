@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PayloadService contains methods and other services that help with interacting
@@ -36,20 +35,30 @@ func NewPayloadService(opts ...option.RequestOption) (r *PayloadService) {
 }
 
 // Add custom scan expressions for Content Scanning
-func (r *PayloadService) New(ctx context.Context, params PayloadNewParams, opts ...option.RequestOption) (res *[]PayloadNewResponse, err error) {
-	var env PayloadNewResponseEnvelope
+func (r *PayloadService) New(ctx context.Context, params PayloadNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadNewResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/content-upload-scan/payloads", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Add custom scan expressions for Content Scanning
+func (r *PayloadService) NewAutoPaging(ctx context.Context, params PayloadNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PayloadNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, params, opts...))
 }
 
 // Get a list of existing custom scan expressions for Content Scanning
@@ -80,9 +89,10 @@ func (r *PayloadService) ListAutoPaging(ctx context.Context, query PayloadListPa
 }
 
 // Delete a Content Scan Custom Expression
-func (r *PayloadService) Delete(ctx context.Context, expressionID string, body PayloadDeleteParams, opts ...option.RequestOption) (res *[]PayloadDeleteResponse, err error) {
-	var env PayloadDeleteResponseEnvelope
+func (r *PayloadService) Delete(ctx context.Context, expressionID string, body PayloadDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadDeleteResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -92,12 +102,21 @@ func (r *PayloadService) Delete(ctx context.Context, expressionID string, body P
 		return
 	}
 	path := fmt.Sprintf("zones/%s/content-upload-scan/payloads/%s", body.ZoneID, expressionID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Delete a Content Scan Custom Expression
+func (r *PayloadService) DeleteAutoPaging(ctx context.Context, expressionID string, body PayloadDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PayloadDeleteResponse] {
+	return pagination.NewSinglePageAutoPager(r.Delete(ctx, expressionID, body, opts...))
 }
 
 // A custom scan expression to match Content Scanning on
@@ -197,49 +216,6 @@ func (r PayloadNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PayloadNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []PayloadNewResponse  `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success PayloadNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    payloadNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// payloadNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PayloadNewResponseEnvelope]
-type payloadNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PayloadNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r payloadNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PayloadNewResponseEnvelopeSuccess bool
-
-const (
-	PayloadNewResponseEnvelopeSuccessTrue PayloadNewResponseEnvelopeSuccess = true
-)
-
-func (r PayloadNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PayloadNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type PayloadListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -248,47 +224,4 @@ type PayloadListParams struct {
 type PayloadDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type PayloadDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   []PayloadDeleteResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success PayloadDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    payloadDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// payloadDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PayloadDeleteResponseEnvelope]
-type payloadDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PayloadDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r payloadDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PayloadDeleteResponseEnvelopeSuccess bool
-
-const (
-	PayloadDeleteResponseEnvelopeSuccessTrue PayloadDeleteResponseEnvelopeSuccess = true
-)
-
-func (r PayloadDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PayloadDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

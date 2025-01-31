@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // DLPDatasetVersionService contains methods and other services that help with
@@ -39,9 +39,10 @@ func NewDLPDatasetVersionService(opts ...option.RequestOption) (r *DLPDatasetVer
 // This is used for multi-column EDMv2 datasets. The EDMv2 format can only be
 // created in the Cloudflare dashboard. The columns in the response appear in the
 // same order as in the request.
-func (r *DLPDatasetVersionService) New(ctx context.Context, datasetID string, version int64, params DLPDatasetVersionNewParams, opts ...option.RequestOption) (res *[]DLPDatasetVersionNewResponse, err error) {
-	var env DLPDatasetVersionNewResponseEnvelope
+func (r *DLPDatasetVersionService) New(ctx context.Context, datasetID string, version int64, params DLPDatasetVersionNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[DLPDatasetVersionNewResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -51,12 +52,23 @@ func (r *DLPDatasetVersionService) New(ctx context.Context, datasetID string, ve
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/versions/%v", params.AccountID, datasetID, version)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// This is used for multi-column EDMv2 datasets. The EDMv2 format can only be
+// created in the Cloudflare dashboard. The columns in the response appear in the
+// same order as in the request.
+func (r *DLPDatasetVersionService) NewAutoPaging(ctx context.Context, datasetID string, version int64, params DLPDatasetVersionNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DLPDatasetVersionNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, datasetID, version, params, opts...))
 }
 
 type DLPDatasetVersionNewResponse struct {
@@ -157,46 +169,3 @@ func (r DLPDatasetVersionNewParamsBodyNewColumn) MarshalJSON() (data []byte, err
 }
 
 func (r DLPDatasetVersionNewParamsBodyNewColumn) implementsDLPDatasetVersionNewParamsBodyUnion() {}
-
-type DLPDatasetVersionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success DLPDatasetVersionNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  []DLPDatasetVersionNewResponse              `json:"result"`
-	JSON    dlpDatasetVersionNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// dlpDatasetVersionNewResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DLPDatasetVersionNewResponseEnvelope]
-type dlpDatasetVersionNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPDatasetVersionNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetVersionNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DLPDatasetVersionNewResponseEnvelopeSuccess bool
-
-const (
-	DLPDatasetVersionNewResponseEnvelopeSuccessTrue DLPDatasetVersionNewResponseEnvelopeSuccess = true
-)
-
-func (r DLPDatasetVersionNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DLPDatasetVersionNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}

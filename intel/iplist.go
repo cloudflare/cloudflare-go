@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // IPListService contains methods and other services that help with interacting
@@ -35,20 +35,30 @@ func NewIPListService(opts ...option.RequestOption) (r *IPListService) {
 }
 
 // Get IP Lists
-func (r *IPListService) Get(ctx context.Context, query IPListGetParams, opts ...option.RequestOption) (res *[]IPList, err error) {
-	var env IPListGetResponseEnvelope
+func (r *IPListService) Get(ctx context.Context, query IPListGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[IPList], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/intel/ip-list", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get IP Lists
+func (r *IPListService) GetAutoPaging(ctx context.Context, query IPListGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IPList] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }
 
 type IPList struct {
@@ -78,80 +88,4 @@ func (r ipListJSON) RawJSON() string {
 type IPListGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type IPListGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []IPList              `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    IPListGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo IPListGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       ipListGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// ipListGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [IPListGetResponseEnvelope]
-type ipListGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPListGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipListGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type IPListGetResponseEnvelopeSuccess bool
-
-const (
-	IPListGetResponseEnvelopeSuccessTrue IPListGetResponseEnvelopeSuccess = true
-)
-
-func (r IPListGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case IPListGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type IPListGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                 `json:"total_count"`
-	JSON       ipListGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// ipListGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [IPListGetResponseEnvelopeResultInfo]
-type ipListGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPListGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipListGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

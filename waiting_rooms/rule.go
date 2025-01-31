@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // RuleService contains methods and other services that help with interacting with
@@ -37,9 +37,10 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Only available for the Waiting Room Advanced subscription. Creates a rule for a
 // waiting room.
-func (r *RuleService) New(ctx context.Context, waitingRoomID string, params RuleNewParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
-	var env RuleNewResponseEnvelope
+func (r *RuleService) New(ctx context.Context, waitingRoomID string, params RuleNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -49,19 +50,30 @@ func (r *RuleService) New(ctx context.Context, waitingRoomID string, params Rule
 		return
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", params.ZoneID, waitingRoomID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Only available for the Waiting Room Advanced subscription. Creates a rule for a
+// waiting room.
+func (r *RuleService) NewAutoPaging(ctx context.Context, waitingRoomID string, params RuleNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingRoomRule] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, waitingRoomID, params, opts...))
 }
 
 // Only available for the Waiting Room Advanced subscription. Replaces all rules
 // for a waiting room.
-func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params RuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
-	var env RuleUpdateResponseEnvelope
+func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params RuleUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -71,18 +83,29 @@ func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params R
 		return
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", params.ZoneID, waitingRoomID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Only available for the Waiting Room Advanced subscription. Replaces all rules
+// for a waiting room.
+func (r *RuleService) UpdateAutoPaging(ctx context.Context, waitingRoomID string, params RuleUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingRoomRule] {
+	return pagination.NewSinglePageAutoPager(r.Update(ctx, waitingRoomID, params, opts...))
 }
 
 // Deletes a rule for a waiting room.
-func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
-	var env RuleDeleteResponseEnvelope
+func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -96,18 +119,28 @@ func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID s
 		return
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", body.ZoneID, waitingRoomID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Deletes a rule for a waiting room.
+func (r *RuleService) DeleteAutoPaging(ctx context.Context, waitingRoomID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingRoomRule] {
+	return pagination.NewSinglePageAutoPager(r.Delete(ctx, waitingRoomID, ruleID, body, opts...))
 }
 
 // Patches a rule for a waiting room.
-func (r *RuleService) Edit(ctx context.Context, waitingRoomID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
-	var env RuleEditResponseEnvelope
+func (r *RuleService) Edit(ctx context.Context, waitingRoomID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -121,18 +154,28 @@ func (r *RuleService) Edit(ctx context.Context, waitingRoomID string, ruleID str
 		return
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", params.ZoneID, waitingRoomID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPatch, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Patches a rule for a waiting room.
+func (r *RuleService) EditAutoPaging(ctx context.Context, waitingRoomID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingRoomRule] {
+	return pagination.NewSinglePageAutoPager(r.Edit(ctx, waitingRoomID, ruleID, params, opts...))
 }
 
 // Lists rules for a waiting room.
-func (r *RuleService) Get(ctx context.Context, waitingRoomID string, query RuleGetParams, opts ...option.RequestOption) (res *[]WaitingRoomRule, err error) {
-	var env RuleGetResponseEnvelope
+func (r *RuleService) Get(ctx context.Context, waitingRoomID string, query RuleGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoomRule], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -142,12 +185,21 @@ func (r *RuleService) Get(ctx context.Context, waitingRoomID string, query RuleG
 		return
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", query.ZoneID, waitingRoomID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists rules for a waiting room.
+func (r *RuleService) GetAutoPaging(ctx context.Context, waitingRoomID string, query RuleGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingRoomRule] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, waitingRoomID, query, opts...))
 }
 
 type WaitingRoomRule struct {
@@ -243,82 +295,6 @@ func (r RuleNewParamsRulesAction) IsKnown() bool {
 	return false
 }
 
-type RuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []WaitingRoomRule                 `json:"result"`
-	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       ruleNewResponseEnvelopeJSON       `json:"-"`
-}
-
-// ruleNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RuleNewResponseEnvelope]
-type ruleNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RuleNewResponseEnvelopeSuccess bool
-
-const (
-	RuleNewResponseEnvelopeSuccessTrue RuleNewResponseEnvelopeSuccess = true
-)
-
-func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RuleNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type RuleNewResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                               `json:"total_count"`
-	JSON       ruleNewResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// ruleNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [RuleNewResponseEnvelopeResultInfo]
-type ruleNewResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type RuleUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string]    `path:"zone_id,required"`
@@ -359,161 +335,9 @@ func (r RuleUpdateParamsRulesAction) IsKnown() bool {
 	return false
 }
 
-type RuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    RuleUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []WaitingRoomRule                    `json:"result"`
-	ResultInfo RuleUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       ruleUpdateResponseEnvelopeJSON       `json:"-"`
-}
-
-// ruleUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RuleUpdateResponseEnvelope]
-type ruleUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RuleUpdateResponseEnvelopeSuccess bool
-
-const (
-	RuleUpdateResponseEnvelopeSuccessTrue RuleUpdateResponseEnvelopeSuccess = true
-)
-
-func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RuleUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type RuleUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       ruleUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// ruleUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [RuleUpdateResponseEnvelopeResultInfo]
-type ruleUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type RuleDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type RuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    RuleDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []WaitingRoomRule                    `json:"result"`
-	ResultInfo RuleDeleteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       ruleDeleteResponseEnvelopeJSON       `json:"-"`
-}
-
-// ruleDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RuleDeleteResponseEnvelope]
-type ruleDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RuleDeleteResponseEnvelopeSuccess bool
-
-const (
-	RuleDeleteResponseEnvelopeSuccessTrue RuleDeleteResponseEnvelopeSuccess = true
-)
-
-func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RuleDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type RuleDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       ruleDeleteResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// ruleDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [RuleDeleteResponseEnvelopeResultInfo]
-type ruleDeleteResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type RuleEditParams struct {
@@ -618,159 +442,7 @@ func (r RuleEditParamsPositionAfter) MarshalJSON() (data []byte, err error) {
 
 func (r RuleEditParamsPositionAfter) implementsRuleEditParamsPositionUnion() {}
 
-type RuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []WaitingRoomRule                  `json:"result"`
-	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       ruleEditResponseEnvelopeJSON       `json:"-"`
-}
-
-// ruleEditResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RuleEditResponseEnvelope]
-type ruleEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RuleEditResponseEnvelopeSuccess bool
-
-const (
-	RuleEditResponseEnvelopeSuccessTrue RuleEditResponseEnvelopeSuccess = true
-)
-
-func (r RuleEditResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RuleEditResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type RuleEditResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                `json:"total_count"`
-	JSON       ruleEditResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// ruleEditResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [RuleEditResponseEnvelopeResultInfo]
-type ruleEditResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type RuleGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type RuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    RuleGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []WaitingRoomRule                 `json:"result"`
-	ResultInfo RuleGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       ruleGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// ruleGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RuleGetResponseEnvelope]
-type ruleGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RuleGetResponseEnvelopeSuccess bool
-
-const (
-	RuleGetResponseEnvelopeSuccessTrue RuleGetResponseEnvelopeSuccess = true
-)
-
-func (r RuleGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RuleGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type RuleGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                               `json:"total_count"`
-	JSON       ruleGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// ruleGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [RuleGetResponseEnvelopeResultInfo]
-type ruleGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

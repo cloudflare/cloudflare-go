@@ -83,20 +83,30 @@ func (r *SettingDomainService) Delete(ctx context.Context, domainID int64, body 
 }
 
 // Unprotect multiple email domains
-func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) (res *[]SettingDomainBulkDeleteResponse, err error) {
-	var env SettingDomainBulkDeleteResponseEnvelope
+func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingDomainBulkDeleteResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/domains", body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Unprotect multiple email domains
+func (r *SettingDomainService) BulkDeleteAutoPaging(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SettingDomainBulkDeleteResponse] {
+	return pagination.NewSinglePageAutoPager(r.BulkDelete(ctx, body, opts...))
 }
 
 // Update an email domain
@@ -839,33 +849,6 @@ func (r settingDomainDeleteResponseEnvelopeJSON) RawJSON() string {
 type SettingDomainBulkDeleteParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type SettingDomainBulkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors,required"`
-	Messages []shared.ResponseInfo                       `json:"messages,required"`
-	Result   []SettingDomainBulkDeleteResponse           `json:"result,required"`
-	Success  bool                                        `json:"success,required"`
-	JSON     settingDomainBulkDeleteResponseEnvelopeJSON `json:"-"`
-}
-
-// settingDomainBulkDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingDomainBulkDeleteResponseEnvelope]
-type settingDomainBulkDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingDomainBulkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingDomainBulkDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }
 
 type SettingDomainEditParams struct {

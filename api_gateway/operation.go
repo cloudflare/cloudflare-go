@@ -110,20 +110,34 @@ func (r *OperationService) Delete(ctx context.Context, operationID string, body 
 // operation and must be unique on the zone. Inserting an operation that matches an
 // existing one will return the record of the already existing operation and update
 // its last_updated date.
-func (r *OperationService) BulkNew(ctx context.Context, params OperationBulkNewParams, opts ...option.RequestOption) (res *[]OperationBulkNewResponse, err error) {
-	var env OperationBulkNewResponseEnvelope
+func (r *OperationService) BulkNew(ctx context.Context, params OperationBulkNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[OperationBulkNewResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Add one or more operations to a zone. Endpoints can contain path variables.
+// Host, method, endpoint will be normalized to a canoncial form when creating an
+// operation and must be unique on the zone. Inserting an operation that matches an
+// existing one will return the record of the already existing operation and update
+// its last_updated date.
+func (r *OperationService) BulkNewAutoPaging(ctx context.Context, params OperationBulkNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OperationBulkNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.BulkNew(ctx, params, opts...))
 }
 
 // Delete multiple operations
@@ -3037,49 +3051,6 @@ const (
 func (r OperationBulkNewParamsBodyMethod) IsKnown() bool {
 	switch r {
 	case OperationBulkNewParamsBodyMethodGet, OperationBulkNewParamsBodyMethodPost, OperationBulkNewParamsBodyMethodHead, OperationBulkNewParamsBodyMethodOptions, OperationBulkNewParamsBodyMethodPut, OperationBulkNewParamsBodyMethodDelete, OperationBulkNewParamsBodyMethodConnect, OperationBulkNewParamsBodyMethodPatch, OperationBulkNewParamsBodyMethodTrace:
-		return true
-	}
-	return false
-}
-
-type OperationBulkNewResponseEnvelope struct {
-	Errors   Message                    `json:"errors,required"`
-	Messages Message                    `json:"messages,required"`
-	Result   []OperationBulkNewResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success OperationBulkNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    operationBulkNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// operationBulkNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [OperationBulkNewResponseEnvelope]
-type operationBulkNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OperationBulkNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r operationBulkNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type OperationBulkNewResponseEnvelopeSuccess bool
-
-const (
-	OperationBulkNewResponseEnvelopeSuccessTrue OperationBulkNewResponseEnvelopeSuccess = true
-)
-
-func (r OperationBulkNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case OperationBulkNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
