@@ -18,3 +18,15 @@
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
   // "remoteUser": "root"
 }
+"ชื่อ": "โครงการของฉัน-devcontainer"
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu" // รูปภาพทั่วไปที่ใช้ Debian
+    "คุณสมบัติ": {
+        "ghcr.io/devcontainers/features/go:1": {
+            "เวอร์ชัน": "1.18"
+        -
+        "ghcr.io/devcontainers/features/docker-in-docker:1": {
+            "เวอร์ชัน": "ล่าสุด",
+            "โมบี้": จริง
+        -
+    -
+-
