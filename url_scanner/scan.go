@@ -54,13 +54,13 @@ func (r *ScanService) New(ctx context.Context, params ScanNewParams, opts ...opt
 }
 
 // Use a subset of ElasticSearch Query syntax to filter scans. Some example
-// queries:<br/> <br/>- 'page.domain:microsoft AND verdicts.malicious:true AND NOT
+// queries:<br/> <br/>- 'path:"/bundles/jquery.js"': Searches for scans who
+// requested resources with the given path.<br/>- 'page.asn:AS24940 AND hash:xxx':
+// Websites hosted in AS24940 where a resource with the given hash was
+// downloaded.<br/>- 'page.domain:microsoft\* AND verdicts.malicious:true AND NOT
 // page.domain:microsoft.com': malicious scans whose hostname starts with
-// "microsoft".<br/>- 'apikey:me AND date:[2024-01 TO 2024-10]': my scans from 2024
-// January to 2024 October.<br/>- 'page.domain:(blogspot OR www.blogspot)':
-// Searches for scans whose main domain starts with "blogspot" or with
-// "www.blogspot"<br/>- 'page.asn:AS24940 AND hash:xxx': Websites hosted in AS24940
-// where a resource with the given hash was downloaded.
+// "microsoft".<br/>- 'apikey:me AND date:[2025-01 TO 2025-02]': my scans from 2025
+// January to 2025 February.
 func (r *ScanService) List(ctx context.Context, params ScanListParams, opts ...option.RequestOption) (res *ScanListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
