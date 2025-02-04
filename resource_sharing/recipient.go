@@ -42,7 +42,7 @@ func NewRecipientService(opts ...option.RequestOption) (r *RecipientService) {
 func (r *RecipientService) New(ctx context.Context, shareID string, params RecipientNewParams, opts ...option.RequestOption) (res *RecipientNewResponse, err error) {
 	var env RecipientNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.AccountID1.Value == "" {
+	if params.PathAccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -50,7 +50,7 @@ func (r *RecipientService) New(ctx context.Context, shareID string, params Recip
 		err = errors.New("missing required share_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/shares/%s/recipients", params.AccountID1, shareID)
+	path := fmt.Sprintf("accounts/%s/shares/%s/recipients", params.PathAccountID, shareID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -363,9 +363,9 @@ func (r RecipientGetResponseAssociationStatus) IsKnown() bool {
 
 type RecipientNewParams struct {
 	// Account identifier.
-	AccountID1 param.Field[string] `path:"account_id,required"`
+	PathAccountID param.Field[string] `path:"account_id,required"`
 	// Account identifier.
-	AccountID2 param.Field[string] `json:"account_id"`
+	BodyAccountID param.Field[string] `json:"account_id"`
 	// Organization identifier.
 	OrganizationID param.Field[string] `json:"organization_id"`
 }
