@@ -60,6 +60,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/managed_transforms"
 	"github.com/cloudflare/cloudflare-go/v4/memberships"
 	"github.com/cloudflare/cloudflare-go/v4/mtls_certificates"
+	"github.com/cloudflare/cloudflare-go/v4/network_interconnects"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/origin_ca_certificates"
 	"github.com/cloudflare/cloudflare-go/v4/origin_post_quantum_encryption"
@@ -77,6 +78,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/rules"
 	"github.com/cloudflare/cloudflare-go/v4/rulesets"
 	"github.com/cloudflare/cloudflare-go/v4/rum"
+	"github.com/cloudflare/cloudflare-go/v4/security_center"
 	"github.com/cloudflare/cloudflare-go/v4/security_txt"
 	"github.com/cloudflare/cloudflare-go/v4/snippets"
 	"github.com/cloudflare/cloudflare-go/v4/spectrum"
@@ -101,35 +103,43 @@ import (
 // interacting with the cloudflare API. You should not instantiate this client
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
-	Options                     []option.RequestOption
-	Accounts                    *accounts.AccountService
-	OriginCACertificates        *origin_ca_certificates.OriginCACertificateService
-	IPs                         *ips.IPService
-	Memberships                 *memberships.MembershipService
-	User                        *user.UserService
-	Zones                       *zones.ZoneService
-	LoadBalancers               *load_balancers.LoadBalancerService
-	Cache                       *cache.CacheService
-	SSL                         *ssl.SSLService
-	ACM                         *acm.ACMService
-	Argo                        *argo.ArgoService
-	CertificateAuthorities      *certificate_authorities.CertificateAuthorityService
-	ClientCertificates          *client_certificates.ClientCertificateService
-	CustomCertificates          *custom_certificates.CustomCertificateService
-	CustomHostnames             *custom_hostnames.CustomHostnameService
-	CustomNameservers           *custom_nameservers.CustomNameserverService
-	DNSFirewall                 *dns_firewall.DNSFirewallService
-	DNS                         *dns.DNSService
-	EmailSecurity               *email_security.EmailSecurityService
-	EmailRouting                *email_routing.EmailRoutingService
-	Filters                     *filters.FilterService
-	Firewall                    *firewall.FirewallService
-	Healthchecks                *healthchecks.HealthcheckService
-	KeylessCertificates         *keyless_certificates.KeylessCertificateService
-	Logpush                     *logpush.LogpushService
-	Logs                        *logs.LogService
-	OriginTLSClientAuth         *origin_tls_client_auth.OriginTLSClientAuthService
-	PageRules                   *page_rules.PageRuleService
+	Options                []option.RequestOption
+	Accounts               *accounts.AccountService
+	OriginCACertificates   *origin_ca_certificates.OriginCACertificateService
+	IPs                    *ips.IPService
+	Memberships            *memberships.MembershipService
+	User                   *user.UserService
+	Zones                  *zones.ZoneService
+	LoadBalancers          *load_balancers.LoadBalancerService
+	Cache                  *cache.CacheService
+	SSL                    *ssl.SSLService
+	ACM                    *acm.ACMService
+	Argo                   *argo.ArgoService
+	CertificateAuthorities *certificate_authorities.CertificateAuthorityService
+	ClientCertificates     *client_certificates.ClientCertificateService
+	CustomCertificates     *custom_certificates.CustomCertificateService
+	CustomHostnames        *custom_hostnames.CustomHostnameService
+	CustomNameservers      *custom_nameservers.CustomNameserverService
+	DNSFirewall            *dns_firewall.DNSFirewallService
+	DNS                    *dns.DNSService
+	EmailSecurity          *email_security.EmailSecurityService
+	EmailRouting           *email_routing.EmailRoutingService
+	// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+	// See
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+	// for full details.
+	Filters             *filters.FilterService
+	Firewall            *firewall.FirewallService
+	Healthchecks        *healthchecks.HealthcheckService
+	KeylessCertificates *keyless_certificates.KeylessCertificateService
+	Logpush             *logpush.LogpushService
+	Logs                *logs.LogService
+	OriginTLSClientAuth *origin_tls_client_auth.OriginTLSClientAuthService
+	PageRules           *page_rules.PageRuleService
+	// Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
+	// Engine. See
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
+	// for full details.
 	RateLimits                  *rate_limits.RateLimitService
 	WaitingRooms                *waiting_rooms.WaitingRoomService
 	Web3                        *web3.Web3Service
@@ -152,6 +162,7 @@ type Client struct {
 	Intel                       *intel.IntelService
 	MagicTransit                *magic_transit.MagicTransitService
 	MagicNetworkMonitoring      *magic_network_monitoring.MagicNetworkMonitoringService
+	NetworkInterconnects        *network_interconnects.NetworkInterconnectService
 	MTLSCertificates            *mtls_certificates.MTLSCertificateService
 	Pages                       *pages.PageService
 	Registrar                   *registrar.RegistrarService
@@ -188,6 +199,7 @@ type Client struct {
 	ContentScanning             *content_scanning.ContentScanningService
 	AbuseReports                *abuse_reports.AbuseReportService
 	AI                          *ai.AIService
+	SecurityCenter              *security_center.SecurityCenterService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -263,6 +275,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Intel = intel.NewIntelService(opts...)
 	r.MagicTransit = magic_transit.NewMagicTransitService(opts...)
 	r.MagicNetworkMonitoring = magic_network_monitoring.NewMagicNetworkMonitoringService(opts...)
+	r.NetworkInterconnects = network_interconnects.NewNetworkInterconnectService(opts...)
 	r.MTLSCertificates = mtls_certificates.NewMTLSCertificateService(opts...)
 	r.Pages = pages.NewPageService(opts...)
 	r.Registrar = registrar.NewRegistrarService(opts...)
@@ -299,6 +312,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
 	r.AI = ai.NewAIService(opts...)
+	r.SecurityCenter = security_center.NewSecurityCenterService(opts...)
 
 	return
 }

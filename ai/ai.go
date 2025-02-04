@@ -82,7 +82,7 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 // [ai.AIRunResponseObject], [ai.AIRunResponseTranslation],
 // [ai.AIRunResponseSummarization] or [ai.AIRunResponseImageToText].
 type AIRunResponseUnion interface {
-	ImplementsAIAIRunResponseUnion()
+	ImplementsAIRunResponseUnion()
 }
 
 func init() {
@@ -138,7 +138,7 @@ func init() {
 
 type AIRunResponseTextClassification []AIRunResponseTextClassificationItem
 
-func (r AIRunResponseTextClassification) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseTextClassification) ImplementsAIRunResponseUnion() {}
 
 type AIRunResponseTextClassificationItem struct {
 	// The classification label assigned to the text (e.g., 'POSITIVE' or 'NEGATIVE')
@@ -188,7 +188,7 @@ func (r aiRunResponseAudioJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseAudio) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseAudio) ImplementsAIRunResponseUnion() {}
 
 type AIRunResponseTextEmbeddings struct {
 	// Embeddings of the requested text values
@@ -214,7 +214,7 @@ func (r aiRunResponseTextEmbeddingsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseTextEmbeddings) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseTextEmbeddings) ImplementsAIRunResponseUnion() {}
 
 type AIRunResponseAutomaticSpeechRecognition struct {
 	// The transcription
@@ -244,7 +244,7 @@ func (r aiRunResponseAutomaticSpeechRecognitionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseAutomaticSpeechRecognition) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseAutomaticSpeechRecognition) ImplementsAIRunResponseUnion() {}
 
 type AIRunResponseAutomaticSpeechRecognitionWord struct {
 	// The ending second when the word completes
@@ -275,7 +275,7 @@ func (r aiRunResponseAutomaticSpeechRecognitionWordJSON) RawJSON() string {
 
 type AIRunResponseImageClassification []AIRunResponseImageClassificationItem
 
-func (r AIRunResponseImageClassification) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseImageClassification) ImplementsAIRunResponseUnion() {}
 
 type AIRunResponseImageClassificationItem struct {
 	// The predicted category or class for the input image based on analysis
@@ -305,7 +305,7 @@ func (r aiRunResponseImageClassificationItemJSON) RawJSON() string {
 
 type AIRunResponseObjectDetection []AIRunResponseObjectDetectionItem
 
-func (r AIRunResponseObjectDetection) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseObjectDetection) ImplementsAIRunResponseUnion() {}
 
 type AIRunResponseObjectDetectionItem struct {
 	// Coordinates defining the bounding box around the detected object
@@ -372,7 +372,9 @@ type AIRunResponseObject struct {
 	Response string `json:"response"`
 	// An array of tool calls requests made during the response generation
 	ToolCalls []AIRunResponseObjectToolCall `json:"tool_calls"`
-	JSON      aiRunResponseObjectJSON       `json:"-"`
+	// Usage statistics for the inference request
+	Usage AIRunResponseObjectUsage `json:"usage"`
+	JSON  aiRunResponseObjectJSON  `json:"-"`
 }
 
 // aiRunResponseObjectJSON contains the JSON metadata for the struct
@@ -380,6 +382,7 @@ type AIRunResponseObject struct {
 type aiRunResponseObjectJSON struct {
 	Response    apijson.Field
 	ToolCalls   apijson.Field
+	Usage       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -392,7 +395,7 @@ func (r aiRunResponseObjectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseObject) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseObject) ImplementsAIRunResponseUnion() {}
 
 type AIRunResponseObjectToolCall struct {
 	// The arguments passed to be passed to the tool call request
@@ -419,6 +422,35 @@ func (r aiRunResponseObjectToolCallJSON) RawJSON() string {
 	return r.raw
 }
 
+// Usage statistics for the inference request
+type AIRunResponseObjectUsage struct {
+	// Total number of tokens in output
+	CompletionTokens float64 `json:"completion_tokens"`
+	// Total number of tokens in input
+	PromptTokens float64 `json:"prompt_tokens"`
+	// Total number of input and output tokens
+	TotalTokens float64                      `json:"total_tokens"`
+	JSON        aiRunResponseObjectUsageJSON `json:"-"`
+}
+
+// aiRunResponseObjectUsageJSON contains the JSON metadata for the struct
+// [AIRunResponseObjectUsage]
+type aiRunResponseObjectUsageJSON struct {
+	CompletionTokens apijson.Field
+	PromptTokens     apijson.Field
+	TotalTokens      apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AIRunResponseObjectUsage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseObjectUsageJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIRunResponseTranslation struct {
 	// The translated text in the target language
 	TranslatedText string                       `json:"translated_text"`
@@ -441,7 +473,7 @@ func (r aiRunResponseTranslationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseTranslation) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseTranslation) ImplementsAIRunResponseUnion() {}
 
 type AIRunResponseSummarization struct {
 	// The summarized version of the input text
@@ -465,7 +497,7 @@ func (r aiRunResponseSummarizationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseSummarization) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseSummarization) ImplementsAIRunResponseUnion() {}
 
 type AIRunResponseImageToText struct {
 	Description string                       `json:"description"`
@@ -488,7 +520,7 @@ func (r aiRunResponseImageToTextJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseImageToText) ImplementsAIAIRunResponseUnion() {}
+func (r AIRunResponseImageToText) ImplementsAIRunResponseUnion() {}
 
 type AIRunParams struct {
 	AccountID param.Field[string]  `path:"account_id,required"`
@@ -537,9 +569,8 @@ type AIRunParamsBody struct {
 	// model's expected formatting.
 	Raw param.Field[bool] `json:"raw"`
 	// Penalty for repeated tokens; higher values discourage repetition.
-	RepetitionPenalty param.Field[float64] `json:"repetition_penalty"`
-	// Random seed for reproducibility of the image generation
-	Seed param.Field[int64] `json:"seed"`
+	RepetitionPenalty param.Field[float64]     `json:"repetition_penalty"`
+	Seed              param.Field[interface{}] `json:"seed"`
 	// The language of the recorded audio
 	SourceLang param.Field[string] `json:"source_lang"`
 	// If true, the response will be streamed back incrementally using SSE, Server Sent
@@ -556,10 +587,7 @@ type AIRunParamsBody struct {
 	Temperature param.Field[float64]     `json:"temperature"`
 	Text        param.Field[interface{}] `json:"text"`
 	Tools       param.Field[interface{}] `json:"tools"`
-	// Limits the AI to choose from the top 'k' most probable words. Lower values make
-	// responses more focused; higher values introduce more variety and potential
-	// surprises.
-	TopK param.Field[int64] `json:"top_k"`
+	TopK        param.Field[interface{}] `json:"top_k"`
 	// Adjusts the creativity of the AI's responses by controlling how many possible
 	// words it considers. Lower values make outputs more predictable; higher values
 	// allow for more varied and creative responses.
@@ -572,7 +600,7 @@ func (r AIRunParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBody) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBody) implementsAIRunParamsBodyUnion() {}
 
 // Satisfied by [ai.AIRunParamsBodyTextClassification],
 // [ai.AIRunParamsBodyTextToImage], [ai.AIRunParamsBodyTextToSpeech],
@@ -583,7 +611,7 @@ func (r AIRunParamsBody) implementsAIAIRunParamsBodyUnion() {}
 // [ai.AIRunParamsBodyTranslation], [ai.AIRunParamsBodySummarization],
 // [ai.AIRunParamsBodyImageToText], [AIRunParamsBody].
 type AIRunParamsBodyUnion interface {
-	implementsAIAIRunParamsBodyUnion()
+	implementsAIRunParamsBodyUnion()
 }
 
 type AIRunParamsBodyTextClassification struct {
@@ -595,7 +623,7 @@ func (r AIRunParamsBodyTextClassification) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextClassification) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyTextClassification) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTextToImage struct {
 	// A text description of the image you want to generate
@@ -630,7 +658,7 @@ func (r AIRunParamsBodyTextToImage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextToImage) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyTextToImage) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTextToSpeech struct {
 	// A text description of the image you want to generate
@@ -644,7 +672,7 @@ func (r AIRunParamsBodyTextToSpeech) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextToSpeech) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyTextToSpeech) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTextEmbeddings struct {
 	// The text to embed
@@ -655,19 +683,18 @@ func (r AIRunParamsBodyTextEmbeddings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextEmbeddings) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyTextEmbeddings) implementsAIRunParamsBodyUnion() {}
 
 // The text to embed
 //
 // Satisfied by [shared.UnionString], [ai.AIRunParamsBodyTextEmbeddingsTextArray].
 type AIRunParamsBodyTextEmbeddingsTextUnion interface {
-	ImplementsAIAIRunParamsBodyTextEmbeddingsTextUnion()
+	ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()
 }
 
 type AIRunParamsBodyTextEmbeddingsTextArray []string
 
-func (r AIRunParamsBodyTextEmbeddingsTextArray) ImplementsAIAIRunParamsBodyTextEmbeddingsTextUnion() {
-}
+func (r AIRunParamsBodyTextEmbeddingsTextArray) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion() {}
 
 type AIRunParamsBodyAutomaticSpeechRecognition struct {
 	// An array of integers that represent the audio data constrained to 8-bit unsigned
@@ -684,7 +711,7 @@ func (r AIRunParamsBodyAutomaticSpeechRecognition) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyAutomaticSpeechRecognition) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyAutomaticSpeechRecognition) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyImageClassification struct {
 	// An array of integers that represent the image data constrained to 8-bit unsigned
@@ -696,7 +723,7 @@ func (r AIRunParamsBodyImageClassification) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyImageClassification) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyImageClassification) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyObjectDetection struct {
 	// An array of integers that represent the image data constrained to 8-bit unsigned
@@ -708,7 +735,7 @@ func (r AIRunParamsBodyObjectDetection) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyObjectDetection) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyObjectDetection) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyPrompt struct {
 	// The input text prompt for the model to generate a response.
@@ -748,7 +775,7 @@ func (r AIRunParamsBodyPrompt) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyPrompt) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyPrompt) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyMessages struct {
 	// An array of message objects representing the conversation history.
@@ -785,7 +812,7 @@ func (r AIRunParamsBodyMessages) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyMessages) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyMessages) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyMessagesMessage struct {
 	// The content of the message as a string.
@@ -822,12 +849,12 @@ func (r AIRunParamsBodyMessagesTool) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyMessagesTool) implementsAIAIRunParamsBodyMessagesToolUnion() {}
+func (r AIRunParamsBodyMessagesTool) implementsAIRunParamsBodyMessagesToolUnion() {}
 
 // Satisfied by [ai.AIRunParamsBodyMessagesToolsObject],
 // [ai.AIRunParamsBodyMessagesToolsObject], [AIRunParamsBodyMessagesTool].
 type AIRunParamsBodyMessagesToolUnion interface {
-	implementsAIAIRunParamsBodyMessagesToolUnion()
+	implementsAIRunParamsBodyMessagesToolUnion()
 }
 
 type AIRunParamsBodyMessagesToolsObject struct {
@@ -843,7 +870,7 @@ func (r AIRunParamsBodyMessagesToolsObject) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyMessagesToolsObject) implementsAIAIRunParamsBodyMessagesToolUnion() {}
+func (r AIRunParamsBodyMessagesToolsObject) implementsAIRunParamsBodyMessagesToolUnion() {}
 
 // Schema defining the parameters accepted by the tool.
 type AIRunParamsBodyMessagesToolsObjectParameters struct {
@@ -884,7 +911,7 @@ func (r AIRunParamsBodyTranslation) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTranslation) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyTranslation) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodySummarization struct {
 	// The text that you want the model to summarize
@@ -897,29 +924,45 @@ func (r AIRunParamsBodySummarization) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodySummarization) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodySummarization) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyImageToText struct {
 	// An array of integers that represent the image data constrained to 8-bit unsigned
 	// integer values
 	Image param.Field[[]float64] `json:"image,required"`
+	// Decreases the likelihood of the model repeating the same lines verbatim.
+	FrequencyPenalty param.Field[float64] `json:"frequency_penalty"`
 	// The maximum number of tokens to generate in the response.
 	MaxTokens param.Field[int64] `json:"max_tokens"`
+	// Increases the likelihood of the model introducing new topics.
+	PresencePenalty param.Field[float64] `json:"presence_penalty"`
 	// The input text prompt for the model to generate a response.
 	Prompt param.Field[string] `json:"prompt"`
 	// If true, a chat template is not applied and you must adhere to the specific
 	// model's expected formatting.
 	Raw param.Field[bool] `json:"raw"`
+	// Penalty for repeated tokens; higher values discourage repetition.
+	RepetitionPenalty param.Field[float64] `json:"repetition_penalty"`
+	// Random seed for reproducibility of the generation.
+	Seed param.Field[float64] `json:"seed"`
 	// Controls the randomness of the output; higher values produce more random
 	// results.
 	Temperature param.Field[float64] `json:"temperature"`
+	// Limits the AI to choose from the top 'k' most probable words. Lower values make
+	// responses more focused; higher values introduce more variety and potential
+	// surprises.
+	TopK param.Field[float64] `json:"top_k"`
+	// Controls the creativity of the AI's responses by adjusting how many possible
+	// words it considers. Lower values make outputs more predictable; higher values
+	// allow for more varied and creative responses.
+	TopP param.Field[float64] `json:"top_p"`
 }
 
 func (r AIRunParamsBodyImageToText) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyImageToText) implementsAIAIRunParamsBodyUnion() {}
+func (r AIRunParamsBodyImageToText) implementsAIRunParamsBodyUnion() {}
 
 type AIRunResponseEnvelope struct {
 	// An array of classification results for the input text

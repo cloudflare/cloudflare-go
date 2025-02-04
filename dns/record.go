@@ -409,7 +409,7 @@ func (r ARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ARecordParam) implementsDNSRecordUnionParam() {}
+func (r ARecordParam) implementsRecordUnionParam() {}
 
 // Settings for the DNS record.
 type ARecordSettingsParam struct {
@@ -549,7 +549,7 @@ func (r AAAARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AAAARecordParam) implementsDNSRecordUnionParam() {}
+func (r AAAARecordParam) implementsRecordUnionParam() {}
 
 // Settings for the DNS record.
 type AAAARecordSettingsParam struct {
@@ -581,7 +581,7 @@ func (r AAAARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 // [dns.BatchPatchTLSARecordParam], [dns.BatchPatchTXTRecordParam],
 // [dns.BatchPatchURIRecordParam].
 type BatchPatchUnionParam interface {
-	implementsDNSBatchPatchUnionParam()
+	implementsBatchPatchUnionParam()
 }
 
 type BatchPatchARecordParam struct {
@@ -594,7 +594,7 @@ func (r BatchPatchARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchARecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchARecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchAAAARecordParam struct {
 	// Identifier
@@ -606,7 +606,7 @@ func (r BatchPatchAAAARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchAAAARecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchAAAARecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchCAARecordParam struct {
 	// Identifier
@@ -618,7 +618,7 @@ func (r BatchPatchCAARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchCAARecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchCAARecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchCERTRecordParam struct {
 	// Identifier
@@ -630,7 +630,7 @@ func (r BatchPatchCERTRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchCERTRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchCERTRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchCNAMERecordParam struct {
 	// Identifier
@@ -642,7 +642,7 @@ func (r BatchPatchCNAMERecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchCNAMERecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchCNAMERecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchDNSKEYRecordParam struct {
 	// Identifier
@@ -654,7 +654,7 @@ func (r BatchPatchDNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchDNSKEYRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchDNSKEYRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchDSRecordParam struct {
 	// Identifier
@@ -666,7 +666,7 @@ func (r BatchPatchDSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchDSRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchDSRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchHTTPSRecordParam struct {
 	// Identifier
@@ -678,7 +678,7 @@ func (r BatchPatchHTTPSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchHTTPSRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchHTTPSRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchLOCRecordParam struct {
 	// Identifier
@@ -690,7 +690,7 @@ func (r BatchPatchLOCRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchLOCRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchLOCRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchMXRecordParam struct {
 	// Identifier
@@ -702,7 +702,7 @@ func (r BatchPatchMXRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchMXRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchMXRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchNAPTRRecordParam struct {
 	// Identifier
@@ -714,7 +714,7 @@ func (r BatchPatchNAPTRRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchNAPTRRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchNAPTRRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchNSRecordParam struct {
 	// Identifier
@@ -726,7 +726,7 @@ func (r BatchPatchNSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchNSRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchNSRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchOpenpgpkeyParam struct {
 	// Identifier
@@ -757,7 +757,7 @@ func (r BatchPatchOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchOpenpgpkeyParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchOpenpgpkeyParam) implementsBatchPatchUnionParam() {}
 
 // Settings for the DNS record.
 type BatchPatchOpenpgpkeySettingsParam struct {
@@ -802,7 +802,7 @@ func (r BatchPatchPTRRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchPTRRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchPTRRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSMIMEARecordParam struct {
 	// Identifier
@@ -814,7 +814,7 @@ func (r BatchPatchSMIMEARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchSMIMEARecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchSMIMEARecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSRVRecordParam struct {
 	// Identifier
@@ -826,7 +826,7 @@ func (r BatchPatchSRVRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchSRVRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchSRVRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSSHFPRecordParam struct {
 	// Identifier
@@ -838,7 +838,7 @@ func (r BatchPatchSSHFPRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchSSHFPRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchSSHFPRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSVCBRecordParam struct {
 	// Identifier
@@ -850,7 +850,7 @@ func (r BatchPatchSVCBRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchSVCBRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchSVCBRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchTLSARecordParam struct {
 	// Identifier
@@ -862,7 +862,7 @@ func (r BatchPatchTLSARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchTLSARecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchTLSARecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchTXTRecordParam struct {
 	// Identifier
@@ -874,7 +874,7 @@ func (r BatchPatchTXTRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchTXTRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchTXTRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchURIRecordParam struct {
 	// Identifier
@@ -886,7 +886,7 @@ func (r BatchPatchURIRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchURIRecordParam) implementsDNSBatchPatchUnionParam() {}
+func (r BatchPatchURIRecordParam) implementsBatchPatchUnionParam() {}
 
 // Satisfied by [dns.BatchPutARecordParam], [dns.BatchPutAAAARecordParam],
 // [dns.BatchPutCAARecordParam], [dns.BatchPutCERTRecordParam],
@@ -900,7 +900,7 @@ func (r BatchPatchURIRecordParam) implementsDNSBatchPatchUnionParam() {}
 // [dns.BatchPutTLSARecordParam], [dns.BatchPutTXTRecordParam],
 // [dns.BatchPutURIRecordParam].
 type BatchPutUnionParam interface {
-	implementsDNSBatchPutUnionParam()
+	implementsBatchPutUnionParam()
 }
 
 type BatchPutARecordParam struct {
@@ -913,7 +913,7 @@ func (r BatchPutARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutARecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutARecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutAAAARecordParam struct {
 	// Identifier
@@ -925,7 +925,7 @@ func (r BatchPutAAAARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutAAAARecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutAAAARecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutCAARecordParam struct {
 	// Identifier
@@ -937,7 +937,7 @@ func (r BatchPutCAARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutCAARecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutCAARecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutCERTRecordParam struct {
 	// Identifier
@@ -949,7 +949,7 @@ func (r BatchPutCERTRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutCERTRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutCERTRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutCNAMERecordParam struct {
 	// Identifier
@@ -961,7 +961,7 @@ func (r BatchPutCNAMERecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutCNAMERecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutCNAMERecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutDNSKEYRecordParam struct {
 	// Identifier
@@ -973,7 +973,7 @@ func (r BatchPutDNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutDNSKEYRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutDNSKEYRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutDSRecordParam struct {
 	// Identifier
@@ -985,7 +985,7 @@ func (r BatchPutDSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutDSRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutDSRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutHTTPSRecordParam struct {
 	// Identifier
@@ -997,7 +997,7 @@ func (r BatchPutHTTPSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutHTTPSRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutHTTPSRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutLOCRecordParam struct {
 	// Identifier
@@ -1009,7 +1009,7 @@ func (r BatchPutLOCRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutLOCRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutLOCRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutMXRecordParam struct {
 	// Identifier
@@ -1021,7 +1021,7 @@ func (r BatchPutMXRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutMXRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutMXRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutNAPTRRecordParam struct {
 	// Identifier
@@ -1033,7 +1033,7 @@ func (r BatchPutNAPTRRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutNAPTRRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutNAPTRRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutNSRecordParam struct {
 	// Identifier
@@ -1045,7 +1045,7 @@ func (r BatchPutNSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutNSRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutNSRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutOpenpgpkeyParam struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
@@ -1076,7 +1076,7 @@ func (r BatchPutOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutOpenpgpkeyParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutOpenpgpkeyParam) implementsBatchPutUnionParam() {}
 
 // Record type.
 type BatchPutOpenpgpkeyType string
@@ -1121,7 +1121,7 @@ func (r BatchPutPTRRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutPTRRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutPTRRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSMIMEARecordParam struct {
 	// Identifier
@@ -1133,7 +1133,7 @@ func (r BatchPutSMIMEARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutSMIMEARecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutSMIMEARecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSRVRecordParam struct {
 	// Identifier
@@ -1145,7 +1145,7 @@ func (r BatchPutSRVRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutSRVRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutSRVRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSSHFPRecordParam struct {
 	// Identifier
@@ -1157,7 +1157,7 @@ func (r BatchPutSSHFPRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutSSHFPRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutSSHFPRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSVCBRecordParam struct {
 	// Identifier
@@ -1169,7 +1169,7 @@ func (r BatchPutSVCBRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutSVCBRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutSVCBRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutTLSARecordParam struct {
 	// Identifier
@@ -1181,7 +1181,7 @@ func (r BatchPutTLSARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutTLSARecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutTLSARecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutTXTRecordParam struct {
 	// Identifier
@@ -1193,7 +1193,7 @@ func (r BatchPutTXTRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutTXTRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutTXTRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutURIRecordParam struct {
 	// Identifier
@@ -1205,7 +1205,7 @@ func (r BatchPutURIRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutURIRecordParam) implementsDNSBatchPutUnionParam() {}
+func (r BatchPutURIRecordParam) implementsBatchPutUnionParam() {}
 
 type CAARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1358,7 +1358,7 @@ func (r CAARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CAARecordParam) implementsDNSRecordUnionParam() {}
+func (r CAARecordParam) implementsRecordUnionParam() {}
 
 // Components of a CAA record.
 type CAARecordDataParam struct {
@@ -1546,7 +1546,7 @@ func (r CERTRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CERTRecordParam) implementsDNSRecordUnionParam() {}
+func (r CERTRecordParam) implementsRecordUnionParam() {}
 
 // Components of a CERT record.
 type CERTRecordDataParam struct {
@@ -1708,7 +1708,7 @@ func (r CNAMERecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CNAMERecordParam) implementsDNSRecordUnionParam() {}
+func (r CNAMERecordParam) implementsRecordUnionParam() {}
 
 // Settings for the DNS record.
 type CNAMERecordSettingsParam struct {
@@ -1888,7 +1888,7 @@ func (r DNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DNSKEYRecordParam) implementsDNSRecordUnionParam() {}
+func (r DNSKEYRecordParam) implementsRecordUnionParam() {}
 
 // Components of a DNSKEY record.
 type DNSKEYRecordDataParam struct {
@@ -2078,7 +2078,7 @@ func (r DSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DSRecordParam) implementsDNSRecordUnionParam() {}
+func (r DSRecordParam) implementsRecordUnionParam() {}
 
 // Components of a DS record.
 type DSRecordDataParam struct {
@@ -2265,7 +2265,7 @@ func (r HTTPSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r HTTPSRecordParam) implementsDNSRecordUnionParam() {}
+func (r HTTPSRecordParam) implementsRecordUnionParam() {}
 
 // Components of a HTTPS record.
 type HTTPSRecordDataParam struct {
@@ -2509,7 +2509,7 @@ func (r LOCRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r LOCRecordParam) implementsDNSRecordUnionParam() {}
+func (r LOCRecordParam) implementsRecordUnionParam() {}
 
 // Components of a LOC record.
 type LOCRecordDataParam struct {
@@ -2688,7 +2688,7 @@ func (r MXRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r MXRecordParam) implementsDNSRecordUnionParam() {}
+func (r MXRecordParam) implementsRecordUnionParam() {}
 
 // Settings for the DNS record.
 type MXRecordSettingsParam struct {
@@ -2868,7 +2868,7 @@ func (r NAPTRRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r NAPTRRecordParam) implementsDNSRecordUnionParam() {}
+func (r NAPTRRecordParam) implementsRecordUnionParam() {}
 
 // Components of a NAPTR record.
 type NAPTRRecordDataParam struct {
@@ -3028,7 +3028,7 @@ func (r NSRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r NSRecordParam) implementsDNSRecordUnionParam() {}
+func (r NSRecordParam) implementsRecordUnionParam() {}
 
 // Settings for the DNS record.
 type NSRecordSettingsParam struct {
@@ -3168,7 +3168,7 @@ func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PTRRecordParam) implementsDNSRecordUnionParam() {}
+func (r PTRRecordParam) implementsRecordUnionParam() {}
 
 // Settings for the DNS record.
 type PTRRecordSettingsParam struct {
@@ -3217,7 +3217,7 @@ func (r RecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RecordParam) implementsDNSRecordUnionParam() {}
+func (r RecordParam) implementsRecordUnionParam() {}
 
 // Satisfied by [dns.ARecordParam], [dns.AAAARecordParam], [dns.CAARecordParam],
 // [dns.CERTRecordParam], [dns.CNAMERecordParam], [dns.DNSKEYRecordParam],
@@ -3228,7 +3228,7 @@ func (r RecordParam) implementsDNSRecordUnionParam() {}
 // [dns.TLSARecordParam], [dns.TXTRecordParam], [dns.URIRecordParam],
 // [RecordParam].
 type RecordUnionParam interface {
-	implementsDNSRecordUnionParam()
+	implementsRecordUnionParam()
 }
 
 type RecordOpenpgpkeyParam struct {
@@ -3258,7 +3258,7 @@ func (r RecordOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RecordOpenpgpkeyParam) implementsDNSRecordUnionParam() {}
+func (r RecordOpenpgpkeyParam) implementsRecordUnionParam() {}
 
 // Settings for the DNS record.
 type RecordOpenpgpkeySettingsParam struct {
@@ -3448,7 +3448,7 @@ func (r RecordResponse) AsUnion() RecordResponseUnion {
 // [dns.RecordResponseTLSARecord], [dns.RecordResponseTXTRecord] or
 // [dns.RecordResponseURIRecord].
 type RecordResponseUnion interface {
-	implementsDNSRecordResponse()
+	implementsRecordResponse()
 }
 
 func init() {
@@ -3604,7 +3604,7 @@ func (r recordResponseARecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseARecord) implementsDNSRecordResponse() {}
+func (r RecordResponseARecord) implementsRecordResponse() {}
 
 type RecordResponseAAAARecord struct {
 	// Identifier
@@ -3647,7 +3647,7 @@ func (r recordResponseAAAARecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseAAAARecord) implementsDNSRecordResponse() {}
+func (r RecordResponseAAAARecord) implementsRecordResponse() {}
 
 type RecordResponseCAARecord struct {
 	// Identifier
@@ -3690,7 +3690,7 @@ func (r recordResponseCAARecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCAARecord) implementsDNSRecordResponse() {}
+func (r RecordResponseCAARecord) implementsRecordResponse() {}
 
 type RecordResponseCERTRecord struct {
 	// Identifier
@@ -3733,7 +3733,7 @@ func (r recordResponseCERTRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCERTRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseCERTRecord) implementsRecordResponse() {}
 
 type RecordResponseCNAMERecord struct {
 	// Identifier
@@ -3776,7 +3776,7 @@ func (r recordResponseCNAMERecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCNAMERecord) implementsDNSRecordResponse() {}
+func (r RecordResponseCNAMERecord) implementsRecordResponse() {}
 
 type RecordResponseDNSKEYRecord struct {
 	// Identifier
@@ -3819,7 +3819,7 @@ func (r recordResponseDNSKEYRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseDNSKEYRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseDNSKEYRecord) implementsRecordResponse() {}
 
 type RecordResponseDSRecord struct {
 	// Identifier
@@ -3862,7 +3862,7 @@ func (r recordResponseDSRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseDSRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseDSRecord) implementsRecordResponse() {}
 
 type RecordResponseHTTPSRecord struct {
 	// Identifier
@@ -3905,7 +3905,7 @@ func (r recordResponseHTTPSRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseHTTPSRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseHTTPSRecord) implementsRecordResponse() {}
 
 type RecordResponseLOCRecord struct {
 	// Identifier
@@ -3948,7 +3948,7 @@ func (r recordResponseLOCRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseLOCRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseLOCRecord) implementsRecordResponse() {}
 
 type RecordResponseMXRecord struct {
 	// Identifier
@@ -3991,7 +3991,7 @@ func (r recordResponseMXRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseMXRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseMXRecord) implementsRecordResponse() {}
 
 type RecordResponseNAPTRRecord struct {
 	// Identifier
@@ -4034,7 +4034,7 @@ func (r recordResponseNAPTRRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseNAPTRRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseNAPTRRecord) implementsRecordResponse() {}
 
 type RecordResponseNSRecord struct {
 	// Identifier
@@ -4077,7 +4077,7 @@ func (r recordResponseNSRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseNSRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseNSRecord) implementsRecordResponse() {}
 
 type RecordResponseOpenpgpkey struct {
 	// Identifier
@@ -4147,7 +4147,7 @@ func (r recordResponseOpenpgpkeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseOpenpgpkey) implementsDNSRecordResponse() {}
+func (r RecordResponseOpenpgpkey) implementsRecordResponse() {}
 
 // Settings for the DNS record.
 type RecordResponseOpenpgpkeySettings struct {
@@ -4237,7 +4237,7 @@ func (r recordResponsePTRRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponsePTRRecord) implementsDNSRecordResponse() {}
+func (r RecordResponsePTRRecord) implementsRecordResponse() {}
 
 type RecordResponseSMIMEARecord struct {
 	// Identifier
@@ -4280,7 +4280,7 @@ func (r recordResponseSMIMEARecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSMIMEARecord) implementsDNSRecordResponse() {}
+func (r RecordResponseSMIMEARecord) implementsRecordResponse() {}
 
 type RecordResponseSRVRecord struct {
 	// Identifier
@@ -4323,7 +4323,7 @@ func (r recordResponseSRVRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSRVRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseSRVRecord) implementsRecordResponse() {}
 
 type RecordResponseSSHFPRecord struct {
 	// Identifier
@@ -4366,7 +4366,7 @@ func (r recordResponseSSHFPRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSSHFPRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseSSHFPRecord) implementsRecordResponse() {}
 
 type RecordResponseSVCBRecord struct {
 	// Identifier
@@ -4409,7 +4409,7 @@ func (r recordResponseSVCBRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSVCBRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseSVCBRecord) implementsRecordResponse() {}
 
 type RecordResponseTLSARecord struct {
 	// Identifier
@@ -4452,7 +4452,7 @@ func (r recordResponseTLSARecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseTLSARecord) implementsDNSRecordResponse() {}
+func (r RecordResponseTLSARecord) implementsRecordResponse() {}
 
 type RecordResponseTXTRecord struct {
 	// Identifier
@@ -4495,7 +4495,7 @@ func (r recordResponseTXTRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseTXTRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseTXTRecord) implementsRecordResponse() {}
 
 type RecordResponseURIRecord struct {
 	// Identifier
@@ -4538,7 +4538,7 @@ func (r recordResponseURIRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseURIRecord) implementsDNSRecordResponse() {}
+func (r RecordResponseURIRecord) implementsRecordResponse() {}
 
 // Record type.
 type RecordResponseType string
@@ -4734,7 +4734,7 @@ func (r SMIMEARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SMIMEARecordParam) implementsDNSRecordUnionParam() {}
+func (r SMIMEARecordParam) implementsRecordUnionParam() {}
 
 // Components of a SMIMEA record.
 type SMIMEARecordDataParam struct {
@@ -4926,7 +4926,7 @@ func (r SRVRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SRVRecordParam) implementsDNSRecordUnionParam() {}
+func (r SRVRecordParam) implementsRecordUnionParam() {}
 
 // Components of a SRV record.
 type SRVRecordDataParam struct {
@@ -5114,7 +5114,7 @@ func (r SSHFPRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SSHFPRecordParam) implementsDNSRecordUnionParam() {}
+func (r SSHFPRecordParam) implementsRecordUnionParam() {}
 
 // Components of a SSHFP record.
 type SSHFPRecordDataParam struct {
@@ -5299,7 +5299,7 @@ func (r SVCBRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SVCBRecordParam) implementsDNSRecordUnionParam() {}
+func (r SVCBRecordParam) implementsRecordUnionParam() {}
 
 // Components of a SVCB record.
 type SVCBRecordDataParam struct {
@@ -5487,7 +5487,7 @@ func (r TLSARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r TLSARecordParam) implementsDNSRecordUnionParam() {}
+func (r TLSARecordParam) implementsRecordUnionParam() {}
 
 // Components of a TLSA record.
 type TLSARecordDataParam struct {
@@ -5670,7 +5670,7 @@ func (r TXTRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r TXTRecordParam) implementsDNSRecordUnionParam() {}
+func (r TXTRecordParam) implementsRecordUnionParam() {}
 
 // Settings for the DNS record.
 type TXTRecordSettingsParam struct {
@@ -5845,7 +5845,7 @@ func (r URIRecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r URIRecordParam) implementsDNSRecordUnionParam() {}
+func (r URIRecordParam) implementsRecordUnionParam() {}
 
 // Components of a URI record.
 type URIRecordDataParam struct {

@@ -303,7 +303,7 @@ func (r ScriptVersionNewParamsMetadataBinding) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBinding) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBinding) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // A binding to allow the Worker to communicate with resources
@@ -331,7 +331,7 @@ func (r ScriptVersionNewParamsMetadataBinding) implementsWorkersScriptVersionNew
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadata],
 // [ScriptVersionNewParamsMetadataBinding].
 type ScriptVersionNewParamsMetadataBindingUnion interface {
-	implementsWorkersScriptVersionNewParamsMetadataBindingUnion()
+	implementsScriptVersionNewParamsMetadataBindingUnion()
 }
 
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny struct {
@@ -346,7 +346,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI struct {
@@ -360,7 +360,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -391,7 +391,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngine)
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -420,7 +420,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssets) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssets) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssets) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -449,7 +449,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRendering
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRendering) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRendering) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -480,7 +480,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -513,7 +513,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespac
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespace) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespace) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -576,7 +576,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -607,7 +607,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive) Mars
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -638,7 +638,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -669,7 +669,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace) Mar
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -700,7 +700,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT) Marsha
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -731,7 +731,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -762,7 +762,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue) MarshalJS
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -793,7 +793,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -824,7 +824,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecret) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecret) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecret) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -857,7 +857,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindService) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindService) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindService) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -888,7 +888,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumer) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumer) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumer) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -919,7 +919,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorize) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorize) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorize) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
@@ -948,7 +948,7 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadata)
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadata) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadata) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.

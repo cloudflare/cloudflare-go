@@ -158,6 +158,8 @@ func TestRulesetListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.List(context.TODO(), rulesets.RulesetListParams{
 		AccountID: cloudflare.F("account_id"),
+		Cursor:    cloudflare.F("dGhpc2lzYW5leGFtcGxlCg"),
+		PerPage:   cloudflare.F(int64(3)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

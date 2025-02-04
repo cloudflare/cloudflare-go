@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
@@ -62,9 +63,10 @@ func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, p
 }
 
 // Fetches connection details for a Cloudflare Tunnel.
-func (r *TunnelConnectionService) Get(ctx context.Context, tunnelID string, query TunnelConnectionGetParams, opts ...option.RequestOption) (res *[]Client, err error) {
-	var env TunnelConnectionGetResponseEnvelope
+func (r *TunnelConnectionService) Get(ctx context.Context, tunnelID string, query TunnelConnectionGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Client], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -74,12 +76,21 @@ func (r *TunnelConnectionService) Get(ctx context.Context, tunnelID string, quer
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connections", query.AccountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches connection details for a Cloudflare Tunnel.
+func (r *TunnelConnectionService) GetAutoPaging(ctx context.Context, tunnelID string, query TunnelConnectionGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Client] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, tunnelID, query, opts...))
 }
 
 // A client (typically cloudflared) that maintains connections to a Cloudflare data
@@ -233,80 +244,4 @@ func (r TunnelConnectionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type TunnelConnectionGetParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type TunnelConnectionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Client              `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    TunnelConnectionGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo TunnelConnectionGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       tunnelConnectionGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// tunnelConnectionGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [TunnelConnectionGetResponseEnvelope]
-type tunnelConnectionGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelConnectionGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelConnectionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type TunnelConnectionGetResponseEnvelopeSuccess bool
-
-const (
-	TunnelConnectionGetResponseEnvelopeSuccessTrue TunnelConnectionGetResponseEnvelopeSuccess = true
-)
-
-func (r TunnelConnectionGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TunnelConnectionGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type TunnelConnectionGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                           `json:"total_count"`
-	JSON       tunnelConnectionGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// tunnelConnectionGetResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [TunnelConnectionGetResponseEnvelopeResultInfo]
-type tunnelConnectionGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelConnectionGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelConnectionGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

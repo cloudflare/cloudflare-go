@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // InvestigateMoveService contains methods and other services that help with
@@ -36,9 +36,10 @@ func NewInvestigateMoveService(opts ...option.RequestOption) (r *InvestigateMove
 }
 
 // Move a message
-func (r *InvestigateMoveService) New(ctx context.Context, postfixID string, params InvestigateMoveNewParams, opts ...option.RequestOption) (res *[]InvestigateMoveNewResponse, err error) {
-	var env InvestigateMoveNewResponseEnvelope
+func (r *InvestigateMoveService) New(ctx context.Context, postfixID string, params InvestigateMoveNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateMoveNewResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -48,29 +49,48 @@ func (r *InvestigateMoveService) New(ctx context.Context, postfixID string, para
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/move", params.AccountID, postfixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Move a message
+func (r *InvestigateMoveService) NewAutoPaging(ctx context.Context, postfixID string, params InvestigateMoveNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateMoveNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, postfixID, params, opts...))
 }
 
 // Move multiple messages
-func (r *InvestigateMoveService) Bulk(ctx context.Context, params InvestigateMoveBulkParams, opts ...option.RequestOption) (res *[]InvestigateMoveBulkResponse, err error) {
-	var env InvestigateMoveBulkResponseEnvelope
+func (r *InvestigateMoveService) Bulk(ctx context.Context, params InvestigateMoveBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateMoveBulkResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/move", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Move multiple messages
+func (r *InvestigateMoveService) BulkAutoPaging(ctx context.Context, params InvestigateMoveBulkParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateMoveBulkResponse] {
+	return pagination.NewSinglePageAutoPager(r.Bulk(ctx, params, opts...))
 }
 
 type InvestigateMoveNewResponse struct {
@@ -167,33 +187,6 @@ func (r InvestigateMoveNewParamsDestination) IsKnown() bool {
 	return false
 }
 
-type InvestigateMoveNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                  `json:"messages,required"`
-	Result   []InvestigateMoveNewResponse           `json:"result,required"`
-	Success  bool                                   `json:"success,required"`
-	JSON     investigateMoveNewResponseEnvelopeJSON `json:"-"`
-}
-
-// investigateMoveNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [InvestigateMoveNewResponseEnvelope]
-type investigateMoveNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateMoveNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateMoveNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
 type InvestigateMoveBulkParams struct {
 	// Account Identifier
 	AccountID   param.Field[string]                               `path:"account_id,required"`
@@ -221,31 +214,4 @@ func (r InvestigateMoveBulkParamsDestination) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type InvestigateMoveBulkResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                   `json:"messages,required"`
-	Result   []InvestigateMoveBulkResponse           `json:"result,required"`
-	Success  bool                                    `json:"success,required"`
-	JSON     investigateMoveBulkResponseEnvelopeJSON `json:"-"`
-}
-
-// investigateMoveBulkResponseEnvelopeJSON contains the JSON metadata for the
-// struct [InvestigateMoveBulkResponseEnvelope]
-type investigateMoveBulkResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateMoveBulkResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateMoveBulkResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }

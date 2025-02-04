@@ -196,7 +196,7 @@ func (r ConfigurationItem) AsUnion() ConfigurationItemUnion {
 // Union satisfied by [firewall.LockdownIPConfiguration] or
 // [firewall.LockdownCIDRConfiguration].
 type ConfigurationItemUnion interface {
-	implementsFirewallConfigurationItem()
+	implementsConfigurationItem()
 }
 
 func init() {
@@ -246,12 +246,12 @@ func (r ConfigurationItemParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigurationItemParam) implementsFirewallConfigurationItemUnionParam() {}
+func (r ConfigurationItemParam) implementsConfigurationItemUnionParam() {}
 
 // Satisfied by [firewall.LockdownIPConfigurationParam],
 // [firewall.LockdownCIDRConfigurationParam], [ConfigurationItemParam].
 type ConfigurationItemUnionParam interface {
-	implementsFirewallConfigurationItemUnionParam()
+	implementsConfigurationItemUnionParam()
 }
 
 type Lockdown struct {
@@ -323,7 +323,7 @@ func (r lockdownCIDRConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r LockdownCIDRConfiguration) implementsFirewallConfigurationItem() {}
+func (r LockdownCIDRConfiguration) implementsConfigurationItem() {}
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the Zone Lockdown rule.
@@ -353,7 +353,7 @@ func (r LockdownCIDRConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r LockdownCIDRConfigurationParam) implementsFirewallConfigurationItemUnionParam() {}
+func (r LockdownCIDRConfigurationParam) implementsConfigurationItemUnionParam() {}
 
 type LockdownIPConfiguration struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
@@ -382,7 +382,7 @@ func (r lockdownIPConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r LockdownIPConfiguration) implementsFirewallConfigurationItem() {}
+func (r LockdownIPConfiguration) implementsConfigurationItem() {}
 
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the Zone Lockdown rule.
@@ -413,7 +413,7 @@ func (r LockdownIPConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r LockdownIPConfigurationParam) implementsFirewallConfigurationItemUnionParam() {}
+func (r LockdownIPConfigurationParam) implementsConfigurationItemUnionParam() {}
 
 type LockdownURL = string
 

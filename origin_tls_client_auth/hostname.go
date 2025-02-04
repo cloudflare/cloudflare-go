@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
@@ -42,20 +43,34 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 // even if activated at the zone level. 100 maximum associations on a single
 // certificate are allowed. Note: Use a null value for parameter _enabled_ to
 // invalidate the association.
-func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *[]HostnameUpdateResponse, err error) {
-	var env HostnameUpdateResponseEnvelope
+func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[HostnameUpdateResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Associate a hostname to a certificate and enable, disable or invalidate the
+// association. If disabled, client certificate will not be sent to the hostname
+// even if activated at the zone level. 100 maximum associations on a single
+// certificate are allowed. Note: Use a null value for parameter _enabled_ to
+// invalidate the association.
+func (r *HostnameService) UpdateAutoPaging(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[HostnameUpdateResponse] {
+	return pagination.NewSinglePageAutoPager(r.Update(ctx, params, opts...))
 }
 
 // Get the Hostname Status for Client Authentication
@@ -247,82 +262,6 @@ type HostnameUpdateParamsConfig struct {
 
 func (r HostnameUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type HostnameUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    HostnameUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []HostnameUpdateResponse                 `json:"result"`
-	ResultInfo HostnameUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       hostnameUpdateResponseEnvelopeJSON       `json:"-"`
-}
-
-// hostnameUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [HostnameUpdateResponseEnvelope]
-type hostnameUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type HostnameUpdateResponseEnvelopeSuccess bool
-
-const (
-	HostnameUpdateResponseEnvelopeSuccessTrue HostnameUpdateResponseEnvelopeSuccess = true
-)
-
-func (r HostnameUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case HostnameUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type HostnameUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                      `json:"total_count"`
-	JSON       hostnameUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// hostnameUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [HostnameUpdateResponseEnvelopeResultInfo]
-type hostnameUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type HostnameGetParams struct {

@@ -132,7 +132,7 @@ func (r UserSchemaOperationListResponse) AsUnion() UserSchemaOperationListRespon
 // [api_gateway.UserSchemaOperationListResponseAPIShieldOperation] or
 // [api_gateway.UserSchemaOperationListResponseAPIShieldBasicOperation].
 type UserSchemaOperationListResponseUnion interface {
-	implementsAPIGatewayUserSchemaOperationListResponse()
+	implementsUserSchemaOperationListResponse()
 }
 
 func init() {
@@ -188,7 +188,7 @@ func (r userSchemaOperationListResponseAPIShieldOperationJSON) RawJSON() string 
 	return r.raw
 }
 
-func (r UserSchemaOperationListResponseAPIShieldOperation) implementsAPIGatewayUserSchemaOperationListResponse() {
+func (r UserSchemaOperationListResponseAPIShieldOperation) implementsUserSchemaOperationListResponse() {
 }
 
 // The HTTP method used to access the endpoint.
@@ -282,7 +282,7 @@ func (r UserSchemaOperationListResponseAPIShieldOperationFeatures) AsUnion() Use
 // or
 // [api_gateway.UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfo].
 type UserSchemaOperationListResponseAPIShieldOperationFeaturesUnion interface {
-	implementsAPIGatewayUserSchemaOperationListResponseAPIShieldOperationFeatures()
+	implementsUserSchemaOperationListResponseAPIShieldOperationFeatures()
 }
 
 func init() {
@@ -334,7 +334,7 @@ func (r userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperat
 	return r.raw
 }
 
-func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureThresholds) implementsAPIGatewayUserSchemaOperationListResponseAPIShieldOperationFeatures() {
+func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureThresholds) implementsUserSchemaOperationListResponseAPIShieldOperationFeatures() {
 }
 
 type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureThresholdsThresholds struct {
@@ -405,7 +405,7 @@ func (r userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperat
 	return r.raw
 }
 
-func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemas) implementsAPIGatewayUserSchemaOperationListResponseAPIShieldOperationFeatures() {
+func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemas) implementsUserSchemaOperationListResponseAPIShieldOperationFeatures() {
 }
 
 type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas struct {
@@ -484,7 +484,7 @@ func (r userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperat
 	return r.raw
 }
 
-func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureAPIRouting) implementsAPIGatewayUserSchemaOperationListResponseAPIShieldOperationFeatures() {
+func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureAPIRouting) implementsUserSchemaOperationListResponseAPIShieldOperationFeatures() {
 }
 
 // API Routing settings on endpoint.
@@ -535,7 +535,7 @@ func (r userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperat
 	return r.raw
 }
 
-func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsAPIGatewayUserSchemaOperationListResponseAPIShieldOperationFeatures() {
+func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsUserSchemaOperationListResponseAPIShieldOperationFeatures() {
 }
 
 type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals struct {
@@ -719,7 +719,7 @@ func (r userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperat
 	return r.raw
 }
 
-func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfo) implementsAPIGatewayUserSchemaOperationListResponseAPIShieldOperationFeatures() {
+func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfo) implementsUserSchemaOperationListResponseAPIShieldOperationFeatures() {
 }
 
 type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
@@ -831,7 +831,7 @@ func (r userSchemaOperationListResponseAPIShieldBasicOperationJSON) RawJSON() st
 	return r.raw
 }
 
-func (r UserSchemaOperationListResponseAPIShieldBasicOperation) implementsAPIGatewayUserSchemaOperationListResponse() {
+func (r UserSchemaOperationListResponseAPIShieldBasicOperation) implementsUserSchemaOperationListResponse() {
 }
 
 // The HTTP method used to access the endpoint.

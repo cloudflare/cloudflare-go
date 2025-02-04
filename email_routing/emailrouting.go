@@ -110,6 +110,8 @@ type Settings struct {
 	Status SettingsStatus `json:"status"`
 	// Email Routing settings tag. (Deprecated, replaced by Email Routing settings
 	// identifier)
+	//
+	// Deprecated: deprecated
 	Tag  string       `json:"tag"`
 	JSON settingsJSON `json:"-"`
 }

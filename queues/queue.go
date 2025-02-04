@@ -223,7 +223,7 @@ func (r QueueProducer) AsUnion() QueueProducersUnion {
 // Union satisfied by [queues.QueueProducersMqWorkerProducer] or
 // [queues.QueueProducersMqR2Producer].
 type QueueProducersUnion interface {
-	implementsQueuesQueueProducer()
+	implementsQueueProducer()
 }
 
 func init() {
@@ -264,7 +264,7 @@ func (r queueProducersMqWorkerProducerJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r QueueProducersMqWorkerProducer) implementsQueuesQueueProducer() {}
+func (r QueueProducersMqWorkerProducer) implementsQueueProducer() {}
 
 type QueueProducersMqWorkerProducerType string
 
@@ -303,7 +303,7 @@ func (r queueProducersMqR2ProducerJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r QueueProducersMqR2Producer) implementsQueuesQueueProducer() {}
+func (r QueueProducersMqR2Producer) implementsQueueProducer() {}
 
 type QueueProducersMqR2ProducerType string
 
@@ -377,12 +377,12 @@ func (r QueueProducerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r QueueProducerParam) implementsQueuesQueueProducersUnionParam() {}
+func (r QueueProducerParam) implementsQueueProducersUnionParam() {}
 
 // Satisfied by [queues.QueueProducersMqWorkerProducerParam],
 // [queues.QueueProducersMqR2ProducerParam], [QueueProducerParam].
 type QueueProducersUnionParam interface {
-	implementsQueuesQueueProducersUnionParam()
+	implementsQueueProducersUnionParam()
 }
 
 type QueueProducersMqWorkerProducerParam struct {
@@ -394,7 +394,7 @@ func (r QueueProducersMqWorkerProducerParam) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r QueueProducersMqWorkerProducerParam) implementsQueuesQueueProducersUnionParam() {}
+func (r QueueProducersMqWorkerProducerParam) implementsQueueProducersUnionParam() {}
 
 type QueueProducersMqR2ProducerParam struct {
 	BucketName param.Field[string]                         `json:"bucket_name"`
@@ -405,7 +405,7 @@ func (r QueueProducersMqR2ProducerParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r QueueProducersMqR2ProducerParam) implementsQueuesQueueProducersUnionParam() {}
+func (r QueueProducersMqR2ProducerParam) implementsQueueProducersUnionParam() {}
 
 type QueueSettingsParam struct {
 	// Number of seconds to delay delivery of all messages to consumers.

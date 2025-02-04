@@ -99,8 +99,8 @@ func TestSiteListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.Sites.List(context.TODO(), magic_transit.SiteListParams{
-		AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ConnectorIdentifier: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Connectorid: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -34,9 +34,40 @@ func NewValidateService(opts ...option.RequestOption) (r *ValidateService) {
 	return
 }
 
-// Checks if there is an existing job with a destination.
+// Validates destination.
 func (r *ValidateService) Destination(ctx context.Context, params ValidateDestinationParams, opts ...option.RequestOption) (res *ValidateDestinationResponse, err error) {
 	var env ValidateDestinationResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	}
+	if params.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
+	path := fmt.Sprintf("%s/%s/logpush/validate/destination", accountOrZone, accountOrZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Checks if there is an existing job with a destination.
+func (r *ValidateService) DestinationExists(ctx context.Context, params ValidateDestinationExistsParams, opts ...option.RequestOption) (res *ValidateDestinationExistsResponse, err error) {
+	var env ValidateDestinationExistsResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -97,14 +128,16 @@ func (r *ValidateService) Origin(ctx context.Context, params ValidateOriginParam
 }
 
 type ValidateDestinationResponse struct {
-	Exists bool                            `json:"exists"`
-	JSON   validateDestinationResponseJSON `json:"-"`
+	Message string                          `json:"message"`
+	Valid   bool                            `json:"valid"`
+	JSON    validateDestinationResponseJSON `json:"-"`
 }
 
 // validateDestinationResponseJSON contains the JSON metadata for the struct
 // [ValidateDestinationResponse]
 type validateDestinationResponseJSON struct {
-	Exists      apijson.Field
+	Message     apijson.Field
+	Valid       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -114,6 +147,27 @@ func (r *ValidateDestinationResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r validateDestinationResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ValidateDestinationExistsResponse struct {
+	Exists bool                                  `json:"exists"`
+	JSON   validateDestinationExistsResponseJSON `json:"-"`
+}
+
+// validateDestinationExistsResponseJSON contains the JSON metadata for the struct
+// [ValidateDestinationExistsResponse]
+type validateDestinationExistsResponseJSON struct {
+	Exists      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ValidateDestinationExistsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateDestinationExistsResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -193,6 +247,64 @@ const (
 func (r ValidateDestinationResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case ValidateDestinationResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type ValidateDestinationExistsParams struct {
+	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
+	// Additional configuration parameters supported by the destination may be
+	// included.
+	DestinationConf param.Field[string] `json:"destination_conf,required" format:"uri"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
+}
+
+func (r ValidateDestinationExistsParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ValidateDestinationExistsResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success ValidateDestinationExistsResponseEnvelopeSuccess `json:"success,required"`
+	Result  ValidateDestinationExistsResponse                `json:"result,nullable"`
+	JSON    validateDestinationExistsResponseEnvelopeJSON    `json:"-"`
+}
+
+// validateDestinationExistsResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ValidateDestinationExistsResponseEnvelope]
+type validateDestinationExistsResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ValidateDestinationExistsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateDestinationExistsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type ValidateDestinationExistsResponseEnvelopeSuccess bool
+
+const (
+	ValidateDestinationExistsResponseEnvelopeSuccessTrue ValidateDestinationExistsResponseEnvelopeSuccess = true
+)
+
+func (r ValidateDestinationExistsResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ValidateDestinationExistsResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

@@ -3,8 +3,10 @@
 package zero_trust_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
@@ -35,7 +37,7 @@ func TestDLPDatasetVersionEntryNew(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPDatasetVersionEntryNewParams{
 			AccountID: cloudflare.F("account_id"),
-			Body:      "body",
+			Body:      io.Reader(bytes.NewBuffer([]byte("some file contents"))),
 		},
 	)
 	if err != nil {

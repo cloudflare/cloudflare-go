@@ -92,6 +92,10 @@ type DEXCommandDeviceListResponseDevice struct {
 	DeviceID string `json:"deviceId"`
 	// Device identifier (human readable)
 	DeviceName string `json:"deviceName"`
+	// Whether the device is eligible for remote captures
+	Eligible bool `json:"eligible"`
+	// If the device is not eligible, the reason why.
+	IneligibleReason string `json:"ineligibleReason"`
 	// User contact email address
 	PersonEmail string `json:"personEmail"`
 	// Operating system
@@ -108,15 +112,17 @@ type DEXCommandDeviceListResponseDevice struct {
 // dexCommandDeviceListResponseDeviceJSON contains the JSON metadata for the struct
 // [DEXCommandDeviceListResponseDevice]
 type dexCommandDeviceListResponseDeviceJSON struct {
-	DeviceID    apijson.Field
-	DeviceName  apijson.Field
-	PersonEmail apijson.Field
-	Platform    apijson.Field
-	Status      apijson.Field
-	Timestamp   apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	DeviceID         apijson.Field
+	DeviceName       apijson.Field
+	Eligible         apijson.Field
+	IneligibleReason apijson.Field
+	PersonEmail      apijson.Field
+	Platform         apijson.Field
+	Status           apijson.Field
+	Timestamp        apijson.Field
+	Version          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *DEXCommandDeviceListResponseDevice) UnmarshalJSON(data []byte) (err error) {

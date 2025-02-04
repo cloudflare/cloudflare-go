@@ -314,7 +314,7 @@ func (r PhaseVersionGetResponseRule) AsUnion() PhaseVersionGetResponseRulesUnion
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type PhaseVersionGetResponseRulesUnion interface {
-	implementsRulesetsPhaseVersionGetResponseRule()
+	implementsPhaseVersionGetResponseRule()
 }
 
 func init() {
@@ -472,8 +472,7 @@ func (r phaseVersionGetResponseRulesRulesetsChallengeRuleJSON) RawJSON() string 
 	return r.raw
 }
 
-func (r PhaseVersionGetResponseRulesRulesetsChallengeRule) implementsRulesetsPhaseVersionGetResponseRule() {
-}
+func (r PhaseVersionGetResponseRulesRulesetsChallengeRule) implementsPhaseVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type PhaseVersionGetResponseRulesRulesetsChallengeRuleAction string
@@ -644,7 +643,7 @@ func (r phaseVersionGetResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() strin
 	return r.raw
 }
 
-func (r PhaseVersionGetResponseRulesRulesetsJSChallengeRule) implementsRulesetsPhaseVersionGetResponseRule() {
+func (r PhaseVersionGetResponseRulesRulesetsJSChallengeRule) implementsPhaseVersionGetResponseRule() {
 }
 
 // The action to perform when the rule matches.

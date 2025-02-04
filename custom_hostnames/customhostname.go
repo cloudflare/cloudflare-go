@@ -26,8 +26,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewCustomHostnameService] method instead.
 type CustomHostnameService struct {
-	Options        []option.RequestOption
-	FallbackOrigin *FallbackOriginService
+	Options         []option.RequestOption
+	FallbackOrigin  *FallbackOriginService
+	CertificatePack *CertificatePackService
 }
 
 // NewCustomHostnameService generates a new service that applies the given options
@@ -37,6 +38,7 @@ func NewCustomHostnameService(opts ...option.RequestOption) (r *CustomHostnameSe
 	r = &CustomHostnameService{}
 	r.Options = opts
 	r.FallbackOrigin = NewFallbackOriginService(opts...)
+	r.CertificatePack = NewCertificatePackService(opts...)
 	return
 }
 
@@ -46,7 +48,10 @@ func NewCustomHostnameService(opts ...option.RequestOption) (r *CustomHostnameSe
 // 'email' will send an email to the WHOIS contacts on file for the base domain
 // plus hostmaster, postmaster, webmaster, admin, administrator. If http is used
 // and the domain is not already pointing to the Managed CNAME host, the PATCH
-// method must be used once it is (to complete validation).
+// method must be used once it is (to complete validation). Enable bundling of
+// certificates using the custom_cert_bundle field. The bundling process requires
+// the following condition One certificate in the bundle must use an RSA, and the
+// other must use an ECDSA.
 func (r *CustomHostnameService) New(ctx context.Context, params CustomHostnameNewParams, opts ...option.RequestOption) (res *CustomHostnameNewResponse, err error) {
 	var env CustomHostnameNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -109,7 +114,10 @@ func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID str
 // Modify SSL configuration for a custom hostname. When sent with SSL config that
 // matches existing config, used to indicate that hostname should pass domain
 // control validation (DCV). Can also be used to change validation type, e.g., from
-// 'http' to 'email'.
+// 'http' to 'email'. Bundle an existing certificate with another certificate by
+// using the "custom_cert_bundle" field. The bundling process supports combining
+// certificates as long as the following condition is met. One certificate must use
+// the RSA algorithm, and the other must use the ECDSA algorithm.
 func (r *CustomHostnameService) Edit(ctx context.Context, customHostnameID string, params CustomHostnameEditParams, opts ...option.RequestOption) (res *CustomHostnameEditResponse, err error) {
 	var env CustomHostnameEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -1994,6 +2002,8 @@ type CustomHostnameNewParamsSSL struct {
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true
 	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
+	// Array of custom certificate and key pairs (1 or 2 pairs allowed)
+	CustomCERTBundle param.Field[[]CustomHostnameNewParamsSSLCustomCERTBundle] `json:"custom_cert_bundle"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.
@@ -2010,6 +2020,17 @@ type CustomHostnameNewParamsSSL struct {
 }
 
 func (r CustomHostnameNewParamsSSL) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type CustomHostnameNewParamsSSLCustomCERTBundle struct {
+	// If a custom uploaded certificate is used.
+	CustomCertificate param.Field[string] `json:"custom_certificate,required"`
+	// The key for a custom uploaded certificate.
+	CustomKey param.Field[string] `json:"custom_key,required"`
+}
+
+func (r CustomHostnameNewParamsSSLCustomCERTBundle) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2260,6 +2281,8 @@ type CustomHostnameEditParamsSSL struct {
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true
 	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
+	// Array of custom certificate and key pairs (1 or 2 pairs allowed)
+	CustomCERTBundle param.Field[[]CustomHostnameEditParamsSSLCustomCERTBundle] `json:"custom_cert_bundle"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.
@@ -2276,6 +2299,17 @@ type CustomHostnameEditParamsSSL struct {
 }
 
 func (r CustomHostnameEditParamsSSL) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type CustomHostnameEditParamsSSLCustomCERTBundle struct {
+	// If a custom uploaded certificate is used.
+	CustomCertificate param.Field[string] `json:"custom_certificate,required"`
+	// The key for a custom uploaded certificate.
+	CustomKey param.Field[string] `json:"custom_key,required"`
+}
+
+func (r CustomHostnameEditParamsSSLCustomCERTBundle) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

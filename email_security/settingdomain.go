@@ -83,20 +83,30 @@ func (r *SettingDomainService) Delete(ctx context.Context, domainID int64, body 
 }
 
 // Unprotect multiple email domains
-func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) (res *[]SettingDomainBulkDeleteResponse, err error) {
-	var env SettingDomainBulkDeleteResponseEnvelope
+func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingDomainBulkDeleteResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/domains", body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Unprotect multiple email domains
+func (r *SettingDomainService) BulkDeleteAutoPaging(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SettingDomainBulkDeleteResponse] {
+	return pagination.NewSinglePageAutoPager(r.BulkDelete(ctx, body, opts...))
 }
 
 // Update an email domain
@@ -144,6 +154,8 @@ type SettingDomainListResponse struct {
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
 	Transport            string                                         `json:"transport,required"`
+	Authorization        SettingDomainListResponseAuthorization         `json:"authorization,nullable"`
+	EmailsProcessed      SettingDomainListResponseEmailsProcessed       `json:"emails_processed,nullable"`
 	Folder               SettingDomainListResponseFolder                `json:"folder,nullable"`
 	InboxProvider        SettingDomainListResponseInboxProvider         `json:"inbox_provider,nullable"`
 	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
@@ -165,6 +177,8 @@ type settingDomainListResponseJSON struct {
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
 	Transport            apijson.Field
+	Authorization        apijson.Field
+	EmailsProcessed      apijson.Field
 	Folder               apijson.Field
 	InboxProvider        apijson.Field
 	IntegrationID        apijson.Field
@@ -222,6 +236,56 @@ func (r SettingDomainListResponseDropDisposition) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type SettingDomainListResponseAuthorization struct {
+	Authorized    bool                                       `json:"authorized,required"`
+	Timestamp     time.Time                                  `json:"timestamp,required" format:"date-time"`
+	StatusMessage string                                     `json:"status_message,nullable"`
+	JSON          settingDomainListResponseAuthorizationJSON `json:"-"`
+}
+
+// settingDomainListResponseAuthorizationJSON contains the JSON metadata for the
+// struct [SettingDomainListResponseAuthorization]
+type settingDomainListResponseAuthorizationJSON struct {
+	Authorized    apijson.Field
+	Timestamp     apijson.Field
+	StatusMessage apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *SettingDomainListResponseAuthorization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainListResponseAuthorizationJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingDomainListResponseEmailsProcessed struct {
+	Timestamp                    time.Time                                    `json:"timestamp,required" format:"date-time"`
+	TotalEmailsProcessed         int64                                        `json:"total_emails_processed,required"`
+	TotalEmailsProcessedPrevious int64                                        `json:"total_emails_processed_previous,required"`
+	JSON                         settingDomainListResponseEmailsProcessedJSON `json:"-"`
+}
+
+// settingDomainListResponseEmailsProcessedJSON contains the JSON metadata for the
+// struct [SettingDomainListResponseEmailsProcessed]
+type settingDomainListResponseEmailsProcessedJSON struct {
+	Timestamp                    apijson.Field
+	TotalEmailsProcessed         apijson.Field
+	TotalEmailsProcessedPrevious apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *SettingDomainListResponseEmailsProcessed) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainListResponseEmailsProcessedJSON) RawJSON() string {
+	return r.raw
 }
 
 type SettingDomainListResponseFolder string
@@ -309,6 +373,8 @@ type SettingDomainEditResponse struct {
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
 	Transport            string                                         `json:"transport,required"`
+	Authorization        SettingDomainEditResponseAuthorization         `json:"authorization,nullable"`
+	EmailsProcessed      SettingDomainEditResponseEmailsProcessed       `json:"emails_processed,nullable"`
 	Folder               SettingDomainEditResponseFolder                `json:"folder,nullable"`
 	InboxProvider        SettingDomainEditResponseInboxProvider         `json:"inbox_provider,nullable"`
 	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
@@ -330,6 +396,8 @@ type settingDomainEditResponseJSON struct {
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
 	Transport            apijson.Field
+	Authorization        apijson.Field
+	EmailsProcessed      apijson.Field
 	Folder               apijson.Field
 	InboxProvider        apijson.Field
 	IntegrationID        apijson.Field
@@ -389,6 +457,56 @@ func (r SettingDomainEditResponseDropDisposition) IsKnown() bool {
 	return false
 }
 
+type SettingDomainEditResponseAuthorization struct {
+	Authorized    bool                                       `json:"authorized,required"`
+	Timestamp     time.Time                                  `json:"timestamp,required" format:"date-time"`
+	StatusMessage string                                     `json:"status_message,nullable"`
+	JSON          settingDomainEditResponseAuthorizationJSON `json:"-"`
+}
+
+// settingDomainEditResponseAuthorizationJSON contains the JSON metadata for the
+// struct [SettingDomainEditResponseAuthorization]
+type settingDomainEditResponseAuthorizationJSON struct {
+	Authorized    apijson.Field
+	Timestamp     apijson.Field
+	StatusMessage apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *SettingDomainEditResponseAuthorization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainEditResponseAuthorizationJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingDomainEditResponseEmailsProcessed struct {
+	Timestamp                    time.Time                                    `json:"timestamp,required" format:"date-time"`
+	TotalEmailsProcessed         int64                                        `json:"total_emails_processed,required"`
+	TotalEmailsProcessedPrevious int64                                        `json:"total_emails_processed_previous,required"`
+	JSON                         settingDomainEditResponseEmailsProcessedJSON `json:"-"`
+}
+
+// settingDomainEditResponseEmailsProcessedJSON contains the JSON metadata for the
+// struct [SettingDomainEditResponseEmailsProcessed]
+type settingDomainEditResponseEmailsProcessedJSON struct {
+	Timestamp                    apijson.Field
+	TotalEmailsProcessed         apijson.Field
+	TotalEmailsProcessedPrevious apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *SettingDomainEditResponseEmailsProcessed) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainEditResponseEmailsProcessedJSON) RawJSON() string {
+	return r.raw
+}
+
 type SettingDomainEditResponseFolder string
 
 const (
@@ -430,6 +548,8 @@ type SettingDomainGetResponse struct {
 	LastModified         time.Time                                     `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                         `json:"lookback_hops,required"`
 	Transport            string                                        `json:"transport,required"`
+	Authorization        SettingDomainGetResponseAuthorization         `json:"authorization,nullable"`
+	EmailsProcessed      SettingDomainGetResponseEmailsProcessed       `json:"emails_processed,nullable"`
 	Folder               SettingDomainGetResponseFolder                `json:"folder,nullable"`
 	InboxProvider        SettingDomainGetResponseInboxProvider         `json:"inbox_provider,nullable"`
 	IntegrationID        string                                        `json:"integration_id,nullable" format:"uuid"`
@@ -451,6 +571,8 @@ type settingDomainGetResponseJSON struct {
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
 	Transport            apijson.Field
+	Authorization        apijson.Field
+	EmailsProcessed      apijson.Field
 	Folder               apijson.Field
 	InboxProvider        apijson.Field
 	IntegrationID        apijson.Field
@@ -510,6 +632,56 @@ func (r SettingDomainGetResponseDropDisposition) IsKnown() bool {
 	return false
 }
 
+type SettingDomainGetResponseAuthorization struct {
+	Authorized    bool                                      `json:"authorized,required"`
+	Timestamp     time.Time                                 `json:"timestamp,required" format:"date-time"`
+	StatusMessage string                                    `json:"status_message,nullable"`
+	JSON          settingDomainGetResponseAuthorizationJSON `json:"-"`
+}
+
+// settingDomainGetResponseAuthorizationJSON contains the JSON metadata for the
+// struct [SettingDomainGetResponseAuthorization]
+type settingDomainGetResponseAuthorizationJSON struct {
+	Authorized    apijson.Field
+	Timestamp     apijson.Field
+	StatusMessage apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *SettingDomainGetResponseAuthorization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainGetResponseAuthorizationJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingDomainGetResponseEmailsProcessed struct {
+	Timestamp                    time.Time                                   `json:"timestamp,required" format:"date-time"`
+	TotalEmailsProcessed         int64                                       `json:"total_emails_processed,required"`
+	TotalEmailsProcessedPrevious int64                                       `json:"total_emails_processed_previous,required"`
+	JSON                         settingDomainGetResponseEmailsProcessedJSON `json:"-"`
+}
+
+// settingDomainGetResponseEmailsProcessedJSON contains the JSON metadata for the
+// struct [SettingDomainGetResponseEmailsProcessed]
+type settingDomainGetResponseEmailsProcessedJSON struct {
+	Timestamp                    apijson.Field
+	TotalEmailsProcessed         apijson.Field
+	TotalEmailsProcessedPrevious apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *SettingDomainGetResponseEmailsProcessed) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainGetResponseEmailsProcessedJSON) RawJSON() string {
+	return r.raw
+}
+
 type SettingDomainGetResponseFolder string
 
 const (
@@ -543,6 +715,8 @@ func (r SettingDomainGetResponseInboxProvider) IsKnown() bool {
 type SettingDomainListParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Filters response to domains with the currently active delivery mode.
+	ActiveDeliveryMode param.Field[SettingDomainListParamsActiveDeliveryMode] `query:"active_delivery_mode"`
 	// Filters response to domains with the provided delivery mode.
 	AllowedDeliveryMode param.Field[SettingDomainListParamsAllowedDeliveryMode] `query:"allowed_delivery_mode"`
 	// The sorting direction.
@@ -568,6 +742,25 @@ func (r SettingDomainListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Filters response to domains with the currently active delivery mode.
+type SettingDomainListParamsActiveDeliveryMode string
+
+const (
+	SettingDomainListParamsActiveDeliveryModeDirect    SettingDomainListParamsActiveDeliveryMode = "DIRECT"
+	SettingDomainListParamsActiveDeliveryModeBcc       SettingDomainListParamsActiveDeliveryMode = "BCC"
+	SettingDomainListParamsActiveDeliveryModeJournal   SettingDomainListParamsActiveDeliveryMode = "JOURNAL"
+	SettingDomainListParamsActiveDeliveryModeAPI       SettingDomainListParamsActiveDeliveryMode = "API"
+	SettingDomainListParamsActiveDeliveryModeRetroScan SettingDomainListParamsActiveDeliveryMode = "RETRO_SCAN"
+)
+
+func (r SettingDomainListParamsActiveDeliveryMode) IsKnown() bool {
+	switch r {
+	case SettingDomainListParamsActiveDeliveryModeDirect, SettingDomainListParamsActiveDeliveryModeBcc, SettingDomainListParamsActiveDeliveryModeJournal, SettingDomainListParamsActiveDeliveryModeAPI, SettingDomainListParamsActiveDeliveryModeRetroScan:
+		return true
+	}
+	return false
 }
 
 // Filters response to domains with the provided delivery mode.
@@ -656,33 +849,6 @@ func (r settingDomainDeleteResponseEnvelopeJSON) RawJSON() string {
 type SettingDomainBulkDeleteParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type SettingDomainBulkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors,required"`
-	Messages []shared.ResponseInfo                       `json:"messages,required"`
-	Result   []SettingDomainBulkDeleteResponse           `json:"result,required"`
-	Success  bool                                        `json:"success,required"`
-	JSON     settingDomainBulkDeleteResponseEnvelopeJSON `json:"-"`
-}
-
-// settingDomainBulkDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingDomainBulkDeleteResponseEnvelope]
-type settingDomainBulkDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingDomainBulkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingDomainBulkDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }
 
 type SettingDomainEditParams struct {

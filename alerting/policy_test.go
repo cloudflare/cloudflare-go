@@ -33,15 +33,11 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 		AlertType: cloudflare.F(alerting.PolicyNewParamsAlertTypeAccessCustomCertificateExpirationType),
 		Enabled:   cloudflare.F(true),
 		Mechanisms: cloudflare.F(alerting.MechanismParam{
-			"email": []alerting.MechanismItemParam{{
+			Email: cloudflare.F([]alerting.MechanismEmailParam{{
 				ID: cloudflare.F("test@example.com"),
-			}},
-			"pagerduty": []alerting.MechanismItemParam{{
-				ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
-			}},
-			"webhooks": []alerting.MechanismItemParam{{
-				ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
-			}},
+			}}),
+			Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{}}),
+			Webhooks:  cloudflare.F([]alerting.MechanismWebhookParam{{}}),
 		}),
 		Name:          cloudflare.F("SSL Notification Event Policy"),
 		AlertInterval: cloudflare.F("30m"),
@@ -63,6 +59,7 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 			HealthCheckID:                cloudflare.F([]string{"string"}),
 			IncidentImpact:               cloudflare.F([]alerting.PolicyFilterIncidentImpact{alerting.PolicyFilterIncidentImpactIncidentImpactNone}),
 			InputID:                      cloudflare.F([]string{"string"}),
+			InsightClass:                 cloudflare.F([]string{"string"}),
 			Limit:                        cloudflare.F([]string{"string"}),
 			LogoTag:                      cloudflare.F([]string{"string"}),
 			MegabitsPerSecond:            cloudflare.F([]string{"string"}),
@@ -70,7 +67,7 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 			NewStatus:                    cloudflare.F([]string{"string"}),
 			PacketsPerSecond:             cloudflare.F([]string{"string"}),
 			PoolID:                       cloudflare.F([]string{"string"}),
-			POPName:                      cloudflare.F([]string{"string"}),
+			POPNames:                     cloudflare.F([]string{"string"}),
 			Product:                      cloudflare.F([]string{"string"}),
 			ProjectID:                    cloudflare.F([]string{"string"}),
 			Protocol:                     cloudflare.F([]string{"string"}),
@@ -139,6 +136,7 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 				HealthCheckID:                cloudflare.F([]string{"string"}),
 				IncidentImpact:               cloudflare.F([]alerting.PolicyFilterIncidentImpact{alerting.PolicyFilterIncidentImpactIncidentImpactNone}),
 				InputID:                      cloudflare.F([]string{"string"}),
+				InsightClass:                 cloudflare.F([]string{"string"}),
 				Limit:                        cloudflare.F([]string{"string"}),
 				LogoTag:                      cloudflare.F([]string{"string"}),
 				MegabitsPerSecond:            cloudflare.F([]string{"string"}),
@@ -146,7 +144,7 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 				NewStatus:                    cloudflare.F([]string{"string"}),
 				PacketsPerSecond:             cloudflare.F([]string{"string"}),
 				PoolID:                       cloudflare.F([]string{"string"}),
-				POPName:                      cloudflare.F([]string{"string"}),
+				POPNames:                     cloudflare.F([]string{"string"}),
 				Product:                      cloudflare.F([]string{"string"}),
 				ProjectID:                    cloudflare.F([]string{"string"}),
 				Protocol:                     cloudflare.F([]string{"string"}),
@@ -166,15 +164,11 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 				Zones:                        cloudflare.F([]string{"string"}),
 			}),
 			Mechanisms: cloudflare.F(alerting.MechanismParam{
-				"email": []alerting.MechanismItemParam{{
+				Email: cloudflare.F([]alerting.MechanismEmailParam{{
 					ID: cloudflare.F("test@example.com"),
-				}},
-				"pagerduty": []alerting.MechanismItemParam{{
-					ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
-				}},
-				"webhooks": []alerting.MechanismItemParam{{
-					ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
-				}},
+				}}),
+				Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{}}),
+				Webhooks:  cloudflare.F([]alerting.MechanismWebhookParam{{}}),
 			}),
 			Name: cloudflare.F("SSL Notification Event Policy"),
 		},

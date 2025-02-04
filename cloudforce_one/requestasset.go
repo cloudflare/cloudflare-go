@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
@@ -36,9 +37,10 @@ func NewRequestAssetService(opts ...option.RequestOption) (r *RequestAssetServic
 }
 
 // List Request Assets
-func (r *RequestAssetService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestAssetNewParams, opts ...option.RequestOption) (res *[]RequestAssetNewResponse, err error) {
-	var env RequestAssetNewResponseEnvelope
+func (r *RequestAssetService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestAssetNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[RequestAssetNewResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -48,12 +50,21 @@ func (r *RequestAssetService) New(ctx context.Context, accountIdentifier string,
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/asset", accountIdentifier, requestIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, body, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List Request Assets
+func (r *RequestAssetService) NewAutoPaging(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestAssetNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RequestAssetNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, accountIdentifier, requestIdentifier, body, opts...))
 }
 
 // Update a Request Asset
@@ -102,9 +113,10 @@ func (r *RequestAssetService) Delete(ctx context.Context, accountIdentifier stri
 }
 
 // Get a Request Asset
-func (r *RequestAssetService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, assetIdentifer string, opts ...option.RequestOption) (res *[]RequestAssetGetResponse, err error) {
-	var env RequestAssetGetResponseEnvelope
+func (r *RequestAssetService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, assetIdentifer string, opts ...option.RequestOption) (res *pagination.SinglePage[RequestAssetGetResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -118,12 +130,21 @@ func (r *RequestAssetService) Get(ctx context.Context, accountIdentifier string,
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/asset/%s", accountIdentifier, requestIdentifier, assetIdentifer)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get a Request Asset
+func (r *RequestAssetService) GetAutoPaging(ctx context.Context, accountIdentifier string, requestIdentifier string, assetIdentifer string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RequestAssetGetResponse] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, accountIdentifier, requestIdentifier, assetIdentifer, opts...))
 }
 
 type RequestAssetNewResponse struct {
@@ -280,49 +301,6 @@ func (r RequestAssetNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type RequestAssetNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success RequestAssetNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  []RequestAssetNewResponse              `json:"result"`
-	JSON    requestAssetNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// requestAssetNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RequestAssetNewResponseEnvelope]
-type requestAssetNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestAssetNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestAssetNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RequestAssetNewResponseEnvelopeSuccess bool
-
-const (
-	RequestAssetNewResponseEnvelopeSuccessTrue RequestAssetNewResponseEnvelopeSuccess = true
-)
-
-func (r RequestAssetNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RequestAssetNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type RequestAssetUpdateParams struct {
 	// Asset file to upload
 	Source param.Field[string] `json:"source"`
@@ -370,49 +348,6 @@ const (
 func (r RequestAssetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case RequestAssetUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type RequestAssetGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success RequestAssetGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  []RequestAssetGetResponse              `json:"result"`
-	JSON    requestAssetGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// requestAssetGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RequestAssetGetResponseEnvelope]
-type requestAssetGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestAssetGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestAssetGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RequestAssetGetResponseEnvelopeSuccess bool
-
-const (
-	RequestAssetGetResponseEnvelopeSuccessTrue RequestAssetGetResponseEnvelopeSuccess = true
-)
-
-func (r RequestAssetGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RequestAssetGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

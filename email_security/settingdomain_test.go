@@ -29,6 +29,7 @@ func TestSettingDomainListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.EmailSecurity.Settings.Domains.List(context.TODO(), email_security.SettingDomainListParams{
 		AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ActiveDeliveryMode:  cloudflare.F(email_security.SettingDomainListParamsActiveDeliveryModeDirect),
 		AllowedDeliveryMode: cloudflare.F(email_security.SettingDomainListParamsAllowedDeliveryModeDirect),
 		Direction:           cloudflare.F(email_security.SettingDomainListParamsDirectionAsc),
 		Domain:              cloudflare.F([]string{"string"}),

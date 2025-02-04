@@ -206,6 +206,41 @@ type PermissionGrantParam = shared.PermissionGrantParam
 // This is an alias to an internal type.
 type RatePlan = shared.RatePlan
 
+// The ID of the rate plan.
+//
+// This is an alias to an internal type.
+type RatePlanID = shared.RatePlanID
+
+// This is an alias to an internal value.
+const RatePlanIDFree = shared.RatePlanIDFree
+
+// This is an alias to an internal value.
+const RatePlanIDLite = shared.RatePlanIDLite
+
+// This is an alias to an internal value.
+const RatePlanIDPro = shared.RatePlanIDPro
+
+// This is an alias to an internal value.
+const RatePlanIDProPlus = shared.RatePlanIDProPlus
+
+// This is an alias to an internal value.
+const RatePlanIDBusiness = shared.RatePlanIDBusiness
+
+// This is an alias to an internal value.
+const RatePlanIDEnterprise = shared.RatePlanIDEnterprise
+
+// This is an alias to an internal value.
+const RatePlanIDPartnersFree = shared.RatePlanIDPartnersFree
+
+// This is an alias to an internal value.
+const RatePlanIDPartnersPro = shared.RatePlanIDPartnersPro
+
+// This is an alias to an internal value.
+const RatePlanIDPartnersBusiness = shared.RatePlanIDPartnersBusiness
+
+// This is an alias to an internal value.
+const RatePlanIDPartnersEnterprise = shared.RatePlanIDPartnersEnterprise
+
 // The rate plan applied to the subscription.
 //
 // This is an alias to an internal type.

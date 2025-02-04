@@ -321,6 +321,8 @@ func (r BrowserIsolationSettingsParam) MarshalJSON() (data []byte, err error) {
 
 // Custom certificate settings for BYO-PKI. (deprecated and replaced by
 // `certificate`)
+//
+// Deprecated: deprecated
 type CustomCertificateSettings struct {
 	// Enable use of custom certificate authority for signing Gateway traffic.
 	Enabled bool `json:"enabled,required"`
@@ -353,6 +355,8 @@ func (r customCertificateSettingsJSON) RawJSON() string {
 
 // Custom certificate settings for BYO-PKI. (deprecated and replaced by
 // `certificate`)
+//
+// Deprecated: deprecated
 type CustomCertificateSettingsParam struct {
 	// Enable use of custom certificate authority for signing Gateway traffic.
 	Enabled param.Field[bool] `json:"enabled,required"`
@@ -448,6 +452,8 @@ type GatewayConfigurationSettings struct {
 	Certificate GatewayConfigurationSettingsCertificate `json:"certificate"`
 	// Custom certificate settings for BYO-PKI. (deprecated and replaced by
 	// `certificate`)
+	//
+	// Deprecated: deprecated
 	CustomCertificate CustomCertificateSettings `json:"custom_certificate"`
 	// Extended e-mail matching settings.
 	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching"`
@@ -574,6 +580,8 @@ type GatewayConfigurationSettingsParam struct {
 	Certificate param.Field[GatewayConfigurationSettingsCertificateParam] `json:"certificate"`
 	// Custom certificate settings for BYO-PKI. (deprecated and replaced by
 	// `certificate`)
+	//
+	// Deprecated: deprecated
 	CustomCertificate param.Field[CustomCertificateSettingsParam] `json:"custom_certificate"`
 	// Extended e-mail matching settings.
 	ExtendedEmailMatching param.Field[ExtendedEmailMatchingParam] `json:"extended_email_matching"`

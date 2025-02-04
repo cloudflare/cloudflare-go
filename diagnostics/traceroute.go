@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // TracerouteService contains methods and other services that help with interacting
@@ -35,20 +35,30 @@ func NewTracerouteService(opts ...option.RequestOption) (r *TracerouteService) {
 }
 
 // Run traceroutes from Cloudflare colos.
-func (r *TracerouteService) New(ctx context.Context, params TracerouteNewParams, opts ...option.RequestOption) (res *[]Traceroute, err error) {
-	var env TracerouteNewResponseEnvelope
+func (r *TracerouteService) New(ctx context.Context, params TracerouteNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[Traceroute], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/diagnostics/traceroute", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Run traceroutes from Cloudflare colos.
+func (r *TracerouteService) NewAutoPaging(ctx context.Context, params TracerouteNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Traceroute] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, params, opts...))
 }
 
 type Traceroute struct {
@@ -278,80 +288,4 @@ func (r TracerouteNewParamsOptionsPacketType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type TracerouteNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Traceroute          `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    TracerouteNewResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo TracerouteNewResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       tracerouteNewResponseEnvelopeJSON       `json:"-"`
-}
-
-// tracerouteNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TracerouteNewResponseEnvelope]
-type tracerouteNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TracerouteNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tracerouteNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type TracerouteNewResponseEnvelopeSuccess bool
-
-const (
-	TracerouteNewResponseEnvelopeSuccessTrue TracerouteNewResponseEnvelopeSuccess = true
-)
-
-func (r TracerouteNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TracerouteNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type TracerouteNewResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                     `json:"total_count"`
-	JSON       tracerouteNewResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// tracerouteNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [TracerouteNewResponseEnvelopeResultInfo]
-type tracerouteNewResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TracerouteNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tracerouteNewResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

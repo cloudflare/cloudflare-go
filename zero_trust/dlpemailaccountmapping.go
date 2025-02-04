@@ -137,7 +137,7 @@ func (r DLPEmailAccountMappingNewResponseAuthRequirements) AsUnion() DLPEmailAcc
 // [zero_trust.DLPEmailAccountMappingNewResponseAuthRequirementsObject] or
 // [zero_trust.DLPEmailAccountMappingNewResponseAuthRequirementsType].
 type DLPEmailAccountMappingNewResponseAuthRequirementsUnion interface {
-	implementsZeroTrustDLPEmailAccountMappingNewResponseAuthRequirements()
+	implementsDLPEmailAccountMappingNewResponseAuthRequirements()
 }
 
 func init() {
@@ -179,7 +179,7 @@ func (r dlpEmailAccountMappingNewResponseAuthRequirementsObjectJSON) RawJSON() s
 	return r.raw
 }
 
-func (r DLPEmailAccountMappingNewResponseAuthRequirementsObject) implementsZeroTrustDLPEmailAccountMappingNewResponseAuthRequirements() {
+func (r DLPEmailAccountMappingNewResponseAuthRequirementsObject) implementsDLPEmailAccountMappingNewResponseAuthRequirements() {
 }
 
 type DLPEmailAccountMappingNewResponseAuthRequirementsObjectType string
@@ -217,7 +217,7 @@ func (r dlpEmailAccountMappingNewResponseAuthRequirementsTypeJSON) RawJSON() str
 	return r.raw
 }
 
-func (r DLPEmailAccountMappingNewResponseAuthRequirementsType) implementsZeroTrustDLPEmailAccountMappingNewResponseAuthRequirements() {
+func (r DLPEmailAccountMappingNewResponseAuthRequirementsType) implementsDLPEmailAccountMappingNewResponseAuthRequirements() {
 }
 
 type DLPEmailAccountMappingNewResponseAuthRequirementsTypeType string
@@ -301,7 +301,7 @@ func (r DLPEmailAccountMappingGetResponseAuthRequirements) AsUnion() DLPEmailAcc
 // [zero_trust.DLPEmailAccountMappingGetResponseAuthRequirementsObject] or
 // [zero_trust.DLPEmailAccountMappingGetResponseAuthRequirementsType].
 type DLPEmailAccountMappingGetResponseAuthRequirementsUnion interface {
-	implementsZeroTrustDLPEmailAccountMappingGetResponseAuthRequirements()
+	implementsDLPEmailAccountMappingGetResponseAuthRequirements()
 }
 
 func init() {
@@ -343,7 +343,7 @@ func (r dlpEmailAccountMappingGetResponseAuthRequirementsObjectJSON) RawJSON() s
 	return r.raw
 }
 
-func (r DLPEmailAccountMappingGetResponseAuthRequirementsObject) implementsZeroTrustDLPEmailAccountMappingGetResponseAuthRequirements() {
+func (r DLPEmailAccountMappingGetResponseAuthRequirementsObject) implementsDLPEmailAccountMappingGetResponseAuthRequirements() {
 }
 
 type DLPEmailAccountMappingGetResponseAuthRequirementsObjectType string
@@ -381,7 +381,7 @@ func (r dlpEmailAccountMappingGetResponseAuthRequirementsTypeJSON) RawJSON() str
 	return r.raw
 }
 
-func (r DLPEmailAccountMappingGetResponseAuthRequirementsType) implementsZeroTrustDLPEmailAccountMappingGetResponseAuthRequirements() {
+func (r DLPEmailAccountMappingGetResponseAuthRequirementsType) implementsDLPEmailAccountMappingGetResponseAuthRequirements() {
 }
 
 type DLPEmailAccountMappingGetResponseAuthRequirementsTypeType string
@@ -416,14 +416,14 @@ func (r DLPEmailAccountMappingNewParamsAuthRequirements) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPEmailAccountMappingNewParamsAuthRequirements) implementsZeroTrustDLPEmailAccountMappingNewParamsAuthRequirementsUnion() {
+func (r DLPEmailAccountMappingNewParamsAuthRequirements) implementsDLPEmailAccountMappingNewParamsAuthRequirementsUnion() {
 }
 
 // Satisfied by [zero_trust.DLPEmailAccountMappingNewParamsAuthRequirementsObject],
 // [zero_trust.DLPEmailAccountMappingNewParamsAuthRequirementsType],
 // [DLPEmailAccountMappingNewParamsAuthRequirements].
 type DLPEmailAccountMappingNewParamsAuthRequirementsUnion interface {
-	implementsZeroTrustDLPEmailAccountMappingNewParamsAuthRequirementsUnion()
+	implementsDLPEmailAccountMappingNewParamsAuthRequirementsUnion()
 }
 
 type DLPEmailAccountMappingNewParamsAuthRequirementsObject struct {
@@ -435,7 +435,7 @@ func (r DLPEmailAccountMappingNewParamsAuthRequirementsObject) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPEmailAccountMappingNewParamsAuthRequirementsObject) implementsZeroTrustDLPEmailAccountMappingNewParamsAuthRequirementsUnion() {
+func (r DLPEmailAccountMappingNewParamsAuthRequirementsObject) implementsDLPEmailAccountMappingNewParamsAuthRequirementsUnion() {
 }
 
 type DLPEmailAccountMappingNewParamsAuthRequirementsObjectType string
@@ -460,7 +460,7 @@ func (r DLPEmailAccountMappingNewParamsAuthRequirementsType) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPEmailAccountMappingNewParamsAuthRequirementsType) implementsZeroTrustDLPEmailAccountMappingNewParamsAuthRequirementsUnion() {
+func (r DLPEmailAccountMappingNewParamsAuthRequirementsType) implementsDLPEmailAccountMappingNewParamsAuthRequirementsUnion() {
 }
 
 type DLPEmailAccountMappingNewParamsAuthRequirementsTypeType string

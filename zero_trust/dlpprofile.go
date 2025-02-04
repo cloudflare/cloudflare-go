@@ -205,7 +205,7 @@ func (r Profile) AsUnion() ProfileUnion {
 // Union satisfied by [zero_trust.ProfileCustomProfile],
 // [zero_trust.ProfilePredefinedProfile] or [zero_trust.ProfileIntegrationProfile].
 type ProfileUnion interface {
-	implementsZeroTrustProfile()
+	implementsProfile()
 }
 
 func init() {
@@ -276,7 +276,7 @@ func (r profileCustomProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustomProfile) implementsZeroTrustProfile() {}
+func (r ProfileCustomProfile) implementsProfile() {}
 
 type ProfileCustomProfileEntry struct {
 	ID      string                          `json:"id,required" format:"uuid"`
@@ -347,7 +347,7 @@ func (r ProfileCustomProfileEntry) AsUnion() ProfileCustomProfileEntriesUnion {
 // [zero_trust.ProfileCustomProfileEntriesExactDataEntry] or
 // [zero_trust.ProfileCustomProfileEntriesWordListEntry].
 type ProfileCustomProfileEntriesUnion interface {
-	implementsZeroTrustProfileCustomProfileEntry()
+	implementsProfileCustomProfileEntry()
 }
 
 func init() {
@@ -412,7 +412,7 @@ func (r profileCustomProfileEntriesCustomEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustomProfileEntriesCustomEntry) implementsZeroTrustProfileCustomProfileEntry() {}
+func (r ProfileCustomProfileEntriesCustomEntry) implementsProfileCustomProfileEntry() {}
 
 type ProfileCustomProfileEntriesCustomEntryType string
 
@@ -459,7 +459,7 @@ func (r profileCustomProfileEntriesPredefinedEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustomProfileEntriesPredefinedEntry) implementsZeroTrustProfileCustomProfileEntry() {}
+func (r ProfileCustomProfileEntriesPredefinedEntry) implementsProfileCustomProfileEntry() {}
 
 type ProfileCustomProfileEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry can be made more or less sensitive by setting a
@@ -532,7 +532,7 @@ func (r profileCustomProfileEntriesIntegrationEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustomProfileEntriesIntegrationEntry) implementsZeroTrustProfileCustomProfileEntry() {}
+func (r ProfileCustomProfileEntriesIntegrationEntry) implementsProfileCustomProfileEntry() {}
 
 type ProfileCustomProfileEntriesIntegrationEntryType string
 
@@ -581,7 +581,7 @@ func (r profileCustomProfileEntriesExactDataEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustomProfileEntriesExactDataEntry) implementsZeroTrustProfileCustomProfileEntry() {}
+func (r ProfileCustomProfileEntriesExactDataEntry) implementsProfileCustomProfileEntry() {}
 
 type ProfileCustomProfileEntriesExactDataEntryType string
 
@@ -632,7 +632,7 @@ func (r profileCustomProfileEntriesWordListEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustomProfileEntriesWordListEntry) implementsZeroTrustProfileCustomProfileEntry() {}
+func (r ProfileCustomProfileEntriesWordListEntry) implementsProfileCustomProfileEntry() {}
 
 type ProfileCustomProfileEntriesWordListEntryType string
 
@@ -739,7 +739,7 @@ func (r profilePredefinedProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefinedProfile) implementsZeroTrustProfile() {}
+func (r ProfilePredefinedProfile) implementsProfile() {}
 
 type ProfilePredefinedProfileEntry struct {
 	ID      string                              `json:"id,required" format:"uuid"`
@@ -810,7 +810,7 @@ func (r ProfilePredefinedProfileEntry) AsUnion() ProfilePredefinedProfileEntries
 // [zero_trust.ProfilePredefinedProfileEntriesExactDataEntry] or
 // [zero_trust.ProfilePredefinedProfileEntriesWordListEntry].
 type ProfilePredefinedProfileEntriesUnion interface {
-	implementsZeroTrustProfilePredefinedProfileEntry()
+	implementsProfilePredefinedProfileEntry()
 }
 
 func init() {
@@ -875,8 +875,7 @@ func (r profilePredefinedProfileEntriesCustomEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefinedProfileEntriesCustomEntry) implementsZeroTrustProfilePredefinedProfileEntry() {
-}
+func (r ProfilePredefinedProfileEntriesCustomEntry) implementsProfilePredefinedProfileEntry() {}
 
 type ProfilePredefinedProfileEntriesCustomEntryType string
 
@@ -923,8 +922,7 @@ func (r profilePredefinedProfileEntriesPredefinedEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefinedProfileEntriesPredefinedEntry) implementsZeroTrustProfilePredefinedProfileEntry() {
-}
+func (r ProfilePredefinedProfileEntriesPredefinedEntry) implementsProfilePredefinedProfileEntry() {}
 
 type ProfilePredefinedProfileEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry can be made more or less sensitive by setting a
@@ -998,8 +996,7 @@ func (r profilePredefinedProfileEntriesIntegrationEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefinedProfileEntriesIntegrationEntry) implementsZeroTrustProfilePredefinedProfileEntry() {
-}
+func (r ProfilePredefinedProfileEntriesIntegrationEntry) implementsProfilePredefinedProfileEntry() {}
 
 type ProfilePredefinedProfileEntriesIntegrationEntryType string
 
@@ -1048,8 +1045,7 @@ func (r profilePredefinedProfileEntriesExactDataEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefinedProfileEntriesExactDataEntry) implementsZeroTrustProfilePredefinedProfileEntry() {
-}
+func (r ProfilePredefinedProfileEntriesExactDataEntry) implementsProfilePredefinedProfileEntry() {}
 
 type ProfilePredefinedProfileEntriesExactDataEntryType string
 
@@ -1100,8 +1096,7 @@ func (r profilePredefinedProfileEntriesWordListEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefinedProfileEntriesWordListEntry) implementsZeroTrustProfilePredefinedProfileEntry() {
-}
+func (r ProfilePredefinedProfileEntriesWordListEntry) implementsProfilePredefinedProfileEntry() {}
 
 type ProfilePredefinedProfileEntriesWordListEntryType string
 
@@ -1200,7 +1195,7 @@ func (r profileIntegrationProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegrationProfile) implementsZeroTrustProfile() {}
+func (r ProfileIntegrationProfile) implementsProfile() {}
 
 type ProfileIntegrationProfileEntry struct {
 	ID      string                               `json:"id,required" format:"uuid"`
@@ -1271,7 +1266,7 @@ func (r ProfileIntegrationProfileEntry) AsUnion() ProfileIntegrationProfileEntri
 // [zero_trust.ProfileIntegrationProfileEntriesExactDataEntry] or
 // [zero_trust.ProfileIntegrationProfileEntriesWordListEntry].
 type ProfileIntegrationProfileEntriesUnion interface {
-	implementsZeroTrustProfileIntegrationProfileEntry()
+	implementsProfileIntegrationProfileEntry()
 }
 
 func init() {
@@ -1336,8 +1331,7 @@ func (r profileIntegrationProfileEntriesCustomEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegrationProfileEntriesCustomEntry) implementsZeroTrustProfileIntegrationProfileEntry() {
-}
+func (r ProfileIntegrationProfileEntriesCustomEntry) implementsProfileIntegrationProfileEntry() {}
 
 type ProfileIntegrationProfileEntriesCustomEntryType string
 
@@ -1384,8 +1378,7 @@ func (r profileIntegrationProfileEntriesPredefinedEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegrationProfileEntriesPredefinedEntry) implementsZeroTrustProfileIntegrationProfileEntry() {
-}
+func (r ProfileIntegrationProfileEntriesPredefinedEntry) implementsProfileIntegrationProfileEntry() {}
 
 type ProfileIntegrationProfileEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry can be made more or less sensitive by setting a
@@ -1459,7 +1452,7 @@ func (r profileIntegrationProfileEntriesIntegrationEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegrationProfileEntriesIntegrationEntry) implementsZeroTrustProfileIntegrationProfileEntry() {
+func (r ProfileIntegrationProfileEntriesIntegrationEntry) implementsProfileIntegrationProfileEntry() {
 }
 
 type ProfileIntegrationProfileEntriesIntegrationEntryType string
@@ -1509,8 +1502,7 @@ func (r profileIntegrationProfileEntriesExactDataEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegrationProfileEntriesExactDataEntry) implementsZeroTrustProfileIntegrationProfileEntry() {
-}
+func (r ProfileIntegrationProfileEntriesExactDataEntry) implementsProfileIntegrationProfileEntry() {}
 
 type ProfileIntegrationProfileEntriesExactDataEntryType string
 
@@ -1561,8 +1553,7 @@ func (r profileIntegrationProfileEntriesWordListEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegrationProfileEntriesWordListEntry) implementsZeroTrustProfileIntegrationProfileEntry() {
-}
+func (r ProfileIntegrationProfileEntriesWordListEntry) implementsProfileIntegrationProfileEntry() {}
 
 type ProfileIntegrationProfileEntriesWordListEntryType string
 

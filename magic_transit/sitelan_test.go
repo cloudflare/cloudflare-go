@@ -55,6 +55,7 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 					DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
 					DHCPPoolStart: cloudflare.F("192.0.2.1"),
 					DNSServer:     cloudflare.F("192.0.2.1"),
+					DNSServers:    cloudflare.F([]string{"192.0.2.1"}),
 					Reservations: cloudflare.F(map[string]string{
 						"00:11:22:33:44:55": "192.0.2.100",
 						"AA:BB:CC:DD:EE:FF": "192.168.1.101",
@@ -114,6 +115,7 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 					DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
 					DHCPPoolStart: cloudflare.F("192.0.2.1"),
 					DNSServer:     cloudflare.F("192.0.2.1"),
+					DNSServers:    cloudflare.F([]string{"192.0.2.1"}),
 					Reservations: cloudflare.F(map[string]string{
 						"00:11:22:33:44:55": "192.0.2.100",
 						"AA:BB:CC:DD:EE:FF": "192.168.1.101",
@@ -233,6 +235,7 @@ func TestSiteLANEditWithOptionalParams(t *testing.T) {
 					DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
 					DHCPPoolStart: cloudflare.F("192.0.2.1"),
 					DNSServer:     cloudflare.F("192.0.2.1"),
+					DNSServers:    cloudflare.F([]string{"192.0.2.1"}),
 					Reservations: cloudflare.F(map[string]string{
 						"00:11:22:33:44:55": "192.0.2.100",
 						"AA:BB:CC:DD:EE:FF": "192.168.1.101",

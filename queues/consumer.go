@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
@@ -103,9 +104,10 @@ func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID
 }
 
 // Returns the consumers for a Queue
-func (r *ConsumerService) Get(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) (res *[]Consumer, err error) {
-	var env ConsumerGetResponseEnvelope
+func (r *ConsumerService) Get(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Consumer], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -115,12 +117,21 @@ func (r *ConsumerService) Get(ctx context.Context, queueID string, query Consume
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers", query.AccountID, queueID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns the consumers for a Queue
+func (r *ConsumerService) GetAutoPaging(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Consumer] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, queueID, query, opts...))
 }
 
 type Consumer struct {
@@ -176,7 +187,7 @@ func (r Consumer) AsUnion() ConsumerUnion {
 // Union satisfied by [queues.ConsumerMqWorkerConsumer] or
 // [queues.ConsumerMqHTTPConsumer].
 type ConsumerUnion interface {
-	implementsQueuesConsumer()
+	implementsConsumer()
 }
 
 func init() {
@@ -228,7 +239,7 @@ func (r consumerMqWorkerConsumerJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ConsumerMqWorkerConsumer) implementsQueuesConsumer() {}
+func (r ConsumerMqWorkerConsumer) implementsConsumer() {}
 
 type ConsumerMqWorkerConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
@@ -312,7 +323,7 @@ func (r consumerMqHTTPConsumerJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ConsumerMqHTTPConsumer) implementsQueuesConsumer() {}
+func (r ConsumerMqHTTPConsumer) implementsConsumer() {}
 
 type ConsumerMqHTTPConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
@@ -387,12 +398,12 @@ func (r ConsumerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerParam) implementsQueuesConsumerUnionParam() {}
+func (r ConsumerParam) implementsConsumerUnionParam() {}
 
 // Satisfied by [queues.ConsumerMqWorkerConsumerParam],
 // [queues.ConsumerMqHTTPConsumerParam], [ConsumerParam].
 type ConsumerUnionParam interface {
-	implementsQueuesConsumerUnionParam()
+	implementsConsumerUnionParam()
 }
 
 type ConsumerMqWorkerConsumerParam struct {
@@ -406,7 +417,7 @@ func (r ConsumerMqWorkerConsumerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerMqWorkerConsumerParam) implementsQueuesConsumerUnionParam() {}
+func (r ConsumerMqWorkerConsumerParam) implementsConsumerUnionParam() {}
 
 type ConsumerMqWorkerConsumerSettingsParam struct {
 	// The maximum number of messages to include in a batch.
@@ -437,7 +448,7 @@ func (r ConsumerMqHTTPConsumerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerMqHTTPConsumerParam) implementsQueuesConsumerUnionParam() {}
+func (r ConsumerMqHTTPConsumerParam) implementsConsumerUnionParam() {}
 
 type ConsumerMqHTTPConsumerSettingsParam struct {
 	// The maximum number of messages to include in a batch.
@@ -519,12 +530,12 @@ func (r ConsumerNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerNewParamsBody) implementsQueuesConsumerNewParamsBodyUnion() {}
+func (r ConsumerNewParamsBody) implementsConsumerNewParamsBodyUnion() {}
 
 // Satisfied by [queues.ConsumerNewParamsBodyMqWorkerConsumer],
 // [queues.ConsumerNewParamsBodyMqHTTPConsumer], [ConsumerNewParamsBody].
 type ConsumerNewParamsBodyUnion interface {
-	implementsQueuesConsumerNewParamsBodyUnion()
+	implementsConsumerNewParamsBodyUnion()
 }
 
 type ConsumerNewParamsBodyMqWorkerConsumer struct {
@@ -539,7 +550,7 @@ func (r ConsumerNewParamsBodyMqWorkerConsumer) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerNewParamsBodyMqWorkerConsumer) implementsQueuesConsumerNewParamsBodyUnion() {}
+func (r ConsumerNewParamsBodyMqWorkerConsumer) implementsConsumerNewParamsBodyUnion() {}
 
 type ConsumerNewParamsBodyMqWorkerConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
@@ -585,7 +596,7 @@ func (r ConsumerNewParamsBodyMqHTTPConsumer) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerNewParamsBodyMqHTTPConsumer) implementsQueuesConsumerNewParamsBodyUnion() {}
+func (r ConsumerNewParamsBodyMqHTTPConsumer) implementsConsumerNewParamsBodyUnion() {}
 
 type ConsumerNewParamsBodyMqHTTPConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
@@ -698,12 +709,12 @@ func (r ConsumerUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerUpdateParamsBody) implementsQueuesConsumerUpdateParamsBodyUnion() {}
+func (r ConsumerUpdateParamsBody) implementsConsumerUpdateParamsBodyUnion() {}
 
 // Satisfied by [queues.ConsumerUpdateParamsBodyMqWorkerConsumer],
 // [queues.ConsumerUpdateParamsBodyMqHTTPConsumer], [ConsumerUpdateParamsBody].
 type ConsumerUpdateParamsBodyUnion interface {
-	implementsQueuesConsumerUpdateParamsBodyUnion()
+	implementsConsumerUpdateParamsBodyUnion()
 }
 
 type ConsumerUpdateParamsBodyMqWorkerConsumer struct {
@@ -718,7 +729,7 @@ func (r ConsumerUpdateParamsBodyMqWorkerConsumer) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerUpdateParamsBodyMqWorkerConsumer) implementsQueuesConsumerUpdateParamsBodyUnion() {}
+func (r ConsumerUpdateParamsBodyMqWorkerConsumer) implementsConsumerUpdateParamsBodyUnion() {}
 
 type ConsumerUpdateParamsBodyMqWorkerConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
@@ -764,7 +775,7 @@ func (r ConsumerUpdateParamsBodyMqHTTPConsumer) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConsumerUpdateParamsBodyMqHTTPConsumer) implementsQueuesConsumerUpdateParamsBodyUnion() {}
+func (r ConsumerUpdateParamsBodyMqHTTPConsumer) implementsConsumerUpdateParamsBodyUnion() {}
 
 type ConsumerUpdateParamsBodyMqHTTPConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
@@ -863,47 +874,4 @@ type ConsumerDeleteParams struct {
 type ConsumerGetParams struct {
 	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ConsumerGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   []Consumer            `json:"result"`
-	// Indicates if the API call was successful or not.
-	Success ConsumerGetResponseEnvelopeSuccess `json:"success"`
-	JSON    consumerGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// consumerGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ConsumerGetResponseEnvelope]
-type consumerGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Indicates if the API call was successful or not.
-type ConsumerGetResponseEnvelopeSuccess bool
-
-const (
-	ConsumerGetResponseEnvelopeSuccessTrue ConsumerGetResponseEnvelopeSuccess = true
-)
-
-func (r ConsumerGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ConsumerGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

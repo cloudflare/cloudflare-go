@@ -33,7 +33,10 @@ func TestSettingEditWithOptionalParams(t *testing.T) {
 		ZoneDefaults: cloudflare.F(dns.SettingEditParamsZoneDefaults{
 			FlattenAllCNAMEs: cloudflare.F(false),
 			FoundationDNS:    cloudflare.F(false),
-			MultiProvider:    cloudflare.F(false),
+			InternalDNS: cloudflare.F(dns.SettingEditParamsZoneDefaultsInternalDNS{
+				ReferenceZoneID: cloudflare.F("reference_zone_id"),
+			}),
+			MultiProvider: cloudflare.F(false),
 			Nameservers: cloudflare.F(dns.SettingEditParamsZoneDefaultsNameservers{
 				Type: cloudflare.F(dns.SettingEditParamsZoneDefaultsNameserversTypeCloudflareStandard),
 			}),

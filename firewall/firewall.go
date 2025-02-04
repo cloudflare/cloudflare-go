@@ -13,12 +13,20 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewFirewallService] method instead.
 type FirewallService struct {
-	Options     []option.RequestOption
-	Lockdowns   *LockdownService
+	Options   []option.RequestOption
+	Lockdowns *LockdownService
+	// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+	// Engine. See
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+	// for full details.
 	Rules       *RuleService
 	AccessRules *AccessRuleService
 	UARules     *UARuleService
-	WAF         *WAFService
+	// Deprecated: WAF managed rules API is deprecated in favour of using the Ruleset
+	// Engine. See
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#waf-managed-rules-apis-previous-version
+	// for full details.
+	WAF *WAFService
 }
 
 // NewFirewallService generates a new service that applies the given options to

@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // InvestigateReleaseService contains methods and other services that help with
@@ -35,20 +35,30 @@ func NewInvestigateReleaseService(opts ...option.RequestOption) (r *InvestigateR
 }
 
 // Release messages from quarantine
-func (r *InvestigateReleaseService) Bulk(ctx context.Context, params InvestigateReleaseBulkParams, opts ...option.RequestOption) (res *[]InvestigateReleaseBulkResponse, err error) {
-	var env InvestigateReleaseBulkResponseEnvelope
+func (r *InvestigateReleaseService) Bulk(ctx context.Context, params InvestigateReleaseBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateReleaseBulkResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/release", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Release messages from quarantine
+func (r *InvestigateReleaseService) BulkAutoPaging(ctx context.Context, params InvestigateReleaseBulkParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateReleaseBulkResponse] {
+	return pagination.NewSinglePageAutoPager(r.Bulk(ctx, params, opts...))
 }
 
 type InvestigateReleaseBulkResponse struct {
@@ -88,31 +98,4 @@ type InvestigateReleaseBulkParams struct {
 
 func (r InvestigateReleaseBulkParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
-}
-
-type InvestigateReleaseBulkResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                      `json:"errors,required"`
-	Messages []shared.ResponseInfo                      `json:"messages,required"`
-	Result   []InvestigateReleaseBulkResponse           `json:"result,required"`
-	Success  bool                                       `json:"success,required"`
-	JSON     investigateReleaseBulkResponseEnvelopeJSON `json:"-"`
-}
-
-// investigateReleaseBulkResponseEnvelopeJSON contains the JSON metadata for the
-// struct [InvestigateReleaseBulkResponseEnvelope]
-type investigateReleaseBulkResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateReleaseBulkResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateReleaseBulkResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }

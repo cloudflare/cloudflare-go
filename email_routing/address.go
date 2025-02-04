@@ -136,6 +136,8 @@ type Address struct {
 	Modified time.Time `json:"modified" format:"date-time"`
 	// Destination address tag. (Deprecated, replaced by destination address
 	// identifier)
+	//
+	// Deprecated: deprecated
 	Tag string `json:"tag"`
 	// The date and time the destination address has been verified. Null means not
 	// verified yet.

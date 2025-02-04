@@ -378,7 +378,7 @@ func (r IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirection) IsKnown() bool {
 // [magic_transit.IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion interface {
-	ImplementsMagicTransitIPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion()
+	ImplementsIPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion()
 }
 
 func init() {
@@ -430,7 +430,7 @@ func (r ipsecTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarge
 	return r.raw
 }
 
-func (r IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion() {
+func (r IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsIPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion() {
 }
 
 type IPSECTunnelUpdateResponse struct {
@@ -590,7 +590,7 @@ func (r IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckDirection) IsKnow
 // [magic_transit.IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion interface {
-	ImplementsMagicTransitIPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion()
+	ImplementsIPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion()
 }
 
 func init() {
@@ -642,7 +642,7 @@ func (r ipsecTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetMagicHealth
 	return r.raw
 }
 
-func (r IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion() {
+func (r IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsIPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion() {
 }
 
 type IPSECTunnelListResponse struct {
@@ -799,7 +799,7 @@ func (r IPSECTunnelListResponseIPSECTunnelsHealthCheckDirection) IsKnown() bool 
 // [magic_transit.IPSECTunnelListResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type IPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion interface {
-	ImplementsMagicTransitIPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion()
+	ImplementsIPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion()
 }
 
 func init() {
@@ -851,7 +851,7 @@ func (r ipsecTunnelListResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarg
 	return r.raw
 }
 
-func (r IPSECTunnelListResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion() {
+func (r IPSECTunnelListResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsIPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion() {
 }
 
 type IPSECTunnelDeleteResponse struct {
@@ -1010,7 +1010,7 @@ func (r IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckDirection) IsKnown
 // [magic_transit.IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion interface {
-	ImplementsMagicTransitIPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion()
+	ImplementsIPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion()
 }
 
 func init() {
@@ -1062,7 +1062,7 @@ func (r ipsecTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetMagicHealthC
 	return r.raw
 }
 
-func (r IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion() {
+func (r IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsIPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion() {
 }
 
 type IPSECTunnelBulkUpdateResponse struct {
@@ -1222,7 +1222,7 @@ func (r IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirection) I
 // [magic_transit.IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion interface {
-	ImplementsMagicTransitIPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion()
+	ImplementsIPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion()
 }
 
 func init() {
@@ -1274,7 +1274,7 @@ func (r ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicH
 	return r.raw
 }
 
-func (r IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion() {
+func (r IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsIPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion() {
 }
 
 type IPSECTunnelGetResponse struct {
@@ -1431,7 +1431,7 @@ func (r IPSECTunnelGetResponseIPSECTunnelHealthCheckDirection) IsKnown() bool {
 // [magic_transit.IPSECTunnelGetResponseIPSECTunnelHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type IPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion interface {
-	ImplementsMagicTransitIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion()
+	ImplementsIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion()
 }
 
 func init() {
@@ -1483,7 +1483,7 @@ func (r ipsecTunnelGetResponseIPSECTunnelHealthCheckTargetMagicHealthCheckTarget
 	return r.raw
 }
 
-func (r IPSECTunnelGetResponseIPSECTunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion() {
+func (r IPSECTunnelGetResponseIPSECTunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion() {
 }
 
 type IPSECTunnelPSKGenerateResponse struct {
@@ -1600,7 +1600,7 @@ func (r IPSECTunnelNewParamsHealthCheckDirection) IsKnown() bool {
 // [magic_transit.IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget],
 // [shared.UnionString].
 type IPSECTunnelNewParamsHealthCheckTargetUnion interface {
-	ImplementsMagicTransitIPSECTunnelNewParamsHealthCheckTargetUnion()
+	ImplementsIPSECTunnelNewParamsHealthCheckTargetUnion()
 }
 
 // The destination address in a request type health check. After the healthcheck is
@@ -1618,7 +1618,7 @@ func (r IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelNewParamsHealthCheckTargetUnion() {
+func (r IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsIPSECTunnelNewParamsHealthCheckTargetUnion() {
 }
 
 type IPSECTunnelNewResponseEnvelope struct {
@@ -1750,7 +1750,7 @@ func (r IPSECTunnelUpdateParamsHealthCheckDirection) IsKnown() bool {
 // [magic_transit.IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget],
 // [shared.UnionString].
 type IPSECTunnelUpdateParamsHealthCheckTargetUnion interface {
-	ImplementsMagicTransitIPSECTunnelUpdateParamsHealthCheckTargetUnion()
+	ImplementsIPSECTunnelUpdateParamsHealthCheckTargetUnion()
 }
 
 // The destination address in a request type health check. After the healthcheck is
@@ -1768,7 +1768,7 @@ func (r IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelUpdateParamsHealthCheckTargetUnion() {
+func (r IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsIPSECTunnelUpdateParamsHealthCheckTargetUnion() {
 }
 
 type IPSECTunnelUpdateResponseEnvelope struct {

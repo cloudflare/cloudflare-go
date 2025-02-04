@@ -32,8 +32,8 @@ func NewResponseService(opts ...option.RequestOption) (r *ResponseService) {
 	return
 }
 
-// Returns the raw response of the network request. If HTML, a plain text response
-// will be returned.
+// Returns the raw response of the network request. Find the `response_id` in the
+// `data.requests.response.hash`.
 func (r *ResponseService) Get(ctx context.Context, responseID string, query ResponseGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)

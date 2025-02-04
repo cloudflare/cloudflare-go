@@ -298,7 +298,7 @@ func (r PageRuleAction) AsUnion() PageRuleActionsUnion {
 // [zones.RocketLoader], [zones.SecurityLevel], [zones.SortQueryStringForCache],
 // [zones.SSL], [zones.TrueClientIPHeader] or [zones.WAF].
 type PageRuleActionsUnion interface {
-	ImplementsPageRulesPageRuleAction()
+	ImplementsPageRuleAction()
 }
 
 func init() {
@@ -506,7 +506,7 @@ func (r pageRuleActionsBypassCacheOnCookieJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsBypassCacheOnCookie) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsBypassCacheOnCookie) ImplementsPageRuleAction() {}
 
 // Bypass cache and fetch resources from the origin server if a regular expression
 // matches against a cookie name present in the request.
@@ -549,7 +549,7 @@ func (r pageRuleActionsCacheByDeviceTypeJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsCacheByDeviceType) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsCacheByDeviceType) ImplementsPageRuleAction() {}
 
 // Separate cached content based on the visitor's device type.
 type PageRuleActionsCacheByDeviceTypeID string
@@ -609,7 +609,7 @@ func (r pageRuleActionsCacheDeceptionArmorJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsCacheDeceptionArmor) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsCacheDeceptionArmor) ImplementsPageRuleAction() {}
 
 // Protect from web cache deception attacks while still allowing static assets to
 // be cached. This setting verifies that the URL's extension matches the returned
@@ -670,7 +670,7 @@ func (r pageRuleActionsCacheKeyFieldsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsCacheKeyFields) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsCacheKeyFields) ImplementsPageRuleAction() {}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
@@ -839,7 +839,7 @@ func (r pageRuleActionsCacheKeyFieldsValueQueryStringJSON) RawJSON() string {
 // [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString] or
 // [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray].
 type PageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion interface {
-	implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion()
+	implementsPageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion()
 }
 
 func init() {
@@ -872,12 +872,12 @@ func (r PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString) IsKnown() bo
 	return false
 }
 
-func (r PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
+func (r PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 type PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray []string
 
-func (r PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
+func (r PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
@@ -886,7 +886,7 @@ func (r PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPag
 // [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString] or
 // [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringIncludeArray].
 type PageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion interface {
-	implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion()
+	implementsPageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion()
 }
 
 func init() {
@@ -919,12 +919,12 @@ func (r PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString) IsKnown() bo
 	return false
 }
 
-func (r PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
+func (r PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 type PageRuleActionsCacheKeyFieldsValueQueryStringIncludeArray []string
 
-func (r PageRuleActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
+func (r PageRuleActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
@@ -984,7 +984,7 @@ func (r pageRuleActionsCacheOnCookieJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsCacheOnCookie) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsCacheOnCookie) ImplementsPageRuleAction() {}
 
 // Apply the Cache Everything option (Cache Level setting) based on a regular
 // expression match against a cookie name.
@@ -1045,7 +1045,7 @@ func (r pageRuleActionsCacheTTLByStatusJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsCacheTTLByStatus) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsCacheTTLByStatus) ImplementsPageRuleAction() {}
 
 // Enterprise customers can set cache time-to-live (TTL) based on the response
 // status from the origin web server. Cache TTL refers to the duration of a
@@ -1075,7 +1075,7 @@ func (r PageRuleActionsCacheTTLByStatusID) IsKnown() bool {
 // Union satisfied by [page_rules.PageRuleActionsCacheTTLByStatusValueString] or
 // [shared.UnionInt].
 type PageRuleActionsCacheTTLByStatusValueUnion interface {
-	ImplementsPageRulesPageRuleActionsCacheTTLByStatusValueUnion()
+	ImplementsPageRuleActionsCacheTTLByStatusValueUnion()
 }
 
 func init() {
@@ -1109,7 +1109,7 @@ func (r PageRuleActionsCacheTTLByStatusValueString) IsKnown() bool {
 	return false
 }
 
-func (r PageRuleActionsCacheTTLByStatusValueString) ImplementsPageRulesPageRuleActionsCacheTTLByStatusValueUnion() {
+func (r PageRuleActionsCacheTTLByStatusValueString) ImplementsPageRuleActionsCacheTTLByStatusValueUnion() {
 }
 
 type PageRuleActionsDisableApps struct {
@@ -1136,7 +1136,7 @@ func (r pageRuleActionsDisableAppsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsDisableApps) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsDisableApps) ImplementsPageRuleAction() {}
 
 // Turn off all active
 // [Cloudflare Apps](https://developers.cloudflare.com/support/more-dashboard-apps/cloudflare-apps/)
@@ -1180,7 +1180,7 @@ func (r pageRuleActionsDisablePerformanceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsDisablePerformance) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsDisablePerformance) ImplementsPageRuleAction() {}
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
@@ -1228,7 +1228,7 @@ func (r pageRuleActionsDisableSecurityJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsDisableSecurity) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsDisableSecurity) ImplementsPageRuleAction() {}
 
 // Turn off
 // [Email Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/),
@@ -1273,7 +1273,7 @@ func (r pageRuleActionsDisableZarazJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsDisableZaraz) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsDisableZaraz) ImplementsPageRuleAction() {}
 
 // Turn off [Zaraz](https://developers.cloudflare.com/zaraz/).
 type PageRuleActionsDisableZarazID string
@@ -1315,7 +1315,7 @@ func (r pageRuleActionsEdgeCacheTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsEdgeCacheTTL) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsEdgeCacheTTL) ImplementsPageRuleAction() {}
 
 // Specify how long to cache a resource in the Cloudflare global network. _Edge
 // Cache TTL_ is not visible in response headers.
@@ -1359,7 +1359,7 @@ func (r pageRuleActionsExplicitCacheControlJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsExplicitCacheControl) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsExplicitCacheControl) ImplementsPageRuleAction() {}
 
 // Origin Cache Control is enabled by default for Free, Pro, and Business domains
 // and disabled by default for Enterprise domains.
@@ -1418,7 +1418,7 @@ func (r pageRuleActionsForwardingURLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsForwardingURL) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsForwardingURL) ImplementsPageRuleAction() {}
 
 // Redirects one URL to another using an `HTTP 301/302` redirect. Refer to
 // [Wildcard matching and referencing](https://developers.cloudflare.com/rules/page-rules/reference/wildcard-matching/).
@@ -1505,7 +1505,7 @@ func (r pageRuleActionsHostHeaderOverrideJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsHostHeaderOverride) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsHostHeaderOverride) ImplementsPageRuleAction() {}
 
 // Apply a specific host header.
 type PageRuleActionsHostHeaderOverrideID string
@@ -1547,7 +1547,7 @@ func (r pageRuleActionsResolveOverrideJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsResolveOverride) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsResolveOverride) ImplementsPageRuleAction() {}
 
 // Change the origin address to the value specified in this setting.
 type PageRuleActionsResolveOverrideID string
@@ -1590,7 +1590,7 @@ func (r pageRuleActionsRespectStrongEtagJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsRespectStrongEtag) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsRespectStrongEtag) ImplementsPageRuleAction() {}
 
 // Turn on or off byte-for-byte equivalency checks between the Cloudflare cache and
 // the origin server.
@@ -1855,7 +1855,7 @@ func (r PageRuleNewParamsAction) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsAction) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PageRuleNewParamsAction) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Satisfied by [zones.AlwaysUseHTTPSParam], [zones.AutomaticHTTPSRewritesParam],
 // [zones.BrowserCacheTTLParam], [zones.BrowserCheckParam],
@@ -1883,7 +1883,7 @@ func (r PageRuleNewParamsAction) ImplementsPageRulesPageRuleNewParamsActionUnion
 // [zones.SSLParam], [zones.TrueClientIPHeaderParam], [zones.WAFParam],
 // [PageRuleNewParamsAction].
 type PageRuleNewParamsActionUnion interface {
-	ImplementsPageRulesPageRuleNewParamsActionUnion()
+	ImplementsPageRuleNewParamsActionUnion()
 }
 
 type PageRuleNewParamsActionsBypassCacheOnCookie struct {
@@ -1900,8 +1900,7 @@ func (r PageRuleNewParamsActionsBypassCacheOnCookie) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsBypassCacheOnCookie) ImplementsPageRulesPageRuleNewParamsActionUnion() {
-}
+func (r PageRuleNewParamsActionsBypassCacheOnCookie) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Bypass cache and fetch resources from the origin server if a regular expression
 // matches against a cookie name present in the request.
@@ -1930,8 +1929,7 @@ func (r PageRuleNewParamsActionsCacheByDeviceType) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsCacheByDeviceType) ImplementsPageRulesPageRuleNewParamsActionUnion() {
-}
+func (r PageRuleNewParamsActionsCacheByDeviceType) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Separate cached content based on the visitor's device type.
 type PageRuleNewParamsActionsCacheByDeviceTypeID string
@@ -1977,8 +1975,7 @@ func (r PageRuleNewParamsActionsCacheDeceptionArmor) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsCacheDeceptionArmor) ImplementsPageRulesPageRuleNewParamsActionUnion() {
-}
+func (r PageRuleNewParamsActionsCacheDeceptionArmor) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Protect from web cache deception attacks while still allowing static assets to
 // be cached. This setting verifies that the URL's extension matches the returned
@@ -2025,7 +2022,7 @@ func (r PageRuleNewParamsActionsCacheKeyFields) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsCacheKeyFields) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsCacheKeyFields) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
@@ -2121,7 +2118,7 @@ func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryString) MarshalJSON() (d
 // [page_rules.PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeString],
 // [page_rules.PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeArray].
 type PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion interface {
-	implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion()
+	implementsPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion()
 }
 
 // Ignore all query string parameters.
@@ -2139,12 +2136,12 @@ func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeString) IsK
 	return false
 }
 
-func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 type PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeArray []string
 
-func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
@@ -2153,7 +2150,7 @@ func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) impl
 // [page_rules.PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeString],
 // [page_rules.PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeArray].
 type PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion interface {
-	implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion()
+	implementsPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion()
 }
 
 // Include all query string parameters.
@@ -2171,12 +2168,12 @@ func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeString) IsK
 	return false
 }
 
-func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 type PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeArray []string
 
-func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
@@ -2207,7 +2204,7 @@ func (r PageRuleNewParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsCacheOnCookie) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsCacheOnCookie) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Apply the Cache Everything option (Cache Level setting) based on a regular
 // expression match against a cookie name.
@@ -2254,7 +2251,7 @@ func (r PageRuleNewParamsActionsCacheTTLByStatus) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsCacheTTLByStatus) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsCacheTTLByStatus) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Enterprise customers can set cache time-to-live (TTL) based on the response
 // status from the origin web server. Cache TTL refers to the duration of a
@@ -2284,7 +2281,7 @@ func (r PageRuleNewParamsActionsCacheTTLByStatusID) IsKnown() bool {
 // Satisfied by [page_rules.PageRuleNewParamsActionsCacheTTLByStatusValueString],
 // [shared.UnionInt].
 type PageRuleNewParamsActionsCacheTTLByStatusValueUnion interface {
-	ImplementsPageRulesPageRuleNewParamsActionsCacheTTLByStatusValueUnion()
+	ImplementsPageRuleNewParamsActionsCacheTTLByStatusValueUnion()
 }
 
 // `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
@@ -2303,7 +2300,7 @@ func (r PageRuleNewParamsActionsCacheTTLByStatusValueString) IsKnown() bool {
 	return false
 }
 
-func (r PageRuleNewParamsActionsCacheTTLByStatusValueString) ImplementsPageRulesPageRuleNewParamsActionsCacheTTLByStatusValueUnion() {
+func (r PageRuleNewParamsActionsCacheTTLByStatusValueString) ImplementsPageRuleNewParamsActionsCacheTTLByStatusValueUnion() {
 }
 
 type PageRuleNewParamsActionsDisableApps struct {
@@ -2317,7 +2314,7 @@ func (r PageRuleNewParamsActionsDisableApps) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsDisableApps) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsDisableApps) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Turn off all active
 // [Cloudflare Apps](https://developers.cloudflare.com/support/more-dashboard-apps/cloudflare-apps/)
@@ -2348,8 +2345,7 @@ func (r PageRuleNewParamsActionsDisablePerformance) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsDisablePerformance) ImplementsPageRulesPageRuleNewParamsActionUnion() {
-}
+func (r PageRuleNewParamsActionsDisablePerformance) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
@@ -2384,7 +2380,7 @@ func (r PageRuleNewParamsActionsDisableSecurity) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsDisableSecurity) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsDisableSecurity) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Turn off
 // [Email Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/),
@@ -2416,7 +2412,7 @@ func (r PageRuleNewParamsActionsDisableZaraz) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsDisableZaraz) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsDisableZaraz) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Turn off [Zaraz](https://developers.cloudflare.com/zaraz/).
 type PageRuleNewParamsActionsDisableZarazID string
@@ -2444,7 +2440,7 @@ func (r PageRuleNewParamsActionsEdgeCacheTTL) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsEdgeCacheTTL) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsEdgeCacheTTL) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Specify how long to cache a resource in the Cloudflare global network. _Edge
 // Cache TTL_ is not visible in response headers.
@@ -2474,8 +2470,7 @@ func (r PageRuleNewParamsActionsExplicitCacheControl) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsExplicitCacheControl) ImplementsPageRulesPageRuleNewParamsActionUnion() {
-}
+func (r PageRuleNewParamsActionsExplicitCacheControl) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Origin Cache Control is enabled by default for Free, Pro, and Business domains
 // and disabled by default for Enterprise domains.
@@ -2520,7 +2515,7 @@ func (r PageRuleNewParamsActionsForwardingURL) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsForwardingURL) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsForwardingURL) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Redirects one URL to another using an `HTTP 301/302` redirect. Refer to
 // [Wildcard matching and referencing](https://developers.cloudflare.com/rules/page-rules/reference/wildcard-matching/).
@@ -2579,8 +2574,7 @@ func (r PageRuleNewParamsActionsHostHeaderOverride) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsHostHeaderOverride) ImplementsPageRulesPageRuleNewParamsActionUnion() {
-}
+func (r PageRuleNewParamsActionsHostHeaderOverride) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Apply a specific host header.
 type PageRuleNewParamsActionsHostHeaderOverrideID string
@@ -2608,7 +2602,7 @@ func (r PageRuleNewParamsActionsResolveOverride) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsResolveOverride) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsResolveOverride) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Change the origin address to the value specified in this setting.
 type PageRuleNewParamsActionsResolveOverrideID string
@@ -2637,8 +2631,7 @@ func (r PageRuleNewParamsActionsRespectStrongEtag) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsRespectStrongEtag) ImplementsPageRulesPageRuleNewParamsActionUnion() {
-}
+func (r PageRuleNewParamsActionsRespectStrongEtag) ImplementsPageRuleNewParamsActionUnion() {}
 
 // Turn on or off byte-for-byte equivalency checks between the Cloudflare cache and
 // the origin server.
@@ -2813,7 +2806,7 @@ func (r PageRuleUpdateParamsAction) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsAction) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r PageRuleUpdateParamsAction) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Satisfied by [zones.AlwaysUseHTTPSParam], [zones.AutomaticHTTPSRewritesParam],
 // [zones.BrowserCacheTTLParam], [zones.BrowserCheckParam],
@@ -2841,7 +2834,7 @@ func (r PageRuleUpdateParamsAction) ImplementsPageRulesPageRuleUpdateParamsActio
 // [zones.SSLParam], [zones.TrueClientIPHeaderParam], [zones.WAFParam],
 // [PageRuleUpdateParamsAction].
 type PageRuleUpdateParamsActionUnion interface {
-	ImplementsPageRulesPageRuleUpdateParamsActionUnion()
+	ImplementsPageRuleUpdateParamsActionUnion()
 }
 
 type PageRuleUpdateParamsActionsBypassCacheOnCookie struct {
@@ -2858,8 +2851,7 @@ func (r PageRuleUpdateParamsActionsBypassCacheOnCookie) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsBypassCacheOnCookie) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsBypassCacheOnCookie) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Bypass cache and fetch resources from the origin server if a regular expression
 // matches against a cookie name present in the request.
@@ -2888,8 +2880,7 @@ func (r PageRuleUpdateParamsActionsCacheByDeviceType) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsCacheByDeviceType) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsCacheByDeviceType) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Separate cached content based on the visitor's device type.
 type PageRuleUpdateParamsActionsCacheByDeviceTypeID string
@@ -2935,8 +2926,7 @@ func (r PageRuleUpdateParamsActionsCacheDeceptionArmor) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsCacheDeceptionArmor) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsCacheDeceptionArmor) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Protect from web cache deception attacks while still allowing static assets to
 // be cached. This setting verifies that the URL's extension matches the returned
@@ -2983,8 +2973,7 @@ func (r PageRuleUpdateParamsActionsCacheKeyFields) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsCacheKeyFields) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsCacheKeyFields) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
@@ -3080,7 +3069,7 @@ func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryString) MarshalJSON()
 // [page_rules.PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeString],
 // [page_rules.PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeArray].
 type PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion interface {
-	implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion()
+	implementsPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion()
 }
 
 // Ignore all query string parameters.
@@ -3098,12 +3087,12 @@ func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeString) 
 	return false
 }
 
-func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 type PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeArray []string
 
-func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
@@ -3112,7 +3101,7 @@ func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) i
 // [page_rules.PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeString],
 // [page_rules.PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeArray].
 type PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion interface {
-	implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion()
+	implementsPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion()
 }
 
 // Include all query string parameters.
@@ -3130,12 +3119,12 @@ func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeString) 
 	return false
 }
 
-func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 type PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeArray []string
 
-func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
@@ -3166,8 +3155,7 @@ func (r PageRuleUpdateParamsActionsCacheOnCookie) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsCacheOnCookie) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsCacheOnCookie) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Apply the Cache Everything option (Cache Level setting) based on a regular
 // expression match against a cookie name.
@@ -3214,8 +3202,7 @@ func (r PageRuleUpdateParamsActionsCacheTTLByStatus) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsCacheTTLByStatus) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsCacheTTLByStatus) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Enterprise customers can set cache time-to-live (TTL) based on the response
 // status from the origin web server. Cache TTL refers to the duration of a
@@ -3246,7 +3233,7 @@ func (r PageRuleUpdateParamsActionsCacheTTLByStatusID) IsKnown() bool {
 // [page_rules.PageRuleUpdateParamsActionsCacheTTLByStatusValueString],
 // [shared.UnionInt].
 type PageRuleUpdateParamsActionsCacheTTLByStatusValueUnion interface {
-	ImplementsPageRulesPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion()
+	ImplementsPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion()
 }
 
 // `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
@@ -3265,7 +3252,7 @@ func (r PageRuleUpdateParamsActionsCacheTTLByStatusValueString) IsKnown() bool {
 	return false
 }
 
-func (r PageRuleUpdateParamsActionsCacheTTLByStatusValueString) ImplementsPageRulesPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion() {
+func (r PageRuleUpdateParamsActionsCacheTTLByStatusValueString) ImplementsPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion() {
 }
 
 type PageRuleUpdateParamsActionsDisableApps struct {
@@ -3279,8 +3266,7 @@ func (r PageRuleUpdateParamsActionsDisableApps) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsDisableApps) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsDisableApps) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Turn off all active
 // [Cloudflare Apps](https://developers.cloudflare.com/support/more-dashboard-apps/cloudflare-apps/)
@@ -3311,8 +3297,7 @@ func (r PageRuleUpdateParamsActionsDisablePerformance) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsDisablePerformance) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsDisablePerformance) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
@@ -3347,8 +3332,7 @@ func (r PageRuleUpdateParamsActionsDisableSecurity) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsDisableSecurity) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsDisableSecurity) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Turn off
 // [Email Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/),
@@ -3380,8 +3364,7 @@ func (r PageRuleUpdateParamsActionsDisableZaraz) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsDisableZaraz) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsDisableZaraz) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Turn off [Zaraz](https://developers.cloudflare.com/zaraz/).
 type PageRuleUpdateParamsActionsDisableZarazID string
@@ -3409,8 +3392,7 @@ func (r PageRuleUpdateParamsActionsEdgeCacheTTL) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsEdgeCacheTTL) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsEdgeCacheTTL) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Specify how long to cache a resource in the Cloudflare global network. _Edge
 // Cache TTL_ is not visible in response headers.
@@ -3440,7 +3422,7 @@ func (r PageRuleUpdateParamsActionsExplicitCacheControl) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsExplicitCacheControl) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsExplicitCacheControl) ImplementsPageRuleUpdateParamsActionUnion() {
 }
 
 // Origin Cache Control is enabled by default for Free, Pro, and Business domains
@@ -3486,8 +3468,7 @@ func (r PageRuleUpdateParamsActionsForwardingURL) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsForwardingURL) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsForwardingURL) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Redirects one URL to another using an `HTTP 301/302` redirect. Refer to
 // [Wildcard matching and referencing](https://developers.cloudflare.com/rules/page-rules/reference/wildcard-matching/).
@@ -3546,8 +3527,7 @@ func (r PageRuleUpdateParamsActionsHostHeaderOverride) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsHostHeaderOverride) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsHostHeaderOverride) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Apply a specific host header.
 type PageRuleUpdateParamsActionsHostHeaderOverrideID string
@@ -3575,8 +3555,7 @@ func (r PageRuleUpdateParamsActionsResolveOverride) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsResolveOverride) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsResolveOverride) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Change the origin address to the value specified in this setting.
 type PageRuleUpdateParamsActionsResolveOverrideID string
@@ -3605,8 +3584,7 @@ func (r PageRuleUpdateParamsActionsRespectStrongEtag) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsRespectStrongEtag) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
-}
+func (r PageRuleUpdateParamsActionsRespectStrongEtag) ImplementsPageRuleUpdateParamsActionUnion() {}
 
 // Turn on or off byte-for-byte equivalency checks between the Cloudflare cache and
 // the origin server.
@@ -3959,7 +3937,7 @@ func (r PageRuleEditParamsAction) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsAction) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r PageRuleEditParamsAction) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Satisfied by [zones.AlwaysUseHTTPSParam], [zones.AutomaticHTTPSRewritesParam],
 // [zones.BrowserCacheTTLParam], [zones.BrowserCheckParam],
@@ -3987,7 +3965,7 @@ func (r PageRuleEditParamsAction) ImplementsPageRulesPageRuleEditParamsActionUni
 // [zones.SSLParam], [zones.TrueClientIPHeaderParam], [zones.WAFParam],
 // [PageRuleEditParamsAction].
 type PageRuleEditParamsActionUnion interface {
-	ImplementsPageRulesPageRuleEditParamsActionUnion()
+	ImplementsPageRuleEditParamsActionUnion()
 }
 
 type PageRuleEditParamsActionsBypassCacheOnCookie struct {
@@ -4004,8 +3982,7 @@ func (r PageRuleEditParamsActionsBypassCacheOnCookie) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsBypassCacheOnCookie) ImplementsPageRulesPageRuleEditParamsActionUnion() {
-}
+func (r PageRuleEditParamsActionsBypassCacheOnCookie) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Bypass cache and fetch resources from the origin server if a regular expression
 // matches against a cookie name present in the request.
@@ -4034,8 +4011,7 @@ func (r PageRuleEditParamsActionsCacheByDeviceType) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsCacheByDeviceType) ImplementsPageRulesPageRuleEditParamsActionUnion() {
-}
+func (r PageRuleEditParamsActionsCacheByDeviceType) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Separate cached content based on the visitor's device type.
 type PageRuleEditParamsActionsCacheByDeviceTypeID string
@@ -4081,8 +4057,7 @@ func (r PageRuleEditParamsActionsCacheDeceptionArmor) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsCacheDeceptionArmor) ImplementsPageRulesPageRuleEditParamsActionUnion() {
-}
+func (r PageRuleEditParamsActionsCacheDeceptionArmor) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Protect from web cache deception attacks while still allowing static assets to
 // be cached. This setting verifies that the URL's extension matches the returned
@@ -4129,7 +4104,7 @@ func (r PageRuleEditParamsActionsCacheKeyFields) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsCacheKeyFields) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsCacheKeyFields) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
@@ -4225,7 +4200,7 @@ func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryString) MarshalJSON() (
 // [page_rules.PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeString],
 // [page_rules.PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeArray].
 type PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion interface {
-	implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion()
+	implementsPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion()
 }
 
 // Ignore all query string parameters.
@@ -4243,12 +4218,12 @@ func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeString) Is
 	return false
 }
 
-func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 type PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeArray []string
 
-func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
@@ -4257,7 +4232,7 @@ func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) imp
 // [page_rules.PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeString],
 // [page_rules.PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeArray].
 type PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion interface {
-	implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion()
+	implementsPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion()
 }
 
 // Include all query string parameters.
@@ -4275,12 +4250,12 @@ func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeString) Is
 	return false
 }
 
-func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 type PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeArray []string
 
-func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
@@ -4311,7 +4286,7 @@ func (r PageRuleEditParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsCacheOnCookie) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsCacheOnCookie) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Apply the Cache Everything option (Cache Level setting) based on a regular
 // expression match against a cookie name.
@@ -4358,8 +4333,7 @@ func (r PageRuleEditParamsActionsCacheTTLByStatus) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsCacheTTLByStatus) ImplementsPageRulesPageRuleEditParamsActionUnion() {
-}
+func (r PageRuleEditParamsActionsCacheTTLByStatus) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Enterprise customers can set cache time-to-live (TTL) based on the response
 // status from the origin web server. Cache TTL refers to the duration of a
@@ -4389,7 +4363,7 @@ func (r PageRuleEditParamsActionsCacheTTLByStatusID) IsKnown() bool {
 // Satisfied by [page_rules.PageRuleEditParamsActionsCacheTTLByStatusValueString],
 // [shared.UnionInt].
 type PageRuleEditParamsActionsCacheTTLByStatusValueUnion interface {
-	ImplementsPageRulesPageRuleEditParamsActionsCacheTTLByStatusValueUnion()
+	ImplementsPageRuleEditParamsActionsCacheTTLByStatusValueUnion()
 }
 
 // `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
@@ -4408,7 +4382,7 @@ func (r PageRuleEditParamsActionsCacheTTLByStatusValueString) IsKnown() bool {
 	return false
 }
 
-func (r PageRuleEditParamsActionsCacheTTLByStatusValueString) ImplementsPageRulesPageRuleEditParamsActionsCacheTTLByStatusValueUnion() {
+func (r PageRuleEditParamsActionsCacheTTLByStatusValueString) ImplementsPageRuleEditParamsActionsCacheTTLByStatusValueUnion() {
 }
 
 type PageRuleEditParamsActionsDisableApps struct {
@@ -4422,7 +4396,7 @@ func (r PageRuleEditParamsActionsDisableApps) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsDisableApps) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsDisableApps) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Turn off all active
 // [Cloudflare Apps](https://developers.cloudflare.com/support/more-dashboard-apps/cloudflare-apps/)
@@ -4453,8 +4427,7 @@ func (r PageRuleEditParamsActionsDisablePerformance) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsDisablePerformance) ImplementsPageRulesPageRuleEditParamsActionUnion() {
-}
+func (r PageRuleEditParamsActionsDisablePerformance) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
@@ -4489,8 +4462,7 @@ func (r PageRuleEditParamsActionsDisableSecurity) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsDisableSecurity) ImplementsPageRulesPageRuleEditParamsActionUnion() {
-}
+func (r PageRuleEditParamsActionsDisableSecurity) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Turn off
 // [Email Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/),
@@ -4522,7 +4494,7 @@ func (r PageRuleEditParamsActionsDisableZaraz) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsDisableZaraz) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsDisableZaraz) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Turn off [Zaraz](https://developers.cloudflare.com/zaraz/).
 type PageRuleEditParamsActionsDisableZarazID string
@@ -4550,7 +4522,7 @@ func (r PageRuleEditParamsActionsEdgeCacheTTL) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsEdgeCacheTTL) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsEdgeCacheTTL) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Specify how long to cache a resource in the Cloudflare global network. _Edge
 // Cache TTL_ is not visible in response headers.
@@ -4580,8 +4552,7 @@ func (r PageRuleEditParamsActionsExplicitCacheControl) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsExplicitCacheControl) ImplementsPageRulesPageRuleEditParamsActionUnion() {
-}
+func (r PageRuleEditParamsActionsExplicitCacheControl) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Origin Cache Control is enabled by default for Free, Pro, and Business domains
 // and disabled by default for Enterprise domains.
@@ -4626,7 +4597,7 @@ func (r PageRuleEditParamsActionsForwardingURL) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsForwardingURL) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsForwardingURL) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Redirects one URL to another using an `HTTP 301/302` redirect. Refer to
 // [Wildcard matching and referencing](https://developers.cloudflare.com/rules/page-rules/reference/wildcard-matching/).
@@ -4685,8 +4656,7 @@ func (r PageRuleEditParamsActionsHostHeaderOverride) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsHostHeaderOverride) ImplementsPageRulesPageRuleEditParamsActionUnion() {
-}
+func (r PageRuleEditParamsActionsHostHeaderOverride) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Apply a specific host header.
 type PageRuleEditParamsActionsHostHeaderOverrideID string
@@ -4714,8 +4684,7 @@ func (r PageRuleEditParamsActionsResolveOverride) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsResolveOverride) ImplementsPageRulesPageRuleEditParamsActionUnion() {
-}
+func (r PageRuleEditParamsActionsResolveOverride) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Change the origin address to the value specified in this setting.
 type PageRuleEditParamsActionsResolveOverrideID string
@@ -4744,8 +4713,7 @@ func (r PageRuleEditParamsActionsRespectStrongEtag) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsRespectStrongEtag) ImplementsPageRulesPageRuleEditParamsActionUnion() {
-}
+func (r PageRuleEditParamsActionsRespectStrongEtag) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Turn on or off byte-for-byte equivalency checks between the Cloudflare cache and
 // the origin server.

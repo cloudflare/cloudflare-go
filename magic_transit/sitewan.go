@@ -36,9 +36,10 @@ func NewSiteWANService(opts ...option.RequestOption) (r *SiteWANService) {
 }
 
 // Creates a new Site WAN.
-func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANNewParams, opts ...option.RequestOption) (res *[]WAN, err error) {
-	var env SiteWANNewResponseEnvelope
+func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[WAN], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -48,12 +49,21 @@ func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANN
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans", params.AccountID, siteID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Creates a new Site WAN.
+func (r *SiteWANService) NewAutoPaging(ctx context.Context, siteID string, params SiteWANNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WAN] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, siteID, params, opts...))
 }
 
 // Update a specific Site WAN.
@@ -307,49 +317,6 @@ type SiteWANNewParams struct {
 
 func (r SiteWANNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type SiteWANNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []WAN                 `json:"result,required"`
-	// Whether the API call was successful
-	Success SiteWANNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteWANNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// siteWANNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SiteWANNewResponseEnvelope]
-type siteWANNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteWANNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteWANNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SiteWANNewResponseEnvelopeSuccess bool
-
-const (
-	SiteWANNewResponseEnvelopeSuccessTrue SiteWANNewResponseEnvelopeSuccess = true
-)
-
-func (r SiteWANNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SiteWANNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type SiteWANUpdateParams struct {

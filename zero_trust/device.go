@@ -230,8 +230,9 @@ type DeviceGetResponse struct {
 	// When the device was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// True if the device was deleted.
-	Deleted         bool   `json:"deleted"`
-	DeviceType      string `json:"device_type"`
+	Deleted    bool   `json:"deleted"`
+	DeviceType string `json:"device_type"`
+	// Deprecated: deprecated
 	GatewayDeviceID string `json:"gateway_device_id"`
 	// IPv4 or IPv6 address.
 	IP string `json:"ip"`
@@ -296,7 +297,9 @@ func (r deviceGetResponseJSON) RawJSON() string {
 }
 
 type DeviceGetResponseAccount struct {
-	ID          string `json:"id"`
+	// Deprecated: deprecated
+	ID string `json:"id"`
+	// Deprecated: deprecated
 	AccountType string `json:"account_type"`
 	// The name of the enrolled account.
 	Name string                       `json:"name"`

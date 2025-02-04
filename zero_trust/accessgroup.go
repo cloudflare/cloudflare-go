@@ -39,7 +39,7 @@ func NewAccessGroupService(opts ...option.RequestOption) (r *AccessGroupService)
 }
 
 // Creates a new Access group.
-func (r *AccessGroupService) New(ctx context.Context, params AccessGroupNewParams, opts ...option.RequestOption) (res *ZeroTrustGroup, err error) {
+func (r *AccessGroupService) New(ctx context.Context, params AccessGroupNewParams, opts ...option.RequestOption) (res *AccessGroupNewResponse, err error) {
 	var env AccessGroupNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -70,7 +70,7 @@ func (r *AccessGroupService) New(ctx context.Context, params AccessGroupNewParam
 }
 
 // Updates a configured Access group.
-func (r *AccessGroupService) Update(ctx context.Context, groupID string, params AccessGroupUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGroup, err error) {
+func (r *AccessGroupService) Update(ctx context.Context, groupID string, params AccessGroupUpdateParams, opts ...option.RequestOption) (res *AccessGroupUpdateResponse, err error) {
 	var env AccessGroupUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -105,7 +105,7 @@ func (r *AccessGroupService) Update(ctx context.Context, groupID string, params 
 }
 
 // Lists all Access groups.
-func (r *AccessGroupService) List(ctx context.Context, params AccessGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGroup], err error) {
+func (r *AccessGroupService) List(ctx context.Context, params AccessGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessGroupListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -141,7 +141,7 @@ func (r *AccessGroupService) List(ctx context.Context, params AccessGroupListPar
 }
 
 // Lists all Access groups.
-func (r *AccessGroupService) ListAutoPaging(ctx context.Context, params AccessGroupListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGroup] {
+func (r *AccessGroupService) ListAutoPaging(ctx context.Context, params AccessGroupListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessGroupListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -181,7 +181,7 @@ func (r *AccessGroupService) Delete(ctx context.Context, groupID string, body Ac
 }
 
 // Fetches a single Access group.
-func (r *AccessGroupService) Get(ctx context.Context, groupID string, query AccessGroupGetParams, opts ...option.RequestOption) (res *ZeroTrustGroup, err error) {
+func (r *AccessGroupService) Get(ctx context.Context, groupID string, query AccessGroupGetParams, opts ...option.RequestOption) (res *AccessGroupGetResponse, err error) {
 	var env AccessGroupGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -216,6 +216,65 @@ func (r *AccessGroupService) Get(ctx context.Context, groupID string, query Acce
 }
 
 type ZeroTrustGroup struct {
+	// The unique Cloudflare-generated Id of the SCIM resource.
+	ID string `json:"id"`
+	// The display name of the SCIM Group resource.
+	DisplayName string `json:"displayName"`
+	// The IdP-generated Id of the SCIM resource.
+	ExternalID string `json:"externalId"`
+	// The metadata of the SCIM resource.
+	Meta ZeroTrustGroupMeta `json:"meta"`
+	// The list of URIs which indicate the attributes contained within a SCIM resource.
+	Schemas []string           `json:"schemas"`
+	JSON    zeroTrustGroupJSON `json:"-"`
+}
+
+// zeroTrustGroupJSON contains the JSON metadata for the struct [ZeroTrustGroup]
+type zeroTrustGroupJSON struct {
+	ID          apijson.Field
+	DisplayName apijson.Field
+	ExternalID  apijson.Field
+	Meta        apijson.Field
+	Schemas     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGroupJSON) RawJSON() string {
+	return r.raw
+}
+
+// The metadata of the SCIM resource.
+type ZeroTrustGroupMeta struct {
+	// The timestamp of when the SCIM resource was created.
+	Created time.Time `json:"created" format:"date-time"`
+	// The timestamp of when the SCIM resource was last modified.
+	LastModified time.Time              `json:"lastModified" format:"date-time"`
+	JSON         zeroTrustGroupMetaJSON `json:"-"`
+}
+
+// zeroTrustGroupMetaJSON contains the JSON metadata for the struct
+// [ZeroTrustGroupMeta]
+type zeroTrustGroupMetaJSON struct {
+	Created      apijson.Field
+	LastModified apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ZeroTrustGroupMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGroupMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupNewResponse struct {
 	// UUID
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -232,13 +291,14 @@ type ZeroTrustGroup struct {
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match a policy, a user must
 	// meet all of the Require rules.
-	Require   []AccessRule       `json:"require"`
-	UpdatedAt time.Time          `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustGroupJSON `json:"-"`
+	Require   []AccessRule               `json:"require"`
+	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
+	JSON      accessGroupNewResponseJSON `json:"-"`
 }
 
-// zeroTrustGroupJSON contains the JSON metadata for the struct [ZeroTrustGroup]
-type zeroTrustGroupJSON struct {
+// accessGroupNewResponseJSON contains the JSON metadata for the struct
+// [AccessGroupNewResponse]
+type accessGroupNewResponseJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Exclude     apijson.Field
@@ -251,11 +311,101 @@ type zeroTrustGroupJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustGroup) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessGroupNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustGroupJSON) RawJSON() string {
+func (r accessGroupNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupUpdateResponse struct {
+	// UUID
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Rules evaluated with an AND logical operator. To match a policy, a user must
+	// meet all of the Require rules.
+	IsDefault []AccessRule `json:"is_default"`
+	// The name of the Access group.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match a policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                  `json:"require"`
+	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
+	JSON      accessGroupUpdateResponseJSON `json:"-"`
+}
+
+// accessGroupUpdateResponseJSON contains the JSON metadata for the struct
+// [AccessGroupUpdateResponse]
+type accessGroupUpdateResponseJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	IsDefault   apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupListResponse struct {
+	// UUID
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Rules evaluated with an AND logical operator. To match a policy, a user must
+	// meet all of the Require rules.
+	IsDefault []AccessRule `json:"is_default"`
+	// The name of the Access group.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match a policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                `json:"require"`
+	UpdatedAt time.Time                   `json:"updated_at" format:"date-time"`
+	JSON      accessGroupListResponseJSON `json:"-"`
+}
+
+// accessGroupListResponseJSON contains the JSON metadata for the struct
+// [AccessGroupListResponse]
+type accessGroupListResponseJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	IsDefault   apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -278,6 +428,51 @@ func (r *AccessGroupDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r accessGroupDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupGetResponse struct {
+	// UUID
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Rules evaluated with an AND logical operator. To match a policy, a user must
+	// meet all of the Require rules.
+	IsDefault []AccessRule `json:"is_default"`
+	// The name of the Access group.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match a policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule               `json:"require"`
+	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
+	JSON      accessGroupGetResponseJSON `json:"-"`
+}
+
+// accessGroupGetResponseJSON contains the JSON metadata for the struct
+// [AccessGroupGetResponse]
+type accessGroupGetResponseJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	IsDefault   apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -310,7 +505,7 @@ type AccessGroupNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessGroupNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  ZeroTrustGroup                        `json:"result"`
+	Result  AccessGroupNewResponse                `json:"result"`
 	JSON    accessGroupNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -377,7 +572,7 @@ type AccessGroupUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  ZeroTrustGroup                           `json:"result"`
+	Result  AccessGroupUpdateResponse                `json:"result"`
 	JSON    accessGroupUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -496,7 +691,7 @@ type AccessGroupGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessGroupGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ZeroTrustGroup                        `json:"result"`
+	Result  AccessGroupGetResponse                `json:"result"`
 	JSON    accessGroupGetResponseEnvelopeJSON    `json:"-"`
 }
 

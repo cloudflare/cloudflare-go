@@ -291,7 +291,7 @@ func (r instanceGetResponseErrorJSON) RawJSON() string {
 
 // Union satisfied by [shared.UnionString] or [shared.UnionFloat].
 type InstanceGetResponseOutputUnion interface {
-	ImplementsWorkflowsInstanceGetResponseOutputUnion()
+	ImplementsInstanceGetResponseOutputUnion()
 }
 
 func init() {
@@ -399,7 +399,7 @@ func (r InstanceGetResponseStep) AsUnion() InstanceGetResponseStepsUnion {
 // [workflows.InstanceGetResponseStepsObject] or
 // [workflows.InstanceGetResponseStepsObject].
 type InstanceGetResponseStepsUnion interface {
-	implementsWorkflowsInstanceGetResponseStep()
+	implementsInstanceGetResponseStep()
 }
 
 func init() {
@@ -456,7 +456,7 @@ func (r instanceGetResponseStepsObjectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r InstanceGetResponseStepsObject) implementsWorkflowsInstanceGetResponseStep() {}
+func (r InstanceGetResponseStepsObject) implementsInstanceGetResponseStep() {}
 
 type InstanceGetResponseStepsObjectAttempt struct {
 	End     time.Time                                   `json:"end,required,nullable" format:"date-time"`
@@ -558,7 +558,7 @@ func (r instanceGetResponseStepsObjectConfigRetriesJSON) RawJSON() string {
 
 // Union satisfied by [shared.UnionString] or [shared.UnionFloat].
 type InstanceGetResponseStepsObjectConfigRetriesDelayUnion interface {
-	ImplementsWorkflowsInstanceGetResponseStepsObjectConfigRetriesDelayUnion()
+	ImplementsInstanceGetResponseStepsObjectConfigRetriesDelayUnion()
 }
 
 func init() {
@@ -594,7 +594,7 @@ func (r InstanceGetResponseStepsObjectConfigRetriesBackoff) IsKnown() bool {
 
 // Union satisfied by [shared.UnionString] or [shared.UnionFloat].
 type InstanceGetResponseStepsObjectConfigTimeoutUnion interface {
-	ImplementsWorkflowsInstanceGetResponseStepsObjectConfigTimeoutUnion()
+	ImplementsInstanceGetResponseStepsObjectConfigTimeoutUnion()
 }
 
 func init() {

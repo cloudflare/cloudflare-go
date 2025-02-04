@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
@@ -56,9 +57,10 @@ func (r *MessageService) Ack(ctx context.Context, queueID string, params Message
 }
 
 // Pull a batch of messages from a Queue
-func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *[]MessagePullResponse, err error) {
-	var env MessagePullResponseEnvelope
+func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *pagination.SinglePage[MessagePullResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -68,12 +70,21 @@ func (r *MessageService) Pull(ctx context.Context, queueID string, params Messag
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages/pull", params.AccountID, queueID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Pull a batch of messages from a Queue
+func (r *MessageService) PullAutoPaging(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MessagePullResponse] {
+	return pagination.NewSinglePageAutoPager(r.Pull(ctx, queueID, params, opts...))
 }
 
 type MessageAckResponse struct {
@@ -225,47 +236,4 @@ type MessagePullParams struct {
 
 func (r MessagePullParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type MessagePullResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   []MessagePullResponse `json:"result"`
-	// Indicates if the API call was successful or not.
-	Success MessagePullResponseEnvelopeSuccess `json:"success"`
-	JSON    messagePullResponseEnvelopeJSON    `json:"-"`
-}
-
-// messagePullResponseEnvelopeJSON contains the JSON metadata for the struct
-// [MessagePullResponseEnvelope]
-type messagePullResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MessagePullResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r messagePullResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Indicates if the API call was successful or not.
-type MessagePullResponseEnvelopeSuccess bool
-
-const (
-	MessagePullResponseEnvelopeSuccessTrue MessagePullResponseEnvelopeSuccess = true
-)
-
-func (r MessagePullResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case MessagePullResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

@@ -251,7 +251,7 @@ func (r WAFPackageRuleListResponse) AsUnion() WAFPackageRuleListResponseUnion {
 // [firewall.WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule] or
 // [firewall.WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule].
 type WAFPackageRuleListResponseUnion interface {
-	implementsFirewallWAFPackageRuleListResponse()
+	implementsWAFPackageRuleListResponse()
 }
 
 func init() {
@@ -319,7 +319,7 @@ func (r wafPackageRuleListResponseWAFManagedRulesAnomalyRuleJSON) RawJSON() stri
 	return r.raw
 }
 
-func (r WAFPackageRuleListResponseWAFManagedRulesAnomalyRule) implementsFirewallWAFPackageRuleListResponse() {
+func (r WAFPackageRuleListResponseWAFManagedRulesAnomalyRule) implementsWAFPackageRuleListResponse() {
 }
 
 // When triggered, traditional WAF rules cause the firewall to immediately act upon
@@ -371,7 +371,7 @@ func (r wafPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleJSON) RawJSO
 	return r.raw
 }
 
-func (r WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule) implementsFirewallWAFPackageRuleListResponse() {
+func (r WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule) implementsWAFPackageRuleListResponse() {
 }
 
 // The action that the current WAF rule will perform when triggered. Applies to
@@ -477,7 +477,7 @@ func (r wafPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleJSON) RawJS
 	return r.raw
 }
 
-func (r WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule) implementsFirewallWAFPackageRuleListResponse() {
+func (r WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule) implementsWAFPackageRuleListResponse() {
 }
 
 // When set to `on`, the current rule will be used when evaluating the request.
@@ -609,7 +609,7 @@ func (r WAFPackageRuleEditResponse) AsUnion() WAFPackageRuleEditResponseUnion {
 // [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule] or
 // [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule].
 type WAFPackageRuleEditResponseUnion interface {
-	implementsFirewallWAFPackageRuleEditResponse()
+	implementsWAFPackageRuleEditResponse()
 }
 
 func init() {
@@ -677,7 +677,7 @@ func (r wafPackageRuleEditResponseWAFManagedRulesAnomalyRuleJSON) RawJSON() stri
 	return r.raw
 }
 
-func (r WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule) implementsFirewallWAFPackageRuleEditResponse() {
+func (r WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule) implementsWAFPackageRuleEditResponse() {
 }
 
 // When triggered, traditional WAF rules cause the firewall to immediately act upon
@@ -729,7 +729,7 @@ func (r wafPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleJSON) RawJSO
 	return r.raw
 }
 
-func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule) implementsFirewallWAFPackageRuleEditResponse() {
+func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule) implementsWAFPackageRuleEditResponse() {
 }
 
 // The action that the current WAF rule will perform when triggered. Applies to
@@ -835,7 +835,7 @@ func (r wafPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleJSON) RawJS
 	return r.raw
 }
 
-func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule) implementsFirewallWAFPackageRuleEditResponse() {
+func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule) implementsWAFPackageRuleEditResponse() {
 }
 
 // When set to `on`, the current rule will be used when evaluating the request.

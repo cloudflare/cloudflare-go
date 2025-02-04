@@ -102,9 +102,10 @@ func (r *DeviceNetworkService) ListAutoPaging(ctx context.Context, query DeviceN
 
 // Deletes a device managed network and fetches a list of the remaining device
 // managed networks for an account.
-func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, body DeviceNetworkDeleteParams, opts ...option.RequestOption) (res *[]DeviceNetwork, err error) {
-	var env DeviceNetworkDeleteResponseEnvelope
+func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, body DeviceNetworkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[DeviceNetwork], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -114,12 +115,22 @@ func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, bod
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", body.AccountID, networkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Deletes a device managed network and fetches a list of the remaining device
+// managed networks for an account.
+func (r *DeviceNetworkService) DeleteAutoPaging(ctx context.Context, networkID string, body DeviceNetworkDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DeviceNetwork] {
+	return pagination.NewSinglePageAutoPager(r.Delete(ctx, networkID, body, opts...))
 }
 
 // Fetches details for a single managed network.
@@ -220,10 +231,8 @@ func (r DeviceNetworkType) IsKnown() bool {
 }
 
 type DeviceNetworkNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The configuration object containing information for the WARP client to detect
-	// the managed network.
-	Config param.Field[DeviceNetworkNewParamsConfig] `json:"config,required"`
+	AccountID param.Field[string]                       `path:"account_id,required"`
+	Config    param.Field[DeviceNetworkNewParamsConfig] `json:"config,required"`
 	// The name of the device managed network. This name must be unique.
 	Name param.Field[string] `json:"name,required"`
 	// The type of device managed network.
@@ -234,8 +243,6 @@ func (r DeviceNetworkNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The configuration object containing information for the WARP client to detect
-// the managed network.
 type DeviceNetworkNewParamsConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
@@ -309,10 +316,8 @@ func (r DeviceNetworkNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceNetworkUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The configuration object containing information for the WARP client to detect
-	// the managed network.
-	Config param.Field[DeviceNetworkUpdateParamsConfig] `json:"config"`
+	AccountID param.Field[string]                          `path:"account_id,required"`
+	Config    param.Field[DeviceNetworkUpdateParamsConfig] `json:"config"`
 	// The name of the device managed network. This name must be unique.
 	Name param.Field[string] `json:"name"`
 	// The type of device managed network.
@@ -323,8 +328,6 @@ func (r DeviceNetworkUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The configuration object containing information for the WARP client to detect
-// the managed network.
 type DeviceNetworkUpdateParamsConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
@@ -403,82 +406,6 @@ type DeviceNetworkListParams struct {
 
 type DeviceNetworkDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DeviceNetworkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []DeviceNetwork       `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DeviceNetworkDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DeviceNetworkDeleteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       deviceNetworkDeleteResponseEnvelopeJSON       `json:"-"`
-}
-
-// deviceNetworkDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DeviceNetworkDeleteResponseEnvelope]
-type deviceNetworkDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DeviceNetworkDeleteResponseEnvelopeSuccess bool
-
-const (
-	DeviceNetworkDeleteResponseEnvelopeSuccessTrue DeviceNetworkDeleteResponseEnvelopeSuccess = true
-)
-
-func (r DeviceNetworkDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DeviceNetworkDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DeviceNetworkDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                           `json:"total_count"`
-	JSON       deviceNetworkDeleteResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// deviceNetworkDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [DeviceNetworkDeleteResponseEnvelopeResultInfo]
-type deviceNetworkDeleteResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type DeviceNetworkGetParams struct {

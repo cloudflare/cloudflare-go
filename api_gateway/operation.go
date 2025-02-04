@@ -110,20 +110,34 @@ func (r *OperationService) Delete(ctx context.Context, operationID string, body 
 // operation and must be unique on the zone. Inserting an operation that matches an
 // existing one will return the record of the already existing operation and update
 // its last_updated date.
-func (r *OperationService) BulkNew(ctx context.Context, params OperationBulkNewParams, opts ...option.RequestOption) (res *[]OperationBulkNewResponse, err error) {
-	var env OperationBulkNewResponseEnvelope
+func (r *OperationService) BulkNew(ctx context.Context, params OperationBulkNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[OperationBulkNewResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Add one or more operations to a zone. Endpoints can contain path variables.
+// Host, method, endpoint will be normalized to a canoncial form when creating an
+// operation and must be unique on the zone. Inserting an operation that matches an
+// existing one will return the record of the already existing operation and update
+// its last_updated date.
+func (r *OperationService) BulkNewAutoPaging(ctx context.Context, params OperationBulkNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OperationBulkNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.BulkNew(ctx, params, opts...))
 }
 
 // Delete multiple operations
@@ -286,7 +300,7 @@ func (r OperationNewResponseFeatures) AsUnion() OperationNewResponseFeaturesUnio
 // or
 // [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 type OperationNewResponseFeaturesUnion interface {
-	implementsAPIGatewayOperationNewResponseFeatures()
+	implementsOperationNewResponseFeatures()
 }
 
 func init() {
@@ -338,7 +352,7 @@ func (r operationNewResponseFeaturesAPIShieldOperationFeatureThresholdsJSON) Raw
 	return r.raw
 }
 
-func (r OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds) implementsAPIGatewayOperationNewResponseFeatures() {
+func (r OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds) implementsOperationNewResponseFeatures() {
 }
 
 type OperationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds struct {
@@ -409,7 +423,7 @@ func (r operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasJSO
 	return r.raw
 }
 
-func (r OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas) implementsAPIGatewayOperationNewResponseFeatures() {
+func (r OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas) implementsOperationNewResponseFeatures() {
 }
 
 type OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas struct {
@@ -488,7 +502,7 @@ func (r operationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingJSON) Raw
 	return r.raw
 }
 
-func (r OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting) implementsAPIGatewayOperationNewResponseFeatures() {
+func (r OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting) implementsOperationNewResponseFeatures() {
 }
 
 // API Routing settings on endpoint.
@@ -539,7 +553,7 @@ func (r operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals
 	return r.raw
 }
 
-func (r OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsAPIGatewayOperationNewResponseFeatures() {
+func (r OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsOperationNewResponseFeatures() {
 }
 
 type OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals struct {
@@ -723,7 +737,7 @@ func (r operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoJSON) Raw
 	return r.raw
 }
 
-func (r OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo) implementsAPIGatewayOperationNewResponseFeatures() {
+func (r OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo) implementsOperationNewResponseFeatures() {
 }
 
 type OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
@@ -931,7 +945,7 @@ func (r OperationListResponseFeatures) AsUnion() OperationListResponseFeaturesUn
 // or
 // [api_gateway.OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 type OperationListResponseFeaturesUnion interface {
-	implementsAPIGatewayOperationListResponseFeatures()
+	implementsOperationListResponseFeatures()
 }
 
 func init() {
@@ -983,7 +997,7 @@ func (r operationListResponseFeaturesAPIShieldOperationFeatureThresholdsJSON) Ra
 	return r.raw
 }
 
-func (r OperationListResponseFeaturesAPIShieldOperationFeatureThresholds) implementsAPIGatewayOperationListResponseFeatures() {
+func (r OperationListResponseFeaturesAPIShieldOperationFeatureThresholds) implementsOperationListResponseFeatures() {
 }
 
 type OperationListResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds struct {
@@ -1054,7 +1068,7 @@ func (r operationListResponseFeaturesAPIShieldOperationFeatureParameterSchemasJS
 	return r.raw
 }
 
-func (r OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemas) implementsAPIGatewayOperationListResponseFeatures() {
+func (r OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemas) implementsOperationListResponseFeatures() {
 }
 
 type OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas struct {
@@ -1133,7 +1147,7 @@ func (r operationListResponseFeaturesAPIShieldOperationFeatureAPIRoutingJSON) Ra
 	return r.raw
 }
 
-func (r OperationListResponseFeaturesAPIShieldOperationFeatureAPIRouting) implementsAPIGatewayOperationListResponseFeatures() {
+func (r OperationListResponseFeaturesAPIShieldOperationFeatureAPIRouting) implementsOperationListResponseFeatures() {
 }
 
 // API Routing settings on endpoint.
@@ -1184,7 +1198,7 @@ func (r operationListResponseFeaturesAPIShieldOperationFeatureConfidenceInterval
 	return r.raw
 }
 
-func (r OperationListResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsAPIGatewayOperationListResponseFeatures() {
+func (r OperationListResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsOperationListResponseFeatures() {
 }
 
 type OperationListResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals struct {
@@ -1368,7 +1382,7 @@ func (r operationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoJSON) Ra
 	return r.raw
 }
 
-func (r OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfo) implementsAPIGatewayOperationListResponseFeatures() {
+func (r OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfo) implementsOperationListResponseFeatures() {
 }
 
 type OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
@@ -1617,7 +1631,7 @@ func (r OperationBulkNewResponseFeatures) AsUnion() OperationBulkNewResponseFeat
 // or
 // [api_gateway.OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 type OperationBulkNewResponseFeaturesUnion interface {
-	implementsAPIGatewayOperationBulkNewResponseFeatures()
+	implementsOperationBulkNewResponseFeatures()
 }
 
 func init() {
@@ -1669,7 +1683,7 @@ func (r operationBulkNewResponseFeaturesAPIShieldOperationFeatureThresholdsJSON)
 	return r.raw
 }
 
-func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureThresholds) implementsAPIGatewayOperationBulkNewResponseFeatures() {
+func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureThresholds) implementsOperationBulkNewResponseFeatures() {
 }
 
 type OperationBulkNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds struct {
@@ -1740,7 +1754,7 @@ func (r operationBulkNewResponseFeaturesAPIShieldOperationFeatureParameterSchema
 	return r.raw
 }
 
-func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas) implementsAPIGatewayOperationBulkNewResponseFeatures() {
+func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas) implementsOperationBulkNewResponseFeatures() {
 }
 
 type OperationBulkNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas struct {
@@ -1819,7 +1833,7 @@ func (r operationBulkNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingJSON)
 	return r.raw
 }
 
-func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureAPIRouting) implementsAPIGatewayOperationBulkNewResponseFeatures() {
+func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureAPIRouting) implementsOperationBulkNewResponseFeatures() {
 }
 
 // API Routing settings on endpoint.
@@ -1870,7 +1884,7 @@ func (r operationBulkNewResponseFeaturesAPIShieldOperationFeatureConfidenceInter
 	return r.raw
 }
 
-func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsAPIGatewayOperationBulkNewResponseFeatures() {
+func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsOperationBulkNewResponseFeatures() {
 }
 
 type OperationBulkNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals struct {
@@ -2054,7 +2068,7 @@ func (r operationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoJSON)
 	return r.raw
 }
 
-func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo) implementsAPIGatewayOperationBulkNewResponseFeatures() {
+func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo) implementsOperationBulkNewResponseFeatures() {
 }
 
 type OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
@@ -2303,7 +2317,7 @@ func (r OperationGetResponseFeatures) AsUnion() OperationGetResponseFeaturesUnio
 // or
 // [api_gateway.OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 type OperationGetResponseFeaturesUnion interface {
-	implementsAPIGatewayOperationGetResponseFeatures()
+	implementsOperationGetResponseFeatures()
 }
 
 func init() {
@@ -2355,7 +2369,7 @@ func (r operationGetResponseFeaturesAPIShieldOperationFeatureThresholdsJSON) Raw
 	return r.raw
 }
 
-func (r OperationGetResponseFeaturesAPIShieldOperationFeatureThresholds) implementsAPIGatewayOperationGetResponseFeatures() {
+func (r OperationGetResponseFeaturesAPIShieldOperationFeatureThresholds) implementsOperationGetResponseFeatures() {
 }
 
 type OperationGetResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds struct {
@@ -2426,7 +2440,7 @@ func (r operationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemasJSO
 	return r.raw
 }
 
-func (r OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemas) implementsAPIGatewayOperationGetResponseFeatures() {
+func (r OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemas) implementsOperationGetResponseFeatures() {
 }
 
 type OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas struct {
@@ -2505,7 +2519,7 @@ func (r operationGetResponseFeaturesAPIShieldOperationFeatureAPIRoutingJSON) Raw
 	return r.raw
 }
 
-func (r OperationGetResponseFeaturesAPIShieldOperationFeatureAPIRouting) implementsAPIGatewayOperationGetResponseFeatures() {
+func (r OperationGetResponseFeaturesAPIShieldOperationFeatureAPIRouting) implementsOperationGetResponseFeatures() {
 }
 
 // API Routing settings on endpoint.
@@ -2556,7 +2570,7 @@ func (r operationGetResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals
 	return r.raw
 }
 
-func (r OperationGetResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsAPIGatewayOperationGetResponseFeatures() {
+func (r OperationGetResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsOperationGetResponseFeatures() {
 }
 
 type OperationGetResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals struct {
@@ -2740,7 +2754,7 @@ func (r operationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoJSON) Raw
 	return r.raw
 }
 
-func (r OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfo) implementsAPIGatewayOperationGetResponseFeatures() {
+func (r OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfo) implementsOperationGetResponseFeatures() {
 }
 
 type OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
@@ -3037,49 +3051,6 @@ const (
 func (r OperationBulkNewParamsBodyMethod) IsKnown() bool {
 	switch r {
 	case OperationBulkNewParamsBodyMethodGet, OperationBulkNewParamsBodyMethodPost, OperationBulkNewParamsBodyMethodHead, OperationBulkNewParamsBodyMethodOptions, OperationBulkNewParamsBodyMethodPut, OperationBulkNewParamsBodyMethodDelete, OperationBulkNewParamsBodyMethodConnect, OperationBulkNewParamsBodyMethodPatch, OperationBulkNewParamsBodyMethodTrace:
-		return true
-	}
-	return false
-}
-
-type OperationBulkNewResponseEnvelope struct {
-	Errors   Message                    `json:"errors,required"`
-	Messages Message                    `json:"messages,required"`
-	Result   []OperationBulkNewResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success OperationBulkNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    operationBulkNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// operationBulkNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [OperationBulkNewResponseEnvelope]
-type operationBulkNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OperationBulkNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r operationBulkNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type OperationBulkNewResponseEnvelopeSuccess bool
-
-const (
-	OperationBulkNewResponseEnvelopeSuccessTrue OperationBulkNewResponseEnvelopeSuccess = true
-)
-
-func (r OperationBulkNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case OperationBulkNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

@@ -366,8 +366,6 @@ func (r dnsTopLocationsResponseTop0JSON) RawJSON() string {
 }
 
 type DNSTopAsesParams struct {
-	// Array of domain names.
-	Domain param.Field[[]string] `query:"domain,required"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -384,6 +382,8 @@ type DNSTopAsesParams struct {
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Array of domain names.
+	Domain param.Field[[]string] `query:"domain"`
 	// Format results are returned in.
 	Format param.Field[DNSTopAsesParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
@@ -444,8 +444,6 @@ func (r dnsTopAsesResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSTopLocationsParams struct {
-	// Array of domain names.
-	Domain param.Field[[]string] `query:"domain,required"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -462,6 +460,8 @@ type DNSTopLocationsParams struct {
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Array of domain names.
+	Domain param.Field[[]string] `query:"domain"`
 	// Format results are returned in.
 	Format param.Field[DNSTopLocationsParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.

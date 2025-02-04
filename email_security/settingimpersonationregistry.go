@@ -134,15 +134,16 @@ func (r *SettingImpersonationRegistryService) Get(ctx context.Context, displayNa
 }
 
 type SettingImpersonationRegistryNewResponse struct {
-	ID                      int64                                       `json:"id,required"`
-	CreatedAt               time.Time                                   `json:"created_at,required" format:"date-time"`
-	Email                   string                                      `json:"email,required"`
-	IsEmailRegex            bool                                        `json:"is_email_regex,required"`
-	LastModified            time.Time                                   `json:"last_modified,required" format:"date-time"`
-	Name                    string                                      `json:"name,required"`
-	Comments                string                                      `json:"comments,nullable"`
-	DirectoryID             int64                                       `json:"directory_id,nullable"`
-	DirectoryNodeID         int64                                       `json:"directory_node_id,nullable"`
+	ID              int64     `json:"id,required"`
+	CreatedAt       time.Time `json:"created_at,required" format:"date-time"`
+	Email           string    `json:"email,required"`
+	IsEmailRegex    bool      `json:"is_email_regex,required"`
+	LastModified    time.Time `json:"last_modified,required" format:"date-time"`
+	Name            string    `json:"name,required"`
+	Comments        string    `json:"comments,nullable"`
+	DirectoryID     int64     `json:"directory_id,nullable"`
+	DirectoryNodeID int64     `json:"directory_node_id,nullable"`
+	// Deprecated: deprecated
 	ExternalDirectoryNodeID string                                      `json:"external_directory_node_id,nullable"`
 	Provenance              string                                      `json:"provenance,nullable"`
 	JSON                    settingImpersonationRegistryNewResponseJSON `json:"-"`
@@ -175,15 +176,16 @@ func (r settingImpersonationRegistryNewResponseJSON) RawJSON() string {
 }
 
 type SettingImpersonationRegistryListResponse struct {
-	ID                      int64                                        `json:"id,required"`
-	CreatedAt               time.Time                                    `json:"created_at,required" format:"date-time"`
-	Email                   string                                       `json:"email,required"`
-	IsEmailRegex            bool                                         `json:"is_email_regex,required"`
-	LastModified            time.Time                                    `json:"last_modified,required" format:"date-time"`
-	Name                    string                                       `json:"name,required"`
-	Comments                string                                       `json:"comments,nullable"`
-	DirectoryID             int64                                        `json:"directory_id,nullable"`
-	DirectoryNodeID         int64                                        `json:"directory_node_id,nullable"`
+	ID              int64     `json:"id,required"`
+	CreatedAt       time.Time `json:"created_at,required" format:"date-time"`
+	Email           string    `json:"email,required"`
+	IsEmailRegex    bool      `json:"is_email_regex,required"`
+	LastModified    time.Time `json:"last_modified,required" format:"date-time"`
+	Name            string    `json:"name,required"`
+	Comments        string    `json:"comments,nullable"`
+	DirectoryID     int64     `json:"directory_id,nullable"`
+	DirectoryNodeID int64     `json:"directory_node_id,nullable"`
+	// Deprecated: deprecated
 	ExternalDirectoryNodeID string                                       `json:"external_directory_node_id,nullable"`
 	Provenance              string                                       `json:"provenance,nullable"`
 	JSON                    settingImpersonationRegistryListResponseJSON `json:"-"`
@@ -237,15 +239,16 @@ func (r settingImpersonationRegistryDeleteResponseJSON) RawJSON() string {
 }
 
 type SettingImpersonationRegistryEditResponse struct {
-	ID                      int64                                        `json:"id,required"`
-	CreatedAt               time.Time                                    `json:"created_at,required" format:"date-time"`
-	Email                   string                                       `json:"email,required"`
-	IsEmailRegex            bool                                         `json:"is_email_regex,required"`
-	LastModified            time.Time                                    `json:"last_modified,required" format:"date-time"`
-	Name                    string                                       `json:"name,required"`
-	Comments                string                                       `json:"comments,nullable"`
-	DirectoryID             int64                                        `json:"directory_id,nullable"`
-	DirectoryNodeID         int64                                        `json:"directory_node_id,nullable"`
+	ID              int64     `json:"id,required"`
+	CreatedAt       time.Time `json:"created_at,required" format:"date-time"`
+	Email           string    `json:"email,required"`
+	IsEmailRegex    bool      `json:"is_email_regex,required"`
+	LastModified    time.Time `json:"last_modified,required" format:"date-time"`
+	Name            string    `json:"name,required"`
+	Comments        string    `json:"comments,nullable"`
+	DirectoryID     int64     `json:"directory_id,nullable"`
+	DirectoryNodeID int64     `json:"directory_node_id,nullable"`
+	// Deprecated: deprecated
 	ExternalDirectoryNodeID string                                       `json:"external_directory_node_id,nullable"`
 	Provenance              string                                       `json:"provenance,nullable"`
 	JSON                    settingImpersonationRegistryEditResponseJSON `json:"-"`
@@ -278,15 +281,16 @@ func (r settingImpersonationRegistryEditResponseJSON) RawJSON() string {
 }
 
 type SettingImpersonationRegistryGetResponse struct {
-	ID                      int64                                       `json:"id,required"`
-	CreatedAt               time.Time                                   `json:"created_at,required" format:"date-time"`
-	Email                   string                                      `json:"email,required"`
-	IsEmailRegex            bool                                        `json:"is_email_regex,required"`
-	LastModified            time.Time                                   `json:"last_modified,required" format:"date-time"`
-	Name                    string                                      `json:"name,required"`
-	Comments                string                                      `json:"comments,nullable"`
-	DirectoryID             int64                                       `json:"directory_id,nullable"`
-	DirectoryNodeID         int64                                       `json:"directory_node_id,nullable"`
+	ID              int64     `json:"id,required"`
+	CreatedAt       time.Time `json:"created_at,required" format:"date-time"`
+	Email           string    `json:"email,required"`
+	IsEmailRegex    bool      `json:"is_email_regex,required"`
+	LastModified    time.Time `json:"last_modified,required" format:"date-time"`
+	Name            string    `json:"name,required"`
+	Comments        string    `json:"comments,nullable"`
+	DirectoryID     int64     `json:"directory_id,nullable"`
+	DirectoryNodeID int64     `json:"directory_node_id,nullable"`
+	// Deprecated: deprecated
 	ExternalDirectoryNodeID string                                      `json:"external_directory_node_id,nullable"`
 	Provenance              string                                      `json:"provenance,nullable"`
 	JSON                    settingImpersonationRegistryGetResponseJSON `json:"-"`

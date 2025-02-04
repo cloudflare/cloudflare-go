@@ -175,7 +175,7 @@ func (r clientCertificateInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ClientCertificateInput) implementsZeroTrustDeviceInput() {}
+func (r ClientCertificateInput) implementsDeviceInput() {}
 
 type ClientCertificateInputParam struct {
 	// UUID of Cloudflare managed certificate.
@@ -188,7 +188,7 @@ func (r ClientCertificateInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ClientCertificateInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r ClientCertificateInputParam) implementsDeviceInputUnionParam() {}
 
 type CrowdstrikeInput struct {
 	// Posture Integration ID.
@@ -236,7 +236,7 @@ func (r crowdstrikeInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CrowdstrikeInput) implementsZeroTrustDeviceInput() {}
+func (r CrowdstrikeInput) implementsDeviceInput() {}
 
 // operator
 type CrowdstrikeInputOperator string
@@ -318,7 +318,7 @@ func (r CrowdstrikeInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CrowdstrikeInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r CrowdstrikeInputParam) implementsDeviceInputUnionParam() {}
 
 // The value to be checked against.
 type DeviceInput struct {
@@ -504,7 +504,7 @@ func (r DeviceInput) AsUnion() DeviceInputUnion {
 // [zero_trust.SentineloneS2sInput] or
 // [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequest].
 type DeviceInputUnion interface {
-	implementsZeroTrustDeviceInput()
+	implementsDeviceInput()
 }
 
 func init() {
@@ -617,7 +617,7 @@ func (r deviceInputTeamsDevicesCarbonblackInputRequestJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DeviceInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDeviceInput() {}
+func (r DeviceInputTeamsDevicesCarbonblackInputRequest) implementsDeviceInput() {}
 
 // Operating system
 type DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
@@ -667,7 +667,7 @@ func (r deviceInputTeamsDevicesApplicationInputRequestJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DeviceInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDeviceInput() {}
+func (r DeviceInputTeamsDevicesApplicationInputRequest) implementsDeviceInput() {}
 
 // Operating system
 type DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem string
@@ -726,7 +726,7 @@ func (r deviceInputTeamsDevicesClientCertificateV2InputRequestJSON) RawJSON() st
 	return r.raw
 }
 
-func (r DeviceInputTeamsDevicesClientCertificateV2InputRequest) implementsZeroTrustDeviceInput() {}
+func (r DeviceInputTeamsDevicesClientCertificateV2InputRequest) implementsDeviceInput() {}
 
 // Operating system
 type DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem string
@@ -829,7 +829,7 @@ func (r deviceInputTeamsDevicesCustomS2sInputRequestJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DeviceInputTeamsDevicesCustomS2sInputRequest) implementsZeroTrustDeviceInput() {}
+func (r DeviceInputTeamsDevicesCustomS2sInputRequest) implementsDeviceInput() {}
 
 // operator
 type DeviceInputTeamsDevicesCustomS2sInputRequestOperator string
@@ -1127,7 +1127,7 @@ func (r DeviceInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DeviceInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r DeviceInputParam) implementsDeviceInputUnionParam() {}
 
 // The value to be checked against.
 //
@@ -1145,7 +1145,7 @@ func (r DeviceInputParam) implementsZeroTrustDeviceInputUnionParam() {}
 // [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequestParam],
 // [DeviceInputParam].
 type DeviceInputUnionParam interface {
-	implementsZeroTrustDeviceInputUnionParam()
+	implementsDeviceInputUnionParam()
 }
 
 type DeviceInputTeamsDevicesCarbonblackInputRequestParam struct {
@@ -1163,8 +1163,7 @@ func (r DeviceInputTeamsDevicesCarbonblackInputRequestParam) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r DeviceInputTeamsDevicesCarbonblackInputRequestParam) implementsZeroTrustDeviceInputUnionParam() {
-}
+func (r DeviceInputTeamsDevicesCarbonblackInputRequestParam) implementsDeviceInputUnionParam() {}
 
 type DeviceInputTeamsDevicesApplicationInputRequestParam struct {
 	// Operating system
@@ -1181,8 +1180,7 @@ func (r DeviceInputTeamsDevicesApplicationInputRequestParam) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r DeviceInputTeamsDevicesApplicationInputRequestParam) implementsZeroTrustDeviceInputUnionParam() {
-}
+func (r DeviceInputTeamsDevicesApplicationInputRequestParam) implementsDeviceInputUnionParam() {}
 
 type DeviceInputTeamsDevicesClientCertificateV2InputRequestParam struct {
 	// UUID of Cloudflare managed certificate.
@@ -1206,7 +1204,7 @@ func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestParam) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestParam) implementsZeroTrustDeviceInputUnionParam() {
+func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestParam) implementsDeviceInputUnionParam() {
 }
 
 type DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsParam struct {
@@ -1233,8 +1231,7 @@ func (r DeviceInputTeamsDevicesCustomS2sInputRequestParam) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r DeviceInputTeamsDevicesCustomS2sInputRequestParam) implementsZeroTrustDeviceInputUnionParam() {
-}
+func (r DeviceInputTeamsDevicesCustomS2sInputRequestParam) implementsDeviceInputUnionParam() {}
 
 type DeviceMatch struct {
 	Platform DeviceMatchPlatform `json:"platform"`
@@ -1387,7 +1384,7 @@ func (r diskEncryptionInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DiskEncryptionInput) implementsZeroTrustDeviceInput() {}
+func (r DiskEncryptionInput) implementsDeviceInput() {}
 
 type DiskEncryptionInputParam struct {
 	// List of volume names to be checked for encryption.
@@ -1400,7 +1397,7 @@ func (r DiskEncryptionInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DiskEncryptionInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r DiskEncryptionInputParam) implementsDeviceInputUnionParam() {}
 
 type DomainJoinedInput struct {
 	// Operating System
@@ -1427,7 +1424,7 @@ func (r domainJoinedInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DomainJoinedInput) implementsZeroTrustDeviceInput() {}
+func (r DomainJoinedInput) implementsDeviceInput() {}
 
 // Operating System
 type DomainJoinedInputOperatingSystem string
@@ -1455,7 +1452,7 @@ func (r DomainJoinedInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DomainJoinedInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r DomainJoinedInputParam) implementsDeviceInputUnionParam() {}
 
 type FileInput struct {
 	// Operating system
@@ -1490,7 +1487,7 @@ func (r fileInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r FileInput) implementsZeroTrustDeviceInput() {}
+func (r FileInput) implementsDeviceInput() {}
 
 // Operating system
 type FileInputOperatingSystem string
@@ -1526,7 +1523,7 @@ func (r FileInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r FileInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r FileInputParam) implementsDeviceInputUnionParam() {}
 
 type FirewallInput struct {
 	// Enabled
@@ -1552,7 +1549,7 @@ func (r firewallInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r FirewallInput) implementsZeroTrustDeviceInput() {}
+func (r FirewallInput) implementsDeviceInput() {}
 
 // Operating System
 type FirewallInputOperatingSystem string
@@ -1581,7 +1578,7 @@ func (r FirewallInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r FirewallInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r FirewallInputParam) implementsDeviceInputUnionParam() {}
 
 type IntuneInput struct {
 	// Compliance Status
@@ -1607,7 +1604,7 @@ func (r intuneInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IntuneInput) implementsZeroTrustDeviceInput() {}
+func (r IntuneInput) implementsDeviceInput() {}
 
 // Compliance Status
 type IntuneInputComplianceStatus string
@@ -1640,7 +1637,7 @@ func (r IntuneInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IntuneInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r IntuneInputParam) implementsDeviceInputUnionParam() {}
 
 type KolideInput struct {
 	// Posture Integration ID.
@@ -1669,7 +1666,7 @@ func (r kolideInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r KolideInput) implementsZeroTrustDeviceInput() {}
+func (r KolideInput) implementsDeviceInput() {}
 
 // Count Operator
 type KolideInputCountOperator string
@@ -1703,7 +1700,7 @@ func (r KolideInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r KolideInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r KolideInputParam) implementsDeviceInputUnionParam() {}
 
 type OSVersionInput struct {
 	// Operating System
@@ -1742,7 +1739,7 @@ func (r osVersionInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OSVersionInput) implementsZeroTrustDeviceInput() {}
+func (r OSVersionInput) implementsDeviceInput() {}
 
 // Operating System
 type OSVersionInputOperatingSystem string
@@ -1798,7 +1795,7 @@ func (r OSVersionInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r OSVersionInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r OSVersionInputParam) implementsDeviceInputUnionParam() {}
 
 type SentineloneInput struct {
 	// Operating system
@@ -1831,7 +1828,7 @@ func (r sentineloneInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SentineloneInput) implementsZeroTrustDeviceInput() {}
+func (r SentineloneInput) implementsDeviceInput() {}
 
 // Operating system
 type SentineloneInputOperatingSystem string
@@ -1865,7 +1862,7 @@ func (r SentineloneInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SentineloneInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r SentineloneInputParam) implementsDeviceInputUnionParam() {}
 
 type SentineloneS2sInput struct {
 	// Posture Integration ID.
@@ -1907,7 +1904,7 @@ func (r sentineloneS2sInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SentineloneS2sInput) implementsZeroTrustDeviceInput() {}
+func (r SentineloneS2sInput) implementsDeviceInput() {}
 
 // Network status of device.
 type SentineloneS2sInputNetworkStatus string
@@ -1988,7 +1985,7 @@ func (r SentineloneS2sInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SentineloneS2sInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r SentineloneS2sInputParam) implementsDeviceInputUnionParam() {}
 
 type TaniumInput struct {
 	// Posture Integration ID.
@@ -2026,7 +2023,7 @@ func (r taniumInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r TaniumInput) implementsZeroTrustDeviceInput() {}
+func (r TaniumInput) implementsDeviceInput() {}
 
 // Operator to evaluate risk_level or eid_last_seen.
 type TaniumInputOperator string
@@ -2103,7 +2100,7 @@ func (r TaniumInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r TaniumInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r TaniumInputParam) implementsDeviceInputUnionParam() {}
 
 type UniqueClientIDInput struct {
 	// List ID.
@@ -2130,7 +2127,7 @@ func (r uniqueClientIDInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r UniqueClientIDInput) implementsZeroTrustDeviceInput() {}
+func (r UniqueClientIDInput) implementsDeviceInput() {}
 
 // Operating System
 type UniqueClientIDInputOperatingSystem string
@@ -2160,7 +2157,7 @@ func (r UniqueClientIDInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r UniqueClientIDInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r UniqueClientIDInputParam) implementsDeviceInputUnionParam() {}
 
 type WorkspaceOneInput struct {
 	// Compliance Status
@@ -2187,7 +2184,7 @@ func (r workspaceOneInputJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r WorkspaceOneInput) implementsZeroTrustDeviceInput() {}
+func (r WorkspaceOneInput) implementsDeviceInput() {}
 
 // Compliance Status
 type WorkspaceOneInputComplianceStatus string
@@ -2217,7 +2214,7 @@ func (r WorkspaceOneInputParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WorkspaceOneInputParam) implementsZeroTrustDeviceInputUnionParam() {}
+func (r WorkspaceOneInputParam) implementsDeviceInputUnionParam() {}
 
 type DevicePostureDeleteResponse struct {
 	// API UUID.

@@ -29,12 +29,12 @@ func TestDNSTopAsesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.Top.Ases(context.TODO(), radar.DNSTopAsesParams{
-		Domain:    cloudflare.F([]string{"string"}),
 		ASN:       cloudflare.F([]string{"string"}),
 		Continent: cloudflare.F([]string{"string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
+		Domain:    cloudflare.F([]string{"string"}),
 		Format:    cloudflare.F(radar.DNSTopAsesParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
@@ -63,12 +63,12 @@ func TestDNSTopLocationsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.Top.Locations(context.TODO(), radar.DNSTopLocationsParams{
-		Domain:    cloudflare.F([]string{"string"}),
 		ASN:       cloudflare.F([]string{"string"}),
 		Continent: cloudflare.F([]string{"string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
+		Domain:    cloudflare.F([]string{"string"}),
 		Format:    cloudflare.F(radar.DNSTopLocationsParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),

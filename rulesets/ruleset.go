@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
@@ -110,30 +112,30 @@ func (r *RulesetService) Update(ctx context.Context, rulesetID string, params Ru
 }
 
 // Fetches all rulesets.
-func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RulesetListResponse], err error) {
+func (r *RulesetService) List(ctx context.Context, params RulesetListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[RulesetListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
 		err = errors.New("account ID and zone ID are mutually exclusive")
 		return
 	}
-	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
 		err = errors.New("either account ID or zone ID must be provided")
 		return
 	}
-	if query.AccountID.Value != "" {
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
-		accountOrZoneID = query.AccountID
+		accountOrZoneID = params.AccountID
 	}
-	if query.ZoneID.Value != "" {
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
-		accountOrZoneID = query.ZoneID
+		accountOrZoneID = params.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/rulesets", accountOrZone, accountOrZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -146,8 +148,8 @@ func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts
 }
 
 // Fetches all rulesets.
-func (r *RulesetService) ListAutoPaging(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RulesetListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *RulesetService) ListAutoPaging(ctx context.Context, params RulesetListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[RulesetListResponse] {
+	return pagination.NewCursorPaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes all versions of an existing account or zone ruleset.
@@ -431,7 +433,7 @@ func (r RulesetNewResponseRule) AsUnion() RulesetNewResponseRulesUnion {
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RulesetNewResponseRulesUnion interface {
-	implementsRulesetsRulesetNewResponseRule()
+	implementsRulesetNewResponseRule()
 }
 
 func init() {
@@ -589,7 +591,7 @@ func (r rulesetNewResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RulesetNewResponseRulesRulesetsChallengeRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r RulesetNewResponseRulesRulesetsChallengeRule) implementsRulesetNewResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetNewResponseRulesRulesetsChallengeRuleAction string
@@ -759,7 +761,7 @@ func (r rulesetNewResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RulesetNewResponseRulesRulesetsJSChallengeRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r RulesetNewResponseRulesRulesetsJSChallengeRule) implementsRulesetNewResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetNewResponseRulesRulesetsJSChallengeRuleAction string
@@ -1064,7 +1066,7 @@ func (r RulesetUpdateResponseRule) AsUnion() RulesetUpdateResponseRulesUnion {
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RulesetUpdateResponseRulesUnion interface {
-	implementsRulesetsRulesetUpdateResponseRule()
+	implementsRulesetUpdateResponseRule()
 }
 
 func init() {
@@ -1222,8 +1224,7 @@ func (r rulesetUpdateResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RulesetUpdateResponseRulesRulesetsChallengeRule) implementsRulesetsRulesetUpdateResponseRule() {
-}
+func (r RulesetUpdateResponseRulesRulesetsChallengeRule) implementsRulesetUpdateResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetUpdateResponseRulesRulesetsChallengeRuleAction string
@@ -1394,8 +1395,7 @@ func (r rulesetUpdateResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string 
 	return r.raw
 }
 
-func (r RulesetUpdateResponseRulesRulesetsJSChallengeRule) implementsRulesetsRulesetUpdateResponseRule() {
-}
+func (r RulesetUpdateResponseRulesRulesetsJSChallengeRule) implementsRulesetUpdateResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetUpdateResponseRulesRulesetsJSChallengeRuleAction string
@@ -1741,7 +1741,7 @@ func (r RulesetGetResponseRule) AsUnion() RulesetGetResponseRulesUnion {
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RulesetGetResponseRulesUnion interface {
-	implementsRulesetsRulesetGetResponseRule()
+	implementsRulesetGetResponseRule()
 }
 
 func init() {
@@ -1899,7 +1899,7 @@ func (r rulesetGetResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RulesetGetResponseRulesRulesetsChallengeRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r RulesetGetResponseRulesRulesetsChallengeRule) implementsRulesetGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetGetResponseRulesRulesetsChallengeRuleAction string
@@ -2069,7 +2069,7 @@ func (r rulesetGetResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RulesetGetResponseRulesRulesetsJSChallengeRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r RulesetGetResponseRulesRulesetsJSChallengeRule) implementsRulesetGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type RulesetGetResponseRulesRulesetsJSChallengeRuleAction string
@@ -2260,7 +2260,7 @@ func (r RulesetNewParamsRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetNewParamsRule) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r RulesetNewParamsRule) implementsRulesetNewParamsRuleUnion() {}
 
 // Satisfied by [rulesets.BlockRuleParam],
 // [rulesets.RulesetNewParamsRulesRulesetsChallengeRule],
@@ -2274,7 +2274,7 @@ func (r RulesetNewParamsRule) implementsRulesetsRulesetNewParamsRuleUnion() {}
 // [rulesets.LogCustomFieldRuleParam], [rulesets.DDoSDynamicRuleParam],
 // [rulesets.ForceConnectionCloseRuleParam], [RulesetNewParamsRule].
 type RulesetNewParamsRuleUnion interface {
-	implementsRulesetsRulesetNewParamsRuleUnion()
+	implementsRulesetNewParamsRuleUnion()
 }
 
 type RulesetNewParamsRulesRulesetsChallengeRule struct {
@@ -2304,7 +2304,7 @@ func (r RulesetNewParamsRulesRulesetsChallengeRule) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetNewParamsRulesRulesetsChallengeRule) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r RulesetNewParamsRulesRulesetsChallengeRule) implementsRulesetNewParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type RulesetNewParamsRulesRulesetsChallengeRuleAction string
@@ -2408,7 +2408,7 @@ func (r RulesetNewParamsRulesRulesetsJSChallengeRule) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetNewParamsRulesRulesetsJSChallengeRule) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r RulesetNewParamsRulesRulesetsJSChallengeRule) implementsRulesetNewParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type RulesetNewParamsRulesRulesetsJSChallengeRuleAction string
@@ -2714,7 +2714,7 @@ func (r RulesetUpdateParamsRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetUpdateParamsRule) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r RulesetUpdateParamsRule) implementsRulesetUpdateParamsRuleUnion() {}
 
 // Satisfied by [rulesets.BlockRuleParam],
 // [rulesets.RulesetUpdateParamsRulesRulesetsChallengeRule],
@@ -2728,7 +2728,7 @@ func (r RulesetUpdateParamsRule) implementsRulesetsRulesetUpdateParamsRuleUnion(
 // [rulesets.LogCustomFieldRuleParam], [rulesets.DDoSDynamicRuleParam],
 // [rulesets.ForceConnectionCloseRuleParam], [RulesetUpdateParamsRule].
 type RulesetUpdateParamsRuleUnion interface {
-	implementsRulesetsRulesetUpdateParamsRuleUnion()
+	implementsRulesetUpdateParamsRuleUnion()
 }
 
 type RulesetUpdateParamsRulesRulesetsChallengeRule struct {
@@ -2758,8 +2758,7 @@ func (r RulesetUpdateParamsRulesRulesetsChallengeRule) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetUpdateParamsRulesRulesetsChallengeRule) implementsRulesetsRulesetUpdateParamsRuleUnion() {
-}
+func (r RulesetUpdateParamsRulesRulesetsChallengeRule) implementsRulesetUpdateParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type RulesetUpdateParamsRulesRulesetsChallengeRuleAction string
@@ -2863,8 +2862,7 @@ func (r RulesetUpdateParamsRulesRulesetsJSChallengeRule) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetUpdateParamsRulesRulesetsJSChallengeRule) implementsRulesetsRulesetUpdateParamsRuleUnion() {
-}
+func (r RulesetUpdateParamsRulesRulesetsJSChallengeRule) implementsRulesetUpdateParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type RulesetUpdateParamsRulesRulesetsJSChallengeRuleAction string
@@ -3129,6 +3127,18 @@ type RulesetListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+	// Cursor to use for the next page.
+	Cursor param.Field[string] `query:"cursor"`
+	// Number of rulesets to return per page.
+	PerPage param.Field[int64] `query:"per_page"`
+}
+
+// URLQuery serializes [RulesetListParams]'s query parameters as `url.Values`.
+func (r RulesetListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type RulesetDeleteParams struct {

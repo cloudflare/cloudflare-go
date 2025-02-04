@@ -139,7 +139,7 @@ func (r *SettingTrustedDomainService) Get(ctx context.Context, trustedDomainID i
 // [email_security.SettingTrustedDomainNewResponseEmailSecurityTrustedDomain] or
 // [email_security.SettingTrustedDomainNewResponseArray].
 type SettingTrustedDomainNewResponseUnion interface {
-	implementsEmailSecuritySettingTrustedDomainNewResponseUnion()
+	implementsSettingTrustedDomainNewResponseUnion()
 }
 
 func init() {
@@ -198,13 +198,12 @@ func (r settingTrustedDomainNewResponseEmailSecurityTrustedDomainJSON) RawJSON()
 	return r.raw
 }
 
-func (r SettingTrustedDomainNewResponseEmailSecurityTrustedDomain) implementsEmailSecuritySettingTrustedDomainNewResponseUnion() {
+func (r SettingTrustedDomainNewResponseEmailSecurityTrustedDomain) implementsSettingTrustedDomainNewResponseUnion() {
 }
 
 type SettingTrustedDomainNewResponseArray []SettingTrustedDomainNewResponseArrayItem
 
-func (r SettingTrustedDomainNewResponseArray) implementsEmailSecuritySettingTrustedDomainNewResponseUnion() {
-}
+func (r SettingTrustedDomainNewResponseArray) implementsSettingTrustedDomainNewResponseUnion() {}
 
 type SettingTrustedDomainNewResponseArrayItem struct {
 	// The unique identifier for the trusted domain.
@@ -402,7 +401,7 @@ func (r SettingTrustedDomainNewParams) MarshalJSON() (data []byte, err error) {
 // [email_security.SettingTrustedDomainNewParamsBodyEmailSecurityCreateTrustedDomain],
 // [email_security.SettingTrustedDomainNewParamsBodyArray].
 type SettingTrustedDomainNewParamsBodyUnion interface {
-	implementsEmailSecuritySettingTrustedDomainNewParamsBodyUnion()
+	implementsSettingTrustedDomainNewParamsBodyUnion()
 }
 
 type SettingTrustedDomainNewParamsBodyEmailSecurityCreateTrustedDomain struct {
@@ -421,13 +420,12 @@ func (r SettingTrustedDomainNewParamsBodyEmailSecurityCreateTrustedDomain) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingTrustedDomainNewParamsBodyEmailSecurityCreateTrustedDomain) implementsEmailSecuritySettingTrustedDomainNewParamsBodyUnion() {
+func (r SettingTrustedDomainNewParamsBodyEmailSecurityCreateTrustedDomain) implementsSettingTrustedDomainNewParamsBodyUnion() {
 }
 
 type SettingTrustedDomainNewParamsBodyArray []SettingTrustedDomainNewParamsBodyArrayItem
 
-func (r SettingTrustedDomainNewParamsBodyArray) implementsEmailSecuritySettingTrustedDomainNewParamsBodyUnion() {
-}
+func (r SettingTrustedDomainNewParamsBodyArray) implementsSettingTrustedDomainNewParamsBodyUnion() {}
 
 type SettingTrustedDomainNewParamsBodyArrayItem struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or

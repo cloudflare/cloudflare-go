@@ -12,6 +12,11 @@ import (
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewWAFService] method instead.
+//
+// Deprecated: WAF managed rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#waf-managed-rules-apis-previous-version
+// for full details.
 type WAFService struct {
 	Options   []option.RequestOption
 	Overrides *WAFOverrideService

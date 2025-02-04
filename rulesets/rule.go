@@ -207,25 +207,25 @@ func (r blockRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BlockRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r BlockRule) implementsRulesetNewResponseRule() {}
 
-func (r BlockRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r BlockRule) implementsRulesetUpdateResponseRule() {}
 
-func (r BlockRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r BlockRule) implementsRulesetGetResponseRule() {}
 
-func (r BlockRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r BlockRule) implementsPhaseUpdateResponseRule() {}
 
-func (r BlockRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r BlockRule) implementsPhaseGetResponseRule() {}
 
-func (r BlockRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r BlockRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r BlockRule) implementsRulesetsRuleNewResponseRule() {}
+func (r BlockRule) implementsRuleNewResponseRule() {}
 
-func (r BlockRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r BlockRule) implementsRuleDeleteResponseRule() {}
 
-func (r BlockRule) implementsRulesetsRuleEditResponseRule() {}
+func (r BlockRule) implementsRuleEditResponseRule() {}
 
-func (r BlockRule) implementsRulesetsVersionGetResponseRule() {}
+func (r BlockRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type BlockRuleAction string
@@ -415,11 +415,11 @@ func (r BlockRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BlockRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r BlockRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r BlockRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r BlockRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r BlockRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r BlockRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type BlockRuleActionParametersParam struct {
@@ -545,25 +545,25 @@ func (r compressResponseRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CompressResponseRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r CompressResponseRule) implementsRulesetNewResponseRule() {}
 
-func (r CompressResponseRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r CompressResponseRule) implementsRulesetUpdateResponseRule() {}
 
-func (r CompressResponseRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r CompressResponseRule) implementsRulesetGetResponseRule() {}
 
-func (r CompressResponseRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r CompressResponseRule) implementsPhaseUpdateResponseRule() {}
 
-func (r CompressResponseRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r CompressResponseRule) implementsPhaseGetResponseRule() {}
 
-func (r CompressResponseRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r CompressResponseRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r CompressResponseRule) implementsRulesetsRuleNewResponseRule() {}
+func (r CompressResponseRule) implementsRuleNewResponseRule() {}
 
-func (r CompressResponseRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r CompressResponseRule) implementsRuleDeleteResponseRule() {}
 
-func (r CompressResponseRule) implementsRulesetsRuleEditResponseRule() {}
+func (r CompressResponseRule) implementsRuleEditResponseRule() {}
 
-func (r CompressResponseRule) implementsRulesetsVersionGetResponseRule() {}
+func (r CompressResponseRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type CompressResponseRuleAction string
@@ -766,11 +766,11 @@ func (r CompressResponseRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CompressResponseRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r CompressResponseRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r CompressResponseRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r CompressResponseRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r CompressResponseRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r CompressResponseRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type CompressResponseRuleActionParametersParam struct {
@@ -891,25 +891,25 @@ func (r DDoSDynamicRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DDoSDynamicRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r DDoSDynamicRule) implementsRulesetNewResponseRule() {}
 
-func (r DDoSDynamicRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r DDoSDynamicRule) implementsRulesetUpdateResponseRule() {}
 
-func (r DDoSDynamicRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r DDoSDynamicRule) implementsRulesetGetResponseRule() {}
 
-func (r DDoSDynamicRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r DDoSDynamicRule) implementsPhaseUpdateResponseRule() {}
 
-func (r DDoSDynamicRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r DDoSDynamicRule) implementsPhaseGetResponseRule() {}
 
-func (r DDoSDynamicRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r DDoSDynamicRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r DDoSDynamicRule) implementsRulesetsRuleNewResponseRule() {}
+func (r DDoSDynamicRule) implementsRuleNewResponseRule() {}
 
-func (r DDoSDynamicRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r DDoSDynamicRule) implementsRuleDeleteResponseRule() {}
 
-func (r DDoSDynamicRule) implementsRulesetsRuleEditResponseRule() {}
+func (r DDoSDynamicRule) implementsRuleEditResponseRule() {}
 
-func (r DDoSDynamicRule) implementsRulesetsVersionGetResponseRule() {}
+func (r DDoSDynamicRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type DDoSDynamicRuleAction string
@@ -1047,11 +1047,11 @@ func (r DDoSDynamicRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DDoSDynamicRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r DDoSDynamicRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r DDoSDynamicRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r DDoSDynamicRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r DDoSDynamicRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r DDoSDynamicRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // Configure checks for exposed credentials.
 type DDoSDynamicRuleExposedCredentialCheckParam struct {
@@ -1152,25 +1152,25 @@ func (r executeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ExecuteRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r ExecuteRule) implementsRulesetNewResponseRule() {}
 
-func (r ExecuteRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r ExecuteRule) implementsRulesetUpdateResponseRule() {}
 
-func (r ExecuteRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r ExecuteRule) implementsRulesetGetResponseRule() {}
 
-func (r ExecuteRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r ExecuteRule) implementsPhaseUpdateResponseRule() {}
 
-func (r ExecuteRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r ExecuteRule) implementsPhaseGetResponseRule() {}
 
-func (r ExecuteRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r ExecuteRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r ExecuteRule) implementsRulesetsRuleNewResponseRule() {}
+func (r ExecuteRule) implementsRuleNewResponseRule() {}
 
-func (r ExecuteRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r ExecuteRule) implementsRuleDeleteResponseRule() {}
 
-func (r ExecuteRule) implementsRulesetsRuleEditResponseRule() {}
+func (r ExecuteRule) implementsRuleEditResponseRule() {}
 
-func (r ExecuteRule) implementsRulesetsVersionGetResponseRule() {}
+func (r ExecuteRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type ExecuteRuleAction string
@@ -1521,11 +1521,11 @@ func (r ExecuteRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ExecuteRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r ExecuteRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r ExecuteRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r ExecuteRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r ExecuteRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r ExecuteRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type ExecuteRuleActionParametersParam struct {
@@ -1707,25 +1707,25 @@ func (r forceConnectionCloseRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ForceConnectionCloseRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r ForceConnectionCloseRule) implementsRulesetNewResponseRule() {}
 
-func (r ForceConnectionCloseRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r ForceConnectionCloseRule) implementsRulesetUpdateResponseRule() {}
 
-func (r ForceConnectionCloseRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r ForceConnectionCloseRule) implementsRulesetGetResponseRule() {}
 
-func (r ForceConnectionCloseRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r ForceConnectionCloseRule) implementsPhaseUpdateResponseRule() {}
 
-func (r ForceConnectionCloseRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r ForceConnectionCloseRule) implementsPhaseGetResponseRule() {}
 
-func (r ForceConnectionCloseRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r ForceConnectionCloseRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r ForceConnectionCloseRule) implementsRulesetsRuleNewResponseRule() {}
+func (r ForceConnectionCloseRule) implementsRuleNewResponseRule() {}
 
-func (r ForceConnectionCloseRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r ForceConnectionCloseRule) implementsRuleDeleteResponseRule() {}
 
-func (r ForceConnectionCloseRule) implementsRulesetsRuleEditResponseRule() {}
+func (r ForceConnectionCloseRule) implementsRuleEditResponseRule() {}
 
-func (r ForceConnectionCloseRule) implementsRulesetsVersionGetResponseRule() {}
+func (r ForceConnectionCloseRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type ForceConnectionCloseRuleAction string
@@ -1863,11 +1863,11 @@ func (r ForceConnectionCloseRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ForceConnectionCloseRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r ForceConnectionCloseRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r ForceConnectionCloseRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r ForceConnectionCloseRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r ForceConnectionCloseRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r ForceConnectionCloseRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // Configure checks for exposed credentials.
 type ForceConnectionCloseRuleExposedCredentialCheckParam struct {
@@ -1969,25 +1969,25 @@ func (r logCustomFieldRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r LogCustomFieldRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r LogCustomFieldRule) implementsRulesetNewResponseRule() {}
 
-func (r LogCustomFieldRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r LogCustomFieldRule) implementsRulesetUpdateResponseRule() {}
 
-func (r LogCustomFieldRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r LogCustomFieldRule) implementsRulesetGetResponseRule() {}
 
-func (r LogCustomFieldRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r LogCustomFieldRule) implementsPhaseUpdateResponseRule() {}
 
-func (r LogCustomFieldRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r LogCustomFieldRule) implementsPhaseGetResponseRule() {}
 
-func (r LogCustomFieldRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r LogCustomFieldRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r LogCustomFieldRule) implementsRulesetsRuleNewResponseRule() {}
+func (r LogCustomFieldRule) implementsRuleNewResponseRule() {}
 
-func (r LogCustomFieldRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r LogCustomFieldRule) implementsRuleDeleteResponseRule() {}
 
-func (r LogCustomFieldRule) implementsRulesetsRuleEditResponseRule() {}
+func (r LogCustomFieldRule) implementsRuleEditResponseRule() {}
 
-func (r LogCustomFieldRule) implementsRulesetsVersionGetResponseRule() {}
+func (r LogCustomFieldRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type LogCustomFieldRuleAction string
@@ -2223,11 +2223,11 @@ func (r LogCustomFieldRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r LogCustomFieldRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r LogCustomFieldRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r LogCustomFieldRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r LogCustomFieldRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r LogCustomFieldRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r LogCustomFieldRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type LogCustomFieldRuleActionParametersParam struct {
@@ -2372,25 +2372,25 @@ func (r logRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r LogRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r LogRule) implementsRulesetNewResponseRule() {}
 
-func (r LogRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r LogRule) implementsRulesetUpdateResponseRule() {}
 
-func (r LogRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r LogRule) implementsRulesetGetResponseRule() {}
 
-func (r LogRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r LogRule) implementsPhaseUpdateResponseRule() {}
 
-func (r LogRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r LogRule) implementsPhaseGetResponseRule() {}
 
-func (r LogRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r LogRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r LogRule) implementsRulesetsRuleNewResponseRule() {}
+func (r LogRule) implementsRuleNewResponseRule() {}
 
-func (r LogRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r LogRule) implementsRuleDeleteResponseRule() {}
 
-func (r LogRule) implementsRulesetsRuleEditResponseRule() {}
+func (r LogRule) implementsRuleEditResponseRule() {}
 
-func (r LogRule) implementsRulesetsVersionGetResponseRule() {}
+func (r LogRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type LogRuleAction string
@@ -2528,11 +2528,11 @@ func (r LogRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r LogRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r LogRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r LogRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r LogRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r LogRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r LogRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // Configure checks for exposed credentials.
 type LogRuleExposedCredentialCheckParam struct {
@@ -2666,25 +2666,25 @@ func (r managedChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ManagedChallengeRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r ManagedChallengeRule) implementsRulesetNewResponseRule() {}
 
-func (r ManagedChallengeRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r ManagedChallengeRule) implementsRulesetUpdateResponseRule() {}
 
-func (r ManagedChallengeRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r ManagedChallengeRule) implementsRulesetGetResponseRule() {}
 
-func (r ManagedChallengeRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r ManagedChallengeRule) implementsPhaseUpdateResponseRule() {}
 
-func (r ManagedChallengeRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r ManagedChallengeRule) implementsPhaseGetResponseRule() {}
 
-func (r ManagedChallengeRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r ManagedChallengeRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r ManagedChallengeRule) implementsRulesetsRuleNewResponseRule() {}
+func (r ManagedChallengeRule) implementsRuleNewResponseRule() {}
 
-func (r ManagedChallengeRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r ManagedChallengeRule) implementsRuleDeleteResponseRule() {}
 
-func (r ManagedChallengeRule) implementsRulesetsRuleEditResponseRule() {}
+func (r ManagedChallengeRule) implementsRuleEditResponseRule() {}
 
-func (r ManagedChallengeRule) implementsRulesetsVersionGetResponseRule() {}
+func (r ManagedChallengeRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type ManagedChallengeRuleAction string
@@ -2822,11 +2822,11 @@ func (r ManagedChallengeRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ManagedChallengeRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r ManagedChallengeRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r ManagedChallengeRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r ManagedChallengeRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r ManagedChallengeRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r ManagedChallengeRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // Configure checks for exposed credentials.
 type ManagedChallengeRuleExposedCredentialCheckParam struct {
@@ -2927,25 +2927,25 @@ func (r redirectRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RedirectRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r RedirectRule) implementsRulesetNewResponseRule() {}
 
-func (r RedirectRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r RedirectRule) implementsRulesetUpdateResponseRule() {}
 
-func (r RedirectRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r RedirectRule) implementsRulesetGetResponseRule() {}
 
-func (r RedirectRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r RedirectRule) implementsPhaseUpdateResponseRule() {}
 
-func (r RedirectRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r RedirectRule) implementsPhaseGetResponseRule() {}
 
-func (r RedirectRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r RedirectRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r RedirectRule) implementsRulesetsRuleNewResponseRule() {}
+func (r RedirectRule) implementsRuleNewResponseRule() {}
 
-func (r RedirectRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r RedirectRule) implementsRuleDeleteResponseRule() {}
 
-func (r RedirectRule) implementsRulesetsRuleEditResponseRule() {}
+func (r RedirectRule) implementsRuleEditResponseRule() {}
 
-func (r RedirectRule) implementsRulesetsVersionGetResponseRule() {}
+func (r RedirectRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type RedirectRuleAction string
@@ -3110,7 +3110,7 @@ func (r RedirectRuleActionParametersFromValueTargetURL) AsUnion() RedirectRuleAc
 // [rulesets.RedirectRuleActionParametersFromValueTargetURLStaticURLRedirect] or
 // [rulesets.RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirect].
 type RedirectRuleActionParametersFromValueTargetURLUnion interface {
-	implementsRulesetsRedirectRuleActionParametersFromValueTargetURL()
+	implementsRedirectRuleActionParametersFromValueTargetURL()
 }
 
 func init() {
@@ -3151,7 +3151,7 @@ func (r redirectRuleActionParametersFromValueTargetURLStaticURLRedirectJSON) Raw
 	return r.raw
 }
 
-func (r RedirectRuleActionParametersFromValueTargetURLStaticURLRedirect) implementsRulesetsRedirectRuleActionParametersFromValueTargetURL() {
+func (r RedirectRuleActionParametersFromValueTargetURLStaticURLRedirect) implementsRedirectRuleActionParametersFromValueTargetURL() {
 }
 
 type RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirect struct {
@@ -3177,7 +3177,7 @@ func (r redirectRuleActionParametersFromValueTargetURLDynamicURLRedirectJSON) Ra
 	return r.raw
 }
 
-func (r RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirect) implementsRulesetsRedirectRuleActionParametersFromValueTargetURL() {
+func (r RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirect) implementsRedirectRuleActionParametersFromValueTargetURL() {
 }
 
 // Configure checks for exposed credentials.
@@ -3301,11 +3301,11 @@ func (r RedirectRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RedirectRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r RedirectRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r RedirectRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r RedirectRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r RedirectRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r RedirectRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type RedirectRuleActionParametersParam struct {
@@ -3357,7 +3357,7 @@ func (r RedirectRuleActionParametersFromValueTargetURLParam) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RedirectRuleActionParametersFromValueTargetURLParam) implementsRulesetsRedirectRuleActionParametersFromValueTargetURLUnionParam() {
+func (r RedirectRuleActionParametersFromValueTargetURLParam) implementsRedirectRuleActionParametersFromValueTargetURLUnionParam() {
 }
 
 // The URL to redirect the request to.
@@ -3367,7 +3367,7 @@ func (r RedirectRuleActionParametersFromValueTargetURLParam) implementsRulesetsR
 // [rulesets.RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirectParam],
 // [RedirectRuleActionParametersFromValueTargetURLParam].
 type RedirectRuleActionParametersFromValueTargetURLUnionParam interface {
-	implementsRulesetsRedirectRuleActionParametersFromValueTargetURLUnionParam()
+	implementsRedirectRuleActionParametersFromValueTargetURLUnionParam()
 }
 
 type RedirectRuleActionParametersFromValueTargetURLStaticURLRedirectParam struct {
@@ -3379,7 +3379,7 @@ func (r RedirectRuleActionParametersFromValueTargetURLStaticURLRedirectParam) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r RedirectRuleActionParametersFromValueTargetURLStaticURLRedirectParam) implementsRulesetsRedirectRuleActionParametersFromValueTargetURLUnionParam() {
+func (r RedirectRuleActionParametersFromValueTargetURLStaticURLRedirectParam) implementsRedirectRuleActionParametersFromValueTargetURLUnionParam() {
 }
 
 type RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirectParam struct {
@@ -3391,7 +3391,7 @@ func (r RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirectParam) M
 	return apijson.MarshalRoot(r)
 }
 
-func (r RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirectParam) implementsRulesetsRedirectRuleActionParametersFromValueTargetURLUnionParam() {
+func (r RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirectParam) implementsRedirectRuleActionParametersFromValueTargetURLUnionParam() {
 }
 
 // Configure checks for exposed credentials.
@@ -3493,25 +3493,25 @@ func (r rewriteRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RewriteRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r RewriteRule) implementsRulesetNewResponseRule() {}
 
-func (r RewriteRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r RewriteRule) implementsRulesetUpdateResponseRule() {}
 
-func (r RewriteRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r RewriteRule) implementsRulesetGetResponseRule() {}
 
-func (r RewriteRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r RewriteRule) implementsPhaseUpdateResponseRule() {}
 
-func (r RewriteRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r RewriteRule) implementsPhaseGetResponseRule() {}
 
-func (r RewriteRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r RewriteRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r RewriteRule) implementsRulesetsRuleNewResponseRule() {}
+func (r RewriteRule) implementsRuleNewResponseRule() {}
 
-func (r RewriteRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r RewriteRule) implementsRuleDeleteResponseRule() {}
 
-func (r RewriteRule) implementsRulesetsRuleEditResponseRule() {}
+func (r RewriteRule) implementsRuleEditResponseRule() {}
 
-func (r RewriteRule) implementsRulesetsVersionGetResponseRule() {}
+func (r RewriteRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type RewriteRuleAction string
@@ -3605,7 +3605,7 @@ func (r RewriteRuleActionParametersHeader) AsUnion() RewriteRuleActionParameters
 // [rulesets.RewriteRuleActionParametersHeadersStaticHeader] or
 // [rulesets.RewriteRuleActionParametersHeadersDynamicHeader].
 type RewriteRuleActionParametersHeadersUnion interface {
-	implementsRulesetsRewriteRuleActionParametersHeader()
+	implementsRewriteRuleActionParametersHeader()
 }
 
 func init() {
@@ -3649,7 +3649,7 @@ func (r rewriteRuleActionParametersHeadersRemoveHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RewriteRuleActionParametersHeadersRemoveHeader) implementsRulesetsRewriteRuleActionParametersHeader() {
+func (r RewriteRuleActionParametersHeadersRemoveHeader) implementsRewriteRuleActionParametersHeader() {
 }
 
 type RewriteRuleActionParametersHeadersRemoveHeaderOperation string
@@ -3691,7 +3691,7 @@ func (r rewriteRuleActionParametersHeadersStaticHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RewriteRuleActionParametersHeadersStaticHeader) implementsRulesetsRewriteRuleActionParametersHeader() {
+func (r RewriteRuleActionParametersHeadersStaticHeader) implementsRewriteRuleActionParametersHeader() {
 }
 
 type RewriteRuleActionParametersHeadersStaticHeaderOperation string
@@ -3733,7 +3733,7 @@ func (r rewriteRuleActionParametersHeadersDynamicHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RewriteRuleActionParametersHeadersDynamicHeader) implementsRulesetsRewriteRuleActionParametersHeader() {
+func (r RewriteRuleActionParametersHeadersDynamicHeader) implementsRewriteRuleActionParametersHeader() {
 }
 
 type RewriteRuleActionParametersHeadersDynamicHeaderOperation string
@@ -3912,11 +3912,11 @@ func (r RewriteRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RewriteRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r RewriteRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r RewriteRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r RewriteRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r RewriteRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r RewriteRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type RewriteRuleActionParametersParam struct {
@@ -3943,7 +3943,7 @@ func (r RewriteRuleActionParametersHeaderParam) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RewriteRuleActionParametersHeaderParam) implementsRulesetsRewriteRuleActionParametersHeadersUnionParam() {
+func (r RewriteRuleActionParametersHeaderParam) implementsRewriteRuleActionParametersHeadersUnionParam() {
 }
 
 // Remove the header from the request.
@@ -3953,7 +3953,7 @@ func (r RewriteRuleActionParametersHeaderParam) implementsRulesetsRewriteRuleAct
 // [rulesets.RewriteRuleActionParametersHeadersDynamicHeaderParam],
 // [RewriteRuleActionParametersHeaderParam].
 type RewriteRuleActionParametersHeadersUnionParam interface {
-	implementsRulesetsRewriteRuleActionParametersHeadersUnionParam()
+	implementsRewriteRuleActionParametersHeadersUnionParam()
 }
 
 // Remove the header from the request.
@@ -3965,7 +3965,7 @@ func (r RewriteRuleActionParametersHeadersRemoveHeaderParam) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RewriteRuleActionParametersHeadersRemoveHeaderParam) implementsRulesetsRewriteRuleActionParametersHeadersUnionParam() {
+func (r RewriteRuleActionParametersHeadersRemoveHeaderParam) implementsRewriteRuleActionParametersHeadersUnionParam() {
 }
 
 // Set a request header with a static value.
@@ -3979,7 +3979,7 @@ func (r RewriteRuleActionParametersHeadersStaticHeaderParam) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RewriteRuleActionParametersHeadersStaticHeaderParam) implementsRulesetsRewriteRuleActionParametersHeadersUnionParam() {
+func (r RewriteRuleActionParametersHeadersStaticHeaderParam) implementsRewriteRuleActionParametersHeadersUnionParam() {
 }
 
 // Set a request header with a dynamic value.
@@ -3993,7 +3993,7 @@ func (r RewriteRuleActionParametersHeadersDynamicHeaderParam) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r RewriteRuleActionParametersHeadersDynamicHeaderParam) implementsRulesetsRewriteRuleActionParametersHeadersUnionParam() {
+func (r RewriteRuleActionParametersHeadersDynamicHeaderParam) implementsRewriteRuleActionParametersHeadersUnionParam() {
 }
 
 // URI to rewrite the request to.
@@ -4092,7 +4092,7 @@ func (r RewriteURIPart) AsUnion() RewriteURIPartUnion {
 // Union satisfied by [rulesets.RewriteURIPartStaticValue] or
 // [rulesets.RewriteURIPartDynamicValue].
 type RewriteURIPartUnion interface {
-	implementsRulesetsRewriteURIPart()
+	implementsRewriteURIPart()
 }
 
 func init() {
@@ -4132,7 +4132,7 @@ func (r rewriteURIPartStaticValueJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RewriteURIPartStaticValue) implementsRulesetsRewriteURIPart() {}
+func (r RewriteURIPartStaticValue) implementsRewriteURIPart() {}
 
 type RewriteURIPartDynamicValue struct {
 	// Expression to evaluate for the replacement value.
@@ -4156,7 +4156,7 @@ func (r rewriteURIPartDynamicValueJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RewriteURIPartDynamicValue) implementsRulesetsRewriteURIPart() {}
+func (r RewriteURIPartDynamicValue) implementsRewriteURIPart() {}
 
 type RewriteURIPartParam struct {
 	// Expression to evaluate for the replacement value.
@@ -4169,12 +4169,12 @@ func (r RewriteURIPartParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RewriteURIPartParam) implementsRulesetsRewriteURIPartUnionParam() {}
+func (r RewriteURIPartParam) implementsRewriteURIPartUnionParam() {}
 
 // Satisfied by [rulesets.RewriteURIPartStaticValueParam],
 // [rulesets.RewriteURIPartDynamicValueParam], [RewriteURIPartParam].
 type RewriteURIPartUnionParam interface {
-	implementsRulesetsRewriteURIPartUnionParam()
+	implementsRewriteURIPartUnionParam()
 }
 
 type RewriteURIPartStaticValueParam struct {
@@ -4186,7 +4186,7 @@ func (r RewriteURIPartStaticValueParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RewriteURIPartStaticValueParam) implementsRulesetsRewriteURIPartUnionParam() {}
+func (r RewriteURIPartStaticValueParam) implementsRewriteURIPartUnionParam() {}
 
 type RewriteURIPartDynamicValueParam struct {
 	// Expression to evaluate for the replacement value.
@@ -4197,7 +4197,7 @@ func (r RewriteURIPartDynamicValueParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RewriteURIPartDynamicValueParam) implementsRulesetsRewriteURIPartUnionParam() {}
+func (r RewriteURIPartDynamicValueParam) implementsRewriteURIPartUnionParam() {}
 
 type RouteRule struct {
 	// The timestamp of when the rule was last modified.
@@ -4256,25 +4256,25 @@ func (r routeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RouteRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r RouteRule) implementsRulesetNewResponseRule() {}
 
-func (r RouteRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r RouteRule) implementsRulesetUpdateResponseRule() {}
 
-func (r RouteRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r RouteRule) implementsRulesetGetResponseRule() {}
 
-func (r RouteRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r RouteRule) implementsPhaseUpdateResponseRule() {}
 
-func (r RouteRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r RouteRule) implementsPhaseGetResponseRule() {}
 
-func (r RouteRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r RouteRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r RouteRule) implementsRulesetsRuleNewResponseRule() {}
+func (r RouteRule) implementsRuleNewResponseRule() {}
 
-func (r RouteRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r RouteRule) implementsRuleDeleteResponseRule() {}
 
-func (r RouteRule) implementsRulesetsRuleEditResponseRule() {}
+func (r RouteRule) implementsRuleEditResponseRule() {}
 
-func (r RouteRule) implementsRulesetsVersionGetResponseRule() {}
+func (r RouteRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type RouteRuleAction string
@@ -4490,11 +4490,11 @@ func (r RouteRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RouteRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r RouteRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r RouteRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r RouteRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r RouteRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r RouteRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type RouteRuleActionParametersParam struct {
@@ -4631,25 +4631,25 @@ func (r scoreRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScoreRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r ScoreRule) implementsRulesetNewResponseRule() {}
 
-func (r ScoreRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r ScoreRule) implementsRulesetUpdateResponseRule() {}
 
-func (r ScoreRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r ScoreRule) implementsRulesetGetResponseRule() {}
 
-func (r ScoreRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r ScoreRule) implementsPhaseUpdateResponseRule() {}
 
-func (r ScoreRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r ScoreRule) implementsPhaseGetResponseRule() {}
 
-func (r ScoreRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r ScoreRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r ScoreRule) implementsRulesetsRuleNewResponseRule() {}
+func (r ScoreRule) implementsRuleNewResponseRule() {}
 
-func (r ScoreRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r ScoreRule) implementsRuleDeleteResponseRule() {}
 
-func (r ScoreRule) implementsRulesetsRuleEditResponseRule() {}
+func (r ScoreRule) implementsRuleEditResponseRule() {}
 
-func (r ScoreRule) implementsRulesetsVersionGetResponseRule() {}
+func (r ScoreRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type ScoreRuleAction string
@@ -4811,11 +4811,11 @@ func (r ScoreRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScoreRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r ScoreRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r ScoreRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r ScoreRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r ScoreRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r ScoreRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type ScoreRuleActionParametersParam struct {
@@ -4927,25 +4927,25 @@ func (r serveErrorRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ServeErrorRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r ServeErrorRule) implementsRulesetNewResponseRule() {}
 
-func (r ServeErrorRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r ServeErrorRule) implementsRulesetUpdateResponseRule() {}
 
-func (r ServeErrorRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r ServeErrorRule) implementsRulesetGetResponseRule() {}
 
-func (r ServeErrorRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r ServeErrorRule) implementsPhaseUpdateResponseRule() {}
 
-func (r ServeErrorRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r ServeErrorRule) implementsPhaseGetResponseRule() {}
 
-func (r ServeErrorRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r ServeErrorRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r ServeErrorRule) implementsRulesetsRuleNewResponseRule() {}
+func (r ServeErrorRule) implementsRuleNewResponseRule() {}
 
-func (r ServeErrorRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r ServeErrorRule) implementsRuleDeleteResponseRule() {}
 
-func (r ServeErrorRule) implementsRulesetsRuleEditResponseRule() {}
+func (r ServeErrorRule) implementsRuleEditResponseRule() {}
 
-func (r ServeErrorRule) implementsRulesetsVersionGetResponseRule() {}
+func (r ServeErrorRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type ServeErrorRuleAction string
@@ -5130,11 +5130,11 @@ func (r ServeErrorRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ServeErrorRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r ServeErrorRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r ServeErrorRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r ServeErrorRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r ServeErrorRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r ServeErrorRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type ServeErrorRuleActionParametersParam struct {
@@ -5250,25 +5250,25 @@ func (r setCacheSettingsRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SetCacheSettingsRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r SetCacheSettingsRule) implementsRulesetNewResponseRule() {}
 
-func (r SetCacheSettingsRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r SetCacheSettingsRule) implementsRulesetUpdateResponseRule() {}
 
-func (r SetCacheSettingsRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r SetCacheSettingsRule) implementsRulesetGetResponseRule() {}
 
-func (r SetCacheSettingsRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r SetCacheSettingsRule) implementsPhaseUpdateResponseRule() {}
 
-func (r SetCacheSettingsRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r SetCacheSettingsRule) implementsPhaseGetResponseRule() {}
 
-func (r SetCacheSettingsRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r SetCacheSettingsRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r SetCacheSettingsRule) implementsRulesetsRuleNewResponseRule() {}
+func (r SetCacheSettingsRule) implementsRuleNewResponseRule() {}
 
-func (r SetCacheSettingsRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r SetCacheSettingsRule) implementsRuleDeleteResponseRule() {}
 
-func (r SetCacheSettingsRule) implementsRulesetsRuleEditResponseRule() {}
+func (r SetCacheSettingsRule) implementsRuleEditResponseRule() {}
 
-func (r SetCacheSettingsRule) implementsRulesetsVersionGetResponseRule() {}
+func (r SetCacheSettingsRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type SetCacheSettingsRuleAction string
@@ -5443,8 +5443,7 @@ type SetCacheSettingsRuleActionParametersCacheKeyCustomKey struct {
 	Header SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHeader `json:"header"`
 	// Whether to use the original host or the resolved host in the cache key.
 	Host SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHost `json:"host"`
-	// Use the presence or absence of parameters in the query string to build the cache
-	// key.
+	// Use the presence of parameters in the query string to build the cache key.
 	QueryString SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString `json:"query_string"`
 	// Characteristics of the request user agent used in building the cache key.
 	User SetCacheSettingsRuleActionParametersCacheKeyCustomKeyUser `json:"user"`
@@ -5562,16 +5561,16 @@ func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyHostJSON) RawJSON()
 	return r.raw
 }
 
-// Use the presence or absence of parameters in the query string to build the cache
-// key.
+// Use the presence of parameters in the query string to build the cache key.
 type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString struct {
-	// build the cache key using all query string parameters EXCECPT these excluded
-	// parameters
-	Exclude SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExclude `json:"exclude"`
-	// build the cache key using a list of query string parameters that ARE in the
-	// request.
-	Include SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringInclude `json:"include"`
-	JSON    setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringJSON    `json:"-"`
+	// This field can have the runtime type of
+	// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude].
+	Exclude interface{} `json:"exclude"`
+	// This field can have the runtime type of
+	// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude].
+	Include interface{}                                                          `json:"include"`
+	JSON    setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringJSON `json:"-"`
+	union   SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion
 }
 
 // setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringJSON contains
@@ -5584,70 +5583,360 @@ type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringJSON struct
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringJSON) RawJSON() string {
 	return r.raw
 }
 
-// build the cache key using all query string parameters EXCECPT these excluded
-// parameters
-type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExclude struct {
-	// Exclude all query string parameters from use in building the cache key.
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString) UnmarshalJSON(data []byte) (err error) {
+	*r = SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters].
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString) AsUnion() SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion {
+	return r.union
+}
+
+// Use the presence of parameters in the query string to build the cache key.
+//
+// Union satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters]
+// or
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion interface {
+	implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters{}),
+		},
+	)
+}
+
+// Use the presence of parameters in the query string to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters struct {
+	// A list of query string parameters used to build the cache key.
+	Include SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude `json:"include"`
+	JSON    setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersJSON    `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersJSON struct {
+	Include     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString() {
+}
+
+// A list of query string parameters used to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude struct {
+	// Determines whether to include all query string parameters in the cache key.
 	All bool `json:"all"`
+	// This field can have the runtime type of [[]string].
+	List  interface{}                                                                                              `json:"list"`
+	JSON  setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeJSON `json:"-"`
+	union SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeJSON struct {
+	All         apijson.Field
+	List        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude) UnmarshalJSON(data []byte) (err error) {
+	*r = SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters].
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude) AsUnion() SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion {
+	return r.union
+}
+
+// A list of query string parameters used to build the cache key.
+//
+// Union satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters]
+// or
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion interface {
+	implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters{}),
+		},
+	)
+}
+
+// A list of query string parameters used to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters struct {
+	List []string                                                                                                                          `json:"list"`
+	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersJSON struct {
+	List        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude() {
+}
+
+// Build the cache key using ALL query string parameters that are in the request.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters struct {
+	// Determines whether to include all query string parameters in the cache key.
+	All  bool                                                                                                                             `json:"all"`
+	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersJSON struct {
+	All         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude() {
+}
+
+// Use the absence of parameters in the query string to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters struct {
 	// A list of query string parameters NOT used to build the cache key. All
 	// parameters present in the request but missing in this list will be used to build
 	// the cache key.
-	List []string                                                                    `json:"list"`
-	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeJSON `json:"-"`
+	Exclude SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude `json:"exclude"`
+	JSON    setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersJSON    `json:"-"`
 }
 
-// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeJSON
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersJSON
 // contains the JSON metadata for the struct
-// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExclude]
-type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeJSON struct {
-	All         apijson.Field
-	List        apijson.Field
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersJSON struct {
+	Exclude     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExclude) UnmarshalJSON(data []byte) (err error) {
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeJSON) RawJSON() string {
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersJSON) RawJSON() string {
 	return r.raw
 }
 
-// build the cache key using a list of query string parameters that ARE in the
-// request.
-type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringInclude struct {
-	// Use all query string parameters in the cache key.
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString() {
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude struct {
+	// Determines whether to exclude all query string parameters from the cache key.
 	All bool `json:"all"`
-	// A list of query string parameters used to build the cache key.
-	List []string                                                                    `json:"list"`
-	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeJSON `json:"-"`
+	// This field can have the runtime type of [[]string].
+	List  interface{}                                                                                              `json:"list"`
+	JSON  setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeJSON `json:"-"`
+	union SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion
 }
 
-// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeJSON
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeJSON
 // contains the JSON metadata for the struct
-// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringInclude]
-type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeJSON struct {
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeJSON struct {
 	All         apijson.Field
 	List        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringInclude) UnmarshalJSON(data []byte) (err error) {
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude) UnmarshalJSON(data []byte) (err error) {
+	*r = SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters].
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude) AsUnion() SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion {
+	return r.union
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+//
+// Union satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters]
+// or
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion interface {
+	implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters{}),
+		},
+	)
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters struct {
+	List []string                                                                                                                          `json:"list"`
+	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersJSON struct {
+	List        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeJSON) RawJSON() string {
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude() {
+}
+
+// Build the cache key excluding ALL query string parameters that are in the
+// request.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters struct {
+	// Determines whether to exclude all query string parameters from the cache key.
+	All  bool                                                                                                                             `json:"all"`
+	JSON setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersJSON
+// contains the JSON metadata for the struct
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters]
+type setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersJSON struct {
+	All         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude() {
 }
 
 // Characteristics of the request user agent used in building the cache key.
@@ -5963,11 +6252,11 @@ func (r SetCacheSettingsRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SetCacheSettingsRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r SetCacheSettingsRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r SetCacheSettingsRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r SetCacheSettingsRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r SetCacheSettingsRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r SetCacheSettingsRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type SetCacheSettingsRuleActionParametersParam struct {
@@ -6057,9 +6346,8 @@ type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyParam struct {
 	Header param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHeaderParam] `json:"header"`
 	// Whether to use the original host or the resolved host in the cache key.
 	Host param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHostParam] `json:"host"`
-	// Use the presence or absence of parameters in the query string to build the cache
-	// key.
-	QueryString param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringParam] `json:"query_string"`
+	// Use the presence of parameters in the query string to build the cache key.
+	QueryString param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam] `json:"query_string"`
 	// Characteristics of the request user agent used in building the cache key.
 	User param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyUserParam] `json:"user"`
 }
@@ -6113,47 +6401,160 @@ func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyHostParam) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-// Use the presence or absence of parameters in the query string to build the cache
-// key.
+// Use the presence of parameters in the query string to build the cache key.
 type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringParam struct {
-	// build the cache key using all query string parameters EXCECPT these excluded
-	// parameters
-	Exclude param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeParam] `json:"exclude"`
-	// build the cache key using a list of query string parameters that ARE in the
-	// request.
-	Include param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeParam] `json:"include"`
+	Exclude param.Field[interface{}] `json:"exclude"`
+	Include param.Field[interface{}] `json:"include"`
 }
 
 func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// build the cache key using all query string parameters EXCECPT these excluded
-// parameters
-type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeParam struct {
-	// Exclude all query string parameters from use in building the cache key.
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringParam) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam() {
+}
+
+// Use the presence of parameters in the query string to build the cache key.
+//
+// Satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersParam],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersParam],
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringParam].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam interface {
+	implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam()
+}
+
+// Use the presence of parameters in the query string to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersParam struct {
+	// A list of query string parameters used to build the cache key.
+	Include param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam] `json:"include"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersParam) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam() {
+}
+
+// A list of query string parameters used to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeParam struct {
+	// Determines whether to include all query string parameters in the cache key.
+	All  param.Field[bool]        `json:"all"`
+	List param.Field[interface{}] `json:"list"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeParam) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam() {
+}
+
+// A list of query string parameters used to build the cache key.
+//
+// Satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersParam],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersParam],
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeParam].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam interface {
+	implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam()
+}
+
+// A list of query string parameters used to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersParam struct {
+	List param.Field[[]string] `json:"list"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParametersParam) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam() {
+}
+
+// Build the cache key using ALL query string parameters that are in the request.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersParam struct {
+	// Determines whether to include all query string parameters in the cache key.
 	All param.Field[bool] `json:"all"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParametersParam) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnionParam() {
+}
+
+// Use the absence of parameters in the query string to build the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersParam struct {
 	// A list of query string parameters NOT used to build the cache key. All
 	// parameters present in the request but missing in this list will be used to build
 	// the cache key.
-	List param.Field[[]string] `json:"list"`
+	Exclude param.Field[SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam] `json:"exclude"`
 }
 
-func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludeParam) MarshalJSON() (data []byte, err error) {
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// build the cache key using a list of query string parameters that ARE in the
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersParam) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnionParam() {
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeParam struct {
+	// Determines whether to exclude all query string parameters from the cache key.
+	All  param.Field[bool]        `json:"all"`
+	List param.Field[interface{}] `json:"list"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeParam) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam() {
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+//
+// Satisfied by
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersParam],
+// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersParam],
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeParam].
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam interface {
+	implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam()
+}
+
+// A list of query string parameters NOT used to build the cache key. All
+// parameters present in the request but missing in this list will be used to build
+// the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersParam struct {
+	List param.Field[[]string] `json:"list"`
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParametersParam) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam() {
+}
+
+// Build the cache key excluding ALL query string parameters that are in the
 // request.
-type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeParam struct {
-	// Use all query string parameters in the cache key.
+type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersParam struct {
+	// Determines whether to exclude all query string parameters from the cache key.
 	All param.Field[bool] `json:"all"`
-	// A list of query string parameters used to build the cache key.
-	List param.Field[[]string] `json:"list"`
 }
 
-func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludeParam) MarshalJSON() (data []byte, err error) {
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParametersParam) implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnionParam() {
 }
 
 // Characteristics of the request user agent used in building the cache key.
@@ -6341,25 +6742,25 @@ func (r setConfigRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SetConfigRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r SetConfigRule) implementsRulesetNewResponseRule() {}
 
-func (r SetConfigRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r SetConfigRule) implementsRulesetUpdateResponseRule() {}
 
-func (r SetConfigRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r SetConfigRule) implementsRulesetGetResponseRule() {}
 
-func (r SetConfigRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r SetConfigRule) implementsPhaseUpdateResponseRule() {}
 
-func (r SetConfigRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r SetConfigRule) implementsPhaseGetResponseRule() {}
 
-func (r SetConfigRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r SetConfigRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r SetConfigRule) implementsRulesetsRuleNewResponseRule() {}
+func (r SetConfigRule) implementsRuleNewResponseRule() {}
 
-func (r SetConfigRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r SetConfigRule) implementsRuleDeleteResponseRule() {}
 
-func (r SetConfigRule) implementsRulesetsRuleEditResponseRule() {}
+func (r SetConfigRule) implementsRuleEditResponseRule() {}
 
-func (r SetConfigRule) implementsRulesetsVersionGetResponseRule() {}
+func (r SetConfigRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type SetConfigRuleAction string
@@ -6698,11 +7099,11 @@ func (r SetConfigRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SetConfigRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r SetConfigRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r SetConfigRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r SetConfigRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r SetConfigRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r SetConfigRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type SetConfigRuleActionParametersParam struct {
@@ -6859,25 +7260,25 @@ func (r skipRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SkipRule) implementsRulesetsRulesetNewResponseRule() {}
+func (r SkipRule) implementsRulesetNewResponseRule() {}
 
-func (r SkipRule) implementsRulesetsRulesetUpdateResponseRule() {}
+func (r SkipRule) implementsRulesetUpdateResponseRule() {}
 
-func (r SkipRule) implementsRulesetsRulesetGetResponseRule() {}
+func (r SkipRule) implementsRulesetGetResponseRule() {}
 
-func (r SkipRule) implementsRulesetsPhaseUpdateResponseRule() {}
+func (r SkipRule) implementsPhaseUpdateResponseRule() {}
 
-func (r SkipRule) implementsRulesetsPhaseGetResponseRule() {}
+func (r SkipRule) implementsPhaseGetResponseRule() {}
 
-func (r SkipRule) implementsRulesetsPhaseVersionGetResponseRule() {}
+func (r SkipRule) implementsPhaseVersionGetResponseRule() {}
 
-func (r SkipRule) implementsRulesetsRuleNewResponseRule() {}
+func (r SkipRule) implementsRuleNewResponseRule() {}
 
-func (r SkipRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r SkipRule) implementsRuleDeleteResponseRule() {}
 
-func (r SkipRule) implementsRulesetsRuleEditResponseRule() {}
+func (r SkipRule) implementsRuleEditResponseRule() {}
 
-func (r SkipRule) implementsRulesetsVersionGetResponseRule() {}
+func (r SkipRule) implementsVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type SkipRuleAction string
@@ -7091,11 +7492,11 @@ func (r SkipRuleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SkipRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
+func (r SkipRuleParam) implementsRulesetNewParamsRuleUnion() {}
 
-func (r SkipRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
+func (r SkipRuleParam) implementsRulesetUpdateParamsRuleUnion() {}
 
-func (r SkipRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+func (r SkipRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 
 // The parameters configuring the rule's action.
 type SkipRuleActionParametersParam struct {
@@ -7320,7 +7721,7 @@ func (r RuleNewResponseRule) AsUnion() RuleNewResponseRulesUnion {
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RuleNewResponseRulesUnion interface {
-	implementsRulesetsRuleNewResponseRule()
+	implementsRuleNewResponseRule()
 }
 
 func init() {
@@ -7478,7 +7879,7 @@ func (r ruleNewResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RuleNewResponseRulesRulesetsChallengeRule) implementsRulesetsRuleNewResponseRule() {}
+func (r RuleNewResponseRulesRulesetsChallengeRule) implementsRuleNewResponseRule() {}
 
 // The action to perform when the rule matches.
 type RuleNewResponseRulesRulesetsChallengeRuleAction string
@@ -7648,7 +8049,7 @@ func (r ruleNewResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RuleNewResponseRulesRulesetsJSChallengeRule) implementsRulesetsRuleNewResponseRule() {}
+func (r RuleNewResponseRulesRulesetsJSChallengeRule) implementsRuleNewResponseRule() {}
 
 // The action to perform when the rule matches.
 type RuleNewResponseRulesRulesetsJSChallengeRuleAction string
@@ -7952,7 +8353,7 @@ func (r RuleDeleteResponseRule) AsUnion() RuleDeleteResponseRulesUnion {
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RuleDeleteResponseRulesUnion interface {
-	implementsRulesetsRuleDeleteResponseRule()
+	implementsRuleDeleteResponseRule()
 }
 
 func init() {
@@ -8110,7 +8511,7 @@ func (r ruleDeleteResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RuleDeleteResponseRulesRulesetsChallengeRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r RuleDeleteResponseRulesRulesetsChallengeRule) implementsRuleDeleteResponseRule() {}
 
 // The action to perform when the rule matches.
 type RuleDeleteResponseRulesRulesetsChallengeRuleAction string
@@ -8280,7 +8681,7 @@ func (r ruleDeleteResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RuleDeleteResponseRulesRulesetsJSChallengeRule) implementsRulesetsRuleDeleteResponseRule() {}
+func (r RuleDeleteResponseRulesRulesetsJSChallengeRule) implementsRuleDeleteResponseRule() {}
 
 // The action to perform when the rule matches.
 type RuleDeleteResponseRulesRulesetsJSChallengeRuleAction string
@@ -8585,7 +8986,7 @@ func (r RuleEditResponseRule) AsUnion() RuleEditResponseRulesUnion {
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
 // [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RuleEditResponseRulesUnion interface {
-	implementsRulesetsRuleEditResponseRule()
+	implementsRuleEditResponseRule()
 }
 
 func init() {
@@ -8743,7 +9144,7 @@ func (r ruleEditResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RuleEditResponseRulesRulesetsChallengeRule) implementsRulesetsRuleEditResponseRule() {}
+func (r RuleEditResponseRulesRulesetsChallengeRule) implementsRuleEditResponseRule() {}
 
 // The action to perform when the rule matches.
 type RuleEditResponseRulesRulesetsChallengeRuleAction string
@@ -8913,7 +9314,7 @@ func (r ruleEditResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RuleEditResponseRulesRulesetsJSChallengeRule) implementsRulesetsRuleEditResponseRule() {}
+func (r RuleEditResponseRulesRulesetsJSChallengeRule) implementsRuleEditResponseRule() {}
 
 // The action to perform when the rule matches.
 type RuleEditResponseRulesRulesetsJSChallengeRuleAction string
@@ -9095,7 +9496,7 @@ func (r RuleNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBody) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBody) implementsRuleNewParamsBodyUnion() {}
 
 // Satisfied by [rulesets.RuleNewParamsBodyBlockRule],
 // [rulesets.RuleNewParamsBodyChallengeRule],
@@ -9114,7 +9515,7 @@ func (r RuleNewParamsBody) implementsRulesetsRuleNewParamsBodyUnion() {}
 // [rulesets.RuleNewParamsBodyDDoSDynamicRule],
 // [rulesets.RuleNewParamsBodyForceConnectionCloseRule], [RuleNewParamsBody].
 type RuleNewParamsBodyUnion interface {
-	implementsRulesetsRuleNewParamsBodyUnion()
+	implementsRuleNewParamsBodyUnion()
 }
 
 type RuleNewParamsBodyBlockRule struct {
@@ -9127,7 +9528,7 @@ func (r RuleNewParamsBodyBlockRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyBlockRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyBlockRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyBlockRulePosition struct {
@@ -9145,8 +9546,7 @@ func (r RuleNewParamsBodyBlockRulePosition) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyBlockRulePosition) implementsRulesetsRuleNewParamsBodyBlockRulePositionUnion() {
-}
+func (r RuleNewParamsBodyBlockRulePosition) implementsRuleNewParamsBodyBlockRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -9155,7 +9555,7 @@ func (r RuleNewParamsBodyBlockRulePosition) implementsRulesetsRuleNewParamsBodyB
 // [rulesets.RuleNewParamsBodyBlockRulePositionIndexPosition],
 // [RuleNewParamsBodyBlockRulePosition].
 type RuleNewParamsBodyBlockRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyBlockRulePositionUnion()
+	implementsRuleNewParamsBodyBlockRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -9169,7 +9569,7 @@ func (r RuleNewParamsBodyBlockRulePositionBeforePosition) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyBlockRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyBlockRulePositionUnion() {
+func (r RuleNewParamsBodyBlockRulePositionBeforePosition) implementsRuleNewParamsBodyBlockRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9183,7 +9583,7 @@ func (r RuleNewParamsBodyBlockRulePositionAfterPosition) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyBlockRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyBlockRulePositionUnion() {
+func (r RuleNewParamsBodyBlockRulePositionAfterPosition) implementsRuleNewParamsBodyBlockRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9196,7 +9596,7 @@ func (r RuleNewParamsBodyBlockRulePositionIndexPosition) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyBlockRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyBlockRulePositionUnion() {
+func (r RuleNewParamsBodyBlockRulePositionIndexPosition) implementsRuleNewParamsBodyBlockRulePositionUnion() {
 }
 
 type RuleNewParamsBodyChallengeRule struct {
@@ -9228,7 +9628,7 @@ func (r RuleNewParamsBodyChallengeRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyChallengeRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyChallengeRule) implementsRuleNewParamsBodyUnion() {}
 
 // The action to perform when the rule matches.
 type RuleNewParamsBodyChallengeRuleAction string
@@ -9273,7 +9673,7 @@ func (r RuleNewParamsBodyChallengeRulePosition) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyChallengeRulePosition) implementsRulesetsRuleNewParamsBodyChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyChallengeRulePosition) implementsRuleNewParamsBodyChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9283,7 +9683,7 @@ func (r RuleNewParamsBodyChallengeRulePosition) implementsRulesetsRuleNewParamsB
 // [rulesets.RuleNewParamsBodyChallengeRulePositionIndexPosition],
 // [RuleNewParamsBodyChallengeRulePosition].
 type RuleNewParamsBodyChallengeRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyChallengeRulePositionUnion()
+	implementsRuleNewParamsBodyChallengeRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -9297,7 +9697,7 @@ func (r RuleNewParamsBodyChallengeRulePositionBeforePosition) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyChallengeRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyChallengeRulePositionBeforePosition) implementsRuleNewParamsBodyChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9311,7 +9711,7 @@ func (r RuleNewParamsBodyChallengeRulePositionAfterPosition) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyChallengeRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyChallengeRulePositionAfterPosition) implementsRuleNewParamsBodyChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9324,7 +9724,7 @@ func (r RuleNewParamsBodyChallengeRulePositionIndexPosition) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyChallengeRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyChallengeRulePositionIndexPosition) implementsRuleNewParamsBodyChallengeRulePositionUnion() {
 }
 
 // An object configuring the rule's ratelimit behavior.
@@ -9385,7 +9785,7 @@ func (r RuleNewParamsBodyCompressionRule) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyCompressionRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyCompressionRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyCompressionRulePosition struct {
@@ -9403,7 +9803,7 @@ func (r RuleNewParamsBodyCompressionRulePosition) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyCompressionRulePosition) implementsRulesetsRuleNewParamsBodyCompressionRulePositionUnion() {
+func (r RuleNewParamsBodyCompressionRulePosition) implementsRuleNewParamsBodyCompressionRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9413,7 +9813,7 @@ func (r RuleNewParamsBodyCompressionRulePosition) implementsRulesetsRuleNewParam
 // [rulesets.RuleNewParamsBodyCompressionRulePositionIndexPosition],
 // [RuleNewParamsBodyCompressionRulePosition].
 type RuleNewParamsBodyCompressionRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyCompressionRulePositionUnion()
+	implementsRuleNewParamsBodyCompressionRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -9427,7 +9827,7 @@ func (r RuleNewParamsBodyCompressionRulePositionBeforePosition) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyCompressionRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyCompressionRulePositionUnion() {
+func (r RuleNewParamsBodyCompressionRulePositionBeforePosition) implementsRuleNewParamsBodyCompressionRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9441,7 +9841,7 @@ func (r RuleNewParamsBodyCompressionRulePositionAfterPosition) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyCompressionRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyCompressionRulePositionUnion() {
+func (r RuleNewParamsBodyCompressionRulePositionAfterPosition) implementsRuleNewParamsBodyCompressionRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9454,7 +9854,7 @@ func (r RuleNewParamsBodyCompressionRulePositionIndexPosition) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyCompressionRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyCompressionRulePositionUnion() {
+func (r RuleNewParamsBodyCompressionRulePositionIndexPosition) implementsRuleNewParamsBodyCompressionRulePositionUnion() {
 }
 
 type RuleNewParamsBodyExecuteRule struct {
@@ -9467,7 +9867,7 @@ func (r RuleNewParamsBodyExecuteRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyExecuteRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyExecuteRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyExecuteRulePosition struct {
@@ -9485,8 +9885,7 @@ func (r RuleNewParamsBodyExecuteRulePosition) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyExecuteRulePosition) implementsRulesetsRuleNewParamsBodyExecuteRulePositionUnion() {
-}
+func (r RuleNewParamsBodyExecuteRulePosition) implementsRuleNewParamsBodyExecuteRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -9495,7 +9894,7 @@ func (r RuleNewParamsBodyExecuteRulePosition) implementsRulesetsRuleNewParamsBod
 // [rulesets.RuleNewParamsBodyExecuteRulePositionIndexPosition],
 // [RuleNewParamsBodyExecuteRulePosition].
 type RuleNewParamsBodyExecuteRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyExecuteRulePositionUnion()
+	implementsRuleNewParamsBodyExecuteRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -9509,7 +9908,7 @@ func (r RuleNewParamsBodyExecuteRulePositionBeforePosition) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyExecuteRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyExecuteRulePositionUnion() {
+func (r RuleNewParamsBodyExecuteRulePositionBeforePosition) implementsRuleNewParamsBodyExecuteRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9523,7 +9922,7 @@ func (r RuleNewParamsBodyExecuteRulePositionAfterPosition) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyExecuteRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyExecuteRulePositionUnion() {
+func (r RuleNewParamsBodyExecuteRulePositionAfterPosition) implementsRuleNewParamsBodyExecuteRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9536,7 +9935,7 @@ func (r RuleNewParamsBodyExecuteRulePositionIndexPosition) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyExecuteRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyExecuteRulePositionUnion() {
+func (r RuleNewParamsBodyExecuteRulePositionIndexPosition) implementsRuleNewParamsBodyExecuteRulePositionUnion() {
 }
 
 type RuleNewParamsBodyJavascriptChallengeRule struct {
@@ -9568,7 +9967,7 @@ func (r RuleNewParamsBodyJavascriptChallengeRule) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyJavascriptChallengeRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyJavascriptChallengeRule) implementsRuleNewParamsBodyUnion() {}
 
 // The action to perform when the rule matches.
 type RuleNewParamsBodyJavascriptChallengeRuleAction string
@@ -9613,7 +10012,7 @@ func (r RuleNewParamsBodyJavascriptChallengeRulePosition) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyJavascriptChallengeRulePosition) implementsRulesetsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyJavascriptChallengeRulePosition) implementsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9624,7 +10023,7 @@ func (r RuleNewParamsBodyJavascriptChallengeRulePosition) implementsRulesetsRule
 // [rulesets.RuleNewParamsBodyJavascriptChallengeRulePositionIndexPosition],
 // [RuleNewParamsBodyJavascriptChallengeRulePosition].
 type RuleNewParamsBodyJavascriptChallengeRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyJavascriptChallengeRulePositionUnion()
+	implementsRuleNewParamsBodyJavascriptChallengeRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -9638,7 +10037,7 @@ func (r RuleNewParamsBodyJavascriptChallengeRulePositionBeforePosition) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyJavascriptChallengeRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyJavascriptChallengeRulePositionBeforePosition) implementsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9652,7 +10051,7 @@ func (r RuleNewParamsBodyJavascriptChallengeRulePositionAfterPosition) MarshalJS
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyJavascriptChallengeRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyJavascriptChallengeRulePositionAfterPosition) implementsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9665,7 +10064,7 @@ func (r RuleNewParamsBodyJavascriptChallengeRulePositionIndexPosition) MarshalJS
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyJavascriptChallengeRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyJavascriptChallengeRulePositionIndexPosition) implementsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
 }
 
 // An object configuring the rule's ratelimit behavior.
@@ -9726,7 +10125,7 @@ func (r RuleNewParamsBodyLogRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyLogRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyLogRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyLogRulePosition struct {
@@ -9744,7 +10143,7 @@ func (r RuleNewParamsBodyLogRulePosition) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyLogRulePosition) implementsRulesetsRuleNewParamsBodyLogRulePositionUnion() {}
+func (r RuleNewParamsBodyLogRulePosition) implementsRuleNewParamsBodyLogRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -9753,7 +10152,7 @@ func (r RuleNewParamsBodyLogRulePosition) implementsRulesetsRuleNewParamsBodyLog
 // [rulesets.RuleNewParamsBodyLogRulePositionIndexPosition],
 // [RuleNewParamsBodyLogRulePosition].
 type RuleNewParamsBodyLogRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyLogRulePositionUnion()
+	implementsRuleNewParamsBodyLogRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -9767,7 +10166,7 @@ func (r RuleNewParamsBodyLogRulePositionBeforePosition) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyLogRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyLogRulePositionUnion() {
+func (r RuleNewParamsBodyLogRulePositionBeforePosition) implementsRuleNewParamsBodyLogRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9781,7 +10180,7 @@ func (r RuleNewParamsBodyLogRulePositionAfterPosition) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyLogRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyLogRulePositionUnion() {
+func (r RuleNewParamsBodyLogRulePositionAfterPosition) implementsRuleNewParamsBodyLogRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9794,7 +10193,7 @@ func (r RuleNewParamsBodyLogRulePositionIndexPosition) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyLogRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyLogRulePositionUnion() {
+func (r RuleNewParamsBodyLogRulePositionIndexPosition) implementsRuleNewParamsBodyLogRulePositionUnion() {
 }
 
 type RuleNewParamsBodyManagedChallengeRule struct {
@@ -9807,7 +10206,7 @@ func (r RuleNewParamsBodyManagedChallengeRule) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyManagedChallengeRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyManagedChallengeRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyManagedChallengeRulePosition struct {
@@ -9825,7 +10224,7 @@ func (r RuleNewParamsBodyManagedChallengeRulePosition) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyManagedChallengeRulePosition) implementsRulesetsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyManagedChallengeRulePosition) implementsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9836,7 +10235,7 @@ func (r RuleNewParamsBodyManagedChallengeRulePosition) implementsRulesetsRuleNew
 // [rulesets.RuleNewParamsBodyManagedChallengeRulePositionIndexPosition],
 // [RuleNewParamsBodyManagedChallengeRulePosition].
 type RuleNewParamsBodyManagedChallengeRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyManagedChallengeRulePositionUnion()
+	implementsRuleNewParamsBodyManagedChallengeRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -9850,7 +10249,7 @@ func (r RuleNewParamsBodyManagedChallengeRulePositionBeforePosition) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyManagedChallengeRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyManagedChallengeRulePositionBeforePosition) implementsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9864,7 +10263,7 @@ func (r RuleNewParamsBodyManagedChallengeRulePositionAfterPosition) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyManagedChallengeRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyManagedChallengeRulePositionAfterPosition) implementsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9877,7 +10276,7 @@ func (r RuleNewParamsBodyManagedChallengeRulePositionIndexPosition) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyManagedChallengeRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
+func (r RuleNewParamsBodyManagedChallengeRulePositionIndexPosition) implementsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
 }
 
 type RuleNewParamsBodyRedirectRule struct {
@@ -9890,7 +10289,7 @@ func (r RuleNewParamsBodyRedirectRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRedirectRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyRedirectRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyRedirectRulePosition struct {
@@ -9908,7 +10307,7 @@ func (r RuleNewParamsBodyRedirectRulePosition) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRedirectRulePosition) implementsRulesetsRuleNewParamsBodyRedirectRulePositionUnion() {
+func (r RuleNewParamsBodyRedirectRulePosition) implementsRuleNewParamsBodyRedirectRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9918,7 +10317,7 @@ func (r RuleNewParamsBodyRedirectRulePosition) implementsRulesetsRuleNewParamsBo
 // [rulesets.RuleNewParamsBodyRedirectRulePositionIndexPosition],
 // [RuleNewParamsBodyRedirectRulePosition].
 type RuleNewParamsBodyRedirectRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyRedirectRulePositionUnion()
+	implementsRuleNewParamsBodyRedirectRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -9932,7 +10331,7 @@ func (r RuleNewParamsBodyRedirectRulePositionBeforePosition) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRedirectRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyRedirectRulePositionUnion() {
+func (r RuleNewParamsBodyRedirectRulePositionBeforePosition) implementsRuleNewParamsBodyRedirectRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9946,7 +10345,7 @@ func (r RuleNewParamsBodyRedirectRulePositionAfterPosition) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRedirectRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyRedirectRulePositionUnion() {
+func (r RuleNewParamsBodyRedirectRulePositionAfterPosition) implementsRuleNewParamsBodyRedirectRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -9959,7 +10358,7 @@ func (r RuleNewParamsBodyRedirectRulePositionIndexPosition) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRedirectRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyRedirectRulePositionUnion() {
+func (r RuleNewParamsBodyRedirectRulePositionIndexPosition) implementsRuleNewParamsBodyRedirectRulePositionUnion() {
 }
 
 type RuleNewParamsBodyRewriteRule struct {
@@ -9972,7 +10371,7 @@ func (r RuleNewParamsBodyRewriteRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRewriteRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyRewriteRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyRewriteRulePosition struct {
@@ -9990,8 +10389,7 @@ func (r RuleNewParamsBodyRewriteRulePosition) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRewriteRulePosition) implementsRulesetsRuleNewParamsBodyRewriteRulePositionUnion() {
-}
+func (r RuleNewParamsBodyRewriteRulePosition) implementsRuleNewParamsBodyRewriteRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -10000,7 +10398,7 @@ func (r RuleNewParamsBodyRewriteRulePosition) implementsRulesetsRuleNewParamsBod
 // [rulesets.RuleNewParamsBodyRewriteRulePositionIndexPosition],
 // [RuleNewParamsBodyRewriteRulePosition].
 type RuleNewParamsBodyRewriteRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyRewriteRulePositionUnion()
+	implementsRuleNewParamsBodyRewriteRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -10014,7 +10412,7 @@ func (r RuleNewParamsBodyRewriteRulePositionBeforePosition) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRewriteRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyRewriteRulePositionUnion() {
+func (r RuleNewParamsBodyRewriteRulePositionBeforePosition) implementsRuleNewParamsBodyRewriteRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10028,7 +10426,7 @@ func (r RuleNewParamsBodyRewriteRulePositionAfterPosition) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRewriteRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyRewriteRulePositionUnion() {
+func (r RuleNewParamsBodyRewriteRulePositionAfterPosition) implementsRuleNewParamsBodyRewriteRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10041,7 +10439,7 @@ func (r RuleNewParamsBodyRewriteRulePositionIndexPosition) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRewriteRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyRewriteRulePositionUnion() {
+func (r RuleNewParamsBodyRewriteRulePositionIndexPosition) implementsRuleNewParamsBodyRewriteRulePositionUnion() {
 }
 
 type RuleNewParamsBodyOriginRule struct {
@@ -10054,7 +10452,7 @@ func (r RuleNewParamsBodyOriginRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyOriginRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyOriginRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyOriginRulePosition struct {
@@ -10072,8 +10470,7 @@ func (r RuleNewParamsBodyOriginRulePosition) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyOriginRulePosition) implementsRulesetsRuleNewParamsBodyOriginRulePositionUnion() {
-}
+func (r RuleNewParamsBodyOriginRulePosition) implementsRuleNewParamsBodyOriginRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -10082,7 +10479,7 @@ func (r RuleNewParamsBodyOriginRulePosition) implementsRulesetsRuleNewParamsBody
 // [rulesets.RuleNewParamsBodyOriginRulePositionIndexPosition],
 // [RuleNewParamsBodyOriginRulePosition].
 type RuleNewParamsBodyOriginRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyOriginRulePositionUnion()
+	implementsRuleNewParamsBodyOriginRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -10096,7 +10493,7 @@ func (r RuleNewParamsBodyOriginRulePositionBeforePosition) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyOriginRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyOriginRulePositionUnion() {
+func (r RuleNewParamsBodyOriginRulePositionBeforePosition) implementsRuleNewParamsBodyOriginRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10110,7 +10507,7 @@ func (r RuleNewParamsBodyOriginRulePositionAfterPosition) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyOriginRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyOriginRulePositionUnion() {
+func (r RuleNewParamsBodyOriginRulePositionAfterPosition) implementsRuleNewParamsBodyOriginRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10123,7 +10520,7 @@ func (r RuleNewParamsBodyOriginRulePositionIndexPosition) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyOriginRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyOriginRulePositionUnion() {
+func (r RuleNewParamsBodyOriginRulePositionIndexPosition) implementsRuleNewParamsBodyOriginRulePositionUnion() {
 }
 
 type RuleNewParamsBodyScoreRule struct {
@@ -10136,7 +10533,7 @@ func (r RuleNewParamsBodyScoreRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyScoreRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyScoreRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyScoreRulePosition struct {
@@ -10154,8 +10551,7 @@ func (r RuleNewParamsBodyScoreRulePosition) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyScoreRulePosition) implementsRulesetsRuleNewParamsBodyScoreRulePositionUnion() {
-}
+func (r RuleNewParamsBodyScoreRulePosition) implementsRuleNewParamsBodyScoreRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -10164,7 +10560,7 @@ func (r RuleNewParamsBodyScoreRulePosition) implementsRulesetsRuleNewParamsBodyS
 // [rulesets.RuleNewParamsBodyScoreRulePositionIndexPosition],
 // [RuleNewParamsBodyScoreRulePosition].
 type RuleNewParamsBodyScoreRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyScoreRulePositionUnion()
+	implementsRuleNewParamsBodyScoreRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -10178,7 +10574,7 @@ func (r RuleNewParamsBodyScoreRulePositionBeforePosition) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyScoreRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyScoreRulePositionUnion() {
+func (r RuleNewParamsBodyScoreRulePositionBeforePosition) implementsRuleNewParamsBodyScoreRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10192,7 +10588,7 @@ func (r RuleNewParamsBodyScoreRulePositionAfterPosition) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyScoreRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyScoreRulePositionUnion() {
+func (r RuleNewParamsBodyScoreRulePositionAfterPosition) implementsRuleNewParamsBodyScoreRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10205,7 +10601,7 @@ func (r RuleNewParamsBodyScoreRulePositionIndexPosition) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyScoreRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyScoreRulePositionUnion() {
+func (r RuleNewParamsBodyScoreRulePositionIndexPosition) implementsRuleNewParamsBodyScoreRulePositionUnion() {
 }
 
 type RuleNewParamsBodyServeErrorRule struct {
@@ -10218,7 +10614,7 @@ func (r RuleNewParamsBodyServeErrorRule) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyServeErrorRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyServeErrorRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyServeErrorRulePosition struct {
@@ -10236,7 +10632,7 @@ func (r RuleNewParamsBodyServeErrorRulePosition) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyServeErrorRulePosition) implementsRulesetsRuleNewParamsBodyServeErrorRulePositionUnion() {
+func (r RuleNewParamsBodyServeErrorRulePosition) implementsRuleNewParamsBodyServeErrorRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10246,7 +10642,7 @@ func (r RuleNewParamsBodyServeErrorRulePosition) implementsRulesetsRuleNewParams
 // [rulesets.RuleNewParamsBodyServeErrorRulePositionIndexPosition],
 // [RuleNewParamsBodyServeErrorRulePosition].
 type RuleNewParamsBodyServeErrorRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyServeErrorRulePositionUnion()
+	implementsRuleNewParamsBodyServeErrorRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -10260,7 +10656,7 @@ func (r RuleNewParamsBodyServeErrorRulePositionBeforePosition) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyServeErrorRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyServeErrorRulePositionUnion() {
+func (r RuleNewParamsBodyServeErrorRulePositionBeforePosition) implementsRuleNewParamsBodyServeErrorRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10274,7 +10670,7 @@ func (r RuleNewParamsBodyServeErrorRulePositionAfterPosition) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyServeErrorRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyServeErrorRulePositionUnion() {
+func (r RuleNewParamsBodyServeErrorRulePositionAfterPosition) implementsRuleNewParamsBodyServeErrorRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10287,7 +10683,7 @@ func (r RuleNewParamsBodyServeErrorRulePositionIndexPosition) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyServeErrorRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyServeErrorRulePositionUnion() {
+func (r RuleNewParamsBodyServeErrorRulePositionIndexPosition) implementsRuleNewParamsBodyServeErrorRulePositionUnion() {
 }
 
 type RuleNewParamsBodySetConfigRule struct {
@@ -10300,7 +10696,7 @@ func (r RuleNewParamsBodySetConfigRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySetConfigRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodySetConfigRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodySetConfigRulePosition struct {
@@ -10318,7 +10714,7 @@ func (r RuleNewParamsBodySetConfigRulePosition) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySetConfigRulePosition) implementsRulesetsRuleNewParamsBodySetConfigRulePositionUnion() {
+func (r RuleNewParamsBodySetConfigRulePosition) implementsRuleNewParamsBodySetConfigRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10328,7 +10724,7 @@ func (r RuleNewParamsBodySetConfigRulePosition) implementsRulesetsRuleNewParamsB
 // [rulesets.RuleNewParamsBodySetConfigRulePositionIndexPosition],
 // [RuleNewParamsBodySetConfigRulePosition].
 type RuleNewParamsBodySetConfigRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodySetConfigRulePositionUnion()
+	implementsRuleNewParamsBodySetConfigRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -10342,7 +10738,7 @@ func (r RuleNewParamsBodySetConfigRulePositionBeforePosition) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySetConfigRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodySetConfigRulePositionUnion() {
+func (r RuleNewParamsBodySetConfigRulePositionBeforePosition) implementsRuleNewParamsBodySetConfigRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10356,7 +10752,7 @@ func (r RuleNewParamsBodySetConfigRulePositionAfterPosition) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySetConfigRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodySetConfigRulePositionUnion() {
+func (r RuleNewParamsBodySetConfigRulePositionAfterPosition) implementsRuleNewParamsBodySetConfigRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10369,7 +10765,7 @@ func (r RuleNewParamsBodySetConfigRulePositionIndexPosition) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySetConfigRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodySetConfigRulePositionUnion() {
+func (r RuleNewParamsBodySetConfigRulePositionIndexPosition) implementsRuleNewParamsBodySetConfigRulePositionUnion() {
 }
 
 type RuleNewParamsBodySkipRule struct {
@@ -10382,7 +10778,7 @@ func (r RuleNewParamsBodySkipRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySkipRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodySkipRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodySkipRulePosition struct {
@@ -10400,8 +10796,7 @@ func (r RuleNewParamsBodySkipRulePosition) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySkipRulePosition) implementsRulesetsRuleNewParamsBodySkipRulePositionUnion() {
-}
+func (r RuleNewParamsBodySkipRulePosition) implementsRuleNewParamsBodySkipRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -10410,7 +10805,7 @@ func (r RuleNewParamsBodySkipRulePosition) implementsRulesetsRuleNewParamsBodySk
 // [rulesets.RuleNewParamsBodySkipRulePositionIndexPosition],
 // [RuleNewParamsBodySkipRulePosition].
 type RuleNewParamsBodySkipRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodySkipRulePositionUnion()
+	implementsRuleNewParamsBodySkipRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -10424,7 +10819,7 @@ func (r RuleNewParamsBodySkipRulePositionBeforePosition) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySkipRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodySkipRulePositionUnion() {
+func (r RuleNewParamsBodySkipRulePositionBeforePosition) implementsRuleNewParamsBodySkipRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10438,7 +10833,7 @@ func (r RuleNewParamsBodySkipRulePositionAfterPosition) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySkipRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodySkipRulePositionUnion() {
+func (r RuleNewParamsBodySkipRulePositionAfterPosition) implementsRuleNewParamsBodySkipRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10451,7 +10846,7 @@ func (r RuleNewParamsBodySkipRulePositionIndexPosition) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySkipRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodySkipRulePositionUnion() {
+func (r RuleNewParamsBodySkipRulePositionIndexPosition) implementsRuleNewParamsBodySkipRulePositionUnion() {
 }
 
 type RuleNewParamsBodySetCacheSettingsRule struct {
@@ -10464,7 +10859,7 @@ func (r RuleNewParamsBodySetCacheSettingsRule) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySetCacheSettingsRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodySetCacheSettingsRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodySetCacheSettingsRulePosition struct {
@@ -10482,7 +10877,7 @@ func (r RuleNewParamsBodySetCacheSettingsRulePosition) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySetCacheSettingsRulePosition) implementsRulesetsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
+func (r RuleNewParamsBodySetCacheSettingsRulePosition) implementsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10493,7 +10888,7 @@ func (r RuleNewParamsBodySetCacheSettingsRulePosition) implementsRulesetsRuleNew
 // [rulesets.RuleNewParamsBodySetCacheSettingsRulePositionIndexPosition],
 // [RuleNewParamsBodySetCacheSettingsRulePosition].
 type RuleNewParamsBodySetCacheSettingsRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodySetCacheSettingsRulePositionUnion()
+	implementsRuleNewParamsBodySetCacheSettingsRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -10507,7 +10902,7 @@ func (r RuleNewParamsBodySetCacheSettingsRulePositionBeforePosition) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySetCacheSettingsRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
+func (r RuleNewParamsBodySetCacheSettingsRulePositionBeforePosition) implementsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10521,7 +10916,7 @@ func (r RuleNewParamsBodySetCacheSettingsRulePositionAfterPosition) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySetCacheSettingsRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
+func (r RuleNewParamsBodySetCacheSettingsRulePositionAfterPosition) implementsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10534,7 +10929,7 @@ func (r RuleNewParamsBodySetCacheSettingsRulePositionIndexPosition) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodySetCacheSettingsRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
+func (r RuleNewParamsBodySetCacheSettingsRulePositionIndexPosition) implementsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
 }
 
 type RuleNewParamsBodyLogCustomFieldRule struct {
@@ -10547,7 +10942,7 @@ func (r RuleNewParamsBodyLogCustomFieldRule) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyLogCustomFieldRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyLogCustomFieldRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyLogCustomFieldRulePosition struct {
@@ -10565,7 +10960,7 @@ func (r RuleNewParamsBodyLogCustomFieldRulePosition) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyLogCustomFieldRulePosition) implementsRulesetsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
+func (r RuleNewParamsBodyLogCustomFieldRulePosition) implementsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10576,7 +10971,7 @@ func (r RuleNewParamsBodyLogCustomFieldRulePosition) implementsRulesetsRuleNewPa
 // [rulesets.RuleNewParamsBodyLogCustomFieldRulePositionIndexPosition],
 // [RuleNewParamsBodyLogCustomFieldRulePosition].
 type RuleNewParamsBodyLogCustomFieldRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyLogCustomFieldRulePositionUnion()
+	implementsRuleNewParamsBodyLogCustomFieldRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -10590,7 +10985,7 @@ func (r RuleNewParamsBodyLogCustomFieldRulePositionBeforePosition) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyLogCustomFieldRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
+func (r RuleNewParamsBodyLogCustomFieldRulePositionBeforePosition) implementsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10604,7 +10999,7 @@ func (r RuleNewParamsBodyLogCustomFieldRulePositionAfterPosition) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyLogCustomFieldRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
+func (r RuleNewParamsBodyLogCustomFieldRulePositionAfterPosition) implementsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10617,7 +11012,7 @@ func (r RuleNewParamsBodyLogCustomFieldRulePositionIndexPosition) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyLogCustomFieldRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
+func (r RuleNewParamsBodyLogCustomFieldRulePositionIndexPosition) implementsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
 }
 
 type RuleNewParamsBodyDDoSDynamicRule struct {
@@ -10630,7 +11025,7 @@ func (r RuleNewParamsBodyDDoSDynamicRule) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyDDoSDynamicRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyDDoSDynamicRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyDDoSDynamicRulePosition struct {
@@ -10648,7 +11043,7 @@ func (r RuleNewParamsBodyDDoSDynamicRulePosition) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyDDoSDynamicRulePosition) implementsRulesetsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
+func (r RuleNewParamsBodyDDoSDynamicRulePosition) implementsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10658,7 +11053,7 @@ func (r RuleNewParamsBodyDDoSDynamicRulePosition) implementsRulesetsRuleNewParam
 // [rulesets.RuleNewParamsBodyDDoSDynamicRulePositionIndexPosition],
 // [RuleNewParamsBodyDDoSDynamicRulePosition].
 type RuleNewParamsBodyDDoSDynamicRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyDDoSDynamicRulePositionUnion()
+	implementsRuleNewParamsBodyDDoSDynamicRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -10672,7 +11067,7 @@ func (r RuleNewParamsBodyDDoSDynamicRulePositionBeforePosition) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyDDoSDynamicRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
+func (r RuleNewParamsBodyDDoSDynamicRulePositionBeforePosition) implementsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10686,7 +11081,7 @@ func (r RuleNewParamsBodyDDoSDynamicRulePositionAfterPosition) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyDDoSDynamicRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
+func (r RuleNewParamsBodyDDoSDynamicRulePositionAfterPosition) implementsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10699,7 +11094,7 @@ func (r RuleNewParamsBodyDDoSDynamicRulePositionIndexPosition) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyDDoSDynamicRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
+func (r RuleNewParamsBodyDDoSDynamicRulePositionIndexPosition) implementsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
 }
 
 type RuleNewParamsBodyForceConnectionCloseRule struct {
@@ -10712,7 +11107,7 @@ func (r RuleNewParamsBodyForceConnectionCloseRule) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyForceConnectionCloseRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyForceConnectionCloseRule) implementsRuleNewParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleNewParamsBodyForceConnectionCloseRulePosition struct {
@@ -10730,7 +11125,7 @@ func (r RuleNewParamsBodyForceConnectionCloseRulePosition) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyForceConnectionCloseRulePosition) implementsRulesetsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
+func (r RuleNewParamsBodyForceConnectionCloseRulePosition) implementsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10741,7 +11136,7 @@ func (r RuleNewParamsBodyForceConnectionCloseRulePosition) implementsRulesetsRul
 // [rulesets.RuleNewParamsBodyForceConnectionCloseRulePositionIndexPosition],
 // [RuleNewParamsBodyForceConnectionCloseRulePosition].
 type RuleNewParamsBodyForceConnectionCloseRulePositionUnion interface {
-	implementsRulesetsRuleNewParamsBodyForceConnectionCloseRulePositionUnion()
+	implementsRuleNewParamsBodyForceConnectionCloseRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -10755,7 +11150,7 @@ func (r RuleNewParamsBodyForceConnectionCloseRulePositionBeforePosition) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyForceConnectionCloseRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
+func (r RuleNewParamsBodyForceConnectionCloseRulePositionBeforePosition) implementsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10769,7 +11164,7 @@ func (r RuleNewParamsBodyForceConnectionCloseRulePositionAfterPosition) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyForceConnectionCloseRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
+func (r RuleNewParamsBodyForceConnectionCloseRulePositionAfterPosition) implementsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -10782,7 +11177,7 @@ func (r RuleNewParamsBodyForceConnectionCloseRulePositionIndexPosition) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyForceConnectionCloseRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
+func (r RuleNewParamsBodyForceConnectionCloseRulePositionIndexPosition) implementsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
 }
 
 // The action to perform when the rule matches.
@@ -11164,7 +11559,7 @@ func (r RuleEditParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBody) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBody) implementsRuleEditParamsBodyUnion() {}
 
 // Satisfied by [rulesets.RuleEditParamsBodyBlockRule],
 // [rulesets.RuleEditParamsBodyChallengeRule],
@@ -11184,7 +11579,7 @@ func (r RuleEditParamsBody) implementsRulesetsRuleEditParamsBodyUnion() {}
 // [rulesets.RuleEditParamsBodyDDoSDynamicRule],
 // [rulesets.RuleEditParamsBodyForceConnectionCloseRule], [RuleEditParamsBody].
 type RuleEditParamsBodyUnion interface {
-	implementsRulesetsRuleEditParamsBodyUnion()
+	implementsRuleEditParamsBodyUnion()
 }
 
 type RuleEditParamsBodyBlockRule struct {
@@ -11197,7 +11592,7 @@ func (r RuleEditParamsBodyBlockRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyBlockRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyBlockRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyBlockRulePosition struct {
@@ -11215,8 +11610,7 @@ func (r RuleEditParamsBodyBlockRulePosition) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyBlockRulePosition) implementsRulesetsRuleEditParamsBodyBlockRulePositionUnion() {
-}
+func (r RuleEditParamsBodyBlockRulePosition) implementsRuleEditParamsBodyBlockRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -11225,7 +11619,7 @@ func (r RuleEditParamsBodyBlockRulePosition) implementsRulesetsRuleEditParamsBod
 // [rulesets.RuleEditParamsBodyBlockRulePositionIndexPosition],
 // [RuleEditParamsBodyBlockRulePosition].
 type RuleEditParamsBodyBlockRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyBlockRulePositionUnion()
+	implementsRuleEditParamsBodyBlockRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -11239,7 +11633,7 @@ func (r RuleEditParamsBodyBlockRulePositionBeforePosition) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyBlockRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyBlockRulePositionUnion() {
+func (r RuleEditParamsBodyBlockRulePositionBeforePosition) implementsRuleEditParamsBodyBlockRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11253,7 +11647,7 @@ func (r RuleEditParamsBodyBlockRulePositionAfterPosition) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyBlockRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyBlockRulePositionUnion() {
+func (r RuleEditParamsBodyBlockRulePositionAfterPosition) implementsRuleEditParamsBodyBlockRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11266,7 +11660,7 @@ func (r RuleEditParamsBodyBlockRulePositionIndexPosition) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyBlockRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyBlockRulePositionUnion() {
+func (r RuleEditParamsBodyBlockRulePositionIndexPosition) implementsRuleEditParamsBodyBlockRulePositionUnion() {
 }
 
 type RuleEditParamsBodyChallengeRule struct {
@@ -11298,7 +11692,7 @@ func (r RuleEditParamsBodyChallengeRule) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyChallengeRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyChallengeRule) implementsRuleEditParamsBodyUnion() {}
 
 // The action to perform when the rule matches.
 type RuleEditParamsBodyChallengeRuleAction string
@@ -11343,7 +11737,7 @@ func (r RuleEditParamsBodyChallengeRulePosition) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyChallengeRulePosition) implementsRulesetsRuleEditParamsBodyChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyChallengeRulePosition) implementsRuleEditParamsBodyChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11353,7 +11747,7 @@ func (r RuleEditParamsBodyChallengeRulePosition) implementsRulesetsRuleEditParam
 // [rulesets.RuleEditParamsBodyChallengeRulePositionIndexPosition],
 // [RuleEditParamsBodyChallengeRulePosition].
 type RuleEditParamsBodyChallengeRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyChallengeRulePositionUnion()
+	implementsRuleEditParamsBodyChallengeRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -11367,7 +11761,7 @@ func (r RuleEditParamsBodyChallengeRulePositionBeforePosition) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyChallengeRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyChallengeRulePositionBeforePosition) implementsRuleEditParamsBodyChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11381,7 +11775,7 @@ func (r RuleEditParamsBodyChallengeRulePositionAfterPosition) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyChallengeRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyChallengeRulePositionAfterPosition) implementsRuleEditParamsBodyChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11394,7 +11788,7 @@ func (r RuleEditParamsBodyChallengeRulePositionIndexPosition) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyChallengeRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyChallengeRulePositionIndexPosition) implementsRuleEditParamsBodyChallengeRulePositionUnion() {
 }
 
 // An object configuring the rule's ratelimit behavior.
@@ -11455,7 +11849,7 @@ func (r RuleEditParamsBodyCompressionRule) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyCompressionRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyCompressionRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyCompressionRulePosition struct {
@@ -11473,7 +11867,7 @@ func (r RuleEditParamsBodyCompressionRulePosition) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyCompressionRulePosition) implementsRulesetsRuleEditParamsBodyCompressionRulePositionUnion() {
+func (r RuleEditParamsBodyCompressionRulePosition) implementsRuleEditParamsBodyCompressionRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11483,7 +11877,7 @@ func (r RuleEditParamsBodyCompressionRulePosition) implementsRulesetsRuleEditPar
 // [rulesets.RuleEditParamsBodyCompressionRulePositionIndexPosition],
 // [RuleEditParamsBodyCompressionRulePosition].
 type RuleEditParamsBodyCompressionRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyCompressionRulePositionUnion()
+	implementsRuleEditParamsBodyCompressionRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -11497,7 +11891,7 @@ func (r RuleEditParamsBodyCompressionRulePositionBeforePosition) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyCompressionRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyCompressionRulePositionUnion() {
+func (r RuleEditParamsBodyCompressionRulePositionBeforePosition) implementsRuleEditParamsBodyCompressionRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11511,7 +11905,7 @@ func (r RuleEditParamsBodyCompressionRulePositionAfterPosition) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyCompressionRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyCompressionRulePositionUnion() {
+func (r RuleEditParamsBodyCompressionRulePositionAfterPosition) implementsRuleEditParamsBodyCompressionRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11524,7 +11918,7 @@ func (r RuleEditParamsBodyCompressionRulePositionIndexPosition) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyCompressionRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyCompressionRulePositionUnion() {
+func (r RuleEditParamsBodyCompressionRulePositionIndexPosition) implementsRuleEditParamsBodyCompressionRulePositionUnion() {
 }
 
 type RuleEditParamsBodyExecuteRule struct {
@@ -11537,7 +11931,7 @@ func (r RuleEditParamsBodyExecuteRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyExecuteRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyExecuteRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyExecuteRulePosition struct {
@@ -11555,7 +11949,7 @@ func (r RuleEditParamsBodyExecuteRulePosition) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyExecuteRulePosition) implementsRulesetsRuleEditParamsBodyExecuteRulePositionUnion() {
+func (r RuleEditParamsBodyExecuteRulePosition) implementsRuleEditParamsBodyExecuteRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11565,7 +11959,7 @@ func (r RuleEditParamsBodyExecuteRulePosition) implementsRulesetsRuleEditParamsB
 // [rulesets.RuleEditParamsBodyExecuteRulePositionIndexPosition],
 // [RuleEditParamsBodyExecuteRulePosition].
 type RuleEditParamsBodyExecuteRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyExecuteRulePositionUnion()
+	implementsRuleEditParamsBodyExecuteRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -11579,7 +11973,7 @@ func (r RuleEditParamsBodyExecuteRulePositionBeforePosition) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyExecuteRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyExecuteRulePositionUnion() {
+func (r RuleEditParamsBodyExecuteRulePositionBeforePosition) implementsRuleEditParamsBodyExecuteRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11593,7 +11987,7 @@ func (r RuleEditParamsBodyExecuteRulePositionAfterPosition) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyExecuteRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyExecuteRulePositionUnion() {
+func (r RuleEditParamsBodyExecuteRulePositionAfterPosition) implementsRuleEditParamsBodyExecuteRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11606,7 +12000,7 @@ func (r RuleEditParamsBodyExecuteRulePositionIndexPosition) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyExecuteRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyExecuteRulePositionUnion() {
+func (r RuleEditParamsBodyExecuteRulePositionIndexPosition) implementsRuleEditParamsBodyExecuteRulePositionUnion() {
 }
 
 type RuleEditParamsBodyJavascriptChallengeRule struct {
@@ -11638,7 +12032,7 @@ func (r RuleEditParamsBodyJavascriptChallengeRule) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyJavascriptChallengeRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyJavascriptChallengeRule) implementsRuleEditParamsBodyUnion() {}
 
 // The action to perform when the rule matches.
 type RuleEditParamsBodyJavascriptChallengeRuleAction string
@@ -11683,7 +12077,7 @@ func (r RuleEditParamsBodyJavascriptChallengeRulePosition) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyJavascriptChallengeRulePosition) implementsRulesetsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyJavascriptChallengeRulePosition) implementsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11694,7 +12088,7 @@ func (r RuleEditParamsBodyJavascriptChallengeRulePosition) implementsRulesetsRul
 // [rulesets.RuleEditParamsBodyJavascriptChallengeRulePositionIndexPosition],
 // [RuleEditParamsBodyJavascriptChallengeRulePosition].
 type RuleEditParamsBodyJavascriptChallengeRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyJavascriptChallengeRulePositionUnion()
+	implementsRuleEditParamsBodyJavascriptChallengeRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -11708,7 +12102,7 @@ func (r RuleEditParamsBodyJavascriptChallengeRulePositionBeforePosition) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyJavascriptChallengeRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyJavascriptChallengeRulePositionBeforePosition) implementsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11722,7 +12116,7 @@ func (r RuleEditParamsBodyJavascriptChallengeRulePositionAfterPosition) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyJavascriptChallengeRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyJavascriptChallengeRulePositionAfterPosition) implementsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11735,7 +12129,7 @@ func (r RuleEditParamsBodyJavascriptChallengeRulePositionIndexPosition) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyJavascriptChallengeRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyJavascriptChallengeRulePositionIndexPosition) implementsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
 }
 
 // An object configuring the rule's ratelimit behavior.
@@ -11796,7 +12190,7 @@ func (r RuleEditParamsBodyLogRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyLogRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyLogRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyLogRulePosition struct {
@@ -11814,8 +12208,7 @@ func (r RuleEditParamsBodyLogRulePosition) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyLogRulePosition) implementsRulesetsRuleEditParamsBodyLogRulePositionUnion() {
-}
+func (r RuleEditParamsBodyLogRulePosition) implementsRuleEditParamsBodyLogRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -11824,7 +12217,7 @@ func (r RuleEditParamsBodyLogRulePosition) implementsRulesetsRuleEditParamsBodyL
 // [rulesets.RuleEditParamsBodyLogRulePositionIndexPosition],
 // [RuleEditParamsBodyLogRulePosition].
 type RuleEditParamsBodyLogRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyLogRulePositionUnion()
+	implementsRuleEditParamsBodyLogRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -11838,7 +12231,7 @@ func (r RuleEditParamsBodyLogRulePositionBeforePosition) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyLogRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyLogRulePositionUnion() {
+func (r RuleEditParamsBodyLogRulePositionBeforePosition) implementsRuleEditParamsBodyLogRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11852,7 +12245,7 @@ func (r RuleEditParamsBodyLogRulePositionAfterPosition) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyLogRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyLogRulePositionUnion() {
+func (r RuleEditParamsBodyLogRulePositionAfterPosition) implementsRuleEditParamsBodyLogRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11865,7 +12258,7 @@ func (r RuleEditParamsBodyLogRulePositionIndexPosition) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyLogRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyLogRulePositionUnion() {
+func (r RuleEditParamsBodyLogRulePositionIndexPosition) implementsRuleEditParamsBodyLogRulePositionUnion() {
 }
 
 type RuleEditParamsBodyManagedChallengeRule struct {
@@ -11878,7 +12271,7 @@ func (r RuleEditParamsBodyManagedChallengeRule) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyManagedChallengeRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyManagedChallengeRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyManagedChallengeRulePosition struct {
@@ -11896,7 +12289,7 @@ func (r RuleEditParamsBodyManagedChallengeRulePosition) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyManagedChallengeRulePosition) implementsRulesetsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyManagedChallengeRulePosition) implementsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11907,7 +12300,7 @@ func (r RuleEditParamsBodyManagedChallengeRulePosition) implementsRulesetsRuleEd
 // [rulesets.RuleEditParamsBodyManagedChallengeRulePositionIndexPosition],
 // [RuleEditParamsBodyManagedChallengeRulePosition].
 type RuleEditParamsBodyManagedChallengeRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyManagedChallengeRulePositionUnion()
+	implementsRuleEditParamsBodyManagedChallengeRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -11921,7 +12314,7 @@ func (r RuleEditParamsBodyManagedChallengeRulePositionBeforePosition) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyManagedChallengeRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyManagedChallengeRulePositionBeforePosition) implementsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11935,7 +12328,7 @@ func (r RuleEditParamsBodyManagedChallengeRulePositionAfterPosition) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyManagedChallengeRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyManagedChallengeRulePositionAfterPosition) implementsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11948,7 +12341,7 @@ func (r RuleEditParamsBodyManagedChallengeRulePositionIndexPosition) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyManagedChallengeRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
+func (r RuleEditParamsBodyManagedChallengeRulePositionIndexPosition) implementsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
 }
 
 type RuleEditParamsBodyRedirectRule struct {
@@ -11961,7 +12354,7 @@ func (r RuleEditParamsBodyRedirectRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRedirectRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyRedirectRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyRedirectRulePosition struct {
@@ -11979,7 +12372,7 @@ func (r RuleEditParamsBodyRedirectRulePosition) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRedirectRulePosition) implementsRulesetsRuleEditParamsBodyRedirectRulePositionUnion() {
+func (r RuleEditParamsBodyRedirectRulePosition) implementsRuleEditParamsBodyRedirectRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -11989,7 +12382,7 @@ func (r RuleEditParamsBodyRedirectRulePosition) implementsRulesetsRuleEditParams
 // [rulesets.RuleEditParamsBodyRedirectRulePositionIndexPosition],
 // [RuleEditParamsBodyRedirectRulePosition].
 type RuleEditParamsBodyRedirectRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyRedirectRulePositionUnion()
+	implementsRuleEditParamsBodyRedirectRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -12003,7 +12396,7 @@ func (r RuleEditParamsBodyRedirectRulePositionBeforePosition) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRedirectRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyRedirectRulePositionUnion() {
+func (r RuleEditParamsBodyRedirectRulePositionBeforePosition) implementsRuleEditParamsBodyRedirectRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12017,7 +12410,7 @@ func (r RuleEditParamsBodyRedirectRulePositionAfterPosition) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRedirectRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyRedirectRulePositionUnion() {
+func (r RuleEditParamsBodyRedirectRulePositionAfterPosition) implementsRuleEditParamsBodyRedirectRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12030,7 +12423,7 @@ func (r RuleEditParamsBodyRedirectRulePositionIndexPosition) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRedirectRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyRedirectRulePositionUnion() {
+func (r RuleEditParamsBodyRedirectRulePositionIndexPosition) implementsRuleEditParamsBodyRedirectRulePositionUnion() {
 }
 
 type RuleEditParamsBodyRewriteRule struct {
@@ -12043,7 +12436,7 @@ func (r RuleEditParamsBodyRewriteRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRewriteRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyRewriteRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyRewriteRulePosition struct {
@@ -12061,7 +12454,7 @@ func (r RuleEditParamsBodyRewriteRulePosition) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRewriteRulePosition) implementsRulesetsRuleEditParamsBodyRewriteRulePositionUnion() {
+func (r RuleEditParamsBodyRewriteRulePosition) implementsRuleEditParamsBodyRewriteRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12071,7 +12464,7 @@ func (r RuleEditParamsBodyRewriteRulePosition) implementsRulesetsRuleEditParamsB
 // [rulesets.RuleEditParamsBodyRewriteRulePositionIndexPosition],
 // [RuleEditParamsBodyRewriteRulePosition].
 type RuleEditParamsBodyRewriteRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyRewriteRulePositionUnion()
+	implementsRuleEditParamsBodyRewriteRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -12085,7 +12478,7 @@ func (r RuleEditParamsBodyRewriteRulePositionBeforePosition) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRewriteRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyRewriteRulePositionUnion() {
+func (r RuleEditParamsBodyRewriteRulePositionBeforePosition) implementsRuleEditParamsBodyRewriteRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12099,7 +12492,7 @@ func (r RuleEditParamsBodyRewriteRulePositionAfterPosition) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRewriteRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyRewriteRulePositionUnion() {
+func (r RuleEditParamsBodyRewriteRulePositionAfterPosition) implementsRuleEditParamsBodyRewriteRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12112,7 +12505,7 @@ func (r RuleEditParamsBodyRewriteRulePositionIndexPosition) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRewriteRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyRewriteRulePositionUnion() {
+func (r RuleEditParamsBodyRewriteRulePositionIndexPosition) implementsRuleEditParamsBodyRewriteRulePositionUnion() {
 }
 
 type RuleEditParamsBodyOriginRule struct {
@@ -12125,7 +12518,7 @@ func (r RuleEditParamsBodyOriginRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyOriginRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyOriginRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyOriginRulePosition struct {
@@ -12143,8 +12536,7 @@ func (r RuleEditParamsBodyOriginRulePosition) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyOriginRulePosition) implementsRulesetsRuleEditParamsBodyOriginRulePositionUnion() {
-}
+func (r RuleEditParamsBodyOriginRulePosition) implementsRuleEditParamsBodyOriginRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -12153,7 +12545,7 @@ func (r RuleEditParamsBodyOriginRulePosition) implementsRulesetsRuleEditParamsBo
 // [rulesets.RuleEditParamsBodyOriginRulePositionIndexPosition],
 // [RuleEditParamsBodyOriginRulePosition].
 type RuleEditParamsBodyOriginRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyOriginRulePositionUnion()
+	implementsRuleEditParamsBodyOriginRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -12167,7 +12559,7 @@ func (r RuleEditParamsBodyOriginRulePositionBeforePosition) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyOriginRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyOriginRulePositionUnion() {
+func (r RuleEditParamsBodyOriginRulePositionBeforePosition) implementsRuleEditParamsBodyOriginRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12181,7 +12573,7 @@ func (r RuleEditParamsBodyOriginRulePositionAfterPosition) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyOriginRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyOriginRulePositionUnion() {
+func (r RuleEditParamsBodyOriginRulePositionAfterPosition) implementsRuleEditParamsBodyOriginRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12194,7 +12586,7 @@ func (r RuleEditParamsBodyOriginRulePositionIndexPosition) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyOriginRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyOriginRulePositionUnion() {
+func (r RuleEditParamsBodyOriginRulePositionIndexPosition) implementsRuleEditParamsBodyOriginRulePositionUnion() {
 }
 
 type RuleEditParamsBodyScoreRule struct {
@@ -12207,7 +12599,7 @@ func (r RuleEditParamsBodyScoreRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyScoreRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyScoreRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyScoreRulePosition struct {
@@ -12225,8 +12617,7 @@ func (r RuleEditParamsBodyScoreRulePosition) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyScoreRulePosition) implementsRulesetsRuleEditParamsBodyScoreRulePositionUnion() {
-}
+func (r RuleEditParamsBodyScoreRulePosition) implementsRuleEditParamsBodyScoreRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -12235,7 +12626,7 @@ func (r RuleEditParamsBodyScoreRulePosition) implementsRulesetsRuleEditParamsBod
 // [rulesets.RuleEditParamsBodyScoreRulePositionIndexPosition],
 // [RuleEditParamsBodyScoreRulePosition].
 type RuleEditParamsBodyScoreRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyScoreRulePositionUnion()
+	implementsRuleEditParamsBodyScoreRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -12249,7 +12640,7 @@ func (r RuleEditParamsBodyScoreRulePositionBeforePosition) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyScoreRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyScoreRulePositionUnion() {
+func (r RuleEditParamsBodyScoreRulePositionBeforePosition) implementsRuleEditParamsBodyScoreRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12263,7 +12654,7 @@ func (r RuleEditParamsBodyScoreRulePositionAfterPosition) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyScoreRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyScoreRulePositionUnion() {
+func (r RuleEditParamsBodyScoreRulePositionAfterPosition) implementsRuleEditParamsBodyScoreRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12276,7 +12667,7 @@ func (r RuleEditParamsBodyScoreRulePositionIndexPosition) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyScoreRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyScoreRulePositionUnion() {
+func (r RuleEditParamsBodyScoreRulePositionIndexPosition) implementsRuleEditParamsBodyScoreRulePositionUnion() {
 }
 
 type RuleEditParamsBodyServeErrorRule struct {
@@ -12289,7 +12680,7 @@ func (r RuleEditParamsBodyServeErrorRule) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyServeErrorRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyServeErrorRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyServeErrorRulePosition struct {
@@ -12307,7 +12698,7 @@ func (r RuleEditParamsBodyServeErrorRulePosition) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyServeErrorRulePosition) implementsRulesetsRuleEditParamsBodyServeErrorRulePositionUnion() {
+func (r RuleEditParamsBodyServeErrorRulePosition) implementsRuleEditParamsBodyServeErrorRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12317,7 +12708,7 @@ func (r RuleEditParamsBodyServeErrorRulePosition) implementsRulesetsRuleEditPara
 // [rulesets.RuleEditParamsBodyServeErrorRulePositionIndexPosition],
 // [RuleEditParamsBodyServeErrorRulePosition].
 type RuleEditParamsBodyServeErrorRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyServeErrorRulePositionUnion()
+	implementsRuleEditParamsBodyServeErrorRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -12331,7 +12722,7 @@ func (r RuleEditParamsBodyServeErrorRulePositionBeforePosition) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyServeErrorRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyServeErrorRulePositionUnion() {
+func (r RuleEditParamsBodyServeErrorRulePositionBeforePosition) implementsRuleEditParamsBodyServeErrorRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12345,7 +12736,7 @@ func (r RuleEditParamsBodyServeErrorRulePositionAfterPosition) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyServeErrorRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyServeErrorRulePositionUnion() {
+func (r RuleEditParamsBodyServeErrorRulePositionAfterPosition) implementsRuleEditParamsBodyServeErrorRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12358,7 +12749,7 @@ func (r RuleEditParamsBodyServeErrorRulePositionIndexPosition) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyServeErrorRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyServeErrorRulePositionUnion() {
+func (r RuleEditParamsBodyServeErrorRulePositionIndexPosition) implementsRuleEditParamsBodyServeErrorRulePositionUnion() {
 }
 
 type RuleEditParamsBodySetConfigRule struct {
@@ -12371,7 +12762,7 @@ func (r RuleEditParamsBodySetConfigRule) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySetConfigRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodySetConfigRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodySetConfigRulePosition struct {
@@ -12389,7 +12780,7 @@ func (r RuleEditParamsBodySetConfigRulePosition) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySetConfigRulePosition) implementsRulesetsRuleEditParamsBodySetConfigRulePositionUnion() {
+func (r RuleEditParamsBodySetConfigRulePosition) implementsRuleEditParamsBodySetConfigRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12399,7 +12790,7 @@ func (r RuleEditParamsBodySetConfigRulePosition) implementsRulesetsRuleEditParam
 // [rulesets.RuleEditParamsBodySetConfigRulePositionIndexPosition],
 // [RuleEditParamsBodySetConfigRulePosition].
 type RuleEditParamsBodySetConfigRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodySetConfigRulePositionUnion()
+	implementsRuleEditParamsBodySetConfigRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -12413,7 +12804,7 @@ func (r RuleEditParamsBodySetConfigRulePositionBeforePosition) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySetConfigRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodySetConfigRulePositionUnion() {
+func (r RuleEditParamsBodySetConfigRulePositionBeforePosition) implementsRuleEditParamsBodySetConfigRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12427,7 +12818,7 @@ func (r RuleEditParamsBodySetConfigRulePositionAfterPosition) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySetConfigRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodySetConfigRulePositionUnion() {
+func (r RuleEditParamsBodySetConfigRulePositionAfterPosition) implementsRuleEditParamsBodySetConfigRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12440,7 +12831,7 @@ func (r RuleEditParamsBodySetConfigRulePositionIndexPosition) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySetConfigRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodySetConfigRulePositionUnion() {
+func (r RuleEditParamsBodySetConfigRulePositionIndexPosition) implementsRuleEditParamsBodySetConfigRulePositionUnion() {
 }
 
 type RuleEditParamsBodySkipRule struct {
@@ -12453,7 +12844,7 @@ func (r RuleEditParamsBodySkipRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySkipRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodySkipRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodySkipRulePosition struct {
@@ -12471,8 +12862,7 @@ func (r RuleEditParamsBodySkipRulePosition) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySkipRulePosition) implementsRulesetsRuleEditParamsBodySkipRulePositionUnion() {
-}
+func (r RuleEditParamsBodySkipRulePosition) implementsRuleEditParamsBodySkipRulePositionUnion() {}
 
 // An object configuring where the rule will be placed.
 //
@@ -12481,7 +12871,7 @@ func (r RuleEditParamsBodySkipRulePosition) implementsRulesetsRuleEditParamsBody
 // [rulesets.RuleEditParamsBodySkipRulePositionIndexPosition],
 // [RuleEditParamsBodySkipRulePosition].
 type RuleEditParamsBodySkipRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodySkipRulePositionUnion()
+	implementsRuleEditParamsBodySkipRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -12495,7 +12885,7 @@ func (r RuleEditParamsBodySkipRulePositionBeforePosition) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySkipRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodySkipRulePositionUnion() {
+func (r RuleEditParamsBodySkipRulePositionBeforePosition) implementsRuleEditParamsBodySkipRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12509,7 +12899,7 @@ func (r RuleEditParamsBodySkipRulePositionAfterPosition) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySkipRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodySkipRulePositionUnion() {
+func (r RuleEditParamsBodySkipRulePositionAfterPosition) implementsRuleEditParamsBodySkipRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12522,7 +12912,7 @@ func (r RuleEditParamsBodySkipRulePositionIndexPosition) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySkipRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodySkipRulePositionUnion() {
+func (r RuleEditParamsBodySkipRulePositionIndexPosition) implementsRuleEditParamsBodySkipRulePositionUnion() {
 }
 
 type RuleEditParamsBodySetCacheSettingsRule struct {
@@ -12535,7 +12925,7 @@ func (r RuleEditParamsBodySetCacheSettingsRule) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySetCacheSettingsRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodySetCacheSettingsRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodySetCacheSettingsRulePosition struct {
@@ -12553,7 +12943,7 @@ func (r RuleEditParamsBodySetCacheSettingsRulePosition) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySetCacheSettingsRulePosition) implementsRulesetsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
+func (r RuleEditParamsBodySetCacheSettingsRulePosition) implementsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12564,7 +12954,7 @@ func (r RuleEditParamsBodySetCacheSettingsRulePosition) implementsRulesetsRuleEd
 // [rulesets.RuleEditParamsBodySetCacheSettingsRulePositionIndexPosition],
 // [RuleEditParamsBodySetCacheSettingsRulePosition].
 type RuleEditParamsBodySetCacheSettingsRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodySetCacheSettingsRulePositionUnion()
+	implementsRuleEditParamsBodySetCacheSettingsRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -12578,7 +12968,7 @@ func (r RuleEditParamsBodySetCacheSettingsRulePositionBeforePosition) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySetCacheSettingsRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
+func (r RuleEditParamsBodySetCacheSettingsRulePositionBeforePosition) implementsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12592,7 +12982,7 @@ func (r RuleEditParamsBodySetCacheSettingsRulePositionAfterPosition) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySetCacheSettingsRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
+func (r RuleEditParamsBodySetCacheSettingsRulePositionAfterPosition) implementsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12605,7 +12995,7 @@ func (r RuleEditParamsBodySetCacheSettingsRulePositionIndexPosition) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodySetCacheSettingsRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
+func (r RuleEditParamsBodySetCacheSettingsRulePositionIndexPosition) implementsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
 }
 
 type RuleEditParamsBodyLogCustomFieldRule struct {
@@ -12618,7 +13008,7 @@ func (r RuleEditParamsBodyLogCustomFieldRule) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyLogCustomFieldRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyLogCustomFieldRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyLogCustomFieldRulePosition struct {
@@ -12636,7 +13026,7 @@ func (r RuleEditParamsBodyLogCustomFieldRulePosition) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyLogCustomFieldRulePosition) implementsRulesetsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
+func (r RuleEditParamsBodyLogCustomFieldRulePosition) implementsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12647,7 +13037,7 @@ func (r RuleEditParamsBodyLogCustomFieldRulePosition) implementsRulesetsRuleEdit
 // [rulesets.RuleEditParamsBodyLogCustomFieldRulePositionIndexPosition],
 // [RuleEditParamsBodyLogCustomFieldRulePosition].
 type RuleEditParamsBodyLogCustomFieldRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyLogCustomFieldRulePositionUnion()
+	implementsRuleEditParamsBodyLogCustomFieldRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -12661,7 +13051,7 @@ func (r RuleEditParamsBodyLogCustomFieldRulePositionBeforePosition) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyLogCustomFieldRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
+func (r RuleEditParamsBodyLogCustomFieldRulePositionBeforePosition) implementsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12675,7 +13065,7 @@ func (r RuleEditParamsBodyLogCustomFieldRulePositionAfterPosition) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyLogCustomFieldRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
+func (r RuleEditParamsBodyLogCustomFieldRulePositionAfterPosition) implementsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12688,7 +13078,7 @@ func (r RuleEditParamsBodyLogCustomFieldRulePositionIndexPosition) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyLogCustomFieldRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
+func (r RuleEditParamsBodyLogCustomFieldRulePositionIndexPosition) implementsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
 }
 
 type RuleEditParamsBodyDDoSDynamicRule struct {
@@ -12701,7 +13091,7 @@ func (r RuleEditParamsBodyDDoSDynamicRule) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyDDoSDynamicRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyDDoSDynamicRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyDDoSDynamicRulePosition struct {
@@ -12719,7 +13109,7 @@ func (r RuleEditParamsBodyDDoSDynamicRulePosition) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyDDoSDynamicRulePosition) implementsRulesetsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
+func (r RuleEditParamsBodyDDoSDynamicRulePosition) implementsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12729,7 +13119,7 @@ func (r RuleEditParamsBodyDDoSDynamicRulePosition) implementsRulesetsRuleEditPar
 // [rulesets.RuleEditParamsBodyDDoSDynamicRulePositionIndexPosition],
 // [RuleEditParamsBodyDDoSDynamicRulePosition].
 type RuleEditParamsBodyDDoSDynamicRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyDDoSDynamicRulePositionUnion()
+	implementsRuleEditParamsBodyDDoSDynamicRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -12743,7 +13133,7 @@ func (r RuleEditParamsBodyDDoSDynamicRulePositionBeforePosition) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyDDoSDynamicRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
+func (r RuleEditParamsBodyDDoSDynamicRulePositionBeforePosition) implementsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12757,7 +13147,7 @@ func (r RuleEditParamsBodyDDoSDynamicRulePositionAfterPosition) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyDDoSDynamicRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
+func (r RuleEditParamsBodyDDoSDynamicRulePositionAfterPosition) implementsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12770,7 +13160,7 @@ func (r RuleEditParamsBodyDDoSDynamicRulePositionIndexPosition) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyDDoSDynamicRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
+func (r RuleEditParamsBodyDDoSDynamicRulePositionIndexPosition) implementsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
 }
 
 type RuleEditParamsBodyForceConnectionCloseRule struct {
@@ -12783,7 +13173,7 @@ func (r RuleEditParamsBodyForceConnectionCloseRule) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyForceConnectionCloseRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyForceConnectionCloseRule) implementsRuleEditParamsBodyUnion() {}
 
 // An object configuring where the rule will be placed.
 type RuleEditParamsBodyForceConnectionCloseRulePosition struct {
@@ -12801,7 +13191,7 @@ func (r RuleEditParamsBodyForceConnectionCloseRulePosition) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyForceConnectionCloseRulePosition) implementsRulesetsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
+func (r RuleEditParamsBodyForceConnectionCloseRulePosition) implementsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12812,7 +13202,7 @@ func (r RuleEditParamsBodyForceConnectionCloseRulePosition) implementsRulesetsRu
 // [rulesets.RuleEditParamsBodyForceConnectionCloseRulePositionIndexPosition],
 // [RuleEditParamsBodyForceConnectionCloseRulePosition].
 type RuleEditParamsBodyForceConnectionCloseRulePositionUnion interface {
-	implementsRulesetsRuleEditParamsBodyForceConnectionCloseRulePositionUnion()
+	implementsRuleEditParamsBodyForceConnectionCloseRulePositionUnion()
 }
 
 // An object configuring where the rule will be placed.
@@ -12826,7 +13216,7 @@ func (r RuleEditParamsBodyForceConnectionCloseRulePositionBeforePosition) Marsha
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyForceConnectionCloseRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
+func (r RuleEditParamsBodyForceConnectionCloseRulePositionBeforePosition) implementsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12840,7 +13230,7 @@ func (r RuleEditParamsBodyForceConnectionCloseRulePositionAfterPosition) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyForceConnectionCloseRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
+func (r RuleEditParamsBodyForceConnectionCloseRulePositionAfterPosition) implementsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
 }
 
 // An object configuring where the rule will be placed.
@@ -12853,7 +13243,7 @@ func (r RuleEditParamsBodyForceConnectionCloseRulePositionIndexPosition) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyForceConnectionCloseRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
+func (r RuleEditParamsBodyForceConnectionCloseRulePositionIndexPosition) implementsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
 }
 
 // The action to perform when the rule matches.

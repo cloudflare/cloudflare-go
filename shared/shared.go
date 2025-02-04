@@ -275,25 +275,25 @@ func (r cloudflareTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CloudflareTunnel) ImplementsZeroTrustTunnelNewResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelNewResponse() {}
 
-func (r CloudflareTunnel) ImplementsZeroTrustTunnelListResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelListResponse() {}
 
-func (r CloudflareTunnel) ImplementsZeroTrustTunnelDeleteResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelDeleteResponse() {}
 
-func (r CloudflareTunnel) ImplementsZeroTrustTunnelEditResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelEditResponse() {}
 
-func (r CloudflareTunnel) ImplementsZeroTrustTunnelGetResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelGetResponse() {}
 
-func (r CloudflareTunnel) ImplementsZeroTrustTunnelWARPConnectorNewResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelWARPConnectorNewResponse() {}
 
-func (r CloudflareTunnel) ImplementsZeroTrustTunnelWARPConnectorListResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelWARPConnectorListResponse() {}
 
-func (r CloudflareTunnel) ImplementsZeroTrustTunnelWARPConnectorDeleteResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelWARPConnectorDeleteResponse() {}
 
-func (r CloudflareTunnel) ImplementsZeroTrustTunnelWARPConnectorEditResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelWARPConnectorEditResponse() {}
 
-func (r CloudflareTunnel) ImplementsZeroTrustTunnelWARPConnectorGetResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelWARPConnectorGetResponse() {}
 
 type CloudflareTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
@@ -731,7 +731,7 @@ func (r PermissionGrantParam) MarshalJSON() (data []byte, err error) {
 // The rate plan applied to the subscription.
 type RatePlan struct {
 	// The ID of the rate plan.
-	ID string `json:"id"`
+	ID RatePlanID `json:"id"`
 	// The currency applied to the rate plan subscription.
 	Currency string `json:"currency"`
 	// Whether this rate plan is managed externally from Cloudflare.
@@ -768,10 +768,34 @@ func (r ratePlanJSON) RawJSON() string {
 	return r.raw
 }
 
+// The ID of the rate plan.
+type RatePlanID string
+
+const (
+	RatePlanIDFree               RatePlanID = "free"
+	RatePlanIDLite               RatePlanID = "lite"
+	RatePlanIDPro                RatePlanID = "pro"
+	RatePlanIDProPlus            RatePlanID = "pro_plus"
+	RatePlanIDBusiness           RatePlanID = "business"
+	RatePlanIDEnterprise         RatePlanID = "enterprise"
+	RatePlanIDPartnersFree       RatePlanID = "partners_free"
+	RatePlanIDPartnersPro        RatePlanID = "partners_pro"
+	RatePlanIDPartnersBusiness   RatePlanID = "partners_business"
+	RatePlanIDPartnersEnterprise RatePlanID = "partners_enterprise"
+)
+
+func (r RatePlanID) IsKnown() bool {
+	switch r {
+	case RatePlanIDFree, RatePlanIDLite, RatePlanIDPro, RatePlanIDProPlus, RatePlanIDBusiness, RatePlanIDEnterprise, RatePlanIDPartnersFree, RatePlanIDPartnersPro, RatePlanIDPartnersBusiness, RatePlanIDPartnersEnterprise:
+		return true
+	}
+	return false
+}
+
 // The rate plan applied to the subscription.
 type RatePlanParam struct {
 	// The ID of the rate plan.
-	ID param.Field[string] `json:"id"`
+	ID param.Field[RatePlanID] `json:"id"`
 	// The currency applied to the rate plan subscription.
 	Currency param.Field[string] `json:"currency"`
 	// Whether this rate plan is managed externally from Cloudflare.

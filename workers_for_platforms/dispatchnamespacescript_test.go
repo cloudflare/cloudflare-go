@@ -40,6 +40,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					Config: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig{
 						HTMLHandling:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
 						NotFoundHandling: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingNone),
+						RunWorkerFirst:   cloudflare.F(false),
 						ServeDirectly:    cloudflare.F(true),
 					}),
 					JWT: cloudflare.F("jwt"),

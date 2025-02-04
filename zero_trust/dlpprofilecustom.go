@@ -167,7 +167,7 @@ func (r PatternParam) MarshalJSON() (data []byte, err error) {
 // [zero_trust.DLPProfileCustomNewResponseIntegrationProfile] or
 // [zero_trust.DLPProfileCustomNewResponseArray].
 type DLPProfileCustomNewResponseUnion interface {
-	implementsZeroTrustDLPProfileCustomNewResponseUnion()
+	implementsDLPProfileCustomNewResponseUnion()
 }
 
 func init() {
@@ -242,8 +242,7 @@ func (r dlpProfileCustomNewResponseCustomProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseCustomProfile) implementsZeroTrustDLPProfileCustomNewResponseUnion() {
-}
+func (r DLPProfileCustomNewResponseCustomProfile) implementsDLPProfileCustomNewResponseUnion() {}
 
 type DLPProfileCustomNewResponseCustomProfileEntry struct {
 	ID      string                                              `json:"id,required" format:"uuid"`
@@ -315,7 +314,7 @@ func (r DLPProfileCustomNewResponseCustomProfileEntry) AsUnion() DLPProfileCusto
 // [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntry] or
 // [zero_trust.DLPProfileCustomNewResponseCustomProfileEntriesWordListEntry].
 type DLPProfileCustomNewResponseCustomProfileEntriesUnion interface {
-	implementsZeroTrustDLPProfileCustomNewResponseCustomProfileEntry()
+	implementsDLPProfileCustomNewResponseCustomProfileEntry()
 }
 
 func init() {
@@ -381,7 +380,7 @@ func (r dlpProfileCustomNewResponseCustomProfileEntriesCustomEntryJSON) RawJSON(
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseCustomProfileEntriesCustomEntry) implementsZeroTrustDLPProfileCustomNewResponseCustomProfileEntry() {
+func (r DLPProfileCustomNewResponseCustomProfileEntriesCustomEntry) implementsDLPProfileCustomNewResponseCustomProfileEntry() {
 }
 
 type DLPProfileCustomNewResponseCustomProfileEntriesCustomEntryType string
@@ -430,7 +429,7 @@ func (r dlpProfileCustomNewResponseCustomProfileEntriesPredefinedEntryJSON) RawJ
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntry) implementsZeroTrustDLPProfileCustomNewResponseCustomProfileEntry() {
+func (r DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntry) implementsDLPProfileCustomNewResponseCustomProfileEntry() {
 }
 
 type DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntryConfidence struct {
@@ -506,7 +505,7 @@ func (r dlpProfileCustomNewResponseCustomProfileEntriesIntegrationEntryJSON) Raw
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseCustomProfileEntriesIntegrationEntry) implementsZeroTrustDLPProfileCustomNewResponseCustomProfileEntry() {
+func (r DLPProfileCustomNewResponseCustomProfileEntriesIntegrationEntry) implementsDLPProfileCustomNewResponseCustomProfileEntry() {
 }
 
 type DLPProfileCustomNewResponseCustomProfileEntriesIntegrationEntryType string
@@ -557,7 +556,7 @@ func (r dlpProfileCustomNewResponseCustomProfileEntriesExactDataEntryJSON) RawJS
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntry) implementsZeroTrustDLPProfileCustomNewResponseCustomProfileEntry() {
+func (r DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntry) implementsDLPProfileCustomNewResponseCustomProfileEntry() {
 }
 
 type DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntryType string
@@ -610,7 +609,7 @@ func (r dlpProfileCustomNewResponseCustomProfileEntriesWordListEntryJSON) RawJSO
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseCustomProfileEntriesWordListEntry) implementsZeroTrustDLPProfileCustomNewResponseCustomProfileEntry() {
+func (r DLPProfileCustomNewResponseCustomProfileEntriesWordListEntry) implementsDLPProfileCustomNewResponseCustomProfileEntry() {
 }
 
 type DLPProfileCustomNewResponseCustomProfileEntriesWordListEntryType string
@@ -718,8 +717,7 @@ func (r dlpProfileCustomNewResponsePredefinedProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponsePredefinedProfile) implementsZeroTrustDLPProfileCustomNewResponseUnion() {
-}
+func (r DLPProfileCustomNewResponsePredefinedProfile) implementsDLPProfileCustomNewResponseUnion() {}
 
 type DLPProfileCustomNewResponsePredefinedProfileEntry struct {
 	ID      string                                                  `json:"id,required" format:"uuid"`
@@ -792,7 +790,7 @@ func (r DLPProfileCustomNewResponsePredefinedProfileEntry) AsUnion() DLPProfileC
 // or
 // [zero_trust.DLPProfileCustomNewResponsePredefinedProfileEntriesWordListEntry].
 type DLPProfileCustomNewResponsePredefinedProfileEntriesUnion interface {
-	implementsZeroTrustDLPProfileCustomNewResponsePredefinedProfileEntry()
+	implementsDLPProfileCustomNewResponsePredefinedProfileEntry()
 }
 
 func init() {
@@ -858,7 +856,7 @@ func (r dlpProfileCustomNewResponsePredefinedProfileEntriesCustomEntryJSON) RawJ
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponsePredefinedProfileEntriesCustomEntry) implementsZeroTrustDLPProfileCustomNewResponsePredefinedProfileEntry() {
+func (r DLPProfileCustomNewResponsePredefinedProfileEntriesCustomEntry) implementsDLPProfileCustomNewResponsePredefinedProfileEntry() {
 }
 
 type DLPProfileCustomNewResponsePredefinedProfileEntriesCustomEntryType string
@@ -907,7 +905,7 @@ func (r dlpProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntryJSON) 
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntry) implementsZeroTrustDLPProfileCustomNewResponsePredefinedProfileEntry() {
+func (r DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntry) implementsDLPProfileCustomNewResponsePredefinedProfileEntry() {
 }
 
 type DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntryConfidence struct {
@@ -983,7 +981,7 @@ func (r dlpProfileCustomNewResponsePredefinedProfileEntriesIntegrationEntryJSON)
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponsePredefinedProfileEntriesIntegrationEntry) implementsZeroTrustDLPProfileCustomNewResponsePredefinedProfileEntry() {
+func (r DLPProfileCustomNewResponsePredefinedProfileEntriesIntegrationEntry) implementsDLPProfileCustomNewResponsePredefinedProfileEntry() {
 }
 
 type DLPProfileCustomNewResponsePredefinedProfileEntriesIntegrationEntryType string
@@ -1034,7 +1032,7 @@ func (r dlpProfileCustomNewResponsePredefinedProfileEntriesExactDataEntryJSON) R
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntry) implementsZeroTrustDLPProfileCustomNewResponsePredefinedProfileEntry() {
+func (r DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntry) implementsDLPProfileCustomNewResponsePredefinedProfileEntry() {
 }
 
 type DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntryType string
@@ -1087,7 +1085,7 @@ func (r dlpProfileCustomNewResponsePredefinedProfileEntriesWordListEntryJSON) Ra
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponsePredefinedProfileEntriesWordListEntry) implementsZeroTrustDLPProfileCustomNewResponsePredefinedProfileEntry() {
+func (r DLPProfileCustomNewResponsePredefinedProfileEntriesWordListEntry) implementsDLPProfileCustomNewResponsePredefinedProfileEntry() {
 }
 
 type DLPProfileCustomNewResponsePredefinedProfileEntriesWordListEntryType string
@@ -1187,8 +1185,7 @@ func (r dlpProfileCustomNewResponseIntegrationProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseIntegrationProfile) implementsZeroTrustDLPProfileCustomNewResponseUnion() {
-}
+func (r DLPProfileCustomNewResponseIntegrationProfile) implementsDLPProfileCustomNewResponseUnion() {}
 
 type DLPProfileCustomNewResponseIntegrationProfileEntry struct {
 	ID      string                                                   `json:"id,required" format:"uuid"`
@@ -1261,7 +1258,7 @@ func (r DLPProfileCustomNewResponseIntegrationProfileEntry) AsUnion() DLPProfile
 // or
 // [zero_trust.DLPProfileCustomNewResponseIntegrationProfileEntriesWordListEntry].
 type DLPProfileCustomNewResponseIntegrationProfileEntriesUnion interface {
-	implementsZeroTrustDLPProfileCustomNewResponseIntegrationProfileEntry()
+	implementsDLPProfileCustomNewResponseIntegrationProfileEntry()
 }
 
 func init() {
@@ -1327,7 +1324,7 @@ func (r dlpProfileCustomNewResponseIntegrationProfileEntriesCustomEntryJSON) Raw
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseIntegrationProfileEntriesCustomEntry) implementsZeroTrustDLPProfileCustomNewResponseIntegrationProfileEntry() {
+func (r DLPProfileCustomNewResponseIntegrationProfileEntriesCustomEntry) implementsDLPProfileCustomNewResponseIntegrationProfileEntry() {
 }
 
 type DLPProfileCustomNewResponseIntegrationProfileEntriesCustomEntryType string
@@ -1376,7 +1373,7 @@ func (r dlpProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntryJSON)
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntry) implementsZeroTrustDLPProfileCustomNewResponseIntegrationProfileEntry() {
+func (r DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntry) implementsDLPProfileCustomNewResponseIntegrationProfileEntry() {
 }
 
 type DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntryConfidence struct {
@@ -1452,7 +1449,7 @@ func (r dlpProfileCustomNewResponseIntegrationProfileEntriesIntegrationEntryJSON
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseIntegrationProfileEntriesIntegrationEntry) implementsZeroTrustDLPProfileCustomNewResponseIntegrationProfileEntry() {
+func (r DLPProfileCustomNewResponseIntegrationProfileEntriesIntegrationEntry) implementsDLPProfileCustomNewResponseIntegrationProfileEntry() {
 }
 
 type DLPProfileCustomNewResponseIntegrationProfileEntriesIntegrationEntryType string
@@ -1503,7 +1500,7 @@ func (r dlpProfileCustomNewResponseIntegrationProfileEntriesExactDataEntryJSON) 
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntry) implementsZeroTrustDLPProfileCustomNewResponseIntegrationProfileEntry() {
+func (r DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntry) implementsDLPProfileCustomNewResponseIntegrationProfileEntry() {
 }
 
 type DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntryType string
@@ -1556,7 +1553,7 @@ func (r dlpProfileCustomNewResponseIntegrationProfileEntriesWordListEntryJSON) R
 	return r.raw
 }
 
-func (r DLPProfileCustomNewResponseIntegrationProfileEntriesWordListEntry) implementsZeroTrustDLPProfileCustomNewResponseIntegrationProfileEntry() {
+func (r DLPProfileCustomNewResponseIntegrationProfileEntriesWordListEntry) implementsDLPProfileCustomNewResponseIntegrationProfileEntry() {
 }
 
 type DLPProfileCustomNewResponseIntegrationProfileEntriesWordListEntryType string
@@ -1607,7 +1604,7 @@ func (r DLPProfileCustomNewResponseIntegrationProfileType) IsKnown() bool {
 
 type DLPProfileCustomNewResponseArray []Profile
 
-func (r DLPProfileCustomNewResponseArray) implementsZeroTrustDLPProfileCustomNewResponseUnion() {}
+func (r DLPProfileCustomNewResponseArray) implementsDLPProfileCustomNewResponseUnion() {}
 
 type DLPProfileCustomDeleteResponse = interface{}
 
@@ -1640,15 +1637,16 @@ func (r DLPProfileCustomNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBody) implementsZeroTrustDLPProfileCustomNewParamsBodyUnion() {}
+func (r DLPProfileCustomNewParamsBody) implementsDLPProfileCustomNewParamsBodyUnion() {}
 
 // Satisfied by [zero_trust.DLPProfileCustomNewParamsBodyProfiles],
 // [zero_trust.DLPProfileCustomNewParamsBodyDLPNewCustomProfile],
 // [DLPProfileCustomNewParamsBody].
 type DLPProfileCustomNewParamsBodyUnion interface {
-	implementsZeroTrustDLPProfileCustomNewParamsBodyUnion()
+	implementsDLPProfileCustomNewParamsBodyUnion()
 }
 
+// Deprecated: deprecated
 type DLPProfileCustomNewParamsBodyProfiles struct {
 	Profiles param.Field[[]DLPProfileCustomNewParamsBodyProfilesProfile] `json:"profiles,required"`
 }
@@ -1657,8 +1655,7 @@ func (r DLPProfileCustomNewParamsBodyProfiles) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyProfiles) implementsZeroTrustDLPProfileCustomNewParamsBodyUnion() {
-}
+func (r DLPProfileCustomNewParamsBodyProfiles) implementsDLPProfileCustomNewParamsBodyUnion() {}
 
 type DLPProfileCustomNewParamsBodyProfilesProfile struct {
 	Entries param.Field[[]DLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion] `json:"entries,required"`
@@ -1692,7 +1689,7 @@ func (r DLPProfileCustomNewParamsBodyProfilesProfilesEntry) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyProfilesProfilesEntry) implementsZeroTrustDLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion() {
+func (r DLPProfileCustomNewParamsBodyProfilesProfilesEntry) implementsDLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion() {
 }
 
 // Satisfied by
@@ -1700,7 +1697,7 @@ func (r DLPProfileCustomNewParamsBodyProfilesProfilesEntry) implementsZeroTrustD
 // [zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewWordListEntry],
 // [DLPProfileCustomNewParamsBodyProfilesProfilesEntry].
 type DLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion interface {
-	implementsZeroTrustDLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion()
+	implementsDLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion()
 }
 
 type DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry struct {
@@ -1713,7 +1710,7 @@ func (r DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry) M
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry) implementsZeroTrustDLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion() {
+func (r DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry) implementsDLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion() {
 }
 
 type DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewWordListEntry struct {
@@ -1726,7 +1723,7 @@ func (r DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewWordListEntry)
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewWordListEntry) implementsZeroTrustDLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion() {
+func (r DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewWordListEntry) implementsDLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion() {
 }
 
 type DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntry struct {
@@ -1739,7 +1736,7 @@ func (r DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntry) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntry) implementsZeroTrustDLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion() {
+func (r DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntry) implementsDLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion() {
 }
 
 // Satisfied by
@@ -1749,7 +1746,7 @@ func (r DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntry) implementsZero
 // [zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesObject],
 // [DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntry].
 type DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion interface {
-	implementsZeroTrustDLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion()
+	implementsDLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion()
 }
 
 type DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesObject struct {
@@ -1762,7 +1759,7 @@ func (r DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesObject) Marsha
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesObject) implementsZeroTrustDLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion() {
+func (r DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesObject) implementsDLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion() {
 }
 
 type DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesObjectEntryType string
@@ -1817,7 +1814,7 @@ func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfile) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfile) implementsZeroTrustDLPProfileCustomNewParamsBodyUnion() {
+func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfile) implementsDLPProfileCustomNewParamsBodyUnion() {
 }
 
 type DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntry struct {
@@ -1831,7 +1828,7 @@ func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntry) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntry) implementsZeroTrustDLPProfileCustomNewParamsBodyDLPNewCustomProfileEntryUnion() {
+func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntry) implementsDLPProfileCustomNewParamsBodyDLPNewCustomProfileEntryUnion() {
 }
 
 // Satisfied by
@@ -1839,7 +1836,7 @@ func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntry) implementsZeroTru
 // [zero_trust.DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntriesDLPNewWordListEntry],
 // [DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntry].
 type DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntryUnion interface {
-	implementsZeroTrustDLPProfileCustomNewParamsBodyDLPNewCustomProfileEntryUnion()
+	implementsDLPProfileCustomNewParamsBodyDLPNewCustomProfileEntryUnion()
 }
 
 type DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntriesDLPNewCustomEntry struct {
@@ -1852,7 +1849,7 @@ func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntriesDLPNewCustomEntry
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntriesDLPNewCustomEntry) implementsZeroTrustDLPProfileCustomNewParamsBodyDLPNewCustomProfileEntryUnion() {
+func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntriesDLPNewCustomEntry) implementsDLPProfileCustomNewParamsBodyDLPNewCustomProfileEntryUnion() {
 }
 
 type DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntriesDLPNewWordListEntry struct {
@@ -1865,7 +1862,7 @@ func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntriesDLPNewWordListEnt
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntriesDLPNewWordListEntry) implementsZeroTrustDLPProfileCustomNewParamsBodyDLPNewCustomProfileEntryUnion() {
+func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntriesDLPNewWordListEntry) implementsDLPProfileCustomNewParamsBodyDLPNewCustomProfileEntryUnion() {
 }
 
 type DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntry struct {
@@ -1878,7 +1875,7 @@ func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntry) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntry) implementsZeroTrustDLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntryUnion() {
+func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntry) implementsDLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntryUnion() {
 }
 
 // Satisfied by
@@ -1888,7 +1885,7 @@ func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntry) implementsZ
 // [zero_trust.DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntriesObject],
 // [DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntry].
 type DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntryUnion interface {
-	implementsZeroTrustDLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntryUnion()
+	implementsDLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntryUnion()
 }
 
 type DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntriesObject struct {
@@ -1901,7 +1898,7 @@ func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntriesObject) Mar
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntriesObject) implementsZeroTrustDLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntryUnion() {
+func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntriesObject) implementsDLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntryUnion() {
 }
 
 type DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntriesObjectEntryType string
@@ -2011,15 +2008,14 @@ func (r DLPProfileCustomUpdateParamsEntry) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomUpdateParamsEntry) implementsZeroTrustDLPProfileCustomUpdateParamsEntryUnion() {
-}
+func (r DLPProfileCustomUpdateParamsEntry) implementsDLPProfileCustomUpdateParamsEntryUnion() {}
 
 // Satisfied by
 // [zero_trust.DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntryWithID],
 // [zero_trust.DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry],
 // [DLPProfileCustomUpdateParamsEntry].
 type DLPProfileCustomUpdateParamsEntryUnion interface {
-	implementsZeroTrustDLPProfileCustomUpdateParamsEntryUnion()
+	implementsDLPProfileCustomUpdateParamsEntryUnion()
 }
 
 type DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntryWithID struct {
@@ -2033,7 +2029,7 @@ func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntryWithID) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntryWithID) implementsZeroTrustDLPProfileCustomUpdateParamsEntryUnion() {
+func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntryWithID) implementsDLPProfileCustomUpdateParamsEntryUnion() {
 }
 
 type DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry struct {
@@ -2046,7 +2042,7 @@ func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry) implementsZeroTrustDLPProfileCustomUpdateParamsEntryUnion() {
+func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry) implementsDLPProfileCustomUpdateParamsEntryUnion() {
 }
 
 type DLPProfileCustomUpdateParamsSharedEntry struct {
@@ -2059,7 +2055,7 @@ func (r DLPProfileCustomUpdateParamsSharedEntry) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomUpdateParamsSharedEntry) implementsZeroTrustDLPProfileCustomUpdateParamsSharedEntryUnion() {
+func (r DLPProfileCustomUpdateParamsSharedEntry) implementsDLPProfileCustomUpdateParamsSharedEntryUnion() {
 }
 
 // Satisfied by [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesObject],
@@ -2067,7 +2063,7 @@ func (r DLPProfileCustomUpdateParamsSharedEntry) implementsZeroTrustDLPProfileCu
 // [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesObject],
 // [DLPProfileCustomUpdateParamsSharedEntry].
 type DLPProfileCustomUpdateParamsSharedEntryUnion interface {
-	implementsZeroTrustDLPProfileCustomUpdateParamsSharedEntryUnion()
+	implementsDLPProfileCustomUpdateParamsSharedEntryUnion()
 }
 
 type DLPProfileCustomUpdateParamsSharedEntriesObject struct {
@@ -2080,7 +2076,7 @@ func (r DLPProfileCustomUpdateParamsSharedEntriesObject) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomUpdateParamsSharedEntriesObject) implementsZeroTrustDLPProfileCustomUpdateParamsSharedEntryUnion() {
+func (r DLPProfileCustomUpdateParamsSharedEntriesObject) implementsDLPProfileCustomUpdateParamsSharedEntryUnion() {
 }
 
 type DLPProfileCustomUpdateParamsSharedEntriesObjectEntryType string

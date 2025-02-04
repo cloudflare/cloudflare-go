@@ -242,7 +242,7 @@ func (r AppNewResponse) AsUnion() AppNewResponseUnion {
 // Union satisfied by [spectrum.AppNewResponseSpectrumConfigAppConfig] or
 // [spectrum.AppNewResponseSpectrumConfigPaygoAppConfig].
 type AppNewResponseUnion interface {
-	implementsSpectrumAppNewResponse()
+	implementsAppNewResponse()
 }
 
 func init() {
@@ -336,7 +336,7 @@ func (r appNewResponseSpectrumConfigAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppNewResponseSpectrumConfigAppConfig) implementsSpectrumAppNewResponse() {}
+func (r AppNewResponseSpectrumConfigAppConfig) implementsAppNewResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -399,13 +399,11 @@ func (r AppNewResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 }
 
 type AppNewResponseSpectrumConfigPaygoAppConfig struct {
-	// App identifier.
-	ID string `json:"id,required"`
-	// When the Application was created.
+	// Identifier
+	ID        string    `json:"id,required"`
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// The name and type of DNS record for the Spectrum application.
-	DNS DNS `json:"dns,required"`
-	// When the Application was last modified.
+	DNS        DNS       `json:"dns,required"`
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
@@ -437,7 +435,7 @@ func (r appNewResponseSpectrumConfigPaygoAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppNewResponseSpectrumConfigPaygoAppConfig) implementsSpectrumAppNewResponse() {}
+func (r AppNewResponseSpectrumConfigPaygoAppConfig) implementsAppNewResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -593,7 +591,7 @@ func (r AppUpdateResponse) AsUnion() AppUpdateResponseUnion {
 // Union satisfied by [spectrum.AppUpdateResponseSpectrumConfigAppConfig] or
 // [spectrum.AppUpdateResponseSpectrumConfigPaygoAppConfig].
 type AppUpdateResponseUnion interface {
-	implementsSpectrumAppUpdateResponse()
+	implementsAppUpdateResponse()
 }
 
 func init() {
@@ -687,7 +685,7 @@ func (r appUpdateResponseSpectrumConfigAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppUpdateResponseSpectrumConfigAppConfig) implementsSpectrumAppUpdateResponse() {}
+func (r AppUpdateResponseSpectrumConfigAppConfig) implementsAppUpdateResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -750,13 +748,11 @@ func (r AppUpdateResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 }
 
 type AppUpdateResponseSpectrumConfigPaygoAppConfig struct {
-	// App identifier.
-	ID string `json:"id,required"`
-	// When the Application was created.
+	// Identifier
+	ID        string    `json:"id,required"`
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// The name and type of DNS record for the Spectrum application.
-	DNS DNS `json:"dns,required"`
-	// When the Application was last modified.
+	DNS        DNS       `json:"dns,required"`
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
@@ -788,7 +784,7 @@ func (r appUpdateResponseSpectrumConfigPaygoAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppUpdateResponseSpectrumConfigPaygoAppConfig) implementsSpectrumAppUpdateResponse() {}
+func (r AppUpdateResponseSpectrumConfigPaygoAppConfig) implementsAppUpdateResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -853,7 +849,7 @@ func (r AppUpdateResponseTrafficType) IsKnown() bool {
 // Union satisfied by [spectrum.AppListResponseArray] or
 // [spectrum.AppListResponseArray].
 type AppListResponseUnion interface {
-	implementsSpectrumAppListResponseUnion()
+	implementsAppListResponseUnion()
 }
 
 func init() {
@@ -873,7 +869,7 @@ func init() {
 
 type AppListResponseArray []AppListResponseArrayItem
 
-func (r AppListResponseArray) implementsSpectrumAppListResponseUnion() {}
+func (r AppListResponseArray) implementsAppListResponseUnion() {}
 
 type AppListResponseArrayItem struct {
 	// App identifier.
@@ -1126,7 +1122,7 @@ func (r AppGetResponse) AsUnion() AppGetResponseUnion {
 // Union satisfied by [spectrum.AppGetResponseSpectrumConfigAppConfig] or
 // [spectrum.AppGetResponseSpectrumConfigPaygoAppConfig].
 type AppGetResponseUnion interface {
-	implementsSpectrumAppGetResponse()
+	implementsAppGetResponse()
 }
 
 func init() {
@@ -1220,7 +1216,7 @@ func (r appGetResponseSpectrumConfigAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppGetResponseSpectrumConfigAppConfig) implementsSpectrumAppGetResponse() {}
+func (r AppGetResponseSpectrumConfigAppConfig) implementsAppGetResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1283,13 +1279,11 @@ func (r AppGetResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 }
 
 type AppGetResponseSpectrumConfigPaygoAppConfig struct {
-	// App identifier.
-	ID string `json:"id,required"`
-	// When the Application was created.
+	// Identifier
+	ID        string    `json:"id,required"`
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// The name and type of DNS record for the Spectrum application.
-	DNS DNS `json:"dns,required"`
-	// When the Application was last modified.
+	DNS        DNS       `json:"dns,required"`
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
@@ -1321,7 +1315,7 @@ func (r appGetResponseSpectrumConfigPaygoAppConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppGetResponseSpectrumConfigPaygoAppConfig) implementsSpectrumAppGetResponse() {}
+func (r AppGetResponseSpectrumConfigPaygoAppConfig) implementsAppGetResponse() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1384,7 +1378,7 @@ func (r AppGetResponseTrafficType) IsKnown() bool {
 }
 
 type AppNewParams struct {
-	// Zone identifier.
+	// Identifier
 	ZoneID param.Field[string]   `path:"zone_id,required"`
 	Body   AppNewParamsBodyUnion `json:"body,required"`
 }
@@ -1435,12 +1429,12 @@ func (r AppNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppNewParamsBody) implementsSpectrumAppNewParamsBodyUnion() {}
+func (r AppNewParamsBody) implementsAppNewParamsBodyUnion() {}
 
 // Satisfied by [spectrum.AppNewParamsBodySpectrumConfigAppConfig],
 // [spectrum.AppNewParamsBodySpectrumConfigPaygoAppConfig], [AppNewParamsBody].
 type AppNewParamsBodyUnion interface {
-	implementsSpectrumAppNewParamsBodyUnion()
+	implementsAppNewParamsBodyUnion()
 }
 
 type AppNewParamsBodySpectrumConfigAppConfig struct {
@@ -1487,7 +1481,7 @@ func (r AppNewParamsBodySpectrumConfigAppConfig) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppNewParamsBodySpectrumConfigAppConfig) implementsSpectrumAppNewParamsBodyUnion() {}
+func (r AppNewParamsBodySpectrumConfigAppConfig) implementsAppNewParamsBodyUnion() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1550,6 +1544,8 @@ func (r AppNewParamsBodySpectrumConfigAppConfigTrafficType) IsKnown() bool {
 }
 
 type AppNewParamsBodySpectrumConfigPaygoAppConfig struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
 	// The name and type of DNS record for the Spectrum application.
 	DNS param.Field[DNSParam] `json:"dns,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
@@ -1564,7 +1560,7 @@ func (r AppNewParamsBodySpectrumConfigPaygoAppConfig) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppNewParamsBodySpectrumConfigPaygoAppConfig) implementsSpectrumAppNewParamsBodyUnion() {}
+func (r AppNewParamsBodySpectrumConfigPaygoAppConfig) implementsAppNewParamsBodyUnion() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1670,7 +1666,7 @@ func (r AppNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AppUpdateParams struct {
-	// Zone identifier.
+	// Identifier
 	ZoneID param.Field[string]      `path:"zone_id,required"`
 	Body   AppUpdateParamsBodyUnion `json:"body,required"`
 }
@@ -1721,13 +1717,13 @@ func (r AppUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppUpdateParamsBody) implementsSpectrumAppUpdateParamsBodyUnion() {}
+func (r AppUpdateParamsBody) implementsAppUpdateParamsBodyUnion() {}
 
 // Satisfied by [spectrum.AppUpdateParamsBodySpectrumConfigAppConfig],
 // [spectrum.AppUpdateParamsBodySpectrumConfigPaygoAppConfig],
 // [AppUpdateParamsBody].
 type AppUpdateParamsBodyUnion interface {
-	implementsSpectrumAppUpdateParamsBodyUnion()
+	implementsAppUpdateParamsBodyUnion()
 }
 
 type AppUpdateParamsBodySpectrumConfigAppConfig struct {
@@ -1774,7 +1770,7 @@ func (r AppUpdateParamsBodySpectrumConfigAppConfig) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppUpdateParamsBodySpectrumConfigAppConfig) implementsSpectrumAppUpdateParamsBodyUnion() {}
+func (r AppUpdateParamsBodySpectrumConfigAppConfig) implementsAppUpdateParamsBodyUnion() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1837,6 +1833,8 @@ func (r AppUpdateParamsBodySpectrumConfigAppConfigTrafficType) IsKnown() bool {
 }
 
 type AppUpdateParamsBodySpectrumConfigPaygoAppConfig struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
 	// The name and type of DNS record for the Spectrum application.
 	DNS param.Field[DNSParam] `json:"dns,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
@@ -1851,8 +1849,7 @@ func (r AppUpdateParamsBodySpectrumConfigPaygoAppConfig) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r AppUpdateParamsBodySpectrumConfigPaygoAppConfig) implementsSpectrumAppUpdateParamsBodyUnion() {
-}
+func (r AppUpdateParamsBodySpectrumConfigPaygoAppConfig) implementsAppUpdateParamsBodyUnion() {}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1958,7 +1955,7 @@ func (r AppUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AppListParams struct {
-	// Zone identifier.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Sets the direction by which results are ordered.
 	Direction param.Field[AppListParamsDirection] `query:"direction"`
@@ -2016,7 +2013,7 @@ func (r AppListParamsOrder) IsKnown() bool {
 }
 
 type AppDeleteParams struct {
-	// Zone identifier.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -2064,7 +2061,7 @@ func (r AppDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AppGetParams struct {
-	// Zone identifier.
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 

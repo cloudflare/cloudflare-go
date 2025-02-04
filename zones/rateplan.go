@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // RatePlanService contains methods and other services that help with interacting
@@ -35,20 +35,30 @@ func NewRatePlanService(opts ...option.RequestOption) (r *RatePlanService) {
 }
 
 // Lists all rate plans the zone can subscribe to.
-func (r *RatePlanService) Get(ctx context.Context, query RatePlanGetParams, opts ...option.RequestOption) (res *[]RatePlanGetResponse, err error) {
-	var env RatePlanGetResponseEnvelope
+func (r *RatePlanService) Get(ctx context.Context, query RatePlanGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[RatePlanGetResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/available_rate_plans", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all rate plans the zone can subscribe to.
+func (r *RatePlanService) GetAutoPaging(ctx context.Context, query RatePlanGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RatePlanGetResponse] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }
 
 type RatePlanGetResponse struct {
@@ -155,80 +165,4 @@ func (r RatePlanGetResponseFrequency) IsKnown() bool {
 type RatePlanGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type RatePlanGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []RatePlanGetResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    RatePlanGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo RatePlanGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       ratePlanGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// ratePlanGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RatePlanGetResponseEnvelope]
-type ratePlanGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RatePlanGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ratePlanGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RatePlanGetResponseEnvelopeSuccess bool
-
-const (
-	RatePlanGetResponseEnvelopeSuccessTrue RatePlanGetResponseEnvelopeSuccess = true
-)
-
-func (r RatePlanGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RatePlanGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type RatePlanGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                   `json:"total_count"`
-	JSON       ratePlanGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// ratePlanGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [RatePlanGetResponseEnvelopeResultInfo]
-type ratePlanGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RatePlanGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ratePlanGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

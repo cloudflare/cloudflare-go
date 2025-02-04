@@ -36,7 +36,7 @@ func TestDLPEmailRuleNewWithOptionalParams(t *testing.T) {
 		Conditions: cloudflare.F([]zero_trust.DLPEmailRuleNewParamsCondition{{
 			Operator: cloudflare.F(zero_trust.DLPEmailRuleNewParamsConditionsOperatorInList),
 			Selector: cloudflare.F(zero_trust.DLPEmailRuleNewParamsConditionsSelectorRecipients),
-			Value:    cloudflare.F[any](map[string]interface{}{}),
+			Value:    cloudflare.F[zero_trust.DLPEmailRuleNewParamsConditionsValueUnion](zero_trust.DLPEmailRuleNewParamsConditionsValueArray([]string{"string"})),
 		}}),
 		Enabled:     cloudflare.F(true),
 		Name:        cloudflare.F("name"),
@@ -76,7 +76,7 @@ func TestDLPEmailRuleUpdateWithOptionalParams(t *testing.T) {
 			Conditions: cloudflare.F([]zero_trust.DLPEmailRuleUpdateParamsCondition{{
 				Operator: cloudflare.F(zero_trust.DLPEmailRuleUpdateParamsConditionsOperatorInList),
 				Selector: cloudflare.F(zero_trust.DLPEmailRuleUpdateParamsConditionsSelectorRecipients),
-				Value:    cloudflare.F[any](map[string]interface{}{}),
+				Value:    cloudflare.F[zero_trust.DLPEmailRuleUpdateParamsConditionsValueUnion](zero_trust.DLPEmailRuleUpdateParamsConditionsValueArray([]string{"string"})),
 			}}),
 			Enabled:     cloudflare.F(true),
 			Name:        cloudflare.F("name"),

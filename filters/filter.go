@@ -24,6 +24,11 @@ import (
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewFilterService] method instead.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
 type FilterService struct {
 	Options []option.RequestOption
 }
@@ -43,20 +48,35 @@ func NewFilterService(opts ...option.RequestOption) (r *FilterService) {
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
-func (r *FilterService) New(ctx context.Context, params FilterNewParams, opts ...option.RequestOption) (res *[]FirewallFilter, err error) {
-	var env FilterNewResponseEnvelope
+func (r *FilterService) New(ctx context.Context, params FilterNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[FirewallFilter], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/filters", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Creates one or more filters.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
+func (r *FilterService) NewAutoPaging(ctx context.Context, params FilterNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[FirewallFilter] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, params, opts...))
 }
 
 // Updates an existing filter.
@@ -156,20 +176,35 @@ func (r *FilterService) Delete(ctx context.Context, filterID string, body Filter
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
-func (r *FilterService) BulkDelete(ctx context.Context, body FilterBulkDeleteParams, opts ...option.RequestOption) (res *[]FirewallFilter, err error) {
-	var env FilterBulkDeleteResponseEnvelope
+func (r *FilterService) BulkDelete(ctx context.Context, body FilterBulkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[FirewallFilter], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/filters", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Deletes one or more existing filters.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
+func (r *FilterService) BulkDeleteAutoPaging(ctx context.Context, body FilterBulkDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[FirewallFilter] {
+	return pagination.NewSinglePageAutoPager(r.BulkDelete(ctx, body, opts...))
 }
 
 // Updates one or more existing filters.
@@ -178,20 +213,35 @@ func (r *FilterService) BulkDelete(ctx context.Context, body FilterBulkDeletePar
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
-func (r *FilterService) BulkUpdate(ctx context.Context, body FilterBulkUpdateParams, opts ...option.RequestOption) (res *[]FirewallFilter, err error) {
-	var env FilterBulkUpdateResponseEnvelope
+func (r *FilterService) BulkUpdate(ctx context.Context, body FilterBulkUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[FirewallFilter], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/filters", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, body, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Updates one or more existing filters.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
+func (r *FilterService) BulkUpdateAutoPaging(ctx context.Context, body FilterBulkUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[FirewallFilter] {
+	return pagination.NewSinglePageAutoPager(r.BulkUpdate(ctx, body, opts...))
 }
 
 // Fetches the details of a filter.
@@ -254,7 +304,7 @@ func (r firewallFilterJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r FirewallFilter) ImplementsFirewallFirewallRuleFilter() {}
+func (r FirewallFilter) ImplementsFirewallRuleFilter() {}
 
 type FirewallFilterParam struct {
 	// An informative summary of the filter.
@@ -282,82 +332,6 @@ type FilterNewParams struct {
 
 func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type FilterNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []FirewallFilter      `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FilterNewResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FilterNewResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       filterNewResponseEnvelopeJSON       `json:"-"`
-}
-
-// filterNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [FilterNewResponseEnvelope]
-type filterNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type FilterNewResponseEnvelopeSuccess bool
-
-const (
-	FilterNewResponseEnvelopeSuccessTrue FilterNewResponseEnvelopeSuccess = true
-)
-
-func (r FilterNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case FilterNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type FilterNewResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                 `json:"total_count"`
-	JSON       filterNewResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// filterNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [FilterNewResponseEnvelopeResultInfo]
-type filterNewResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterNewResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type FilterUpdateParams struct {
@@ -493,82 +467,6 @@ type FilterBulkDeleteParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type FilterBulkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []FirewallFilter      `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FilterBulkDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FilterBulkDeleteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       filterBulkDeleteResponseEnvelopeJSON       `json:"-"`
-}
-
-// filterBulkDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [FilterBulkDeleteResponseEnvelope]
-type filterBulkDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterBulkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterBulkDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type FilterBulkDeleteResponseEnvelopeSuccess bool
-
-const (
-	FilterBulkDeleteResponseEnvelopeSuccessTrue FilterBulkDeleteResponseEnvelopeSuccess = true
-)
-
-func (r FilterBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case FilterBulkDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type FilterBulkDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       filterBulkDeleteResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// filterBulkDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [FilterBulkDeleteResponseEnvelopeResultInfo]
-type filterBulkDeleteResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterBulkDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterBulkDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type FilterBulkUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -576,82 +474,6 @@ type FilterBulkUpdateParams struct {
 
 func (r FilterBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type FilterBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []FirewallFilter      `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FilterBulkUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FilterBulkUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       filterBulkUpdateResponseEnvelopeJSON       `json:"-"`
-}
-
-// filterBulkUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [FilterBulkUpdateResponseEnvelope]
-type filterBulkUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterBulkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterBulkUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type FilterBulkUpdateResponseEnvelopeSuccess bool
-
-const (
-	FilterBulkUpdateResponseEnvelopeSuccessTrue FilterBulkUpdateResponseEnvelopeSuccess = true
-)
-
-func (r FilterBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case FilterBulkUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type FilterBulkUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       filterBulkUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// filterBulkUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [FilterBulkUpdateResponseEnvelopeResultInfo]
-type filterBulkUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterBulkUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r filterBulkUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type FilterGetParams struct {

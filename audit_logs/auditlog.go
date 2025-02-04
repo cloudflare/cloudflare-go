@@ -135,7 +135,7 @@ func (r AuditLogListParamsActor) URLQuery() (v url.Values) {
 //
 // Satisfied by [shared.UnionTime], [shared.UnionTime].
 type AuditLogListParamsBeforeUnion interface {
-	ImplementsAuditLogsAuditLogListParamsBeforeUnion()
+	ImplementsAuditLogListParamsBeforeUnion()
 }
 
 // Changes the direction of the chronological sorting.
@@ -159,7 +159,7 @@ func (r AuditLogListParamsDirection) IsKnown() bool {
 //
 // Satisfied by [shared.UnionTime], [shared.UnionTime].
 type AuditLogListParamsSinceUnion interface {
-	ImplementsAuditLogsAuditLogListParamsSinceUnion()
+	ImplementsAuditLogListParamsSinceUnion()
 }
 
 type AuditLogListParamsZone struct {

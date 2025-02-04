@@ -250,7 +250,7 @@ func (r AppListResponse) AsUnion() AppListResponseUnion {
 // Union satisfied by [magic_transit.AppListResponseMagicAccountApp] or
 // [magic_transit.AppListResponseMagicManagedApp].
 type AppListResponseUnion interface {
-	implementsMagicTransitAppListResponse()
+	implementsAppListResponse()
 }
 
 func init() {
@@ -303,7 +303,7 @@ func (r appListResponseMagicAccountAppJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppListResponseMagicAccountApp) implementsMagicTransitAppListResponse() {}
+func (r AppListResponseMagicAccountApp) implementsAppListResponse() {}
 
 // Managed app defined by Cloudflare.
 type AppListResponseMagicManagedApp struct {
@@ -340,7 +340,7 @@ func (r appListResponseMagicManagedAppJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AppListResponseMagicManagedApp) implementsMagicTransitAppListResponse() {}
+func (r AppListResponseMagicManagedApp) implementsAppListResponse() {}
 
 // Custom app defined for an account.
 type AppDeleteResponse struct {

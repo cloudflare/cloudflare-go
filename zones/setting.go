@@ -113,9 +113,9 @@ func (r advancedDDoSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AdvancedDDoS) implementsZonesSettingEditResponse() {}
+func (r AdvancedDDoS) implementsSettingEditResponse() {}
 
-func (r AdvancedDDoS) implementsZonesSettingGetResponse() {}
+func (r AdvancedDDoS) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type AdvancedDDoSID string
@@ -179,7 +179,7 @@ func (r AdvancedDDoSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AdvancedDDoSParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r AdvancedDDoSParam) implementsSettingEditParamsBodyUnion() {}
 
 // When enabled, Cloudflare serves limited copies of web pages available from the
 // [Internet Archive's Wayback Machine](https://archive.org/web/) if your server is
@@ -217,9 +217,9 @@ func (r alwaysOnlineJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AlwaysOnline) implementsZonesSettingEditResponse() {}
+func (r AlwaysOnline) implementsSettingEditResponse() {}
 
-func (r AlwaysOnline) implementsZonesSettingGetResponse() {}
+func (r AlwaysOnline) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type AlwaysOnlineID string
@@ -285,7 +285,7 @@ func (r AlwaysOnlineParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AlwaysOnlineParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r AlwaysOnlineParam) implementsSettingEditParamsBodyUnion() {}
 
 type AlwaysUseHTTPS struct {
 	// If enabled, any ` http://“ URL is converted to  `https://` through a 301
@@ -309,7 +309,7 @@ func (r alwaysUseHTTPSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AlwaysUseHTTPS) ImplementsPageRulesPageRuleAction() {}
+func (r AlwaysUseHTTPS) ImplementsPageRuleAction() {}
 
 // If enabled, any ` http://“ URL is converted to  `https://` through a 301
 // redirect.
@@ -337,11 +337,11 @@ func (r AlwaysUseHTTPSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AlwaysUseHTTPSParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r AlwaysUseHTTPSParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r AlwaysUseHTTPSParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r AlwaysUseHTTPSParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r AlwaysUseHTTPSParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r AlwaysUseHTTPSParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 type AutomaticHTTPSRewrites struct {
 	// Turn on or off Automatic HTTPS Rewrites.
@@ -368,7 +368,7 @@ func (r automaticHTTPSRewritesJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AutomaticHTTPSRewrites) ImplementsPageRulesPageRuleAction() {}
+func (r AutomaticHTTPSRewrites) ImplementsPageRuleAction() {}
 
 // Turn on or off Automatic HTTPS Rewrites.
 type AutomaticHTTPSRewritesID string
@@ -412,11 +412,11 @@ func (r AutomaticHTTPSRewritesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AutomaticHTTPSRewritesParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r AutomaticHTTPSRewritesParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r AutomaticHTTPSRewritesParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r AutomaticHTTPSRewritesParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r AutomaticHTTPSRewritesParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r AutomaticHTTPSRewritesParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 type AutomaticPlatformOptimization struct {
 	// Indicates whether or not
@@ -517,9 +517,9 @@ func (r brotliJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Brotli) implementsZonesSettingEditResponse() {}
+func (r Brotli) implementsSettingEditResponse() {}
 
-func (r Brotli) implementsZonesSettingGetResponse() {}
+func (r Brotli) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type BrotliID string
@@ -582,7 +582,7 @@ func (r BrotliParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BrotliParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r BrotliParam) implementsSettingEditParamsBodyUnion() {}
 
 type BrowserCacheTTL struct {
 	// Control how long resources cached by client browsers remain valid.
@@ -609,7 +609,7 @@ func (r browserCacheTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BrowserCacheTTL) ImplementsPageRulesPageRuleAction() {}
+func (r BrowserCacheTTL) ImplementsPageRuleAction() {}
 
 // Control how long resources cached by client browsers remain valid.
 type BrowserCacheTTLID string
@@ -638,11 +638,11 @@ func (r BrowserCacheTTLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BrowserCacheTTLParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r BrowserCacheTTLParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r BrowserCacheTTLParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r BrowserCacheTTLParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r BrowserCacheTTLParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r BrowserCacheTTLParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 type BrowserCheck struct {
 	// Inspect the visitor's browser for headers commonly associated with spammers and
@@ -669,7 +669,7 @@ func (r browserCheckJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BrowserCheck) ImplementsPageRulesPageRuleAction() {}
+func (r BrowserCheck) ImplementsPageRuleAction() {}
 
 // Inspect the visitor's browser for headers commonly associated with spammers and
 // certain bots.
@@ -715,11 +715,11 @@ func (r BrowserCheckParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BrowserCheckParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r BrowserCheckParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r BrowserCheckParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r BrowserCheckParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r BrowserCheckParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r BrowserCheckParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 type CacheLevel struct {
 	// Apply custom caching based on the option selected.
@@ -752,7 +752,7 @@ func (r cacheLevelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CacheLevel) ImplementsPageRulesPageRuleAction() {}
+func (r CacheLevel) ImplementsPageRuleAction() {}
 
 // Apply custom caching based on the option selected.
 type CacheLevelID string
@@ -813,11 +813,11 @@ func (r CacheLevelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CacheLevelParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r CacheLevelParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r CacheLevelParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r CacheLevelParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r CacheLevelParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r CacheLevelParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Specify how long a visitor is allowed access to your site after successfully
 // completing a challenge (such as a CAPTCHA). After the TTL has expired the
@@ -855,9 +855,9 @@ func (r challengeTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ChallengeTTL) implementsZonesSettingEditResponse() {}
+func (r ChallengeTTL) implementsSettingEditResponse() {}
 
-func (r ChallengeTTL) implementsZonesSettingGetResponse() {}
+func (r ChallengeTTL) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type ChallengeTTLID string
@@ -935,7 +935,7 @@ func (r ChallengeTTLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ChallengeTTLParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r ChallengeTTLParam) implementsSettingEditParamsBodyUnion() {}
 
 // An allowlist of ciphers for TLS termination. These ciphers must be in the
 // BoringSSL format.
@@ -970,9 +970,9 @@ func (r ciphersJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Ciphers) implementsZonesSettingEditResponse() {}
+func (r Ciphers) implementsSettingEditResponse() {}
 
-func (r Ciphers) implementsZonesSettingGetResponse() {}
+func (r Ciphers) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type CiphersID string
@@ -1019,7 +1019,7 @@ func (r CiphersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CiphersParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r CiphersParam) implementsSettingEditParamsBodyUnion() {}
 
 // Development Mode temporarily allows you to enter development mode for your
 // websites if you need to make changes to your site. This will bypass Cloudflare's
@@ -1063,9 +1063,9 @@ func (r developmentModeJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DevelopmentMode) implementsZonesSettingEditResponse() {}
+func (r DevelopmentMode) implementsSettingEditResponse() {}
 
-func (r DevelopmentMode) implementsZonesSettingGetResponse() {}
+func (r DevelopmentMode) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type DevelopmentModeID string
@@ -1132,7 +1132,7 @@ func (r DevelopmentModeParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevelopmentModeParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r DevelopmentModeParam) implementsSettingEditParamsBodyUnion() {}
 
 // When enabled, Cloudflare will attempt to speed up overall page loads by serving
 // `103` responses with `Link` headers from the final response. Refer to
@@ -1169,9 +1169,9 @@ func (r earlyHintsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EarlyHints) implementsZonesSettingEditResponse() {}
+func (r EarlyHints) implementsSettingEditResponse() {}
 
-func (r EarlyHints) implementsZonesSettingGetResponse() {}
+func (r EarlyHints) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type EarlyHintsID string
@@ -1236,7 +1236,7 @@ func (r EarlyHintsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EarlyHintsParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r EarlyHintsParam) implementsSettingEditParamsBodyUnion() {}
 
 type EmailObfuscation struct {
 	// Turn on or off **Email Obfuscation**.
@@ -1263,7 +1263,7 @@ func (r emailObfuscationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EmailObfuscation) ImplementsPageRulesPageRuleAction() {}
+func (r EmailObfuscation) ImplementsPageRuleAction() {}
 
 // Turn on or off **Email Obfuscation**.
 type EmailObfuscationID string
@@ -1307,11 +1307,11 @@ func (r EmailObfuscationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EmailObfuscationParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r EmailObfuscationParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r EmailObfuscationParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r EmailObfuscationParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r EmailObfuscationParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r EmailObfuscationParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 // HTTP/2 Edge Prioritization optimises the delivery of resources served through
 // HTTP/2 to improve page load performance. It also supports fine control of
@@ -1348,9 +1348,9 @@ func (r h2PrioritizationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r H2Prioritization) implementsZonesSettingEditResponse() {}
+func (r H2Prioritization) implementsSettingEditResponse() {}
 
-func (r H2Prioritization) implementsZonesSettingGetResponse() {}
+func (r H2Prioritization) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type H2PrioritizationID string
@@ -1415,7 +1415,7 @@ func (r H2PrioritizationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r H2PrioritizationParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r H2PrioritizationParam) implementsSettingEditParamsBodyUnion() {}
 
 // When enabled, the Hotlink Protection option ensures that other sites cannot suck
 // up your bandwidth by building pages that use images hosted on your site. Anytime
@@ -1456,9 +1456,9 @@ func (r hotlinkProtectionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r HotlinkProtection) implementsZonesSettingEditResponse() {}
+func (r HotlinkProtection) implementsSettingEditResponse() {}
 
-func (r HotlinkProtection) implementsZonesSettingGetResponse() {}
+func (r HotlinkProtection) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type HotlinkProtectionID string
@@ -1526,7 +1526,7 @@ func (r HotlinkProtectionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r HotlinkProtectionParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r HotlinkProtectionParam) implementsSettingEditParamsBodyUnion() {}
 
 // HTTP2 enabled for this zone.
 type HTTP2 struct {
@@ -1560,9 +1560,9 @@ func (r http2JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r HTTP2) implementsZonesSettingEditResponse() {}
+func (r HTTP2) implementsSettingEditResponse() {}
 
-func (r HTTP2) implementsZonesSettingGetResponse() {}
+func (r HTTP2) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type HTTP2ID string
@@ -1624,7 +1624,7 @@ func (r HTTP2Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r HTTP2Param) implementsZonesSettingEditParamsBodyUnion() {}
+func (r HTTP2Param) implementsSettingEditParamsBodyUnion() {}
 
 // HTTP3 enabled for this zone.
 type HTTP3 struct {
@@ -1658,9 +1658,9 @@ func (r http3JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r HTTP3) implementsZonesSettingEditResponse() {}
+func (r HTTP3) implementsSettingEditResponse() {}
 
-func (r HTTP3) implementsZonesSettingGetResponse() {}
+func (r HTTP3) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type HTTP3ID string
@@ -1722,7 +1722,7 @@ func (r HTTP3Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r HTTP3Param) implementsZonesSettingEditParamsBodyUnion() {}
+func (r HTTP3Param) implementsSettingEditParamsBodyUnion() {}
 
 // Image Resizing provides on-demand resizing, conversion and optimisation for
 // images served through Cloudflare's network. Refer to the
@@ -1759,9 +1759,9 @@ func (r imageResizingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ImageResizing) implementsZonesSettingEditResponse() {}
+func (r ImageResizing) implementsSettingEditResponse() {}
 
-func (r ImageResizing) implementsZonesSettingGetResponse() {}
+func (r ImageResizing) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type ImageResizingID string
@@ -1827,7 +1827,7 @@ func (r ImageResizingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ImageResizingParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r ImageResizingParam) implementsSettingEditParamsBodyUnion() {}
 
 type IPGeolocation struct {
 	// Cloudflare adds a CF-IPCountry HTTP header containing the country code that
@@ -1854,7 +1854,7 @@ func (r ipGeolocationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IPGeolocation) ImplementsPageRulesPageRuleAction() {}
+func (r IPGeolocation) ImplementsPageRuleAction() {}
 
 // Cloudflare adds a CF-IPCountry HTTP header containing the country code that
 // corresponds to the visitor.
@@ -1900,11 +1900,11 @@ func (r IPGeolocationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IPGeolocationParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r IPGeolocationParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r IPGeolocationParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r IPGeolocationParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r IPGeolocationParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r IPGeolocationParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
@@ -1939,9 +1939,9 @@ func (r ipv6JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IPV6) implementsZonesSettingEditResponse() {}
+func (r IPV6) implementsSettingEditResponse() {}
 
-func (r IPV6) implementsZonesSettingGetResponse() {}
+func (r IPV6) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type IPV6ID string
@@ -2004,7 +2004,7 @@ func (r IPV6Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IPV6Param) implementsZonesSettingEditParamsBodyUnion() {}
+func (r IPV6Param) implementsSettingEditParamsBodyUnion() {}
 
 // Only accepts HTTPS requests that use at least the TLS protocol version
 // specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
@@ -2040,9 +2040,9 @@ func (r minTLSVersionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r MinTLSVersion) implementsZonesSettingEditResponse() {}
+func (r MinTLSVersion) implementsSettingEditResponse() {}
 
-func (r MinTLSVersion) implementsZonesSettingGetResponse() {}
+func (r MinTLSVersion) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type MinTLSVersionID string
@@ -2108,7 +2108,7 @@ func (r MinTLSVersionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r MinTLSVersionParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r MinTLSVersionParam) implementsSettingEditParamsBodyUnion() {}
 
 type Mirage struct {
 	// Cloudflare Mirage reduces bandwidth used by images in mobile browsers. It can
@@ -2136,7 +2136,7 @@ func (r mirageJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Mirage) ImplementsPageRulesPageRuleAction() {}
+func (r Mirage) ImplementsPageRuleAction() {}
 
 // Cloudflare Mirage reduces bandwidth used by images in mobile browsers. It can
 // accelerate loading of image-heavy websites on very slow mobile connections and
@@ -2184,11 +2184,11 @@ func (r MirageParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r MirageParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r MirageParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r MirageParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r MirageParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r MirageParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r MirageParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Enable Network Error Logging reporting on your zone. (Beta)
 type NEL struct {
@@ -2222,9 +2222,9 @@ func (r nelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r NEL) implementsZonesSettingEditResponse() {}
+func (r NEL) implementsSettingEditResponse() {}
 
-func (r NEL) implementsZonesSettingGetResponse() {}
+func (r NEL) implementsSettingGetResponse() {}
 
 // Zone setting identifier.
 type NELID string
@@ -2291,7 +2291,7 @@ func (r NELParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r NELParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r NELParam) implementsSettingEditParamsBodyUnion() {}
 
 // Current value of the zone setting.
 type NELValueParam struct {
@@ -2329,7 +2329,7 @@ func (r opportunisticEncryptionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OpportunisticEncryption) ImplementsPageRulesPageRuleAction() {}
+func (r OpportunisticEncryption) ImplementsPageRuleAction() {}
 
 // Opportunistic Encryption allows browsers to access HTTP URIs over an encrypted
 // TLS channel. It's not a substitute for HTTPS, but provides additional security
@@ -2377,11 +2377,11 @@ func (r OpportunisticEncryptionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r OpportunisticEncryptionParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r OpportunisticEncryptionParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r OpportunisticEncryptionParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r OpportunisticEncryptionParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r OpportunisticEncryptionParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r OpportunisticEncryptionParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
@@ -2417,9 +2417,9 @@ func (r opportunisticOnionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OpportunisticOnion) implementsZonesSettingEditResponse() {}
+func (r OpportunisticOnion) implementsSettingEditResponse() {}
 
-func (r OpportunisticOnion) implementsZonesSettingGetResponse() {}
+func (r OpportunisticOnion) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type OpportunisticOnionID string
@@ -2482,7 +2482,7 @@ func (r OpportunisticOnionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r OpportunisticOnionParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r OpportunisticOnionParam) implementsSettingEditParamsBodyUnion() {}
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 // on Cloudflare.
@@ -2517,9 +2517,9 @@ func (r orangeToOrangeJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OrangeToOrange) implementsZonesSettingEditResponse() {}
+func (r OrangeToOrange) implementsSettingEditResponse() {}
 
-func (r OrangeToOrange) implementsZonesSettingGetResponse() {}
+func (r OrangeToOrange) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type OrangeToOrangeID string
@@ -2582,7 +2582,7 @@ func (r OrangeToOrangeParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r OrangeToOrangeParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r OrangeToOrangeParam) implementsSettingEditParamsBodyUnion() {}
 
 type OriginErrorPagePassThru struct {
 	// Turn on or off Cloudflare error pages generated from issues sent from the origin
@@ -2610,7 +2610,7 @@ func (r originErrorPagePassThruJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OriginErrorPagePassThru) ImplementsPageRulesPageRuleAction() {}
+func (r OriginErrorPagePassThru) ImplementsPageRuleAction() {}
 
 // Turn on or off Cloudflare error pages generated from issues sent from the origin
 // server. If enabled, this setting triggers error pages issued by the origin.
@@ -2656,11 +2656,11 @@ func (r OriginErrorPagePassThruParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r OriginErrorPagePassThruParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r OriginErrorPagePassThruParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r OriginErrorPagePassThruParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r OriginErrorPagePassThruParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r OriginErrorPagePassThruParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r OriginErrorPagePassThruParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 type Polish struct {
 	// Apply options from the Polish feature of the Cloudflare Speed app.
@@ -2686,7 +2686,7 @@ func (r polishJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Polish) ImplementsPageRulesPageRuleAction() {}
+func (r Polish) ImplementsPageRuleAction() {}
 
 // Apply options from the Polish feature of the Cloudflare Speed app.
 type PolishID string
@@ -2731,11 +2731,11 @@ func (r PolishParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PolishParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PolishParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r PolishParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r PolishParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r PolishParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r PolishParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
@@ -2770,9 +2770,9 @@ func (r prefetchPreloadJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PrefetchPreload) implementsZonesSettingEditResponse() {}
+func (r PrefetchPreload) implementsSettingEditResponse() {}
 
-func (r PrefetchPreload) implementsZonesSettingGetResponse() {}
+func (r PrefetchPreload) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type PrefetchPreloadID string
@@ -2835,7 +2835,7 @@ func (r PrefetchPreloadParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PrefetchPreloadParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r PrefetchPreloadParam) implementsSettingEditParamsBodyUnion() {}
 
 // Maximum time between two read operations from origin.
 type ProxyReadTimeout struct {
@@ -2870,9 +2870,9 @@ func (r proxyReadTimeoutJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProxyReadTimeout) implementsZonesSettingEditResponse() {}
+func (r ProxyReadTimeout) implementsSettingEditResponse() {}
 
-func (r ProxyReadTimeout) implementsZonesSettingGetResponse() {}
+func (r ProxyReadTimeout) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type ProxyReadTimeoutID string
@@ -2918,7 +2918,7 @@ func (r ProxyReadTimeoutParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ProxyReadTimeoutParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r ProxyReadTimeoutParam) implementsSettingEditParamsBodyUnion() {}
 
 // The value set for the Pseudo IPv4 setting.
 type PseudoIPV4 struct {
@@ -2952,9 +2952,9 @@ func (r pseudoIPV4JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PseudoIPV4) implementsZonesSettingEditResponse() {}
+func (r PseudoIPV4) implementsSettingEditResponse() {}
 
-func (r PseudoIPV4) implementsZonesSettingGetResponse() {}
+func (r PseudoIPV4) implementsSettingGetResponse() {}
 
 // Value of the Pseudo IPv4 setting.
 type PseudoIPV4ID string
@@ -3017,7 +3017,7 @@ func (r PseudoIPV4Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PseudoIPV4Param) implementsZonesSettingEditParamsBodyUnion() {}
+func (r PseudoIPV4Param) implementsSettingEditParamsBodyUnion() {}
 
 type ResponseBuffering struct {
 	// Turn on or off whether Cloudflare should wait for an entire file from the origin
@@ -3046,7 +3046,7 @@ func (r responseBufferingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ResponseBuffering) ImplementsPageRulesPageRuleAction() {}
+func (r ResponseBuffering) ImplementsPageRuleAction() {}
 
 // Turn on or off whether Cloudflare should wait for an entire file from the origin
 // server before forwarding it to the site visitor. By default, Cloudflare sends
@@ -3094,11 +3094,11 @@ func (r ResponseBufferingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ResponseBufferingParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r ResponseBufferingParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r ResponseBufferingParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r ResponseBufferingParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r ResponseBufferingParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r ResponseBufferingParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 type RocketLoader struct {
 	// Turn on or off Rocket Loader in the Cloudflare Speed app.
@@ -3124,7 +3124,7 @@ func (r rocketLoaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RocketLoader) ImplementsPageRulesPageRuleAction() {}
+func (r RocketLoader) ImplementsPageRuleAction() {}
 
 // Turn on or off Rocket Loader in the Cloudflare Speed app.
 type RocketLoaderID string
@@ -3168,11 +3168,11 @@ func (r RocketLoaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RocketLoaderParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r RocketLoaderParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r RocketLoaderParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r RocketLoaderParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r RocketLoaderParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r RocketLoaderParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Cloudflare security header for a zone.
 type SecurityHeaders struct {
@@ -3206,9 +3206,9 @@ func (r securityHeadersJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SecurityHeaders) implementsZonesSettingEditResponse() {}
+func (r SecurityHeaders) implementsSettingEditResponse() {}
 
-func (r SecurityHeaders) implementsZonesSettingGetResponse() {}
+func (r SecurityHeaders) implementsSettingGetResponse() {}
 
 // ID of the zone's security header.
 type SecurityHeadersID string
@@ -3312,7 +3312,7 @@ func (r SecurityHeadersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SecurityHeadersParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SecurityHeadersParam) implementsSettingEditParamsBodyUnion() {}
 
 // Current value of the zone setting.
 type SecurityHeadersValueParam struct {
@@ -3365,7 +3365,7 @@ func (r securityLevelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SecurityLevel) ImplementsPageRulesPageRuleAction() {}
+func (r SecurityLevel) ImplementsPageRuleAction() {}
 
 // Control options for the **Security Level** feature from the **Security** app.
 type SecurityLevelID string
@@ -3411,11 +3411,11 @@ func (r SecurityLevelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SecurityLevelParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r SecurityLevelParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r SecurityLevelParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r SecurityLevelParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r SecurityLevelParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r SecurityLevelParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 // If there is sensitive content on your website that you want visible to real
 // visitors, but that you want to hide from suspicious visitors, all you have to do
@@ -3460,9 +3460,9 @@ func (r serverSideExcludesJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ServerSideExcludes) implementsZonesSettingEditResponse() {}
+func (r ServerSideExcludes) implementsSettingEditResponse() {}
 
-func (r ServerSideExcludes) implementsZonesSettingGetResponse() {}
+func (r ServerSideExcludes) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type ServerSideExcludesID string
@@ -3534,7 +3534,7 @@ func (r ServerSideExcludesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ServerSideExcludesParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r ServerSideExcludesParam) implementsSettingEditParamsBodyUnion() {}
 
 type SortQueryStringForCache struct {
 	// Turn on or off the reordering of query strings. When query strings have the same
@@ -3562,7 +3562,7 @@ func (r sortQueryStringForCacheJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SortQueryStringForCache) ImplementsPageRulesPageRuleAction() {}
+func (r SortQueryStringForCache) ImplementsPageRuleAction() {}
 
 // Turn on or off the reordering of query strings. When query strings have the same
 // structure, caching improves.
@@ -3608,11 +3608,11 @@ func (r SortQueryStringForCacheParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SortQueryStringForCacheParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r SortQueryStringForCacheParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r SortQueryStringForCacheParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r SortQueryStringForCacheParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r SortQueryStringForCacheParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r SortQueryStringForCacheParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 type SSL struct {
 	// Control options for the SSL feature of the Edge Certificates tab in the
@@ -3639,7 +3639,7 @@ func (r sslJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SSL) ImplementsPageRulesPageRuleAction() {}
+func (r SSL) ImplementsPageRuleAction() {}
 
 // Control options for the SSL feature of the Edge Certificates tab in the
 // Cloudflare SSL/TLS app.
@@ -3688,11 +3688,11 @@ func (r SSLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SSLParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r SSLParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r SSLParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r SSLParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r SSLParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r SSLParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 // Enrollment in the SSL/TLS Recommender service which tries to detect and
 // recommend (by sending periodic emails) the most secure SSL/TLS setting your
@@ -3721,9 +3721,9 @@ func (r sslRecommenderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SSLRecommender) implementsZonesSettingEditResponse() {}
+func (r SSLRecommender) implementsSettingEditResponse() {}
 
-func (r SSLRecommender) implementsZonesSettingGetResponse() {}
+func (r SSLRecommender) implementsSettingGetResponse() {}
 
 // Enrollment value for SSL/TLS Recommender.
 type SSLRecommenderID string
@@ -3754,7 +3754,7 @@ func (r SSLRecommenderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SSLRecommenderParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SSLRecommenderParam) implementsSettingEditParamsBodyUnion() {}
 
 // Enables Crypto TLS 1.3 feature for a zone.
 type TLS1_3 struct {
@@ -3788,9 +3788,9 @@ func (r tls1_3JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r TLS1_3) implementsZonesSettingEditResponse() {}
+func (r TLS1_3) implementsSettingEditResponse() {}
 
-func (r TLS1_3) implementsZonesSettingGetResponse() {}
+func (r TLS1_3) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type TLS1_3ID string
@@ -3853,7 +3853,7 @@ func (r TLS1_3Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r TLS1_3Param) implementsZonesSettingEditParamsBodyUnion() {}
+func (r TLS1_3Param) implementsSettingEditParamsBodyUnion() {}
 
 // TLS Client Auth requires Cloudflare to connect to your origin server using a
 // client certificate (Enterprise Only).
@@ -3888,9 +3888,9 @@ func (r tlsClientAuthJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r TLSClientAuth) implementsZonesSettingEditResponse() {}
+func (r TLSClientAuth) implementsSettingEditResponse() {}
 
-func (r TLSClientAuth) implementsZonesSettingGetResponse() {}
+func (r TLSClientAuth) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type TLSClientAuthID string
@@ -3953,7 +3953,7 @@ func (r TLSClientAuthParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r TLSClientAuthParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r TLSClientAuthParam) implementsSettingEditParamsBodyUnion() {}
 
 type TrueClientIPHeader struct {
 	// Turn on or off the True-Client-IP Header feature of the Cloudflare Network app.
@@ -3980,7 +3980,7 @@ func (r trueClientIPHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r TrueClientIPHeader) ImplementsPageRulesPageRuleAction() {}
+func (r TrueClientIPHeader) ImplementsPageRuleAction() {}
 
 // Turn on or off the True-Client-IP Header feature of the Cloudflare Network app.
 type TrueClientIPHeaderID string
@@ -4024,11 +4024,11 @@ func (r TrueClientIPHeaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r TrueClientIPHeaderParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r TrueClientIPHeaderParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r TrueClientIPHeaderParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r TrueClientIPHeaderParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r TrueClientIPHeaderParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r TrueClientIPHeaderParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 type WAF struct {
 	// Turn on or off
@@ -4056,7 +4056,7 @@ func (r wafJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r WAF) ImplementsPageRulesPageRuleAction() {}
+func (r WAF) ImplementsPageRuleAction() {}
 
 // Turn on or off
 // [WAF managed rules (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/).
@@ -4104,11 +4104,11 @@ func (r WAFParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WAFParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r WAFParam) ImplementsPageRuleNewParamsActionUnion() {}
 
-func (r WAFParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r WAFParam) ImplementsPageRuleUpdateParamsActionUnion() {}
 
-func (r WAFParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r WAFParam) ImplementsPageRuleEditParamsActionUnion() {}
 
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
@@ -4144,9 +4144,9 @@ func (r WebPJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r WebP) implementsZonesSettingEditResponse() {}
+func (r WebP) implementsSettingEditResponse() {}
 
-func (r WebP) implementsZonesSettingGetResponse() {}
+func (r WebP) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type WebPID string
@@ -4210,7 +4210,7 @@ func (r WebPParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WebPParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r WebPParam) implementsSettingEditParamsBodyUnion() {}
 
 // WebSockets are open connections sustained between the client and the origin
 // server. Inside a WebSockets connection, the client and the origin can pass data
@@ -4250,9 +4250,9 @@ func (r websocketJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Websocket) implementsZonesSettingEditResponse() {}
+func (r Websocket) implementsSettingEditResponse() {}
 
-func (r Websocket) implementsZonesSettingGetResponse() {}
+func (r Websocket) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type WebsocketID string
@@ -4320,7 +4320,7 @@ func (r WebsocketParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WebsocketParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r WebsocketParam) implementsSettingEditParamsBodyUnion() {}
 
 // 0-RTT session resumption enabled for this zone.
 type ZeroRTT struct {
@@ -4354,9 +4354,9 @@ func (r zeroRTTJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZeroRTT) implementsZonesSettingEditResponse() {}
+func (r ZeroRTT) implementsSettingEditResponse() {}
 
-func (r ZeroRTT) implementsZonesSettingGetResponse() {}
+func (r ZeroRTT) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type ZeroRTTID string
@@ -4418,7 +4418,7 @@ func (r ZeroRTTParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZeroRTTParam) implementsZonesSettingEditParamsBodyUnion() {}
+func (r ZeroRTTParam) implementsSettingEditParamsBodyUnion() {}
 
 // 0-RTT session resumption enabled for this zone.
 type SettingEditResponse struct {
@@ -4436,7 +4436,8 @@ type SettingEditResponse struct {
 	// for the domain. If development mode has never been enabled, this value is false.
 	TimeRemaining float64 `json:"time_remaining"`
 	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
-	// [AlwaysOnlineValue], [SettingEditResponseZonesSchemasAlwaysUseHTTPSValue],
+	// [SettingEditResponseZonesCacheRulesAegisValue], [AlwaysOnlineValue],
+	// [SettingEditResponseZonesSchemasAlwaysUseHTTPSValue],
 	// [SettingEditResponseZonesSchemasAutomaticHTTPSRewritesValue], [BrotliValue],
 	// [SettingEditResponseZonesSchemasBrowserCacheTTLValue],
 	// [SettingEditResponseZonesSchemasBrowserCheckValue],
@@ -4451,7 +4452,8 @@ type SettingEditResponse struct {
 	// [SettingEditResponseZonesSchemasMirageValue], [NELValue],
 	// [SettingEditResponseZonesSchemasOpportunisticEncryptionValue],
 	// [OpportunisticOnionValue], [OrangeToOrangeValue],
-	// [SettingEditResponseZonesSchemasOriginErrorPagePassThruValue],
+	// [SettingEditResponseZonesSchemasOriginErrorPagePassThruValue], [int64],
+	// [SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue],
 	// [SettingEditResponseZonesSchemasPolishValue], [PrefetchPreloadValue], [float64],
 	// [PseudoIPV4Value], [SettingEditResponseZonesReplaceInsecureJSValue],
 	// [SettingEditResponseZonesSchemasResponseBufferingValue],
@@ -4499,7 +4501,8 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are [zones.ZeroRTT], [zones.AdvancedDDoS],
-// [zones.AlwaysOnline], [zones.SettingEditResponseZonesSchemasAlwaysUseHTTPS],
+// [zones.SettingEditResponseZonesCacheRulesAegis], [zones.AlwaysOnline],
+// [zones.SettingEditResponseZonesSchemasAlwaysUseHTTPS],
 // [zones.SettingEditResponseZonesSchemasAutomaticHTTPSRewrites], [zones.Brotli],
 // [zones.SettingEditResponseZonesSchemasBrowserCacheTTL],
 // [zones.SettingEditResponseZonesSchemasBrowserCheck],
@@ -4516,6 +4519,8 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.SettingEditResponseZonesSchemasOpportunisticEncryption],
 // [zones.OpportunisticOnion], [zones.OrangeToOrange],
 // [zones.SettingEditResponseZonesSchemasOriginErrorPagePassThru],
+// [zones.SettingEditResponseZonesCacheRulesOriginH2MaxStreams],
+// [zones.SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingEditResponseZonesSchemasPolish], [zones.PrefetchPreload],
 // [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingEditResponseZonesReplaceInsecureJS],
@@ -4536,7 +4541,8 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 
 // 0-RTT session resumption enabled for this zone.
 //
-// Union satisfied by [zones.ZeroRTT], [zones.AdvancedDDoS], [zones.AlwaysOnline],
+// Union satisfied by [zones.ZeroRTT], [zones.AdvancedDDoS],
+// [zones.SettingEditResponseZonesCacheRulesAegis], [zones.AlwaysOnline],
 // [zones.SettingEditResponseZonesSchemasAlwaysUseHTTPS],
 // [zones.SettingEditResponseZonesSchemasAutomaticHTTPSRewrites], [zones.Brotli],
 // [zones.SettingEditResponseZonesSchemasBrowserCacheTTL],
@@ -4554,6 +4560,8 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [zones.SettingEditResponseZonesSchemasOpportunisticEncryption],
 // [zones.OpportunisticOnion], [zones.OrangeToOrange],
 // [zones.SettingEditResponseZonesSchemasOriginErrorPagePassThru],
+// [zones.SettingEditResponseZonesCacheRulesOriginH2MaxStreams],
+// [zones.SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingEditResponseZonesSchemasPolish], [zones.PrefetchPreload],
 // [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingEditResponseZonesReplaceInsecureJS],
@@ -4569,7 +4577,7 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [zones.SettingEditResponseZonesSchemasTrueClientIPHeader],
 // [zones.SettingEditResponseZonesSchemasWAF], [zones.WebP] or [zones.Websocket].
 type SettingEditResponseUnion interface {
-	implementsZonesSettingEditResponse()
+	implementsSettingEditResponse()
 }
 
 func init() {
@@ -4583,6 +4591,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AdvancedDDoS{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesCacheRulesAegis{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -4702,6 +4714,14 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesCacheRulesOriginH2MaxStreams{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SettingEditResponseZonesSchemasPolish{}),
 		},
 		apijson.UnionVariant{
@@ -4791,6 +4811,82 @@ func init() {
 	)
 }
 
+// Aegis provides dedicated egress IPs (from Cloudflare to your origin) for your
+// layer 7 WAF and CDN services. The egress IPs are reserved exclusively for your
+// account so that you can increase your origin security by only allowing traffic
+// from a small list of IP addresses.
+type SettingEditResponseZonesCacheRulesAegis struct {
+	// ID of the zone setting.
+	ID SettingEditResponseZonesCacheRulesAegisID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value SettingEditResponseZonesCacheRulesAegisValue `json:"value"`
+	JSON  settingEditResponseZonesCacheRulesAegisJSON  `json:"-"`
+}
+
+// settingEditResponseZonesCacheRulesAegisJSON contains the JSON metadata for the
+// struct [SettingEditResponseZonesCacheRulesAegis]
+type settingEditResponseZonesCacheRulesAegisJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesCacheRulesAegis) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesCacheRulesAegisJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesCacheRulesAegis) implementsSettingEditResponse() {}
+
+// ID of the zone setting.
+type SettingEditResponseZonesCacheRulesAegisID string
+
+const (
+	SettingEditResponseZonesCacheRulesAegisIDAegis SettingEditResponseZonesCacheRulesAegisID = "aegis"
+)
+
+func (r SettingEditResponseZonesCacheRulesAegisID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesCacheRulesAegisIDAegis:
+		return true
+	}
+	return false
+}
+
+// Value of the zone setting.
+type SettingEditResponseZonesCacheRulesAegisValue struct {
+	// Whether the feature is enabled or not.
+	Enabled bool `json:"enabled"`
+	// Egress pool id which refers to a grouping of dedicated egress IPs through which
+	// Cloudflare will connect to origin.
+	PoolID string                                           `json:"pool_id"`
+	JSON   settingEditResponseZonesCacheRulesAegisValueJSON `json:"-"`
+}
+
+// settingEditResponseZonesCacheRulesAegisValueJSON contains the JSON metadata for
+// the struct [SettingEditResponseZonesCacheRulesAegisValue]
+type settingEditResponseZonesCacheRulesAegisValueJSON struct {
+	Enabled     apijson.Field
+	PoolID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesCacheRulesAegisValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesCacheRulesAegisValueJSON) RawJSON() string {
+	return r.raw
+}
+
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
@@ -4826,7 +4922,7 @@ func (r settingEditResponseZonesSchemasAlwaysUseHTTPSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasAlwaysUseHTTPS) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasAlwaysUseHTTPS) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasAlwaysUseHTTPSID string
@@ -4909,7 +5005,7 @@ func (r settingEditResponseZonesSchemasAutomaticHTTPSRewritesJSON) RawJSON() str
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasAutomaticHTTPSRewrites) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasAutomaticHTTPSRewrites) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasAutomaticHTTPSRewritesID string
@@ -4995,7 +5091,7 @@ func (r settingEditResponseZonesSchemasBrowserCacheTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasBrowserCacheTTL) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasBrowserCacheTTL) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasBrowserCacheTTLID string
@@ -5108,7 +5204,7 @@ func (r settingEditResponseZonesSchemasBrowserCheckJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasBrowserCheck) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasBrowserCheck) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasBrowserCheckID string
@@ -5195,7 +5291,7 @@ func (r settingEditResponseZonesSchemasCacheLevelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasCacheLevel) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasCacheLevel) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasCacheLevelID string
@@ -5279,7 +5375,7 @@ func (r settingEditResponseZonesCNAMEFlatteningJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesCNAMEFlattening) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesCNAMEFlattening) implementsSettingEditResponse() {}
 
 // How to flatten the cname destination.
 type SettingEditResponseZonesCNAMEFlatteningID string
@@ -5363,7 +5459,7 @@ func (r settingEditResponseZonesSchemasEdgeCacheTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasEdgeCacheTTL) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasEdgeCacheTTL) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasEdgeCacheTTLID string
@@ -5466,7 +5562,7 @@ func (r settingEditResponseZonesSchemasEmailObfuscationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasEmailObfuscation) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasEmailObfuscation) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasEmailObfuscationID string
@@ -5551,7 +5647,7 @@ func (r settingEditResponseZonesSchemasIPGeolocationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasIPGeolocation) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasIPGeolocation) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasIPGeolocationID string
@@ -5634,7 +5730,7 @@ func (r settingEditResponseZonesMaxUploadJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesMaxUpload) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesMaxUpload) implementsSettingEditResponse() {}
 
 // identifier of the zone setting.
 type SettingEditResponseZonesMaxUploadID string
@@ -5721,7 +5817,7 @@ func (r settingEditResponseZonesSchemasMirageJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasMirage) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasMirage) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasMirageID string
@@ -5804,8 +5900,7 @@ func (r settingEditResponseZonesSchemasOpportunisticEncryptionJSON) RawJSON() st
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasOpportunisticEncryption) implementsZonesSettingEditResponse() {
-}
+func (r SettingEditResponseZonesSchemasOpportunisticEncryption) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasOpportunisticEncryptionID string
@@ -5890,8 +5985,7 @@ func (r settingEditResponseZonesSchemasOriginErrorPagePassThruJSON) RawJSON() st
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasOriginErrorPagePassThru) implementsZonesSettingEditResponse() {
-}
+func (r SettingEditResponseZonesSchemasOriginErrorPagePassThru) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasOriginErrorPagePassThruID string
@@ -5941,6 +6035,124 @@ func (r SettingEditResponseZonesSchemasOriginErrorPagePassThruEditable) IsKnown(
 	return false
 }
 
+// Origin H2 Max Streams configures the max number of concurrent requests that
+// Cloudflare will send within the same connection when communicating with the
+// origin server, if the origin supports it. Note that if your origin does not
+// support H2 multiplexing, 5xx errors may be observed, particularly 520s. Also
+// note that the default value is `100` for all plan types except Enterprise where
+// it is `1`. `1` means that H2 multiplexing is disabled.
+type SettingEditResponseZonesCacheRulesOriginH2MaxStreams struct {
+	// Value of the zone setting.
+	ID SettingEditResponseZonesCacheRulesOriginH2MaxStreamsID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the Origin H2 Max Streams Setting.
+	Value int64                                                    `json:"value"`
+	JSON  settingEditResponseZonesCacheRulesOriginH2MaxStreamsJSON `json:"-"`
+}
+
+// settingEditResponseZonesCacheRulesOriginH2MaxStreamsJSON contains the JSON
+// metadata for the struct [SettingEditResponseZonesCacheRulesOriginH2MaxStreams]
+type settingEditResponseZonesCacheRulesOriginH2MaxStreamsJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesCacheRulesOriginH2MaxStreams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesCacheRulesOriginH2MaxStreamsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesCacheRulesOriginH2MaxStreams) implementsSettingEditResponse() {}
+
+// Value of the zone setting.
+type SettingEditResponseZonesCacheRulesOriginH2MaxStreamsID string
+
+const (
+	SettingEditResponseZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams SettingEditResponseZonesCacheRulesOriginH2MaxStreamsID = "origin_h2_max_streams"
+)
+
+func (r SettingEditResponseZonesCacheRulesOriginH2MaxStreamsID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams:
+		return true
+	}
+	return false
+}
+
+// Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
+// attempt to use with your origin. This setting allows Cloudflare to make HTTP/2
+// requests to your origin. (Refer to
+// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+// for more information.). The default value is "2" for all plan types except
+// Enterprise where it is "1"
+type SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion struct {
+	// Value of the zone setting.
+	ID SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the Origin Max HTTP Version Setting.
+	Value SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue `json:"value"`
+	JSON  settingEditResponseZonesCacheRulesOriginMaxHTTPVersionJSON  `json:"-"`
+}
+
+// settingEditResponseZonesCacheRulesOriginMaxHTTPVersionJSON contains the JSON
+// metadata for the struct [SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion]
+type settingEditResponseZonesCacheRulesOriginMaxHTTPVersionJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesCacheRulesOriginMaxHTTPVersionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion) implementsSettingEditResponse() {}
+
+// Value of the zone setting.
+type SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionID string
+
+const (
+	SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionID = "origin_max_http_version"
+)
+
+func (r SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion:
+		return true
+	}
+	return false
+}
+
+// Value of the Origin Max HTTP Version Setting.
+type SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue string
+
+const (
+	SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue2 SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue = "2"
+	SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue1 SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue = "1"
+)
+
+func (r SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue2, SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue1:
+		return true
+	}
+	return false
+}
+
 // Removes metadata and compresses your images for faster page load times. Basic
 // (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
 // quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
@@ -5979,7 +6191,7 @@ func (r settingEditResponseZonesSchemasPolishJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasPolish) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasPolish) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasPolishID string
@@ -6065,7 +6277,7 @@ func (r settingEditResponseZonesReplaceInsecureJSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesReplaceInsecureJS) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesReplaceInsecureJS) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesReplaceInsecureJSID string
@@ -6151,7 +6363,7 @@ func (r settingEditResponseZonesSchemasResponseBufferingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasResponseBuffering) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasResponseBuffering) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasResponseBufferingID string
@@ -6243,7 +6455,7 @@ func (r settingEditResponseZonesSchemasRocketLoaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasRocketLoader) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasRocketLoader) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasRocketLoaderID string
@@ -6329,7 +6541,7 @@ func (r settingEditResponseZonesSchemasAutomaticPlatformOptimizationJSON) RawJSO
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasAutomaticPlatformOptimization) implementsZonesSettingEditResponse() {
+func (r SettingEditResponseZonesSchemasAutomaticPlatformOptimization) implementsSettingEditResponse() {
 }
 
 // ID of the zone setting.
@@ -6400,7 +6612,7 @@ func (r settingEditResponseZonesSchemasSecurityLevelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasSecurityLevel) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasSecurityLevel) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasSecurityLevelID string
@@ -6487,7 +6699,7 @@ func (r settingEditResponseZonesSha1SupportJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSha1Support) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSha1Support) implementsSettingEditResponse() {}
 
 // Zone setting identifier.
 type SettingEditResponseZonesSha1SupportID string
@@ -6572,8 +6784,7 @@ func (r settingEditResponseZonesSchemasSortQueryStringForCacheJSON) RawJSON() st
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasSortQueryStringForCache) implementsZonesSettingEditResponse() {
-}
+func (r SettingEditResponseZonesSchemasSortQueryStringForCache) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasSortQueryStringForCacheID string
@@ -6671,7 +6882,7 @@ func (r settingEditResponseZonesSchemasSSLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasSSL) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasSSL) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasSSLID string
@@ -6756,7 +6967,7 @@ func (r settingEditResponseZonesTls1_2OnlyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesTLS1_2Only) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesTLS1_2Only) implementsSettingEditResponse() {}
 
 // Zone setting identifier.
 type SettingEditResponseZonesTLS1_2OnlyID string
@@ -6840,7 +7051,7 @@ func (r settingEditResponseZonesSchemasTrueClientIPHeaderJSON) RawJSON() string 
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasTrueClientIPHeader) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasTrueClientIPHeader) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasTrueClientIPHeaderID string
@@ -6932,7 +7143,7 @@ func (r settingEditResponseZonesSchemasWAFJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingEditResponseZonesSchemasWAF) implementsZonesSettingEditResponse() {}
+func (r SettingEditResponseZonesSchemasWAF) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
 type SettingEditResponseZonesSchemasWAFID string
@@ -6988,6 +7199,7 @@ type SettingEditResponseID string
 const (
 	SettingEditResponseID0rtt                          SettingEditResponseID = "0rtt"
 	SettingEditResponseIDAdvancedDDoS                  SettingEditResponseID = "advanced_ddos"
+	SettingEditResponseIDAegis                         SettingEditResponseID = "aegis"
 	SettingEditResponseIDAlwaysOnline                  SettingEditResponseID = "always_online"
 	SettingEditResponseIDAlwaysUseHTTPS                SettingEditResponseID = "always_use_https"
 	SettingEditResponseIDAutomaticHTTPSRewrites        SettingEditResponseID = "automatic_https_rewrites"
@@ -7017,6 +7229,8 @@ const (
 	SettingEditResponseIDOpportunisticOnion            SettingEditResponseID = "opportunistic_onion"
 	SettingEditResponseIDOrangeToOrange                SettingEditResponseID = "orange_to_orange"
 	SettingEditResponseIDOriginErrorPagePassThru       SettingEditResponseID = "origin_error_page_pass_thru"
+	SettingEditResponseIDOriginH2MaxStreams            SettingEditResponseID = "origin_h2_max_streams"
+	SettingEditResponseIDOriginMaxHTTPVersion          SettingEditResponseID = "origin_max_http_version"
 	SettingEditResponseIDPolish                        SettingEditResponseID = "polish"
 	SettingEditResponseIDPrefetchPreload               SettingEditResponseID = "prefetch_preload"
 	SettingEditResponseIDProxyReadTimeout              SettingEditResponseID = "proxy_read_timeout"
@@ -7043,7 +7257,7 @@ const (
 
 func (r SettingEditResponseID) IsKnown() bool {
 	switch r {
-	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
+	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -7082,7 +7296,8 @@ type SettingGetResponse struct {
 	// for the domain. If development mode has never been enabled, this value is false.
 	TimeRemaining float64 `json:"time_remaining"`
 	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
-	// [AlwaysOnlineValue], [SettingGetResponseZonesSchemasAlwaysUseHTTPSValue],
+	// [SettingGetResponseZonesCacheRulesAegisValue], [AlwaysOnlineValue],
+	// [SettingGetResponseZonesSchemasAlwaysUseHTTPSValue],
 	// [SettingGetResponseZonesSchemasAutomaticHTTPSRewritesValue], [BrotliValue],
 	// [SettingGetResponseZonesSchemasBrowserCacheTTLValue],
 	// [SettingGetResponseZonesSchemasBrowserCheckValue],
@@ -7097,7 +7312,8 @@ type SettingGetResponse struct {
 	// [SettingGetResponseZonesSchemasMirageValue], [NELValue],
 	// [SettingGetResponseZonesSchemasOpportunisticEncryptionValue],
 	// [OpportunisticOnionValue], [OrangeToOrangeValue],
-	// [SettingGetResponseZonesSchemasOriginErrorPagePassThruValue],
+	// [SettingGetResponseZonesSchemasOriginErrorPagePassThruValue], [int64],
+	// [SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue],
 	// [SettingGetResponseZonesSchemasPolishValue], [PrefetchPreloadValue], [float64],
 	// [PseudoIPV4Value], [SettingGetResponseZonesReplaceInsecureJSValue],
 	// [SettingGetResponseZonesSchemasResponseBufferingValue],
@@ -7145,7 +7361,8 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are [zones.ZeroRTT], [zones.AdvancedDDoS],
-// [zones.AlwaysOnline], [zones.SettingGetResponseZonesSchemasAlwaysUseHTTPS],
+// [zones.SettingGetResponseZonesCacheRulesAegis], [zones.AlwaysOnline],
+// [zones.SettingGetResponseZonesSchemasAlwaysUseHTTPS],
 // [zones.SettingGetResponseZonesSchemasAutomaticHTTPSRewrites], [zones.Brotli],
 // [zones.SettingGetResponseZonesSchemasBrowserCacheTTL],
 // [zones.SettingGetResponseZonesSchemasBrowserCheck],
@@ -7162,6 +7379,8 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.SettingGetResponseZonesSchemasOpportunisticEncryption],
 // [zones.OpportunisticOnion], [zones.OrangeToOrange],
 // [zones.SettingGetResponseZonesSchemasOriginErrorPagePassThru],
+// [zones.SettingGetResponseZonesCacheRulesOriginH2MaxStreams],
+// [zones.SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingGetResponseZonesSchemasPolish], [zones.PrefetchPreload],
 // [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingGetResponseZonesReplaceInsecureJS],
@@ -7181,7 +7400,8 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 
 // 0-RTT session resumption enabled for this zone.
 //
-// Union satisfied by [zones.ZeroRTT], [zones.AdvancedDDoS], [zones.AlwaysOnline],
+// Union satisfied by [zones.ZeroRTT], [zones.AdvancedDDoS],
+// [zones.SettingGetResponseZonesCacheRulesAegis], [zones.AlwaysOnline],
 // [zones.SettingGetResponseZonesSchemasAlwaysUseHTTPS],
 // [zones.SettingGetResponseZonesSchemasAutomaticHTTPSRewrites], [zones.Brotli],
 // [zones.SettingGetResponseZonesSchemasBrowserCacheTTL],
@@ -7199,6 +7419,8 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [zones.SettingGetResponseZonesSchemasOpportunisticEncryption],
 // [zones.OpportunisticOnion], [zones.OrangeToOrange],
 // [zones.SettingGetResponseZonesSchemasOriginErrorPagePassThru],
+// [zones.SettingGetResponseZonesCacheRulesOriginH2MaxStreams],
+// [zones.SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingGetResponseZonesSchemasPolish], [zones.PrefetchPreload],
 // [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingGetResponseZonesReplaceInsecureJS],
@@ -7213,7 +7435,7 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [zones.TLSClientAuth], [zones.SettingGetResponseZonesSchemasTrueClientIPHeader],
 // [zones.SettingGetResponseZonesSchemasWAF], [zones.WebP] or [zones.Websocket].
 type SettingGetResponseUnion interface {
-	implementsZonesSettingGetResponse()
+	implementsSettingGetResponse()
 }
 
 func init() {
@@ -7227,6 +7449,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AdvancedDDoS{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesCacheRulesAegis{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -7346,6 +7572,14 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesCacheRulesOriginH2MaxStreams{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SettingGetResponseZonesSchemasPolish{}),
 		},
 		apijson.UnionVariant{
@@ -7435,6 +7669,82 @@ func init() {
 	)
 }
 
+// Aegis provides dedicated egress IPs (from Cloudflare to your origin) for your
+// layer 7 WAF and CDN services. The egress IPs are reserved exclusively for your
+// account so that you can increase your origin security by only allowing traffic
+// from a small list of IP addresses.
+type SettingGetResponseZonesCacheRulesAegis struct {
+	// ID of the zone setting.
+	ID SettingGetResponseZonesCacheRulesAegisID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value SettingGetResponseZonesCacheRulesAegisValue `json:"value"`
+	JSON  settingGetResponseZonesCacheRulesAegisJSON  `json:"-"`
+}
+
+// settingGetResponseZonesCacheRulesAegisJSON contains the JSON metadata for the
+// struct [SettingGetResponseZonesCacheRulesAegis]
+type settingGetResponseZonesCacheRulesAegisJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesCacheRulesAegis) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesCacheRulesAegisJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesCacheRulesAegis) implementsSettingGetResponse() {}
+
+// ID of the zone setting.
+type SettingGetResponseZonesCacheRulesAegisID string
+
+const (
+	SettingGetResponseZonesCacheRulesAegisIDAegis SettingGetResponseZonesCacheRulesAegisID = "aegis"
+)
+
+func (r SettingGetResponseZonesCacheRulesAegisID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesCacheRulesAegisIDAegis:
+		return true
+	}
+	return false
+}
+
+// Value of the zone setting.
+type SettingGetResponseZonesCacheRulesAegisValue struct {
+	// Whether the feature is enabled or not.
+	Enabled bool `json:"enabled"`
+	// Egress pool id which refers to a grouping of dedicated egress IPs through which
+	// Cloudflare will connect to origin.
+	PoolID string                                          `json:"pool_id"`
+	JSON   settingGetResponseZonesCacheRulesAegisValueJSON `json:"-"`
+}
+
+// settingGetResponseZonesCacheRulesAegisValueJSON contains the JSON metadata for
+// the struct [SettingGetResponseZonesCacheRulesAegisValue]
+type settingGetResponseZonesCacheRulesAegisValueJSON struct {
+	Enabled     apijson.Field
+	PoolID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesCacheRulesAegisValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesCacheRulesAegisValueJSON) RawJSON() string {
+	return r.raw
+}
+
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
@@ -7470,7 +7780,7 @@ func (r settingGetResponseZonesSchemasAlwaysUseHTTPSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasAlwaysUseHTTPS) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasAlwaysUseHTTPS) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasAlwaysUseHTTPSID string
@@ -7553,7 +7863,7 @@ func (r settingGetResponseZonesSchemasAutomaticHTTPSRewritesJSON) RawJSON() stri
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasAutomaticHTTPSRewrites) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasAutomaticHTTPSRewrites) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasAutomaticHTTPSRewritesID string
@@ -7639,7 +7949,7 @@ func (r settingGetResponseZonesSchemasBrowserCacheTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasBrowserCacheTTL) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasBrowserCacheTTL) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasBrowserCacheTTLID string
@@ -7752,7 +8062,7 @@ func (r settingGetResponseZonesSchemasBrowserCheckJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasBrowserCheck) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasBrowserCheck) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasBrowserCheckID string
@@ -7839,7 +8149,7 @@ func (r settingGetResponseZonesSchemasCacheLevelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasCacheLevel) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasCacheLevel) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasCacheLevelID string
@@ -7923,7 +8233,7 @@ func (r settingGetResponseZonesCNAMEFlatteningJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesCNAMEFlattening) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesCNAMEFlattening) implementsSettingGetResponse() {}
 
 // How to flatten the cname destination.
 type SettingGetResponseZonesCNAMEFlatteningID string
@@ -8007,7 +8317,7 @@ func (r settingGetResponseZonesSchemasEdgeCacheTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasEdgeCacheTTL) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasEdgeCacheTTL) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasEdgeCacheTTLID string
@@ -8110,7 +8420,7 @@ func (r settingGetResponseZonesSchemasEmailObfuscationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasEmailObfuscation) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasEmailObfuscation) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasEmailObfuscationID string
@@ -8195,7 +8505,7 @@ func (r settingGetResponseZonesSchemasIPGeolocationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasIPGeolocation) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasIPGeolocation) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasIPGeolocationID string
@@ -8278,7 +8588,7 @@ func (r settingGetResponseZonesMaxUploadJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesMaxUpload) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesMaxUpload) implementsSettingGetResponse() {}
 
 // identifier of the zone setting.
 type SettingGetResponseZonesMaxUploadID string
@@ -8365,7 +8675,7 @@ func (r settingGetResponseZonesSchemasMirageJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasMirage) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasMirage) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasMirageID string
@@ -8448,7 +8758,7 @@ func (r settingGetResponseZonesSchemasOpportunisticEncryptionJSON) RawJSON() str
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasOpportunisticEncryption) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasOpportunisticEncryption) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasOpportunisticEncryptionID string
@@ -8533,7 +8843,7 @@ func (r settingGetResponseZonesSchemasOriginErrorPagePassThruJSON) RawJSON() str
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasOriginErrorPagePassThru) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasOriginErrorPagePassThru) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasOriginErrorPagePassThruID string
@@ -8583,6 +8893,124 @@ func (r SettingGetResponseZonesSchemasOriginErrorPagePassThruEditable) IsKnown()
 	return false
 }
 
+// Origin H2 Max Streams configures the max number of concurrent requests that
+// Cloudflare will send within the same connection when communicating with the
+// origin server, if the origin supports it. Note that if your origin does not
+// support H2 multiplexing, 5xx errors may be observed, particularly 520s. Also
+// note that the default value is `100` for all plan types except Enterprise where
+// it is `1`. `1` means that H2 multiplexing is disabled.
+type SettingGetResponseZonesCacheRulesOriginH2MaxStreams struct {
+	// Value of the zone setting.
+	ID SettingGetResponseZonesCacheRulesOriginH2MaxStreamsID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the Origin H2 Max Streams Setting.
+	Value int64                                                   `json:"value"`
+	JSON  settingGetResponseZonesCacheRulesOriginH2MaxStreamsJSON `json:"-"`
+}
+
+// settingGetResponseZonesCacheRulesOriginH2MaxStreamsJSON contains the JSON
+// metadata for the struct [SettingGetResponseZonesCacheRulesOriginH2MaxStreams]
+type settingGetResponseZonesCacheRulesOriginH2MaxStreamsJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesCacheRulesOriginH2MaxStreams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesCacheRulesOriginH2MaxStreamsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesCacheRulesOriginH2MaxStreams) implementsSettingGetResponse() {}
+
+// Value of the zone setting.
+type SettingGetResponseZonesCacheRulesOriginH2MaxStreamsID string
+
+const (
+	SettingGetResponseZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams SettingGetResponseZonesCacheRulesOriginH2MaxStreamsID = "origin_h2_max_streams"
+)
+
+func (r SettingGetResponseZonesCacheRulesOriginH2MaxStreamsID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams:
+		return true
+	}
+	return false
+}
+
+// Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
+// attempt to use with your origin. This setting allows Cloudflare to make HTTP/2
+// requests to your origin. (Refer to
+// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+// for more information.). The default value is "2" for all plan types except
+// Enterprise where it is "1"
+type SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion struct {
+	// Value of the zone setting.
+	ID SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionID `json:"id,required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the Origin Max HTTP Version Setting.
+	Value SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue `json:"value"`
+	JSON  settingGetResponseZonesCacheRulesOriginMaxHTTPVersionJSON  `json:"-"`
+}
+
+// settingGetResponseZonesCacheRulesOriginMaxHTTPVersionJSON contains the JSON
+// metadata for the struct [SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion]
+type settingGetResponseZonesCacheRulesOriginMaxHTTPVersionJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesCacheRulesOriginMaxHTTPVersionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion) implementsSettingGetResponse() {}
+
+// Value of the zone setting.
+type SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionID string
+
+const (
+	SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionID = "origin_max_http_version"
+)
+
+func (r SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion:
+		return true
+	}
+	return false
+}
+
+// Value of the Origin Max HTTP Version Setting.
+type SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue string
+
+const (
+	SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue2 SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue = "2"
+	SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue1 SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue = "1"
+)
+
+func (r SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue2, SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue1:
+		return true
+	}
+	return false
+}
+
 // Removes metadata and compresses your images for faster page load times. Basic
 // (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
 // quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
@@ -8621,7 +9049,7 @@ func (r settingGetResponseZonesSchemasPolishJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasPolish) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasPolish) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasPolishID string
@@ -8707,7 +9135,7 @@ func (r settingGetResponseZonesReplaceInsecureJSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesReplaceInsecureJS) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesReplaceInsecureJS) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesReplaceInsecureJSID string
@@ -8793,7 +9221,7 @@ func (r settingGetResponseZonesSchemasResponseBufferingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasResponseBuffering) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasResponseBuffering) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasResponseBufferingID string
@@ -8885,7 +9313,7 @@ func (r settingGetResponseZonesSchemasRocketLoaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasRocketLoader) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasRocketLoader) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasRocketLoaderID string
@@ -8971,8 +9399,7 @@ func (r settingGetResponseZonesSchemasAutomaticPlatformOptimizationJSON) RawJSON
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasAutomaticPlatformOptimization) implementsZonesSettingGetResponse() {
-}
+func (r SettingGetResponseZonesSchemasAutomaticPlatformOptimization) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasAutomaticPlatformOptimizationID string
@@ -9042,7 +9469,7 @@ func (r settingGetResponseZonesSchemasSecurityLevelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasSecurityLevel) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasSecurityLevel) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasSecurityLevelID string
@@ -9129,7 +9556,7 @@ func (r settingGetResponseZonesSha1SupportJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSha1Support) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSha1Support) implementsSettingGetResponse() {}
 
 // Zone setting identifier.
 type SettingGetResponseZonesSha1SupportID string
@@ -9214,7 +9641,7 @@ func (r settingGetResponseZonesSchemasSortQueryStringForCacheJSON) RawJSON() str
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasSortQueryStringForCache) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasSortQueryStringForCache) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasSortQueryStringForCacheID string
@@ -9312,7 +9739,7 @@ func (r settingGetResponseZonesSchemasSSLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasSSL) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasSSL) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasSSLID string
@@ -9397,7 +9824,7 @@ func (r settingGetResponseZonesTls1_2OnlyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesTLS1_2Only) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesTLS1_2Only) implementsSettingGetResponse() {}
 
 // Zone setting identifier.
 type SettingGetResponseZonesTLS1_2OnlyID string
@@ -9481,7 +9908,7 @@ func (r settingGetResponseZonesSchemasTrueClientIPHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasTrueClientIPHeader) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasTrueClientIPHeader) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasTrueClientIPHeaderID string
@@ -9573,7 +10000,7 @@ func (r settingGetResponseZonesSchemasWAFJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingGetResponseZonesSchemasWAF) implementsZonesSettingGetResponse() {}
+func (r SettingGetResponseZonesSchemasWAF) implementsSettingGetResponse() {}
 
 // ID of the zone setting.
 type SettingGetResponseZonesSchemasWAFID string
@@ -9629,6 +10056,7 @@ type SettingGetResponseID string
 const (
 	SettingGetResponseID0rtt                          SettingGetResponseID = "0rtt"
 	SettingGetResponseIDAdvancedDDoS                  SettingGetResponseID = "advanced_ddos"
+	SettingGetResponseIDAegis                         SettingGetResponseID = "aegis"
 	SettingGetResponseIDAlwaysOnline                  SettingGetResponseID = "always_online"
 	SettingGetResponseIDAlwaysUseHTTPS                SettingGetResponseID = "always_use_https"
 	SettingGetResponseIDAutomaticHTTPSRewrites        SettingGetResponseID = "automatic_https_rewrites"
@@ -9658,6 +10086,8 @@ const (
 	SettingGetResponseIDOpportunisticOnion            SettingGetResponseID = "opportunistic_onion"
 	SettingGetResponseIDOrangeToOrange                SettingGetResponseID = "orange_to_orange"
 	SettingGetResponseIDOriginErrorPagePassThru       SettingGetResponseID = "origin_error_page_pass_thru"
+	SettingGetResponseIDOriginH2MaxStreams            SettingGetResponseID = "origin_h2_max_streams"
+	SettingGetResponseIDOriginMaxHTTPVersion          SettingGetResponseID = "origin_max_http_version"
 	SettingGetResponseIDPolish                        SettingGetResponseID = "polish"
 	SettingGetResponseIDPrefetchPreload               SettingGetResponseID = "prefetch_preload"
 	SettingGetResponseIDProxyReadTimeout              SettingGetResponseID = "proxy_read_timeout"
@@ -9684,7 +10114,7 @@ const (
 
 func (r SettingGetResponseID) IsKnown() bool {
 	switch r {
-	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
+	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -9731,12 +10161,12 @@ func (r SettingEditParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBody) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBody) implementsSettingEditParamsBodyUnion() {}
 
 // 0-RTT session resumption enabled for this zone.
 //
 // Satisfied by [zones.ZeroRTTParam], [zones.AdvancedDDoSParam],
-// [zones.AlwaysOnlineParam],
+// [zones.SettingEditParamsBodyZonesCacheRulesAegis], [zones.AlwaysOnlineParam],
 // [zones.SettingEditParamsBodyZonesSchemasAlwaysUseHTTPS],
 // [zones.SettingEditParamsBodyZonesSchemasAutomaticHTTPSRewrites],
 // [zones.BrotliParam], [zones.SettingEditParamsBodyZonesSchemasBrowserCacheTTL],
@@ -9754,6 +10184,8 @@ func (r SettingEditParamsBody) implementsZonesSettingEditParamsBodyUnion() {}
 // [zones.SettingEditParamsBodyZonesSchemasOpportunisticEncryption],
 // [zones.OpportunisticOnionParam], [zones.OrangeToOrangeParam],
 // [zones.SettingEditParamsBodyZonesSchemasOriginErrorPagePassThru],
+// [zones.SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreams],
+// [zones.SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingEditParamsBodyZonesSchemasPolish], [zones.PrefetchPreloadParam],
 // [zones.ProxyReadTimeoutParam], [zones.PseudoIPV4Param],
 // [zones.SettingEditParamsBodyZonesReplaceInsecureJS],
@@ -9771,7 +10203,52 @@ func (r SettingEditParamsBody) implementsZonesSettingEditParamsBodyUnion() {}
 // [zones.SettingEditParamsBodyZonesSchemasWAF], [zones.WebPParam],
 // [zones.WebsocketParam], [SettingEditParamsBody].
 type SettingEditParamsBodyUnion interface {
-	implementsZonesSettingEditParamsBodyUnion()
+	implementsSettingEditParamsBodyUnion()
+}
+
+// Aegis provides dedicated egress IPs (from Cloudflare to your origin) for your
+// layer 7 WAF and CDN services. The egress IPs are reserved exclusively for your
+// account so that you can increase your origin security by only allowing traffic
+// from a small list of IP addresses.
+type SettingEditParamsBodyZonesCacheRulesAegis struct {
+	// ID of the zone setting.
+	ID param.Field[SettingEditParamsBodyZonesCacheRulesAegisID] `json:"id,required"`
+	// Value of the zone setting.
+	Value param.Field[SettingEditParamsBodyZonesCacheRulesAegisValue] `json:"value"`
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesAegis) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesAegis) implementsSettingEditParamsBodyUnion() {}
+
+// ID of the zone setting.
+type SettingEditParamsBodyZonesCacheRulesAegisID string
+
+const (
+	SettingEditParamsBodyZonesCacheRulesAegisIDAegis SettingEditParamsBodyZonesCacheRulesAegisID = "aegis"
+)
+
+func (r SettingEditParamsBodyZonesCacheRulesAegisID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyZonesCacheRulesAegisIDAegis:
+		return true
+	}
+	return false
+}
+
+// Value of the zone setting.
+type SettingEditParamsBodyZonesCacheRulesAegisValue struct {
+	// Whether the feature is enabled or not.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Egress pool id which refers to a grouping of dedicated egress IPs through which
+	// Cloudflare will connect to origin.
+	PoolID param.Field[string] `json:"pool_id"`
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesAegisValue) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
@@ -9788,8 +10265,7 @@ func (r SettingEditParamsBodyZonesSchemasAlwaysUseHTTPS) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasAlwaysUseHTTPS) implementsZonesSettingEditParamsBodyUnion() {
-}
+func (r SettingEditParamsBodyZonesSchemasAlwaysUseHTTPS) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasAlwaysUseHTTPSID string
@@ -9851,7 +10327,7 @@ func (r SettingEditParamsBodyZonesSchemasAutomaticHTTPSRewrites) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasAutomaticHTTPSRewrites) implementsZonesSettingEditParamsBodyUnion() {
+func (r SettingEditParamsBodyZonesSchemasAutomaticHTTPSRewrites) implementsSettingEditParamsBodyUnion() {
 }
 
 // ID of the zone setting.
@@ -9917,8 +10393,7 @@ func (r SettingEditParamsBodyZonesSchemasBrowserCacheTTL) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasBrowserCacheTTL) implementsZonesSettingEditParamsBodyUnion() {
-}
+func (r SettingEditParamsBodyZonesSchemasBrowserCacheTTL) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasBrowserCacheTTLID string
@@ -10010,7 +10485,7 @@ func (r SettingEditParamsBodyZonesSchemasBrowserCheck) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasBrowserCheck) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesSchemasBrowserCheck) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasBrowserCheckID string
@@ -10076,7 +10551,7 @@ func (r SettingEditParamsBodyZonesSchemasCacheLevel) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasCacheLevel) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesSchemasCacheLevel) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasCacheLevelID string
@@ -10139,7 +10614,7 @@ func (r SettingEditParamsBodyZonesCNAMEFlattening) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesCNAMEFlattening) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesCNAMEFlattening) implementsSettingEditParamsBodyUnion() {}
 
 // How to flatten the cname destination.
 type SettingEditParamsBodyZonesCNAMEFlatteningID string
@@ -10202,7 +10677,7 @@ func (r SettingEditParamsBodyZonesSchemasEdgeCacheTTL) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasEdgeCacheTTL) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesSchemasEdgeCacheTTL) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasEdgeCacheTTLID string
@@ -10284,8 +10759,7 @@ func (r SettingEditParamsBodyZonesSchemasEmailObfuscation) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasEmailObfuscation) implementsZonesSettingEditParamsBodyUnion() {
-}
+func (r SettingEditParamsBodyZonesSchemasEmailObfuscation) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasEmailObfuscationID string
@@ -10349,7 +10823,7 @@ func (r SettingEditParamsBodyZonesSchemasIPGeolocation) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasIPGeolocation) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesSchemasIPGeolocation) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasIPGeolocationID string
@@ -10411,7 +10885,7 @@ func (r SettingEditParamsBodyZonesMaxUpload) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesMaxUpload) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesMaxUpload) implementsSettingEditParamsBodyUnion() {}
 
 // identifier of the zone setting.
 type SettingEditParamsBodyZonesMaxUploadID string
@@ -10477,7 +10951,7 @@ func (r SettingEditParamsBodyZonesSchemasMirage) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasMirage) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesSchemasMirage) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasMirageID string
@@ -10539,7 +11013,7 @@ func (r SettingEditParamsBodyZonesSchemasOpportunisticEncryption) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasOpportunisticEncryption) implementsZonesSettingEditParamsBodyUnion() {
+func (r SettingEditParamsBodyZonesSchemasOpportunisticEncryption) implementsSettingEditParamsBodyUnion() {
 }
 
 // ID of the zone setting.
@@ -10604,7 +11078,7 @@ func (r SettingEditParamsBodyZonesSchemasOriginErrorPagePassThru) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasOriginErrorPagePassThru) implementsZonesSettingEditParamsBodyUnion() {
+func (r SettingEditParamsBodyZonesSchemasOriginErrorPagePassThru) implementsSettingEditParamsBodyUnion() {
 }
 
 // ID of the zone setting.
@@ -10655,6 +11129,92 @@ func (r SettingEditParamsBodyZonesSchemasOriginErrorPagePassThruEditable) IsKnow
 	return false
 }
 
+// Origin H2 Max Streams configures the max number of concurrent requests that
+// Cloudflare will send within the same connection when communicating with the
+// origin server, if the origin supports it. Note that if your origin does not
+// support H2 multiplexing, 5xx errors may be observed, particularly 520s. Also
+// note that the default value is `100` for all plan types except Enterprise where
+// it is `1`. `1` means that H2 multiplexing is disabled.
+type SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreams struct {
+	// Value of the zone setting.
+	ID param.Field[SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsID] `json:"id,required"`
+	// Value of the Origin H2 Max Streams Setting.
+	Value param.Field[int64] `json:"value"`
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreams) implementsSettingEditParamsBodyUnion() {
+}
+
+// Value of the zone setting.
+type SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsID string
+
+const (
+	SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsID = "origin_h2_max_streams"
+)
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreamsIDOriginH2MaxStreams:
+		return true
+	}
+	return false
+}
+
+// Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
+// attempt to use with your origin. This setting allows Cloudflare to make HTTP/2
+// requests to your origin. (Refer to
+// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+// for more information.). The default value is "2" for all plan types except
+// Enterprise where it is "1"
+type SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersion struct {
+	// Value of the zone setting.
+	ID param.Field[SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionID] `json:"id,required"`
+	// Value of the Origin Max HTTP Version Setting.
+	Value param.Field[SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue] `json:"value"`
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersion) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersion) implementsSettingEditParamsBodyUnion() {
+}
+
+// Value of the zone setting.
+type SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionID string
+
+const (
+	SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionID = "origin_max_http_version"
+)
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionIDOriginMaxHTTPVersion:
+		return true
+	}
+	return false
+}
+
+// Value of the Origin Max HTTP Version Setting.
+type SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue string
+
+const (
+	SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue2 SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue = "2"
+	SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue1 SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue = "1"
+)
+
+func (r SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue2, SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersionValue1:
+		return true
+	}
+	return false
+}
+
 // Removes metadata and compresses your images for faster page load times. Basic
 // (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
 // quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
@@ -10672,7 +11232,7 @@ func (r SettingEditParamsBodyZonesSchemasPolish) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasPolish) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesSchemasPolish) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasPolishID string
@@ -10737,7 +11297,7 @@ func (r SettingEditParamsBodyZonesReplaceInsecureJS) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesReplaceInsecureJS) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesReplaceInsecureJS) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesReplaceInsecureJSID string
@@ -10802,8 +11362,7 @@ func (r SettingEditParamsBodyZonesSchemasResponseBuffering) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasResponseBuffering) implementsZonesSettingEditParamsBodyUnion() {
-}
+func (r SettingEditParamsBodyZonesSchemasResponseBuffering) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasResponseBufferingID string
@@ -10874,7 +11433,7 @@ func (r SettingEditParamsBodyZonesSchemasRocketLoader) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasRocketLoader) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesSchemasRocketLoader) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasRocketLoaderID string
@@ -10938,7 +11497,7 @@ func (r SettingEditParamsBodyZonesSchemasAutomaticPlatformOptimization) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasAutomaticPlatformOptimization) implementsZonesSettingEditParamsBodyUnion() {
+func (r SettingEditParamsBodyZonesSchemasAutomaticPlatformOptimization) implementsSettingEditParamsBodyUnion() {
 }
 
 // ID of the zone setting.
@@ -10988,7 +11547,7 @@ func (r SettingEditParamsBodyZonesSchemasSecurityLevel) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasSecurityLevel) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesSchemasSecurityLevel) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasSecurityLevelID string
@@ -11054,7 +11613,7 @@ func (r SettingEditParamsBodyZonesSha1Support) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSha1Support) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesSha1Support) implementsSettingEditParamsBodyUnion() {}
 
 // Zone setting identifier.
 type SettingEditParamsBodyZonesSha1SupportID string
@@ -11118,7 +11677,7 @@ func (r SettingEditParamsBodyZonesSchemasSortQueryStringForCache) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasSortQueryStringForCache) implementsZonesSettingEditParamsBodyUnion() {
+func (r SettingEditParamsBodyZonesSchemasSortQueryStringForCache) implementsSettingEditParamsBodyUnion() {
 }
 
 // ID of the zone setting.
@@ -11196,7 +11755,7 @@ func (r SettingEditParamsBodyZonesSchemasSSL) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasSSL) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesSchemasSSL) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasSSLID string
@@ -11260,7 +11819,7 @@ func (r SettingEditParamsBodyZonesTLS1_2Only) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesTLS1_2Only) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesTLS1_2Only) implementsSettingEditParamsBodyUnion() {}
 
 // Zone setting identifier.
 type SettingEditParamsBodyZonesTLS1_2OnlyID string
@@ -11323,8 +11882,7 @@ func (r SettingEditParamsBodyZonesSchemasTrueClientIPHeader) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasTrueClientIPHeader) implementsZonesSettingEditParamsBodyUnion() {
-}
+func (r SettingEditParamsBodyZonesSchemasTrueClientIPHeader) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasTrueClientIPHeaderID string
@@ -11395,7 +11953,7 @@ func (r SettingEditParamsBodyZonesSchemasWAF) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsBodyZonesSchemasWAF) implementsZonesSettingEditParamsBodyUnion() {}
+func (r SettingEditParamsBodyZonesSchemasWAF) implementsSettingEditParamsBodyUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsBodyZonesSchemasWAFID string
@@ -11451,6 +12009,7 @@ type SettingEditParamsBodyID string
 const (
 	SettingEditParamsBodyID0rtt                          SettingEditParamsBodyID = "0rtt"
 	SettingEditParamsBodyIDAdvancedDDoS                  SettingEditParamsBodyID = "advanced_ddos"
+	SettingEditParamsBodyIDAegis                         SettingEditParamsBodyID = "aegis"
 	SettingEditParamsBodyIDAlwaysOnline                  SettingEditParamsBodyID = "always_online"
 	SettingEditParamsBodyIDAlwaysUseHTTPS                SettingEditParamsBodyID = "always_use_https"
 	SettingEditParamsBodyIDAutomaticHTTPSRewrites        SettingEditParamsBodyID = "automatic_https_rewrites"
@@ -11480,6 +12039,8 @@ const (
 	SettingEditParamsBodyIDOpportunisticOnion            SettingEditParamsBodyID = "opportunistic_onion"
 	SettingEditParamsBodyIDOrangeToOrange                SettingEditParamsBodyID = "orange_to_orange"
 	SettingEditParamsBodyIDOriginErrorPagePassThru       SettingEditParamsBodyID = "origin_error_page_pass_thru"
+	SettingEditParamsBodyIDOriginH2MaxStreams            SettingEditParamsBodyID = "origin_h2_max_streams"
+	SettingEditParamsBodyIDOriginMaxHTTPVersion          SettingEditParamsBodyID = "origin_max_http_version"
 	SettingEditParamsBodyIDPolish                        SettingEditParamsBodyID = "polish"
 	SettingEditParamsBodyIDPrefetchPreload               SettingEditParamsBodyID = "prefetch_preload"
 	SettingEditParamsBodyIDProxyReadTimeout              SettingEditParamsBodyID = "proxy_read_timeout"
@@ -11506,7 +12067,7 @@ const (
 
 func (r SettingEditParamsBodyID) IsKnown() bool {
 	switch r {
-	case SettingEditParamsBodyID0rtt, SettingEditParamsBodyIDAdvancedDDoS, SettingEditParamsBodyIDAlwaysOnline, SettingEditParamsBodyIDAlwaysUseHTTPS, SettingEditParamsBodyIDAutomaticHTTPSRewrites, SettingEditParamsBodyIDBrotli, SettingEditParamsBodyIDBrowserCacheTTL, SettingEditParamsBodyIDBrowserCheck, SettingEditParamsBodyIDCacheLevel, SettingEditParamsBodyIDChallengeTTL, SettingEditParamsBodyIDCiphers, SettingEditParamsBodyIDCNAMEFlattening, SettingEditParamsBodyIDDevelopmentMode, SettingEditParamsBodyIDEarlyHints, SettingEditParamsBodyIDEdgeCacheTTL, SettingEditParamsBodyIDEmailObfuscation, SettingEditParamsBodyIDH2Prioritization, SettingEditParamsBodyIDHotlinkProtection, SettingEditParamsBodyIDHTTP2, SettingEditParamsBodyIDHTTP3, SettingEditParamsBodyIDImageResizing, SettingEditParamsBodyIDIPGeolocation, SettingEditParamsBodyIDIPV6, SettingEditParamsBodyIDMaxUpload, SettingEditParamsBodyIDMinTLSVersion, SettingEditParamsBodyIDMirage, SettingEditParamsBodyIDNEL, SettingEditParamsBodyIDOpportunisticEncryption, SettingEditParamsBodyIDOpportunisticOnion, SettingEditParamsBodyIDOrangeToOrange, SettingEditParamsBodyIDOriginErrorPagePassThru, SettingEditParamsBodyIDPolish, SettingEditParamsBodyIDPrefetchPreload, SettingEditParamsBodyIDProxyReadTimeout, SettingEditParamsBodyIDPseudoIPV4, SettingEditParamsBodyIDReplaceInsecureJS, SettingEditParamsBodyIDResponseBuffering, SettingEditParamsBodyIDRocketLoader, SettingEditParamsBodyIDAutomaticPlatformOptimization, SettingEditParamsBodyIDSecurityHeader, SettingEditParamsBodyIDSecurityLevel, SettingEditParamsBodyIDServerSideExclude, SettingEditParamsBodyIDSha1Support, SettingEditParamsBodyIDSortQueryStringForCache, SettingEditParamsBodyIDSSL, SettingEditParamsBodyIDSSLRecommender, SettingEditParamsBodyIDTLS1_2Only, SettingEditParamsBodyIDTLS1_3, SettingEditParamsBodyIDTLSClientAuth, SettingEditParamsBodyIDTrueClientIPHeader, SettingEditParamsBodyIDWAF, SettingEditParamsBodyIDWebP, SettingEditParamsBodyIDWebsockets:
+	case SettingEditParamsBodyID0rtt, SettingEditParamsBodyIDAdvancedDDoS, SettingEditParamsBodyIDAegis, SettingEditParamsBodyIDAlwaysOnline, SettingEditParamsBodyIDAlwaysUseHTTPS, SettingEditParamsBodyIDAutomaticHTTPSRewrites, SettingEditParamsBodyIDBrotli, SettingEditParamsBodyIDBrowserCacheTTL, SettingEditParamsBodyIDBrowserCheck, SettingEditParamsBodyIDCacheLevel, SettingEditParamsBodyIDChallengeTTL, SettingEditParamsBodyIDCiphers, SettingEditParamsBodyIDCNAMEFlattening, SettingEditParamsBodyIDDevelopmentMode, SettingEditParamsBodyIDEarlyHints, SettingEditParamsBodyIDEdgeCacheTTL, SettingEditParamsBodyIDEmailObfuscation, SettingEditParamsBodyIDH2Prioritization, SettingEditParamsBodyIDHotlinkProtection, SettingEditParamsBodyIDHTTP2, SettingEditParamsBodyIDHTTP3, SettingEditParamsBodyIDImageResizing, SettingEditParamsBodyIDIPGeolocation, SettingEditParamsBodyIDIPV6, SettingEditParamsBodyIDMaxUpload, SettingEditParamsBodyIDMinTLSVersion, SettingEditParamsBodyIDMirage, SettingEditParamsBodyIDNEL, SettingEditParamsBodyIDOpportunisticEncryption, SettingEditParamsBodyIDOpportunisticOnion, SettingEditParamsBodyIDOrangeToOrange, SettingEditParamsBodyIDOriginErrorPagePassThru, SettingEditParamsBodyIDOriginH2MaxStreams, SettingEditParamsBodyIDOriginMaxHTTPVersion, SettingEditParamsBodyIDPolish, SettingEditParamsBodyIDPrefetchPreload, SettingEditParamsBodyIDProxyReadTimeout, SettingEditParamsBodyIDPseudoIPV4, SettingEditParamsBodyIDReplaceInsecureJS, SettingEditParamsBodyIDResponseBuffering, SettingEditParamsBodyIDRocketLoader, SettingEditParamsBodyIDAutomaticPlatformOptimization, SettingEditParamsBodyIDSecurityHeader, SettingEditParamsBodyIDSecurityLevel, SettingEditParamsBodyIDServerSideExclude, SettingEditParamsBodyIDSha1Support, SettingEditParamsBodyIDSortQueryStringForCache, SettingEditParamsBodyIDSSL, SettingEditParamsBodyIDSSLRecommender, SettingEditParamsBodyIDTLS1_2Only, SettingEditParamsBodyIDTLS1_3, SettingEditParamsBodyIDTLSClientAuth, SettingEditParamsBodyIDTrueClientIPHeader, SettingEditParamsBodyIDWAF, SettingEditParamsBodyIDWebP, SettingEditParamsBodyIDWebsockets:
 		return true
 	}
 	return false

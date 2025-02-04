@@ -146,11 +146,11 @@ func (r pcapJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PCAP) implementsMagicTransitPCAPNewResponse() {}
+func (r PCAP) implementsPCAPNewResponse() {}
 
-func (r PCAP) implementsMagicTransitPCAPListResponse() {}
+func (r PCAP) implementsPCAPListResponse() {}
 
-func (r PCAP) implementsMagicTransitPCAPGetResponse() {}
+func (r PCAP) implementsPCAPGetResponse() {}
 
 // The status of the packet capture request.
 type PCAPStatus string
@@ -332,7 +332,7 @@ func (r PCAPNewResponse) AsUnion() PCAPNewResponseUnion {
 // Union satisfied by [magic_transit.PCAP] or
 // [magic_transit.PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull].
 type PCAPNewResponseUnion interface {
-	implementsMagicTransitPCAPNewResponse()
+	implementsPCAPNewResponse()
 }
 
 func init() {
@@ -407,8 +407,7 @@ func (r pcapNewResponseMagicVisibilityPCAPsPCAPsResponseFullJSON) RawJSON() stri
 	return r.raw
 }
 
-func (r PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull) implementsMagicTransitPCAPNewResponse() {
-}
+func (r PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull) implementsPCAPNewResponse() {}
 
 // The status of the packet capture request.
 type PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFullStatus string
@@ -593,7 +592,7 @@ func (r PCAPListResponse) AsUnion() PCAPListResponseUnion {
 // Union satisfied by [magic_transit.PCAP] or
 // [magic_transit.PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull].
 type PCAPListResponseUnion interface {
-	implementsMagicTransitPCAPListResponse()
+	implementsPCAPListResponse()
 }
 
 func init() {
@@ -668,8 +667,7 @@ func (r pcapListResponseMagicVisibilityPCAPsPCAPsResponseFullJSON) RawJSON() str
 	return r.raw
 }
 
-func (r PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull) implementsMagicTransitPCAPListResponse() {
-}
+func (r PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull) implementsPCAPListResponse() {}
 
 // The status of the packet capture request.
 type PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFullStatus string
@@ -853,7 +851,7 @@ func (r PCAPGetResponse) AsUnion() PCAPGetResponseUnion {
 // Union satisfied by [magic_transit.PCAP] or
 // [magic_transit.PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull].
 type PCAPGetResponseUnion interface {
-	implementsMagicTransitPCAPGetResponse()
+	implementsPCAPGetResponse()
 }
 
 func init() {
@@ -928,8 +926,7 @@ func (r pcapGetResponseMagicVisibilityPCAPsPCAPsResponseFullJSON) RawJSON() stri
 	return r.raw
 }
 
-func (r PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull) implementsMagicTransitPCAPGetResponse() {
-}
+func (r PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull) implementsPCAPGetResponse() {}
 
 // The status of the packet capture request.
 type PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFullStatus string
@@ -1076,14 +1073,14 @@ func (r PCAPNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PCAPNewParamsBody) implementsMagicTransitPCAPNewParamsBodyUnion() {}
+func (r PCAPNewParamsBody) implementsPCAPNewParamsBodyUnion() {}
 
 // Satisfied by
 // [magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimple],
 // [magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestFull],
 // [PCAPNewParamsBody].
 type PCAPNewParamsBodyUnion interface {
-	implementsMagicTransitPCAPNewParamsBodyUnion()
+	implementsPCAPNewParamsBodyUnion()
 }
 
 type PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimple struct {
@@ -1104,8 +1101,7 @@ func (r PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimple) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimple) implementsMagicTransitPCAPNewParamsBodyUnion() {
-}
+func (r PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimple) implementsPCAPNewParamsBodyUnion() {}
 
 // The system used to collect packet captures.
 type PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleSystem string
@@ -1166,8 +1162,7 @@ func (r PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestFull) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestFull) implementsMagicTransitPCAPNewParamsBodyUnion() {
-}
+func (r PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestFull) implementsPCAPNewParamsBodyUnion() {}
 
 // The system used to collect packet captures.
 type PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestFullSystem string

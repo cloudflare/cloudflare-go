@@ -48,7 +48,7 @@ func (r *DatasetService) List(ctx context.Context, query DatasetListParams, opts
 	return
 }
 
-// Get a url to download a single dataset.
+// Get a URL to download a single dataset.
 func (r *DatasetService) Download(ctx context.Context, params DatasetDownloadParams, opts ...option.RequestOption) (res *DatasetDownloadResponse, err error) {
 	var env DatasetDownloadResponseEnvelope
 	opts = append(r.Options[:], opts...)
