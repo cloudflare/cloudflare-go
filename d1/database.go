@@ -293,13 +293,11 @@ func (r queryResultMetaJSON) RawJSON() string {
 
 type DatabaseListResponse struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// D1 database name.
-	Name string `json:"name"`
-	// D1 database identifier (UUID).
-	UUID    string                   `json:"uuid"`
-	Version string                   `json:"version"`
-	JSON    databaseListResponseJSON `json:"-"`
+	CreatedAt time.Time                `json:"created_at" format:"date-time"`
+	Name      string                   `json:"name"`
+	UUID      string                   `json:"uuid"`
+	Version   string                   `json:"version"`
+	JSON      databaseListResponseJSON `json:"-"`
 }
 
 // databaseListResponseJSON contains the JSON metadata for the struct
@@ -639,8 +637,7 @@ func (r databaseRawResponseResultsJSON) RawJSON() string {
 type DatabaseNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// D1 database name.
-	Name param.Field[string] `json:"name,required"`
+	Name      param.Field[string] `json:"name,required"`
 	// Specify the region to create the D1 primary, if available. If this option is
 	// omitted, the D1 will be created as close as possible to the current user.
 	PrimaryLocationHint param.Field[DatabaseNewParamsPrimaryLocationHint] `json:"primary_location_hint"`
