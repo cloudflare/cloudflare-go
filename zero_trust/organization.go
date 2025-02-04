@@ -554,9 +554,9 @@ type OrganizationRevokeUsersParams struct {
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// When set to `true`, all devices associated with the user will be revoked.
-	Devices1 param.Field[bool] `query:"devices"`
+	QueryDevices param.Field[bool] `query:"devices"`
 	// When set to `true`, all devices associated with the user will be revoked.
-	Devices2 param.Field[bool] `json:"devices"`
+	BodyDevices param.Field[bool] `json:"devices"`
 	// The uuid of the user to revoke.
 	UserUID param.Field[string] `json:"user_uid"`
 	// When set to `true`, the user will be required to re-authenticate to WARP for all
