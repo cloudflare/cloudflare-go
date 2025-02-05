@@ -34,12 +34,14 @@ type D1 struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The D1 database's size, in bytes.
-	FileSize  float64 `json:"file_size"`
+	FileSize float64 `json:"file_size"`
+	// D1 database name.
 	Name      string  `json:"name"`
 	NumTables float64 `json:"num_tables"`
-	UUID      string  `json:"uuid"`
-	Version   string  `json:"version"`
-	JSON      d1JSON  `json:"-"`
+	// D1 database identifier (UUID).
+	UUID    string `json:"uuid"`
+	Version string `json:"version"`
+	JSON    d1JSON `json:"-"`
 }
 
 // d1JSON contains the JSON metadata for the struct [D1]
