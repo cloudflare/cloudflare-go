@@ -108,10 +108,12 @@ Methods:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts#TokenPermissionGroupListResponse">TokenPermissionGroupListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts#TokenPermissionGroupGetResponse">TokenPermissionGroupGetResponse</a>
 
 Methods:
 
 - <code title="get /accounts/{account_id}/tokens/permission_groups">client.Accounts.Tokens.PermissionGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts#TokenPermissionGroupService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts#TokenPermissionGroupListParams">TokenPermissionGroupListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts#TokenPermissionGroupListResponse">TokenPermissionGroupListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/tokens/permission_groups">client.Accounts.Tokens.PermissionGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts#TokenPermissionGroupService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts#TokenPermissionGroupGetParams">TokenPermissionGroupGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/accounts#TokenPermissionGroupGetResponse">TokenPermissionGroupGetResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Value
 
@@ -749,6 +751,14 @@ Methods:
 - <code title="get /zones/{zone_id}/ssl/certificate_packs/quota">client.SSL.CertificatePacks.Quota.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl#CertificatePackQuotaService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl#CertificatePackQuotaGetParams">CertificatePackQuotaGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl#CertificatePackQuotaGetResponse">CertificatePackQuotaGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Recommendations
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl#RecommendationGetResponse">RecommendationGetResponse</a>
+
+Methods:
+
+- <code title="get /zones/{zone_identifier}/ssl/recommendation">client.SSL.Recommendations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl#RecommendationService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl#RecommendationGetResponse">RecommendationGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Universal
 

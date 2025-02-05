@@ -60,9 +60,43 @@ func (r *TokenPermissionGroupService) ListAutoPaging(ctx context.Context, query 
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
+// Find all available permission groups for Account Owned API Tokens
+func (r *TokenPermissionGroupService) Get(ctx context.Context, query TokenPermissionGroupGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[TokenPermissionGroupGetResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/tokens/permission_groups", query.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Find all available permission groups for Account Owned API Tokens
+func (r *TokenPermissionGroupService) GetAutoPaging(ctx context.Context, query TokenPermissionGroupGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenPermissionGroupGetResponse] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
+}
+
 type TokenPermissionGroupListResponse = interface{}
 
+type TokenPermissionGroupGetResponse = interface{}
+
 type TokenPermissionGroupListParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type TokenPermissionGroupGetParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
