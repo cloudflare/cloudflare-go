@@ -78,9 +78,10 @@ type CustomHostnameSSL struct {
 	// Deprecated: use ValidationRecords.
 	// If there a single validation record, this will equal ValidationRecords[0] for backwards compatibility.
 	SSLValidationRecord
-	ValidationRecords []SSLValidationRecord `json:"validation_records,omitempty"`
-	ValidationErrors  []SSLValidationError  `json:"validation_errors,omitempty"`
-	BundleMethod      string                `json:"bundle_method,omitempty"`
+	ValidationRecords  []SSLValidationRecord `json:"validation_records,omitempty"`
+	ValidationErrors   []SSLValidationError  `json:"validation_errors,omitempty"`
+	BundleMethod       string                `json:"bundle_method,omitempty"`
+	CloudflareBranding *bool                 `json:"cloudflare_branding,omitempty"`
 }
 
 // CustomMetadata defines custom metadata for the hostname. This requires logic to be implemented by Cloudflare to act on the data provided.
