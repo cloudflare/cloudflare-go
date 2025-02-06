@@ -752,14 +752,6 @@ Methods:
 
 ## Recommendations
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl#RecommendationGetResponse">RecommendationGetResponse</a>
-
-Methods:
-
-- <code title="get /zones/{zone_identifier}/ssl/recommendation">client.SSL.Recommendations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl#RecommendationService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ssl#RecommendationGetResponse">RecommendationGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## Universal
 
 ### Settings
