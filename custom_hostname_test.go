@@ -406,6 +406,83 @@ func TestCustomHostname_CreateCustomHostname_CustomOriginSNI(t *testing.T) {
 	}
 }
 
+func TestCustomHostname_CreateCustomHostname_CloudflareBrandingSSL(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/custom_hostnames", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		fmt.Fprintf(w, `
+{
+	"success": true,
+	"errors": [],
+	"messages": [],
+	"result": {
+		"id": "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+		"hostname": "app.example.com",
+		"custom_origin_server": "example.app.com",
+		"ssl": {
+			"status": "pending_validation",
+			"method": "http",
+			"type": "dv",
+			"wildcard": "false",
+			"certificate_authority": "google"
+		},
+		"status": "pending",
+		"verification_errors": [
+		  "None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."
+		],
+		"ownership_verification": {
+		  "type": "txt",
+		  "name": "_cf-custom-hostname.app.example.com",
+		  "value": "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0"
+		},
+		"ownership_verification_http": {
+		  "http_url": "http://app.example.com/.well-known/cf-custom-hostname-challenge/37c82d20-99fb-490e-ba0a-489fa483b776",
+		  "http_body": "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0"
+		},
+		"created_at": "2020-02-06T18:11:23.531995Z"
+}`)
+	})
+
+	response, err := client.CreateCustomHostname(context.Background(), "foo", CustomHostname{Hostname: "app.example.com", CustomOriginServer: "example.app.com", SSL: &CustomHostnameSSL{Method: "http", Type: "dv", CloudflareBranding: BoolPtr(true)}})
+
+	createdAt, _ := time.Parse(time.RFC3339, "2020-02-06T18:11:23.531995Z")
+
+	want := &CustomHostnameResponse{
+		Result: CustomHostname{
+			ID:                 "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+			Hostname:           "app.example.com",
+			CustomOriginServer: "example.app.com",
+			SSL: &CustomHostnameSSL{
+				Type:   "http",
+				Method: "cname",
+				Status: "pending_validation",
+			},
+			Status:             "pending",
+			VerificationErrors: []string{"None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."},
+			OwnershipVerification: CustomHostnameOwnershipVerification{
+				Type:  "txt",
+				Name:  "_cf-custom-hostname.app.example.com",
+				Value: "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0",
+			},
+			OwnershipVerificationHTTP: CustomHostnameOwnershipVerificationHTTP{
+				HTTPUrl:  "http://app.example.com/.well-known/cf-custom-hostname-challenge/37c82d20-99fb-490e-ba0a-489fa483b776",
+				HTTPBody: "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0",
+			},
+			CreatedAt: &createdAt,
+		},
+		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, response)
+	}
+}
+
 func TestCustomHostname_CustomHostnames(t *testing.T) {
 	setup()
 	defer teardown()
