@@ -428,7 +428,7 @@ func TestCustomHostname_CreateCustomHostname_CloudflareBrandingSSL(t *testing.T)
 			"status": "pending_validation",
 			"method": "http",
 			"type": "dv",
-			"wildcard": "false",
+			"wildcard": false,
 			"certificate_authority": "google"
 		},
 		"status": "pending",
@@ -445,6 +445,7 @@ func TestCustomHostname_CreateCustomHostname_CloudflareBrandingSSL(t *testing.T)
 		  "http_body": "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0"
 		},
 		"created_at": "2020-02-06T18:11:23.531995Z"
+	}
 }`)
 	})
 
@@ -458,9 +459,11 @@ func TestCustomHostname_CreateCustomHostname_CloudflareBrandingSSL(t *testing.T)
 			Hostname:           "app.example.com",
 			CustomOriginServer: "example.app.com",
 			SSL: &CustomHostnameSSL{
-				Type:   "http",
-				Method: "cname",
-				Status: "pending_validation",
+				Type:                 "dv",
+				Method:               "http",
+				Status:               "pending_validation",
+				Wildcard:             BoolPtr(false),
+				CertificateAuthority: "google",
 			},
 			Status:             "pending",
 			VerificationErrors: []string{"None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."},
