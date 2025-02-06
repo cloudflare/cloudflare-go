@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestSearchGetWithOptionalParams(t *testing.T) {
+func TestSearchListWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,13 +28,13 @@ func TestSearchGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.LoadBalancers.Searches.Get(context.TODO(), load_balancers.SearchGetParams{
+	_, err := client.LoadBalancers.Searches.List(context.TODO(), load_balancers.SearchListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(1.000000),
-		SearchParams: cloudflare.F(load_balancers.SearchGetParamsSearchParams{
+		SearchParams: cloudflare.F(load_balancers.SearchListParamsSearchParams{
 			Query:      cloudflare.F("primary"),
-			References: cloudflare.F(load_balancers.SearchGetParamsSearchParamsReferencesEmpty),
+			References: cloudflare.F(load_balancers.SearchListParamsSearchParamsReferencesEmpty),
 		}),
 	})
 	if err != nil {

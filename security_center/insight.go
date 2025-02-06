@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
@@ -42,6 +43,47 @@ func NewInsightService(opts ...option.RequestOption) (r *InsightService) {
 	r.Severity = NewInsightSeverityService(opts...)
 	r.Type = NewInsightTypeService(opts...)
 	return
+}
+
+// Get Security Center Insights
+func (r *InsightService) List(ctx context.Context, params InsightListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[InsightListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	}
+	if params.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
+	path := fmt.Sprintf("%s/%s/security-center/insights", accountOrZone, accountOrZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get Security Center Insights
+func (r *InsightService) ListAutoPaging(ctx context.Context, params InsightListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[InsightListResponse] {
+	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 // Archive Security Center Insight
@@ -74,35 +116,91 @@ func (r *InsightService) Dismiss(ctx context.Context, issueID string, params Ins
 	return
 }
 
-// Get Security Center Insights
-func (r *InsightService) Get(ctx context.Context, params InsightGetParams, opts ...option.RequestOption) (res *InsightGetResponse, err error) {
-	var env InsightGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	var accountOrZone string
-	var accountOrZoneID param.Field[string]
-	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
-		err = errors.New("account ID and zone ID are mutually exclusive")
-		return
+type InsightListResponse struct {
+	// Total number of results
+	Count  int64                      `json:"count"`
+	Issues []InsightListResponseIssue `json:"issues"`
+	// Current page within paginated list of results
+	Page int64 `json:"page"`
+	// Number of results per page of results
+	PerPage int64                   `json:"per_page"`
+	JSON    insightListResponseJSON `json:"-"`
+}
+
+// insightListResponseJSON contains the JSON metadata for the struct
+// [InsightListResponse]
+type insightListResponseJSON struct {
+	Count       apijson.Field
+	Issues      apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightListResponseIssue struct {
+	ID          string                            `json:"id"`
+	Dismissed   bool                              `json:"dismissed"`
+	IssueClass  string                            `json:"issue_class"`
+	IssueType   intel.IssueType                   `json:"issue_type"`
+	Payload     interface{}                       `json:"payload"`
+	ResolveLink string                            `json:"resolve_link"`
+	ResolveText string                            `json:"resolve_text"`
+	Severity    InsightListResponseIssuesSeverity `json:"severity"`
+	Since       time.Time                         `json:"since" format:"date-time"`
+	Subject     string                            `json:"subject"`
+	Timestamp   time.Time                         `json:"timestamp" format:"date-time"`
+	JSON        insightListResponseIssueJSON      `json:"-"`
+}
+
+// insightListResponseIssueJSON contains the JSON metadata for the struct
+// [InsightListResponseIssue]
+type insightListResponseIssueJSON struct {
+	ID          apijson.Field
+	Dismissed   apijson.Field
+	IssueClass  apijson.Field
+	IssueType   apijson.Field
+	Payload     apijson.Field
+	ResolveLink apijson.Field
+	ResolveText apijson.Field
+	Severity    apijson.Field
+	Since       apijson.Field
+	Subject     apijson.Field
+	Timestamp   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightListResponseIssue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightListResponseIssueJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightListResponseIssuesSeverity string
+
+const (
+	InsightListResponseIssuesSeverityLow      InsightListResponseIssuesSeverity = "Low"
+	InsightListResponseIssuesSeverityModerate InsightListResponseIssuesSeverity = "Moderate"
+	InsightListResponseIssuesSeverityCritical InsightListResponseIssuesSeverity = "Critical"
+)
+
+func (r InsightListResponseIssuesSeverity) IsKnown() bool {
+	switch r {
+	case InsightListResponseIssuesSeverityLow, InsightListResponseIssuesSeverityModerate, InsightListResponseIssuesSeverityCritical:
+		return true
 	}
-	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
-		err = errors.New("either account ID or zone ID must be provided")
-		return
-	}
-	if params.AccountID.Value != "" {
-		accountOrZone = "accounts"
-		accountOrZoneID = params.AccountID
-	}
-	if params.ZoneID.Value != "" {
-		accountOrZone = "zones"
-		accountOrZoneID = params.ZoneID
-	}
-	path := fmt.Sprintf("%s/%s/security-center/insights", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+	return false
 }
 
 type InsightDismissResponse struct {
@@ -146,106 +244,7 @@ func (r InsightDismissResponseSuccess) IsKnown() bool {
 	return false
 }
 
-type InsightGetResponse struct {
-	// Total number of results
-	Count  int64                     `json:"count"`
-	Issues []InsightGetResponseIssue `json:"issues"`
-	// Current page within paginated list of results
-	Page int64 `json:"page"`
-	// Number of results per page of results
-	PerPage int64                  `json:"per_page"`
-	JSON    insightGetResponseJSON `json:"-"`
-}
-
-// insightGetResponseJSON contains the JSON metadata for the struct
-// [InsightGetResponse]
-type insightGetResponseJSON struct {
-	Count       apijson.Field
-	Issues      apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InsightGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r insightGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type InsightGetResponseIssue struct {
-	ID          string                           `json:"id"`
-	Dismissed   bool                             `json:"dismissed"`
-	IssueClass  string                           `json:"issue_class"`
-	IssueType   intel.IssueType                  `json:"issue_type"`
-	Payload     interface{}                      `json:"payload"`
-	ResolveLink string                           `json:"resolve_link"`
-	ResolveText string                           `json:"resolve_text"`
-	Severity    InsightGetResponseIssuesSeverity `json:"severity"`
-	Since       time.Time                        `json:"since" format:"date-time"`
-	Subject     string                           `json:"subject"`
-	Timestamp   time.Time                        `json:"timestamp" format:"date-time"`
-	JSON        insightGetResponseIssueJSON      `json:"-"`
-}
-
-// insightGetResponseIssueJSON contains the JSON metadata for the struct
-// [InsightGetResponseIssue]
-type insightGetResponseIssueJSON struct {
-	ID          apijson.Field
-	Dismissed   apijson.Field
-	IssueClass  apijson.Field
-	IssueType   apijson.Field
-	Payload     apijson.Field
-	ResolveLink apijson.Field
-	ResolveText apijson.Field
-	Severity    apijson.Field
-	Since       apijson.Field
-	Subject     apijson.Field
-	Timestamp   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InsightGetResponseIssue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r insightGetResponseIssueJSON) RawJSON() string {
-	return r.raw
-}
-
-type InsightGetResponseIssuesSeverity string
-
-const (
-	InsightGetResponseIssuesSeverityLow      InsightGetResponseIssuesSeverity = "Low"
-	InsightGetResponseIssuesSeverityModerate InsightGetResponseIssuesSeverity = "Moderate"
-	InsightGetResponseIssuesSeverityCritical InsightGetResponseIssuesSeverity = "Critical"
-)
-
-func (r InsightGetResponseIssuesSeverity) IsKnown() bool {
-	switch r {
-	case InsightGetResponseIssuesSeverityLow, InsightGetResponseIssuesSeverityModerate, InsightGetResponseIssuesSeverityCritical:
-		return true
-	}
-	return false
-}
-
-type InsightDismissParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID  param.Field[string] `path:"zone_id"`
-	Dismiss param.Field[bool]   `json:"dismiss"`
-}
-
-func (r InsightDismissParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type InsightGetParams struct {
+type InsightListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -267,53 +266,22 @@ type InsightGetParams struct {
 	SubjectNeq  param.Field[[]string]                   `query:"subject~neq"`
 }
 
-// URLQuery serializes [InsightGetParams]'s query parameters as `url.Values`.
-func (r InsightGetParams) URLQuery() (v url.Values) {
+// URLQuery serializes [InsightListParams]'s query parameters as `url.Values`.
+func (r InsightListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
-type InsightGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success InsightGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  InsightGetResponse                `json:"result"`
-	JSON    insightGetResponseEnvelopeJSON    `json:"-"`
+type InsightDismissParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID  param.Field[string] `path:"zone_id"`
+	Dismiss param.Field[bool]   `json:"dismiss"`
 }
 
-// insightGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [InsightGetResponseEnvelope]
-type insightGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InsightGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r insightGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type InsightGetResponseEnvelopeSuccess bool
-
-const (
-	InsightGetResponseEnvelopeSuccessTrue InsightGetResponseEnvelopeSuccess = true
-)
-
-func (r InsightGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case InsightGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
+func (r InsightDismissParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
