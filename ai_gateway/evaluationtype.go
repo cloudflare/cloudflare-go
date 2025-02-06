@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // EvaluationTypeService contains methods and other services that help with
@@ -37,37 +38,47 @@ func NewEvaluationTypeService(opts ...option.RequestOption) (r *EvaluationTypeSe
 }
 
 // List Evaluators
-func (r *EvaluationTypeService) Get(ctx context.Context, params EvaluationTypeGetParams, opts ...option.RequestOption) (res *[]EvaluationTypeGetResponse, err error) {
-	var env EvaluationTypeGetResponseEnvelope
+func (r *EvaluationTypeService) List(ctx context.Context, params EvaluationTypeListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[EvaluationTypeListResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/evaluation-types", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type EvaluationTypeGetResponse struct {
-	ID          string                        `json:"id,required"`
-	CreatedAt   time.Time                     `json:"created_at,required" format:"date-time"`
-	Description string                        `json:"description,required"`
-	Enable      bool                          `json:"enable,required"`
-	Mandatory   bool                          `json:"mandatory,required"`
-	ModifiedAt  time.Time                     `json:"modified_at,required" format:"date-time"`
-	Name        string                        `json:"name,required"`
-	Type        string                        `json:"type,required"`
-	JSON        evaluationTypeGetResponseJSON `json:"-"`
+// List Evaluators
+func (r *EvaluationTypeService) ListAutoPaging(ctx context.Context, params EvaluationTypeListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[EvaluationTypeListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// evaluationTypeGetResponseJSON contains the JSON metadata for the struct
-// [EvaluationTypeGetResponse]
-type evaluationTypeGetResponseJSON struct {
+type EvaluationTypeListResponse struct {
+	ID          string                         `json:"id,required"`
+	CreatedAt   time.Time                      `json:"created_at,required" format:"date-time"`
+	Description string                         `json:"description,required"`
+	Enable      bool                           `json:"enable,required"`
+	Mandatory   bool                           `json:"mandatory,required"`
+	ModifiedAt  time.Time                      `json:"modified_at,required" format:"date-time"`
+	Name        string                         `json:"name,required"`
+	Type        string                         `json:"type,required"`
+	JSON        evaluationTypeListResponseJSON `json:"-"`
+}
+
+// evaluationTypeListResponseJSON contains the JSON metadata for the struct
+// [EvaluationTypeListResponse]
+type evaluationTypeListResponseJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Description apijson.Field
@@ -80,94 +91,42 @@ type evaluationTypeGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EvaluationTypeGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *EvaluationTypeListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r evaluationTypeGetResponseJSON) RawJSON() string {
+func (r evaluationTypeListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type EvaluationTypeGetParams struct {
-	AccountID        param.Field[string]                                  `path:"account_id,required"`
-	OrderBy          param.Field[string]                                  `query:"order_by"`
-	OrderByDirection param.Field[EvaluationTypeGetParamsOrderByDirection] `query:"order_by_direction"`
-	Page             param.Field[int64]                                   `query:"page"`
-	PerPage          param.Field[int64]                                   `query:"per_page"`
+type EvaluationTypeListParams struct {
+	AccountID        param.Field[string]                                   `path:"account_id,required"`
+	OrderBy          param.Field[string]                                   `query:"order_by"`
+	OrderByDirection param.Field[EvaluationTypeListParamsOrderByDirection] `query:"order_by_direction"`
+	Page             param.Field[int64]                                    `query:"page"`
+	PerPage          param.Field[int64]                                    `query:"per_page"`
 }
 
-// URLQuery serializes [EvaluationTypeGetParams]'s query parameters as
+// URLQuery serializes [EvaluationTypeListParams]'s query parameters as
 // `url.Values`.
-func (r EvaluationTypeGetParams) URLQuery() (v url.Values) {
+func (r EvaluationTypeListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
-type EvaluationTypeGetParamsOrderByDirection string
+type EvaluationTypeListParamsOrderByDirection string
 
 const (
-	EvaluationTypeGetParamsOrderByDirectionAsc  EvaluationTypeGetParamsOrderByDirection = "asc"
-	EvaluationTypeGetParamsOrderByDirectionDesc EvaluationTypeGetParamsOrderByDirection = "desc"
+	EvaluationTypeListParamsOrderByDirectionAsc  EvaluationTypeListParamsOrderByDirection = "asc"
+	EvaluationTypeListParamsOrderByDirectionDesc EvaluationTypeListParamsOrderByDirection = "desc"
 )
 
-func (r EvaluationTypeGetParamsOrderByDirection) IsKnown() bool {
+func (r EvaluationTypeListParamsOrderByDirection) IsKnown() bool {
 	switch r {
-	case EvaluationTypeGetParamsOrderByDirectionAsc, EvaluationTypeGetParamsOrderByDirectionDesc:
+	case EvaluationTypeListParamsOrderByDirectionAsc, EvaluationTypeListParamsOrderByDirectionDesc:
 		return true
 	}
 	return false
-}
-
-type EvaluationTypeGetResponseEnvelope struct {
-	Result     []EvaluationTypeGetResponse                 `json:"result,required"`
-	ResultInfo EvaluationTypeGetResponseEnvelopeResultInfo `json:"result_info,required"`
-	Success    bool                                        `json:"success,required"`
-	JSON       evaluationTypeGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// evaluationTypeGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [EvaluationTypeGetResponseEnvelope]
-type evaluationTypeGetResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EvaluationTypeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r evaluationTypeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type EvaluationTypeGetResponseEnvelopeResultInfo struct {
-	Count      float64                                         `json:"count,required"`
-	Page       float64                                         `json:"page,required"`
-	PerPage    float64                                         `json:"per_page,required"`
-	TotalCount float64                                         `json:"total_count,required"`
-	JSON       evaluationTypeGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// evaluationTypeGetResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [EvaluationTypeGetResponseEnvelopeResultInfo]
-type evaluationTypeGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EvaluationTypeGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r evaluationTypeGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestEvaluationTypeGetWithOptionalParams(t *testing.T) {
+func TestEvaluationTypeListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,10 @@ func TestEvaluationTypeGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.AIGateway.EvaluationTypes.Get(context.TODO(), ai_gateway.EvaluationTypeGetParams{
+	_, err := client.AIGateway.EvaluationTypes.List(context.TODO(), ai_gateway.EvaluationTypeListParams{
 		AccountID:        cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
 		OrderBy:          cloudflare.F("order_by"),
-		OrderByDirection: cloudflare.F(ai_gateway.EvaluationTypeGetParamsOrderByDirectionAsc),
+		OrderByDirection: cloudflare.F(ai_gateway.EvaluationTypeListParamsOrderByDirectionAsc),
 		Page:             cloudflare.F(int64(1)),
 		PerPage:          cloudflare.F(int64(5)),
 	})
