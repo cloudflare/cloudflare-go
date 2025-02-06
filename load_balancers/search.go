@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // SearchService contains methods and other services that help with interacting
@@ -37,61 +37,71 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 }
 
 // Search for Load Balancing resources.
-func (r *SearchService) Get(ctx context.Context, params SearchGetParams, opts ...option.RequestOption) (res *SearchGetResponse, err error) {
-	var env SearchGetResponseEnvelope
+func (r *SearchService) List(ctx context.Context, params SearchListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[SearchListResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/search", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type SearchGetResponse struct {
+// Search for Load Balancing resources.
+func (r *SearchService) ListAutoPaging(ctx context.Context, params SearchListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[SearchListResponse] {
+	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
+}
+
+type SearchListResponse struct {
 	// A list of resources matching the search query.
-	Resources []SearchGetResponseResource `json:"resources"`
-	JSON      searchGetResponseJSON       `json:"-"`
+	Resources []SearchListResponseResource `json:"resources"`
+	JSON      searchListResponseJSON       `json:"-"`
 }
 
-// searchGetResponseJSON contains the JSON metadata for the struct
-// [SearchGetResponse]
-type searchGetResponseJSON struct {
+// searchListResponseJSON contains the JSON metadata for the struct
+// [SearchListResponse]
+type searchListResponseJSON struct {
 	Resources   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SearchGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SearchListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r searchGetResponseJSON) RawJSON() string {
+func (r searchListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // A reference to a load balancer resource.
-type SearchGetResponseResource struct {
+type SearchListResponseResource struct {
 	// When listed as a reference, the type (direction) of the reference.
-	ReferenceType SearchGetResponseResourcesReferenceType `json:"reference_type"`
+	ReferenceType SearchListResponseResourcesReferenceType `json:"reference_type"`
 	// A list of references to (referrer) or from (referral) this resource.
 	References []interface{} `json:"references"`
 	ResourceID string        `json:"resource_id"`
 	// The human-identifiable name of the resource.
 	ResourceName string `json:"resource_name"`
 	// The type of the resource.
-	ResourceType SearchGetResponseResourcesResourceType `json:"resource_type"`
-	JSON         searchGetResponseResourceJSON          `json:"-"`
+	ResourceType SearchListResponseResourcesResourceType `json:"resource_type"`
+	JSON         searchListResponseResourceJSON          `json:"-"`
 }
 
-// searchGetResponseResourceJSON contains the JSON metadata for the struct
-// [SearchGetResponseResource]
-type searchGetResponseResourceJSON struct {
+// searchListResponseResourceJSON contains the JSON metadata for the struct
+// [SearchListResponseResource]
+type searchListResponseResourceJSON struct {
 	ReferenceType apijson.Field
 	References    apijson.Field
 	ResourceID    apijson.Field
@@ -101,73 +111,73 @@ type searchGetResponseResourceJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SearchGetResponseResource) UnmarshalJSON(data []byte) (err error) {
+func (r *SearchListResponseResource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r searchGetResponseResourceJSON) RawJSON() string {
+func (r searchListResponseResourceJSON) RawJSON() string {
 	return r.raw
 }
 
 // When listed as a reference, the type (direction) of the reference.
-type SearchGetResponseResourcesReferenceType string
+type SearchListResponseResourcesReferenceType string
 
 const (
-	SearchGetResponseResourcesReferenceTypeReferral SearchGetResponseResourcesReferenceType = "referral"
-	SearchGetResponseResourcesReferenceTypeReferrer SearchGetResponseResourcesReferenceType = "referrer"
+	SearchListResponseResourcesReferenceTypeReferral SearchListResponseResourcesReferenceType = "referral"
+	SearchListResponseResourcesReferenceTypeReferrer SearchListResponseResourcesReferenceType = "referrer"
 )
 
-func (r SearchGetResponseResourcesReferenceType) IsKnown() bool {
+func (r SearchListResponseResourcesReferenceType) IsKnown() bool {
 	switch r {
-	case SearchGetResponseResourcesReferenceTypeReferral, SearchGetResponseResourcesReferenceTypeReferrer:
+	case SearchListResponseResourcesReferenceTypeReferral, SearchListResponseResourcesReferenceTypeReferrer:
 		return true
 	}
 	return false
 }
 
 // The type of the resource.
-type SearchGetResponseResourcesResourceType string
+type SearchListResponseResourcesResourceType string
 
 const (
-	SearchGetResponseResourcesResourceTypeLoadBalancer SearchGetResponseResourcesResourceType = "load_balancer"
-	SearchGetResponseResourcesResourceTypeMonitor      SearchGetResponseResourcesResourceType = "monitor"
-	SearchGetResponseResourcesResourceTypePool         SearchGetResponseResourcesResourceType = "pool"
+	SearchListResponseResourcesResourceTypeLoadBalancer SearchListResponseResourcesResourceType = "load_balancer"
+	SearchListResponseResourcesResourceTypeMonitor      SearchListResponseResourcesResourceType = "monitor"
+	SearchListResponseResourcesResourceTypePool         SearchListResponseResourcesResourceType = "pool"
 )
 
-func (r SearchGetResponseResourcesResourceType) IsKnown() bool {
+func (r SearchListResponseResourcesResourceType) IsKnown() bool {
 	switch r {
-	case SearchGetResponseResourcesResourceTypeLoadBalancer, SearchGetResponseResourcesResourceTypeMonitor, SearchGetResponseResourcesResourceTypePool:
+	case SearchListResponseResourcesResourceTypeLoadBalancer, SearchListResponseResourcesResourceTypeMonitor, SearchListResponseResourcesResourceTypePool:
 		return true
 	}
 	return false
 }
 
-type SearchGetParams struct {
+type SearchListParams struct {
 	// Identifier
-	AccountID    param.Field[string]                      `path:"account_id,required"`
-	Page         param.Field[float64]                     `query:"page"`
-	PerPage      param.Field[float64]                     `query:"per_page"`
-	SearchParams param.Field[SearchGetParamsSearchParams] `query:"search_params"`
+	AccountID    param.Field[string]                       `path:"account_id,required"`
+	Page         param.Field[float64]                      `query:"page"`
+	PerPage      param.Field[float64]                      `query:"per_page"`
+	SearchParams param.Field[SearchListParamsSearchParams] `query:"search_params"`
 }
 
-// URLQuery serializes [SearchGetParams]'s query parameters as `url.Values`.
-func (r SearchGetParams) URLQuery() (v url.Values) {
+// URLQuery serializes [SearchListParams]'s query parameters as `url.Values`.
+func (r SearchListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
-type SearchGetParamsSearchParams struct {
+type SearchListParamsSearchParams struct {
 	// Search query term.
 	Query param.Field[string] `query:"query"`
 	// The type of references to include ("\*" for all).
-	References param.Field[SearchGetParamsSearchParamsReferences] `query:"references"`
+	References param.Field[SearchListParamsSearchParamsReferences] `query:"references"`
 }
 
-// URLQuery serializes [SearchGetParamsSearchParams]'s query parameters as
+// URLQuery serializes [SearchListParamsSearchParams]'s query parameters as
 // `url.Values`.
-func (r SearchGetParamsSearchParams) URLQuery() (v url.Values) {
+func (r SearchListParamsSearchParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -175,98 +185,19 @@ func (r SearchGetParamsSearchParams) URLQuery() (v url.Values) {
 }
 
 // The type of references to include ("\*" for all).
-type SearchGetParamsSearchParamsReferences string
+type SearchListParamsSearchParamsReferences string
 
 const (
-	SearchGetParamsSearchParamsReferencesEmpty    SearchGetParamsSearchParamsReferences = ""
-	SearchGetParamsSearchParamsReferencesStar     SearchGetParamsSearchParamsReferences = "*"
-	SearchGetParamsSearchParamsReferencesReferral SearchGetParamsSearchParamsReferences = "referral"
-	SearchGetParamsSearchParamsReferencesReferrer SearchGetParamsSearchParamsReferences = "referrer"
+	SearchListParamsSearchParamsReferencesEmpty    SearchListParamsSearchParamsReferences = ""
+	SearchListParamsSearchParamsReferencesStar     SearchListParamsSearchParamsReferences = "*"
+	SearchListParamsSearchParamsReferencesReferral SearchListParamsSearchParamsReferences = "referral"
+	SearchListParamsSearchParamsReferencesReferrer SearchListParamsSearchParamsReferences = "referrer"
 )
 
-func (r SearchGetParamsSearchParamsReferences) IsKnown() bool {
+func (r SearchListParamsSearchParamsReferences) IsKnown() bool {
 	switch r {
-	case SearchGetParamsSearchParamsReferencesEmpty, SearchGetParamsSearchParamsReferencesStar, SearchGetParamsSearchParamsReferencesReferral, SearchGetParamsSearchParamsReferencesReferrer:
+	case SearchListParamsSearchParamsReferencesEmpty, SearchListParamsSearchParamsReferencesStar, SearchListParamsSearchParamsReferencesReferral, SearchListParamsSearchParamsReferencesReferrer:
 		return true
 	}
 	return false
-}
-
-type SearchGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SearchGetResponse     `json:"result,required"`
-	// Whether the API call was successful
-	Success    SearchGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo SearchGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       searchGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// searchGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SearchGetResponseEnvelope]
-type searchGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SearchGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r searchGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SearchGetResponseEnvelopeSuccess bool
-
-const (
-	SearchGetResponseEnvelopeSuccessTrue SearchGetResponseEnvelopeSuccess = true
-)
-
-func (r SearchGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SearchGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type SearchGetResponseEnvelopeResultInfo struct {
-	// Total number of results on the current page
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64 `json:"total_count"`
-	// Total number of pages available
-	TotalPages float64                                 `json:"total_pages"`
-	JSON       searchGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// searchGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [SearchGetResponseEnvelopeResultInfo]
-type searchGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SearchGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r searchGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

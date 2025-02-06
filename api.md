@@ -625,11 +625,11 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers#SearchGetResponse">SearchGetResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers#SearchListResponse">SearchListResponse</a>
 
 Methods:
 
-- <code title="get /accounts/{account_id}/load_balancers/search">client.LoadBalancers.Searches.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers#SearchService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers#SearchGetParams">SearchGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers#SearchGetResponse">SearchGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/load_balancers/search">client.LoadBalancers.Searches.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers#SearchService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers#SearchListParams">SearchListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#V4PagePagination">V4PagePagination</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/load_balancers#SearchListResponse">SearchListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Cache
 
@@ -7542,11 +7542,11 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway#EvaluationTypeGetResponse">EvaluationTypeGetResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway#EvaluationTypeListResponse">EvaluationTypeListResponse</a>
 
 Methods:
 
-- <code title="get /accounts/{account_id}/ai-gateway/evaluation-types">client.AIGateway.EvaluationTypes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway#EvaluationTypeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway#EvaluationTypeGetParams">EvaluationTypeGetParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway#EvaluationTypeGetResponse">EvaluationTypeGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/ai-gateway/evaluation-types">client.AIGateway.EvaluationTypes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway#EvaluationTypeService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway#EvaluationTypeListParams">EvaluationTypeListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/ai_gateway#EvaluationTypeListResponse">EvaluationTypeListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Logs
 
@@ -7950,13 +7950,13 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center">security_center</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightListResponse">InsightListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center">security_center</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightDismissResponse">InsightDismissResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center">security_center</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightGetResponse">InsightGetResponse</a>
 
 Methods:
 
+- <code title="get /{account_or_zone}/{account_or_zone_id}/security-center/insights">client.SecurityCenter.Insights.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center">security_center</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightListParams">InsightListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#V4PagePagination">V4PagePagination</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center">security_center</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightListResponse">InsightListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="put /{account_or_zone}/{account_or_zone_id}/security-center/insights/{issue_id}/dismiss">client.SecurityCenter.Insights.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightService.Dismiss">Dismiss</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, issueID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center">security_center</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightDismissParams">InsightDismissParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center">security_center</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightDismissResponse">InsightDismissResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /{account_or_zone}/{account_or_zone_id}/security-center/insights">client.SecurityCenter.Insights.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center">security_center</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightGetParams">InsightGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center">security_center</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightGetResponse">InsightGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Class
 
