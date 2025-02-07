@@ -3,7 +3,7 @@ module github.com/cloudflare/cloudflare-go/v4
 go 1.23
 
 require (
-	github.com/tidwall/gjson v1.14.4
+	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
 )
 
