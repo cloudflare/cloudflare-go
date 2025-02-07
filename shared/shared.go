@@ -1280,7 +1280,7 @@ type TokenPolicyParam struct {
 	// Allow or deny operations against the resources.
 	Effect param.Field[TokenPolicyEffect] `json:"effect,required"`
 	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]TokenPolicyPermissionGroupParam] `json:"permission_groups,required"`
+	PermissionGroups param.Field[[]TokenPolicyPermissionGroup] `json:"permission_groups,required"`
 	// A list of resource names that the policy applies to.
 	Resources param.Field[map[string]string] `json:"resources,required"`
 }

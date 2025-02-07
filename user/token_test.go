@@ -34,17 +34,24 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 		Name: cloudflare.F("readonly token"),
 		Policies: cloudflare.F([]shared.TokenPolicyParam{{
 			Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
-			PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
-				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
-					Key:   cloudflare.F("key"),
-					Value: cloudflare.F("value"),
-				}),
-			}, {
-				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
-					Key:   cloudflare.F("key"),
-					Value: cloudflare.F("value"),
-				}),
-			}}),
+			PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroup{
+				{
+					ID: "id",
+					Meta: shared.TokenPolicyPermissionGroupsMeta{
+						Key:   "key",
+						Value: "value",
+					},
+					Name: "name",
+				},
+				{
+					ID: "id",
+					Meta: shared.TokenPolicyPermissionGroupsMeta{
+						Key:   "key",
+						Value: "value",
+					},
+					Name: "name",
+				},
+			}),
 			Resources: cloudflare.F(map[string]string{
 				"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 				"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
@@ -90,17 +97,24 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 				Name: cloudflare.F("readonly token"),
 				Policies: cloudflare.F([]shared.TokenPolicyParam{{
 					Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
-					PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
-						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
-							Key:   cloudflare.F("key"),
-							Value: cloudflare.F("value"),
-						}),
-					}, {
-						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
-							Key:   cloudflare.F("key"),
-							Value: cloudflare.F("value"),
-						}),
-					}}),
+					PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroup{
+						{
+							ID: "id",
+							Meta: shared.TokenPolicyPermissionGroupsMeta{
+								Key:   "key",
+								Value: "value",
+							},
+							Name: "name",
+						},
+						{
+							ID: "id",
+							Meta: shared.TokenPolicyPermissionGroupsMeta{
+								Key:   "key",
+								Value: "value",
+							},
+							Name: "name",
+						},
+					}),
 					Resources: cloudflare.F(map[string]string{
 						"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 						"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
