@@ -42,7 +42,7 @@ func TestDNSFirewallNewWithOptionalParams(t *testing.T) {
 		NegativeCacheTTL:     cloudflare.F(900.000000),
 		Ratelimit:            cloudflare.F(600.000000),
 		Retries:              cloudflare.F(2.000000),
-		UpstreamIPs:          cloudflare.F([]dns_firewall.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
+		UpstreamIPs:          cloudflare.F([]dns_firewall.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "2001:DB8:100::CF"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -140,7 +140,7 @@ func TestDNSFirewallEditWithOptionalParams(t *testing.T) {
 			NegativeCacheTTL:     cloudflare.F(900.000000),
 			Ratelimit:            cloudflare.F(600.000000),
 			Retries:              cloudflare.F(2.000000),
-			UpstreamIPs:          cloudflare.F([]dns_firewall.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
+			UpstreamIPs:          cloudflare.F([]dns_firewall.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "2001:DB8:100::CF"}),
 		},
 	)
 	if err != nil {
