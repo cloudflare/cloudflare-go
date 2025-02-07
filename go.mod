@@ -1,6 +1,6 @@
 module github.com/cloudflare/cloudflare-go/v4
 
-go 1.21
+go 1.23
 
 require (
 	github.com/tidwall/gjson v1.14.4
