@@ -38,7 +38,7 @@ func NewAccessLogAccessRequestService(opts ...option.RequestOption) (r *AccessLo
 }
 
 // Gets a list of Access authentication audit logs for an account.
-func (r *AccessLogAccessRequestService) List(ctx context.Context, params AccessLogAccessRequestListParams, opts ...option.RequestOption) (res *[]AccessRequests, err error) {
+func (r *AccessLogAccessRequestService) List(ctx context.Context, params AccessLogAccessRequestListParams, opts ...option.RequestOption) (res *[]AccessRequest, err error) {
 	var env AccessLogAccessRequestListResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -97,7 +97,7 @@ type AccessLogAccessRequestListResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessLogAccessRequestListResponseEnvelopeSuccess `json:"success,required"`
-	Result  []AccessRequests                                  `json:"result"`
+	Result  []AccessRequest                                   `json:"result"`
 	JSON    accessLogAccessRequestListResponseEnvelopeJSON    `json:"-"`
 }
 
