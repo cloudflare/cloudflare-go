@@ -5169,13 +5169,13 @@ Methods:
 
 Methods:
 
-- <code title="get /accounts/{account_id}/access/logs/access_requests">client.ZeroTrust.Access.Logs.AccessRequests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#AccessLogAccessRequestService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#AccessLogAccessRequestListParams">AccessLogAccessRequestListParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#AccessRequests">AccessRequests</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/access/logs/access_requests">client.ZeroTrust.Access.Logs.AccessRequests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#AccessLogAccessRequestService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#AccessLogAccessRequestListParams">AccessLogAccessRequestListParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#AccessRequest">AccessRequest</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 #### SCIM
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#AccessRequests">AccessRequests</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#AccessRequest">AccessRequest</a>
 
 ##### Updates
 
