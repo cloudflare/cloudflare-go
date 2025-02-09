@@ -30,7 +30,7 @@ func NewAccessLogSCIMService(opts ...option.RequestOption) (r *AccessLogSCIMServ
 	return
 }
 
-type AccessRequests struct {
+type AccessRequest struct {
 	// The event that occurred, such as a login attempt.
 	Action string `json:"action"`
 	// The result of the authentication event.
@@ -47,12 +47,12 @@ type AccessRequests struct {
 	// The unique identifier for the request to Cloudflare.
 	RayID string `json:"ray_id"`
 	// The email address of the authenticating user.
-	UserEmail string             `json:"user_email" format:"email"`
-	JSON      accessRequestsJSON `json:"-"`
+	UserEmail string            `json:"user_email" format:"email"`
+	JSON      accessRequestJSON `json:"-"`
 }
 
-// accessRequestsJSON contains the JSON metadata for the struct [AccessRequests]
-type accessRequestsJSON struct {
+// accessRequestJSON contains the JSON metadata for the struct [AccessRequest]
+type accessRequestJSON struct {
 	Action      apijson.Field
 	Allowed     apijson.Field
 	AppDomain   apijson.Field
@@ -66,10 +66,10 @@ type accessRequestsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessRequests) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessRequestsJSON) RawJSON() string {
+func (r accessRequestJSON) RawJSON() string {
 	return r.raw
 }
