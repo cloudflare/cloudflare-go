@@ -84,7 +84,9 @@ func (r TunnelManagementNewParamsResource) IsKnown() bool {
 type TunnelManagementNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   string                `json:"result,required"`
+	// The Tunnel Token is used as a mechanism to authenticate the operation of a
+	// tunnel.
+	Result string `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelManagementNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelManagementNewResponseEnvelopeJSON    `json:"-"`

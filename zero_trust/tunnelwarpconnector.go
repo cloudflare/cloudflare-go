@@ -1906,7 +1906,9 @@ type TunnelWARPConnectorTokenParams struct {
 type TunnelWARPConnectorTokenResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   string                `json:"result,required"`
+	// The Tunnel Token is used as a mechanism to authenticate the operation of a
+	// tunnel.
+	Result string `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelWARPConnectorTokenResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelWARPConnectorTokenResponseEnvelopeJSON    `json:"-"`
