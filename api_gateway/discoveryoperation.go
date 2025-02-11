@@ -196,7 +196,6 @@ func (r DiscoveryOperationEditResponseState) IsKnown() bool {
 }
 
 type DiscoveryOperationListParams struct {
-	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// When `true`, only return API Discovery results that are not saved into API
 	// Shield Endpoint Management
@@ -323,7 +322,6 @@ func (r DiscoveryOperationListParamsState) IsKnown() bool {
 }
 
 type DiscoveryOperationBulkEditParams struct {
-	// Identifier
 	ZoneID param.Field[string]                             `path:"zone_id,required"`
 	Body   map[string]DiscoveryOperationBulkEditParamsBody `json:"body,required"`
 }
@@ -408,7 +406,6 @@ func (r DiscoveryOperationBulkEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DiscoveryOperationEditParams struct {
-	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Mark state of operation in API Discovery
 	//
