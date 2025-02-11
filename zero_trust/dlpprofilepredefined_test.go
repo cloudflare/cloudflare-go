@@ -36,6 +36,7 @@ func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 				ID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 				Enabled: cloudflare.F(true),
 			}}),
+			AIContextEnabled:    cloudflare.F(true),
 			AllowedMatchCount:   cloudflare.F(int64(0)),
 			ConfidenceThreshold: cloudflare.F("confidence_threshold"),
 			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
