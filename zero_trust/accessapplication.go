@@ -967,8 +967,8 @@ type SAMLSaaSAppCustomAttributesSource struct {
 	// The name of the IdP attribute.
 	Name string `json:"name"`
 	// A mapping from IdP ID to attribute name.
-	NameByIdP map[string]string                     `json:"name_by_idp"`
-	JSON      samlSaaSAppCustomAttributesSourceJSON `json:"-"`
+	NameByIdP []SAMLSaaSAppCustomAttributesSourceNameByIdP `json:"name_by_idp"`
+	JSON      samlSaaSAppCustomAttributesSourceJSON        `json:"-"`
 }
 
 // samlSaaSAppCustomAttributesSourceJSON contains the JSON metadata for the struct
@@ -985,6 +985,31 @@ func (r *SAMLSaaSAppCustomAttributesSource) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r samlSaaSAppCustomAttributesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SAMLSaaSAppCustomAttributesSourceNameByIdP struct {
+	// The UID of the IdP.
+	IdPID string `json:"idp_id"`
+	// The name of the IdP provided attribute.
+	SourceName string                                         `json:"source_name"`
+	JSON       samlSaaSAppCustomAttributesSourceNameByIdPJSON `json:"-"`
+}
+
+// samlSaaSAppCustomAttributesSourceNameByIdPJSON contains the JSON metadata for
+// the struct [SAMLSaaSAppCustomAttributesSourceNameByIdP]
+type samlSaaSAppCustomAttributesSourceNameByIdPJSON struct {
+	IdPID       apijson.Field
+	SourceName  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SAMLSaaSAppCustomAttributesSourceNameByIdP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r samlSaaSAppCustomAttributesSourceNameByIdPJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1050,10 +1075,21 @@ type SAMLSaaSAppCustomAttributesSourceParam struct {
 	// The name of the IdP attribute.
 	Name param.Field[string] `json:"name"`
 	// A mapping from IdP ID to attribute name.
-	NameByIdP param.Field[map[string]string] `json:"name_by_idp"`
+	NameByIdP param.Field[[]SAMLSaaSAppCustomAttributesSourceNameByIdPParam] `json:"name_by_idp"`
 }
 
 func (r SAMLSaaSAppCustomAttributesSourceParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SAMLSaaSAppCustomAttributesSourceNameByIdPParam struct {
+	// The UID of the IdP.
+	IdPID param.Field[string] `json:"idp_id"`
+	// The name of the IdP provided attribute.
+	SourceName param.Field[string] `json:"source_name"`
+}
+
+func (r SAMLSaaSAppCustomAttributesSourceNameByIdPParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
