@@ -141,8 +141,9 @@ type Profile struct {
 	// [[]ProfilePredefinedProfileEntry], [[]ProfileIntegrationProfileEntry].
 	Entries interface{} `json:"entries,required"`
 	// The name of the profile
-	Name string      `json:"name,required"`
-	Type ProfileType `json:"type,required"`
+	Name             string      `json:"name,required"`
+	Type             ProfileType `json:"type,required"`
+	AIContextEnabled bool        `json:"ai_context_enabled"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount   int64                      `json:"allowed_match_count"`
 	ConfidenceThreshold ProfileConfidenceThreshold `json:"confidence_threshold"`
@@ -168,6 +169,7 @@ type profileJSON struct {
 	Entries             apijson.Field
 	Name                apijson.Field
 	Type                apijson.Field
+	AIContextEnabled    apijson.Field
 	AllowedMatchCount   apijson.Field
 	ConfidenceThreshold apijson.Field
 	ContextAwareness    apijson.Field
@@ -244,6 +246,7 @@ type ProfileCustomProfile struct {
 	Type       ProfileCustomProfileType `json:"type,required"`
 	// When the profile was lasted updated
 	UpdatedAt           time.Time                               `json:"updated_at,required" format:"date-time"`
+	AIContextEnabled    bool                                    `json:"ai_context_enabled"`
 	ConfidenceThreshold ProfileCustomProfileConfidenceThreshold `json:"confidence_threshold"`
 	// The description of the profile
 	Description string                   `json:"description,nullable"`
@@ -262,6 +265,7 @@ type profileCustomProfileJSON struct {
 	OCREnabled          apijson.Field
 	Type                apijson.Field
 	UpdatedAt           apijson.Field
+	AIContextEnabled    apijson.Field
 	ConfidenceThreshold apijson.Field
 	Description         apijson.Field
 	raw                 string
@@ -462,6 +466,7 @@ func (r profileCustomProfileEntriesPredefinedEntryJSON) RawJSON() string {
 func (r ProfileCustomProfileEntriesPredefinedEntry) implementsProfileCustomProfileEntry() {}
 
 type ProfileCustomProfileEntriesPredefinedEntryConfidence struct {
+	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry can be made more or less sensitive by setting a
 	// confidence threshold. Profiles that use an entry with `available` set to true
 	// can use confidence thresholds
@@ -472,9 +477,10 @@ type ProfileCustomProfileEntriesPredefinedEntryConfidence struct {
 // profileCustomProfileEntriesPredefinedEntryConfidenceJSON contains the JSON
 // metadata for the struct [ProfileCustomProfileEntriesPredefinedEntryConfidence]
 type profileCustomProfileEntriesPredefinedEntryConfidenceJSON struct {
-	Available   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AIContextAvailable apijson.Field
+	Available          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *ProfileCustomProfileEntriesPredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
@@ -705,6 +711,7 @@ type ProfilePredefinedProfile struct {
 	// The name of the predefined profile
 	Name                string                                      `json:"name,required"`
 	Type                ProfilePredefinedProfileType                `json:"type,required"`
+	AIContextEnabled    bool                                        `json:"ai_context_enabled"`
 	ConfidenceThreshold ProfilePredefinedProfileConfidenceThreshold `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
@@ -723,6 +730,7 @@ type profilePredefinedProfileJSON struct {
 	Entries             apijson.Field
 	Name                apijson.Field
 	Type                apijson.Field
+	AIContextEnabled    apijson.Field
 	ConfidenceThreshold apijson.Field
 	ContextAwareness    apijson.Field
 	OCREnabled          apijson.Field
@@ -925,6 +933,7 @@ func (r profilePredefinedProfileEntriesPredefinedEntryJSON) RawJSON() string {
 func (r ProfilePredefinedProfileEntriesPredefinedEntry) implementsProfilePredefinedProfileEntry() {}
 
 type ProfilePredefinedProfileEntriesPredefinedEntryConfidence struct {
+	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry can be made more or less sensitive by setting a
 	// confidence threshold. Profiles that use an entry with `available` set to true
 	// can use confidence thresholds
@@ -936,9 +945,10 @@ type ProfilePredefinedProfileEntriesPredefinedEntryConfidence struct {
 // metadata for the struct
 // [ProfilePredefinedProfileEntriesPredefinedEntryConfidence]
 type profilePredefinedProfileEntriesPredefinedEntryConfidenceJSON struct {
-	Available   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AIContextAvailable apijson.Field
+	Available          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *ProfilePredefinedProfileEntriesPredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
@@ -1381,6 +1391,7 @@ func (r profileIntegrationProfileEntriesPredefinedEntryJSON) RawJSON() string {
 func (r ProfileIntegrationProfileEntriesPredefinedEntry) implementsProfileIntegrationProfileEntry() {}
 
 type ProfileIntegrationProfileEntriesPredefinedEntryConfidence struct {
+	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry can be made more or less sensitive by setting a
 	// confidence threshold. Profiles that use an entry with `available` set to true
 	// can use confidence thresholds
@@ -1392,9 +1403,10 @@ type ProfileIntegrationProfileEntriesPredefinedEntryConfidence struct {
 // metadata for the struct
 // [ProfileIntegrationProfileEntriesPredefinedEntryConfidence]
 type profileIntegrationProfileEntriesPredefinedEntryConfidenceJSON struct {
-	Available   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AIContextAvailable apijson.Field
+	Available          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *ProfileIntegrationProfileEntriesPredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
