@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestRoleList(t *testing.T) {
+func TestRoleListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,6 +29,8 @@ func TestRoleList(t *testing.T) {
 	)
 	_, err := client.Accounts.Roles.List(context.TODO(), accounts.RoleListParams{
 		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		Page:      cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(5.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
