@@ -190,13 +190,13 @@ type AnalyticsEventBytimeGetResponseQuery struct {
 	Metrics []AnalyticsEventBytimeGetResponseQueryMetric `json:"metrics"`
 	// Start of time interval to query, defaults to `until` - 6 hours. Timestamp must
 	// be in RFC3339 format and uses UTC unless otherwise specified.
-	Since time.Time `json:"since" format:"date-time"`
+	Since interface{} `json:"since"`
 	// The sort order for the result set; sort fields must be included in `metrics` or
 	// `dimensions`.
 	Sort []string `json:"sort"`
 	// End of time interval to query, defaults to current time. Timestamp must be in
 	// RFC3339 format and uses UTC unless otherwise specified.
-	Until time.Time                                `json:"until" format:"date-time"`
+	Until interface{}                              `json:"until"`
 	JSON  analyticsEventBytimeGetResponseQueryJSON `json:"-"`
 }
 

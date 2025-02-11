@@ -180,11 +180,10 @@ type OperationNewResponse struct {
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
 	Endpoint string `json:"endpoint,required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string `json:"host,required" format:"hostname"`
+	LastUpdated string `json:"last_updated,required"`
 	// The HTTP method used to access the endpoint.
-	Method OperationNewResponseMethod `json:"method,required"`
-	// UUID
+	Method      OperationNewResponseMethod   `json:"method,required"`
 	OperationID string                       `json:"operation_id,required"`
 	Features    OperationNewResponseFeatures `json:"features"`
 	JSON        operationNewResponseJSON     `json:"-"`
@@ -771,7 +770,6 @@ func (r operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 
 // Schema active on endpoint.
 type OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema struct {
-	// UUID
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// True if schema is Cloudflare-provided.
@@ -825,11 +823,10 @@ type OperationListResponse struct {
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
 	Endpoint string `json:"endpoint,required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string `json:"host,required" format:"hostname"`
+	LastUpdated string `json:"last_updated,required"`
 	// The HTTP method used to access the endpoint.
-	Method OperationListResponseMethod `json:"method,required"`
-	// UUID
+	Method      OperationListResponseMethod   `json:"method,required"`
 	OperationID string                        `json:"operation_id,required"`
 	Features    OperationListResponseFeatures `json:"features"`
 	JSON        operationListResponseJSON     `json:"-"`
@@ -1416,7 +1413,6 @@ func (r operationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaIn
 
 // Schema active on endpoint.
 type OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema struct {
-	// UUID
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// True if schema is Cloudflare-provided.
@@ -1511,11 +1507,10 @@ type OperationBulkNewResponse struct {
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
 	Endpoint string `json:"endpoint,required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string `json:"host,required" format:"hostname"`
+	LastUpdated string `json:"last_updated,required"`
 	// The HTTP method used to access the endpoint.
-	Method OperationBulkNewResponseMethod `json:"method,required"`
-	// UUID
+	Method      OperationBulkNewResponseMethod   `json:"method,required"`
 	OperationID string                           `json:"operation_id,required"`
 	Features    OperationBulkNewResponseFeatures `json:"features"`
 	JSON        operationBulkNewResponseJSON     `json:"-"`
@@ -2102,7 +2097,6 @@ func (r operationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchem
 
 // Schema active on endpoint.
 type OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema struct {
-	// UUID
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// True if schema is Cloudflare-provided.
@@ -2197,11 +2191,10 @@ type OperationGetResponse struct {
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
 	Endpoint string `json:"endpoint,required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string `json:"host,required" format:"hostname"`
+	LastUpdated string `json:"last_updated,required"`
 	// The HTTP method used to access the endpoint.
-	Method OperationGetResponseMethod `json:"method,required"`
-	// UUID
+	Method      OperationGetResponseMethod   `json:"method,required"`
 	OperationID string                       `json:"operation_id,required"`
 	Features    OperationGetResponseFeatures `json:"features"`
 	JSON        operationGetResponseJSON     `json:"-"`
@@ -2788,7 +2781,6 @@ func (r operationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 
 // Schema active on endpoint.
 type OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema struct {
-	// UUID
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// True if schema is Cloudflare-provided.
@@ -2836,7 +2828,6 @@ func (r OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 }
 
 type OperationNewParams struct {
-	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -2920,7 +2911,6 @@ func (r OperationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OperationListParams struct {
-	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Direction to order results.
 	Direction param.Field[OperationListParamsDirection] `query:"direction"`
@@ -3003,12 +2993,10 @@ func (r OperationListParamsOrder) IsKnown() bool {
 }
 
 type OperationDeleteParams struct {
-	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OperationBulkNewParams struct {
-	// Identifier
 	ZoneID param.Field[string]          `path:"zone_id,required"`
 	Body   []OperationBulkNewParamsBody `json:"body,required"`
 }
@@ -3057,12 +3045,10 @@ func (r OperationBulkNewParamsBodyMethod) IsKnown() bool {
 }
 
 type OperationBulkDeleteParams struct {
-	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OperationGetParams struct {
-	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Add feature(s) to the results. The feature name that is given here corresponds
 	// to the resulting feature object. Have a look at the top-level object description

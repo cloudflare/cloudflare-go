@@ -28,7 +28,7 @@ func TestDiscoveryOperationListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Discovery.Operations.List(context.TODO(), api_gateway.DiscoveryOperationListParams{
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("zone_id"),
 		Diff:      cloudflare.F(true),
 		Direction: cloudflare.F(api_gateway.DiscoveryOperationListParamsDirectionAsc),
 		Endpoint:  cloudflare.F("/api/v1"),
@@ -63,7 +63,7 @@ func TestDiscoveryOperationBulkEdit(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Discovery.Operations.BulkEdit(context.TODO(), api_gateway.DiscoveryOperationBulkEditParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID: cloudflare.F("zone_id"),
 		Body: map[string]api_gateway.DiscoveryOperationBulkEditParamsBody{
 			"3818d821-5901-4147-a474-f5f5aec1d54e": {
 				State: cloudflare.F(api_gateway.DiscoveryOperationBulkEditParamsBodyStateReview),
@@ -97,9 +97,9 @@ func TestDiscoveryOperationEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.APIGateway.Discovery.Operations.Edit(
 		context.TODO(),
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 		api_gateway.DiscoveryOperationEditParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID: cloudflare.F("zone_id"),
 			State:  cloudflare.F(api_gateway.DiscoveryOperationEditParamsStateReview),
 		},
 	)
