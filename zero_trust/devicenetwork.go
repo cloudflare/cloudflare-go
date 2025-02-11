@@ -157,7 +157,7 @@ func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query 
 type DeviceNetwork struct {
 	// The configuration object containing information for the WARP client to detect
 	// the managed network.
-	Config DeviceNetworkConfig `json:"config"`
+	Config interface{} `json:"config"`
 	// The name of the device managed network. This name must be unique.
 	Name string `json:"name"`
 	// API UUID.
@@ -182,36 +182,6 @@ func (r *DeviceNetwork) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r deviceNetworkJSON) RawJSON() string {
-	return r.raw
-}
-
-// The configuration object containing information for the WARP client to detect
-// the managed network.
-type DeviceNetworkConfig struct {
-	// A network address of the form "host:port" that the WARP client will use to
-	// detect the presence of a TLS host.
-	TLSSockaddr string `json:"tls_sockaddr,required"`
-	// The SHA-256 hash of the TLS certificate presented by the host found at
-	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
-	// timestamp, etc) will be used to validate the certificate.
-	Sha256 string                  `json:"sha256"`
-	JSON   deviceNetworkConfigJSON `json:"-"`
-}
-
-// deviceNetworkConfigJSON contains the JSON metadata for the struct
-// [DeviceNetworkConfig]
-type deviceNetworkConfigJSON struct {
-	TLSSockaddr apijson.Field
-	Sha256      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkConfigJSON) RawJSON() string {
 	return r.raw
 }
 

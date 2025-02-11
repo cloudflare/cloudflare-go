@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
@@ -65,12 +64,11 @@ func (r *UserSchemaHostService) ListAutoPaging(ctx context.Context, params UserS
 }
 
 type UserSchemaHostListResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt string `json:"created_at,required"`
 	// Hosts serving the schema, e.g zone.host.com
 	Hosts []string `json:"hosts,required"`
 	// Name of the schema
-	Name string `json:"name,required"`
-	// UUID
+	Name     string                         `json:"name,required"`
 	SchemaID string                         `json:"schema_id,required"`
 	JSON     userSchemaHostListResponseJSON `json:"-"`
 }
@@ -95,7 +93,6 @@ func (r userSchemaHostListResponseJSON) RawJSON() string {
 }
 
 type UserSchemaHostListParams struct {
-	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Page number of paginated results.
 	Page param.Field[int64] `query:"page"`

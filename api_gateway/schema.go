@@ -76,7 +76,6 @@ func (r schemaListResponseJSON) RawJSON() string {
 }
 
 type SchemaListParams struct {
-	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Add feature(s) to the results. The feature name that is given here corresponds
 	// to the resulting feature object. Have a look at the top-level object description

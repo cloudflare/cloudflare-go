@@ -57,22 +57,22 @@ type DomainBulkGetResponse struct {
 	// Additional information related to the host name.
 	AdditionalInformation DomainBulkGetResponseAdditionalInformation `json:"additional_information"`
 	// Application that the hostname belongs to.
-	Application                DomainBulkGetResponseApplication                `json:"application"`
-	ContentCategories          []DomainBulkGetResponseContentCategory          `json:"content_categories"`
-	Domain                     string                                          `json:"domain"`
-	InheritedContentCategories []DomainBulkGetResponseInheritedContentCategory `json:"inherited_content_categories"`
+	Application                DomainBulkGetResponseApplication       `json:"application"`
+	ContentCategories          []DomainBulkGetResponseContentCategory `json:"content_categories"`
+	Domain                     string                                 `json:"domain"`
+	InheritedContentCategories interface{}                            `json:"inherited_content_categories"`
 	// Domain from which `inherited_content_categories` and `inherited_risk_types` are
 	// inherited, if applicable.
-	InheritedFrom      string                                   `json:"inherited_from"`
-	InheritedRiskTypes []DomainBulkGetResponseInheritedRiskType `json:"inherited_risk_types"`
+	InheritedFrom      string      `json:"inherited_from"`
+	InheritedRiskTypes interface{} `json:"inherited_risk_types"`
 	// Global Cloudflare 100k ranking for the last 30 days, if available for the
 	// hostname. The top ranked domain is 1, the lowest ranked domain is 100,000.
 	PopularityRank int64 `json:"popularity_rank"`
 	// Hostname risk score, which is a value between 0 (lowest risk) to 1 (highest
 	// risk).
-	RiskScore float64                         `json:"risk_score"`
-	RiskTypes []DomainBulkGetResponseRiskType `json:"risk_types"`
-	JSON      domainBulkGetResponseJSON       `json:"-"`
+	RiskScore float64                   `json:"risk_score"`
+	RiskTypes interface{}               `json:"risk_types"`
+	JSON      domainBulkGetResponseJSON `json:"-"`
 }
 
 // domainBulkGetResponseJSON contains the JSON metadata for the struct
@@ -170,81 +170,6 @@ func (r *DomainBulkGetResponseContentCategory) UnmarshalJSON(data []byte) (err e
 }
 
 func (r domainBulkGetResponseContentCategoryJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainBulkGetResponseInheritedContentCategory struct {
-	ID              int64                                             `json:"id"`
-	Name            string                                            `json:"name"`
-	SuperCategoryID int64                                             `json:"super_category_id"`
-	JSON            domainBulkGetResponseInheritedContentCategoryJSON `json:"-"`
-}
-
-// domainBulkGetResponseInheritedContentCategoryJSON contains the JSON metadata for
-// the struct [DomainBulkGetResponseInheritedContentCategory]
-type domainBulkGetResponseInheritedContentCategoryJSON struct {
-	ID              apijson.Field
-	Name            apijson.Field
-	SuperCategoryID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DomainBulkGetResponseInheritedContentCategory) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainBulkGetResponseInheritedContentCategoryJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainBulkGetResponseInheritedRiskType struct {
-	ID              int64                                      `json:"id"`
-	Name            string                                     `json:"name"`
-	SuperCategoryID int64                                      `json:"super_category_id"`
-	JSON            domainBulkGetResponseInheritedRiskTypeJSON `json:"-"`
-}
-
-// domainBulkGetResponseInheritedRiskTypeJSON contains the JSON metadata for the
-// struct [DomainBulkGetResponseInheritedRiskType]
-type domainBulkGetResponseInheritedRiskTypeJSON struct {
-	ID              apijson.Field
-	Name            apijson.Field
-	SuperCategoryID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DomainBulkGetResponseInheritedRiskType) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainBulkGetResponseInheritedRiskTypeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainBulkGetResponseRiskType struct {
-	ID              int64                             `json:"id"`
-	Name            string                            `json:"name"`
-	SuperCategoryID int64                             `json:"super_category_id"`
-	JSON            domainBulkGetResponseRiskTypeJSON `json:"-"`
-}
-
-// domainBulkGetResponseRiskTypeJSON contains the JSON metadata for the struct
-// [DomainBulkGetResponseRiskType]
-type domainBulkGetResponseRiskTypeJSON struct {
-	ID              apijson.Field
-	Name            apijson.Field
-	SuperCategoryID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DomainBulkGetResponseRiskType) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainBulkGetResponseRiskTypeJSON) RawJSON() string {
 	return r.raw
 }
 

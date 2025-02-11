@@ -31,7 +31,7 @@ func TestOperationSchemaValidationUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.OperationSchemaValidationUpdateParams{
-			ZoneID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:           cloudflare.F("zone_id"),
 			MitigationAction: cloudflare.F(api_gateway.OperationSchemaValidationUpdateParamsMitigationActionLog),
 		},
 	)
@@ -58,7 +58,7 @@ func TestOperationSchemaValidationEdit(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Operations.SchemaValidation.Edit(context.TODO(), api_gateway.OperationSchemaValidationEditParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID: cloudflare.F("zone_id"),
 		SettingsMultipleRequest: api_gateway.SettingsMultipleRequestParam{
 			"3818d821-5901-4147-a474-f5f5aec1d54e": api_gateway.SettingsMultipleRequestItemParam{
 				MitigationAction: cloudflare.F(api_gateway.SettingsMultipleRequestItemMitigationActionLog),
@@ -94,7 +94,7 @@ func TestOperationSchemaValidationGet(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.OperationSchemaValidationGetParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID: cloudflare.F("zone_id"),
 		},
 	)
 	if err != nil {

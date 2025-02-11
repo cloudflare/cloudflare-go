@@ -42,7 +42,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 // Rules consist of a set of criteria for matching emails (such as an email being
 // sent to a specific custom email address) plus a set of actions to take on the
 // email (like forwarding it to a specific destination address).
-func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
+func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *RuleNewResponse, err error) {
 	var env RuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -59,7 +59,7 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 }
 
 // Update actions and matches, or enable/disable specific routing rules.
-func (r *RuleService) Update(ctx context.Context, ruleIdentifier string, params RuleUpdateParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
+func (r *RuleService) Update(ctx context.Context, ruleIdentifier string, params RuleUpdateParams, opts ...option.RequestOption) (res *RuleUpdateResponse, err error) {
 	var env RuleUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -107,7 +107,7 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, params RuleListParams,
 }
 
 // Delete a specific routing rule.
-func (r *RuleService) Delete(ctx context.Context, ruleIdentifier string, body RuleDeleteParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
+func (r *RuleService) Delete(ctx context.Context, ruleIdentifier string, body RuleDeleteParams, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
 	var env RuleDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
@@ -128,7 +128,7 @@ func (r *RuleService) Delete(ctx context.Context, ruleIdentifier string, body Ru
 }
 
 // Get information for a specific routing rule already created.
-func (r *RuleService) Get(ctx context.Context, ruleIdentifier string, query RuleGetParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
+func (r *RuleService) Get(ctx context.Context, ruleIdentifier string, query RuleGetParams, opts ...option.RequestOption) (res *RuleGetResponse, err error) {
 	var env RuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
@@ -330,6 +330,14 @@ func (r MatcherParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type RuleNewResponse = interface{}
+
+type RuleUpdateResponse = interface{}
+
+type RuleDeleteResponse = interface{}
+
+type RuleGetResponse = interface{}
+
 type RuleNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -370,7 +378,7 @@ type RuleNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RuleNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  EmailRoutingRule               `json:"result"`
+	Result  RuleNewResponse                `json:"result"`
 	JSON    ruleNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -448,7 +456,7 @@ type RuleUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  EmailRoutingRule                  `json:"result"`
+	Result  RuleUpdateResponse                `json:"result"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -531,7 +539,7 @@ type RuleDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  EmailRoutingRule                  `json:"result"`
+	Result  RuleDeleteResponse                `json:"result"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -579,7 +587,7 @@ type RuleGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  EmailRoutingRule               `json:"result"`
+	Result  RuleGetResponse                `json:"result"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
 }
 

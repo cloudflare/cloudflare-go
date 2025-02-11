@@ -150,14 +150,14 @@ func (r *AppService) Get(ctx context.Context, appID string, query AppGetParams, 
 }
 
 type AppNewResponse struct {
-	// App identifier.
-	ID string `json:"id,required"`
-	// When the Application was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// This field can have the runtime type of [interface{}], [string].
+	ID interface{} `json:"id,required"`
+	// This field can have the runtime type of [interface{}], [time.Time].
+	CreatedOn interface{} `json:"created_on,required"`
 	// The name and type of DNS record for the Spectrum application.
 	DNS DNS `json:"dns,required"`
-	// When the Application was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// This field can have the runtime type of [interface{}], [time.Time].
+	ModifiedOn interface{} `json:"modified_on,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol string `json:"protocol,required"`
@@ -262,16 +262,16 @@ func init() {
 
 type AppNewResponseSpectrumConfigAppConfig struct {
 	// App identifier.
-	ID string `json:"id,required"`
+	ID interface{} `json:"id,required"`
 	// When the Application was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn interface{} `json:"created_on,required"`
 	// The name and type of DNS record for the Spectrum application.
 	DNS DNS `json:"dns,required"`
 	// Enables IP Access Rules for this application. Notes: Only available for TCP
 	// applications.
 	IPFirewall bool `json:"ip_firewall,required"`
 	// When the Application was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn interface{} `json:"modified_on,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol string `json:"protocol,required"`
@@ -498,14 +498,14 @@ func (r AppNewResponseTrafficType) IsKnown() bool {
 }
 
 type AppUpdateResponse struct {
-	// App identifier.
-	ID string `json:"id,required"`
-	// When the Application was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// This field can have the runtime type of [interface{}], [string].
+	ID interface{} `json:"id,required"`
+	// This field can have the runtime type of [interface{}], [time.Time].
+	CreatedOn interface{} `json:"created_on,required"`
 	// The name and type of DNS record for the Spectrum application.
 	DNS DNS `json:"dns,required"`
-	// When the Application was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// This field can have the runtime type of [interface{}], [time.Time].
+	ModifiedOn interface{} `json:"modified_on,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol string `json:"protocol,required"`
@@ -611,16 +611,16 @@ func init() {
 
 type AppUpdateResponseSpectrumConfigAppConfig struct {
 	// App identifier.
-	ID string `json:"id,required"`
+	ID interface{} `json:"id,required"`
 	// When the Application was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn interface{} `json:"created_on,required"`
 	// The name and type of DNS record for the Spectrum application.
 	DNS DNS `json:"dns,required"`
 	// Enables IP Access Rules for this application. Notes: Only available for TCP
 	// applications.
 	IPFirewall bool `json:"ip_firewall,required"`
 	// When the Application was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn interface{} `json:"modified_on,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol string `json:"protocol,required"`
@@ -873,16 +873,16 @@ func (r AppListResponseArray) implementsAppListResponseUnion() {}
 
 type AppListResponseArrayItem struct {
 	// App identifier.
-	ID string `json:"id,required"`
+	ID interface{} `json:"id,required"`
 	// When the Application was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn interface{} `json:"created_on,required"`
 	// The name and type of DNS record for the Spectrum application.
 	DNS DNS `json:"dns,required"`
 	// Enables IP Access Rules for this application. Notes: Only available for TCP
 	// applications.
 	IPFirewall bool `json:"ip_firewall,required"`
 	// When the Application was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn interface{} `json:"modified_on,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol string `json:"protocol,required"`
@@ -1030,14 +1030,14 @@ func (r appDeleteResponseJSON) RawJSON() string {
 }
 
 type AppGetResponse struct {
-	// App identifier.
-	ID string `json:"id,required"`
-	// When the Application was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// This field can have the runtime type of [interface{}], [string].
+	ID interface{} `json:"id,required"`
+	// This field can have the runtime type of [interface{}], [time.Time].
+	CreatedOn interface{} `json:"created_on,required"`
 	// The name and type of DNS record for the Spectrum application.
 	DNS DNS `json:"dns,required"`
-	// When the Application was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// This field can have the runtime type of [interface{}], [time.Time].
+	ModifiedOn interface{} `json:"modified_on,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol string `json:"protocol,required"`
@@ -1142,16 +1142,16 @@ func init() {
 
 type AppGetResponseSpectrumConfigAppConfig struct {
 	// App identifier.
-	ID string `json:"id,required"`
+	ID interface{} `json:"id,required"`
 	// When the Application was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn interface{} `json:"created_on,required"`
 	// The name and type of DNS record for the Spectrum application.
 	DNS DNS `json:"dns,required"`
 	// Enables IP Access Rules for this application. Notes: Only available for TCP
 	// applications.
 	IPFirewall bool `json:"ip_firewall,required"`
 	// When the Application was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn interface{} `json:"modified_on,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol string `json:"protocol,required"`
@@ -1388,8 +1388,11 @@ func (r AppNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AppNewParamsBody struct {
+	ID        param.Field[interface{}] `json:"id,required"`
+	CreatedOn param.Field[interface{}] `json:"created_on,required"`
 	// The name and type of DNS record for the Spectrum application.
-	DNS param.Field[DNSParam] `json:"dns,required"`
+	DNS        param.Field[DNSParam]    `json:"dns,required"`
+	ModifiedOn param.Field[interface{}] `json:"modified_on,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol param.Field[string] `json:"protocol,required"`
@@ -1676,8 +1679,11 @@ func (r AppUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AppUpdateParamsBody struct {
+	ID        param.Field[interface{}] `json:"id,required"`
+	CreatedOn param.Field[interface{}] `json:"created_on,required"`
 	// The name and type of DNS record for the Spectrum application.
-	DNS param.Field[DNSParam] `json:"dns,required"`
+	DNS        param.Field[DNSParam]    `json:"dns,required"`
+	ModifiedOn param.Field[interface{}] `json:"modified_on,required"`
 	// The port configuration at Cloudflare's edge. May specify a single port, for
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol param.Field[string] `json:"protocol,required"`
