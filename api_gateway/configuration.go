@@ -134,7 +134,7 @@ func (r ConfigurationAuthIDCharacteristic) AsUnion() ConfigurationAuthIDCharacte
 // [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic] or
 // [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim].
 type ConfigurationAuthIDCharacteristicsUnion interface {
-	implementsAPIGatewayConfigurationAuthIDCharacteristic()
+	implementsConfigurationAuthIDCharacteristic()
 }
 
 func init() {
@@ -179,7 +179,7 @@ func (r configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJSON) Raw
 	return r.raw
 }
 
-func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic) implementsAPIGatewayConfigurationAuthIDCharacteristic() {
+func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic) implementsConfigurationAuthIDCharacteristic() {
 }
 
 // The type of characteristic.
@@ -231,7 +231,7 @@ func (r configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimJ
 	return r.raw
 }
 
-func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim) implementsAPIGatewayConfigurationAuthIDCharacteristic() {
+func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim) implementsConfigurationAuthIDCharacteristic() {
 }
 
 // The type of characteristic.
@@ -286,7 +286,7 @@ func (r ConfigurationAuthIDCharacteristicParam) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigurationAuthIDCharacteristicParam) implementsAPIGatewayConfigurationAuthIDCharacteristicsUnionParam() {
+func (r ConfigurationAuthIDCharacteristicParam) implementsConfigurationAuthIDCharacteristicsUnionParam() {
 }
 
 // Auth ID Characteristic
@@ -296,7 +296,7 @@ func (r ConfigurationAuthIDCharacteristicParam) implementsAPIGatewayConfiguratio
 // [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimParam],
 // [ConfigurationAuthIDCharacteristicParam].
 type ConfigurationAuthIDCharacteristicsUnionParam interface {
-	implementsAPIGatewayConfigurationAuthIDCharacteristicsUnionParam()
+	implementsConfigurationAuthIDCharacteristicsUnionParam()
 }
 
 // Auth ID Characteristic
@@ -311,7 +311,7 @@ func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicParam) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicParam) implementsAPIGatewayConfigurationAuthIDCharacteristicsUnionParam() {
+func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicParam) implementsConfigurationAuthIDCharacteristicsUnionParam() {
 }
 
 // Auth ID Characteristic extracted from JWT Token Claims
@@ -332,7 +332,7 @@ func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimP
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimParam) implementsAPIGatewayConfigurationAuthIDCharacteristicsUnionParam() {
+func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimParam) implementsConfigurationAuthIDCharacteristicsUnionParam() {
 }
 
 type ConfigurationUpdateResponse struct {

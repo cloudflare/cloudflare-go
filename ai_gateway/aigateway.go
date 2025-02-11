@@ -166,6 +166,8 @@ type AIGatewayNewResponse struct {
 	RateLimitingInterval    int64                                     `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	Authentication          bool                                      `json:"authentication"`
+	LogManagement           int64                                     `json:"log_management,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayNewResponseJSON                  `json:"-"`
@@ -186,6 +188,8 @@ type aiGatewayNewResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
+	Authentication          apijson.Field
+	LogManagement           apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	raw                     string
@@ -229,6 +233,8 @@ type AIGatewayUpdateResponse struct {
 	RateLimitingInterval    int64                                        `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	Authentication          bool                                         `json:"authentication"`
+	LogManagement           int64                                        `json:"log_management,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayUpdateResponseJSON                  `json:"-"`
@@ -249,6 +255,8 @@ type aiGatewayUpdateResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
+	Authentication          apijson.Field
+	LogManagement           apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	raw                     string
@@ -292,6 +300,8 @@ type AIGatewayListResponse struct {
 	RateLimitingInterval    int64                                      `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                      `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	Authentication          bool                                       `json:"authentication"`
+	LogManagement           int64                                      `json:"log_management,nullable"`
 	Logpush                 bool                                       `json:"logpush"`
 	LogpushPublicKey        string                                     `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayListResponseJSON                  `json:"-"`
@@ -312,6 +322,8 @@ type aiGatewayListResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
+	Authentication          apijson.Field
+	LogManagement           apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	raw                     string
@@ -355,6 +367,8 @@ type AIGatewayDeleteResponse struct {
 	RateLimitingInterval    int64                                        `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	Authentication          bool                                         `json:"authentication"`
+	LogManagement           int64                                        `json:"log_management,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayDeleteResponseJSON                  `json:"-"`
@@ -375,6 +389,8 @@ type aiGatewayDeleteResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
+	Authentication          apijson.Field
+	LogManagement           apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	raw                     string
@@ -418,6 +434,8 @@ type AIGatewayGetResponse struct {
 	RateLimitingInterval    int64                                     `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	Authentication          bool                                      `json:"authentication"`
+	LogManagement           int64                                     `json:"log_management,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayGetResponseJSON                  `json:"-"`
@@ -438,6 +456,8 @@ type aiGatewayGetResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
+	Authentication          apijson.Field
+	LogManagement           apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	raw                     string
@@ -477,6 +497,8 @@ type AIGatewayNewParams struct {
 	RateLimitingInterval    param.Field[int64]                                   `json:"rate_limiting_interval,required"`
 	RateLimitingLimit       param.Field[int64]                                   `json:"rate_limiting_limit,required"`
 	RateLimitingTechnique   param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
+	Authentication          param.Field[bool]                                    `json:"authentication"`
+	LogManagement           param.Field[int64]                                   `json:"log_management"`
 	Logpush                 param.Field[bool]                                    `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                  `json:"logpush_public_key"`
 }
@@ -531,6 +553,8 @@ type AIGatewayUpdateParams struct {
 	RateLimitingInterval    param.Field[int64]                                      `json:"rate_limiting_interval,required"`
 	RateLimitingLimit       param.Field[int64]                                      `json:"rate_limiting_limit,required"`
 	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
+	Authentication          param.Field[bool]                                       `json:"authentication"`
+	LogManagement           param.Field[int64]                                      `json:"log_management"`
 	Logpush                 param.Field[bool]                                       `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                     `json:"logpush_public_key"`
 }

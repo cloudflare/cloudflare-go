@@ -38,7 +38,7 @@ func NewAccessLogAccessRequestService(opts ...option.RequestOption) (r *AccessLo
 }
 
 // Gets a list of Access authentication audit logs for an account.
-func (r *AccessLogAccessRequestService) List(ctx context.Context, params AccessLogAccessRequestListParams, opts ...option.RequestOption) (res *[]AccessRequests, err error) {
+func (r *AccessLogAccessRequestService) List(ctx context.Context, params AccessLogAccessRequestListParams, opts ...option.RequestOption) (res *[]AccessRequest, err error) {
 	var env AccessLogAccessRequestListResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -52,50 +52,6 @@ func (r *AccessLogAccessRequestService) List(ctx context.Context, params AccessL
 	}
 	res = &env.Result
 	return
-}
-
-type AccessRequests struct {
-	// The event that occurred, such as a login attempt.
-	Action string `json:"action"`
-	// The result of the authentication event.
-	Allowed bool `json:"allowed"`
-	// The URL of the Access application.
-	AppDomain string `json:"app_domain"`
-	// The unique identifier for the Access application.
-	AppUID string `json:"app_uid"`
-	// The IdP used to authenticate.
-	Connection string    `json:"connection"`
-	CreatedAt  time.Time `json:"created_at" format:"date-time"`
-	// The IP address of the authenticating user.
-	IPAddress string `json:"ip_address"`
-	// The unique identifier for the request to Cloudflare.
-	RayID string `json:"ray_id"`
-	// The email address of the authenticating user.
-	UserEmail string             `json:"user_email" format:"email"`
-	JSON      accessRequestsJSON `json:"-"`
-}
-
-// accessRequestsJSON contains the JSON metadata for the struct [AccessRequests]
-type accessRequestsJSON struct {
-	Action      apijson.Field
-	Allowed     apijson.Field
-	AppDomain   apijson.Field
-	AppUID      apijson.Field
-	Connection  apijson.Field
-	CreatedAt   apijson.Field
-	IPAddress   apijson.Field
-	RayID       apijson.Field
-	UserEmail   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRequests) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRequestsJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessLogAccessRequestListParams struct {
@@ -141,7 +97,7 @@ type AccessLogAccessRequestListResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessLogAccessRequestListResponseEnvelopeSuccess `json:"success,required"`
-	Result  []AccessRequests                                  `json:"result"`
+	Result  []AccessRequest                                   `json:"result"`
 	JSON    accessLogAccessRequestListResponseEnvelopeJSON    `json:"-"`
 }
 

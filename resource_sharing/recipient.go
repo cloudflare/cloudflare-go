@@ -43,7 +43,7 @@ func (r *RecipientService) New(ctx context.Context, shareID string, params Recip
 	var env RecipientNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.PathAccountID.Value == "" {
-		err = errors.New("missing required path_account_id parameter")
+		err = errors.New("missing required account_id parameter")
 		return
 	}
 	if shareID == "" {

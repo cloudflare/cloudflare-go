@@ -138,37 +138,129 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	return
 }
 
-type Mechanism map[string][]MechanismItem
-
-type MechanismItem struct {
-	// UUID
-	ID   string            `json:"id"`
-	JSON mechanismItemJSON `json:"-"`
+// List of IDs that will be used when dispatching a notification. IDs for email
+// type will be the email address.
+type Mechanism struct {
+	Email     []MechanismEmail     `json:"email"`
+	Pagerduty []MechanismPagerduty `json:"pagerduty"`
+	Webhooks  []MechanismWebhook   `json:"webhooks"`
+	JSON      mechanismJSON        `json:"-"`
 }
 
-// mechanismItemJSON contains the JSON metadata for the struct [MechanismItem]
-type mechanismItemJSON struct {
+// mechanismJSON contains the JSON metadata for the struct [Mechanism]
+type mechanismJSON struct {
+	Email       apijson.Field
+	Pagerduty   apijson.Field
+	Webhooks    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Mechanism) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mechanismJSON) RawJSON() string {
+	return r.raw
+}
+
+type MechanismEmail struct {
+	// The email address
+	ID   string             `json:"id"`
+	JSON mechanismEmailJSON `json:"-"`
+}
+
+// mechanismEmailJSON contains the JSON metadata for the struct [MechanismEmail]
+type mechanismEmailJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MechanismItem) UnmarshalJSON(data []byte) (err error) {
+func (r *MechanismEmail) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r mechanismItemJSON) RawJSON() string {
+func (r mechanismEmailJSON) RawJSON() string {
 	return r.raw
 }
 
-type MechanismParam map[string][]MechanismItemParam
-
-type MechanismItemParam struct {
+type MechanismPagerduty struct {
 	// UUID
+	ID   string                 `json:"id"`
+	JSON mechanismPagerdutyJSON `json:"-"`
+}
+
+// mechanismPagerdutyJSON contains the JSON metadata for the struct
+// [MechanismPagerduty]
+type mechanismPagerdutyJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MechanismPagerduty) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mechanismPagerdutyJSON) RawJSON() string {
+	return r.raw
+}
+
+type MechanismWebhook struct {
+	// UUID
+	ID   string               `json:"id"`
+	JSON mechanismWebhookJSON `json:"-"`
+}
+
+// mechanismWebhookJSON contains the JSON metadata for the struct
+// [MechanismWebhook]
+type mechanismWebhookJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MechanismWebhook) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mechanismWebhookJSON) RawJSON() string {
+	return r.raw
+}
+
+// List of IDs that will be used when dispatching a notification. IDs for email
+// type will be the email address.
+type MechanismParam struct {
+	Email     param.Field[[]MechanismEmailParam]     `json:"email"`
+	Pagerduty param.Field[[]MechanismPagerdutyParam] `json:"pagerduty"`
+	Webhooks  param.Field[[]MechanismWebhookParam]   `json:"webhooks"`
+}
+
+func (r MechanismParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type MechanismEmailParam struct {
+	// The email address
 	ID param.Field[string] `json:"id"`
 }
 
-func (r MechanismItemParam) MarshalJSON() (data []byte, err error) {
+func (r MechanismEmailParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type MechanismPagerdutyParam struct {
+}
+
+func (r MechanismPagerdutyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type MechanismWebhookParam struct {
+}
+
+func (r MechanismWebhookParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -259,9 +351,9 @@ const (
 	PolicyAlertTypeHostnameAopCustomCertificateExpirationType    PolicyAlertType = "hostname_aop_custom_certificate_expiration_type"
 	PolicyAlertTypeHTTPAlertEdgeError                            PolicyAlertType = "http_alert_edge_error"
 	PolicyAlertTypeHTTPAlertOriginError                          PolicyAlertType = "http_alert_origin_error"
-	PolicyAlertTypeIncidentAlert                                 PolicyAlertType = "incident_alert"
 	PolicyAlertTypeImageNotification                             PolicyAlertType = "image_notification"
 	PolicyAlertTypeImageResizingNotification                     PolicyAlertType = "image_resizing_notification"
+	PolicyAlertTypeIncidentAlert                                 PolicyAlertType = "incident_alert"
 	PolicyAlertTypeLoadBalancingHealthAlert                      PolicyAlertType = "load_balancing_health_alert"
 	PolicyAlertTypeLoadBalancingPoolEnablementAlert              PolicyAlertType = "load_balancing_pool_enablement_alert"
 	PolicyAlertTypeLogoMatchAlert                                PolicyAlertType = "logo_match_alert"
@@ -284,6 +376,7 @@ const (
 	PolicyAlertTypeSecondaryDNSWarning                           PolicyAlertType = "secondary_dns_warning"
 	PolicyAlertTypeSecondaryDNSZoneSuccessfullyUpdated           PolicyAlertType = "secondary_dns_zone_successfully_updated"
 	PolicyAlertTypeSecondaryDNSZoneValidationWarning             PolicyAlertType = "secondary_dns_zone_validation_warning"
+	PolicyAlertTypeSecurityInsightsAlert                         PolicyAlertType = "security_insights_alert"
 	PolicyAlertTypeSentinelAlert                                 PolicyAlertType = "sentinel_alert"
 	PolicyAlertTypeStreamLiveNotifications                       PolicyAlertType = "stream_live_notifications"
 	PolicyAlertTypeSyntheticTestLatencyAlert                     PolicyAlertType = "synthetic_test_latency_alert"
@@ -298,7 +391,7 @@ const (
 
 func (r PolicyAlertType) IsKnown() bool {
 	switch r {
-	case PolicyAlertTypeAccessCustomCertificateExpirationType, PolicyAlertTypeAdvancedDDoSAttackL4Alert, PolicyAlertTypeAdvancedDDoSAttackL7Alert, PolicyAlertTypeAdvancedHTTPAlertError, PolicyAlertTypeBGPHijackNotification, PolicyAlertTypeBillingUsageAlert, PolicyAlertTypeBlockNotificationBlockRemoved, PolicyAlertTypeBlockNotificationNewBlock, PolicyAlertTypeBlockNotificationReviewRejected, PolicyAlertTypeBrandProtectionAlert, PolicyAlertTypeBrandProtectionDigest, PolicyAlertTypeClickhouseAlertFwAnomaly, PolicyAlertTypeClickhouseAlertFwEntAnomaly, PolicyAlertTypeCloudforceOneRequestNotification, PolicyAlertTypeCustomAnalytics, PolicyAlertTypeCustomSSLCertificateEventType, PolicyAlertTypeDedicatedSSLCertificateEventType, PolicyAlertTypeDeviceConnectivityAnomalyAlert, PolicyAlertTypeDosAttackL4, PolicyAlertTypeDosAttackL7, PolicyAlertTypeExpiringServiceTokenAlert, PolicyAlertTypeFailingLogpushJobDisabledAlert, PolicyAlertTypeFbmAutoAdvertisement, PolicyAlertTypeFbmDosdAttack, PolicyAlertTypeFbmVolumetricAttack, PolicyAlertTypeHealthCheckStatusNotification, PolicyAlertTypeHostnameAopCustomCertificateExpirationType, PolicyAlertTypeHTTPAlertEdgeError, PolicyAlertTypeHTTPAlertOriginError, PolicyAlertTypeIncidentAlert, PolicyAlertTypeImageNotification, PolicyAlertTypeImageResizingNotification, PolicyAlertTypeLoadBalancingHealthAlert, PolicyAlertTypeLoadBalancingPoolEnablementAlert, PolicyAlertTypeLogoMatchAlert, PolicyAlertTypeMagicTunnelHealthCheckEvent, PolicyAlertTypeMagicWANTunnelHealth, PolicyAlertTypeMaintenanceEventNotification, PolicyAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyAlertTypePagesEventAlert, PolicyAlertTypeRadarNotification, PolicyAlertTypeRealOriginMonitoring, PolicyAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyAlertTypeScriptmonitorAlertNewHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyAlertTypeScriptmonitorAlertNewResources, PolicyAlertTypeSecondaryDNSAllPrimariesFailing, PolicyAlertTypeSecondaryDNSPrimariesFailing, PolicyAlertTypeSecondaryDNSWarning, PolicyAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyAlertTypeSecondaryDNSZoneValidationWarning, PolicyAlertTypeSentinelAlert, PolicyAlertTypeStreamLiveNotifications, PolicyAlertTypeSyntheticTestLatencyAlert, PolicyAlertTypeSyntheticTestLowAvailabilityAlert, PolicyAlertTypeTrafficAnomaliesAlert, PolicyAlertTypeTunnelHealthEvent, PolicyAlertTypeTunnelUpdateEvent, PolicyAlertTypeUniversalSSLEventType, PolicyAlertTypeWebAnalyticsMetricsUpdate, PolicyAlertTypeZoneAopCustomCertificateExpirationType:
+	case PolicyAlertTypeAccessCustomCertificateExpirationType, PolicyAlertTypeAdvancedDDoSAttackL4Alert, PolicyAlertTypeAdvancedDDoSAttackL7Alert, PolicyAlertTypeAdvancedHTTPAlertError, PolicyAlertTypeBGPHijackNotification, PolicyAlertTypeBillingUsageAlert, PolicyAlertTypeBlockNotificationBlockRemoved, PolicyAlertTypeBlockNotificationNewBlock, PolicyAlertTypeBlockNotificationReviewRejected, PolicyAlertTypeBrandProtectionAlert, PolicyAlertTypeBrandProtectionDigest, PolicyAlertTypeClickhouseAlertFwAnomaly, PolicyAlertTypeClickhouseAlertFwEntAnomaly, PolicyAlertTypeCloudforceOneRequestNotification, PolicyAlertTypeCustomAnalytics, PolicyAlertTypeCustomSSLCertificateEventType, PolicyAlertTypeDedicatedSSLCertificateEventType, PolicyAlertTypeDeviceConnectivityAnomalyAlert, PolicyAlertTypeDosAttackL4, PolicyAlertTypeDosAttackL7, PolicyAlertTypeExpiringServiceTokenAlert, PolicyAlertTypeFailingLogpushJobDisabledAlert, PolicyAlertTypeFbmAutoAdvertisement, PolicyAlertTypeFbmDosdAttack, PolicyAlertTypeFbmVolumetricAttack, PolicyAlertTypeHealthCheckStatusNotification, PolicyAlertTypeHostnameAopCustomCertificateExpirationType, PolicyAlertTypeHTTPAlertEdgeError, PolicyAlertTypeHTTPAlertOriginError, PolicyAlertTypeImageNotification, PolicyAlertTypeImageResizingNotification, PolicyAlertTypeIncidentAlert, PolicyAlertTypeLoadBalancingHealthAlert, PolicyAlertTypeLoadBalancingPoolEnablementAlert, PolicyAlertTypeLogoMatchAlert, PolicyAlertTypeMagicTunnelHealthCheckEvent, PolicyAlertTypeMagicWANTunnelHealth, PolicyAlertTypeMaintenanceEventNotification, PolicyAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyAlertTypePagesEventAlert, PolicyAlertTypeRadarNotification, PolicyAlertTypeRealOriginMonitoring, PolicyAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyAlertTypeScriptmonitorAlertNewHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyAlertTypeScriptmonitorAlertNewResources, PolicyAlertTypeSecondaryDNSAllPrimariesFailing, PolicyAlertTypeSecondaryDNSPrimariesFailing, PolicyAlertTypeSecondaryDNSWarning, PolicyAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyAlertTypeSecondaryDNSZoneValidationWarning, PolicyAlertTypeSecurityInsightsAlert, PolicyAlertTypeSentinelAlert, PolicyAlertTypeStreamLiveNotifications, PolicyAlertTypeSyntheticTestLatencyAlert, PolicyAlertTypeSyntheticTestLowAvailabilityAlert, PolicyAlertTypeTrafficAnomaliesAlert, PolicyAlertTypeTunnelHealthEvent, PolicyAlertTypeTunnelUpdateEvent, PolicyAlertTypeUniversalSSLEventType, PolicyAlertTypeWebAnalyticsMetricsUpdate, PolicyAlertTypeZoneAopCustomCertificateExpirationType:
 		return true
 	}
 	return false
@@ -340,6 +433,8 @@ type PolicyFilter struct {
 	IncidentImpact []PolicyFilterIncidentImpact `json:"incident_impact"`
 	// Used for configuring stream_live_notifications
 	InputID []string `json:"input_id"`
+	// Used for configuring security_insights_alert
+	InsightClass []string `json:"insight_class"`
 	// Used for configuring billing_usage_alert
 	Limit []string `json:"limit"`
 	// Used for configuring logo_match_alert
@@ -355,7 +450,7 @@ type PolicyFilter struct {
 	// Usage depends on specific alert type
 	PoolID []string `json:"pool_id"`
 	// Usage depends on specific alert type
-	POPName []string `json:"pop_name"`
+	POPNames []string `json:"pop_names"`
 	// Used for configuring billing_usage_alert
 	Product []string `json:"product"`
 	// Used for configuring pages_event_alert
@@ -411,6 +506,7 @@ type policyFilterJSON struct {
 	HealthCheckID                apijson.Field
 	IncidentImpact               apijson.Field
 	InputID                      apijson.Field
+	InsightClass                 apijson.Field
 	Limit                        apijson.Field
 	LogoTag                      apijson.Field
 	MegabitsPerSecond            apijson.Field
@@ -418,7 +514,7 @@ type policyFilterJSON struct {
 	NewStatus                    apijson.Field
 	PacketsPerSecond             apijson.Field
 	PoolID                       apijson.Field
-	POPName                      apijson.Field
+	POPNames                     apijson.Field
 	Product                      apijson.Field
 	ProjectID                    apijson.Field
 	Protocol                     apijson.Field
@@ -515,6 +611,8 @@ type PolicyFilterParam struct {
 	IncidentImpact param.Field[[]PolicyFilterIncidentImpact] `json:"incident_impact"`
 	// Used for configuring stream_live_notifications
 	InputID param.Field[[]string] `json:"input_id"`
+	// Used for configuring security_insights_alert
+	InsightClass param.Field[[]string] `json:"insight_class"`
 	// Used for configuring billing_usage_alert
 	Limit param.Field[[]string] `json:"limit"`
 	// Used for configuring logo_match_alert
@@ -530,7 +628,7 @@ type PolicyFilterParam struct {
 	// Usage depends on specific alert type
 	PoolID param.Field[[]string] `json:"pool_id"`
 	// Usage depends on specific alert type
-	POPName param.Field[[]string] `json:"pop_name"`
+	POPNames param.Field[[]string] `json:"pop_names"`
 	// Used for configuring billing_usage_alert
 	Product param.Field[[]string] `json:"product"`
 	// Used for configuring pages_event_alert
@@ -753,9 +851,9 @@ const (
 	PolicyNewParamsAlertTypeHostnameAopCustomCertificateExpirationType    PolicyNewParamsAlertType = "hostname_aop_custom_certificate_expiration_type"
 	PolicyNewParamsAlertTypeHTTPAlertEdgeError                            PolicyNewParamsAlertType = "http_alert_edge_error"
 	PolicyNewParamsAlertTypeHTTPAlertOriginError                          PolicyNewParamsAlertType = "http_alert_origin_error"
-	PolicyNewParamsAlertTypeIncidentAlert                                 PolicyNewParamsAlertType = "incident_alert"
 	PolicyNewParamsAlertTypeImageNotification                             PolicyNewParamsAlertType = "image_notification"
 	PolicyNewParamsAlertTypeImageResizingNotification                     PolicyNewParamsAlertType = "image_resizing_notification"
+	PolicyNewParamsAlertTypeIncidentAlert                                 PolicyNewParamsAlertType = "incident_alert"
 	PolicyNewParamsAlertTypeLoadBalancingHealthAlert                      PolicyNewParamsAlertType = "load_balancing_health_alert"
 	PolicyNewParamsAlertTypeLoadBalancingPoolEnablementAlert              PolicyNewParamsAlertType = "load_balancing_pool_enablement_alert"
 	PolicyNewParamsAlertTypeLogoMatchAlert                                PolicyNewParamsAlertType = "logo_match_alert"
@@ -778,6 +876,7 @@ const (
 	PolicyNewParamsAlertTypeSecondaryDNSWarning                           PolicyNewParamsAlertType = "secondary_dns_warning"
 	PolicyNewParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated           PolicyNewParamsAlertType = "secondary_dns_zone_successfully_updated"
 	PolicyNewParamsAlertTypeSecondaryDNSZoneValidationWarning             PolicyNewParamsAlertType = "secondary_dns_zone_validation_warning"
+	PolicyNewParamsAlertTypeSecurityInsightsAlert                         PolicyNewParamsAlertType = "security_insights_alert"
 	PolicyNewParamsAlertTypeSentinelAlert                                 PolicyNewParamsAlertType = "sentinel_alert"
 	PolicyNewParamsAlertTypeStreamLiveNotifications                       PolicyNewParamsAlertType = "stream_live_notifications"
 	PolicyNewParamsAlertTypeSyntheticTestLatencyAlert                     PolicyNewParamsAlertType = "synthetic_test_latency_alert"
@@ -792,7 +891,7 @@ const (
 
 func (r PolicyNewParamsAlertType) IsKnown() bool {
 	switch r {
-	case PolicyNewParamsAlertTypeAccessCustomCertificateExpirationType, PolicyNewParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyNewParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyNewParamsAlertTypeAdvancedHTTPAlertError, PolicyNewParamsAlertTypeBGPHijackNotification, PolicyNewParamsAlertTypeBillingUsageAlert, PolicyNewParamsAlertTypeBlockNotificationBlockRemoved, PolicyNewParamsAlertTypeBlockNotificationNewBlock, PolicyNewParamsAlertTypeBlockNotificationReviewRejected, PolicyNewParamsAlertTypeBrandProtectionAlert, PolicyNewParamsAlertTypeBrandProtectionDigest, PolicyNewParamsAlertTypeClickhouseAlertFwAnomaly, PolicyNewParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyNewParamsAlertTypeCloudforceOneRequestNotification, PolicyNewParamsAlertTypeCustomAnalytics, PolicyNewParamsAlertTypeCustomSSLCertificateEventType, PolicyNewParamsAlertTypeDedicatedSSLCertificateEventType, PolicyNewParamsAlertTypeDeviceConnectivityAnomalyAlert, PolicyNewParamsAlertTypeDosAttackL4, PolicyNewParamsAlertTypeDosAttackL7, PolicyNewParamsAlertTypeExpiringServiceTokenAlert, PolicyNewParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyNewParamsAlertTypeFbmAutoAdvertisement, PolicyNewParamsAlertTypeFbmDosdAttack, PolicyNewParamsAlertTypeFbmVolumetricAttack, PolicyNewParamsAlertTypeHealthCheckStatusNotification, PolicyNewParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyNewParamsAlertTypeHTTPAlertEdgeError, PolicyNewParamsAlertTypeHTTPAlertOriginError, PolicyNewParamsAlertTypeIncidentAlert, PolicyNewParamsAlertTypeImageNotification, PolicyNewParamsAlertTypeImageResizingNotification, PolicyNewParamsAlertTypeLoadBalancingHealthAlert, PolicyNewParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyNewParamsAlertTypeLogoMatchAlert, PolicyNewParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyNewParamsAlertTypeMagicWANTunnelHealth, PolicyNewParamsAlertTypeMaintenanceEventNotification, PolicyNewParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyNewParamsAlertTypePagesEventAlert, PolicyNewParamsAlertTypeRadarNotification, PolicyNewParamsAlertTypeRealOriginMonitoring, PolicyNewParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyNewParamsAlertTypeScriptmonitorAlertNewHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewResources, PolicyNewParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSWarning, PolicyNewParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyNewParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyNewParamsAlertTypeSentinelAlert, PolicyNewParamsAlertTypeStreamLiveNotifications, PolicyNewParamsAlertTypeSyntheticTestLatencyAlert, PolicyNewParamsAlertTypeSyntheticTestLowAvailabilityAlert, PolicyNewParamsAlertTypeTrafficAnomaliesAlert, PolicyNewParamsAlertTypeTunnelHealthEvent, PolicyNewParamsAlertTypeTunnelUpdateEvent, PolicyNewParamsAlertTypeUniversalSSLEventType, PolicyNewParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyNewParamsAlertTypeZoneAopCustomCertificateExpirationType:
+	case PolicyNewParamsAlertTypeAccessCustomCertificateExpirationType, PolicyNewParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyNewParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyNewParamsAlertTypeAdvancedHTTPAlertError, PolicyNewParamsAlertTypeBGPHijackNotification, PolicyNewParamsAlertTypeBillingUsageAlert, PolicyNewParamsAlertTypeBlockNotificationBlockRemoved, PolicyNewParamsAlertTypeBlockNotificationNewBlock, PolicyNewParamsAlertTypeBlockNotificationReviewRejected, PolicyNewParamsAlertTypeBrandProtectionAlert, PolicyNewParamsAlertTypeBrandProtectionDigest, PolicyNewParamsAlertTypeClickhouseAlertFwAnomaly, PolicyNewParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyNewParamsAlertTypeCloudforceOneRequestNotification, PolicyNewParamsAlertTypeCustomAnalytics, PolicyNewParamsAlertTypeCustomSSLCertificateEventType, PolicyNewParamsAlertTypeDedicatedSSLCertificateEventType, PolicyNewParamsAlertTypeDeviceConnectivityAnomalyAlert, PolicyNewParamsAlertTypeDosAttackL4, PolicyNewParamsAlertTypeDosAttackL7, PolicyNewParamsAlertTypeExpiringServiceTokenAlert, PolicyNewParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyNewParamsAlertTypeFbmAutoAdvertisement, PolicyNewParamsAlertTypeFbmDosdAttack, PolicyNewParamsAlertTypeFbmVolumetricAttack, PolicyNewParamsAlertTypeHealthCheckStatusNotification, PolicyNewParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyNewParamsAlertTypeHTTPAlertEdgeError, PolicyNewParamsAlertTypeHTTPAlertOriginError, PolicyNewParamsAlertTypeImageNotification, PolicyNewParamsAlertTypeImageResizingNotification, PolicyNewParamsAlertTypeIncidentAlert, PolicyNewParamsAlertTypeLoadBalancingHealthAlert, PolicyNewParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyNewParamsAlertTypeLogoMatchAlert, PolicyNewParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyNewParamsAlertTypeMagicWANTunnelHealth, PolicyNewParamsAlertTypeMaintenanceEventNotification, PolicyNewParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyNewParamsAlertTypePagesEventAlert, PolicyNewParamsAlertTypeRadarNotification, PolicyNewParamsAlertTypeRealOriginMonitoring, PolicyNewParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyNewParamsAlertTypeScriptmonitorAlertNewHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewResources, PolicyNewParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSWarning, PolicyNewParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyNewParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyNewParamsAlertTypeSecurityInsightsAlert, PolicyNewParamsAlertTypeSentinelAlert, PolicyNewParamsAlertTypeStreamLiveNotifications, PolicyNewParamsAlertTypeSyntheticTestLatencyAlert, PolicyNewParamsAlertTypeSyntheticTestLowAvailabilityAlert, PolicyNewParamsAlertTypeTrafficAnomaliesAlert, PolicyNewParamsAlertTypeTunnelHealthEvent, PolicyNewParamsAlertTypeTunnelUpdateEvent, PolicyNewParamsAlertTypeUniversalSSLEventType, PolicyNewParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyNewParamsAlertTypeZoneAopCustomCertificateExpirationType:
 		return true
 	}
 	return false
@@ -905,9 +1004,9 @@ const (
 	PolicyUpdateParamsAlertTypeHostnameAopCustomCertificateExpirationType    PolicyUpdateParamsAlertType = "hostname_aop_custom_certificate_expiration_type"
 	PolicyUpdateParamsAlertTypeHTTPAlertEdgeError                            PolicyUpdateParamsAlertType = "http_alert_edge_error"
 	PolicyUpdateParamsAlertTypeHTTPAlertOriginError                          PolicyUpdateParamsAlertType = "http_alert_origin_error"
-	PolicyUpdateParamsAlertTypeIncidentAlert                                 PolicyUpdateParamsAlertType = "incident_alert"
 	PolicyUpdateParamsAlertTypeImageNotification                             PolicyUpdateParamsAlertType = "image_notification"
 	PolicyUpdateParamsAlertTypeImageResizingNotification                     PolicyUpdateParamsAlertType = "image_resizing_notification"
+	PolicyUpdateParamsAlertTypeIncidentAlert                                 PolicyUpdateParamsAlertType = "incident_alert"
 	PolicyUpdateParamsAlertTypeLoadBalancingHealthAlert                      PolicyUpdateParamsAlertType = "load_balancing_health_alert"
 	PolicyUpdateParamsAlertTypeLoadBalancingPoolEnablementAlert              PolicyUpdateParamsAlertType = "load_balancing_pool_enablement_alert"
 	PolicyUpdateParamsAlertTypeLogoMatchAlert                                PolicyUpdateParamsAlertType = "logo_match_alert"
@@ -930,6 +1029,7 @@ const (
 	PolicyUpdateParamsAlertTypeSecondaryDNSWarning                           PolicyUpdateParamsAlertType = "secondary_dns_warning"
 	PolicyUpdateParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated           PolicyUpdateParamsAlertType = "secondary_dns_zone_successfully_updated"
 	PolicyUpdateParamsAlertTypeSecondaryDNSZoneValidationWarning             PolicyUpdateParamsAlertType = "secondary_dns_zone_validation_warning"
+	PolicyUpdateParamsAlertTypeSecurityInsightsAlert                         PolicyUpdateParamsAlertType = "security_insights_alert"
 	PolicyUpdateParamsAlertTypeSentinelAlert                                 PolicyUpdateParamsAlertType = "sentinel_alert"
 	PolicyUpdateParamsAlertTypeStreamLiveNotifications                       PolicyUpdateParamsAlertType = "stream_live_notifications"
 	PolicyUpdateParamsAlertTypeSyntheticTestLatencyAlert                     PolicyUpdateParamsAlertType = "synthetic_test_latency_alert"
@@ -944,7 +1044,7 @@ const (
 
 func (r PolicyUpdateParamsAlertType) IsKnown() bool {
 	switch r {
-	case PolicyUpdateParamsAlertTypeAccessCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyUpdateParamsAlertTypeAdvancedHTTPAlertError, PolicyUpdateParamsAlertTypeBGPHijackNotification, PolicyUpdateParamsAlertTypeBillingUsageAlert, PolicyUpdateParamsAlertTypeBlockNotificationBlockRemoved, PolicyUpdateParamsAlertTypeBlockNotificationNewBlock, PolicyUpdateParamsAlertTypeBlockNotificationReviewRejected, PolicyUpdateParamsAlertTypeBrandProtectionAlert, PolicyUpdateParamsAlertTypeBrandProtectionDigest, PolicyUpdateParamsAlertTypeClickhouseAlertFwAnomaly, PolicyUpdateParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyUpdateParamsAlertTypeCloudforceOneRequestNotification, PolicyUpdateParamsAlertTypeCustomAnalytics, PolicyUpdateParamsAlertTypeCustomSSLCertificateEventType, PolicyUpdateParamsAlertTypeDedicatedSSLCertificateEventType, PolicyUpdateParamsAlertTypeDeviceConnectivityAnomalyAlert, PolicyUpdateParamsAlertTypeDosAttackL4, PolicyUpdateParamsAlertTypeDosAttackL7, PolicyUpdateParamsAlertTypeExpiringServiceTokenAlert, PolicyUpdateParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyUpdateParamsAlertTypeFbmAutoAdvertisement, PolicyUpdateParamsAlertTypeFbmDosdAttack, PolicyUpdateParamsAlertTypeFbmVolumetricAttack, PolicyUpdateParamsAlertTypeHealthCheckStatusNotification, PolicyUpdateParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeHTTPAlertEdgeError, PolicyUpdateParamsAlertTypeHTTPAlertOriginError, PolicyUpdateParamsAlertTypeIncidentAlert, PolicyUpdateParamsAlertTypeImageNotification, PolicyUpdateParamsAlertTypeImageResizingNotification, PolicyUpdateParamsAlertTypeLoadBalancingHealthAlert, PolicyUpdateParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyUpdateParamsAlertTypeLogoMatchAlert, PolicyUpdateParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyUpdateParamsAlertTypeMagicWANTunnelHealth, PolicyUpdateParamsAlertTypeMaintenanceEventNotification, PolicyUpdateParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyUpdateParamsAlertTypePagesEventAlert, PolicyUpdateParamsAlertTypeRadarNotification, PolicyUpdateParamsAlertTypeRealOriginMonitoring, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewResources, PolicyUpdateParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSWarning, PolicyUpdateParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyUpdateParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyUpdateParamsAlertTypeSentinelAlert, PolicyUpdateParamsAlertTypeStreamLiveNotifications, PolicyUpdateParamsAlertTypeSyntheticTestLatencyAlert, PolicyUpdateParamsAlertTypeSyntheticTestLowAvailabilityAlert, PolicyUpdateParamsAlertTypeTrafficAnomaliesAlert, PolicyUpdateParamsAlertTypeTunnelHealthEvent, PolicyUpdateParamsAlertTypeTunnelUpdateEvent, PolicyUpdateParamsAlertTypeUniversalSSLEventType, PolicyUpdateParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyUpdateParamsAlertTypeZoneAopCustomCertificateExpirationType:
+	case PolicyUpdateParamsAlertTypeAccessCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyUpdateParamsAlertTypeAdvancedHTTPAlertError, PolicyUpdateParamsAlertTypeBGPHijackNotification, PolicyUpdateParamsAlertTypeBillingUsageAlert, PolicyUpdateParamsAlertTypeBlockNotificationBlockRemoved, PolicyUpdateParamsAlertTypeBlockNotificationNewBlock, PolicyUpdateParamsAlertTypeBlockNotificationReviewRejected, PolicyUpdateParamsAlertTypeBrandProtectionAlert, PolicyUpdateParamsAlertTypeBrandProtectionDigest, PolicyUpdateParamsAlertTypeClickhouseAlertFwAnomaly, PolicyUpdateParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyUpdateParamsAlertTypeCloudforceOneRequestNotification, PolicyUpdateParamsAlertTypeCustomAnalytics, PolicyUpdateParamsAlertTypeCustomSSLCertificateEventType, PolicyUpdateParamsAlertTypeDedicatedSSLCertificateEventType, PolicyUpdateParamsAlertTypeDeviceConnectivityAnomalyAlert, PolicyUpdateParamsAlertTypeDosAttackL4, PolicyUpdateParamsAlertTypeDosAttackL7, PolicyUpdateParamsAlertTypeExpiringServiceTokenAlert, PolicyUpdateParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyUpdateParamsAlertTypeFbmAutoAdvertisement, PolicyUpdateParamsAlertTypeFbmDosdAttack, PolicyUpdateParamsAlertTypeFbmVolumetricAttack, PolicyUpdateParamsAlertTypeHealthCheckStatusNotification, PolicyUpdateParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeHTTPAlertEdgeError, PolicyUpdateParamsAlertTypeHTTPAlertOriginError, PolicyUpdateParamsAlertTypeImageNotification, PolicyUpdateParamsAlertTypeImageResizingNotification, PolicyUpdateParamsAlertTypeIncidentAlert, PolicyUpdateParamsAlertTypeLoadBalancingHealthAlert, PolicyUpdateParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyUpdateParamsAlertTypeLogoMatchAlert, PolicyUpdateParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyUpdateParamsAlertTypeMagicWANTunnelHealth, PolicyUpdateParamsAlertTypeMaintenanceEventNotification, PolicyUpdateParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyUpdateParamsAlertTypePagesEventAlert, PolicyUpdateParamsAlertTypeRadarNotification, PolicyUpdateParamsAlertTypeRealOriginMonitoring, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewResources, PolicyUpdateParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSWarning, PolicyUpdateParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyUpdateParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyUpdateParamsAlertTypeSecurityInsightsAlert, PolicyUpdateParamsAlertTypeSentinelAlert, PolicyUpdateParamsAlertTypeStreamLiveNotifications, PolicyUpdateParamsAlertTypeSyntheticTestLatencyAlert, PolicyUpdateParamsAlertTypeSyntheticTestLowAvailabilityAlert, PolicyUpdateParamsAlertTypeTrafficAnomaliesAlert, PolicyUpdateParamsAlertTypeTunnelHealthEvent, PolicyUpdateParamsAlertTypeTunnelUpdateEvent, PolicyUpdateParamsAlertTypeUniversalSSLEventType, PolicyUpdateParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyUpdateParamsAlertTypeZoneAopCustomCertificateExpirationType:
 		return true
 	}
 	return false

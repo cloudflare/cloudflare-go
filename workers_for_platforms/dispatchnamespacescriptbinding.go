@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -38,9 +38,10 @@ func NewDispatchNamespaceScriptBindingService(opts ...option.RequestOption) (r *
 
 // Fetch script bindings from a script uploaded to a Workers for Platforms
 // namespace.
-func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptBindingGetParams, opts ...option.RequestOption) (res *[]DispatchNamespaceScriptBindingGetResponse, err error) {
-	var env DispatchNamespaceScriptBindingGetResponseEnvelope
+func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptBindingGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[DispatchNamespaceScriptBindingGetResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,12 +55,22 @@ func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatc
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/bindings", query.AccountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetch script bindings from a script uploaded to a Workers for Platforms
+// namespace.
+func (r *DispatchNamespaceScriptBindingService) GetAutoPaging(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptBindingGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DispatchNamespaceScriptBindingGetResponse] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, dispatchNamespace, scriptName, query, opts...))
 }
 
 // A binding to allow the Worker to communicate with resources
@@ -194,7 +205,7 @@ func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceSc
 // or
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata].
 type DispatchNamespaceScriptBindingGetResponseUnion interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse()
+	implementsDispatchNamespaceScriptBindingGetResponse()
 }
 
 func init() {
@@ -311,7 +322,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnyJSON) RawJ
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAny) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAny) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI struct {
@@ -340,7 +351,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIJSON) RawJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -387,7 +398,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngi
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -431,7 +442,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsJSON) R
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -475,7 +486,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRender
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -522,7 +533,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1JSON) RawJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -572,7 +583,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNames
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -684,7 +695,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDoJSON) RawJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDo) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDo) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -731,7 +742,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveJSO
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -778,7 +789,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonJSON) Raw
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -825,7 +836,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -872,7 +883,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindMtlscertJSON)
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCERT) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCERT) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -919,7 +930,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextJSON
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -966,7 +977,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueJSON) Ra
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1013,7 +1024,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2JSON) RawJS
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1060,7 +1071,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretJSON) R
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecret) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecret) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1110,7 +1121,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceJSON) 
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1157,7 +1168,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerJ
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1204,7 +1215,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeJSON
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1248,7 +1259,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetada
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata) implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
@@ -1269,50 +1280,4 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetada
 type DispatchNamespaceScriptBindingGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DispatchNamespaceScriptBindingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess `json:"success,required"`
-	// List of bindings attached to a Worker. You can find more about bindings on our
-	// docs:
-	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
-	Result []DispatchNamespaceScriptBindingGetResponse           `json:"result"`
-	JSON   dispatchNamespaceScriptBindingGetResponseEnvelopeJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseEnvelopeJSON contains the JSON metadata
-// for the struct [DispatchNamespaceScriptBindingGetResponseEnvelope]
-type dispatchNamespaceScriptBindingGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess bool
-
-const (
-	DispatchNamespaceScriptBindingGetResponseEnvelopeSuccessTrue DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess = true
-)
-
-func (r DispatchNamespaceScriptBindingGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptBindingGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

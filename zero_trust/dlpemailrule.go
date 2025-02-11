@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
@@ -15,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/tidwall/gjson"
 )
 
 // DLPEmailRuleService contains methods and other services that help with
@@ -236,10 +238,10 @@ func (r DLPEmailRuleNewResponseActionAction) IsKnown() bool {
 }
 
 type DLPEmailRuleNewResponseCondition struct {
-	Operator DLPEmailRuleNewResponseConditionsOperator `json:"operator,required"`
-	Selector DLPEmailRuleNewResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                               `json:"value,required"`
-	JSON     dlpEmailRuleNewResponseConditionJSON      `json:"-"`
+	Operator DLPEmailRuleNewResponseConditionsOperator   `json:"operator,required"`
+	Selector DLPEmailRuleNewResponseConditionsSelector   `json:"selector,required"`
+	Value    DLPEmailRuleNewResponseConditionsValueUnion `json:"value,required"`
+	JSON     dlpEmailRuleNewResponseConditionJSON        `json:"-"`
 }
 
 // dlpEmailRuleNewResponseConditionJSON contains the JSON metadata for the struct
@@ -291,6 +293,32 @@ func (r DLPEmailRuleNewResponseConditionsSelector) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [zero_trust.DLPEmailRuleNewResponseConditionsValueArray] or
+// [shared.UnionString].
+type DLPEmailRuleNewResponseConditionsValueUnion interface {
+	ImplementsDLPEmailRuleNewResponseConditionsValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DLPEmailRuleNewResponseConditionsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEmailRuleNewResponseConditionsValueArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DLPEmailRuleNewResponseConditionsValueArray []string
+
+func (r DLPEmailRuleNewResponseConditionsValueArray) ImplementsDLPEmailRuleNewResponseConditionsValueUnion() {
 }
 
 type DLPEmailRuleUpdateResponse struct {
@@ -369,10 +397,10 @@ func (r DLPEmailRuleUpdateResponseActionAction) IsKnown() bool {
 }
 
 type DLPEmailRuleUpdateResponseCondition struct {
-	Operator DLPEmailRuleUpdateResponseConditionsOperator `json:"operator,required"`
-	Selector DLPEmailRuleUpdateResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                                  `json:"value,required"`
-	JSON     dlpEmailRuleUpdateResponseConditionJSON      `json:"-"`
+	Operator DLPEmailRuleUpdateResponseConditionsOperator   `json:"operator,required"`
+	Selector DLPEmailRuleUpdateResponseConditionsSelector   `json:"selector,required"`
+	Value    DLPEmailRuleUpdateResponseConditionsValueUnion `json:"value,required"`
+	JSON     dlpEmailRuleUpdateResponseConditionJSON        `json:"-"`
 }
 
 // dlpEmailRuleUpdateResponseConditionJSON contains the JSON metadata for the
@@ -424,6 +452,32 @@ func (r DLPEmailRuleUpdateResponseConditionsSelector) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [zero_trust.DLPEmailRuleUpdateResponseConditionsValueArray]
+// or [shared.UnionString].
+type DLPEmailRuleUpdateResponseConditionsValueUnion interface {
+	ImplementsDLPEmailRuleUpdateResponseConditionsValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DLPEmailRuleUpdateResponseConditionsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEmailRuleUpdateResponseConditionsValueArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DLPEmailRuleUpdateResponseConditionsValueArray []string
+
+func (r DLPEmailRuleUpdateResponseConditionsValueArray) ImplementsDLPEmailRuleUpdateResponseConditionsValueUnion() {
 }
 
 type DLPEmailRuleListResponse struct {
@@ -502,10 +556,10 @@ func (r DLPEmailRuleListResponseActionAction) IsKnown() bool {
 }
 
 type DLPEmailRuleListResponseCondition struct {
-	Operator DLPEmailRuleListResponseConditionsOperator `json:"operator,required"`
-	Selector DLPEmailRuleListResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                                `json:"value,required"`
-	JSON     dlpEmailRuleListResponseConditionJSON      `json:"-"`
+	Operator DLPEmailRuleListResponseConditionsOperator   `json:"operator,required"`
+	Selector DLPEmailRuleListResponseConditionsSelector   `json:"selector,required"`
+	Value    DLPEmailRuleListResponseConditionsValueUnion `json:"value,required"`
+	JSON     dlpEmailRuleListResponseConditionJSON        `json:"-"`
 }
 
 // dlpEmailRuleListResponseConditionJSON contains the JSON metadata for the struct
@@ -557,6 +611,32 @@ func (r DLPEmailRuleListResponseConditionsSelector) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [zero_trust.DLPEmailRuleListResponseConditionsValueArray] or
+// [shared.UnionString].
+type DLPEmailRuleListResponseConditionsValueUnion interface {
+	ImplementsDLPEmailRuleListResponseConditionsValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DLPEmailRuleListResponseConditionsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEmailRuleListResponseConditionsValueArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DLPEmailRuleListResponseConditionsValueArray []string
+
+func (r DLPEmailRuleListResponseConditionsValueArray) ImplementsDLPEmailRuleListResponseConditionsValueUnion() {
 }
 
 type DLPEmailRuleDeleteResponse struct {
@@ -635,10 +715,10 @@ func (r DLPEmailRuleDeleteResponseActionAction) IsKnown() bool {
 }
 
 type DLPEmailRuleDeleteResponseCondition struct {
-	Operator DLPEmailRuleDeleteResponseConditionsOperator `json:"operator,required"`
-	Selector DLPEmailRuleDeleteResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                                  `json:"value,required"`
-	JSON     dlpEmailRuleDeleteResponseConditionJSON      `json:"-"`
+	Operator DLPEmailRuleDeleteResponseConditionsOperator   `json:"operator,required"`
+	Selector DLPEmailRuleDeleteResponseConditionsSelector   `json:"selector,required"`
+	Value    DLPEmailRuleDeleteResponseConditionsValueUnion `json:"value,required"`
+	JSON     dlpEmailRuleDeleteResponseConditionJSON        `json:"-"`
 }
 
 // dlpEmailRuleDeleteResponseConditionJSON contains the JSON metadata for the
@@ -690,6 +770,32 @@ func (r DLPEmailRuleDeleteResponseConditionsSelector) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [zero_trust.DLPEmailRuleDeleteResponseConditionsValueArray]
+// or [shared.UnionString].
+type DLPEmailRuleDeleteResponseConditionsValueUnion interface {
+	ImplementsDLPEmailRuleDeleteResponseConditionsValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DLPEmailRuleDeleteResponseConditionsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEmailRuleDeleteResponseConditionsValueArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DLPEmailRuleDeleteResponseConditionsValueArray []string
+
+func (r DLPEmailRuleDeleteResponseConditionsValueArray) ImplementsDLPEmailRuleDeleteResponseConditionsValueUnion() {
 }
 
 type DLPEmailRuleBulkEditResponse struct {
@@ -768,10 +874,10 @@ func (r DLPEmailRuleBulkEditResponseActionAction) IsKnown() bool {
 }
 
 type DLPEmailRuleBulkEditResponseCondition struct {
-	Operator DLPEmailRuleBulkEditResponseConditionsOperator `json:"operator,required"`
-	Selector DLPEmailRuleBulkEditResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                                    `json:"value,required"`
-	JSON     dlpEmailRuleBulkEditResponseConditionJSON      `json:"-"`
+	Operator DLPEmailRuleBulkEditResponseConditionsOperator   `json:"operator,required"`
+	Selector DLPEmailRuleBulkEditResponseConditionsSelector   `json:"selector,required"`
+	Value    DLPEmailRuleBulkEditResponseConditionsValueUnion `json:"value,required"`
+	JSON     dlpEmailRuleBulkEditResponseConditionJSON        `json:"-"`
 }
 
 // dlpEmailRuleBulkEditResponseConditionJSON contains the JSON metadata for the
@@ -823,6 +929,32 @@ func (r DLPEmailRuleBulkEditResponseConditionsSelector) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [zero_trust.DLPEmailRuleBulkEditResponseConditionsValueArray]
+// or [shared.UnionString].
+type DLPEmailRuleBulkEditResponseConditionsValueUnion interface {
+	ImplementsDLPEmailRuleBulkEditResponseConditionsValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DLPEmailRuleBulkEditResponseConditionsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEmailRuleBulkEditResponseConditionsValueArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DLPEmailRuleBulkEditResponseConditionsValueArray []string
+
+func (r DLPEmailRuleBulkEditResponseConditionsValueArray) ImplementsDLPEmailRuleBulkEditResponseConditionsValueUnion() {
 }
 
 type DLPEmailRuleGetResponse struct {
@@ -901,10 +1033,10 @@ func (r DLPEmailRuleGetResponseActionAction) IsKnown() bool {
 }
 
 type DLPEmailRuleGetResponseCondition struct {
-	Operator DLPEmailRuleGetResponseConditionsOperator `json:"operator,required"`
-	Selector DLPEmailRuleGetResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                               `json:"value,required"`
-	JSON     dlpEmailRuleGetResponseConditionJSON      `json:"-"`
+	Operator DLPEmailRuleGetResponseConditionsOperator   `json:"operator,required"`
+	Selector DLPEmailRuleGetResponseConditionsSelector   `json:"selector,required"`
+	Value    DLPEmailRuleGetResponseConditionsValueUnion `json:"value,required"`
+	JSON     dlpEmailRuleGetResponseConditionJSON        `json:"-"`
 }
 
 // dlpEmailRuleGetResponseConditionJSON contains the JSON metadata for the struct
@@ -958,6 +1090,32 @@ func (r DLPEmailRuleGetResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by [zero_trust.DLPEmailRuleGetResponseConditionsValueArray] or
+// [shared.UnionString].
+type DLPEmailRuleGetResponseConditionsValueUnion interface {
+	ImplementsDLPEmailRuleGetResponseConditionsValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DLPEmailRuleGetResponseConditionsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEmailRuleGetResponseConditionsValueArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DLPEmailRuleGetResponseConditionsValueArray []string
+
+func (r DLPEmailRuleGetResponseConditionsValueArray) ImplementsDLPEmailRuleGetResponseConditionsValueUnion() {
+}
+
 type DLPEmailRuleNewParams struct {
 	AccountID param.Field[string]                      `path:"account_id,required"`
 	Action    param.Field[DLPEmailRuleNewParamsAction] `json:"action,required"`
@@ -996,9 +1154,9 @@ func (r DLPEmailRuleNewParamsActionAction) IsKnown() bool {
 }
 
 type DLPEmailRuleNewParamsCondition struct {
-	Operator param.Field[DLPEmailRuleNewParamsConditionsOperator] `json:"operator,required"`
-	Selector param.Field[DLPEmailRuleNewParamsConditionsSelector] `json:"selector,required"`
-	Value    param.Field[interface{}]                             `json:"value,required"`
+	Operator param.Field[DLPEmailRuleNewParamsConditionsOperator]   `json:"operator,required"`
+	Selector param.Field[DLPEmailRuleNewParamsConditionsSelector]   `json:"selector,required"`
+	Value    param.Field[DLPEmailRuleNewParamsConditionsValueUnion] `json:"value,required"`
 }
 
 func (r DLPEmailRuleNewParamsCondition) MarshalJSON() (data []byte, err error) {
@@ -1036,6 +1194,17 @@ func (r DLPEmailRuleNewParamsConditionsSelector) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Satisfied by [zero_trust.DLPEmailRuleNewParamsConditionsValueArray],
+// [shared.UnionString].
+type DLPEmailRuleNewParamsConditionsValueUnion interface {
+	ImplementsDLPEmailRuleNewParamsConditionsValueUnion()
+}
+
+type DLPEmailRuleNewParamsConditionsValueArray []string
+
+func (r DLPEmailRuleNewParamsConditionsValueArray) ImplementsDLPEmailRuleNewParamsConditionsValueUnion() {
 }
 
 type DLPEmailRuleNewResponseEnvelope struct {
@@ -1119,9 +1288,9 @@ func (r DLPEmailRuleUpdateParamsActionAction) IsKnown() bool {
 }
 
 type DLPEmailRuleUpdateParamsCondition struct {
-	Operator param.Field[DLPEmailRuleUpdateParamsConditionsOperator] `json:"operator,required"`
-	Selector param.Field[DLPEmailRuleUpdateParamsConditionsSelector] `json:"selector,required"`
-	Value    param.Field[interface{}]                                `json:"value,required"`
+	Operator param.Field[DLPEmailRuleUpdateParamsConditionsOperator]   `json:"operator,required"`
+	Selector param.Field[DLPEmailRuleUpdateParamsConditionsSelector]   `json:"selector,required"`
+	Value    param.Field[DLPEmailRuleUpdateParamsConditionsValueUnion] `json:"value,required"`
 }
 
 func (r DLPEmailRuleUpdateParamsCondition) MarshalJSON() (data []byte, err error) {
@@ -1159,6 +1328,17 @@ func (r DLPEmailRuleUpdateParamsConditionsSelector) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Satisfied by [zero_trust.DLPEmailRuleUpdateParamsConditionsValueArray],
+// [shared.UnionString].
+type DLPEmailRuleUpdateParamsConditionsValueUnion interface {
+	ImplementsDLPEmailRuleUpdateParamsConditionsValueUnion()
+}
+
+type DLPEmailRuleUpdateParamsConditionsValueArray []string
+
+func (r DLPEmailRuleUpdateParamsConditionsValueArray) ImplementsDLPEmailRuleUpdateParamsConditionsValueUnion() {
 }
 
 type DLPEmailRuleUpdateResponseEnvelope struct {

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
@@ -37,6 +38,7 @@ func NewRayIDService(opts ...option.RequestOption) (r *RayIDService) {
 // The `/rayids` api route allows lookups by specific rayid. The rayids route will
 // return zero, one, or more records (ray ids are not unique).
 func (r *RayIDService) Get(ctx context.Context, RayID string, params RayIDGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
+	var env apijson.UnionUnmarshaler[interface{}]
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -47,7 +49,11 @@ func (r *RayIDService) Get(ctx context.Context, RayID string, params RayIDGetPar
 		return
 	}
 	path := fmt.Sprintf("zones/%s/logs/rayids/%s", params.ZoneID, RayID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Value
 	return
 }
 

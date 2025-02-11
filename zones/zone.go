@@ -26,9 +26,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewZoneService] method instead.
 type ZoneService struct {
-	Options           []option.RequestOption
-	ActivationCheck   *ActivationCheckService
-	Settings          *SettingService
+	Options         []option.RequestOption
+	ActivationCheck *ActivationCheckService
+	Settings        *SettingService
+	// Deprecated: Use DNS settings API instead.
 	CustomNameservers *CustomNameserverService
 	Holds             *HoldService
 	Subscriptions     *SubscriptionService
@@ -199,7 +200,9 @@ type Zone struct {
 	// An array of domains used for custom name servers. This is only available for
 	// Business and Enterprise plans.
 	VanityNameServers []string `json:"vanity_name_servers" format:"hostname"`
-	JSON              zoneJSON `json:"-"`
+	// Verification key for partial zone setup.
+	VerificationKey string   `json:"verification_key"`
+	JSON            zoneJSON `json:"-"`
 }
 
 // zoneJSON contains the JSON metadata for the struct [Zone]
@@ -221,6 +224,7 @@ type zoneJSON struct {
 	Status              apijson.Field
 	Type                apijson.Field
 	VanityNameServers   apijson.Field
+	VerificationKey     apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }

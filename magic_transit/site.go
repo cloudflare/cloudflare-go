@@ -81,8 +81,8 @@ func (r *SiteService) Update(ctx context.Context, siteID string, params SiteUpda
 	return
 }
 
-// Lists Sites associated with an account. Use connector_identifier query param to
-// return sites where connector_identifier matches either site.ConnectorID or
+// Lists Sites associated with an account. Use connectorid query param to return
+// sites where connectorid matches either site.ConnectorID or
 // site.SecondaryConnectorID.
 func (r *SiteService) List(ctx context.Context, params SiteListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Site], err error) {
 	var raw *http.Response
@@ -105,8 +105,8 @@ func (r *SiteService) List(ctx context.Context, params SiteListParams, opts ...o
 	return res, nil
 }
 
-// Lists Sites associated with an account. Use connector_identifier query param to
-// return sites where connector_identifier matches either site.ConnectorID or
+// Lists Sites associated with an account. Use connectorid query param to return
+// sites where connectorid matches either site.ConnectorID or
 // site.SecondaryConnectorID.
 func (r *SiteService) ListAutoPaging(ctx context.Context, params SiteListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Site] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
@@ -383,7 +383,7 @@ type SiteListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Identifier
-	ConnectorIdentifier param.Field[string] `query:"connector_identifier"`
+	Connectorid param.Field[string] `query:"connectorid"`
 }
 
 // URLQuery serializes [SiteListParams]'s query parameters as `url.Values`.

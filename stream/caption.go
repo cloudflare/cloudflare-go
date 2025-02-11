@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // CaptionService contains methods and other services that help with interacting
@@ -37,9 +37,10 @@ func NewCaptionService(opts ...option.RequestOption) (r *CaptionService) {
 }
 
 // Lists the available captions or subtitles for a specific video.
-func (r *CaptionService) Get(ctx context.Context, identifier string, query CaptionGetParams, opts ...option.RequestOption) (res *[]Caption, err error) {
-	var env CaptionGetResponseEnvelope
+func (r *CaptionService) Get(ctx context.Context, identifier string, query CaptionGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Caption], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -49,12 +50,21 @@ func (r *CaptionService) Get(ctx context.Context, identifier string, query Capti
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions", query.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists the available captions or subtitles for a specific video.
+func (r *CaptionService) GetAutoPaging(ctx context.Context, identifier string, query CaptionGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Caption] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, identifier, query, opts...))
 }
 
 type Caption struct {
@@ -107,47 +117,4 @@ func (r CaptionStatus) IsKnown() bool {
 type CaptionGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type CaptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success CaptionGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  []Caption                         `json:"result"`
-	JSON    captionGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// captionGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CaptionGetResponseEnvelope]
-type captionGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CaptionGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r captionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type CaptionGetResponseEnvelopeSuccess bool
-
-const (
-	CaptionGetResponseEnvelopeSuccessTrue CaptionGetResponseEnvelopeSuccess = true
-)
-
-func (r CaptionGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case CaptionGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

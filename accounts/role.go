@@ -7,8 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
@@ -36,16 +38,16 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 }
 
 // Get all available roles for an account.
-func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[shared.Role], err error) {
+func (r *RoleService) List(ctx context.Context, params RoleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.Role], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/roles", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/roles", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +60,8 @@ func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...op
 }
 
 // Get all available roles for an account.
-func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[shared.Role] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *RoleService) ListAutoPaging(ctx context.Context, params RoleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[shared.Role] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Get information about a specific role for an account.
@@ -86,6 +88,18 @@ func (r *RoleService) Get(ctx context.Context, roleID string, query RoleGetParam
 type RoleListParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Page number of paginated results.
+	Page param.Field[float64] `query:"page"`
+	// Number of roles per page.
+	PerPage param.Field[float64] `query:"per_page"`
+}
+
+// URLQuery serializes [RoleListParams]'s query parameters as `url.Values`.
+func (r RoleListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type RoleGetParams struct {

@@ -88,9 +88,10 @@ func (r *DevicePolicyCustomService) ListAutoPaging(ctx context.Context, query De
 
 // Deletes a device settings profile and fetches a list of the remaining profiles
 // for an account.
-func (r *DevicePolicyCustomService) Delete(ctx context.Context, policyID string, body DevicePolicyCustomDeleteParams, opts ...option.RequestOption) (res *[]SettingsPolicy, err error) {
-	var env DevicePolicyCustomDeleteResponseEnvelope
+func (r *DevicePolicyCustomService) Delete(ctx context.Context, policyID string, body DevicePolicyCustomDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingsPolicy], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -100,12 +101,22 @@ func (r *DevicePolicyCustomService) Delete(ctx context.Context, policyID string,
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s", body.AccountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Deletes a device settings profile and fetches a list of the remaining profiles
+// for an account.
+func (r *DevicePolicyCustomService) DeleteAutoPaging(ctx context.Context, policyID string, body DevicePolicyCustomDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SettingsPolicy] {
+	return pagination.NewSinglePageAutoPager(r.Delete(ctx, policyID, body, opts...))
 }
 
 // Updates a configured device settings profile.
@@ -166,7 +177,7 @@ type DevicePolicyCustomNewParams struct {
 	AllowUpdates param.Field[bool] `json:"allow_updates"`
 	// Whether to allow devices to leave the organization.
 	AllowedToLeave param.Field[bool] `json:"allowed_to_leave"`
-	// The amount of time in minutes to reconnect after having been disabled.
+	// The amount of time in seconds to reconnect after having been disabled.
 	AutoConnect param.Field[float64] `json:"auto_connect"`
 	// Turn on the captive portal after the specified amount of time.
 	CaptivePortal param.Field[float64] `json:"captive_portal"`
@@ -263,82 +274,6 @@ type DevicePolicyCustomDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type DevicePolicyCustomDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []SettingsPolicy      `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyCustomDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyCustomDeleteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyCustomDeleteResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyCustomDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DevicePolicyCustomDeleteResponseEnvelope]
-type devicePolicyCustomDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DevicePolicyCustomDeleteResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyCustomDeleteResponseEnvelopeSuccessTrue DevicePolicyCustomDeleteResponseEnvelopeSuccess = true
-)
-
-func (r DevicePolicyCustomDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DevicePolicyCustomDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DevicePolicyCustomDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                `json:"total_count"`
-	JSON       devicePolicyCustomDeleteResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyCustomDeleteResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [DevicePolicyCustomDeleteResponseEnvelopeResultInfo]
-type devicePolicyCustomDeleteResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type DevicePolicyCustomEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Whether to allow the user to switch WARP between modes.
@@ -348,7 +283,7 @@ type DevicePolicyCustomEditParams struct {
 	AllowUpdates param.Field[bool] `json:"allow_updates"`
 	// Whether to allow devices to leave the organization.
 	AllowedToLeave param.Field[bool] `json:"allowed_to_leave"`
-	// The amount of time in minutes to reconnect after having been disabled.
+	// The amount of time in seconds to reconnect after having been disabled.
 	AutoConnect param.Field[float64] `json:"auto_connect"`
 	// Turn on the captive portal after the specified amount of time.
 	CaptivePortal param.Field[float64] `json:"captive_portal"`

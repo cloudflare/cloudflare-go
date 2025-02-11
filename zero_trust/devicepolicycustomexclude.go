@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // DevicePolicyCustomExcludeService contains methods and other services that help
@@ -36,9 +36,10 @@ func NewDevicePolicyCustomExcludeService(opts ...option.RequestOption) (r *Devic
 
 // Sets the list of routes excluded from the WARP client's tunnel for a specific
 // device settings profile.
-func (r *DevicePolicyCustomExcludeService) Update(ctx context.Context, policyID string, params DevicePolicyCustomExcludeUpdateParams, opts ...option.RequestOption) (res *[]SplitTunnelExclude, err error) {
-	var env DevicePolicyCustomExcludeUpdateResponseEnvelope
+func (r *DevicePolicyCustomExcludeService) Update(ctx context.Context, policyID string, params DevicePolicyCustomExcludeUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[SplitTunnelExclude], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -48,19 +49,30 @@ func (r *DevicePolicyCustomExcludeService) Update(ctx context.Context, policyID 
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/exclude", params.AccountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Sets the list of routes excluded from the WARP client's tunnel for a specific
+// device settings profile.
+func (r *DevicePolicyCustomExcludeService) UpdateAutoPaging(ctx context.Context, policyID string, params DevicePolicyCustomExcludeUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SplitTunnelExclude] {
+	return pagination.NewSinglePageAutoPager(r.Update(ctx, policyID, params, opts...))
 }
 
 // Fetches the list of routes excluded from the WARP client's tunnel for a specific
 // device settings profile.
-func (r *DevicePolicyCustomExcludeService) Get(ctx context.Context, policyID string, query DevicePolicyCustomExcludeGetParams, opts ...option.RequestOption) (res *[]SplitTunnelExclude, err error) {
-	var env DevicePolicyCustomExcludeGetResponseEnvelope
+func (r *DevicePolicyCustomExcludeService) Get(ctx context.Context, policyID string, query DevicePolicyCustomExcludeGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[SplitTunnelExclude], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -70,12 +82,22 @@ func (r *DevicePolicyCustomExcludeService) Get(ctx context.Context, policyID str
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/exclude", query.AccountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches the list of routes excluded from the WARP client's tunnel for a specific
+// device settings profile.
+func (r *DevicePolicyCustomExcludeService) GetAutoPaging(ctx context.Context, policyID string, query DevicePolicyCustomExcludeGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SplitTunnelExclude] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, policyID, query, opts...))
 }
 
 type DevicePolicyCustomExcludeUpdateParams struct {
@@ -87,159 +109,6 @@ func (r DevicePolicyCustomExcludeUpdateParams) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r.Body)
 }
 
-type DevicePolicyCustomExcludeUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []SplitTunnelExclude  `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyCustomExcludeUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyCustomExcludeUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyCustomExcludeUpdateResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyCustomExcludeUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [DevicePolicyCustomExcludeUpdateResponseEnvelope]
-type devicePolicyCustomExcludeUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomExcludeUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomExcludeUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DevicePolicyCustomExcludeUpdateResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyCustomExcludeUpdateResponseEnvelopeSuccessTrue DevicePolicyCustomExcludeUpdateResponseEnvelopeSuccess = true
-)
-
-func (r DevicePolicyCustomExcludeUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DevicePolicyCustomExcludeUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DevicePolicyCustomExcludeUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                       `json:"total_count"`
-	JSON       devicePolicyCustomExcludeUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyCustomExcludeUpdateResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct
-// [DevicePolicyCustomExcludeUpdateResponseEnvelopeResultInfo]
-type devicePolicyCustomExcludeUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomExcludeUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomExcludeUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type DevicePolicyCustomExcludeGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DevicePolicyCustomExcludeGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []SplitTunnelExclude  `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyCustomExcludeGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyCustomExcludeGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyCustomExcludeGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyCustomExcludeGetResponseEnvelopeJSON contains the JSON metadata for
-// the struct [DevicePolicyCustomExcludeGetResponseEnvelope]
-type devicePolicyCustomExcludeGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomExcludeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomExcludeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DevicePolicyCustomExcludeGetResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyCustomExcludeGetResponseEnvelopeSuccessTrue DevicePolicyCustomExcludeGetResponseEnvelopeSuccess = true
-)
-
-func (r DevicePolicyCustomExcludeGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DevicePolicyCustomExcludeGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DevicePolicyCustomExcludeGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                    `json:"total_count"`
-	JSON       devicePolicyCustomExcludeGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyCustomExcludeGetResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [DevicePolicyCustomExcludeGetResponseEnvelopeResultInfo]
-type devicePolicyCustomExcludeGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomExcludeGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomExcludeGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

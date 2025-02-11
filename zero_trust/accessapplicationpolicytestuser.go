@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // AccessApplicationPolicyTestUserService contains methods and other services that
@@ -34,8 +35,10 @@ func NewAccessApplicationPolicyTestUserService(opts ...option.RequestOption) (r 
 }
 
 // Fetches a single page of user results from an Access policy test.
-func (r *AccessApplicationPolicyTestUserService) List(ctx context.Context, policyTestID string, query AccessApplicationPolicyTestUserListParams, opts ...option.RequestOption) (res *[]AccessApplicationPolicyTestUserListResponse, err error) {
+func (r *AccessApplicationPolicyTestUserService) List(ctx context.Context, policyTestID string, query AccessApplicationPolicyTestUserListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationPolicyTestUserListResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -45,8 +48,21 @@ func (r *AccessApplicationPolicyTestUserService) List(ctx context.Context, polic
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/access/policy-tests/%s/users", query.AccountID, policyTestID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches a single page of user results from an Access policy test.
+func (r *AccessApplicationPolicyTestUserService) ListAutoPaging(ctx context.Context, policyTestID string, query AccessApplicationPolicyTestUserListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessApplicationPolicyTestUserListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, policyTestID, query, opts...))
 }
 
 type AccessApplicationPolicyTestUserListResponse struct {

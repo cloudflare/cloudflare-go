@@ -1,6 +1,6 @@
 # Cloudflare Go API Library
 
-<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v3.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v4.svg" alt="Go Reference"></a>
 
 The Cloudflare Go library provides convenient access to [the Cloudflare REST
 API](https://developers.cloudflare.com/api) from applications written in Go. The full API of this library can be found in [api.md](api.md).
@@ -22,7 +22,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go/v3@v4.0.0'
+go get -u 'github.com/cloudflare/cloudflare-go/v4@v4.1.0'
 ```
 
 <!-- x-release-please-end -->
@@ -159,7 +159,7 @@ client.Zones.New(context.TODO(), ...,
 )
 ```
 
-See the [full list of request options](https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/option).
+See the [full list of request options](https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/option).
 
 ### Pagination
 
@@ -277,6 +277,34 @@ client.Zones.Get(
 	},
 	option.WithMaxRetries(5),
 )
+```
+
+### Accessing raw response data (e.g. response headers)
+
+You can access the raw HTTP response data by using the `option.WithResponseInto()` request option. This is useful when
+you need to examine response headers, status codes, or other details.
+
+```go
+// Create a variable to store the HTTP response
+var response *http.Response
+zone, err := client.Zones.New(
+	context.TODO(),
+	zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	},
+	option.WithResponseInto(&response),
+)
+if err != nil {
+	// handle error
+}
+fmt.Printf("%+v\n", zone)
+
+fmt.Printf("Status Code: %d\n", response.StatusCode)
+fmt.Printf("Headers: %+#v\n", response.Header)
 ```
 
 ### Making custom/undocumented requests

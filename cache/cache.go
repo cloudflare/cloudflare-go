@@ -169,7 +169,7 @@ func (r CachePurgeParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CachePurgeParamsBody) implementsCacheCachePurgeParamsBodyUnion() {}
+func (r CachePurgeParamsBody) implementsCachePurgeParamsBodyUnion() {}
 
 // Satisfied by [cache.CachePurgeParamsBodyCachePurgeFlexPurgeByTags],
 // [cache.CachePurgeParamsBodyCachePurgeFlexPurgeByHostnames],
@@ -179,7 +179,7 @@ func (r CachePurgeParamsBody) implementsCacheCachePurgeParamsBodyUnion() {}
 // [cache.CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeaders],
 // [CachePurgeParamsBody].
 type CachePurgeParamsBodyUnion interface {
-	implementsCacheCachePurgeParamsBodyUnion()
+	implementsCachePurgeParamsBodyUnion()
 }
 
 type CachePurgeParamsBodyCachePurgeFlexPurgeByTags struct {
@@ -192,7 +192,7 @@ func (r CachePurgeParamsBodyCachePurgeFlexPurgeByTags) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r CachePurgeParamsBodyCachePurgeFlexPurgeByTags) implementsCacheCachePurgeParamsBodyUnion() {}
+func (r CachePurgeParamsBodyCachePurgeFlexPurgeByTags) implementsCachePurgeParamsBodyUnion() {}
 
 type CachePurgeParamsBodyCachePurgeFlexPurgeByHostnames struct {
 	// For more information purging by hostnames, please refer to
@@ -204,8 +204,7 @@ func (r CachePurgeParamsBodyCachePurgeFlexPurgeByHostnames) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r CachePurgeParamsBodyCachePurgeFlexPurgeByHostnames) implementsCacheCachePurgeParamsBodyUnion() {
-}
+func (r CachePurgeParamsBodyCachePurgeFlexPurgeByHostnames) implementsCachePurgeParamsBodyUnion() {}
 
 type CachePurgeParamsBodyCachePurgeFlexPurgeByPrefixes struct {
 	// For more information on purging by prefixes, please refer to
@@ -217,8 +216,7 @@ func (r CachePurgeParamsBodyCachePurgeFlexPurgeByPrefixes) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r CachePurgeParamsBodyCachePurgeFlexPurgeByPrefixes) implementsCacheCachePurgeParamsBodyUnion() {
-}
+func (r CachePurgeParamsBodyCachePurgeFlexPurgeByPrefixes) implementsCachePurgeParamsBodyUnion() {}
 
 type CachePurgeParamsBodyCachePurgeEverything struct {
 	// For more information, please refer to
@@ -230,7 +228,7 @@ func (r CachePurgeParamsBodyCachePurgeEverything) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r CachePurgeParamsBodyCachePurgeEverything) implementsCacheCachePurgeParamsBodyUnion() {}
+func (r CachePurgeParamsBodyCachePurgeEverything) implementsCachePurgeParamsBodyUnion() {}
 
 type CachePurgeParamsBodyCachePurgeSingleFile struct {
 	// For more information on purging files, please refer to
@@ -242,7 +240,7 @@ func (r CachePurgeParamsBodyCachePurgeSingleFile) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-func (r CachePurgeParamsBodyCachePurgeSingleFile) implementsCacheCachePurgeParamsBodyUnion() {}
+func (r CachePurgeParamsBodyCachePurgeSingleFile) implementsCachePurgeParamsBodyUnion() {}
 
 type CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeaders struct {
 	// For more information on purging files with URL and headers, please refer to
@@ -254,7 +252,7 @@ func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeaders) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeaders) implementsCacheCachePurgeParamsBodyUnion() {
+func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeaders) implementsCachePurgeParamsBodyUnion() {
 }
 
 type CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeadersFile struct {

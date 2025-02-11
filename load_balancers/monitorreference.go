@@ -12,7 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // MonitorReferenceService contains methods and other services that help with
@@ -35,9 +35,10 @@ func NewMonitorReferenceService(opts ...option.RequestOption) (r *MonitorReferen
 }
 
 // Get the list of resources that reference the provided monitor.
-func (r *MonitorReferenceService) Get(ctx context.Context, monitorID string, query MonitorReferenceGetParams, opts ...option.RequestOption) (res *[]MonitorReferenceGetResponse, err error) {
-	var env MonitorReferenceGetResponseEnvelope
+func (r *MonitorReferenceService) Get(ctx context.Context, monitorID string, query MonitorReferenceGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[MonitorReferenceGetResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -47,12 +48,21 @@ func (r *MonitorReferenceService) Get(ctx context.Context, monitorID string, que
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/references", query.AccountID, monitorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get the list of resources that reference the provided monitor.
+func (r *MonitorReferenceService) GetAutoPaging(ctx context.Context, monitorID string, query MonitorReferenceGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MonitorReferenceGetResponse] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, monitorID, query, opts...))
 }
 
 type MonitorReferenceGetResponse struct {
@@ -101,48 +111,4 @@ func (r MonitorReferenceGetResponseReferenceType) IsKnown() bool {
 type MonitorReferenceGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type MonitorReferenceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// List of resources that reference a given monitor.
-	Result []MonitorReferenceGetResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success MonitorReferenceGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    monitorReferenceGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// monitorReferenceGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [MonitorReferenceGetResponseEnvelope]
-type monitorReferenceGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorReferenceGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorReferenceGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type MonitorReferenceGetResponseEnvelopeSuccess bool
-
-const (
-	MonitorReferenceGetResponseEnvelopeSuccessTrue MonitorReferenceGetResponseEnvelopeSuccess = true
-)
-
-func (r MonitorReferenceGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case MonitorReferenceGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

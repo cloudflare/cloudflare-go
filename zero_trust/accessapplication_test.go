@@ -50,21 +50,33 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			CustomDenyURL:            cloudflare.F("custom_deny_url"),
 			CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
 			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252"}),
-			Destinations: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestination{{
-				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic),
+			Destinations: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination{
+				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
 				URI:  cloudflare.F("test.example.com/admin"),
-			}, {
-				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic),
+			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination{
+				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
 				URI:  cloudflare.F("test.anotherexample.com/staff"),
-			}, {
-				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic),
-				URI:  cloudflare.F("10.5.0.2"),
-			}, {
-				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic),
-				URI:  cloudflare.F("10.5.0.3/32:1234-4321"),
-			}, {
-				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic),
-				URI:  cloudflare.F("private-sni.example.com"),
+			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination{
+				CIDR:       cloudflare.F("10.5.0.0/24"),
+				Hostname:   cloudflare.F("hostname"),
+				L4Protocol: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
+				PortRange:  cloudflare.F("80-90"),
+				Type:       cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
+				VnetID:     cloudflare.F("vnet_id"),
+			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination{
+				CIDR:       cloudflare.F("10.5.0.3/32"),
+				Hostname:   cloudflare.F("hostname"),
+				L4Protocol: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
+				PortRange:  cloudflare.F("80"),
+				Type:       cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
+				VnetID:     cloudflare.F("vnet_id"),
+			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination{
+				CIDR:       cloudflare.F("cidr"),
+				Hostname:   cloudflare.F("hostname"),
+				L4Protocol: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
+				PortRange:  cloudflare.F("port_range"),
+				Type:       cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
+				VnetID:     cloudflare.F("vnet_id"),
 			}}),
 			EnableBindingCookie:     cloudflare.F(true),
 			HTTPOnlyCookieAttribute: cloudflare.F(true),
@@ -156,21 +168,33 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				CustomDenyURL:            cloudflare.F("custom_deny_url"),
 				CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
 				CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252"}),
-				Destinations: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestination{{
-					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic),
+				Destinations: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination{
+					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
 					URI:  cloudflare.F("test.example.com/admin"),
-				}, {
-					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic),
+				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination{
+					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
 					URI:  cloudflare.F("test.anotherexample.com/staff"),
-				}, {
-					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic),
-					URI:  cloudflare.F("10.5.0.2"),
-				}, {
-					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic),
-					URI:  cloudflare.F("10.5.0.3/32:1234-4321"),
-				}, {
-					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic),
-					URI:  cloudflare.F("private-sni.example.com"),
+				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination{
+					CIDR:       cloudflare.F("10.5.0.0/24"),
+					Hostname:   cloudflare.F("hostname"),
+					L4Protocol: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
+					PortRange:  cloudflare.F("80-90"),
+					Type:       cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
+					VnetID:     cloudflare.F("vnet_id"),
+				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination{
+					CIDR:       cloudflare.F("10.5.0.3/32"),
+					Hostname:   cloudflare.F("hostname"),
+					L4Protocol: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
+					PortRange:  cloudflare.F("80"),
+					Type:       cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
+					VnetID:     cloudflare.F("vnet_id"),
+				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination{
+					CIDR:       cloudflare.F("cidr"),
+					Hostname:   cloudflare.F("hostname"),
+					L4Protocol: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
+					PortRange:  cloudflare.F("port_range"),
+					Type:       cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
+					VnetID:     cloudflare.F("vnet_id"),
 				}}),
 				EnableBindingCookie:     cloudflare.F(true),
 				HTTPOnlyCookieAttribute: cloudflare.F(true),

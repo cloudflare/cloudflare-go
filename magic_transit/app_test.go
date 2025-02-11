@@ -33,7 +33,7 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 		Name:      cloudflare.F("Cloudflare Dashboard"),
 		Type:      cloudflare.F("Development"),
 		Hostnames: cloudflare.F([]string{"auth.cloudflare.com"}),
-		IPSubnets: cloudflare.F([]string{"1.1.1.1/32"}),
+		IPSubnets: cloudflare.F([]string{"192.0.2.0/24"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

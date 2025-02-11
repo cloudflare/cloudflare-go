@@ -28,6 +28,7 @@ import (
 // the [NewIdentityProviderService] method instead.
 type IdentityProviderService struct {
 	Options []option.RequestOption
+	SCIM    *IdentityProviderSCIMService
 }
 
 // NewIdentityProviderService generates a new service that applies the given
@@ -36,6 +37,7 @@ type IdentityProviderService struct {
 func NewIdentityProviderService(opts ...option.RequestOption) (r *IdentityProviderService) {
 	r = &IdentityProviderService{}
 	r.Options = opts
+	r.SCIM = NewIdentityProviderSCIMService(opts...)
 	return
 }
 
@@ -254,9 +256,9 @@ func (r azureADJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AzureAD) implementsZeroTrustIdentityProvider() {}
+func (r AzureAD) implementsIdentityProvider() {}
 
-func (r AzureAD) implementsZeroTrustIdentityProviderListResponse() {}
+func (r AzureAD) implementsIdentityProviderListResponse() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -354,7 +356,7 @@ func (r AzureADParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AzureADParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r AzureADParam) implementsIdentityProviderUnionParam() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -509,7 +511,7 @@ func (r IdentityProvider) AsUnion() IdentityProviderUnion {
 // [zero_trust.IdentityProviderAccessYandex] or
 // [zero_trust.IdentityProviderAccessOnetimepin].
 type IdentityProviderUnion interface {
-	implementsZeroTrustIdentityProvider()
+	implementsIdentityProvider()
 }
 
 func init() {
@@ -614,7 +616,7 @@ func (r identityProviderAccessCentrifyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessCentrify) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessCentrify) implementsIdentityProvider() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -695,7 +697,7 @@ func (r identityProviderAccessFacebookJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessFacebook) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessFacebook) implementsIdentityProvider() {}
 
 type IdentityProviderAccessGitHub struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -736,7 +738,7 @@ func (r identityProviderAccessGitHubJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessGitHub) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessGitHub) implementsIdentityProvider() {}
 
 type IdentityProviderAccessGoogle struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -777,7 +779,7 @@ func (r identityProviderAccessGoogleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessGoogle) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessGoogle) implementsIdentityProvider() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -852,7 +854,7 @@ func (r identityProviderAccessGoogleAppsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessGoogleApps) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessGoogleApps) implementsIdentityProvider() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -930,7 +932,7 @@ func (r identityProviderAccessLinkedinJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessLinkedin) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessLinkedin) implementsIdentityProvider() {}
 
 type IdentityProviderAccessOIDC struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -971,7 +973,7 @@ func (r identityProviderAccessOIDCJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessOIDC) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessOIDC) implementsIdentityProvider() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1061,7 +1063,7 @@ func (r identityProviderAccessOktaJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessOkta) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessOkta) implementsIdentityProvider() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1142,7 +1144,7 @@ func (r identityProviderAccessOneloginJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessOnelogin) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessOnelogin) implementsIdentityProvider() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1220,7 +1222,7 @@ func (r identityProviderAccessPingoneJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessPingone) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessPingone) implementsIdentityProvider() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1298,7 +1300,7 @@ func (r identityProviderAccessSAMLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessSAML) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessSAML) implementsIdentityProvider() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1410,7 +1412,7 @@ func (r identityProviderAccessYandexJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessYandex) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessYandex) implementsIdentityProvider() {}
 
 type IdentityProviderAccessOnetimepin struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -1451,7 +1453,7 @@ func (r identityProviderAccessOnetimepinJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderAccessOnetimepin) implementsZeroTrustIdentityProvider() {}
+func (r IdentityProviderAccessOnetimepin) implementsIdentityProvider() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1494,7 +1496,7 @@ func (r IdentityProviderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderParam) implementsIdentityProviderUnionParam() {}
 
 // Satisfied by [zero_trust.AzureADParam],
 // [zero_trust.IdentityProviderAccessCentrifyParam],
@@ -1511,7 +1513,7 @@ func (r IdentityProviderParam) implementsZeroTrustIdentityProviderUnionParam() {
 // [zero_trust.IdentityProviderAccessYandexParam],
 // [zero_trust.IdentityProviderAccessOnetimepinParam], [IdentityProviderParam].
 type IdentityProviderUnionParam interface {
-	implementsZeroTrustIdentityProviderUnionParam()
+	implementsIdentityProviderUnionParam()
 }
 
 type IdentityProviderAccessCentrifyParam struct {
@@ -1534,7 +1536,7 @@ func (r IdentityProviderAccessCentrifyParam) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessCentrifyParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessCentrifyParam) implementsIdentityProviderUnionParam() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1578,7 +1580,7 @@ func (r IdentityProviderAccessFacebookParam) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessFacebookParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessFacebookParam) implementsIdentityProviderUnionParam() {}
 
 type IdentityProviderAccessGitHubParam struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -1600,7 +1602,7 @@ func (r IdentityProviderAccessGitHubParam) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessGitHubParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessGitHubParam) implementsIdentityProviderUnionParam() {}
 
 type IdentityProviderAccessGoogleParam struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -1622,7 +1624,7 @@ func (r IdentityProviderAccessGoogleParam) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessGoogleParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessGoogleParam) implementsIdentityProviderUnionParam() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1662,7 +1664,7 @@ func (r IdentityProviderAccessGoogleAppsParam) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessGoogleAppsParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessGoogleAppsParam) implementsIdentityProviderUnionParam() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1704,7 +1706,7 @@ func (r IdentityProviderAccessLinkedinParam) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessLinkedinParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessLinkedinParam) implementsIdentityProviderUnionParam() {}
 
 type IdentityProviderAccessOIDCParam struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -1726,7 +1728,7 @@ func (r IdentityProviderAccessOIDCParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessOIDCParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessOIDCParam) implementsIdentityProviderUnionParam() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1776,7 +1778,7 @@ func (r IdentityProviderAccessOktaParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessOktaParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessOktaParam) implementsIdentityProviderUnionParam() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1820,7 +1822,7 @@ func (r IdentityProviderAccessOneloginParam) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessOneloginParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessOneloginParam) implementsIdentityProviderUnionParam() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1862,7 +1864,7 @@ func (r IdentityProviderAccessPingoneParam) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessPingoneParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessPingoneParam) implementsIdentityProviderUnionParam() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1904,7 +1906,7 @@ func (r IdentityProviderAccessSAMLParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessSAMLParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessSAMLParam) implementsIdentityProviderUnionParam() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -1964,7 +1966,7 @@ func (r IdentityProviderAccessYandexParam) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessYandexParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessYandexParam) implementsIdentityProviderUnionParam() {}
 
 type IdentityProviderAccessOnetimepinParam struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -1986,7 +1988,7 @@ func (r IdentityProviderAccessOnetimepinParam) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderAccessOnetimepinParam) implementsZeroTrustIdentityProviderUnionParam() {}
+func (r IdentityProviderAccessOnetimepinParam) implementsIdentityProviderUnionParam() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -2011,13 +2013,15 @@ type IdentityProviderSCIMConfig struct {
 	// SCIM user resource. With "no_action" identities will not be changed by SCIM
 	// updates in any way and users will not be prompted to reauthenticate.
 	IdentityUpdateBehavior IdentityProviderSCIMConfigIdentityUpdateBehavior `json:"identity_update_behavior"`
+	// The base URL of Cloudflare's SCIM V2.0 API endpoint.
+	SCIMBaseURL string `json:"scim_base_url"`
 	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
 	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
 	// enabled.
 	SeatDeprovision bool `json:"seat_deprovision"`
 	// A read-only token generated when the SCIM integration is enabled for the first
 	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	// refresh it at /access/identity_providers/:idpID/refresh_scim_secret.
 	Secret string `json:"secret"`
 	// A flag to enable revoking a user's session in Access and Gateway when they have
 	// been deprovisioned in the Identity Provider.
@@ -2030,6 +2034,7 @@ type IdentityProviderSCIMConfig struct {
 type identityProviderSCIMConfigJSON struct {
 	Enabled                apijson.Field
 	IdentityUpdateBehavior apijson.Field
+	SCIMBaseURL            apijson.Field
 	SeatDeprovision        apijson.Field
 	Secret                 apijson.Field
 	UserDeprovision        apijson.Field
@@ -2209,7 +2214,7 @@ func (r IdentityProviderListResponse) AsUnion() IdentityProviderListResponseUnio
 // [zero_trust.IdentityProviderListResponseAccessSAML] or
 // [zero_trust.IdentityProviderListResponseAccessYandex].
 type IdentityProviderListResponseUnion interface {
-	implementsZeroTrustIdentityProviderListResponse()
+	implementsIdentityProviderListResponse()
 }
 
 func init() {
@@ -2310,8 +2315,7 @@ func (r identityProviderListResponseAccessCentrifyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessCentrify) implementsZeroTrustIdentityProviderListResponse() {
-}
+func (r IdentityProviderListResponseAccessCentrify) implementsIdentityProviderListResponse() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -2392,8 +2396,7 @@ func (r identityProviderListResponseAccessFacebookJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessFacebook) implementsZeroTrustIdentityProviderListResponse() {
-}
+func (r IdentityProviderListResponseAccessFacebook) implementsIdentityProviderListResponse() {}
 
 type IdentityProviderListResponseAccessGitHub struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -2434,7 +2437,7 @@ func (r identityProviderListResponseAccessGitHubJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessGitHub) implementsZeroTrustIdentityProviderListResponse() {}
+func (r IdentityProviderListResponseAccessGitHub) implementsIdentityProviderListResponse() {}
 
 type IdentityProviderListResponseAccessGoogle struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -2475,7 +2478,7 @@ func (r identityProviderListResponseAccessGoogleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessGoogle) implementsZeroTrustIdentityProviderListResponse() {}
+func (r IdentityProviderListResponseAccessGoogle) implementsIdentityProviderListResponse() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -2550,8 +2553,7 @@ func (r identityProviderListResponseAccessGoogleAppsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessGoogleApps) implementsZeroTrustIdentityProviderListResponse() {
-}
+func (r IdentityProviderListResponseAccessGoogleApps) implementsIdentityProviderListResponse() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -2629,8 +2631,7 @@ func (r identityProviderListResponseAccessLinkedinJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessLinkedin) implementsZeroTrustIdentityProviderListResponse() {
-}
+func (r IdentityProviderListResponseAccessLinkedin) implementsIdentityProviderListResponse() {}
 
 type IdentityProviderListResponseAccessOIDC struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -2671,7 +2672,7 @@ func (r identityProviderListResponseAccessOIDCJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessOIDC) implementsZeroTrustIdentityProviderListResponse() {}
+func (r IdentityProviderListResponseAccessOIDC) implementsIdentityProviderListResponse() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -2761,7 +2762,7 @@ func (r identityProviderListResponseAccessOktaJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessOkta) implementsZeroTrustIdentityProviderListResponse() {}
+func (r IdentityProviderListResponseAccessOkta) implementsIdentityProviderListResponse() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -2842,8 +2843,7 @@ func (r identityProviderListResponseAccessOneloginJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessOnelogin) implementsZeroTrustIdentityProviderListResponse() {
-}
+func (r IdentityProviderListResponseAccessOnelogin) implementsIdentityProviderListResponse() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -2921,8 +2921,7 @@ func (r identityProviderListResponseAccessPingoneJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessPingone) implementsZeroTrustIdentityProviderListResponse() {
-}
+func (r IdentityProviderListResponseAccessPingone) implementsIdentityProviderListResponse() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -3000,7 +2999,7 @@ func (r identityProviderListResponseAccessSAMLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessSAML) implementsZeroTrustIdentityProviderListResponse() {}
+func (r IdentityProviderListResponseAccessSAML) implementsIdentityProviderListResponse() {}
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
@@ -3113,7 +3112,7 @@ func (r identityProviderListResponseAccessYandexJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IdentityProviderListResponseAccessYandex) implementsZeroTrustIdentityProviderListResponse() {}
+func (r IdentityProviderListResponseAccessYandex) implementsIdentityProviderListResponse() {}
 
 type IdentityProviderDeleteResponse struct {
 	// UUID

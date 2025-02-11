@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
@@ -35,14 +36,14 @@ func NewRecommendationService(opts ...option.RequestOption) (r *RecommendationSe
 }
 
 // Retrieve the SSL/TLS Recommender's recommendation for a zone.
-func (r *RecommendationService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *RecommendationGetResponse, err error) {
+func (r *RecommendationService) Get(ctx context.Context, query RecommendationGetParams, opts ...option.RequestOption) (res *RecommendationGetResponse, err error) {
 	var env RecommendationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/ssl/recommendation", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/ssl/recommendation", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -52,7 +53,7 @@ func (r *RecommendationService) Get(ctx context.Context, zoneIdentifier string, 
 }
 
 type RecommendationGetResponse struct {
-	// Identifier of a recommedation result.
+	// Identifier of a recommendation result.
 	ID         string                         `json:"id"`
 	ModifiedOn time.Time                      `json:"modified_on" format:"date-time"`
 	Value      RecommendationGetResponseValue `json:"value"`
@@ -93,12 +94,17 @@ func (r RecommendationGetResponseValue) IsKnown() bool {
 	return false
 }
 
+type RecommendationGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type RecommendationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   RecommendationGetResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RecommendationGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  RecommendationGetResponse                `json:"result"`
 	JSON    recommendationGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -107,8 +113,8 @@ type RecommendationGetResponseEnvelope struct {
 type recommendationGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -204,13 +204,13 @@ func (r MemberNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r MemberNewParamsBody) implementsAccountsMemberNewParamsBodyUnion() {}
+func (r MemberNewParamsBody) implementsMemberNewParamsBodyUnion() {}
 
 // Satisfied by [accounts.MemberNewParamsBodyIAMCreateMemberWithRoles],
 // [accounts.MemberNewParamsBodyIAMCreateMemberWithPolicies],
 // [MemberNewParamsBody].
 type MemberNewParamsBodyUnion interface {
-	implementsAccountsMemberNewParamsBodyUnion()
+	implementsMemberNewParamsBodyUnion()
 }
 
 type MemberNewParamsBodyIAMCreateMemberWithRoles struct {
@@ -225,7 +225,7 @@ func (r MemberNewParamsBodyIAMCreateMemberWithRoles) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r MemberNewParamsBodyIAMCreateMemberWithRoles) implementsAccountsMemberNewParamsBodyUnion() {}
+func (r MemberNewParamsBodyIAMCreateMemberWithRoles) implementsMemberNewParamsBodyUnion() {}
 
 type MemberNewParamsBodyIAMCreateMemberWithRolesStatus string
 
@@ -254,8 +254,7 @@ func (r MemberNewParamsBodyIAMCreateMemberWithPolicies) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r MemberNewParamsBodyIAMCreateMemberWithPolicies) implementsAccountsMemberNewParamsBodyUnion() {
-}
+func (r MemberNewParamsBodyIAMCreateMemberWithPolicies) implementsMemberNewParamsBodyUnion() {}
 
 type MemberNewParamsBodyIAMCreateMemberWithPoliciesPolicy struct {
 	// Allow or deny operations against the resources.
@@ -399,13 +398,13 @@ func (r MemberUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r MemberUpdateParamsBody) implementsAccountsMemberUpdateParamsBodyUnion() {}
+func (r MemberUpdateParamsBody) implementsMemberUpdateParamsBodyUnion() {}
 
 // Satisfied by [accounts.MemberUpdateParamsBodyIAMUpdateMemberWithRoles],
 // [accounts.MemberUpdateParamsBodyIAMUpdateMemberWithPolicies],
 // [MemberUpdateParamsBody].
 type MemberUpdateParamsBodyUnion interface {
-	implementsAccountsMemberUpdateParamsBodyUnion()
+	implementsMemberUpdateParamsBodyUnion()
 }
 
 type MemberUpdateParamsBodyIAMUpdateMemberWithRoles struct {
@@ -417,8 +416,7 @@ func (r MemberUpdateParamsBodyIAMUpdateMemberWithRoles) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r MemberUpdateParamsBodyIAMUpdateMemberWithRoles) implementsAccountsMemberUpdateParamsBodyUnion() {
-}
+func (r MemberUpdateParamsBodyIAMUpdateMemberWithRoles) implementsMemberUpdateParamsBodyUnion() {}
 
 // A member's status in the account.
 type MemberUpdateParamsBodyIAMUpdateMemberWithRolesStatus string
@@ -459,8 +457,7 @@ func (r MemberUpdateParamsBodyIAMUpdateMemberWithPolicies) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r MemberUpdateParamsBodyIAMUpdateMemberWithPolicies) implementsAccountsMemberUpdateParamsBodyUnion() {
-}
+func (r MemberUpdateParamsBodyIAMUpdateMemberWithPolicies) implementsMemberUpdateParamsBodyUnion() {}
 
 type MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPolicy struct {
 	// Allow or deny operations against the resources.

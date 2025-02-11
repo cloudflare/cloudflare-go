@@ -276,7 +276,7 @@ func (r DatasetNewResponseFiltersOperator) IsKnown() bool {
 // Union satisfied by [shared.UnionString], [shared.UnionFloat] or
 // [shared.UnionBool].
 type DatasetNewResponseFiltersValueUnion interface {
-	ImplementsAIGatewayDatasetNewResponseFiltersValueUnion()
+	ImplementsDatasetNewResponseFiltersValueUnion()
 }
 
 func init() {
@@ -411,7 +411,7 @@ func (r DatasetUpdateResponseFiltersOperator) IsKnown() bool {
 // Union satisfied by [shared.UnionString], [shared.UnionFloat] or
 // [shared.UnionBool].
 type DatasetUpdateResponseFiltersValueUnion interface {
-	ImplementsAIGatewayDatasetUpdateResponseFiltersValueUnion()
+	ImplementsDatasetUpdateResponseFiltersValueUnion()
 }
 
 func init() {
@@ -546,7 +546,7 @@ func (r DatasetListResponseFiltersOperator) IsKnown() bool {
 // Union satisfied by [shared.UnionString], [shared.UnionFloat] or
 // [shared.UnionBool].
 type DatasetListResponseFiltersValueUnion interface {
-	ImplementsAIGatewayDatasetListResponseFiltersValueUnion()
+	ImplementsDatasetListResponseFiltersValueUnion()
 }
 
 func init() {
@@ -681,7 +681,7 @@ func (r DatasetDeleteResponseFiltersOperator) IsKnown() bool {
 // Union satisfied by [shared.UnionString], [shared.UnionFloat] or
 // [shared.UnionBool].
 type DatasetDeleteResponseFiltersValueUnion interface {
-	ImplementsAIGatewayDatasetDeleteResponseFiltersValueUnion()
+	ImplementsDatasetDeleteResponseFiltersValueUnion()
 }
 
 func init() {
@@ -816,7 +816,7 @@ func (r DatasetGetResponseFiltersOperator) IsKnown() bool {
 // Union satisfied by [shared.UnionString], [shared.UnionFloat] or
 // [shared.UnionBool].
 type DatasetGetResponseFiltersValueUnion interface {
-	ImplementsAIGatewayDatasetGetResponseFiltersValueUnion()
+	ImplementsDatasetGetResponseFiltersValueUnion()
 }
 
 func init() {
@@ -908,7 +908,7 @@ func (r DatasetNewParamsFiltersOperator) IsKnown() bool {
 
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type DatasetNewParamsFiltersValueUnion interface {
-	ImplementsAIGatewayDatasetNewParamsFiltersValueUnion()
+	ImplementsDatasetNewParamsFiltersValueUnion()
 }
 
 type DatasetNewResponseEnvelope struct {
@@ -1000,7 +1000,7 @@ func (r DatasetUpdateParamsFiltersOperator) IsKnown() bool {
 
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type DatasetUpdateParamsFiltersValueUnion interface {
-	ImplementsAIGatewayDatasetUpdateParamsFiltersValueUnion()
+	ImplementsDatasetUpdateParamsFiltersValueUnion()
 }
 
 type DatasetUpdateResponseEnvelope struct {

@@ -3,10 +3,8 @@
 package vectorize_test
 
 import (
-	"bytes"
 	"context"
 	"errors"
-	"io"
 	"os"
 	"testing"
 
@@ -238,7 +236,7 @@ func TestIndexInsertWithOptionalParams(t *testing.T) {
 		"example-index",
 		vectorize.IndexInsertParams{
 			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:               io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+			Body:               "@/path/to/vectors.ndjson",
 			UnparsableBehavior: cloudflare.F(vectorize.IndexInsertParamsUnparsableBehaviorError),
 		},
 	)
@@ -309,7 +307,7 @@ func TestIndexUpsertWithOptionalParams(t *testing.T) {
 		"example-index",
 		vectorize.IndexUpsertParams{
 			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:               io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+			Body:               "@/path/to/vectors.ndjson",
 			UnparsableBehavior: cloudflare.F(vectorize.IndexUpsertParamsUnparsableBehaviorError),
 		},
 	)

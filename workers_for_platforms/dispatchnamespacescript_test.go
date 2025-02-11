@@ -40,13 +40,15 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					Config: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig{
 						HTMLHandling:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
 						NotFoundHandling: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingNone),
+						RunWorkerFirst:   cloudflare.F(false),
 						ServeDirectly:    cloudflare.F(true),
 					}),
 					JWT: cloudflare.F("jwt"),
 				}),
-				Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingUnion{workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAny{
+				Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingUnion{workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText{
 					Name: cloudflare.F("MY_ENV_VAR"),
-					Type: cloudflare.F("plain_text"),
+					Text: cloudflare.F("my_data"),
+					Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText),
 				}}),
 				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),

@@ -253,7 +253,7 @@ func (r TunnelWARPConnectorNewResponse) AsUnion() TunnelWARPConnectorNewResponse
 // Union satisfied by [shared.CloudflareTunnel] or
 // [zero_trust.TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnel].
 type TunnelWARPConnectorNewResponseUnion interface {
-	ImplementsZeroTrustTunnelWARPConnectorNewResponse()
+	ImplementsTunnelWARPConnectorNewResponse()
 }
 
 func init() {
@@ -331,7 +331,7 @@ func (r tunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelJSON) RawJSON() s
 	return r.raw
 }
 
-func (r TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelWARPConnectorNewResponse() {
+func (r TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnel) ImplementsTunnelWARPConnectorNewResponse() {
 }
 
 type TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelConnection struct {
@@ -545,7 +545,7 @@ func (r TunnelWARPConnectorListResponse) AsUnion() TunnelWARPConnectorListRespon
 // Union satisfied by [shared.CloudflareTunnel] or
 // [zero_trust.TunnelWARPConnectorListResponseTunnelWARPConnectorTunnel].
 type TunnelWARPConnectorListResponseUnion interface {
-	ImplementsZeroTrustTunnelWARPConnectorListResponse()
+	ImplementsTunnelWARPConnectorListResponse()
 }
 
 func init() {
@@ -623,7 +623,7 @@ func (r tunnelWARPConnectorListResponseTunnelWARPConnectorTunnelJSON) RawJSON() 
 	return r.raw
 }
 
-func (r TunnelWARPConnectorListResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelWARPConnectorListResponse() {
+func (r TunnelWARPConnectorListResponseTunnelWARPConnectorTunnel) ImplementsTunnelWARPConnectorListResponse() {
 }
 
 type TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelConnection struct {
@@ -837,7 +837,7 @@ func (r TunnelWARPConnectorDeleteResponse) AsUnion() TunnelWARPConnectorDeleteRe
 // Union satisfied by [shared.CloudflareTunnel] or
 // [zero_trust.TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnel].
 type TunnelWARPConnectorDeleteResponseUnion interface {
-	ImplementsZeroTrustTunnelWARPConnectorDeleteResponse()
+	ImplementsTunnelWARPConnectorDeleteResponse()
 }
 
 func init() {
@@ -915,7 +915,7 @@ func (r tunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelJSON) RawJSON(
 	return r.raw
 }
 
-func (r TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelWARPConnectorDeleteResponse() {
+func (r TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnel) ImplementsTunnelWARPConnectorDeleteResponse() {
 }
 
 type TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelConnection struct {
@@ -1129,7 +1129,7 @@ func (r TunnelWARPConnectorEditResponse) AsUnion() TunnelWARPConnectorEditRespon
 // Union satisfied by [shared.CloudflareTunnel] or
 // [zero_trust.TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnel].
 type TunnelWARPConnectorEditResponseUnion interface {
-	ImplementsZeroTrustTunnelWARPConnectorEditResponse()
+	ImplementsTunnelWARPConnectorEditResponse()
 }
 
 func init() {
@@ -1207,7 +1207,7 @@ func (r tunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelJSON) RawJSON() 
 	return r.raw
 }
 
-func (r TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelWARPConnectorEditResponse() {
+func (r TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnel) ImplementsTunnelWARPConnectorEditResponse() {
 }
 
 type TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelConnection struct {
@@ -1421,7 +1421,7 @@ func (r TunnelWARPConnectorGetResponse) AsUnion() TunnelWARPConnectorGetResponse
 // Union satisfied by [shared.CloudflareTunnel] or
 // [zero_trust.TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnel].
 type TunnelWARPConnectorGetResponseUnion interface {
-	ImplementsZeroTrustTunnelWARPConnectorGetResponse()
+	ImplementsTunnelWARPConnectorGetResponse()
 }
 
 func init() {
@@ -1499,7 +1499,7 @@ func (r tunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelJSON) RawJSON() s
 	return r.raw
 }
 
-func (r TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnel) ImplementsZeroTrustTunnelWARPConnectorGetResponse() {
+func (r TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnel) ImplementsTunnelWARPConnectorGetResponse() {
 }
 
 type TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelConnection struct {
@@ -1906,7 +1906,9 @@ type TunnelWARPConnectorTokenParams struct {
 type TunnelWARPConnectorTokenResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   string                `json:"result,required"`
+	// The Tunnel Token is used as a mechanism to authenticate the operation of a
+	// tunnel.
+	Result string `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelWARPConnectorTokenResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelWARPConnectorTokenResponseEnvelopeJSON    `json:"-"`

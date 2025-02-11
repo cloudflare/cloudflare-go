@@ -14,6 +14,7 @@ import (
 // the [NewAIService] method instead.
 type AIService struct {
 	Options          []option.RequestOption
+	Inference        *AIInferenceService
 	Bots             *AIBotService
 	TimeseriesGroups *AITimeseriesGroupService
 }
@@ -24,6 +25,7 @@ type AIService struct {
 func NewAIService(opts ...option.RequestOption) (r *AIService) {
 	r = &AIService{}
 	r.Options = opts
+	r.Inference = NewAIInferenceService(opts...)
 	r.Bots = NewAIBotService(opts...)
 	r.TimeseriesGroups = NewAITimeseriesGroupService(opts...)
 	return

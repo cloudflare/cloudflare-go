@@ -453,9 +453,9 @@ type RuleSetting struct {
 	// Configure how session check behaves.
 	CheckSession RuleSettingCheckSession `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
-	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-	// route to the address closest to their origin. Only valid when a rule's action is
-	// set to 'resolve'.
+	// Cannot be used when 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
+	// are set. DNS queries will route to the address closest to their origin. Only
+	// valid when a rule's action is set to 'resolve'.
 	DNSResolvers RuleSettingDNSResolvers `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
@@ -486,9 +486,15 @@ type RuleSetting struct {
 	PayloadLog RuleSettingPayloadLog `json:"payload_log"`
 	// Settings that apply to quarantine rules
 	Quarantine RuleSettingQuarantine `json:"quarantine"`
+	// Configure to forward the query to the internal DNS service, passing the
+	// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
+	// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
+	// set to 'resolve'.
+	ResolveDNSInternally RuleSettingResolveDNSInternally `json:"resolve_dns_internally"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
-	// resolver. Cannot be set when dns_resolvers are specified. Only valid when a
-	// rule's action is set to 'resolve'.
+	// resolver. Cannot be set when 'dns_resolvers' are specified or
+	// 'resolve_dns_internally' is set. Only valid when a rule's action is set to
+	// 'resolve'.
 	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
 	UntrustedCERT RuleSettingUntrustedCERT `json:"untrusted_cert"`
@@ -517,6 +523,7 @@ type ruleSettingJSON struct {
 	OverrideIPs                     apijson.Field
 	PayloadLog                      apijson.Field
 	Quarantine                      apijson.Field
+	ResolveDNSInternally            apijson.Field
 	ResolveDNSThroughCloudflare     apijson.Field
 	UntrustedCERT                   apijson.Field
 	raw                             string
@@ -556,27 +563,56 @@ func (r ruleSettingAuditSSHJSON) RawJSON() string {
 
 // Configure how browser isolation behaves.
 type RuleSettingBISOAdminControls struct {
-	// Set to false to enable copy-pasting.
+	// Configure whether copy is enabled or not. When set with "remote_only", copying
+	// isolated content from the remote browser to the user's local clipboard is
+	// disabled. When absent, copy is enabled. Only applies when `version == "v2"`.
+	Copy RuleSettingBISOAdminControlsCopy `json:"copy"`
+	// Set to false to enable copy-pasting. Only applies when `version == "v1"`.
 	DCP bool `json:"dcp"`
-	// Set to false to enable downloading.
+	// Set to false to enable downloading. Only applies when `version == "v1"`.
 	DD bool `json:"dd"`
-	// Set to false to enable keyboard usage.
+	// Set to false to enable keyboard usage. Only applies when `version == "v1"`.
 	DK bool `json:"dk"`
-	// Set to false to enable printing.
+	// Configure whether downloading enabled or not. When absent, downloading is
+	// enabled. Only applies when `version == "v2"`.
+	Download RuleSettingBISOAdminControlsDownload `json:"download"`
+	// Set to false to enable printing. Only applies when `version == "v1"`.
 	DP bool `json:"dp"`
-	// Set to false to enable uploading.
-	DU   bool                             `json:"du"`
-	JSON ruleSettingBISOAdminControlsJSON `json:"-"`
+	// Set to false to enable uploading. Only applies when `version == "v1"`.
+	DU bool `json:"du"`
+	// Configure whether keyboard usage is enabled or not. When absent, keyboard usage
+	// is enabled. Only applies when `version == "v2"`.
+	Keyboard RuleSettingBISOAdminControlsKeyboard `json:"keyboard"`
+	// Configure whether pasting is enabled or not. When set with "remote_only",
+	// pasting content from the user's local clipboard into isolated pages is disabled.
+	// When absent, paste is enabled. Only applies when `version == "v2"`.
+	Paste RuleSettingBISOAdminControlsPaste `json:"paste"`
+	// Configure whether printing is enabled or not. When absent, printing is enabled.
+	// Only applies when `version == "v2"`.
+	Printing RuleSettingBISOAdminControlsPrinting `json:"printing"`
+	// Configure whether uploading is enabled or not. When absent, uploading is
+	// enabled. Only applies when `version == "v2"`.
+	Upload RuleSettingBISOAdminControlsUpload `json:"upload"`
+	// Indicates which version of the browser isolation controls should apply.
+	Version RuleSettingBISOAdminControlsVersion `json:"version"`
+	JSON    ruleSettingBISOAdminControlsJSON    `json:"-"`
 }
 
 // ruleSettingBISOAdminControlsJSON contains the JSON metadata for the struct
 // [RuleSettingBISOAdminControls]
 type ruleSettingBISOAdminControlsJSON struct {
+	Copy        apijson.Field
 	DCP         apijson.Field
 	DD          apijson.Field
 	DK          apijson.Field
+	Download    apijson.Field
 	DP          apijson.Field
 	DU          apijson.Field
+	Keyboard    apijson.Field
+	Paste       apijson.Field
+	Printing    apijson.Field
+	Upload      apijson.Field
+	Version     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -587,6 +623,128 @@ func (r *RuleSettingBISOAdminControls) UnmarshalJSON(data []byte) (err error) {
 
 func (r ruleSettingBISOAdminControlsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configure whether copy is enabled or not. When set with "remote_only", copying
+// isolated content from the remote browser to the user's local clipboard is
+// disabled. When absent, copy is enabled. Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsCopy string
+
+const (
+	RuleSettingBISOAdminControlsCopyEnabled    RuleSettingBISOAdminControlsCopy = "enabled"
+	RuleSettingBISOAdminControlsCopyDisabled   RuleSettingBISOAdminControlsCopy = "disabled"
+	RuleSettingBISOAdminControlsCopyRemoteOnly RuleSettingBISOAdminControlsCopy = "remote_only"
+)
+
+func (r RuleSettingBISOAdminControlsCopy) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsCopyEnabled, RuleSettingBISOAdminControlsCopyDisabled, RuleSettingBISOAdminControlsCopyRemoteOnly:
+		return true
+	}
+	return false
+}
+
+// Configure whether downloading enabled or not. When absent, downloading is
+// enabled. Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsDownload string
+
+const (
+	RuleSettingBISOAdminControlsDownloadEnabled  RuleSettingBISOAdminControlsDownload = "enabled"
+	RuleSettingBISOAdminControlsDownloadDisabled RuleSettingBISOAdminControlsDownload = "disabled"
+)
+
+func (r RuleSettingBISOAdminControlsDownload) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsDownloadEnabled, RuleSettingBISOAdminControlsDownloadDisabled:
+		return true
+	}
+	return false
+}
+
+// Configure whether keyboard usage is enabled or not. When absent, keyboard usage
+// is enabled. Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsKeyboard string
+
+const (
+	RuleSettingBISOAdminControlsKeyboardEnabled  RuleSettingBISOAdminControlsKeyboard = "enabled"
+	RuleSettingBISOAdminControlsKeyboardDisabled RuleSettingBISOAdminControlsKeyboard = "disabled"
+)
+
+func (r RuleSettingBISOAdminControlsKeyboard) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsKeyboardEnabled, RuleSettingBISOAdminControlsKeyboardDisabled:
+		return true
+	}
+	return false
+}
+
+// Configure whether pasting is enabled or not. When set with "remote_only",
+// pasting content from the user's local clipboard into isolated pages is disabled.
+// When absent, paste is enabled. Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsPaste string
+
+const (
+	RuleSettingBISOAdminControlsPasteEnabled    RuleSettingBISOAdminControlsPaste = "enabled"
+	RuleSettingBISOAdminControlsPasteDisabled   RuleSettingBISOAdminControlsPaste = "disabled"
+	RuleSettingBISOAdminControlsPasteRemoteOnly RuleSettingBISOAdminControlsPaste = "remote_only"
+)
+
+func (r RuleSettingBISOAdminControlsPaste) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsPasteEnabled, RuleSettingBISOAdminControlsPasteDisabled, RuleSettingBISOAdminControlsPasteRemoteOnly:
+		return true
+	}
+	return false
+}
+
+// Configure whether printing is enabled or not. When absent, printing is enabled.
+// Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsPrinting string
+
+const (
+	RuleSettingBISOAdminControlsPrintingEnabled  RuleSettingBISOAdminControlsPrinting = "enabled"
+	RuleSettingBISOAdminControlsPrintingDisabled RuleSettingBISOAdminControlsPrinting = "disabled"
+)
+
+func (r RuleSettingBISOAdminControlsPrinting) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsPrintingEnabled, RuleSettingBISOAdminControlsPrintingDisabled:
+		return true
+	}
+	return false
+}
+
+// Configure whether uploading is enabled or not. When absent, uploading is
+// enabled. Only applies when `version == "v2"`.
+type RuleSettingBISOAdminControlsUpload string
+
+const (
+	RuleSettingBISOAdminControlsUploadEnabled  RuleSettingBISOAdminControlsUpload = "enabled"
+	RuleSettingBISOAdminControlsUploadDisabled RuleSettingBISOAdminControlsUpload = "disabled"
+)
+
+func (r RuleSettingBISOAdminControlsUpload) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsUploadEnabled, RuleSettingBISOAdminControlsUploadDisabled:
+		return true
+	}
+	return false
+}
+
+// Indicates which version of the browser isolation controls should apply.
+type RuleSettingBISOAdminControlsVersion string
+
+const (
+	RuleSettingBISOAdminControlsVersionV1 RuleSettingBISOAdminControlsVersion = "v1"
+	RuleSettingBISOAdminControlsVersionV2 RuleSettingBISOAdminControlsVersion = "v2"
+)
+
+func (r RuleSettingBISOAdminControlsVersion) IsKnown() bool {
+	switch r {
+	case RuleSettingBISOAdminControlsVersionV1, RuleSettingBISOAdminControlsVersionV2:
+		return true
+	}
+	return false
 }
 
 // Configure how session check behaves.
@@ -616,9 +774,9 @@ func (r ruleSettingCheckSessionJSON) RawJSON() string {
 }
 
 // Add your own custom resolvers to route queries that match the resolver policy.
-// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-// route to the address closest to their origin. Only valid when a rule's action is
-// set to 'resolve'.
+// Cannot be used when 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
+// are set. DNS queries will route to the address closest to their origin. Only
+// valid when a rule's action is set to 'resolve'.
 type RuleSettingDNSResolvers struct {
 	IPV4 []DNSResolverSettingsV4     `json:"ipv4"`
 	IPV6 []DNSResolverSettingsV6     `json:"ipv6"`
@@ -804,6 +962,55 @@ func (r RuleSettingQuarantineFileType) IsKnown() bool {
 	return false
 }
 
+// Configure to forward the query to the internal DNS service, passing the
+// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
+// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
+// set to 'resolve'.
+type RuleSettingResolveDNSInternally struct {
+	// The fallback behavior to apply when the internal DNS response code is different
+	// from 'NOERROR' or when the response data only contains CNAME records for 'A' or
+	// 'AAAA' queries.
+	Fallback RuleSettingResolveDNSInternallyFallback `json:"fallback"`
+	// The internal DNS view identifier that's passed to the internal DNS service.
+	ViewID string                              `json:"view_id"`
+	JSON   ruleSettingResolveDNSInternallyJSON `json:"-"`
+}
+
+// ruleSettingResolveDNSInternallyJSON contains the JSON metadata for the struct
+// [RuleSettingResolveDNSInternally]
+type ruleSettingResolveDNSInternallyJSON struct {
+	Fallback    apijson.Field
+	ViewID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleSettingResolveDNSInternally) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleSettingResolveDNSInternallyJSON) RawJSON() string {
+	return r.raw
+}
+
+// The fallback behavior to apply when the internal DNS response code is different
+// from 'NOERROR' or when the response data only contains CNAME records for 'A' or
+// 'AAAA' queries.
+type RuleSettingResolveDNSInternallyFallback string
+
+const (
+	RuleSettingResolveDNSInternallyFallbackNone      RuleSettingResolveDNSInternallyFallback = "none"
+	RuleSettingResolveDNSInternallyFallbackPublicDNS RuleSettingResolveDNSInternallyFallback = "public_dns"
+)
+
+func (r RuleSettingResolveDNSInternallyFallback) IsKnown() bool {
+	switch r {
+	case RuleSettingResolveDNSInternallyFallbackNone, RuleSettingResolveDNSInternallyFallbackPublicDNS:
+		return true
+	}
+	return false
+}
+
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
 type RuleSettingUntrustedCERT struct {
 	// The action performed when an untrusted certificate is seen. The default action
@@ -867,9 +1074,9 @@ type RuleSettingParam struct {
 	// Configure how session check behaves.
 	CheckSession param.Field[RuleSettingCheckSessionParam] `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
-	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-	// route to the address closest to their origin. Only valid when a rule's action is
-	// set to 'resolve'.
+	// Cannot be used when 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
+	// are set. DNS queries will route to the address closest to their origin. Only
+	// valid when a rule's action is set to 'resolve'.
 	DNSResolvers param.Field[RuleSettingDNSResolversParam] `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
@@ -900,9 +1107,15 @@ type RuleSettingParam struct {
 	PayloadLog param.Field[RuleSettingPayloadLogParam] `json:"payload_log"`
 	// Settings that apply to quarantine rules
 	Quarantine param.Field[RuleSettingQuarantineParam] `json:"quarantine"`
+	// Configure to forward the query to the internal DNS service, passing the
+	// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
+	// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
+	// set to 'resolve'.
+	ResolveDNSInternally param.Field[RuleSettingResolveDNSInternallyParam] `json:"resolve_dns_internally"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
-	// resolver. Cannot be set when dns_resolvers are specified. Only valid when a
-	// rule's action is set to 'resolve'.
+	// resolver. Cannot be set when 'dns_resolvers' are specified or
+	// 'resolve_dns_internally' is set. Only valid when a rule's action is set to
+	// 'resolve'.
 	ResolveDNSThroughCloudflare param.Field[bool] `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
 	UntrustedCERT param.Field[RuleSettingUntrustedCERTParam] `json:"untrusted_cert"`
@@ -924,16 +1137,38 @@ func (r RuleSettingAuditSSHParam) MarshalJSON() (data []byte, err error) {
 
 // Configure how browser isolation behaves.
 type RuleSettingBISOAdminControlsParam struct {
-	// Set to false to enable copy-pasting.
+	// Configure whether copy is enabled or not. When set with "remote_only", copying
+	// isolated content from the remote browser to the user's local clipboard is
+	// disabled. When absent, copy is enabled. Only applies when `version == "v2"`.
+	Copy param.Field[RuleSettingBISOAdminControlsCopy] `json:"copy"`
+	// Set to false to enable copy-pasting. Only applies when `version == "v1"`.
 	DCP param.Field[bool] `json:"dcp"`
-	// Set to false to enable downloading.
+	// Set to false to enable downloading. Only applies when `version == "v1"`.
 	DD param.Field[bool] `json:"dd"`
-	// Set to false to enable keyboard usage.
+	// Set to false to enable keyboard usage. Only applies when `version == "v1"`.
 	DK param.Field[bool] `json:"dk"`
-	// Set to false to enable printing.
+	// Configure whether downloading enabled or not. When absent, downloading is
+	// enabled. Only applies when `version == "v2"`.
+	Download param.Field[RuleSettingBISOAdminControlsDownload] `json:"download"`
+	// Set to false to enable printing. Only applies when `version == "v1"`.
 	DP param.Field[bool] `json:"dp"`
-	// Set to false to enable uploading.
+	// Set to false to enable uploading. Only applies when `version == "v1"`.
 	DU param.Field[bool] `json:"du"`
+	// Configure whether keyboard usage is enabled or not. When absent, keyboard usage
+	// is enabled. Only applies when `version == "v2"`.
+	Keyboard param.Field[RuleSettingBISOAdminControlsKeyboard] `json:"keyboard"`
+	// Configure whether pasting is enabled or not. When set with "remote_only",
+	// pasting content from the user's local clipboard into isolated pages is disabled.
+	// When absent, paste is enabled. Only applies when `version == "v2"`.
+	Paste param.Field[RuleSettingBISOAdminControlsPaste] `json:"paste"`
+	// Configure whether printing is enabled or not. When absent, printing is enabled.
+	// Only applies when `version == "v2"`.
+	Printing param.Field[RuleSettingBISOAdminControlsPrinting] `json:"printing"`
+	// Configure whether uploading is enabled or not. When absent, uploading is
+	// enabled. Only applies when `version == "v2"`.
+	Upload param.Field[RuleSettingBISOAdminControlsUpload] `json:"upload"`
+	// Indicates which version of the browser isolation controls should apply.
+	Version param.Field[RuleSettingBISOAdminControlsVersion] `json:"version"`
 }
 
 func (r RuleSettingBISOAdminControlsParam) MarshalJSON() (data []byte, err error) {
@@ -953,9 +1188,9 @@ func (r RuleSettingCheckSessionParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Add your own custom resolvers to route queries that match the resolver policy.
-// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-// route to the address closest to their origin. Only valid when a rule's action is
-// set to 'resolve'.
+// Cannot be used when 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
+// are set. DNS queries will route to the address closest to their origin. Only
+// valid when a rule's action is set to 'resolve'.
 type RuleSettingDNSResolversParam struct {
 	IPV4 param.Field[[]DNSResolverSettingsV4Param] `json:"ipv4"`
 	IPV6 param.Field[[]DNSResolverSettingsV6Param] `json:"ipv6"`
@@ -1028,6 +1263,23 @@ type RuleSettingQuarantineParam struct {
 }
 
 func (r RuleSettingQuarantineParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configure to forward the query to the internal DNS service, passing the
+// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
+// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
+// set to 'resolve'.
+type RuleSettingResolveDNSInternallyParam struct {
+	// The fallback behavior to apply when the internal DNS response code is different
+	// from 'NOERROR' or when the response data only contains CNAME records for 'A' or
+	// 'AAAA' queries.
+	Fallback param.Field[RuleSettingResolveDNSInternallyFallback] `json:"fallback"`
+	// The internal DNS view identifier that's passed to the internal DNS service.
+	ViewID param.Field[string] `json:"view_id"`
+}
+
+func (r RuleSettingResolveDNSInternallyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

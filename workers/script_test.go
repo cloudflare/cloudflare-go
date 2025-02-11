@@ -38,13 +38,15 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					Config: cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfig{
 						HTMLHandling:     cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
 						NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingNone),
+						RunWorkerFirst:   cloudflare.F(false),
 						ServeDirectly:    cloudflare.F(true),
 					}),
 					JWT: cloudflare.F("jwt"),
 				}),
-				Bindings: cloudflare.F([]workers.ScriptUpdateParamsMetadataBindingUnion{workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAny{
+				Bindings: cloudflare.F([]workers.ScriptUpdateParamsMetadataBindingUnion{workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText{
 					Name: cloudflare.F("MY_ENV_VAR"),
-					Type: cloudflare.F("plain_text"),
+					Text: cloudflare.F("my_data"),
+					Type: cloudflare.F(workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText),
 				}}),
 				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),

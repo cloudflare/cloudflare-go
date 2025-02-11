@@ -180,6 +180,8 @@ type RuleCatchAllUpdateResponse struct {
 	// Routing rule name.
 	Name string `json:"name"`
 	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
+	//
+	// Deprecated: deprecated
 	Tag  string                         `json:"tag"`
 	JSON ruleCatchAllUpdateResponseJSON `json:"-"`
 }
@@ -233,6 +235,8 @@ type RuleCatchAllGetResponse struct {
 	// Routing rule name.
 	Name string `json:"name"`
 	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
+	//
+	// Deprecated: deprecated
 	Tag  string                      `json:"tag"`
 	JSON ruleCatchAllGetResponseJSON `json:"-"`
 }
