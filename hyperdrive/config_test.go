@@ -39,9 +39,7 @@ func TestConfigNewWithOptionalParams(t *testing.T) {
 				Scheme:   cloudflare.F(hyperdrive.HyperdriveOriginPublicDatabaseSchemePostgres),
 				User:     cloudflare.F("postgres"),
 			}),
-			Caching: cloudflare.F[hyperdrive.HyperdriveCachingUnionParam](hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingCommonParam{
-				Disabled: cloudflare.F(true),
-			}),
+			Caching: cloudflare.F(hyperdrive.HyperdriveCachingParam{Disabled: cloudflare.F(true), MaxAge: cloudflare.F(int64(60)), StaleWhileRevalidate: cloudflare.F(int64(15))}),
 		},
 	})
 	if err != nil {
@@ -81,9 +79,7 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 					Scheme:   cloudflare.F(hyperdrive.HyperdriveOriginPublicDatabaseSchemePostgres),
 					User:     cloudflare.F("postgres"),
 				}),
-				Caching: cloudflare.F[hyperdrive.HyperdriveCachingUnionParam](hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingCommonParam{
-					Disabled: cloudflare.F(true),
-				}),
+				Caching: cloudflare.F(hyperdrive.HyperdriveCachingParam{Disabled: cloudflare.F(true), MaxAge: cloudflare.F(int64(60)), StaleWhileRevalidate: cloudflare.F(int64(15))}),
 			},
 		},
 	)
@@ -169,10 +165,8 @@ func TestConfigEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		hyperdrive.ConfigEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Caching: cloudflare.F[hyperdrive.ConfigEditParamsCachingUnion](hyperdrive.ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon{
-				Disabled: cloudflare.F(true),
-			}),
-			Name: cloudflare.F("example-hyperdrive"),
+			Caching:   cloudflare.F(hyperdrive.ConfigEditParamsCaching{Disabled: cloudflare.F(true), MaxAge: cloudflare.F(int64(60)), StaleWhileRevalidate: cloudflare.F(int64(15))}),
+			Name:      cloudflare.F("example-hyperdrive"),
 			Origin: cloudflare.F[hyperdrive.ConfigEditParamsOriginUnion](hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveDatabase{
 				Database: cloudflare.F("postgres"),
 				Scheme:   cloudflare.F(hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgres),

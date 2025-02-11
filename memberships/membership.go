@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/accounts"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
@@ -114,8 +113,8 @@ func (r *MembershipService) Get(ctx context.Context, membershipID string, opts .
 
 type Membership struct {
 	// Membership identifier tag.
-	ID      string           `json:"id"`
-	Account accounts.Account `json:"account"`
+	ID      string      `json:"id"`
+	Account interface{} `json:"account"`
 	// Enterprise only. Indicates whether or not API access is enabled specifically for
 	// this user on a given account.
 	APIAccessEnabled bool `json:"api_access_enabled,nullable"`
@@ -211,8 +210,8 @@ func (r MembershipStatus) IsKnown() bool {
 
 type MembershipUpdateResponse struct {
 	// Membership identifier tag.
-	ID      string           `json:"id"`
-	Account accounts.Account `json:"account"`
+	ID      string      `json:"id"`
+	Account interface{} `json:"account"`
 	// Enterprise only. Indicates whether or not API access is enabled specifically for
 	// this user on a given account.
 	APIAccessEnabled bool `json:"api_access_enabled,nullable"`
@@ -544,8 +543,8 @@ func (r membershipDeleteResponseJSON) RawJSON() string {
 
 type MembershipGetResponse struct {
 	// Membership identifier tag.
-	ID      string           `json:"id"`
-	Account accounts.Account `json:"account"`
+	ID      string      `json:"id"`
+	Account interface{} `json:"account"`
 	// Enterprise only. Indicates whether or not API access is enabled specifically for
 	// this user on a given account.
 	APIAccessEnabled bool `json:"api_access_enabled,nullable"`

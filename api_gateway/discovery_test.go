@@ -28,7 +28,7 @@ func TestDiscoveryGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Discovery.Get(context.TODO(), api_gateway.DiscoveryGetParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID: cloudflare.F("zone_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

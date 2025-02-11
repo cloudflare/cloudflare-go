@@ -161,7 +161,7 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 	Description string `json:"description"`
 	// The configuration specific to GRE interconnects.
 	GRE         CfInterconnectUpdateResponseModifiedInterconnectGRE `json:"gre"`
-	HealthCheck HealthCheck                                         `json:"health_check"`
+	HealthCheck interface{}                                         `json:"health_check"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
@@ -257,7 +257,7 @@ type CfInterconnectListResponseInterconnect struct {
 	Description string `json:"description"`
 	// The configuration specific to GRE interconnects.
 	GRE         CfInterconnectListResponseInterconnectsGRE `json:"gre"`
-	HealthCheck HealthCheck                                `json:"health_check"`
+	HealthCheck interface{}                                `json:"health_check"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
@@ -355,7 +355,7 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 	Description string `json:"description"`
 	// The configuration specific to GRE interconnects.
 	GRE         CfInterconnectBulkUpdateResponseModifiedInterconnectsGRE `json:"gre"`
-	HealthCheck HealthCheck                                              `json:"health_check"`
+	HealthCheck interface{}                                              `json:"health_check"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
@@ -452,7 +452,7 @@ type CfInterconnectGetResponseInterconnect struct {
 	Description string `json:"description"`
 	// The configuration specific to GRE interconnects.
 	GRE         CfInterconnectGetResponseInterconnectGRE `json:"gre"`
-	HealthCheck HealthCheck                              `json:"health_check"`
+	HealthCheck interface{}                              `json:"health_check"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.

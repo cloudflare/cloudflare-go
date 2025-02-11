@@ -95,7 +95,7 @@ func (r *SubscriptionService) Delete(ctx context.Context, subscriptionIdentifier
 }
 
 // Lists all of an account's subscriptions.
-func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[shared.Subscription], err error) {
+func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[SubscriptionGetResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -117,7 +117,7 @@ func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetPara
 }
 
 // Lists all of an account's subscriptions.
-func (r *SubscriptionService) GetAutoPaging(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[shared.Subscription] {
+func (r *SubscriptionService) GetAutoPaging(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SubscriptionGetResponse] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }
 
@@ -142,6 +142,8 @@ func (r *SubscriptionDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 func (r subscriptionDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
+
+type SubscriptionGetResponse = interface{}
 
 type SubscriptionNewParams struct {
 	// Identifier

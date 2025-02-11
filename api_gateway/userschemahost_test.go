@@ -28,7 +28,7 @@ func TestUserSchemaHostListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.UserSchemas.Hosts.List(context.TODO(), api_gateway.UserSchemaHostListParams{
-		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:  cloudflare.F("zone_id"),
 		Page:    cloudflare.F(int64(1)),
 		PerPage: cloudflare.F(int64(5)),
 	})
