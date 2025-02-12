@@ -1316,6 +1316,8 @@ func (r TokenPolicyParam) MarshalJSON() (data []byte, err error) {
 // A named group of permissions that map to a group of operations against
 // resources.
 type TokenPolicyPermissionGroupParam struct {
+	// Identifier of the group.
+	ID param.Field[string] `json:"id,required"`
 	// Attributes associated to the permission group.
 	Meta param.Field[TokenPolicyPermissionGroupsMetaParam] `json:"meta"`
 }
