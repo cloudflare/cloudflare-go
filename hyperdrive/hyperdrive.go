@@ -264,6 +264,7 @@ type HyperdriveCaching struct {
 	// it becomes stale. Not returned if set to default. (Default: 15)
 	StaleWhileRevalidate int64                 `json:"stale_while_revalidate"`
 	JSON                 hyperdriveCachingJSON `json:"-"`
+	union                HyperdriveCachingUnion
 }
 
 // hyperdriveCachingJSON contains the JSON metadata for the struct
@@ -276,18 +277,111 @@ type hyperdriveCachingJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *HyperdriveCaching) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 func (r hyperdriveCachingJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r *HyperdriveCaching) UnmarshalJSON(data []byte) (err error) {
+	*r = HyperdriveCaching{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [HyperdriveCachingUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingCommon],
+// [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingEnabled].
+func (r HyperdriveCaching) AsUnion() HyperdriveCachingUnion {
+	return r.union
+}
+
+// Union satisfied by
+// [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingCommon] or
+// [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingEnabled].
+type HyperdriveCachingUnion interface {
+	implementsHyperdriveCaching()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*HyperdriveCachingUnion)(nil)).Elem(),
+		"disabled",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(HyperdriveCachingHyperdriveHyperdriveCachingCommon{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(HyperdriveCachingHyperdriveHyperdriveCachingEnabled{}),
+		},
+	)
+}
+
+type HyperdriveCachingHyperdriveHyperdriveCachingCommon struct {
+	// When set to true, disables the caching of SQL responses. (Default: false)
+	Disabled bool                                                   `json:"disabled"`
+	JSON     hyperdriveCachingHyperdriveHyperdriveCachingCommonJSON `json:"-"`
+}
+
+// hyperdriveCachingHyperdriveHyperdriveCachingCommonJSON contains the JSON
+// metadata for the struct [HyperdriveCachingHyperdriveHyperdriveCachingCommon]
+type hyperdriveCachingHyperdriveHyperdriveCachingCommonJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveCachingHyperdriveHyperdriveCachingCommon) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveCachingHyperdriveHyperdriveCachingCommonJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r HyperdriveCachingHyperdriveHyperdriveCachingCommon) implementsHyperdriveCaching() {}
+
+type HyperdriveCachingHyperdriveHyperdriveCachingEnabled struct {
+	// When set to true, disables the caching of SQL responses. (Default: false)
+	Disabled bool `json:"disabled"`
+	// When present, specifies max duration for which items should persist in the
+	// cache. Not returned if set to default. (Default: 60)
+	MaxAge int64 `json:"max_age"`
+	// When present, indicates the number of seconds cache may serve the response after
+	// it becomes stale. Not returned if set to default. (Default: 15)
+	StaleWhileRevalidate int64                                                   `json:"stale_while_revalidate"`
+	JSON                 hyperdriveCachingHyperdriveHyperdriveCachingEnabledJSON `json:"-"`
+}
+
+// hyperdriveCachingHyperdriveHyperdriveCachingEnabledJSON contains the JSON
+// metadata for the struct [HyperdriveCachingHyperdriveHyperdriveCachingEnabled]
+type hyperdriveCachingHyperdriveHyperdriveCachingEnabledJSON struct {
+	Disabled             apijson.Field
+	MaxAge               apijson.Field
+	StaleWhileRevalidate apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *HyperdriveCachingHyperdriveHyperdriveCachingEnabled) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveCachingHyperdriveHyperdriveCachingEnabledJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabled) implementsHyperdriveCaching() {}
+
 type HyperdriveParam struct {
-	Name    param.Field[string]                     `json:"name,required"`
-	Origin  param.Field[HyperdriveOriginUnionParam] `json:"origin,required"`
-	Caching param.Field[HyperdriveCachingParam]     `json:"caching"`
+	Name    param.Field[string]                      `json:"name,required"`
+	Origin  param.Field[HyperdriveOriginUnionParam]  `json:"origin,required"`
+	Caching param.Field[HyperdriveCachingUnionParam] `json:"caching"`
 }
 
 func (r HyperdriveParam) MarshalJSON() (data []byte, err error) {
@@ -389,4 +483,44 @@ type HyperdriveCachingParam struct {
 
 func (r HyperdriveCachingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r HyperdriveCachingParam) implementsHyperdriveCachingUnionParam() {}
+
+// Satisfied by
+// [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingCommonParam],
+// [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam],
+// [HyperdriveCachingParam].
+type HyperdriveCachingUnionParam interface {
+	implementsHyperdriveCachingUnionParam()
+}
+
+type HyperdriveCachingHyperdriveHyperdriveCachingCommonParam struct {
+	// When set to true, disables the caching of SQL responses. (Default: false)
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r HyperdriveCachingHyperdriveHyperdriveCachingCommonParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r HyperdriveCachingHyperdriveHyperdriveCachingCommonParam) implementsHyperdriveCachingUnionParam() {
+}
+
+type HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam struct {
+	// When set to true, disables the caching of SQL responses. (Default: false)
+	Disabled param.Field[bool] `json:"disabled"`
+	// When present, specifies max duration for which items should persist in the
+	// cache. Not returned if set to default. (Default: 60)
+	MaxAge param.Field[int64] `json:"max_age"`
+	// When present, indicates the number of seconds cache may serve the response after
+	// it becomes stale. Not returned if set to default. (Default: 15)
+	StaleWhileRevalidate param.Field[int64] `json:"stale_while_revalidate"`
+}
+
+func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam) implementsHyperdriveCachingUnionParam() {
 }

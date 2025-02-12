@@ -28,7 +28,7 @@ func TestOperationNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Operations.New(context.TODO(), api_gateway.OperationNewParams{
-		ZoneID:   cloudflare.F("zone_id"),
+		ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Endpoint: cloudflare.F("/api/v1/users/{var1}"),
 		Host:     cloudflare.F("www.example.com"),
 		Method:   cloudflare.F(api_gateway.OperationNewParamsMethodGet),
@@ -56,7 +56,7 @@ func TestOperationListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Operations.List(context.TODO(), api_gateway.OperationListParams{
-		ZoneID:    cloudflare.F("zone_id"),
+		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Direction: cloudflare.F(api_gateway.OperationListParamsDirectionAsc),
 		Endpoint:  cloudflare.F("/api/v1"),
 		Feature:   cloudflare.F([]api_gateway.OperationListParamsFeature{api_gateway.OperationListParamsFeatureThresholds}),
@@ -92,7 +92,7 @@ func TestOperationDelete(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.OperationDeleteParams{
-			ZoneID: cloudflare.F("zone_id"),
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -118,7 +118,7 @@ func TestOperationBulkNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Operations.BulkNew(context.TODO(), api_gateway.OperationBulkNewParams{
-		ZoneID: cloudflare.F("zone_id"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: []api_gateway.OperationBulkNewParamsBody{{
 			Endpoint: cloudflare.F("/api/v1/users/{var1}"),
 			Host:     cloudflare.F("www.example.com"),
@@ -148,7 +148,7 @@ func TestOperationBulkDelete(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Operations.BulkDelete(context.TODO(), api_gateway.OperationBulkDeleteParams{
-		ZoneID: cloudflare.F("zone_id"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -176,7 +176,7 @@ func TestOperationGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.OperationGetParams{
-			ZoneID:  cloudflare.F("zone_id"),
+			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Feature: cloudflare.F([]api_gateway.OperationGetParamsFeature{api_gateway.OperationGetParamsFeatureThresholds}),
 		},
 	)

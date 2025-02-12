@@ -458,10 +458,10 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigEditParams struct {
 	// Identifier
-	AccountID param.Field[string]                      `path:"account_id,required"`
-	Caching   param.Field[ConfigEditParamsCaching]     `json:"caching"`
-	Name      param.Field[string]                      `json:"name"`
-	Origin    param.Field[ConfigEditParamsOriginUnion] `json:"origin"`
+	AccountID param.Field[string]                       `path:"account_id,required"`
+	Caching   param.Field[ConfigEditParamsCachingUnion] `json:"caching"`
+	Name      param.Field[string]                       `json:"name"`
+	Origin    param.Field[ConfigEditParamsOriginUnion]  `json:"origin"`
 }
 
 func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
@@ -481,6 +481,46 @@ type ConfigEditParamsCaching struct {
 
 func (r ConfigEditParamsCaching) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigEditParamsCaching) implementsConfigEditParamsCachingUnion() {}
+
+// Satisfied by
+// [hyperdrive.ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon],
+// [hyperdrive.ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled],
+// [ConfigEditParamsCaching].
+type ConfigEditParamsCachingUnion interface {
+	implementsConfigEditParamsCachingUnion()
+}
+
+type ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon struct {
+	// When set to true, disables the caching of SQL responses. (Default: false)
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon) implementsConfigEditParamsCachingUnion() {
+}
+
+type ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled struct {
+	// When set to true, disables the caching of SQL responses. (Default: false)
+	Disabled param.Field[bool] `json:"disabled"`
+	// When present, specifies max duration for which items should persist in the
+	// cache. Not returned if set to default. (Default: 60)
+	MaxAge param.Field[int64] `json:"max_age"`
+	// When present, indicates the number of seconds cache may serve the response after
+	// it becomes stale. Not returned if set to default. (Default: 15)
+	StaleWhileRevalidate param.Field[int64] `json:"stale_while_revalidate"`
+}
+
+func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) implementsConfigEditParamsCachingUnion() {
 }
 
 type ConfigEditParamsOrigin struct {

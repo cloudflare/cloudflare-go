@@ -122,7 +122,7 @@ func (r *PayloadService) DeleteAutoPaging(ctx context.Context, expressionID stri
 // A custom scan expression to match Content Scanning on
 type PayloadNewResponse struct {
 	// The unique ID for this custom scan expression
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// Ruleset expression to use in matching content objects
 	Payload string                 `json:"payload"`
 	JSON    payloadNewResponseJSON `json:"-"`
@@ -148,7 +148,7 @@ func (r payloadNewResponseJSON) RawJSON() string {
 // A custom scan expression to match Content Scanning on
 type PayloadListResponse struct {
 	// The unique ID for this custom scan expression
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// Ruleset expression to use in matching content objects
 	Payload string                  `json:"payload"`
 	JSON    payloadListResponseJSON `json:"-"`
@@ -174,7 +174,7 @@ func (r payloadListResponseJSON) RawJSON() string {
 // A custom scan expression to match Content Scanning on
 type PayloadDeleteResponse struct {
 	// The unique ID for this custom scan expression
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// Ruleset expression to use in matching content objects
 	Payload string                    `json:"payload"`
 	JSON    payloadDeleteResponseJSON `json:"-"`

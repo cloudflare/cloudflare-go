@@ -157,7 +157,7 @@ func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query 
 type DeviceNetwork struct {
 	// The configuration object containing information for the WARP client to detect
 	// the managed network.
-	Config interface{} `json:"config"`
+	Config DeviceNetworkConfig `json:"config"`
 	// The name of the device managed network. This name must be unique.
 	Name string `json:"name"`
 	// API UUID.
@@ -185,6 +185,36 @@ func (r deviceNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
+// The configuration object containing information for the WARP client to detect
+// the managed network.
+type DeviceNetworkConfig struct {
+	// A network address of the form "host:port" that the WARP client will use to
+	// detect the presence of a TLS host.
+	TLSSockaddr string `json:"tls_sockaddr,required"`
+	// The SHA-256 hash of the TLS certificate presented by the host found at
+	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
+	// timestamp, etc) will be used to validate the certificate.
+	Sha256 string                  `json:"sha256"`
+	JSON   deviceNetworkConfigJSON `json:"-"`
+}
+
+// deviceNetworkConfigJSON contains the JSON metadata for the struct
+// [DeviceNetworkConfig]
+type deviceNetworkConfigJSON struct {
+	TLSSockaddr apijson.Field
+	Sha256      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceNetworkConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of device managed network.
 type DeviceNetworkType string
 
@@ -201,8 +231,10 @@ func (r DeviceNetworkType) IsKnown() bool {
 }
 
 type DeviceNetworkNewParams struct {
-	AccountID param.Field[string]                       `path:"account_id,required"`
-	Config    param.Field[DeviceNetworkNewParamsConfig] `json:"config,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The configuration object containing information for the WARP client to detect
+	// the managed network.
+	Config param.Field[DeviceNetworkNewParamsConfig] `json:"config,required"`
 	// The name of the device managed network. This name must be unique.
 	Name param.Field[string] `json:"name,required"`
 	// The type of device managed network.
@@ -213,6 +245,8 @@ func (r DeviceNetworkNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The configuration object containing information for the WARP client to detect
+// the managed network.
 type DeviceNetworkNewParamsConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
@@ -286,8 +320,10 @@ func (r DeviceNetworkNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceNetworkUpdateParams struct {
-	AccountID param.Field[string]                          `path:"account_id,required"`
-	Config    param.Field[DeviceNetworkUpdateParamsConfig] `json:"config"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The configuration object containing information for the WARP client to detect
+	// the managed network.
+	Config param.Field[DeviceNetworkUpdateParamsConfig] `json:"config"`
 	// The name of the device managed network. This name must be unique.
 	Name param.Field[string] `json:"name"`
 	// The type of device managed network.
@@ -298,6 +334,8 @@ func (r DeviceNetworkUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The configuration object containing information for the WARP client to detect
+// the managed network.
 type DeviceNetworkUpdateParamsConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.

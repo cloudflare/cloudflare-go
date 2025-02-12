@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
@@ -60,7 +61,106 @@ func (r *RatePlanService) GetAutoPaging(ctx context.Context, query RatePlanGetPa
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }
 
-type RatePlanGetResponse = interface{}
+type RatePlanGetResponse struct {
+	// Plan identifier tag.
+	ID string `json:"id"`
+	// Array of available components values for the plan.
+	Components []RatePlanGetResponseComponent `json:"components"`
+	// The monetary unit in which pricing information is displayed.
+	Currency string `json:"currency"`
+	// The duration of the plan subscription.
+	Duration float64 `json:"duration"`
+	// The frequency at which you will be billed for this plan.
+	Frequency RatePlanGetResponseFrequency `json:"frequency"`
+	// The plan name.
+	Name string                  `json:"name"`
+	JSON ratePlanGetResponseJSON `json:"-"`
+}
+
+// ratePlanGetResponseJSON contains the JSON metadata for the struct
+// [RatePlanGetResponse]
+type ratePlanGetResponseJSON struct {
+	ID          apijson.Field
+	Components  apijson.Field
+	Currency    apijson.Field
+	Duration    apijson.Field
+	Frequency   apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RatePlanGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ratePlanGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RatePlanGetResponseComponent struct {
+	// The default amount allocated.
+	Default float64 `json:"default"`
+	// The unique component.
+	Name RatePlanGetResponseComponentsName `json:"name"`
+	// The unit price of the addon.
+	UnitPrice float64                          `json:"unit_price"`
+	JSON      ratePlanGetResponseComponentJSON `json:"-"`
+}
+
+// ratePlanGetResponseComponentJSON contains the JSON metadata for the struct
+// [RatePlanGetResponseComponent]
+type ratePlanGetResponseComponentJSON struct {
+	Default     apijson.Field
+	Name        apijson.Field
+	UnitPrice   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RatePlanGetResponseComponent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ratePlanGetResponseComponentJSON) RawJSON() string {
+	return r.raw
+}
+
+// The unique component.
+type RatePlanGetResponseComponentsName string
+
+const (
+	RatePlanGetResponseComponentsNameZones                       RatePlanGetResponseComponentsName = "zones"
+	RatePlanGetResponseComponentsNamePageRules                   RatePlanGetResponseComponentsName = "page_rules"
+	RatePlanGetResponseComponentsNameDedicatedCertificates       RatePlanGetResponseComponentsName = "dedicated_certificates"
+	RatePlanGetResponseComponentsNameDedicatedCertificatesCustom RatePlanGetResponseComponentsName = "dedicated_certificates_custom"
+)
+
+func (r RatePlanGetResponseComponentsName) IsKnown() bool {
+	switch r {
+	case RatePlanGetResponseComponentsNameZones, RatePlanGetResponseComponentsNamePageRules, RatePlanGetResponseComponentsNameDedicatedCertificates, RatePlanGetResponseComponentsNameDedicatedCertificatesCustom:
+		return true
+	}
+	return false
+}
+
+// The frequency at which you will be billed for this plan.
+type RatePlanGetResponseFrequency string
+
+const (
+	RatePlanGetResponseFrequencyWeekly    RatePlanGetResponseFrequency = "weekly"
+	RatePlanGetResponseFrequencyMonthly   RatePlanGetResponseFrequency = "monthly"
+	RatePlanGetResponseFrequencyQuarterly RatePlanGetResponseFrequency = "quarterly"
+	RatePlanGetResponseFrequencyYearly    RatePlanGetResponseFrequency = "yearly"
+)
+
+func (r RatePlanGetResponseFrequency) IsKnown() bool {
+	switch r {
+	case RatePlanGetResponseFrequencyWeekly, RatePlanGetResponseFrequencyMonthly, RatePlanGetResponseFrequencyQuarterly, RatePlanGetResponseFrequencyYearly:
+		return true
+	}
+	return false
+}
 
 type RatePlanGetParams struct {
 	// Identifier

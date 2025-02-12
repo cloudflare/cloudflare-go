@@ -28,7 +28,7 @@ func TestSchemaListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Schemas.List(context.TODO(), api_gateway.SchemaListParams{
-		ZoneID:  cloudflare.F("zone_id"),
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Feature: cloudflare.F([]api_gateway.SchemaListParamsFeature{api_gateway.SchemaListParamsFeatureThresholds}),
 		Host:    cloudflare.F([]string{"www.example.com"}),
 	})

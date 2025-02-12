@@ -55,6 +55,7 @@ func (r *DiscoveryService) Get(ctx context.Context, query DiscoveryGetParams, op
 }
 
 type DiscoveryOperation struct {
+	// UUID
 	ID string `json:"id,required"`
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -62,8 +63,8 @@ type DiscoveryOperation struct {
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
 	Endpoint string `json:"endpoint,required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string `json:"host,required" format:"hostname"`
-	LastUpdated string `json:"last_updated,required"`
+	Host        string    `json:"host,required" format:"hostname"`
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
 	Method DiscoveryOperationMethod `json:"method,required"`
 	// API discovery engine(s) that discovered this operation
@@ -213,7 +214,7 @@ func (r discoveryOperationFeaturesTrafficStatsJSON) RawJSON() string {
 
 type DiscoveryGetResponse struct {
 	Schemas   []interface{}            `json:"schemas,required"`
-	Timestamp string                   `json:"timestamp,required"`
+	Timestamp time.Time                `json:"timestamp,required" format:"date-time"`
 	JSON      discoveryGetResponseJSON `json:"-"`
 }
 
@@ -235,6 +236,7 @@ func (r discoveryGetResponseJSON) RawJSON() string {
 }
 
 type DiscoveryGetParams struct {
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 

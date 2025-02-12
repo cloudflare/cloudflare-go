@@ -307,9 +307,9 @@ type SettingViewNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the view.
-	Name param.Field[string] `json:"name"`
+	Name param.Field[string] `json:"name,required"`
 	// The list of zones linked to this view.
-	Zones param.Field[[]string] `json:"zones"`
+	Zones param.Field[[]string] `json:"zones,required"`
 }
 
 func (r SettingViewNewParams) MarshalJSON() (data []byte, err error) {

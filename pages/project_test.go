@@ -384,8 +384,16 @@ func TestProjectEditWithOptionalParams(t *testing.T) {
 							},
 						}),
 						EnvVars: cloudflare.F(map[string]pages.ProjectDeploymentConfigsProductionEnvVarParam{
-							"foo": {
-								Value: cloudflare.F("hello world"),
+							"BUILD_VERSION": {
+								Value: cloudflare.F("3.3"),
+								Type:  cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsTypePlainText),
+							},
+							"delete_this_env_var": {
+								Value: cloudflare.F("value"),
+								Type:  cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsTypePlainText),
+							},
+							"secret_var": {
+								Value: cloudflare.F("A_CMS_API_TOKEN"),
 								Type:  cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsTypePlainText),
 							},
 						}),

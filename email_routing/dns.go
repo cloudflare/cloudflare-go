@@ -40,7 +40,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 }
 
 // Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
-func (r *DNSService) New(ctx context.Context, params DNSNewParams, opts ...option.RequestOption) (res *DNSNewResponse, err error) {
+func (r *DNSService) New(ctx context.Context, params DNSNewParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env DNSNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -86,7 +86,7 @@ func (r *DNSService) DeleteAutoPaging(ctx context.Context, body DNSDeleteParams,
 }
 
 // Unlock MX Records previously locked by Email Routing.
-func (r *DNSService) Edit(ctx context.Context, params DNSEditParams, opts ...option.RequestOption) (res *DNSEditResponse, err error) {
+func (r *DNSService) Edit(ctx context.Context, params DNSEditParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env DNSEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -197,10 +197,6 @@ func (r DNSRecordType) IsKnown() bool {
 	}
 	return false
 }
-
-type DNSNewResponse = interface{}
-
-type DNSEditResponse = interface{}
 
 type DNSGetResponse struct {
 	// This field can have the runtime type of [[]shared.ResponseInfo].
@@ -513,7 +509,7 @@ type DNSNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  DNSNewResponse                `json:"result"`
+	Result  Settings                      `json:"result"`
 	JSON    dnsNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -572,7 +568,7 @@ type DNSEditResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  DNSEditResponse                `json:"result"`
+	Result  Settings                       `json:"result"`
 	JSON    dnsEditResponseEnvelopeJSON    `json:"-"`
 }
 

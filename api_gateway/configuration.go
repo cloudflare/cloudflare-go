@@ -377,6 +377,7 @@ func (r ConfigurationUpdateResponseSuccess) IsKnown() bool {
 }
 
 type ConfigurationUpdateParams struct {
+	// Identifier
 	ZoneID        param.Field[string] `path:"zone_id,required"`
 	Configuration ConfigurationParam  `json:"configuration,required"`
 }
@@ -386,6 +387,7 @@ func (r ConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigurationGetParams struct {
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Requests information about certain properties.
 	Properties param.Field[[]ConfigurationGetParamsProperty] `query:"properties"`
