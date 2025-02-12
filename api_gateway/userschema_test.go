@@ -30,7 +30,7 @@ func TestUserSchemaNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.UserSchemas.New(context.TODO(), api_gateway.UserSchemaNewParams{
-		ZoneID:            cloudflare.F("zone_id"),
+		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		File:              cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
 		Kind:              cloudflare.F(api_gateway.UserSchemaNewParamsKindOpenAPIV3),
 		Name:              cloudflare.F("petstore schema"),
@@ -59,7 +59,7 @@ func TestUserSchemaListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.UserSchemas.List(context.TODO(), api_gateway.UserSchemaListParams{
-		ZoneID:            cloudflare.F("zone_id"),
+		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		OmitSource:        cloudflare.F(true),
 		Page:              cloudflare.F(int64(1)),
 		PerPage:           cloudflare.F(int64(5)),
@@ -91,7 +91,7 @@ func TestUserSchemaDelete(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.UserSchemaDeleteParams{
-			ZoneID: cloudflare.F("zone_id"),
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -120,7 +120,7 @@ func TestUserSchemaEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.UserSchemaEditParams{
-			ZoneID:            cloudflare.F("zone_id"),
+			ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ValidationEnabled: cloudflare.F(api_gateway.UserSchemaEditParamsValidationEnabledTrue),
 		},
 	)
@@ -150,7 +150,7 @@ func TestUserSchemaGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.UserSchemaGetParams{
-			ZoneID:     cloudflare.F("zone_id"),
+			ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			OmitSource: cloudflare.F(true),
 		},
 	)

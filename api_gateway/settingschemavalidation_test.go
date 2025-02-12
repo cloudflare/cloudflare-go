@@ -28,7 +28,7 @@ func TestSettingSchemaValidationUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Settings.SchemaValidation.Update(context.TODO(), api_gateway.SettingSchemaValidationUpdateParams{
-		ZoneID:                             cloudflare.F("zone_id"),
+		ZoneID:                             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ValidationDefaultMitigationAction:  cloudflare.F(api_gateway.SettingSchemaValidationUpdateParamsValidationDefaultMitigationActionNone),
 		ValidationOverrideMitigationAction: cloudflare.F(api_gateway.SettingSchemaValidationUpdateParamsValidationOverrideMitigationActionNone),
 	})
@@ -55,7 +55,7 @@ func TestSettingSchemaValidationEditWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Settings.SchemaValidation.Edit(context.TODO(), api_gateway.SettingSchemaValidationEditParams{
-		ZoneID:                             cloudflare.F("zone_id"),
+		ZoneID:                             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ValidationDefaultMitigationAction:  cloudflare.F(api_gateway.SettingSchemaValidationEditParamsValidationDefaultMitigationActionNone),
 		ValidationOverrideMitigationAction: cloudflare.F(api_gateway.SettingSchemaValidationEditParamsValidationOverrideMitigationActionNone),
 	})
@@ -82,7 +82,7 @@ func TestSettingSchemaValidationGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Settings.SchemaValidation.Get(context.TODO(), api_gateway.SettingSchemaValidationGetParams{
-		ZoneID: cloudflare.F("zone_id"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

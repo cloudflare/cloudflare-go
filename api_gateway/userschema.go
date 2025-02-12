@@ -11,6 +11,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
@@ -150,11 +151,12 @@ func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params Use
 type Message []shared.ResponseInfo
 
 type PublicSchema struct {
-	CreatedAt string `json:"created_at,required"`
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// Kind of schema
 	Kind PublicSchemaKind `json:"kind,required"`
 	// Name of the schema
-	Name     string `json:"name,required"`
+	Name string `json:"name,required"`
+	// UUID
 	SchemaID string `json:"schema_id,required"`
 	// Source of the schema
 	Source string `json:"source"`
@@ -315,6 +317,7 @@ func (r UserSchemaDeleteResponseSuccess) IsKnown() bool {
 }
 
 type UserSchemaNewParams struct {
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Schema file bytes
 	File param.Field[io.Reader] `json:"file,required" format:"binary"`
@@ -416,6 +419,7 @@ func (r UserSchemaNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UserSchemaListParams struct {
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Omit the source-files of schemas and only retrieve their meta-data.
 	OmitSource param.Field[bool] `query:"omit_source"`
@@ -436,10 +440,12 @@ func (r UserSchemaListParams) URLQuery() (v url.Values) {
 }
 
 type UserSchemaDeleteParams struct {
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type UserSchemaEditParams struct {
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Flag whether schema is enabled for validation.
 	ValidationEnabled param.Field[UserSchemaEditParamsValidationEnabled] `json:"validation_enabled"`
@@ -508,6 +514,7 @@ func (r UserSchemaEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UserSchemaGetParams struct {
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Omit the source-files of schemas and only retrieve their meta-data.
 	OmitSource param.Field[bool] `query:"omit_source"`

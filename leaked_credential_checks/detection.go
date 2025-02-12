@@ -125,7 +125,7 @@ func (r *DetectionService) Delete(ctx context.Context, detectionID string, body 
 // on
 type DetectionNewResponse struct {
 	// The unique ID for this custom detection
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The ruleset expression to use in matching the password in a request
 	Password string `json:"password"`
 	// The ruleset expression to use in matching the username in a request
@@ -155,7 +155,7 @@ func (r detectionNewResponseJSON) RawJSON() string {
 // on
 type DetectionUpdateResponse struct {
 	// The unique ID for this custom detection
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The ruleset expression to use in matching the password in a request
 	Password string `json:"password"`
 	// The ruleset expression to use in matching the username in a request
@@ -185,7 +185,7 @@ func (r detectionUpdateResponseJSON) RawJSON() string {
 // on
 type DetectionListResponse struct {
 	// The unique ID for this custom detection
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The ruleset expression to use in matching the password in a request
 	Password string `json:"password"`
 	// The ruleset expression to use in matching the username in a request
@@ -216,8 +216,6 @@ type DetectionDeleteResponse = interface{}
 type DetectionNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The unique ID for this custom detection
-	ID param.Field[interface{}] `json:"id"`
 	// The ruleset expression to use in matching the password in a request
 	Password param.Field[string] `json:"password"`
 	// The ruleset expression to use in matching the username in a request
@@ -276,8 +274,6 @@ func (r DetectionNewResponseEnvelopeSuccess) IsKnown() bool {
 type DetectionUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The unique ID for this custom detection
-	ID param.Field[interface{}] `json:"id"`
 	// The ruleset expression to use in matching the password in a request
 	Password param.Field[string] `json:"password"`
 	// The ruleset expression to use in matching the username in a request

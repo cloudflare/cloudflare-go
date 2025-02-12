@@ -31,7 +31,7 @@ func TestUserSchemaOperationListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.UserSchemaOperationListParams{
-			ZoneID:          cloudflare.F("zone_id"),
+			ZoneID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Endpoint:        cloudflare.F("/api/v1"),
 			Feature:         cloudflare.F([]api_gateway.UserSchemaOperationListParamsFeature{api_gateway.UserSchemaOperationListParamsFeatureThresholds}),
 			Host:            cloudflare.F([]string{"api.cloudflare.com"}),

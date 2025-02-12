@@ -180,7 +180,7 @@ type AccessUserActiveSessionGetResponse struct {
 	DeviceSessions     map[string]AccessUserActiveSessionGetResponseDeviceSession `json:"device_sessions"`
 	DevicePosture      map[string]AccessUserActiveSessionGetResponseDevicePosture `json:"devicePosture"`
 	Email              string                                                     `json:"email"`
-	Geo                interface{}                                                `json:"geo"`
+	Geo                UserPolicyCheckGeo                                         `json:"geo"`
 	Iat                float64                                                    `json:"iat"`
 	IdP                AccessUserActiveSessionGetResponseIdP                      `json:"idp"`
 	IP                 string                                                     `json:"ip"`

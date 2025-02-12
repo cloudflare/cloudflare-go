@@ -84,8 +84,9 @@ type UserSchemaOperationListResponse struct {
 	Method UserSchemaOperationListResponseMethod `json:"method,required"`
 	// This field can have the runtime type of
 	// [UserSchemaOperationListResponseAPIShieldOperationFeatures].
-	Features    interface{}                         `json:"features"`
-	LastUpdated string                              `json:"last_updated"`
+	Features    interface{} `json:"features"`
+	LastUpdated time.Time   `json:"last_updated" format:"date-time"`
+	// UUID
 	OperationID string                              `json:"operation_id"`
 	JSON        userSchemaOperationListResponseJSON `json:"-"`
 	union       UserSchemaOperationListResponseUnion
@@ -156,10 +157,11 @@ type UserSchemaOperationListResponseAPIShieldOperation struct {
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
 	Endpoint string `json:"endpoint,required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string `json:"host,required" format:"hostname"`
-	LastUpdated string `json:"last_updated,required"`
+	Host        string    `json:"host,required" format:"hostname"`
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
-	Method      UserSchemaOperationListResponseAPIShieldOperationMethod   `json:"method,required"`
+	Method UserSchemaOperationListResponseAPIShieldOperationMethod `json:"method,required"`
+	// UUID
 	OperationID string                                                    `json:"operation_id,required"`
 	Features    UserSchemaOperationListResponseAPIShieldOperationFeatures `json:"features"`
 	JSON        userSchemaOperationListResponseAPIShieldOperationJSON     `json:"-"`
@@ -751,6 +753,7 @@ func (r userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperat
 
 // Schema active on endpoint.
 type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema struct {
+	// UUID
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// True if schema is Cloudflare-provided.
@@ -878,6 +881,7 @@ func (r UserSchemaOperationListResponseMethod) IsKnown() bool {
 }
 
 type UserSchemaOperationListParams struct {
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Filter results to only include endpoints containing this pattern.
 	Endpoint param.Field[string] `query:"endpoint"`
