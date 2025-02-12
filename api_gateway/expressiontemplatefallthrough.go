@@ -76,6 +76,7 @@ func (r expressionTemplateFallthroughNewResponseJSON) RawJSON() string {
 }
 
 type ExpressionTemplateFallthroughNewParams struct {
+	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// List of hosts to be targeted in the expression
 	Hosts param.Field[[]string] `json:"hosts,required"`

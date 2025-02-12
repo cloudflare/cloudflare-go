@@ -82,7 +82,7 @@ func TestPayloadDelete(t *testing.T) {
 	)
 	_, err := client.ContentScanning.Payloads.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"a350a054caa840c9becd89c3b4f0195b",
 		content_scanning.PayloadDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
