@@ -79,7 +79,59 @@ func (r *PermissionGroupService) Get(ctx context.Context, permissionGroupID stri
 	return
 }
 
-type PermissionGroupListResponse = interface{}
+// A named group of permissions that map to a group of operations against
+// resources.
+type PermissionGroupListResponse struct {
+	// Identifier of the group.
+	ID string `json:"id,required"`
+	// Attributes associated to the permission group.
+	Meta PermissionGroupListResponseMeta `json:"meta"`
+	// Name of the group.
+	Name string                          `json:"name"`
+	JSON permissionGroupListResponseJSON `json:"-"`
+}
+
+// permissionGroupListResponseJSON contains the JSON metadata for the struct
+// [PermissionGroupListResponse]
+type permissionGroupListResponseJSON struct {
+	ID          apijson.Field
+	Meta        apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PermissionGroupListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r permissionGroupListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes associated to the permission group.
+type PermissionGroupListResponseMeta struct {
+	Key   string                              `json:"key"`
+	Value string                              `json:"value"`
+	JSON  permissionGroupListResponseMetaJSON `json:"-"`
+}
+
+// permissionGroupListResponseMetaJSON contains the JSON metadata for the struct
+// [PermissionGroupListResponseMeta]
+type permissionGroupListResponseMetaJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PermissionGroupListResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r permissionGroupListResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
 
 // A named group of permissions that map to a group of operations against
 // resources.

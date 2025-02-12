@@ -319,7 +319,113 @@ func (r resourceGroupUpdateResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type ResourceGroupListResponse = interface{}
+// A group of scoped resources.
+type ResourceGroupListResponse struct {
+	// Identifier of the group.
+	ID string `json:"id,required"`
+	// The scope associated to the resource group
+	Scope []ResourceGroupListResponseScope `json:"scope,required"`
+	// Attributes associated to the resource group.
+	Meta ResourceGroupListResponseMeta `json:"meta"`
+	// Name of the resource group.
+	Name string                        `json:"name"`
+	JSON resourceGroupListResponseJSON `json:"-"`
+}
+
+// resourceGroupListResponseJSON contains the JSON metadata for the struct
+// [ResourceGroupListResponse]
+type resourceGroupListResponseJSON struct {
+	ID          apijson.Field
+	Scope       apijson.Field
+	Meta        apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// A scope is a combination of scope objects which provides additional context.
+type ResourceGroupListResponseScope struct {
+	// This is a combination of pre-defined resource name and identifier (like Account
+	// ID etc.)
+	Key string `json:"key,required"`
+	// A list of scope objects for additional context.
+	Objects []ResourceGroupListResponseScopeObject `json:"objects,required"`
+	JSON    resourceGroupListResponseScopeJSON     `json:"-"`
+}
+
+// resourceGroupListResponseScopeJSON contains the JSON metadata for the struct
+// [ResourceGroupListResponseScope]
+type resourceGroupListResponseScopeJSON struct {
+	Key         apijson.Field
+	Objects     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupListResponseScope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupListResponseScopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// A scope object represents any resource that can have actions applied against
+// invite.
+type ResourceGroupListResponseScopeObject struct {
+	// This is a combination of pre-defined resource name and identifier (like Zone ID
+	// etc.)
+	Key  string                                   `json:"key,required"`
+	JSON resourceGroupListResponseScopeObjectJSON `json:"-"`
+}
+
+// resourceGroupListResponseScopeObjectJSON contains the JSON metadata for the
+// struct [ResourceGroupListResponseScopeObject]
+type resourceGroupListResponseScopeObjectJSON struct {
+	Key         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupListResponseScopeObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupListResponseScopeObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes associated to the resource group.
+type ResourceGroupListResponseMeta struct {
+	Key   string                            `json:"key"`
+	Value string                            `json:"value"`
+	JSON  resourceGroupListResponseMetaJSON `json:"-"`
+}
+
+// resourceGroupListResponseMetaJSON contains the JSON metadata for the struct
+// [ResourceGroupListResponseMeta]
+type resourceGroupListResponseMetaJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupListResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupListResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
 
 type ResourceGroupDeleteResponse struct {
 	// Identifier
