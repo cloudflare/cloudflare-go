@@ -28,7 +28,7 @@ func TestConfigurationUpdate(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Configurations.Update(context.TODO(), api_gateway.ConfigurationUpdateParams{
-		ZoneID: cloudflare.F("zone_id"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Configuration: api_gateway.ConfigurationParam{
 			AuthIDCharacteristics: cloudflare.F([]api_gateway.ConfigurationAuthIDCharacteristicsUnionParam{api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicParam{
 				Name: cloudflare.F("authorization"),
@@ -59,7 +59,7 @@ func TestConfigurationGetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Configurations.Get(context.TODO(), api_gateway.ConfigurationGetParams{
-		ZoneID:     cloudflare.F("zone_id"),
+		ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Properties: cloudflare.F([]api_gateway.ConfigurationGetParamsProperty{api_gateway.ConfigurationGetParamsPropertyAuthIDCharacteristics}),
 	})
 	if err != nil {

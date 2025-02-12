@@ -472,6 +472,9 @@ func (r dnsFirewallGetResponseJSON) RawJSON() string {
 type DNSFirewallNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	// DNS Firewall cluster name
+	Name        param.Field[string]             `json:"name,required"`
+	UpstreamIPs param.Field[[]UpstreamIPsParam] `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
 	// Whether to refuse to answer queries for the ANY type
@@ -486,8 +489,6 @@ type DNSFirewallNewParams struct {
 	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
 	// increased to the minimum defined here for caching purposes.
 	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl"`
-	// DNS Firewall cluster name
-	Name param.Field[string] `json:"name"`
 	// Negative DNS cache TTL This setting controls how long DNS Firewall should cache
 	// negative responses (e.g., NXDOMAIN) from the upstream servers.
 	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
@@ -496,8 +497,7 @@ type DNSFirewallNewParams struct {
 	Ratelimit param.Field[float64] `json:"ratelimit"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt)
-	Retries     param.Field[float64]            `json:"retries"`
-	UpstreamIPs param.Field[[]UpstreamIPsParam] `json:"upstream_ips" format:"ipv4"`
+	Retries param.Field[float64] `json:"retries"`
 }
 
 func (r DNSFirewallNewParams) MarshalJSON() (data []byte, err error) {

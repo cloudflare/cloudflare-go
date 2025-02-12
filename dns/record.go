@@ -569,23 +569,643 @@ func (r AAAARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type BatchPatchParam struct {
+// Satisfied by [dns.BatchPatchARecordParam], [dns.BatchPatchAAAARecordParam],
+// [dns.BatchPatchCAARecordParam], [dns.BatchPatchCERTRecordParam],
+// [dns.BatchPatchCNAMERecordParam], [dns.BatchPatchDNSKEYRecordParam],
+// [dns.BatchPatchDSRecordParam], [dns.BatchPatchHTTPSRecordParam],
+// [dns.BatchPatchLOCRecordParam], [dns.BatchPatchMXRecordParam],
+// [dns.BatchPatchNAPTRRecordParam], [dns.BatchPatchNSRecordParam],
+// [dns.BatchPatchOpenpgpkeyParam], [dns.BatchPatchPTRRecordParam],
+// [dns.BatchPatchSMIMEARecordParam], [dns.BatchPatchSRVRecordParam],
+// [dns.BatchPatchSSHFPRecordParam], [dns.BatchPatchSVCBRecordParam],
+// [dns.BatchPatchTLSARecordParam], [dns.BatchPatchTXTRecordParam],
+// [dns.BatchPatchURIRecordParam].
+type BatchPatchUnionParam interface {
+	implementsBatchPatchUnionParam()
+}
+
+type BatchPatchARecordParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
+	ARecordParam
 }
 
-func (r BatchPatchParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type BatchPutParam struct {
+func (r BatchPatchARecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchAAAARecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	AAAARecordParam
+}
+
+func (r BatchPatchAAAARecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchAAAARecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchCAARecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	CAARecordParam
+}
+
+func (r BatchPatchCAARecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchCAARecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchCERTRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	CERTRecordParam
+}
+
+func (r BatchPatchCERTRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchCERTRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchCNAMERecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	CNAMERecordParam
+}
+
+func (r BatchPatchCNAMERecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchCNAMERecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchDNSKEYRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	DNSKEYRecordParam
+}
+
+func (r BatchPatchDNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchDNSKEYRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchDSRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	DSRecordParam
+}
+
+func (r BatchPatchDSRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchDSRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchHTTPSRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	HTTPSRecordParam
+}
+
+func (r BatchPatchHTTPSRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchHTTPSRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchLOCRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	LOCRecordParam
+}
+
+func (r BatchPatchLOCRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchLOCRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchMXRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	MXRecordParam
+}
+
+func (r BatchPatchMXRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchMXRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchNAPTRRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	NAPTRRecordParam
+}
+
+func (r BatchPatchNAPTRRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchNAPTRRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchNSRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	NSRecordParam
+}
+
+func (r BatchPatchNSRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchNSRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchOpenpgpkeyParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+	Content param.Field[string] `json:"content"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[BatchPatchOpenpgpkeySettingsParam] `json:"settings"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+	// Record type.
+	Type param.Field[BatchPatchOpenpgpkeyType] `json:"type"`
+}
+
+func (r BatchPatchOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchOpenpgpkeyParam) implementsBatchPatchUnionParam() {}
+
+// Settings for the DNS record.
+type BatchPatchOpenpgpkeySettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r BatchPatchOpenpgpkeySettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Record type.
+type BatchPatchOpenpgpkeyType string
+
+const (
+	BatchPatchOpenpgpkeyTypeOpenpgpkey BatchPatchOpenpgpkeyType = "OPENPGPKEY"
+)
+
+func (r BatchPatchOpenpgpkeyType) IsKnown() bool {
+	switch r {
+	case BatchPatchOpenpgpkeyTypeOpenpgpkey:
+		return true
+	}
+	return false
+}
+
+type BatchPatchPTRRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	PTRRecordParam
+}
+
+func (r BatchPatchPTRRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchPTRRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchSMIMEARecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	SMIMEARecordParam
+}
+
+func (r BatchPatchSMIMEARecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchSMIMEARecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchSRVRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	SRVRecordParam
+}
+
+func (r BatchPatchSRVRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchSRVRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchSSHFPRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	SSHFPRecordParam
+}
+
+func (r BatchPatchSSHFPRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchSSHFPRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchSVCBRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	SVCBRecordParam
+}
+
+func (r BatchPatchSVCBRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchSVCBRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchTLSARecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	TLSARecordParam
+}
+
+func (r BatchPatchTLSARecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchTLSARecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchTXTRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	TXTRecordParam
+}
+
+func (r BatchPatchTXTRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchTXTRecordParam) implementsBatchPatchUnionParam() {}
+
+type BatchPatchURIRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
+	URIRecordParam
+}
+
+func (r BatchPatchURIRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPatchURIRecordParam) implementsBatchPatchUnionParam() {}
+
+// Satisfied by [dns.BatchPutARecordParam], [dns.BatchPutAAAARecordParam],
+// [dns.BatchPutCAARecordParam], [dns.BatchPutCERTRecordParam],
+// [dns.BatchPutCNAMERecordParam], [dns.BatchPutDNSKEYRecordParam],
+// [dns.BatchPutDSRecordParam], [dns.BatchPutHTTPSRecordParam],
+// [dns.BatchPutLOCRecordParam], [dns.BatchPutMXRecordParam],
+// [dns.BatchPutNAPTRRecordParam], [dns.BatchPutNSRecordParam],
+// [dns.BatchPutOpenpgpkeyParam], [dns.BatchPutPTRRecordParam],
+// [dns.BatchPutSMIMEARecordParam], [dns.BatchPutSRVRecordParam],
+// [dns.BatchPutSSHFPRecordParam], [dns.BatchPutSVCBRecordParam],
+// [dns.BatchPutTLSARecordParam], [dns.BatchPutTXTRecordParam],
+// [dns.BatchPutURIRecordParam].
+type BatchPutUnionParam interface {
+	implementsBatchPutUnionParam()
+}
+
+type BatchPutARecordParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
+	ARecordParam
 }
 
-func (r BatchPutParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutARecordParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+func (r BatchPutARecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutAAAARecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	AAAARecordParam
+}
+
+func (r BatchPutAAAARecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutAAAARecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutCAARecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	CAARecordParam
+}
+
+func (r BatchPutCAARecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutCAARecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutCERTRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	CERTRecordParam
+}
+
+func (r BatchPutCERTRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutCERTRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutCNAMERecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	CNAMERecordParam
+}
+
+func (r BatchPutCNAMERecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutCNAMERecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutDNSKEYRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	DNSKEYRecordParam
+}
+
+func (r BatchPutDNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutDNSKEYRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutDSRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	DSRecordParam
+}
+
+func (r BatchPutDSRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutDSRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutHTTPSRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	HTTPSRecordParam
+}
+
+func (r BatchPutHTTPSRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutHTTPSRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutLOCRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	LOCRecordParam
+}
+
+func (r BatchPutLOCRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutLOCRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutMXRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	MXRecordParam
+}
+
+func (r BatchPutMXRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutMXRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutNAPTRRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	NAPTRRecordParam
+}
+
+func (r BatchPutNAPTRRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutNAPTRRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutNSRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	NSRecordParam
+}
+
+func (r BatchPutNSRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutNSRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutOpenpgpkeyParam struct {
+	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+	Content param.Field[string] `json:"content,required"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name,required"`
+	// Record type.
+	Type param.Field[BatchPutOpenpgpkeyType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[BatchPutOpenpgpkeySettingsParam] `json:"settings"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+}
+
+func (r BatchPutOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutOpenpgpkeyParam) implementsBatchPutUnionParam() {}
+
+// Record type.
+type BatchPutOpenpgpkeyType string
+
+const (
+	BatchPutOpenpgpkeyTypeOpenpgpkey BatchPutOpenpgpkeyType = "OPENPGPKEY"
+)
+
+func (r BatchPutOpenpgpkeyType) IsKnown() bool {
+	switch r {
+	case BatchPutOpenpgpkeyTypeOpenpgpkey:
+		return true
+	}
+	return false
+}
+
+// Settings for the DNS record.
+type BatchPutOpenpgpkeySettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r BatchPutOpenpgpkeySettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type BatchPutPTRRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	PTRRecordParam
+}
+
+func (r BatchPutPTRRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutPTRRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutSMIMEARecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	SMIMEARecordParam
+}
+
+func (r BatchPutSMIMEARecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutSMIMEARecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutSRVRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	SRVRecordParam
+}
+
+func (r BatchPutSRVRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutSRVRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutSSHFPRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	SSHFPRecordParam
+}
+
+func (r BatchPutSSHFPRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutSSHFPRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutSVCBRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	SVCBRecordParam
+}
+
+func (r BatchPutSVCBRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutSVCBRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutTLSARecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	TLSARecordParam
+}
+
+func (r BatchPutTLSARecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutTLSARecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutTXTRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	TXTRecordParam
+}
+
+func (r BatchPutTXTRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutTXTRecordParam) implementsBatchPutUnionParam() {}
+
+type BatchPutURIRecordParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	URIRecordParam
+}
+
+func (r BatchPutURIRecordParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BatchPutURIRecordParam) implementsBatchPutUnionParam() {}
 
 type CAARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5726,9 +6346,9 @@ type RecordBatchParams struct {
 	// Identifier
 	ZoneID  param.Field[string]                    `path:"zone_id,required"`
 	Deletes param.Field[[]RecordBatchParamsDelete] `json:"deletes"`
-	Patches param.Field[[]BatchPatchParam]         `json:"patches"`
-	Posts   param.Field[[]interface{}]             `json:"posts"`
-	Puts    param.Field[[]BatchPutParam]           `json:"puts"`
+	Patches param.Field[[]BatchPatchUnionParam]    `json:"patches"`
+	Posts   param.Field[[]RecordUnionParam]        `json:"posts"`
+	Puts    param.Field[[]BatchPutUnionParam]      `json:"puts"`
 }
 
 func (r RecordBatchParams) MarshalJSON() (data []byte, err error) {

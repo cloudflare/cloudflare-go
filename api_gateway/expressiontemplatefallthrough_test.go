@@ -28,7 +28,7 @@ func TestExpressionTemplateFallthroughNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.ExpressionTemplate.Fallthrough.New(context.TODO(), api_gateway.ExpressionTemplateFallthroughNewParams{
-		ZoneID: cloudflare.F("zone_id"),
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Hosts:  cloudflare.F([]string{"{zone}.domain1.tld", "domain2.tld"}),
 	})
 	if err != nil {
