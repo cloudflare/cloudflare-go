@@ -4454,8 +4454,9 @@ type SettingEditResponse struct {
 	// [OpportunisticOnionValue], [OrangeToOrangeValue],
 	// [SettingEditResponseZonesSchemasOriginErrorPagePassThruValue], [int64],
 	// [SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue],
-	// [SettingEditResponseZonesSchemasPolishValue], [PrefetchPreloadValue], [float64],
-	// [PseudoIPV4Value], [SettingEditResponseZonesReplaceInsecureJSValue],
+	// [SettingEditResponseZonesSchemasPolishValue], [PrefetchPreloadValue],
+	// [SettingEditResponseZonesPrivacyPassValue], [float64], [PseudoIPV4Value],
+	// [SettingEditResponseZonesReplaceInsecureJSValue],
 	// [SettingEditResponseZonesSchemasResponseBufferingValue],
 	// [SettingEditResponseZonesSchemasRocketLoaderValue],
 	// [AutomaticPlatformOptimization], [SecurityHeadersValue],
@@ -4522,8 +4523,8 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.SettingEditResponseZonesCacheRulesOriginH2MaxStreams],
 // [zones.SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingEditResponseZonesSchemasPolish], [zones.PrefetchPreload],
-// [zones.ProxyReadTimeout], [zones.PseudoIPV4],
-// [zones.SettingEditResponseZonesReplaceInsecureJS],
+// [zones.SettingEditResponseZonesPrivacyPass], [zones.ProxyReadTimeout],
+// [zones.PseudoIPV4], [zones.SettingEditResponseZonesReplaceInsecureJS],
 // [zones.SettingEditResponseZonesSchemasResponseBuffering],
 // [zones.SettingEditResponseZonesSchemasRocketLoader],
 // [zones.SettingEditResponseZonesSchemasAutomaticPlatformOptimization],
@@ -4563,8 +4564,8 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [zones.SettingEditResponseZonesCacheRulesOriginH2MaxStreams],
 // [zones.SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingEditResponseZonesSchemasPolish], [zones.PrefetchPreload],
-// [zones.ProxyReadTimeout], [zones.PseudoIPV4],
-// [zones.SettingEditResponseZonesReplaceInsecureJS],
+// [zones.SettingEditResponseZonesPrivacyPass], [zones.ProxyReadTimeout],
+// [zones.PseudoIPV4], [zones.SettingEditResponseZonesReplaceInsecureJS],
 // [zones.SettingEditResponseZonesSchemasResponseBuffering],
 // [zones.SettingEditResponseZonesSchemasRocketLoader],
 // [zones.SettingEditResponseZonesSchemasAutomaticPlatformOptimization],
@@ -4727,6 +4728,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(PrefetchPreload{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesPrivacyPass{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -6242,6 +6247,102 @@ func (r SettingEditResponseZonesSchemasPolishEditable) IsKnown() bool {
 	return false
 }
 
+// Privacy Pass v1 was a browser extension developed by the Privacy Pass Team to
+// improve the browsing experience for your visitors by allowing users to reduce
+// the number of CAPTCHAs shown.
+// (https://support.cloudflare.com/hc/en-us/articles/115001992652-Privacy-Pass).
+//
+// Deprecated: Privacy Pass v1 was deprecated in 2023. (Announcement -
+// https://blog.cloudflare.com/privacy-pass-standard/) and (API deprecation
+// details -
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2024-03-31)
+type SettingEditResponseZonesPrivacyPass struct {
+	// ID of the zone setting.
+	ID SettingEditResponseZonesPrivacyPassID `json:"id,required"`
+	// Current value of the zone setting.
+	//
+	// Deprecated: Privacy Pass v1 was deprecated in 2023. (Announcement -
+	// https://blog.cloudflare.com/privacy-pass-standard/) and (API deprecation
+	// details -
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2024-03-31)
+	Value SettingEditResponseZonesPrivacyPassValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingEditResponseZonesPrivacyPassEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingEditResponseZonesPrivacyPassJSON `json:"-"`
+}
+
+// settingEditResponseZonesPrivacyPassJSON contains the JSON metadata for the
+// struct [SettingEditResponseZonesPrivacyPass]
+type settingEditResponseZonesPrivacyPassJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesPrivacyPass) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesPrivacyPassJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesPrivacyPass) implementsSettingEditResponse() {}
+
+// ID of the zone setting.
+type SettingEditResponseZonesPrivacyPassID string
+
+const (
+	SettingEditResponseZonesPrivacyPassIDPrivacyPass SettingEditResponseZonesPrivacyPassID = "privacy_pass"
+)
+
+func (r SettingEditResponseZonesPrivacyPassID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesPrivacyPassIDPrivacyPass:
+		return true
+	}
+	return false
+}
+
+// Current value of the zone setting.
+type SettingEditResponseZonesPrivacyPassValue string
+
+const (
+	SettingEditResponseZonesPrivacyPassValueOn  SettingEditResponseZonesPrivacyPassValue = "on"
+	SettingEditResponseZonesPrivacyPassValueOff SettingEditResponseZonesPrivacyPassValue = "off"
+)
+
+func (r SettingEditResponseZonesPrivacyPassValue) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesPrivacyPassValueOn, SettingEditResponseZonesPrivacyPassValueOff:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingEditResponseZonesPrivacyPassEditable bool
+
+const (
+	SettingEditResponseZonesPrivacyPassEditableTrue  SettingEditResponseZonesPrivacyPassEditable = true
+	SettingEditResponseZonesPrivacyPassEditableFalse SettingEditResponseZonesPrivacyPassEditable = false
+)
+
+func (r SettingEditResponseZonesPrivacyPassEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesPrivacyPassEditableTrue, SettingEditResponseZonesPrivacyPassEditableFalse:
+		return true
+	}
+	return false
+}
+
 // Automatically replace insecure JavaScript libraries with safer and faster
 // alternatives provided under cdnjs and powered by Cloudflare. Currently supports
 // the following libraries: Polyfill under polyfill.io.
@@ -7233,6 +7334,7 @@ const (
 	SettingEditResponseIDOriginMaxHTTPVersion          SettingEditResponseID = "origin_max_http_version"
 	SettingEditResponseIDPolish                        SettingEditResponseID = "polish"
 	SettingEditResponseIDPrefetchPreload               SettingEditResponseID = "prefetch_preload"
+	SettingEditResponseIDPrivacyPass                   SettingEditResponseID = "privacy_pass"
 	SettingEditResponseIDProxyReadTimeout              SettingEditResponseID = "proxy_read_timeout"
 	SettingEditResponseIDPseudoIPV4                    SettingEditResponseID = "pseudo_ipv4"
 	SettingEditResponseIDReplaceInsecureJS             SettingEditResponseID = "replace_insecure_js"
@@ -7257,7 +7359,7 @@ const (
 
 func (r SettingEditResponseID) IsKnown() bool {
 	switch r {
-	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
+	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDPrivacyPass, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -7314,8 +7416,9 @@ type SettingGetResponse struct {
 	// [OpportunisticOnionValue], [OrangeToOrangeValue],
 	// [SettingGetResponseZonesSchemasOriginErrorPagePassThruValue], [int64],
 	// [SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue],
-	// [SettingGetResponseZonesSchemasPolishValue], [PrefetchPreloadValue], [float64],
-	// [PseudoIPV4Value], [SettingGetResponseZonesReplaceInsecureJSValue],
+	// [SettingGetResponseZonesSchemasPolishValue], [PrefetchPreloadValue],
+	// [SettingGetResponseZonesPrivacyPassValue], [float64], [PseudoIPV4Value],
+	// [SettingGetResponseZonesReplaceInsecureJSValue],
 	// [SettingGetResponseZonesSchemasResponseBufferingValue],
 	// [SettingGetResponseZonesSchemasRocketLoaderValue],
 	// [AutomaticPlatformOptimization], [SecurityHeadersValue],
@@ -7382,8 +7485,8 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.SettingGetResponseZonesCacheRulesOriginH2MaxStreams],
 // [zones.SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingGetResponseZonesSchemasPolish], [zones.PrefetchPreload],
-// [zones.ProxyReadTimeout], [zones.PseudoIPV4],
-// [zones.SettingGetResponseZonesReplaceInsecureJS],
+// [zones.SettingGetResponseZonesPrivacyPass], [zones.ProxyReadTimeout],
+// [zones.PseudoIPV4], [zones.SettingGetResponseZonesReplaceInsecureJS],
 // [zones.SettingGetResponseZonesSchemasResponseBuffering],
 // [zones.SettingGetResponseZonesSchemasRocketLoader],
 // [zones.SettingGetResponseZonesSchemasAutomaticPlatformOptimization],
@@ -7422,8 +7525,8 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [zones.SettingGetResponseZonesCacheRulesOriginH2MaxStreams],
 // [zones.SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingGetResponseZonesSchemasPolish], [zones.PrefetchPreload],
-// [zones.ProxyReadTimeout], [zones.PseudoIPV4],
-// [zones.SettingGetResponseZonesReplaceInsecureJS],
+// [zones.SettingGetResponseZonesPrivacyPass], [zones.ProxyReadTimeout],
+// [zones.PseudoIPV4], [zones.SettingGetResponseZonesReplaceInsecureJS],
 // [zones.SettingGetResponseZonesSchemasResponseBuffering],
 // [zones.SettingGetResponseZonesSchemasRocketLoader],
 // [zones.SettingGetResponseZonesSchemasAutomaticPlatformOptimization],
@@ -7585,6 +7688,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(PrefetchPreload{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesPrivacyPass{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -9100,6 +9207,102 @@ func (r SettingGetResponseZonesSchemasPolishEditable) IsKnown() bool {
 	return false
 }
 
+// Privacy Pass v1 was a browser extension developed by the Privacy Pass Team to
+// improve the browsing experience for your visitors by allowing users to reduce
+// the number of CAPTCHAs shown.
+// (https://support.cloudflare.com/hc/en-us/articles/115001992652-Privacy-Pass).
+//
+// Deprecated: Privacy Pass v1 was deprecated in 2023. (Announcement -
+// https://blog.cloudflare.com/privacy-pass-standard/) and (API deprecation
+// details -
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2024-03-31)
+type SettingGetResponseZonesPrivacyPass struct {
+	// ID of the zone setting.
+	ID SettingGetResponseZonesPrivacyPassID `json:"id,required"`
+	// Current value of the zone setting.
+	//
+	// Deprecated: Privacy Pass v1 was deprecated in 2023. (Announcement -
+	// https://blog.cloudflare.com/privacy-pass-standard/) and (API deprecation
+	// details -
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2024-03-31)
+	Value SettingGetResponseZonesPrivacyPassValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingGetResponseZonesPrivacyPassEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingGetResponseZonesPrivacyPassJSON `json:"-"`
+}
+
+// settingGetResponseZonesPrivacyPassJSON contains the JSON metadata for the struct
+// [SettingGetResponseZonesPrivacyPass]
+type settingGetResponseZonesPrivacyPassJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesPrivacyPass) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesPrivacyPassJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesPrivacyPass) implementsSettingGetResponse() {}
+
+// ID of the zone setting.
+type SettingGetResponseZonesPrivacyPassID string
+
+const (
+	SettingGetResponseZonesPrivacyPassIDPrivacyPass SettingGetResponseZonesPrivacyPassID = "privacy_pass"
+)
+
+func (r SettingGetResponseZonesPrivacyPassID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesPrivacyPassIDPrivacyPass:
+		return true
+	}
+	return false
+}
+
+// Current value of the zone setting.
+type SettingGetResponseZonesPrivacyPassValue string
+
+const (
+	SettingGetResponseZonesPrivacyPassValueOn  SettingGetResponseZonesPrivacyPassValue = "on"
+	SettingGetResponseZonesPrivacyPassValueOff SettingGetResponseZonesPrivacyPassValue = "off"
+)
+
+func (r SettingGetResponseZonesPrivacyPassValue) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesPrivacyPassValueOn, SettingGetResponseZonesPrivacyPassValueOff:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingGetResponseZonesPrivacyPassEditable bool
+
+const (
+	SettingGetResponseZonesPrivacyPassEditableTrue  SettingGetResponseZonesPrivacyPassEditable = true
+	SettingGetResponseZonesPrivacyPassEditableFalse SettingGetResponseZonesPrivacyPassEditable = false
+)
+
+func (r SettingGetResponseZonesPrivacyPassEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesPrivacyPassEditableTrue, SettingGetResponseZonesPrivacyPassEditableFalse:
+		return true
+	}
+	return false
+}
+
 // Automatically replace insecure JavaScript libraries with safer and faster
 // alternatives provided under cdnjs and powered by Cloudflare. Currently supports
 // the following libraries: Polyfill under polyfill.io.
@@ -10090,6 +10293,7 @@ const (
 	SettingGetResponseIDOriginMaxHTTPVersion          SettingGetResponseID = "origin_max_http_version"
 	SettingGetResponseIDPolish                        SettingGetResponseID = "polish"
 	SettingGetResponseIDPrefetchPreload               SettingGetResponseID = "prefetch_preload"
+	SettingGetResponseIDPrivacyPass                   SettingGetResponseID = "privacy_pass"
 	SettingGetResponseIDProxyReadTimeout              SettingGetResponseID = "proxy_read_timeout"
 	SettingGetResponseIDPseudoIPV4                    SettingGetResponseID = "pseudo_ipv4"
 	SettingGetResponseIDReplaceInsecureJS             SettingGetResponseID = "replace_insecure_js"
@@ -10114,7 +10318,7 @@ const (
 
 func (r SettingGetResponseID) IsKnown() bool {
 	switch r {
-	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
+	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDPrivacyPass, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -10187,8 +10391,8 @@ func (r SettingEditParamsBody) implementsSettingEditParamsBodyUnion() {}
 // [zones.SettingEditParamsBodyZonesCacheRulesOriginH2MaxStreams],
 // [zones.SettingEditParamsBodyZonesCacheRulesOriginMaxHTTPVersion],
 // [zones.SettingEditParamsBodyZonesSchemasPolish], [zones.PrefetchPreloadParam],
-// [zones.ProxyReadTimeoutParam], [zones.PseudoIPV4Param],
-// [zones.SettingEditParamsBodyZonesReplaceInsecureJS],
+// [zones.SettingEditParamsBodyZonesPrivacyPass], [zones.ProxyReadTimeoutParam],
+// [zones.PseudoIPV4Param], [zones.SettingEditParamsBodyZonesReplaceInsecureJS],
 // [zones.SettingEditParamsBodyZonesSchemasResponseBuffering],
 // [zones.SettingEditParamsBodyZonesSchemasRocketLoader],
 // [zones.SettingEditParamsBodyZonesSchemasAutomaticPlatformOptimization],
@@ -11283,6 +11487,81 @@ func (r SettingEditParamsBodyZonesSchemasPolishEditable) IsKnown() bool {
 	return false
 }
 
+// Privacy Pass v1 was a browser extension developed by the Privacy Pass Team to
+// improve the browsing experience for your visitors by allowing users to reduce
+// the number of CAPTCHAs shown.
+// (https://support.cloudflare.com/hc/en-us/articles/115001992652-Privacy-Pass).
+//
+// Deprecated: Privacy Pass v1 was deprecated in 2023. (Announcement -
+// https://blog.cloudflare.com/privacy-pass-standard/) and (API deprecation
+// details -
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2024-03-31)
+type SettingEditParamsBodyZonesPrivacyPass struct {
+	// ID of the zone setting.
+	ID param.Field[SettingEditParamsBodyZonesPrivacyPassID] `json:"id,required"`
+	// Current value of the zone setting.
+	//
+	// Deprecated: Privacy Pass v1 was deprecated in 2023. (Announcement -
+	// https://blog.cloudflare.com/privacy-pass-standard/) and (API deprecation
+	// details -
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2024-03-31)
+	Value param.Field[SettingEditParamsBodyZonesPrivacyPassValue] `json:"value,required"`
+}
+
+func (r SettingEditParamsBodyZonesPrivacyPass) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingEditParamsBodyZonesPrivacyPass) implementsSettingEditParamsBodyUnion() {}
+
+// ID of the zone setting.
+type SettingEditParamsBodyZonesPrivacyPassID string
+
+const (
+	SettingEditParamsBodyZonesPrivacyPassIDPrivacyPass SettingEditParamsBodyZonesPrivacyPassID = "privacy_pass"
+)
+
+func (r SettingEditParamsBodyZonesPrivacyPassID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyZonesPrivacyPassIDPrivacyPass:
+		return true
+	}
+	return false
+}
+
+// Current value of the zone setting.
+type SettingEditParamsBodyZonesPrivacyPassValue string
+
+const (
+	SettingEditParamsBodyZonesPrivacyPassValueOn  SettingEditParamsBodyZonesPrivacyPassValue = "on"
+	SettingEditParamsBodyZonesPrivacyPassValueOff SettingEditParamsBodyZonesPrivacyPassValue = "off"
+)
+
+func (r SettingEditParamsBodyZonesPrivacyPassValue) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyZonesPrivacyPassValueOn, SettingEditParamsBodyZonesPrivacyPassValueOff:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingEditParamsBodyZonesPrivacyPassEditable bool
+
+const (
+	SettingEditParamsBodyZonesPrivacyPassEditableTrue  SettingEditParamsBodyZonesPrivacyPassEditable = true
+	SettingEditParamsBodyZonesPrivacyPassEditableFalse SettingEditParamsBodyZonesPrivacyPassEditable = false
+)
+
+func (r SettingEditParamsBodyZonesPrivacyPassEditable) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyZonesPrivacyPassEditableTrue, SettingEditParamsBodyZonesPrivacyPassEditableFalse:
+		return true
+	}
+	return false
+}
+
 // Automatically replace insecure JavaScript libraries with safer and faster
 // alternatives provided under cdnjs and powered by Cloudflare. Currently supports
 // the following libraries: Polyfill under polyfill.io.
@@ -12043,6 +12322,7 @@ const (
 	SettingEditParamsBodyIDOriginMaxHTTPVersion          SettingEditParamsBodyID = "origin_max_http_version"
 	SettingEditParamsBodyIDPolish                        SettingEditParamsBodyID = "polish"
 	SettingEditParamsBodyIDPrefetchPreload               SettingEditParamsBodyID = "prefetch_preload"
+	SettingEditParamsBodyIDPrivacyPass                   SettingEditParamsBodyID = "privacy_pass"
 	SettingEditParamsBodyIDProxyReadTimeout              SettingEditParamsBodyID = "proxy_read_timeout"
 	SettingEditParamsBodyIDPseudoIPV4                    SettingEditParamsBodyID = "pseudo_ipv4"
 	SettingEditParamsBodyIDReplaceInsecureJS             SettingEditParamsBodyID = "replace_insecure_js"
@@ -12067,7 +12347,7 @@ const (
 
 func (r SettingEditParamsBodyID) IsKnown() bool {
 	switch r {
-	case SettingEditParamsBodyID0rtt, SettingEditParamsBodyIDAdvancedDDoS, SettingEditParamsBodyIDAegis, SettingEditParamsBodyIDAlwaysOnline, SettingEditParamsBodyIDAlwaysUseHTTPS, SettingEditParamsBodyIDAutomaticHTTPSRewrites, SettingEditParamsBodyIDBrotli, SettingEditParamsBodyIDBrowserCacheTTL, SettingEditParamsBodyIDBrowserCheck, SettingEditParamsBodyIDCacheLevel, SettingEditParamsBodyIDChallengeTTL, SettingEditParamsBodyIDCiphers, SettingEditParamsBodyIDCNAMEFlattening, SettingEditParamsBodyIDDevelopmentMode, SettingEditParamsBodyIDEarlyHints, SettingEditParamsBodyIDEdgeCacheTTL, SettingEditParamsBodyIDEmailObfuscation, SettingEditParamsBodyIDH2Prioritization, SettingEditParamsBodyIDHotlinkProtection, SettingEditParamsBodyIDHTTP2, SettingEditParamsBodyIDHTTP3, SettingEditParamsBodyIDImageResizing, SettingEditParamsBodyIDIPGeolocation, SettingEditParamsBodyIDIPV6, SettingEditParamsBodyIDMaxUpload, SettingEditParamsBodyIDMinTLSVersion, SettingEditParamsBodyIDMirage, SettingEditParamsBodyIDNEL, SettingEditParamsBodyIDOpportunisticEncryption, SettingEditParamsBodyIDOpportunisticOnion, SettingEditParamsBodyIDOrangeToOrange, SettingEditParamsBodyIDOriginErrorPagePassThru, SettingEditParamsBodyIDOriginH2MaxStreams, SettingEditParamsBodyIDOriginMaxHTTPVersion, SettingEditParamsBodyIDPolish, SettingEditParamsBodyIDPrefetchPreload, SettingEditParamsBodyIDProxyReadTimeout, SettingEditParamsBodyIDPseudoIPV4, SettingEditParamsBodyIDReplaceInsecureJS, SettingEditParamsBodyIDResponseBuffering, SettingEditParamsBodyIDRocketLoader, SettingEditParamsBodyIDAutomaticPlatformOptimization, SettingEditParamsBodyIDSecurityHeader, SettingEditParamsBodyIDSecurityLevel, SettingEditParamsBodyIDServerSideExclude, SettingEditParamsBodyIDSha1Support, SettingEditParamsBodyIDSortQueryStringForCache, SettingEditParamsBodyIDSSL, SettingEditParamsBodyIDSSLRecommender, SettingEditParamsBodyIDTLS1_2Only, SettingEditParamsBodyIDTLS1_3, SettingEditParamsBodyIDTLSClientAuth, SettingEditParamsBodyIDTrueClientIPHeader, SettingEditParamsBodyIDWAF, SettingEditParamsBodyIDWebP, SettingEditParamsBodyIDWebsockets:
+	case SettingEditParamsBodyID0rtt, SettingEditParamsBodyIDAdvancedDDoS, SettingEditParamsBodyIDAegis, SettingEditParamsBodyIDAlwaysOnline, SettingEditParamsBodyIDAlwaysUseHTTPS, SettingEditParamsBodyIDAutomaticHTTPSRewrites, SettingEditParamsBodyIDBrotli, SettingEditParamsBodyIDBrowserCacheTTL, SettingEditParamsBodyIDBrowserCheck, SettingEditParamsBodyIDCacheLevel, SettingEditParamsBodyIDChallengeTTL, SettingEditParamsBodyIDCiphers, SettingEditParamsBodyIDCNAMEFlattening, SettingEditParamsBodyIDDevelopmentMode, SettingEditParamsBodyIDEarlyHints, SettingEditParamsBodyIDEdgeCacheTTL, SettingEditParamsBodyIDEmailObfuscation, SettingEditParamsBodyIDH2Prioritization, SettingEditParamsBodyIDHotlinkProtection, SettingEditParamsBodyIDHTTP2, SettingEditParamsBodyIDHTTP3, SettingEditParamsBodyIDImageResizing, SettingEditParamsBodyIDIPGeolocation, SettingEditParamsBodyIDIPV6, SettingEditParamsBodyIDMaxUpload, SettingEditParamsBodyIDMinTLSVersion, SettingEditParamsBodyIDMirage, SettingEditParamsBodyIDNEL, SettingEditParamsBodyIDOpportunisticEncryption, SettingEditParamsBodyIDOpportunisticOnion, SettingEditParamsBodyIDOrangeToOrange, SettingEditParamsBodyIDOriginErrorPagePassThru, SettingEditParamsBodyIDOriginH2MaxStreams, SettingEditParamsBodyIDOriginMaxHTTPVersion, SettingEditParamsBodyIDPolish, SettingEditParamsBodyIDPrefetchPreload, SettingEditParamsBodyIDPrivacyPass, SettingEditParamsBodyIDProxyReadTimeout, SettingEditParamsBodyIDPseudoIPV4, SettingEditParamsBodyIDReplaceInsecureJS, SettingEditParamsBodyIDResponseBuffering, SettingEditParamsBodyIDRocketLoader, SettingEditParamsBodyIDAutomaticPlatformOptimization, SettingEditParamsBodyIDSecurityHeader, SettingEditParamsBodyIDSecurityLevel, SettingEditParamsBodyIDServerSideExclude, SettingEditParamsBodyIDSha1Support, SettingEditParamsBodyIDSortQueryStringForCache, SettingEditParamsBodyIDSSL, SettingEditParamsBodyIDSSLRecommender, SettingEditParamsBodyIDTLS1_2Only, SettingEditParamsBodyIDTLS1_3, SettingEditParamsBodyIDTLSClientAuth, SettingEditParamsBodyIDTrueClientIPHeader, SettingEditParamsBodyIDWAF, SettingEditParamsBodyIDWebP, SettingEditParamsBodyIDWebsockets:
 		return true
 	}
 	return false

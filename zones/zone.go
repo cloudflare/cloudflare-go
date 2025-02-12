@@ -608,11 +608,12 @@ const (
 	ZoneEditParamsTypeFull      ZoneEditParamsType = "full"
 	ZoneEditParamsTypePartial   ZoneEditParamsType = "partial"
 	ZoneEditParamsTypeSecondary ZoneEditParamsType = "secondary"
+	ZoneEditParamsTypeInternal  ZoneEditParamsType = "internal"
 )
 
 func (r ZoneEditParamsType) IsKnown() bool {
 	switch r {
-	case ZoneEditParamsTypeFull, ZoneEditParamsTypePartial, ZoneEditParamsTypeSecondary:
+	case ZoneEditParamsTypeFull, ZoneEditParamsTypePartial, ZoneEditParamsTypeSecondary, ZoneEditParamsTypeInternal:
 		return true
 	}
 	return false
