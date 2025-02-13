@@ -323,9 +323,9 @@ type NetworkRouteListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `query:"comment"`
-	// If provided, include only tunnels that were created (and not deleted) before
-	// this time.
-	ExistedAt param.Field[time.Time] `query:"existed_at" format:"date-time"`
+	// If provided, include only resources that were created (and not deleted) before
+	// this time. URL encoded.
+	ExistedAt param.Field[string] `query:"existed_at" format:"url-encoded-date-time"`
 	// If `true`, only include deleted routes. If `false`, exclude deleted routes. If
 	// empty, all routes will be included.
 	IsDeleted param.Field[bool] `query:"is_deleted"`
