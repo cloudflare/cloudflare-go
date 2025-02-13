@@ -7,7 +7,6 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
@@ -60,7 +59,7 @@ func TestNetworkRouteListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Networks.Routes.List(context.TODO(), zero_trust.NetworkRouteListParams{
 		AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Comment:          cloudflare.F("Example comment for this route."),
-		ExistedAt:        cloudflare.F(time.Now()),
+		ExistedAt:        cloudflare.F("2019-10-12T07%3A20%3A50.52Z"),
 		IsDeleted:        cloudflare.F(true),
 		NetworkSubset:    cloudflare.F("172.16.0.0/16"),
 		NetworkSuperset:  cloudflare.F("172.16.0.0/16"),

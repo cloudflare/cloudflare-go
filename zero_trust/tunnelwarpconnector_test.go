@@ -57,7 +57,7 @@ func TestTunnelWARPConnectorListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Tunnels.WARPConnector.List(context.TODO(), zero_trust.TunnelWARPConnectorListParams{
 		AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		ExcludePrefix: cloudflare.F("vpc1-"),
-		ExistedAt:     cloudflare.F(time.Now()),
+		ExistedAt:     cloudflare.F("2019-10-12T07%3A20%3A50.52Z"),
 		IncludePrefix: cloudflare.F("vpc1-"),
 		IsDeleted:     cloudflare.F(true),
 		Name:          cloudflare.F("blog"),
