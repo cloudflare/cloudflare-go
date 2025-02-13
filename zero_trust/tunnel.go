@@ -1689,10 +1689,10 @@ type TunnelListParams struct {
 	// Cloudflare account ID
 	AccountID     param.Field[string] `path:"account_id,required"`
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
-	// If provided, include only tunnels that were created (and not deleted) before
-	// this time.
-	ExistedAt     param.Field[time.Time] `query:"existed_at" format:"date-time"`
-	IncludePrefix param.Field[string]    `query:"include_prefix"`
+	// If provided, include only resources that were created (and not deleted) before
+	// this time. URL encoded.
+	ExistedAt     param.Field[string] `query:"existed_at" format:"url-encoded-date-time"`
+	IncludePrefix param.Field[string] `query:"include_prefix"`
 	// If `true`, only include deleted tunnels. If `false`, exclude deleted tunnels. If
 	// empty, all tunnels will be included.
 	IsDeleted param.Field[bool] `query:"is_deleted"`
