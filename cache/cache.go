@@ -256,8 +256,8 @@ func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeaders) implementsCac
 }
 
 type CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeadersFile struct {
-	Headers param.Field[interface{}] `json:"headers"`
-	URL     param.Field[string]      `json:"url"`
+	Headers param.Field[map[string]string] `json:"headers"`
+	URL     param.Field[string]            `json:"url"`
 }
 
 func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeadersFile) MarshalJSON() (data []byte, err error) {
