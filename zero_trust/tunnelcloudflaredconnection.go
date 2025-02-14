@@ -19,21 +19,21 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
-// TunnelConnectionService contains methods and other services that help with
-// interacting with the cloudflare API.
+// TunnelCloudflaredConnectionService contains methods and other services that help
+// with interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewTunnelConnectionService] method instead.
-type TunnelConnectionService struct {
+// the [NewTunnelCloudflaredConnectionService] method instead.
+type TunnelCloudflaredConnectionService struct {
 	Options []option.RequestOption
 }
 
-// NewTunnelConnectionService generates a new service that applies the given
-// options to each request. These options are applied after the parent client's
-// options (if there is one), and before any request-specific options.
-func NewTunnelConnectionService(opts ...option.RequestOption) (r *TunnelConnectionService) {
-	r = &TunnelConnectionService{}
+// NewTunnelCloudflaredConnectionService generates a new service that applies the
+// given options to each request. These options are applied after the parent
+// client's options (if there is one), and before any request-specific options.
+func NewTunnelCloudflaredConnectionService(opts ...option.RequestOption) (r *TunnelCloudflaredConnectionService) {
+	r = &TunnelCloudflaredConnectionService{}
 	r.Options = opts
 	return
 }
@@ -42,8 +42,8 @@ func NewTunnelConnectionService(opts ...option.RequestOption) (r *TunnelConnecti
 // independently of its current state. If no connector id (client_id) is provided
 // all connectors will be removed. We recommend running this command after rotating
 // tokens.
-func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, params TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelConnectionDeleteResponse, err error) {
-	var env TunnelConnectionDeleteResponseEnvelope
+func (r *TunnelCloudflaredConnectionService) Delete(ctx context.Context, tunnelID string, params TunnelCloudflaredConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelCloudflaredConnectionDeleteResponse, err error) {
+	var env TunnelCloudflaredConnectionDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -63,7 +63,7 @@ func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, p
 }
 
 // Fetches connection details for a Cloudflare Tunnel.
-func (r *TunnelConnectionService) Get(ctx context.Context, tunnelID string, query TunnelConnectionGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Client], err error) {
+func (r *TunnelCloudflaredConnectionService) Get(ctx context.Context, tunnelID string, query TunnelCloudflaredConnectionGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Client], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -89,7 +89,7 @@ func (r *TunnelConnectionService) Get(ctx context.Context, tunnelID string, quer
 }
 
 // Fetches connection details for a Cloudflare Tunnel.
-func (r *TunnelConnectionService) GetAutoPaging(ctx context.Context, tunnelID string, query TunnelConnectionGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Client] {
+func (r *TunnelCloudflaredConnectionService) GetAutoPaging(ctx context.Context, tunnelID string, query TunnelCloudflaredConnectionGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Client] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, tunnelID, query, opts...))
 }
 
@@ -180,36 +180,36 @@ func (r clientConnJSON) RawJSON() string {
 	return r.raw
 }
 
-type TunnelConnectionDeleteResponse = interface{}
+type TunnelCloudflaredConnectionDeleteResponse = interface{}
 
-type TunnelConnectionDeleteParams struct {
+type TunnelCloudflaredConnectionDeleteParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 	// UUID of the Cloudflare Tunnel connector.
 	ClientID param.Field[string] `query:"client_id" format:"uuid"`
 }
 
-// URLQuery serializes [TunnelConnectionDeleteParams]'s query parameters as
-// `url.Values`.
-func (r TunnelConnectionDeleteParams) URLQuery() (v url.Values) {
+// URLQuery serializes [TunnelCloudflaredConnectionDeleteParams]'s query parameters
+// as `url.Values`.
+func (r TunnelCloudflaredConnectionDeleteParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
-type TunnelConnectionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   TunnelConnectionDeleteResponse `json:"result,required,nullable"`
+type TunnelCloudflaredConnectionDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo                     `json:"errors,required"`
+	Messages []shared.ResponseInfo                     `json:"messages,required"`
+	Result   TunnelCloudflaredConnectionDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success TunnelConnectionDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    tunnelConnectionDeleteResponseEnvelopeJSON    `json:"-"`
+	Success TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    tunnelCloudflaredConnectionDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// tunnelConnectionDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [TunnelConnectionDeleteResponseEnvelope]
-type tunnelConnectionDeleteResponseEnvelopeJSON struct {
+// tunnelCloudflaredConnectionDeleteResponseEnvelopeJSON contains the JSON metadata
+// for the struct [TunnelCloudflaredConnectionDeleteResponseEnvelope]
+type tunnelCloudflaredConnectionDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -218,30 +218,30 @@ type tunnelConnectionDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelConnectionDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConnectionDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConnectionDeleteResponseEnvelopeJSON) RawJSON() string {
+func (r tunnelCloudflaredConnectionDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type TunnelConnectionDeleteResponseEnvelopeSuccess bool
+type TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccess bool
 
 const (
-	TunnelConnectionDeleteResponseEnvelopeSuccessTrue TunnelConnectionDeleteResponseEnvelopeSuccess = true
+	TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccessTrue TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccess = true
 )
 
-func (r TunnelConnectionDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case TunnelConnectionDeleteResponseEnvelopeSuccessTrue:
+	case TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type TunnelConnectionGetParams struct {
+type TunnelCloudflaredConnectionGetParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 }

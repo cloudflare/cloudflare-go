@@ -15,28 +15,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
-// TunnelConnectorService contains methods and other services that help with
-// interacting with the cloudflare API.
+// TunnelCloudflaredConnectorService contains methods and other services that help
+// with interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewTunnelConnectorService] method instead.
-type TunnelConnectorService struct {
+// the [NewTunnelCloudflaredConnectorService] method instead.
+type TunnelCloudflaredConnectorService struct {
 	Options []option.RequestOption
 }
 
-// NewTunnelConnectorService generates a new service that applies the given options
-// to each request. These options are applied after the parent client's options (if
-// there is one), and before any request-specific options.
-func NewTunnelConnectorService(opts ...option.RequestOption) (r *TunnelConnectorService) {
-	r = &TunnelConnectorService{}
+// NewTunnelCloudflaredConnectorService generates a new service that applies the
+// given options to each request. These options are applied after the parent
+// client's options (if there is one), and before any request-specific options.
+func NewTunnelCloudflaredConnectorService(opts ...option.RequestOption) (r *TunnelCloudflaredConnectorService) {
+	r = &TunnelCloudflaredConnectorService{}
 	r.Options = opts
 	return
 }
 
 // Fetches connector and connection details for a Cloudflare Tunnel.
-func (r *TunnelConnectorService) Get(ctx context.Context, tunnelID string, connectorID string, query TunnelConnectorGetParams, opts ...option.RequestOption) (res *Client, err error) {
-	var env TunnelConnectorGetResponseEnvelope
+func (r *TunnelCloudflaredConnectorService) Get(ctx context.Context, tunnelID string, connectorID string, query TunnelCloudflaredConnectorGetParams, opts ...option.RequestOption) (res *Client, err error) {
+	var env TunnelCloudflaredConnectorGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -59,25 +59,25 @@ func (r *TunnelConnectorService) Get(ctx context.Context, tunnelID string, conne
 	return
 }
 
-type TunnelConnectorGetParams struct {
+type TunnelCloudflaredConnectorGetParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type TunnelConnectorGetResponseEnvelope struct {
+type TunnelCloudflaredConnectorGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A client (typically cloudflared) that maintains connections to a Cloudflare data
 	// center.
 	Result Client `json:"result,required"`
 	// Whether the API call was successful
-	Success TunnelConnectorGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    tunnelConnectorGetResponseEnvelopeJSON    `json:"-"`
+	Success TunnelCloudflaredConnectorGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    tunnelCloudflaredConnectorGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// tunnelConnectorGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TunnelConnectorGetResponseEnvelope]
-type tunnelConnectorGetResponseEnvelopeJSON struct {
+// tunnelCloudflaredConnectorGetResponseEnvelopeJSON contains the JSON metadata for
+// the struct [TunnelCloudflaredConnectorGetResponseEnvelope]
+type tunnelCloudflaredConnectorGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -86,24 +86,24 @@ type tunnelConnectorGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelConnectorGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConnectorGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConnectorGetResponseEnvelopeJSON) RawJSON() string {
+func (r tunnelCloudflaredConnectorGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type TunnelConnectorGetResponseEnvelopeSuccess bool
+type TunnelCloudflaredConnectorGetResponseEnvelopeSuccess bool
 
 const (
-	TunnelConnectorGetResponseEnvelopeSuccessTrue TunnelConnectorGetResponseEnvelopeSuccess = true
+	TunnelCloudflaredConnectorGetResponseEnvelopeSuccessTrue TunnelCloudflaredConnectorGetResponseEnvelopeSuccess = true
 )
 
-func (r TunnelConnectorGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r TunnelCloudflaredConnectorGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case TunnelConnectorGetResponseEnvelopeSuccessTrue:
+	case TunnelCloudflaredConnectorGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
