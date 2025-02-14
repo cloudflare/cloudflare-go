@@ -6005,6 +6005,26 @@ Methods:
 - <code title="patch /accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}">client.ZeroTrust.Networks.VirtualNetworks.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkVirtualNetworkService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, virtualNetworkID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkVirtualNetworkEditParams">NetworkVirtualNetworkEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#VirtualNetwork">VirtualNetwork</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}">client.ZeroTrust.Networks.VirtualNetworks.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkVirtualNetworkService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, virtualNetworkID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkVirtualNetworkGetParams">NetworkVirtualNetworkGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#VirtualNetwork">VirtualNetwork</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+### Subnets
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkSubnetListResponse">NetworkSubnetListResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/zerotrust/subnets">client.ZeroTrust.Networks.Subnets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkSubnetService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkSubnetListParams">NetworkSubnetListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkSubnetListResponse">NetworkSubnetListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+#### CloudflareSource
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkSubnetCloudflareSourceUpdateResponse">NetworkSubnetCloudflareSourceUpdateResponse</a>
+
+Methods:
+
+- <code title="patch /accounts/{account_id}/zerotrust/subnets/cloudflare_source/{address_family}">client.ZeroTrust.Networks.Subnets.CloudflareSource.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkSubnetCloudflareSourceService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, addressFamily <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkSubnetCloudflareSourceUpdateParamsAddressFamily">NetworkSubnetCloudflareSourceUpdateParamsAddressFamily</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkSubnetCloudflareSourceUpdateParams">NetworkSubnetCloudflareSourceUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#NetworkSubnetCloudflareSourceUpdateResponse">NetworkSubnetCloudflareSourceUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## RiskScoring
 
 Response Types:
