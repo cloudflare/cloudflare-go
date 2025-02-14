@@ -275,15 +275,17 @@ func (r cloudflareTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CloudflareTunnel) ImplementsTunnelNewResponse() {}
-
 func (r CloudflareTunnel) ImplementsTunnelListResponse() {}
 
-func (r CloudflareTunnel) ImplementsTunnelDeleteResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredNewResponse() {}
 
-func (r CloudflareTunnel) ImplementsTunnelEditResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredListResponse() {}
 
-func (r CloudflareTunnel) ImplementsTunnelGetResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredDeleteResponse() {}
+
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredEditResponse() {}
+
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredGetResponse() {}
 
 func (r CloudflareTunnel) ImplementsTunnelWARPConnectorNewResponse() {}
 

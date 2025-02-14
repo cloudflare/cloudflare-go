@@ -16,28 +16,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
-// TunnelConfigurationService contains methods and other services that help with
-// interacting with the cloudflare API.
+// TunnelCloudflaredConfigurationService contains methods and other services that
+// help with interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewTunnelConfigurationService] method instead.
-type TunnelConfigurationService struct {
+// the [NewTunnelCloudflaredConfigurationService] method instead.
+type TunnelCloudflaredConfigurationService struct {
 	Options []option.RequestOption
 }
 
-// NewTunnelConfigurationService generates a new service that applies the given
-// options to each request. These options are applied after the parent client's
-// options (if there is one), and before any request-specific options.
-func NewTunnelConfigurationService(opts ...option.RequestOption) (r *TunnelConfigurationService) {
-	r = &TunnelConfigurationService{}
+// NewTunnelCloudflaredConfigurationService generates a new service that applies
+// the given options to each request. These options are applied after the parent
+// client's options (if there is one), and before any request-specific options.
+func NewTunnelCloudflaredConfigurationService(opts ...option.RequestOption) (r *TunnelCloudflaredConfigurationService) {
+	r = &TunnelCloudflaredConfigurationService{}
 	r.Options = opts
 	return
 }
 
 // Adds or updates the configuration for a remotely-managed tunnel.
-func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelConfigurationUpdateResponse, err error) {
-	var env TunnelConfigurationUpdateResponseEnvelope
+func (r *TunnelCloudflaredConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelCloudflaredConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelCloudflaredConfigurationUpdateResponse, err error) {
+	var env TunnelCloudflaredConfigurationUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -57,8 +57,8 @@ func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string
 }
 
 // Gets the configuration for a remotely-managed tunnel
-func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelConfigurationGetParams, opts ...option.RequestOption) (res *TunnelConfigurationGetResponse, err error) {
-	var env TunnelConfigurationGetResponseEnvelope
+func (r *TunnelCloudflaredConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelCloudflaredConfigurationGetParams, opts ...option.RequestOption) (res *TunnelCloudflaredConfigurationGetResponse, err error) {
+	var env TunnelCloudflaredConfigurationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -78,26 +78,26 @@ func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, q
 }
 
 // Cloudflare Tunnel configuration
-type TunnelConfigurationUpdateResponse struct {
+type TunnelCloudflaredConfigurationUpdateResponse struct {
 	// Identifier
 	AccountID string `json:"account_id"`
 	// The tunnel configuration and ingress rules.
-	Config    TunnelConfigurationUpdateResponseConfig `json:"config"`
-	CreatedAt time.Time                               `json:"created_at" format:"date-time"`
+	Config    TunnelCloudflaredConfigurationUpdateResponseConfig `json:"config"`
+	CreatedAt time.Time                                          `json:"created_at" format:"date-time"`
 	// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
 	// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 	// tunnel's configuration on the Zero Trust dashboard.
-	Source TunnelConfigurationUpdateResponseSource `json:"source"`
+	Source TunnelCloudflaredConfigurationUpdateResponseSource `json:"source"`
 	// UUID of the tunnel.
 	TunnelID string `json:"tunnel_id" format:"uuid"`
 	// The version of the Tunnel Configuration.
-	Version int64                                 `json:"version"`
-	JSON    tunnelConfigurationUpdateResponseJSON `json:"-"`
+	Version int64                                            `json:"version"`
+	JSON    tunnelCloudflaredConfigurationUpdateResponseJSON `json:"-"`
 }
 
-// tunnelConfigurationUpdateResponseJSON contains the JSON metadata for the struct
-// [TunnelConfigurationUpdateResponse]
-type tunnelConfigurationUpdateResponseJSON struct {
+// tunnelCloudflaredConfigurationUpdateResponseJSON contains the JSON metadata for
+// the struct [TunnelCloudflaredConfigurationUpdateResponse]
+type tunnelCloudflaredConfigurationUpdateResponseJSON struct {
 	AccountID   apijson.Field
 	Config      apijson.Field
 	CreatedAt   apijson.Field
@@ -108,31 +108,31 @@ type tunnelConfigurationUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationUpdateResponseJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The tunnel configuration and ingress rules.
-type TunnelConfigurationUpdateResponseConfig struct {
+type TunnelCloudflaredConfigurationUpdateResponseConfig struct {
 	// List of public hostname definitions. At least one ingress rule needs to be
 	// defined for the tunnel.
-	Ingress []TunnelConfigurationUpdateResponseConfigIngress `json:"ingress"`
+	Ingress []TunnelCloudflaredConfigurationUpdateResponseConfigIngress `json:"ingress"`
 	// Configuration parameters for the public hostname specific connection settings
 	// between cloudflared and origin server.
-	OriginRequest TunnelConfigurationUpdateResponseConfigOriginRequest `json:"originRequest"`
+	OriginRequest TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequest `json:"originRequest"`
 	// Enable private network access from WARP users to private network routes. This is
 	// enabled if the tunnel has an assigned route.
-	WARPRouting TunnelConfigurationUpdateResponseConfigWARPRouting `json:"warp-routing"`
-	JSON        tunnelConfigurationUpdateResponseConfigJSON        `json:"-"`
+	WARPRouting TunnelCloudflaredConfigurationUpdateResponseConfigWARPRouting `json:"warp-routing"`
+	JSON        tunnelCloudflaredConfigurationUpdateResponseConfigJSON        `json:"-"`
 }
 
-// tunnelConfigurationUpdateResponseConfigJSON contains the JSON metadata for the
-// struct [TunnelConfigurationUpdateResponseConfig]
-type tunnelConfigurationUpdateResponseConfigJSON struct {
+// tunnelCloudflaredConfigurationUpdateResponseConfigJSON contains the JSON
+// metadata for the struct [TunnelCloudflaredConfigurationUpdateResponseConfig]
+type tunnelCloudflaredConfigurationUpdateResponseConfigJSON struct {
 	Ingress       apijson.Field
 	OriginRequest apijson.Field
 	WARPRouting   apijson.Field
@@ -140,16 +140,16 @@ type tunnelConfigurationUpdateResponseConfigJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationUpdateResponseConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationUpdateResponseConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationUpdateResponseConfigJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationUpdateResponseConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // Public hostname
-type TunnelConfigurationUpdateResponseConfigIngress struct {
+type TunnelCloudflaredConfigurationUpdateResponseConfigIngress struct {
 	// Public hostname for this service.
 	Hostname string `json:"hostname,required"`
 	// Protocol and address of destination server. Supported protocols: http://,
@@ -158,15 +158,16 @@ type TunnelConfigurationUpdateResponseConfigIngress struct {
 	Service string `json:"service,required"`
 	// Configuration parameters for the public hostname specific connection settings
 	// between cloudflared and origin server.
-	OriginRequest TunnelConfigurationUpdateResponseConfigIngressOriginRequest `json:"originRequest"`
+	OriginRequest TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequest `json:"originRequest"`
 	// Requests with this path route to this public hostname.
-	Path string                                             `json:"path"`
-	JSON tunnelConfigurationUpdateResponseConfigIngressJSON `json:"-"`
+	Path string                                                        `json:"path"`
+	JSON tunnelCloudflaredConfigurationUpdateResponseConfigIngressJSON `json:"-"`
 }
 
-// tunnelConfigurationUpdateResponseConfigIngressJSON contains the JSON metadata
-// for the struct [TunnelConfigurationUpdateResponseConfigIngress]
-type tunnelConfigurationUpdateResponseConfigIngressJSON struct {
+// tunnelCloudflaredConfigurationUpdateResponseConfigIngressJSON contains the JSON
+// metadata for the struct
+// [TunnelCloudflaredConfigurationUpdateResponseConfigIngress]
+type tunnelCloudflaredConfigurationUpdateResponseConfigIngressJSON struct {
 	Hostname      apijson.Field
 	Service       apijson.Field
 	OriginRequest apijson.Field
@@ -175,20 +176,20 @@ type tunnelConfigurationUpdateResponseConfigIngressJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationUpdateResponseConfigIngress) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationUpdateResponseConfigIngress) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationUpdateResponseConfigIngressJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationUpdateResponseConfigIngressJSON) RawJSON() string {
 	return r.raw
 }
 
 // Configuration parameters for the public hostname specific connection settings
 // between cloudflared and origin server.
-type TunnelConfigurationUpdateResponseConfigIngressOriginRequest struct {
+type TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
 	// Cf-Access-Jwt-Assertion request header.
-	Access TunnelConfigurationUpdateResponseConfigIngressOriginRequestAccess `json:"access"`
+	Access TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAccess `json:"access"`
 	// Path to the certificate authority (CA) for the certificate of your origin. This
 	// option should be used only if your certificate is not signed by Cloudflare.
 	CAPool string `json:"caPool"`
@@ -224,14 +225,121 @@ type TunnelConfigurationUpdateResponseConfigIngressOriginRequest struct {
 	TCPKeepAlive int64 `json:"tcpKeepAlive"`
 	// Timeout for completing a TLS handshake to your origin server, if you have chosen
 	// to connect Tunnel to an HTTPS server.
-	TLSTimeout int64                                                           `json:"tlsTimeout"`
-	JSON       tunnelConfigurationUpdateResponseConfigIngressOriginRequestJSON `json:"-"`
+	TLSTimeout int64                                                                      `json:"tlsTimeout"`
+	JSON       tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestJSON `json:"-"`
 }
 
-// tunnelConfigurationUpdateResponseConfigIngressOriginRequestJSON contains the
+// tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestJSON
+// contains the JSON metadata for the struct
+// [TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequest]
+type tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestJSON struct {
+	Access                 apijson.Field
+	CAPool                 apijson.Field
+	ConnectTimeout         apijson.Field
+	DisableChunkedEncoding apijson.Field
+	HTTP2Origin            apijson.Field
+	HTTPHostHeader         apijson.Field
+	KeepAliveConnections   apijson.Field
+	KeepAliveTimeout       apijson.Field
+	NoHappyEyeballs        apijson.Field
+	NoTLSVerify            apijson.Field
+	OriginServerName       apijson.Field
+	ProxyType              apijson.Field
+	TCPKeepAlive           apijson.Field
+	TLSTimeout             apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestJSON) RawJSON() string {
+	return r.raw
+}
+
+// For all L7 requests to this hostname, cloudflared will validate each request's
+// Cf-Access-Jwt-Assertion request header.
+type TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAccess struct {
+	// Access applications that are allowed to reach this hostname for this Tunnel.
+	// Audience tags can be identified in the dashboard or via the List Access policies
+	// API.
+	AUDTag   []string `json:"audTag,required"`
+	TeamName string   `json:"teamName,required"`
+	// Deny traffic that has not fulfilled Access authorization.
+	Required bool                                                                             `json:"required"`
+	JSON     tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAccessJSON `json:"-"`
+}
+
+// tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAccessJSON
+// contains the JSON metadata for the struct
+// [TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAccess]
+type tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAccessJSON struct {
+	AUDTag      apijson.Field
+	TeamName    apijson.Field
+	Required    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAccess) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAccessJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration parameters for the public hostname specific connection settings
+// between cloudflared and origin server.
+type TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequest struct {
+	// For all L7 requests to this hostname, cloudflared will validate each request's
+	// Cf-Access-Jwt-Assertion request header.
+	Access TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccess `json:"access"`
+	// Path to the certificate authority (CA) for the certificate of your origin. This
+	// option should be used only if your certificate is not signed by Cloudflare.
+	CAPool string `json:"caPool"`
+	// Timeout for establishing a new TCP connection to your origin server. This
+	// excludes the time taken to establish TLS, which is controlled by tlsTimeout.
+	ConnectTimeout int64 `json:"connectTimeout"`
+	// Disables chunked transfer encoding. Useful if you are running a WSGI server.
+	DisableChunkedEncoding bool `json:"disableChunkedEncoding"`
+	// Attempt to connect to origin using HTTP2. Origin must be configured as https.
+	HTTP2Origin bool `json:"http2Origin"`
+	// Sets the HTTP Host header on requests sent to the local service.
+	HTTPHostHeader string `json:"httpHostHeader"`
+	// Maximum number of idle keepalive connections between Tunnel and your origin.
+	// This does not restrict the total number of concurrent connections.
+	KeepAliveConnections int64 `json:"keepAliveConnections"`
+	// Timeout after which an idle keepalive connection can be discarded.
+	KeepAliveTimeout int64 `json:"keepAliveTimeout"`
+	// Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local
+	// network has misconfigured one of the protocols.
+	NoHappyEyeballs bool `json:"noHappyEyeballs"`
+	// Disables TLS verification of the certificate presented by your origin. Will
+	// allow any certificate from the origin to be accepted.
+	NoTLSVerify bool `json:"noTLSVerify"`
+	// Hostname that cloudflared should expect from your origin server certificate.
+	OriginServerName string `json:"originServerName"`
+	// cloudflared starts a proxy server to translate HTTP traffic into TCP when
+	// proxying, for example, SSH or RDP. This configures what type of proxy will be
+	// started. Valid options are: "" for the regular proxy and "socks" for a SOCKS5
+	// proxy.
+	ProxyType string `json:"proxyType"`
+	// The timeout after which a TCP keepalive packet is sent on a connection between
+	// Tunnel and the origin server.
+	TCPKeepAlive int64 `json:"tcpKeepAlive"`
+	// Timeout for completing a TLS handshake to your origin server, if you have chosen
+	// to connect Tunnel to an HTTPS server.
+	TLSTimeout int64                                                               `json:"tlsTimeout"`
+	JSON       tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestJSON `json:"-"`
+}
+
+// tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestJSON contains the
 // JSON metadata for the struct
-// [TunnelConfigurationUpdateResponseConfigIngressOriginRequest]
-type tunnelConfigurationUpdateResponseConfigIngressOriginRequestJSON struct {
+// [TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequest]
+type tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestJSON struct {
 	Access                 apijson.Field
 	CAPool                 apijson.Field
 	ConnectTimeout         apijson.Field
@@ -250,31 +358,31 @@ type tunnelConfigurationUpdateResponseConfigIngressOriginRequestJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationUpdateResponseConfigIngressOriginRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationUpdateResponseConfigIngressOriginRequestJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestJSON) RawJSON() string {
 	return r.raw
 }
 
 // For all L7 requests to this hostname, cloudflared will validate each request's
 // Cf-Access-Jwt-Assertion request header.
-type TunnelConfigurationUpdateResponseConfigIngressOriginRequestAccess struct {
+type TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
 	AUDTag   []string `json:"audTag,required"`
 	TeamName string   `json:"teamName,required"`
 	// Deny traffic that has not fulfilled Access authorization.
-	Required bool                                                                  `json:"required"`
-	JSON     tunnelConfigurationUpdateResponseConfigIngressOriginRequestAccessJSON `json:"-"`
+	Required bool                                                                      `json:"required"`
+	JSON     tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccessJSON `json:"-"`
 }
 
-// tunnelConfigurationUpdateResponseConfigIngressOriginRequestAccessJSON contains
-// the JSON metadata for the struct
-// [TunnelConfigurationUpdateResponseConfigIngressOriginRequestAccess]
-type tunnelConfigurationUpdateResponseConfigIngressOriginRequestAccessJSON struct {
+// tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccessJSON
+// contains the JSON metadata for the struct
+// [TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccess]
+type tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccessJSON struct {
 	AUDTag      apijson.Field
 	TeamName    apijson.Field
 	Required    apijson.Field
@@ -282,182 +390,77 @@ type tunnelConfigurationUpdateResponseConfigIngressOriginRequestAccessJSON struc
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationUpdateResponseConfigIngressOriginRequestAccess) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccess) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationUpdateResponseConfigIngressOriginRequestAccessJSON) RawJSON() string {
-	return r.raw
-}
-
-// Configuration parameters for the public hostname specific connection settings
-// between cloudflared and origin server.
-type TunnelConfigurationUpdateResponseConfigOriginRequest struct {
-	// For all L7 requests to this hostname, cloudflared will validate each request's
-	// Cf-Access-Jwt-Assertion request header.
-	Access TunnelConfigurationUpdateResponseConfigOriginRequestAccess `json:"access"`
-	// Path to the certificate authority (CA) for the certificate of your origin. This
-	// option should be used only if your certificate is not signed by Cloudflare.
-	CAPool string `json:"caPool"`
-	// Timeout for establishing a new TCP connection to your origin server. This
-	// excludes the time taken to establish TLS, which is controlled by tlsTimeout.
-	ConnectTimeout int64 `json:"connectTimeout"`
-	// Disables chunked transfer encoding. Useful if you are running a WSGI server.
-	DisableChunkedEncoding bool `json:"disableChunkedEncoding"`
-	// Attempt to connect to origin using HTTP2. Origin must be configured as https.
-	HTTP2Origin bool `json:"http2Origin"`
-	// Sets the HTTP Host header on requests sent to the local service.
-	HTTPHostHeader string `json:"httpHostHeader"`
-	// Maximum number of idle keepalive connections between Tunnel and your origin.
-	// This does not restrict the total number of concurrent connections.
-	KeepAliveConnections int64 `json:"keepAliveConnections"`
-	// Timeout after which an idle keepalive connection can be discarded.
-	KeepAliveTimeout int64 `json:"keepAliveTimeout"`
-	// Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local
-	// network has misconfigured one of the protocols.
-	NoHappyEyeballs bool `json:"noHappyEyeballs"`
-	// Disables TLS verification of the certificate presented by your origin. Will
-	// allow any certificate from the origin to be accepted.
-	NoTLSVerify bool `json:"noTLSVerify"`
-	// Hostname that cloudflared should expect from your origin server certificate.
-	OriginServerName string `json:"originServerName"`
-	// cloudflared starts a proxy server to translate HTTP traffic into TCP when
-	// proxying, for example, SSH or RDP. This configures what type of proxy will be
-	// started. Valid options are: "" for the regular proxy and "socks" for a SOCKS5
-	// proxy.
-	ProxyType string `json:"proxyType"`
-	// The timeout after which a TCP keepalive packet is sent on a connection between
-	// Tunnel and the origin server.
-	TCPKeepAlive int64 `json:"tcpKeepAlive"`
-	// Timeout for completing a TLS handshake to your origin server, if you have chosen
-	// to connect Tunnel to an HTTPS server.
-	TLSTimeout int64                                                    `json:"tlsTimeout"`
-	JSON       tunnelConfigurationUpdateResponseConfigOriginRequestJSON `json:"-"`
-}
-
-// tunnelConfigurationUpdateResponseConfigOriginRequestJSON contains the JSON
-// metadata for the struct [TunnelConfigurationUpdateResponseConfigOriginRequest]
-type tunnelConfigurationUpdateResponseConfigOriginRequestJSON struct {
-	Access                 apijson.Field
-	CAPool                 apijson.Field
-	ConnectTimeout         apijson.Field
-	DisableChunkedEncoding apijson.Field
-	HTTP2Origin            apijson.Field
-	HTTPHostHeader         apijson.Field
-	KeepAliveConnections   apijson.Field
-	KeepAliveTimeout       apijson.Field
-	NoHappyEyeballs        apijson.Field
-	NoTLSVerify            apijson.Field
-	OriginServerName       apijson.Field
-	ProxyType              apijson.Field
-	TCPKeepAlive           apijson.Field
-	TLSTimeout             apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *TunnelConfigurationUpdateResponseConfigOriginRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelConfigurationUpdateResponseConfigOriginRequestJSON) RawJSON() string {
-	return r.raw
-}
-
-// For all L7 requests to this hostname, cloudflared will validate each request's
-// Cf-Access-Jwt-Assertion request header.
-type TunnelConfigurationUpdateResponseConfigOriginRequestAccess struct {
-	// Access applications that are allowed to reach this hostname for this Tunnel.
-	// Audience tags can be identified in the dashboard or via the List Access policies
-	// API.
-	AUDTag   []string `json:"audTag,required"`
-	TeamName string   `json:"teamName,required"`
-	// Deny traffic that has not fulfilled Access authorization.
-	Required bool                                                           `json:"required"`
-	JSON     tunnelConfigurationUpdateResponseConfigOriginRequestAccessJSON `json:"-"`
-}
-
-// tunnelConfigurationUpdateResponseConfigOriginRequestAccessJSON contains the JSON
-// metadata for the struct
-// [TunnelConfigurationUpdateResponseConfigOriginRequestAccess]
-type tunnelConfigurationUpdateResponseConfigOriginRequestAccessJSON struct {
-	AUDTag      apijson.Field
-	TeamName    apijson.Field
-	Required    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelConfigurationUpdateResponseConfigOriginRequestAccess) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelConfigurationUpdateResponseConfigOriginRequestAccessJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccessJSON) RawJSON() string {
 	return r.raw
 }
 
 // Enable private network access from WARP users to private network routes. This is
 // enabled if the tunnel has an assigned route.
-type TunnelConfigurationUpdateResponseConfigWARPRouting struct {
-	Enabled bool                                                   `json:"enabled"`
-	JSON    tunnelConfigurationUpdateResponseConfigWARPRoutingJSON `json:"-"`
+type TunnelCloudflaredConfigurationUpdateResponseConfigWARPRouting struct {
+	Enabled bool                                                              `json:"enabled"`
+	JSON    tunnelCloudflaredConfigurationUpdateResponseConfigWARPRoutingJSON `json:"-"`
 }
 
-// tunnelConfigurationUpdateResponseConfigWARPRoutingJSON contains the JSON
-// metadata for the struct [TunnelConfigurationUpdateResponseConfigWARPRouting]
-type tunnelConfigurationUpdateResponseConfigWARPRoutingJSON struct {
+// tunnelCloudflaredConfigurationUpdateResponseConfigWARPRoutingJSON contains the
+// JSON metadata for the struct
+// [TunnelCloudflaredConfigurationUpdateResponseConfigWARPRouting]
+type tunnelCloudflaredConfigurationUpdateResponseConfigWARPRoutingJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationUpdateResponseConfigWARPRouting) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationUpdateResponseConfigWARPRouting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationUpdateResponseConfigWARPRoutingJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationUpdateResponseConfigWARPRoutingJSON) RawJSON() string {
 	return r.raw
 }
 
 // Indicates if this is a locally or remotely configured tunnel. If `local`, manage
 // the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 // tunnel's configuration on the Zero Trust dashboard.
-type TunnelConfigurationUpdateResponseSource string
+type TunnelCloudflaredConfigurationUpdateResponseSource string
 
 const (
-	TunnelConfigurationUpdateResponseSourceLocal      TunnelConfigurationUpdateResponseSource = "local"
-	TunnelConfigurationUpdateResponseSourceCloudflare TunnelConfigurationUpdateResponseSource = "cloudflare"
+	TunnelCloudflaredConfigurationUpdateResponseSourceLocal      TunnelCloudflaredConfigurationUpdateResponseSource = "local"
+	TunnelCloudflaredConfigurationUpdateResponseSourceCloudflare TunnelCloudflaredConfigurationUpdateResponseSource = "cloudflare"
 )
 
-func (r TunnelConfigurationUpdateResponseSource) IsKnown() bool {
+func (r TunnelCloudflaredConfigurationUpdateResponseSource) IsKnown() bool {
 	switch r {
-	case TunnelConfigurationUpdateResponseSourceLocal, TunnelConfigurationUpdateResponseSourceCloudflare:
+	case TunnelCloudflaredConfigurationUpdateResponseSourceLocal, TunnelCloudflaredConfigurationUpdateResponseSourceCloudflare:
 		return true
 	}
 	return false
 }
 
 // Cloudflare Tunnel configuration
-type TunnelConfigurationGetResponse struct {
+type TunnelCloudflaredConfigurationGetResponse struct {
 	// Identifier
 	AccountID string `json:"account_id"`
 	// The tunnel configuration and ingress rules.
-	Config    TunnelConfigurationGetResponseConfig `json:"config"`
-	CreatedAt time.Time                            `json:"created_at" format:"date-time"`
+	Config    TunnelCloudflaredConfigurationGetResponseConfig `json:"config"`
+	CreatedAt time.Time                                       `json:"created_at" format:"date-time"`
 	// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
 	// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 	// tunnel's configuration on the Zero Trust dashboard.
-	Source TunnelConfigurationGetResponseSource `json:"source"`
+	Source TunnelCloudflaredConfigurationGetResponseSource `json:"source"`
 	// UUID of the tunnel.
 	TunnelID string `json:"tunnel_id" format:"uuid"`
 	// The version of the Tunnel Configuration.
-	Version int64                              `json:"version"`
-	JSON    tunnelConfigurationGetResponseJSON `json:"-"`
+	Version int64                                         `json:"version"`
+	JSON    tunnelCloudflaredConfigurationGetResponseJSON `json:"-"`
 }
 
-// tunnelConfigurationGetResponseJSON contains the JSON metadata for the struct
-// [TunnelConfigurationGetResponse]
-type tunnelConfigurationGetResponseJSON struct {
+// tunnelCloudflaredConfigurationGetResponseJSON contains the JSON metadata for the
+// struct [TunnelCloudflaredConfigurationGetResponse]
+type tunnelCloudflaredConfigurationGetResponseJSON struct {
 	AccountID   apijson.Field
 	Config      apijson.Field
 	CreatedAt   apijson.Field
@@ -468,31 +471,31 @@ type tunnelConfigurationGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationGetResponseJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The tunnel configuration and ingress rules.
-type TunnelConfigurationGetResponseConfig struct {
+type TunnelCloudflaredConfigurationGetResponseConfig struct {
 	// List of public hostname definitions. At least one ingress rule needs to be
 	// defined for the tunnel.
-	Ingress []TunnelConfigurationGetResponseConfigIngress `json:"ingress"`
+	Ingress []TunnelCloudflaredConfigurationGetResponseConfigIngress `json:"ingress"`
 	// Configuration parameters for the public hostname specific connection settings
 	// between cloudflared and origin server.
-	OriginRequest TunnelConfigurationGetResponseConfigOriginRequest `json:"originRequest"`
+	OriginRequest TunnelCloudflaredConfigurationGetResponseConfigOriginRequest `json:"originRequest"`
 	// Enable private network access from WARP users to private network routes. This is
 	// enabled if the tunnel has an assigned route.
-	WARPRouting TunnelConfigurationGetResponseConfigWARPRouting `json:"warp-routing"`
-	JSON        tunnelConfigurationGetResponseConfigJSON        `json:"-"`
+	WARPRouting TunnelCloudflaredConfigurationGetResponseConfigWARPRouting `json:"warp-routing"`
+	JSON        tunnelCloudflaredConfigurationGetResponseConfigJSON        `json:"-"`
 }
 
-// tunnelConfigurationGetResponseConfigJSON contains the JSON metadata for the
-// struct [TunnelConfigurationGetResponseConfig]
-type tunnelConfigurationGetResponseConfigJSON struct {
+// tunnelCloudflaredConfigurationGetResponseConfigJSON contains the JSON metadata
+// for the struct [TunnelCloudflaredConfigurationGetResponseConfig]
+type tunnelCloudflaredConfigurationGetResponseConfigJSON struct {
 	Ingress       apijson.Field
 	OriginRequest apijson.Field
 	WARPRouting   apijson.Field
@@ -500,16 +503,16 @@ type tunnelConfigurationGetResponseConfigJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationGetResponseConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationGetResponseConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationGetResponseConfigJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationGetResponseConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // Public hostname
-type TunnelConfigurationGetResponseConfigIngress struct {
+type TunnelCloudflaredConfigurationGetResponseConfigIngress struct {
 	// Public hostname for this service.
 	Hostname string `json:"hostname,required"`
 	// Protocol and address of destination server. Supported protocols: http://,
@@ -518,15 +521,15 @@ type TunnelConfigurationGetResponseConfigIngress struct {
 	Service string `json:"service,required"`
 	// Configuration parameters for the public hostname specific connection settings
 	// between cloudflared and origin server.
-	OriginRequest TunnelConfigurationGetResponseConfigIngressOriginRequest `json:"originRequest"`
+	OriginRequest TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequest `json:"originRequest"`
 	// Requests with this path route to this public hostname.
-	Path string                                          `json:"path"`
-	JSON tunnelConfigurationGetResponseConfigIngressJSON `json:"-"`
+	Path string                                                     `json:"path"`
+	JSON tunnelCloudflaredConfigurationGetResponseConfigIngressJSON `json:"-"`
 }
 
-// tunnelConfigurationGetResponseConfigIngressJSON contains the JSON metadata for
-// the struct [TunnelConfigurationGetResponseConfigIngress]
-type tunnelConfigurationGetResponseConfigIngressJSON struct {
+// tunnelCloudflaredConfigurationGetResponseConfigIngressJSON contains the JSON
+// metadata for the struct [TunnelCloudflaredConfigurationGetResponseConfigIngress]
+type tunnelCloudflaredConfigurationGetResponseConfigIngressJSON struct {
 	Hostname      apijson.Field
 	Service       apijson.Field
 	OriginRequest apijson.Field
@@ -535,20 +538,20 @@ type tunnelConfigurationGetResponseConfigIngressJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationGetResponseConfigIngress) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationGetResponseConfigIngress) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationGetResponseConfigIngressJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationGetResponseConfigIngressJSON) RawJSON() string {
 	return r.raw
 }
 
 // Configuration parameters for the public hostname specific connection settings
 // between cloudflared and origin server.
-type TunnelConfigurationGetResponseConfigIngressOriginRequest struct {
+type TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
 	// Cf-Access-Jwt-Assertion request header.
-	Access TunnelConfigurationGetResponseConfigIngressOriginRequestAccess `json:"access"`
+	Access TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccess `json:"access"`
 	// Path to the certificate authority (CA) for the certificate of your origin. This
 	// option should be used only if your certificate is not signed by Cloudflare.
 	CAPool string `json:"caPool"`
@@ -584,14 +587,14 @@ type TunnelConfigurationGetResponseConfigIngressOriginRequest struct {
 	TCPKeepAlive int64 `json:"tcpKeepAlive"`
 	// Timeout for completing a TLS handshake to your origin server, if you have chosen
 	// to connect Tunnel to an HTTPS server.
-	TLSTimeout int64                                                        `json:"tlsTimeout"`
-	JSON       tunnelConfigurationGetResponseConfigIngressOriginRequestJSON `json:"-"`
+	TLSTimeout int64                                                                   `json:"tlsTimeout"`
+	JSON       tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestJSON `json:"-"`
 }
 
-// tunnelConfigurationGetResponseConfigIngressOriginRequestJSON contains the JSON
-// metadata for the struct
-// [TunnelConfigurationGetResponseConfigIngressOriginRequest]
-type tunnelConfigurationGetResponseConfigIngressOriginRequestJSON struct {
+// tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestJSON contains
+// the JSON metadata for the struct
+// [TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequest]
+type tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestJSON struct {
 	Access                 apijson.Field
 	CAPool                 apijson.Field
 	ConnectTimeout         apijson.Field
@@ -610,94 +613,95 @@ type tunnelConfigurationGetResponseConfigIngressOriginRequestJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationGetResponseConfigIngressOriginRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationGetResponseConfigIngressOriginRequestJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestJSON) RawJSON() string {
 	return r.raw
 }
 
 // For all L7 requests to this hostname, cloudflared will validate each request's
 // Cf-Access-Jwt-Assertion request header.
-type TunnelConfigurationGetResponseConfigIngressOriginRequestAccess struct {
+type TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
 	AUDTag   []string `json:"audTag,required"`
 	TeamName string   `json:"teamName,required"`
 	// Deny traffic that has not fulfilled Access authorization.
-	Required bool                                                               `json:"required"`
-	JSON     tunnelConfigurationGetResponseConfigIngressOriginRequestAccessJSON `json:"-"`
+	Required bool                                                                          `json:"required"`
+	JSON     tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccessJSON `json:"-"`
 }
 
-// tunnelConfigurationGetResponseConfigIngressOriginRequestAccessJSON contains the
+// tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccessJSON
+// contains the JSON metadata for the struct
+// [TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccess]
+type tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccessJSON struct {
+	AUDTag      apijson.Field
+	TeamName    apijson.Field
+	Required    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccess) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccessJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration parameters for the public hostname specific connection settings
+// between cloudflared and origin server.
+type TunnelCloudflaredConfigurationGetResponseConfigOriginRequest struct {
+	// For all L7 requests to this hostname, cloudflared will validate each request's
+	// Cf-Access-Jwt-Assertion request header.
+	Access TunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccess `json:"access"`
+	// Path to the certificate authority (CA) for the certificate of your origin. This
+	// option should be used only if your certificate is not signed by Cloudflare.
+	CAPool string `json:"caPool"`
+	// Timeout for establishing a new TCP connection to your origin server. This
+	// excludes the time taken to establish TLS, which is controlled by tlsTimeout.
+	ConnectTimeout int64 `json:"connectTimeout"`
+	// Disables chunked transfer encoding. Useful if you are running a WSGI server.
+	DisableChunkedEncoding bool `json:"disableChunkedEncoding"`
+	// Attempt to connect to origin using HTTP2. Origin must be configured as https.
+	HTTP2Origin bool `json:"http2Origin"`
+	// Sets the HTTP Host header on requests sent to the local service.
+	HTTPHostHeader string `json:"httpHostHeader"`
+	// Maximum number of idle keepalive connections between Tunnel and your origin.
+	// This does not restrict the total number of concurrent connections.
+	KeepAliveConnections int64 `json:"keepAliveConnections"`
+	// Timeout after which an idle keepalive connection can be discarded.
+	KeepAliveTimeout int64 `json:"keepAliveTimeout"`
+	// Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local
+	// network has misconfigured one of the protocols.
+	NoHappyEyeballs bool `json:"noHappyEyeballs"`
+	// Disables TLS verification of the certificate presented by your origin. Will
+	// allow any certificate from the origin to be accepted.
+	NoTLSVerify bool `json:"noTLSVerify"`
+	// Hostname that cloudflared should expect from your origin server certificate.
+	OriginServerName string `json:"originServerName"`
+	// cloudflared starts a proxy server to translate HTTP traffic into TCP when
+	// proxying, for example, SSH or RDP. This configures what type of proxy will be
+	// started. Valid options are: "" for the regular proxy and "socks" for a SOCKS5
+	// proxy.
+	ProxyType string `json:"proxyType"`
+	// The timeout after which a TCP keepalive packet is sent on a connection between
+	// Tunnel and the origin server.
+	TCPKeepAlive int64 `json:"tcpKeepAlive"`
+	// Timeout for completing a TLS handshake to your origin server, if you have chosen
+	// to connect Tunnel to an HTTPS server.
+	TLSTimeout int64                                                            `json:"tlsTimeout"`
+	JSON       tunnelCloudflaredConfigurationGetResponseConfigOriginRequestJSON `json:"-"`
+}
+
+// tunnelCloudflaredConfigurationGetResponseConfigOriginRequestJSON contains the
 // JSON metadata for the struct
-// [TunnelConfigurationGetResponseConfigIngressOriginRequestAccess]
-type tunnelConfigurationGetResponseConfigIngressOriginRequestAccessJSON struct {
-	AUDTag      apijson.Field
-	TeamName    apijson.Field
-	Required    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelConfigurationGetResponseConfigIngressOriginRequestAccess) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelConfigurationGetResponseConfigIngressOriginRequestAccessJSON) RawJSON() string {
-	return r.raw
-}
-
-// Configuration parameters for the public hostname specific connection settings
-// between cloudflared and origin server.
-type TunnelConfigurationGetResponseConfigOriginRequest struct {
-	// For all L7 requests to this hostname, cloudflared will validate each request's
-	// Cf-Access-Jwt-Assertion request header.
-	Access TunnelConfigurationGetResponseConfigOriginRequestAccess `json:"access"`
-	// Path to the certificate authority (CA) for the certificate of your origin. This
-	// option should be used only if your certificate is not signed by Cloudflare.
-	CAPool string `json:"caPool"`
-	// Timeout for establishing a new TCP connection to your origin server. This
-	// excludes the time taken to establish TLS, which is controlled by tlsTimeout.
-	ConnectTimeout int64 `json:"connectTimeout"`
-	// Disables chunked transfer encoding. Useful if you are running a WSGI server.
-	DisableChunkedEncoding bool `json:"disableChunkedEncoding"`
-	// Attempt to connect to origin using HTTP2. Origin must be configured as https.
-	HTTP2Origin bool `json:"http2Origin"`
-	// Sets the HTTP Host header on requests sent to the local service.
-	HTTPHostHeader string `json:"httpHostHeader"`
-	// Maximum number of idle keepalive connections between Tunnel and your origin.
-	// This does not restrict the total number of concurrent connections.
-	KeepAliveConnections int64 `json:"keepAliveConnections"`
-	// Timeout after which an idle keepalive connection can be discarded.
-	KeepAliveTimeout int64 `json:"keepAliveTimeout"`
-	// Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local
-	// network has misconfigured one of the protocols.
-	NoHappyEyeballs bool `json:"noHappyEyeballs"`
-	// Disables TLS verification of the certificate presented by your origin. Will
-	// allow any certificate from the origin to be accepted.
-	NoTLSVerify bool `json:"noTLSVerify"`
-	// Hostname that cloudflared should expect from your origin server certificate.
-	OriginServerName string `json:"originServerName"`
-	// cloudflared starts a proxy server to translate HTTP traffic into TCP when
-	// proxying, for example, SSH or RDP. This configures what type of proxy will be
-	// started. Valid options are: "" for the regular proxy and "socks" for a SOCKS5
-	// proxy.
-	ProxyType string `json:"proxyType"`
-	// The timeout after which a TCP keepalive packet is sent on a connection between
-	// Tunnel and the origin server.
-	TCPKeepAlive int64 `json:"tcpKeepAlive"`
-	// Timeout for completing a TLS handshake to your origin server, if you have chosen
-	// to connect Tunnel to an HTTPS server.
-	TLSTimeout int64                                                 `json:"tlsTimeout"`
-	JSON       tunnelConfigurationGetResponseConfigOriginRequestJSON `json:"-"`
-}
-
-// tunnelConfigurationGetResponseConfigOriginRequestJSON contains the JSON metadata
-// for the struct [TunnelConfigurationGetResponseConfigOriginRequest]
-type tunnelConfigurationGetResponseConfigOriginRequestJSON struct {
+// [TunnelCloudflaredConfigurationGetResponseConfigOriginRequest]
+type tunnelCloudflaredConfigurationGetResponseConfigOriginRequestJSON struct {
 	Access                 apijson.Field
 	CAPool                 apijson.Field
 	ConnectTimeout         apijson.Field
@@ -716,31 +720,31 @@ type tunnelConfigurationGetResponseConfigOriginRequestJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationGetResponseConfigOriginRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationGetResponseConfigOriginRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationGetResponseConfigOriginRequestJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationGetResponseConfigOriginRequestJSON) RawJSON() string {
 	return r.raw
 }
 
 // For all L7 requests to this hostname, cloudflared will validate each request's
 // Cf-Access-Jwt-Assertion request header.
-type TunnelConfigurationGetResponseConfigOriginRequestAccess struct {
+type TunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
 	AUDTag   []string `json:"audTag,required"`
 	TeamName string   `json:"teamName,required"`
 	// Deny traffic that has not fulfilled Access authorization.
-	Required bool                                                        `json:"required"`
-	JSON     tunnelConfigurationGetResponseConfigOriginRequestAccessJSON `json:"-"`
+	Required bool                                                                   `json:"required"`
+	JSON     tunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccessJSON `json:"-"`
 }
 
-// tunnelConfigurationGetResponseConfigOriginRequestAccessJSON contains the JSON
-// metadata for the struct
-// [TunnelConfigurationGetResponseConfigOriginRequestAccess]
-type tunnelConfigurationGetResponseConfigOriginRequestAccessJSON struct {
+// tunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccessJSON contains
+// the JSON metadata for the struct
+// [TunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccess]
+type tunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccessJSON struct {
 	AUDTag      apijson.Field
 	TeamName    apijson.Field
 	Required    apijson.Field
@@ -748,82 +752,83 @@ type tunnelConfigurationGetResponseConfigOriginRequestAccessJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationGetResponseConfigOriginRequestAccess) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccess) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationGetResponseConfigOriginRequestAccessJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccessJSON) RawJSON() string {
 	return r.raw
 }
 
 // Enable private network access from WARP users to private network routes. This is
 // enabled if the tunnel has an assigned route.
-type TunnelConfigurationGetResponseConfigWARPRouting struct {
-	Enabled bool                                                `json:"enabled"`
-	JSON    tunnelConfigurationGetResponseConfigWARPRoutingJSON `json:"-"`
+type TunnelCloudflaredConfigurationGetResponseConfigWARPRouting struct {
+	Enabled bool                                                           `json:"enabled"`
+	JSON    tunnelCloudflaredConfigurationGetResponseConfigWARPRoutingJSON `json:"-"`
 }
 
-// tunnelConfigurationGetResponseConfigWARPRoutingJSON contains the JSON metadata
-// for the struct [TunnelConfigurationGetResponseConfigWARPRouting]
-type tunnelConfigurationGetResponseConfigWARPRoutingJSON struct {
+// tunnelCloudflaredConfigurationGetResponseConfigWARPRoutingJSON contains the JSON
+// metadata for the struct
+// [TunnelCloudflaredConfigurationGetResponseConfigWARPRouting]
+type tunnelCloudflaredConfigurationGetResponseConfigWARPRoutingJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationGetResponseConfigWARPRouting) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationGetResponseConfigWARPRouting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationGetResponseConfigWARPRoutingJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationGetResponseConfigWARPRoutingJSON) RawJSON() string {
 	return r.raw
 }
 
 // Indicates if this is a locally or remotely configured tunnel. If `local`, manage
 // the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 // tunnel's configuration on the Zero Trust dashboard.
-type TunnelConfigurationGetResponseSource string
+type TunnelCloudflaredConfigurationGetResponseSource string
 
 const (
-	TunnelConfigurationGetResponseSourceLocal      TunnelConfigurationGetResponseSource = "local"
-	TunnelConfigurationGetResponseSourceCloudflare TunnelConfigurationGetResponseSource = "cloudflare"
+	TunnelCloudflaredConfigurationGetResponseSourceLocal      TunnelCloudflaredConfigurationGetResponseSource = "local"
+	TunnelCloudflaredConfigurationGetResponseSourceCloudflare TunnelCloudflaredConfigurationGetResponseSource = "cloudflare"
 )
 
-func (r TunnelConfigurationGetResponseSource) IsKnown() bool {
+func (r TunnelCloudflaredConfigurationGetResponseSource) IsKnown() bool {
 	switch r {
-	case TunnelConfigurationGetResponseSourceLocal, TunnelConfigurationGetResponseSourceCloudflare:
+	case TunnelCloudflaredConfigurationGetResponseSourceLocal, TunnelCloudflaredConfigurationGetResponseSourceCloudflare:
 		return true
 	}
 	return false
 }
 
-type TunnelConfigurationUpdateParams struct {
+type TunnelCloudflaredConfigurationUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The tunnel configuration and ingress rules.
-	Config param.Field[TunnelConfigurationUpdateParamsConfig] `json:"config"`
+	Config param.Field[TunnelCloudflaredConfigurationUpdateParamsConfig] `json:"config"`
 }
 
-func (r TunnelConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r TunnelCloudflaredConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The tunnel configuration and ingress rules.
-type TunnelConfigurationUpdateParamsConfig struct {
+type TunnelCloudflaredConfigurationUpdateParamsConfig struct {
 	// List of public hostname definitions. At least one ingress rule needs to be
 	// defined for the tunnel.
-	Ingress param.Field[[]TunnelConfigurationUpdateParamsConfigIngress] `json:"ingress"`
+	Ingress param.Field[[]TunnelCloudflaredConfigurationUpdateParamsConfigIngress] `json:"ingress"`
 	// Configuration parameters for the public hostname specific connection settings
 	// between cloudflared and origin server.
-	OriginRequest param.Field[TunnelConfigurationUpdateParamsConfigOriginRequest] `json:"originRequest"`
+	OriginRequest param.Field[TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequest] `json:"originRequest"`
 }
 
-func (r TunnelConfigurationUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
+func (r TunnelCloudflaredConfigurationUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Public hostname
-type TunnelConfigurationUpdateParamsConfigIngress struct {
+type TunnelCloudflaredConfigurationUpdateParamsConfigIngress struct {
 	// Public hostname for this service.
 	Hostname param.Field[string] `json:"hostname,required"`
 	// Protocol and address of destination server. Supported protocols: http://,
@@ -832,21 +837,21 @@ type TunnelConfigurationUpdateParamsConfigIngress struct {
 	Service param.Field[string] `json:"service,required"`
 	// Configuration parameters for the public hostname specific connection settings
 	// between cloudflared and origin server.
-	OriginRequest param.Field[TunnelConfigurationUpdateParamsConfigIngressOriginRequest] `json:"originRequest"`
+	OriginRequest param.Field[TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequest] `json:"originRequest"`
 	// Requests with this path route to this public hostname.
 	Path param.Field[string] `json:"path"`
 }
 
-func (r TunnelConfigurationUpdateParamsConfigIngress) MarshalJSON() (data []byte, err error) {
+func (r TunnelCloudflaredConfigurationUpdateParamsConfigIngress) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configuration parameters for the public hostname specific connection settings
 // between cloudflared and origin server.
-type TunnelConfigurationUpdateParamsConfigIngressOriginRequest struct {
+type TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
 	// Cf-Access-Jwt-Assertion request header.
-	Access param.Field[TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess] `json:"access"`
+	Access param.Field[TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequestAccess] `json:"access"`
 	// Path to the certificate authority (CA) for the certificate of your origin. This
 	// option should be used only if your certificate is not signed by Cloudflare.
 	CAPool param.Field[string] `json:"caPool"`
@@ -885,13 +890,13 @@ type TunnelConfigurationUpdateParamsConfigIngressOriginRequest struct {
 	TLSTimeout param.Field[int64] `json:"tlsTimeout"`
 }
 
-func (r TunnelConfigurationUpdateParamsConfigIngressOriginRequest) MarshalJSON() (data []byte, err error) {
+func (r TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // For all L7 requests to this hostname, cloudflared will validate each request's
 // Cf-Access-Jwt-Assertion request header.
-type TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess struct {
+type TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
@@ -901,16 +906,16 @@ type TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess struct {
 	Required param.Field[bool] `json:"required"`
 }
 
-func (r TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess) MarshalJSON() (data []byte, err error) {
+func (r TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequestAccess) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configuration parameters for the public hostname specific connection settings
 // between cloudflared and origin server.
-type TunnelConfigurationUpdateParamsConfigOriginRequest struct {
+type TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
 	// Cf-Access-Jwt-Assertion request header.
-	Access param.Field[TunnelConfigurationUpdateParamsConfigOriginRequestAccess] `json:"access"`
+	Access param.Field[TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequestAccess] `json:"access"`
 	// Path to the certificate authority (CA) for the certificate of your origin. This
 	// option should be used only if your certificate is not signed by Cloudflare.
 	CAPool param.Field[string] `json:"caPool"`
@@ -949,13 +954,13 @@ type TunnelConfigurationUpdateParamsConfigOriginRequest struct {
 	TLSTimeout param.Field[int64] `json:"tlsTimeout"`
 }
 
-func (r TunnelConfigurationUpdateParamsConfigOriginRequest) MarshalJSON() (data []byte, err error) {
+func (r TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // For all L7 requests to this hostname, cloudflared will validate each request's
 // Cf-Access-Jwt-Assertion request header.
-type TunnelConfigurationUpdateParamsConfigOriginRequestAccess struct {
+type TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
@@ -965,33 +970,33 @@ type TunnelConfigurationUpdateParamsConfigOriginRequestAccess struct {
 	Required param.Field[bool] `json:"required"`
 }
 
-func (r TunnelConfigurationUpdateParamsConfigOriginRequestAccess) MarshalJSON() (data []byte, err error) {
+func (r TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequestAccess) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Enable private network access from WARP users to private network routes. This is
 // enabled if the tunnel has an assigned route.
-type TunnelConfigurationUpdateParamsConfigWARPRouting struct {
+type TunnelCloudflaredConfigurationUpdateParamsConfigWARPRouting struct {
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r TunnelConfigurationUpdateParamsConfigWARPRouting) MarshalJSON() (data []byte, err error) {
+func (r TunnelCloudflaredConfigurationUpdateParamsConfigWARPRouting) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type TunnelConfigurationUpdateResponseEnvelope struct {
+type TunnelCloudflaredConfigurationUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success TunnelConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// Cloudflare Tunnel configuration
-	Result TunnelConfigurationUpdateResponse             `json:"result"`
-	JSON   tunnelConfigurationUpdateResponseEnvelopeJSON `json:"-"`
+	Result TunnelCloudflaredConfigurationUpdateResponse             `json:"result"`
+	JSON   tunnelCloudflaredConfigurationUpdateResponseEnvelopeJSON `json:"-"`
 }
 
-// tunnelConfigurationUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [TunnelConfigurationUpdateResponseEnvelope]
-type tunnelConfigurationUpdateResponseEnvelopeJSON struct {
+// tunnelCloudflaredConfigurationUpdateResponseEnvelopeJSON contains the JSON
+// metadata for the struct [TunnelCloudflaredConfigurationUpdateResponseEnvelope]
+type tunnelCloudflaredConfigurationUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -1000,47 +1005,47 @@ type tunnelConfigurationUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationUpdateResponseEnvelopeJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type TunnelConfigurationUpdateResponseEnvelopeSuccess bool
+type TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess bool
 
 const (
-	TunnelConfigurationUpdateResponseEnvelopeSuccessTrue TunnelConfigurationUpdateResponseEnvelopeSuccess = true
+	TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccessTrue TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess = true
 )
 
-func (r TunnelConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
+func (r TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case TunnelConfigurationUpdateResponseEnvelopeSuccessTrue:
+	case TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type TunnelConfigurationGetParams struct {
+type TunnelCloudflaredConfigurationGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type TunnelConfigurationGetResponseEnvelope struct {
+type TunnelCloudflaredConfigurationGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success TunnelConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
 	// Cloudflare Tunnel configuration
-	Result TunnelConfigurationGetResponse             `json:"result"`
-	JSON   tunnelConfigurationGetResponseEnvelopeJSON `json:"-"`
+	Result TunnelCloudflaredConfigurationGetResponse             `json:"result"`
+	JSON   tunnelCloudflaredConfigurationGetResponseEnvelopeJSON `json:"-"`
 }
 
-// tunnelConfigurationGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [TunnelConfigurationGetResponseEnvelope]
-type tunnelConfigurationGetResponseEnvelopeJSON struct {
+// tunnelCloudflaredConfigurationGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [TunnelCloudflaredConfigurationGetResponseEnvelope]
+type tunnelCloudflaredConfigurationGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -1049,24 +1054,24 @@ type tunnelConfigurationGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelConfigurationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelCloudflaredConfigurationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelConfigurationGetResponseEnvelopeJSON) RawJSON() string {
+func (r tunnelCloudflaredConfigurationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type TunnelConfigurationGetResponseEnvelopeSuccess bool
+type TunnelCloudflaredConfigurationGetResponseEnvelopeSuccess bool
 
 const (
-	TunnelConfigurationGetResponseEnvelopeSuccessTrue TunnelConfigurationGetResponseEnvelopeSuccess = true
+	TunnelCloudflaredConfigurationGetResponseEnvelopeSuccessTrue TunnelCloudflaredConfigurationGetResponseEnvelopeSuccess = true
 )
 
-func (r TunnelConfigurationGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r TunnelCloudflaredConfigurationGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case TunnelConfigurationGetResponseEnvelopeSuccessTrue:
+	case TunnelCloudflaredConfigurationGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

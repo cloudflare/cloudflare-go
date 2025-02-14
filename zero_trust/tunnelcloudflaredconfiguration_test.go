@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
-func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
+func TestTunnelCloudflaredConfigurationUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,17 +27,17 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Tunnels.Configurations.Update(
+	_, err := client.ZeroTrust.Tunnels.Cloudflared.Configurations.Update(
 		context.TODO(),
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		zero_trust.TunnelConfigurationUpdateParams{
+		zero_trust.TunnelCloudflaredConfigurationUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Config: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfig{
-				Ingress: cloudflare.F([]zero_trust.TunnelConfigurationUpdateParamsConfigIngress{{
+			Config: cloudflare.F(zero_trust.TunnelCloudflaredConfigurationUpdateParamsConfig{
+				Ingress: cloudflare.F([]zero_trust.TunnelCloudflaredConfigurationUpdateParamsConfigIngress{{
 					Hostname: cloudflare.F("tunnel.example.com"),
 					Service:  cloudflare.F("https://localhost:8001"),
-					OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequest{
-						Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess{
+					OriginRequest: cloudflare.F(zero_trust.TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequest{
+						Access: cloudflare.F(zero_trust.TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequestAccess{
 							AUDTag:   cloudflare.F([]string{"string"}),
 							TeamName: cloudflare.F("teamName"),
 							Required: cloudflare.F(true),
@@ -58,8 +58,8 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 					}),
 					Path: cloudflare.F("subpath"),
 				}}),
-				OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigOriginRequest{
-					Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigOriginRequestAccess{
+				OriginRequest: cloudflare.F(zero_trust.TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequest{
+					Access: cloudflare.F(zero_trust.TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequestAccess{
 						AUDTag:   cloudflare.F([]string{"string"}),
 						TeamName: cloudflare.F("teamName"),
 						Required: cloudflare.F(true),
@@ -90,7 +90,7 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestTunnelConfigurationGet(t *testing.T) {
+func TestTunnelCloudflaredConfigurationGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -103,10 +103,10 @@ func TestTunnelConfigurationGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Tunnels.Configurations.Get(
+	_, err := client.ZeroTrust.Tunnels.Cloudflared.Configurations.Get(
 		context.TODO(),
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		zero_trust.TunnelConfigurationGetParams{
+		zero_trust.TunnelCloudflaredConfigurationGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
