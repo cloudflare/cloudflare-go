@@ -2,18 +2,6 @@ name: Bug report
 description: Report an issue or bug with this library
 labels: ['bug']
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for taking the time to fill out this bug report!
-  - type: checkboxes
-    id: non_feature_request
-    attributes:
-      label: Confirm this is not a feature request
-      description: For feature requests or general feedback on the new API, comment in our [v2.0.0 Beta Discussion](https://github.com/cloudflare/cloudflare-go/discussions/1538)
-      options:
-        - label: This is a bug
-          required: true
   - type: checkboxes
     id: non_api
     attributes:
