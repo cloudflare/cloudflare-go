@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
@@ -41,6 +42,7 @@ func TestPCAPNewWithOptionalParams(t *testing.T) {
 				SourceAddress:      cloudflare.F("1.2.3.4"),
 				SourcePort:         cloudflare.F(123.000000),
 			}),
+			OffsetTime: cloudflare.F(time.Now()),
 		},
 	})
 	if err != nil {
