@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ConnectorService contains methods and other services that help with interacting
@@ -388,11 +387,11 @@ func (r ConnectorUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConnectorUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   ConnectorUpdateResponse             `json:"result,required"`
-	Success  bool                                `json:"success,required"`
-	JSON     connectorUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   []ConnectorUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ConnectorUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   ConnectorUpdateResponse                   `json:"result,required"`
+	Success  bool                                      `json:"success,required"`
+	JSON     connectorUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
 // connectorUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -411,6 +410,52 @@ func (r *ConnectorUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r connectorUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorUpdateResponseEnvelopeErrors struct {
+	Code    float64                                   `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    connectorUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// connectorUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ConnectorUpdateResponseEnvelopeErrors]
+type connectorUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorUpdateResponseEnvelopeMessages struct {
+	Code    float64                                     `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    connectorUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// connectorUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ConnectorUpdateResponseEnvelopeMessages]
+type connectorUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -434,11 +479,11 @@ func (r ConnectorEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConnectorEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   ConnectorEditResponse             `json:"result,required"`
-	Success  bool                              `json:"success,required"`
-	JSON     connectorEditResponseEnvelopeJSON `json:"-"`
+	Errors   []ConnectorEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ConnectorEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   ConnectorEditResponse                   `json:"result,required"`
+	Success  bool                                    `json:"success,required"`
+	JSON     connectorEditResponseEnvelopeJSON       `json:"-"`
 }
 
 // connectorEditResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -460,17 +505,63 @@ func (r connectorEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type ConnectorEditResponseEnvelopeErrors struct {
+	Code    float64                                 `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    connectorEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// connectorEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ConnectorEditResponseEnvelopeErrors]
+type connectorEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorEditResponseEnvelopeMessages struct {
+	Code    float64                                   `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    connectorEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// connectorEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ConnectorEditResponseEnvelopeMessages]
+type connectorEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 type ConnectorGetParams struct {
 	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConnectorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   ConnectorGetResponse             `json:"result,required"`
-	Success  bool                             `json:"success,required"`
-	JSON     connectorGetResponseEnvelopeJSON `json:"-"`
+	Errors   []ConnectorGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ConnectorGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ConnectorGetResponse                   `json:"result,required"`
+	Success  bool                                   `json:"success,required"`
+	JSON     connectorGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // connectorGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -489,5 +580,51 @@ func (r *ConnectorGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r connectorGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorGetResponseEnvelopeErrors struct {
+	Code    float64                                `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    connectorGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// connectorGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ConnectorGetResponseEnvelopeErrors]
+type connectorGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectorGetResponseEnvelopeMessages struct {
+	Code    float64                                  `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    connectorGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// connectorGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ConnectorGetResponseEnvelopeMessages]
+type connectorGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
