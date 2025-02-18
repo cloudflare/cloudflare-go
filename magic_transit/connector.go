@@ -22,7 +22,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewConnectorService] method instead.
 type ConnectorService struct {
-	Options []option.RequestOption
+	Options   []option.RequestOption
+	Telemetry *ConnectorTelemetryService
+	Snapshots *ConnectorSnapshotService
 }
 
 // NewConnectorService generates a new service that applies the given options to
@@ -31,6 +33,8 @@ type ConnectorService struct {
 func NewConnectorService(opts ...option.RequestOption) (r *ConnectorService) {
 	r = &ConnectorService{}
 	r.Options = opts
+	r.Telemetry = NewConnectorTelemetryService(opts...)
+	r.Snapshots = NewConnectorSnapshotService(opts...)
 	return
 }
 
