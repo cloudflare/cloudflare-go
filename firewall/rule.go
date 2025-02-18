@@ -332,10 +332,10 @@ func (r *RuleService) EditAutoPaging(ctx context.Context, ruleID string, body Ru
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
-func (r *RuleService) Get(ctx context.Context, ruleID string, params RuleGetParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
+func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	var env RuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.ZoneID.Value == "" {
+	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
@@ -343,8 +343,8 @@ func (r *RuleService) Get(ctx context.Context, ruleID string, params RuleGetPara
 		err = errors.New("missing required rule_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/rules/%s", params.ZoneID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/rules/%s", query.ZoneID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -816,16 +816,6 @@ func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 type RuleGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The unique identifier of the firewall rule.
-	ID param.Field[string] `query:"id"`
-}
-
-// URLQuery serializes [RuleGetParams]'s query parameters as `url.Values`.
-func (r RuleGetParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type RuleGetResponseEnvelope struct {

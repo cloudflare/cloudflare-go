@@ -269,7 +269,7 @@ func TestRuleEdit(t *testing.T) {
 	}
 }
 
-func TestRuleGetWithOptionalParams(t *testing.T) {
+func TestRuleGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -287,7 +287,6 @@ func TestRuleGetWithOptionalParams(t *testing.T) {
 		"372e67954025e0ba6aaa6d586b9e0b60",
 		firewall.RuleGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ID:     cloudflare.F("372e67954025e0ba6aaa6d586b9e0b60"),
 		},
 	)
 	if err != nil {
