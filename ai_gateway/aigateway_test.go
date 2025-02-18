@@ -38,6 +38,7 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 		RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayNewParamsRateLimitingTechniqueFixed),
 		Authentication:          cloudflare.F(true),
 		LogManagement:           cloudflare.F(int64(10000)),
+		LogManagementStrategy:   cloudflare.F(ai_gateway.AIGatewayNewParamsLogManagementStrategyStopInserting),
 		Logpush:                 cloudflare.F(true),
 		LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
 	})
@@ -76,6 +77,7 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
 			Authentication:          cloudflare.F(true),
 			LogManagement:           cloudflare.F(int64(10000)),
+			LogManagementStrategy:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsLogManagementStrategyStopInserting),
 			Logpush:                 cloudflare.F(true),
 			LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
 		},
