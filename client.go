@@ -95,6 +95,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/workers"
 	"github.com/cloudflare/cloudflare-go/v4/workers_for_platforms"
 	"github.com/cloudflare/cloudflare-go/v4/workflows"
+	"github.com/cloudflare/cloudflare-go/v4/zaraz"
 	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 	"github.com/cloudflare/cloudflare-go/v4/zones"
 )
@@ -182,6 +183,7 @@ type Client struct {
 	Radar                       *radar.RadarService
 	BotManagement               *bot_management.BotManagementService
 	OriginPostQuantumEncryption *origin_post_quantum_encryption.OriginPostQuantumEncryptionService
+	Zaraz                       *zaraz.ZarazService
 	Speed                       *speed.SpeedService
 	DCVDelegation               *dcv_delegation.DCVDelegationService
 	Hostnames                   *hostnames.HostnameService
@@ -295,6 +297,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Radar = radar.NewRadarService(opts...)
 	r.BotManagement = bot_management.NewBotManagementService(opts...)
 	r.OriginPostQuantumEncryption = origin_post_quantum_encryption.NewOriginPostQuantumEncryptionService(opts...)
+	r.Zaraz = zaraz.NewZarazService(opts...)
 	r.Speed = speed.NewSpeedService(opts...)
 	r.DCVDelegation = dcv_delegation.NewDCVDelegationService(opts...)
 	r.Hostnames = hostnames.NewHostnameService(opts...)
