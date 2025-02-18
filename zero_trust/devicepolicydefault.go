@@ -94,15 +94,22 @@ type DevicePolicyDefaultEditResponse struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback bool `json:"disable_auto_fallback"`
+	// Determines how the WARP client sends DNS requests to Cloudflare Gateway. When
+	// `true`, DNS traffic is sent over DoH inside the WARP tunnel. When `false`, the
+	// DoH connection operates outside of the WARP tunnel.
+	DOHInTunnel bool `json:"doh_in_tunnel"`
 	// Whether the policy will be applied to matching devices.
 	Enabled bool                 `json:"enabled"`
 	Exclude []SplitTunnelExclude `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs bool                                         `json:"exclude_office_ips"`
-	FallbackDomains  []FallbackDomain                             `json:"fallback_domains"`
-	GatewayUniqueID  string                                       `json:"gateway_unique_id"`
-	Include          []SplitTunnelInclude                         `json:"include"`
-	ServiceModeV2    DevicePolicyDefaultEditResponseServiceModeV2 `json:"service_mode_v2"`
+	ExcludeOfficeIPs bool                 `json:"exclude_office_ips"`
+	FallbackDomains  []FallbackDomain     `json:"fallback_domains"`
+	GatewayUniqueID  string               `json:"gateway_unique_id"`
+	Include          []SplitTunnelInclude `json:"include"`
+	// Determines if the operating system will register WARP's local interface IP with
+	// your on-premises DNS server.
+	RegisterInterfaceIPWithDNS bool                                         `json:"register_interface_ip_with_dns"`
+	ServiceModeV2              DevicePolicyDefaultEditResponseServiceModeV2 `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL string `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
@@ -115,25 +122,27 @@ type DevicePolicyDefaultEditResponse struct {
 // devicePolicyDefaultEditResponseJSON contains the JSON metadata for the struct
 // [DevicePolicyDefaultEditResponse]
 type devicePolicyDefaultEditResponseJSON struct {
-	AllowModeSwitch     apijson.Field
-	AllowUpdates        apijson.Field
-	AllowedToLeave      apijson.Field
-	AutoConnect         apijson.Field
-	CaptivePortal       apijson.Field
-	Default             apijson.Field
-	DisableAutoFallback apijson.Field
-	Enabled             apijson.Field
-	Exclude             apijson.Field
-	ExcludeOfficeIPs    apijson.Field
-	FallbackDomains     apijson.Field
-	GatewayUniqueID     apijson.Field
-	Include             apijson.Field
-	ServiceModeV2       apijson.Field
-	SupportURL          apijson.Field
-	SwitchLocked        apijson.Field
-	TunnelProtocol      apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
+	AllowModeSwitch            apijson.Field
+	AllowUpdates               apijson.Field
+	AllowedToLeave             apijson.Field
+	AutoConnect                apijson.Field
+	CaptivePortal              apijson.Field
+	Default                    apijson.Field
+	DisableAutoFallback        apijson.Field
+	DOHInTunnel                apijson.Field
+	Enabled                    apijson.Field
+	Exclude                    apijson.Field
+	ExcludeOfficeIPs           apijson.Field
+	FallbackDomains            apijson.Field
+	GatewayUniqueID            apijson.Field
+	Include                    apijson.Field
+	RegisterInterfaceIPWithDNS apijson.Field
+	ServiceModeV2              apijson.Field
+	SupportURL                 apijson.Field
+	SwitchLocked               apijson.Field
+	TunnelProtocol             apijson.Field
+	raw                        string
+	ExtraFields                map[string]apijson.Field
 }
 
 func (r *DevicePolicyDefaultEditResponse) UnmarshalJSON(data []byte) (err error) {
@@ -187,15 +196,22 @@ type DevicePolicyDefaultGetResponse struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback bool `json:"disable_auto_fallback"`
+	// Determines how the WARP client sends DNS requests to Cloudflare Gateway. When
+	// `true`, DNS traffic is sent over DoH inside the WARP tunnel. When `false`, the
+	// DoH connection operates outside of the WARP tunnel.
+	DOHInTunnel bool `json:"doh_in_tunnel"`
 	// Whether the policy will be applied to matching devices.
 	Enabled bool                 `json:"enabled"`
 	Exclude []SplitTunnelExclude `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs bool                                        `json:"exclude_office_ips"`
-	FallbackDomains  []FallbackDomain                            `json:"fallback_domains"`
-	GatewayUniqueID  string                                      `json:"gateway_unique_id"`
-	Include          []SplitTunnelInclude                        `json:"include"`
-	ServiceModeV2    DevicePolicyDefaultGetResponseServiceModeV2 `json:"service_mode_v2"`
+	ExcludeOfficeIPs bool                 `json:"exclude_office_ips"`
+	FallbackDomains  []FallbackDomain     `json:"fallback_domains"`
+	GatewayUniqueID  string               `json:"gateway_unique_id"`
+	Include          []SplitTunnelInclude `json:"include"`
+	// Determines if the operating system will register WARP's local interface IP with
+	// your on-premises DNS server.
+	RegisterInterfaceIPWithDNS bool                                        `json:"register_interface_ip_with_dns"`
+	ServiceModeV2              DevicePolicyDefaultGetResponseServiceModeV2 `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL string `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
@@ -208,25 +224,27 @@ type DevicePolicyDefaultGetResponse struct {
 // devicePolicyDefaultGetResponseJSON contains the JSON metadata for the struct
 // [DevicePolicyDefaultGetResponse]
 type devicePolicyDefaultGetResponseJSON struct {
-	AllowModeSwitch     apijson.Field
-	AllowUpdates        apijson.Field
-	AllowedToLeave      apijson.Field
-	AutoConnect         apijson.Field
-	CaptivePortal       apijson.Field
-	Default             apijson.Field
-	DisableAutoFallback apijson.Field
-	Enabled             apijson.Field
-	Exclude             apijson.Field
-	ExcludeOfficeIPs    apijson.Field
-	FallbackDomains     apijson.Field
-	GatewayUniqueID     apijson.Field
-	Include             apijson.Field
-	ServiceModeV2       apijson.Field
-	SupportURL          apijson.Field
-	SwitchLocked        apijson.Field
-	TunnelProtocol      apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
+	AllowModeSwitch            apijson.Field
+	AllowUpdates               apijson.Field
+	AllowedToLeave             apijson.Field
+	AutoConnect                apijson.Field
+	CaptivePortal              apijson.Field
+	Default                    apijson.Field
+	DisableAutoFallback        apijson.Field
+	DOHInTunnel                apijson.Field
+	Enabled                    apijson.Field
+	Exclude                    apijson.Field
+	ExcludeOfficeIPs           apijson.Field
+	FallbackDomains            apijson.Field
+	GatewayUniqueID            apijson.Field
+	Include                    apijson.Field
+	RegisterInterfaceIPWithDNS apijson.Field
+	ServiceModeV2              apijson.Field
+	SupportURL                 apijson.Field
+	SwitchLocked               apijson.Field
+	TunnelProtocol             apijson.Field
+	raw                        string
+	ExtraFields                map[string]apijson.Field
 }
 
 func (r *DevicePolicyDefaultGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -279,9 +297,16 @@ type DevicePolicyDefaultEditParams struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
+	// Determines how the WARP client sends DNS requests to Cloudflare Gateway. When
+	// `true`, DNS traffic is sent over DoH inside the WARP tunnel. When `false`, the
+	// DoH connection operates outside of the WARP tunnel.
+	DOHInTunnel param.Field[bool] `json:"doh_in_tunnel"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs param.Field[bool]                                       `json:"exclude_office_ips"`
-	ServiceModeV2    param.Field[DevicePolicyDefaultEditParamsServiceModeV2] `json:"service_mode_v2"`
+	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
+	// Determines if the operating system will register WARP's local interface IP with
+	// your on-premises DNS server.
+	RegisterInterfaceIPWithDNS param.Field[bool]                                       `json:"register_interface_ip_with_dns"`
+	ServiceModeV2              param.Field[DevicePolicyDefaultEditParamsServiceModeV2] `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL param.Field[string] `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
