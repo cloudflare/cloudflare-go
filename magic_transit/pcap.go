@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
@@ -111,6 +112,9 @@ type PCAP struct {
 	ID string `json:"id"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
+	// within the last 24h. When this field is empty, defaults to time of request.
+	OffsetTime time.Time `json:"offset_time" format:"date-time"`
 	// The status of the packet capture request.
 	Status PCAPStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
@@ -129,6 +133,7 @@ type PCAP struct {
 type pcapJSON struct {
 	ID          apijson.Field
 	FilterV1    apijson.Field
+	OffsetTime  apijson.Field
 	Status      apijson.Field
 	Submitted   apijson.Field
 	System      apijson.Field
@@ -275,6 +280,9 @@ type PCAPNewResponse struct {
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
+	// within the last 24h. When this field is empty, defaults to time of request.
+	OffsetTime time.Time `json:"offset_time" format:"date-time"`
 	// The status of the packet capture request.
 	Status PCAPNewResponseStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
@@ -298,6 +306,7 @@ type pcapNewResponseJSON struct {
 	DestinationConf apijson.Field
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
+	OffsetTime      apijson.Field
 	Status          apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
@@ -534,6 +543,9 @@ type PCAPListResponse struct {
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
+	// within the last 24h. When this field is empty, defaults to time of request.
+	OffsetTime time.Time `json:"offset_time" format:"date-time"`
 	// The status of the packet capture request.
 	Status PCAPListResponseStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
@@ -558,6 +570,7 @@ type pcapListResponseJSON struct {
 	DestinationConf apijson.Field
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
+	OffsetTime      apijson.Field
 	Status          apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
@@ -794,6 +807,9 @@ type PCAPGetResponse struct {
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
+	// within the last 24h. When this field is empty, defaults to time of request.
+	OffsetTime time.Time `json:"offset_time" format:"date-time"`
 	// The status of the packet capture request.
 	Status PCAPGetResponseStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
@@ -817,6 +833,7 @@ type pcapGetResponseJSON struct {
 	DestinationConf apijson.Field
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
+	OffsetTime      apijson.Field
 	Status          apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
@@ -1065,6 +1082,9 @@ type PCAPNewParamsBody struct {
 	DestinationConf param.Field[string] `json:"destination_conf"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 param.Field[PCAPFilterParam] `json:"filter_v1"`
+	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
+	// within the last 24h. When this field is empty, defaults to time of request.
+	OffsetTime param.Field[time.Time] `json:"offset_time" format:"date-time"`
 	// The limit of packets contained in a packet capture.
 	PacketLimit param.Field[float64] `json:"packet_limit"`
 }
@@ -1095,6 +1115,9 @@ type PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimple struct {
 	Type param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleType] `json:"type,required"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 param.Field[PCAPFilterParam] `json:"filter_v1"`
+	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
+	// within the last 24h. When this field is empty, defaults to time of request.
+	OffsetTime param.Field[time.Time] `json:"offset_time" format:"date-time"`
 }
 
 func (r PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimple) MarshalJSON() (data []byte, err error) {
