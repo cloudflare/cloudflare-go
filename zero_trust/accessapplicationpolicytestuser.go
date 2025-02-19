@@ -7,8 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
@@ -35,11 +37,11 @@ func NewAccessApplicationPolicyTestUserService(opts ...option.RequestOption) (r 
 }
 
 // Fetches a single page of user results from an Access policy test.
-func (r *AccessApplicationPolicyTestUserService) List(ctx context.Context, policyTestID string, query AccessApplicationPolicyTestUserListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationPolicyTestUserListResponse], err error) {
+func (r *AccessApplicationPolicyTestUserService) List(ctx context.Context, policyTestID string, params AccessApplicationPolicyTestUserListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationPolicyTestUserListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -47,8 +49,8 @@ func (r *AccessApplicationPolicyTestUserService) List(ctx context.Context, polic
 		err = errors.New("missing required policy_test_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/access/policy-tests/%s/users", query.AccountID, policyTestID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/access/policy-tests/%s/users", params.AccountID, policyTestID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,8 +63,8 @@ func (r *AccessApplicationPolicyTestUserService) List(ctx context.Context, polic
 }
 
 // Fetches a single page of user results from an Access policy test.
-func (r *AccessApplicationPolicyTestUserService) ListAutoPaging(ctx context.Context, policyTestID string, query AccessApplicationPolicyTestUserListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessApplicationPolicyTestUserListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, policyTestID, query, opts...))
+func (r *AccessApplicationPolicyTestUserService) ListAutoPaging(ctx context.Context, policyTestID string, params AccessApplicationPolicyTestUserListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessApplicationPolicyTestUserListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, policyTestID, params, opts...))
 }
 
 type AccessApplicationPolicyTestUserListResponse struct {
@@ -115,4 +117,31 @@ func (r AccessApplicationPolicyTestUserListResponseStatus) IsKnown() bool {
 type AccessApplicationPolicyTestUserListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Filter users by their policy evaluation status.
+	Status param.Field[AccessApplicationPolicyTestUserListParamsStatus] `query:"status"`
+}
+
+// URLQuery serializes [AccessApplicationPolicyTestUserListParams]'s query
+// parameters as `url.Values`.
+func (r AccessApplicationPolicyTestUserListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Filter users by their policy evaluation status.
+type AccessApplicationPolicyTestUserListParamsStatus string
+
+const (
+	AccessApplicationPolicyTestUserListParamsStatusSuccess AccessApplicationPolicyTestUserListParamsStatus = "success"
+	AccessApplicationPolicyTestUserListParamsStatusFail    AccessApplicationPolicyTestUserListParamsStatus = "fail"
+)
+
+func (r AccessApplicationPolicyTestUserListParamsStatus) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyTestUserListParamsStatusSuccess, AccessApplicationPolicyTestUserListParamsStatusFail:
+		return true
+	}
+	return false
 }
