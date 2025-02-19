@@ -23,7 +23,7 @@ import (
 // the [NewConnectorService] method instead.
 type ConnectorService struct {
 	Options   []option.RequestOption
-	Telemetry *ConnectorTelemetryService
+	Events    *ConnectorEventService
 	Snapshots *ConnectorSnapshotService
 }
 
@@ -33,7 +33,7 @@ type ConnectorService struct {
 func NewConnectorService(opts ...option.RequestOption) (r *ConnectorService) {
 	r = &ConnectorService{}
 	r.Options = opts
-	r.Telemetry = NewConnectorTelemetryService(opts...)
+	r.Events = NewConnectorEventService(opts...)
 	r.Snapshots = NewConnectorSnapshotService(opts...)
 	return
 }
