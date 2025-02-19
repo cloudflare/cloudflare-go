@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestConnectorTelemetryListWithOptionalParams(t *testing.T) {
+func TestConnectorEventListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,10 @@ func TestConnectorTelemetryListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Connectors.Telemetry.List(
+	_, err := client.MagicTransit.Connectors.Events.List(
 		context.TODO(),
 		"connector_id",
-		magic_transit.ConnectorTelemetryListParams{
+		magic_transit.ConnectorEventListParams{
 			AccountID: cloudflare.F(0.000000),
 			From:      cloudflare.F(0.000000),
 			To:        cloudflare.F(0.000000),
@@ -47,7 +47,7 @@ func TestConnectorTelemetryListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestConnectorTelemetryGet(t *testing.T) {
+func TestConnectorEventGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -60,12 +60,12 @@ func TestConnectorTelemetryGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Connectors.Telemetry.Get(
+	_, err := client.MagicTransit.Connectors.Events.Get(
 		context.TODO(),
 		"connector_id",
 		0.000000,
 		0.000000,
-		magic_transit.ConnectorTelemetryGetParams{
+		magic_transit.ConnectorEventGetParams{
 			AccountID: cloudflare.F(0.000000),
 		},
 	)
