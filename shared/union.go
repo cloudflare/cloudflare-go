@@ -53,6 +53,7 @@ func (UnionString) ImplementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPe
 }
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
+func (UnionString) ImplementsAccessApplicationPolicyTestNewParamsPolicyUnion()                {}
 func (UnionString) ImplementsDLPEmailRuleNewResponseConditionsValueUnion()                    {}
 func (UnionString) ImplementsDLPEmailRuleUpdateResponseConditionsValueUnion()                 {}
 func (UnionString) ImplementsDLPEmailRuleListResponseConditionsValueUnion()                   {}
