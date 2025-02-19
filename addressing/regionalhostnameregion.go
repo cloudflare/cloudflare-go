@@ -56,6 +56,23 @@ func (r *RegionalHostnameRegionService) List(ctx context.Context, query Regional
 	return res, nil
 }
 
+func (r *NewRegionalHostnameRegionService) ValidateKey(ctx context.Context, query RegionalHostnameRegionListParams, regionKey string opts ...option.RequestOption) (isValidRegion bool, err error) {
+	// Call List Regions
+	res, err := r.List(ctx, query, opts...)
+	if err != nil {
+		return false, err
+	}
+
+	// Check if query.AccountID.Value is in the list of regions
+	for _, region := range res.Result {
+		if regionKey == region.Key {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
 // List all Regional Services regions available for use by this account.
 func (r *RegionalHostnameRegionService) ListAutoPaging(ctx context.Context, query RegionalHostnameRegionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RegionalHostnameRegionListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
