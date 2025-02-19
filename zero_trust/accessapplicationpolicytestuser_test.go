@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
-func TestAccessApplicationPolicyTestUserList(t *testing.T) {
+func TestAccessApplicationPolicyTestUserListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -32,6 +32,7 @@ func TestAccessApplicationPolicyTestUserList(t *testing.T) {
 		"f1a8b3c9d4e5f6789a0b1c2d3e4f5678a9b0c1d2e3f4a5b67890c1d2e3f4b5a6",
 		zero_trust.AccessApplicationPolicyTestUserListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Status:    cloudflare.F(zero_trust.AccessApplicationPolicyTestUserListParamsStatusSuccess),
 		},
 	)
 	if err != nil {
