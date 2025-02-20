@@ -524,7 +524,7 @@ func (r AIRunResponseImageToText) ImplementsAIRunResponseUnion() {}
 
 type AIRunParams struct {
 	AccountID param.Field[string]  `path:"account_id,required"`
-	Body      AIRunParamsBodyUnion `json:"body,required"`
+	Body      AIRunParamsBodyUnion `json:"body"`
 }
 
 func (r AIRunParams) MarshalJSON() (data []byte, err error) {
