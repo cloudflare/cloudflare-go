@@ -515,7 +515,7 @@ func (r QueueNewResponseEnvelopeSuccess) IsKnown() bool {
 type QueueUpdateParams struct {
 	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	Queue     QueueParam          `json:"queue,required"`
+	Queue     QueueParam          `json:"queue"`
 }
 
 func (r QueueUpdateParams) MarshalJSON() (data []byte, err error) {

@@ -2691,7 +2691,7 @@ type ScanBulkNewParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// List of urls to scan (up to a 100).
-	Body []ScanBulkNewParamsBody `json:"body,required"`
+	Body []ScanBulkNewParamsBody `json:"body"`
 }
 
 func (r ScanBulkNewParams) MarshalJSON() (data []byte, err error) {

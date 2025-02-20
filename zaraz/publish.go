@@ -55,7 +55,7 @@ type PublishNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Zaraz configuration description.
-	Body string `json:"body,required"`
+	Body string `json:"body"`
 }
 
 func (r PublishNewParams) MarshalJSON() (data []byte, err error) {
