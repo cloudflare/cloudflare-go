@@ -1367,8 +1367,6 @@ func (r PhaseGetResponseRulesAction) IsKnown() bool {
 }
 
 type PhaseUpdateParams struct {
-	// The list of rules in the ruleset.
-	Rules param.Field[[]PhaseUpdateParamsRuleUnion] `json:"rules,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -1377,6 +1375,8 @@ type PhaseUpdateParams struct {
 	Description param.Field[string] `json:"description"`
 	// The human-readable name of the ruleset.
 	Name param.Field[string] `json:"name"`
+	// The list of rules in the ruleset.
+	Rules param.Field[[]PhaseUpdateParamsRuleUnion] `json:"rules"`
 }
 
 func (r PhaseUpdateParams) MarshalJSON() (data []byte, err error) {
