@@ -165,8 +165,10 @@ type AIInferenceTimeseriesGroupSummaryModelParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AIInferenceTimeseriesGroupSummaryModelParamsFormat] `query:"format"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
+	// within the specified time range. If the limitPerGroup is set, the response will
+	// include that number of items, with the remaining items grouped together under an
+	// "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
@@ -255,8 +257,10 @@ type AIInferenceTimeseriesGroupSummaryTaskParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AIInferenceTimeseriesGroupSummaryTaskParamsFormat] `query:"format"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
+	// within the specified time range. If the limitPerGroup is set, the response will
+	// include that number of items, with the remaining items grouped together under an
+	// "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
