@@ -29,9 +29,11 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Rulesets.New(context.TODO(), rulesets.RulesetNewParams{
-		Kind:  cloudflare.F(rulesets.KindManaged),
-		Name:  cloudflare.F("My ruleset"),
-		Phase: cloudflare.F(rulesets.PhaseDDoSL4),
+		Kind:        cloudflare.F(rulesets.KindManaged),
+		Name:        cloudflare.F("My ruleset"),
+		Phase:       cloudflare.F(rulesets.PhaseDDoSL4),
+		AccountID:   cloudflare.F("account_id"),
+		Description: cloudflare.F("My ruleset to execute managed rulesets"),
 		Rules: cloudflare.F([]rulesets.RulesetNewParamsRuleUnion{rulesets.BlockRuleParam{
 			ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 			Action: cloudflare.F(rulesets.BlockRuleActionBlock),
@@ -64,8 +66,6 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			}),
 			Ref: cloudflare.F("my_ref"),
 		}}),
-		AccountID:   cloudflare.F("account_id"),
-		Description: cloudflare.F("My ruleset to execute managed rulesets"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -94,6 +94,11 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RulesetUpdateParams{
+			AccountID:   cloudflare.F("account_id"),
+			Description: cloudflare.F("My ruleset to execute managed rulesets"),
+			Kind:        cloudflare.F(rulesets.KindManaged),
+			Name:        cloudflare.F("My ruleset"),
+			Phase:       cloudflare.F(rulesets.PhaseDDoSL4),
 			Rules: cloudflare.F([]rulesets.RulesetUpdateParamsRuleUnion{rulesets.BlockRuleParam{
 				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
@@ -126,11 +131,6 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Ref: cloudflare.F("my_ref"),
 			}}),
-			AccountID:   cloudflare.F("account_id"),
-			Description: cloudflare.F("My ruleset to execute managed rulesets"),
-			Kind:        cloudflare.F(rulesets.KindManaged),
-			Name:        cloudflare.F("My ruleset"),
-			Phase:       cloudflare.F(rulesets.PhaseDDoSL4),
 		},
 	)
 	if err != nil {
