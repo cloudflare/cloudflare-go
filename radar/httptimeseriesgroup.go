@@ -898,8 +898,10 @@ type HTTPTimeseriesGroupBrowserParams struct {
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupBrowserParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]HTTPTimeseriesGroupBrowserParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
+	// within the specified time range. If the limitPerGroup is set, the response will
+	// include that number of items, with the remaining items grouped together under an
+	// "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
@@ -1130,8 +1132,10 @@ type HTTPTimeseriesGroupBrowserFamilyParams struct {
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
+	// within the specified time range. If the limitPerGroup is set, the response will
+	// include that number of items, with the remaining items grouped together under an
+	// "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,

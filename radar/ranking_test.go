@@ -29,15 +29,16 @@ func TestRankingTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Ranking.TimeseriesGroups(context.TODO(), radar.RankingTimeseriesGroupsParams{
-		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Domains:     cloudflare.F([]string{"string"}),
-		Format:      cloudflare.F(radar.RankingTimeseriesGroupsParamsFormatJson),
-		Limit:       cloudflare.F(int64(5)),
-		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"string"}),
-		RankingType: cloudflare.F(radar.RankingTimeseriesGroupsParamsRankingTypePopular),
+		DateEnd:        cloudflare.F([]time.Time{time.Now()}),
+		DateRange:      cloudflare.F([]string{"7d"}),
+		DateStart:      cloudflare.F([]time.Time{time.Now()}),
+		DomainCategory: cloudflare.F([]string{"string"}),
+		Domains:        cloudflare.F([]string{"string"}),
+		Format:         cloudflare.F(radar.RankingTimeseriesGroupsParamsFormatJson),
+		Limit:          cloudflare.F(int64(5)),
+		Location:       cloudflare.F([]string{"string"}),
+		Name:           cloudflare.F([]string{"string"}),
+		RankingType:    cloudflare.F(radar.RankingTimeseriesGroupsParamsRankingTypePopular),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -62,12 +63,13 @@ func TestRankingTopWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Ranking.Top(context.TODO(), radar.RankingTopParams{
-		Date:        cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.RankingTopParamsFormatJson),
-		Limit:       cloudflare.F(int64(5)),
-		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"string"}),
-		RankingType: cloudflare.F(radar.RankingTopParamsRankingTypePopular),
+		Date:           cloudflare.F([]time.Time{time.Now()}),
+		DomainCategory: cloudflare.F([]string{"string"}),
+		Format:         cloudflare.F(radar.RankingTopParamsFormatJson),
+		Limit:          cloudflare.F(int64(5)),
+		Location:       cloudflare.F([]string{"string"}),
+		Name:           cloudflare.F([]string{"string"}),
+		RankingType:    cloudflare.F(radar.RankingTopParamsRankingTypePopular),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

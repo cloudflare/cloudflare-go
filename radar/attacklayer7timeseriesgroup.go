@@ -476,8 +476,10 @@ type AttackLayer7TimeseriesGroupHTTPMethodParams struct {
 	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
+	// within the specified time range. If the limitPerGroup is set, the response will
+	// include that number of items, with the remaining items grouped together under an
+	// "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
@@ -876,8 +878,10 @@ type AttackLayer7TimeseriesGroupIndustryParams struct {
 	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupIndustryParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer7TimeseriesGroupIndustryParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
+	// within the specified time range. If the limitPerGroup is set, the response will
+	// include that number of items, with the remaining items grouped together under an
+	// "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
@@ -1336,8 +1340,10 @@ type AttackLayer7TimeseriesGroupManagedRulesParams struct {
 	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
+	// within the specified time range. If the limitPerGroup is set, the response will
+	// include that number of items, with the remaining items grouped together under an
+	// "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
@@ -1577,8 +1583,10 @@ type AttackLayer7TimeseriesGroupMitigationProductParams struct {
 	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer7TimeseriesGroupMitigationProductParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
+	// within the specified time range. If the limitPerGroup is set, the response will
+	// include that number of items, with the remaining items grouped together under an
+	// "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
@@ -1796,8 +1804,10 @@ type AttackLayer7TimeseriesGroupVerticalParams struct {
 	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupVerticalParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer7TimeseriesGroupVerticalParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
+	// within the specified time range. If the limitPerGroup is set, the response will
+	// include that number of items, with the remaining items grouped together under an
+	// "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,

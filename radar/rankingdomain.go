@@ -78,21 +78,21 @@ func (r rankingDomainGetResponseJSON) RawJSON() string {
 }
 
 type RankingDomainGetResponseDetails0 struct {
-	Categories   []RankingDomainGetResponseDetails0Category    `json:"categories,required"`
-	TopLocations []RankingDomainGetResponseDetails0TopLocation `json:"top_locations,required"`
+	Categories []RankingDomainGetResponseDetails0Category `json:"categories,required"`
 	// Only available in POPULAR ranking for the most recent ranking.
-	Bucket string                               `json:"bucket"`
-	Rank   int64                                `json:"rank"`
-	JSON   rankingDomainGetResponseDetails0JSON `json:"-"`
+	Bucket       string                                        `json:"bucket"`
+	Rank         int64                                         `json:"rank"`
+	TopLocations []RankingDomainGetResponseDetails0TopLocation `json:"top_locations"`
+	JSON         rankingDomainGetResponseDetails0JSON          `json:"-"`
 }
 
 // rankingDomainGetResponseDetails0JSON contains the JSON metadata for the struct
 // [RankingDomainGetResponseDetails0]
 type rankingDomainGetResponseDetails0JSON struct {
 	Categories   apijson.Field
-	TopLocations apijson.Field
 	Bucket       apijson.Field
 	Rank         apijson.Field
+	TopLocations apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -106,9 +106,9 @@ func (r rankingDomainGetResponseDetails0JSON) RawJSON() string {
 }
 
 type RankingDomainGetResponseDetails0Category struct {
-	ID              float64                                      `json:"id,required"`
+	ID              int64                                        `json:"id,required"`
 	Name            string                                       `json:"name,required"`
-	SuperCategoryID float64                                      `json:"superCategoryId,required"`
+	SuperCategoryID int64                                        `json:"superCategoryId,required"`
 	JSON            rankingDomainGetResponseDetails0CategoryJSON `json:"-"`
 }
 

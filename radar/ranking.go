@@ -308,6 +308,8 @@ type RankingTimeseriesGroupsParams struct {
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Filter by domain category.
+	DomainCategory param.Field[[]string] `query:"domainCategory"`
 	// Array of comma separated list of domains names.
 	Domains param.Field[[]string] `query:"domains"`
 	// Format results are returned in.
@@ -390,6 +392,8 @@ func (r rankingTimeseriesGroupsResponseEnvelopeJSON) RawJSON() string {
 type RankingTopParams struct {
 	// Array of dates to filter the ranking.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
+	// Filter by domain category.
+	DomainCategory param.Field[[]string] `query:"domainCategory"`
 	// Format results are returned in.
 	Format param.Field[RankingTopParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
