@@ -2221,14 +2221,14 @@ type RulesetNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The phase of the ruleset.
 	Phase param.Field[Phase] `json:"phase,required"`
-	// The list of rules in the ruleset.
-	Rules param.Field[[]RulesetNewParamsRuleUnion] `json:"rules,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// An informative description of the ruleset.
 	Description param.Field[string] `json:"description"`
+	// The list of rules in the ruleset.
+	Rules param.Field[[]RulesetNewParamsRuleUnion] `json:"rules"`
 }
 
 func (r RulesetNewParams) MarshalJSON() (data []byte, err error) {
@@ -2669,8 +2669,6 @@ func (r RulesetNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RulesetUpdateParams struct {
-	// The list of rules in the ruleset.
-	Rules param.Field[[]RulesetUpdateParamsRuleUnion] `json:"rules,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -2683,6 +2681,8 @@ type RulesetUpdateParams struct {
 	Name param.Field[string] `json:"name"`
 	// The phase of the ruleset.
 	Phase param.Field[Phase] `json:"phase"`
+	// The list of rules in the ruleset.
+	Rules param.Field[[]RulesetUpdateParamsRuleUnion] `json:"rules"`
 }
 
 func (r RulesetUpdateParams) MarshalJSON() (data []byte, err error) {
