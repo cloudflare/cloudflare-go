@@ -1,5 +1,53 @@
 # Changelog
 
+## 5.0.0 (2025-02-23)
+
+Full Changelog: [v4.1.0...v5.0.0](https://github.com/cloudflare/cloudflare-go/compare/v4.1.0...v5.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* **tunnels:** move all cloudflared resources into dedicated namespace ([#3927](https://github.com/cloudflare/cloudflare-go/issues/3927))
+
+### Features
+
+* **api:** api update ([#3916](https://github.com/cloudflare/cloudflare-go/issues/3916)) ([221dbd0](https://github.com/cloudflare/cloudflare-go/commit/221dbd0d65a0a3d80e2868fe468ceca018394098))
+* **api:** api update ([#3919](https://github.com/cloudflare/cloudflare-go/issues/3919)) ([fba317f](https://github.com/cloudflare/cloudflare-go/commit/fba317fcf60184857bf765e67a38eb1b9b4f898a))
+* **api:** api update ([#3920](https://github.com/cloudflare/cloudflare-go/issues/3920)) ([a658cfc](https://github.com/cloudflare/cloudflare-go/commit/a658cfc87ac4638850a89ca1c27c947dfa99f033))
+* **api:** api update ([#3921](https://github.com/cloudflare/cloudflare-go/issues/3921)) ([2b5cec8](https://github.com/cloudflare/cloudflare-go/commit/2b5cec87728045fe9650721f9ff3500910556744))
+* **api:** api update ([#3924](https://github.com/cloudflare/cloudflare-go/issues/3924)) ([ac50f40](https://github.com/cloudflare/cloudflare-go/commit/ac50f4084932aedf2631a2b6b5dd2638ea3f3b75))
+* **api:** api update ([#3925](https://github.com/cloudflare/cloudflare-go/issues/3925)) ([02be7f1](https://github.com/cloudflare/cloudflare-go/commit/02be7f1a159f3bb3405afa1d1d11f576d9955fe1))
+* **api:** api update ([#3931](https://github.com/cloudflare/cloudflare-go/issues/3931)) ([41f332b](https://github.com/cloudflare/cloudflare-go/commit/41f332bc01533de77d86bdce2313eac08b2e1014))
+* **api:** api update ([#3932](https://github.com/cloudflare/cloudflare-go/issues/3932)) ([70734c3](https://github.com/cloudflare/cloudflare-go/commit/70734c3eb2a1b6d13eedb897bbb152ced6de08c1))
+* **api:** api update ([#3934](https://github.com/cloudflare/cloudflare-go/issues/3934)) ([426e47e](https://github.com/cloudflare/cloudflare-go/commit/426e47eb643124f0424cbe4bb16dd87a6a87b7da))
+* **api:** api update ([#3935](https://github.com/cloudflare/cloudflare-go/issues/3935)) ([f1e0a8e](https://github.com/cloudflare/cloudflare-go/commit/f1e0a8e1343f9989e644aebfdcac3a64768f285b))
+* **api:** api update ([#3941](https://github.com/cloudflare/cloudflare-go/issues/3941)) ([7e964fc](https://github.com/cloudflare/cloudflare-go/commit/7e964fcfca021e0f83cc6ea436c0db0d0fb5f71b))
+* **api:** api update ([#3943](https://github.com/cloudflare/cloudflare-go/issues/3943)) ([350b4a6](https://github.com/cloudflare/cloudflare-go/commit/350b4a65930ae9e73e26f8e1991450ebdb9ce262))
+* **api:** api update ([#3944](https://github.com/cloudflare/cloudflare-go/issues/3944)) ([52f520f](https://github.com/cloudflare/cloudflare-go/commit/52f520f8436fa65c0617b42dd628879536b3b1fb))
+* **api:** api update ([#3946](https://github.com/cloudflare/cloudflare-go/issues/3946)) ([ca0ca86](https://github.com/cloudflare/cloudflare-go/commit/ca0ca861848da92b1f81447fba92d5f175d5649c))
+* **api:** api update ([#3948](https://github.com/cloudflare/cloudflare-go/issues/3948)) ([84af698](https://github.com/cloudflare/cloudflare-go/commit/84af698f1a968f9985658ef5febbcf0635bc99a6))
+* **api:** enable zero_trust_tunnel_cloudflared_token ([#3923](https://github.com/cloudflare/cloudflare-go/issues/3923)) ([a8e8ac5](https://github.com/cloudflare/cloudflare-go/commit/a8e8ac5649992e20cbd1a40e09ff83f1a884fe4f))
+* **connectors:** `telemetry` =&gt; `events`  ([#3942](https://github.com/cloudflare/cloudflare-go/issues/3942)) ([d5043b6](https://github.com/cloudflare/cloudflare-go/commit/d5043b6c122172c84cc45ec421f8db956919fb8c))
+* **connectors:** add `telemetry` and `snapshots` ([#3937](https://github.com/cloudflare/cloudflare-go/issues/3937)) ([a54c5ed](https://github.com/cloudflare/cloudflare-go/commit/a54c5ed5191c6ba2008f0f1ee4684e0f8541d888))
+* **firewall_rules:** remove duplicated `id` query parameter ([#3938](https://github.com/cloudflare/cloudflare-go/issues/3938)) ([fff6d3e](https://github.com/cloudflare/cloudflare-go/commit/fff6d3e12130912f3d42bfdc9ae92f6432a390fa))
+* **tunnels:** move all cloudflared resources into dedicated namespace ([#3927](https://github.com/cloudflare/cloudflare-go/issues/3927)) ([8284aa6](https://github.com/cloudflare/cloudflare-go/commit/8284aa66e81073f389ec6a073c81616986cd047f))
+* **zaraz:** re-enable resources ([#3936](https://github.com/cloudflare/cloudflare-go/issues/3936)) ([49c1331](https://github.com/cloudflare/cloudflare-go/commit/49c13318f7feb6a709105d9c6dd23e6b07776d5f))
+* **zero_trust:** add subnets ([#3928](https://github.com/cloudflare/cloudflare-go/issues/3928)) ([c577355](https://github.com/cloudflare/cloudflare-go/commit/c577355eff359c783ce0d88f43b63d70a0a2b38f))
+
+
+### Bug Fixes
+
+* **client:** don't truncate manually specified filenames ([#3929](https://github.com/cloudflare/cloudflare-go/issues/3929)) ([c30732f](https://github.com/cloudflare/cloudflare-go/commit/c30732f2d359b646b4ae63a875b2ba8053919ded))
+* **client:** mark some request bodies as optional ([#3945](https://github.com/cloudflare/cloudflare-go/issues/3945)) ([d90c468](https://github.com/cloudflare/cloudflare-go/commit/d90c4685f0df62fa60c7619805fd72beda4e5c85))
+
+
+### Chores
+
+* change api.md to use accounts_or_zones ([#3930](https://github.com/cloudflare/cloudflare-go/issues/3930)) ([ca935dd](https://github.com/cloudflare/cloudflare-go/commit/ca935dd32f9cb13310a797183beacddf36159eab))
+* **internal:** codegen related update ([#3918](https://github.com/cloudflare/cloudflare-go/issues/3918)) ([884e59e](https://github.com/cloudflare/cloudflare-go/commit/884e59e351f3853c2ab1b993d68f64befa091ad1))
+* **internal:** codegen related update ([#3922](https://github.com/cloudflare/cloudflare-go/issues/3922)) ([f7303c2](https://github.com/cloudflare/cloudflare-go/commit/f7303c25876a29fa8eca4ab630bd2c1a2180969a))
+* **internal:** codegen related update ([#3933](https://github.com/cloudflare/cloudflare-go/issues/3933)) ([1505281](https://github.com/cloudflare/cloudflare-go/commit/150528125497a4f0e37048cac4454736f1ba1071))
+* **internal:** fix devcontainers setup ([#3947](https://github.com/cloudflare/cloudflare-go/issues/3947)) ([2f5b5dc](https://github.com/cloudflare/cloudflare-go/commit/2f5b5dcc8d1654068e4725f7d046ce7f79cde46e))
+
 ## 4.1.0 (2025-02-11)
 
 Full Changelog: [v4.0.0...v4.1.0](https://github.com/cloudflare/cloudflare-go/compare/v4.0.0...v4.1.0)
