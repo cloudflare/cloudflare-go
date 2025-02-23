@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // Error represents an error that originates from the API, i.e. when a request is
