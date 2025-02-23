@@ -8,13 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/zero_trust"
 )
 
-func TestTunnelTokenGet(t *testing.T) {
+func TestTunnelWARPConnectorTokenGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,10 @@ func TestTunnelTokenGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Tunnels.Token.Get(
+	_, err := client.ZeroTrust.Tunnels.WARPConnector.Token.Get(
 		context.TODO(),
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		zero_trust.TunnelTokenGetParams{
+		zero_trust.TunnelWARPConnectorTokenGetParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)

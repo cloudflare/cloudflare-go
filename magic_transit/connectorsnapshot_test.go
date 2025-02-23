@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package zero_trust_test
+package magic_transit_test
 
 import (
 	"context"
@@ -8,13 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/magic_transit"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
-func TestTunnelConnectionDeleteWithOptionalParams(t *testing.T) {
+func TestConnectorSnapshotListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,12 +27,15 @@ func TestTunnelConnectionDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Tunnels.Connections.Delete(
+	_, err := client.MagicTransit.Connectors.Snapshots.List(
 		context.TODO(),
-		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		zero_trust.TunnelConnectionDeleteParams{
-			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			ClientID:  cloudflare.F("1bedc50d-42b3-473c-b108-ff3d10c0d925"),
+		"connector_id",
+		magic_transit.ConnectorSnapshotListParams{
+			AccountID: cloudflare.F(0.000000),
+			From:      cloudflare.F(0.000000),
+			To:        cloudflare.F(0.000000),
+			Cursor:    cloudflare.F("cursor"),
+			Limit:     cloudflare.F(0.000000),
 		},
 	)
 	if err != nil {
@@ -44,7 +47,7 @@ func TestTunnelConnectionDeleteWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestTunnelConnectionGet(t *testing.T) {
+func TestConnectorSnapshotGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -57,11 +60,12 @@ func TestTunnelConnectionGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Tunnels.Connections.Get(
+	_, err := client.MagicTransit.Connectors.Snapshots.Get(
 		context.TODO(),
-		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		zero_trust.TunnelConnectionGetParams{
-			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		"connector_id",
+		0.000000,
+		magic_transit.ConnectorSnapshotGetParams{
+			AccountID: cloudflare.F(0.000000),
 		},
 	)
 	if err != nil {

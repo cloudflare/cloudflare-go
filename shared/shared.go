@@ -5,8 +5,8 @@ package shared
 import (
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
 )
 
 type ASN = int64
@@ -275,15 +275,17 @@ func (r cloudflareTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CloudflareTunnel) ImplementsTunnelNewResponse() {}
-
 func (r CloudflareTunnel) ImplementsTunnelListResponse() {}
 
-func (r CloudflareTunnel) ImplementsTunnelDeleteResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredNewResponse() {}
 
-func (r CloudflareTunnel) ImplementsTunnelEditResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredListResponse() {}
 
-func (r CloudflareTunnel) ImplementsTunnelGetResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredDeleteResponse() {}
+
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredEditResponse() {}
+
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredGetResponse() {}
 
 func (r CloudflareTunnel) ImplementsTunnelWARPConnectorNewResponse() {}
 
@@ -1316,6 +1318,8 @@ func (r TokenPolicyParam) MarshalJSON() (data []byte, err error) {
 // A named group of permissions that map to a group of operations against
 // resources.
 type TokenPolicyPermissionGroupParam struct {
+	// Identifier of the group.
+	ID param.Field[string] `json:"id,required"`
 	// Attributes associated to the permission group.
 	Meta param.Field[TokenPolicyPermissionGroupsMetaParam] `json:"meta"`
 }

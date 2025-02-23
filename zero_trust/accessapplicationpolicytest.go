@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // AccessApplicationPolicyTestService contains methods and other services that help
@@ -181,15 +181,23 @@ func (r AccessApplicationPolicyTestGetResponseStatus) IsKnown() bool {
 
 type AccessApplicationPolicyTestNewParams struct {
 	// Identifier
-	AccountID param.Field[string]                                       `path:"account_id,required"`
-	Policies  param.Field[[]AccessApplicationPolicyTestNewParamsPolicy] `json:"policies"`
+	AccountID param.Field[string]                                            `path:"account_id,required"`
+	Policies  param.Field[[]AccessApplicationPolicyTestNewParamsPolicyUnion] `json:"policies"`
 }
 
 func (r AccessApplicationPolicyTestNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessApplicationPolicyTestNewParamsPolicy struct {
+// The UUID of the reusable policy you wish to test
+//
+// Satisfied by [zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObject],
+// [shared.UnionString].
+type AccessApplicationPolicyTestNewParamsPolicyUnion interface {
+	ImplementsAccessApplicationPolicyTestNewParamsPolicyUnion()
+}
+
+type AccessApplicationPolicyTestNewParamsPoliciesObject struct {
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision param.Field[Decision] `json:"decision,required"`
@@ -223,8 +231,11 @@ type AccessApplicationPolicyTestNewParamsPolicy struct {
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
-func (r AccessApplicationPolicyTestNewParamsPolicy) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyTestNewParamsPoliciesObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationPolicyTestNewParamsPoliciesObject) ImplementsAccessApplicationPolicyTestNewParamsPolicyUnion() {
 }
 
 type AccessApplicationPolicyTestNewResponseEnvelope struct {

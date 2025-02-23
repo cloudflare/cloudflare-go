@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // NetworkRouteService contains methods and other services that help with
@@ -323,9 +323,9 @@ type NetworkRouteListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `query:"comment"`
-	// If provided, include only tunnels that were created (and not deleted) before
-	// this time.
-	ExistedAt param.Field[time.Time] `query:"existed_at" format:"date-time"`
+	// If provided, include only resources that were created (and not deleted) before
+	// this time. URL encoded.
+	ExistedAt param.Field[string] `query:"existed_at" format:"url-encoded-date-time"`
 	// If `true`, only include deleted routes. If `false`, exclude deleted routes. If
 	// empty, all routes will be included.
 	IsDeleted param.Field[bool] `query:"is_deleted"`

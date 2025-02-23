@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package zero_trust_test
+package zaraz_test
 
 import (
 	"context"
@@ -8,13 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/zaraz"
 )
 
-func TestTunnelManagementNew(t *testing.T) {
+func TestZarazUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,14 +27,10 @@ func TestTunnelManagementNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Tunnels.Management.New(
-		context.TODO(),
-		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		zero_trust.TunnelManagementNewParams{
-			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Resources: cloudflare.F([]zero_trust.TunnelManagementNewParamsResource{zero_trust.TunnelManagementNewParamsResourceLogs}),
-		},
-	)
+	_, err := client.Zaraz.Update(context.TODO(), zaraz.ZarazUpdateParams{
+		ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Workflow: zaraz.WorkflowRealtime,
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

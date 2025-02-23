@@ -3,7 +3,7 @@
 package zero_trust
 
 import (
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // NetworkService contains methods and other services that help with interacting
@@ -16,6 +16,7 @@ type NetworkService struct {
 	Options         []option.RequestOption
 	Routes          *NetworkRouteService
 	VirtualNetworks *NetworkVirtualNetworkService
+	Subnets         *NetworkSubnetService
 }
 
 // NewNetworkService generates a new service that applies the given options to each
@@ -26,5 +27,6 @@ func NewNetworkService(opts ...option.RequestOption) (r *NetworkService) {
 	r.Options = opts
 	r.Routes = NewNetworkRouteService(opts...)
 	r.VirtualNetworks = NewNetworkVirtualNetworkService(opts...)
+	r.Subnets = NewNetworkSubnetService(opts...)
 	return
 }

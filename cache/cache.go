@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // CacheService contains methods and other services that help with interacting with
@@ -256,8 +256,8 @@ func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeaders) implementsCac
 }
 
 type CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeadersFile struct {
-	Headers param.Field[interface{}] `json:"headers"`
-	URL     param.Field[string]      `json:"url"`
+	Headers param.Field[map[string]string] `json:"headers"`
+	URL     param.Field[string]            `json:"url"`
 }
 
 func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeadersFile) MarshalJSON() (data []byte, err error) {

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/zero_trust"
 )
 
 func TestAccessApplicationPolicyTestNewWithOptionalParams(t *testing.T) {
@@ -29,7 +29,7 @@ func TestAccessApplicationPolicyTestNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.PolicyTests.New(context.TODO(), zero_trust.AccessApplicationPolicyTestNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Policies: cloudflare.F([]zero_trust.AccessApplicationPolicyTestNewParamsPolicy{{
+		Policies: cloudflare.F([]zero_trust.AccessApplicationPolicyTestNewParamsPolicyUnion{zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObject{
 			Decision: cloudflare.F(zero_trust.DecisionAllow),
 			Include: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
 				Group: cloudflare.F(zero_trust.GroupRuleGroupParam{

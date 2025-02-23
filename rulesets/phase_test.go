@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/rulesets"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/rulesets"
 )
 
 func TestPhaseUpdateWithOptionalParams(t *testing.T) {
@@ -32,6 +32,9 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		rulesets.PhaseDDoSL4,
 		rulesets.PhaseUpdateParams{
+			AccountID:   cloudflare.F("account_id"),
+			Description: cloudflare.F("My ruleset to execute managed rulesets"),
+			Name:        cloudflare.F("My ruleset"),
 			Rules: cloudflare.F([]rulesets.PhaseUpdateParamsRuleUnion{rulesets.BlockRuleParam{
 				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
@@ -64,9 +67,6 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Ref: cloudflare.F("my_ref"),
 			}}),
-			AccountID:   cloudflare.F("account_id"),
-			Description: cloudflare.F("My ruleset to execute managed rulesets"),
-			Name:        cloudflare.F("My ruleset"),
 		},
 	)
 	if err != nil {

@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // AttackLayer3SummaryService contains methods and other services that help with
@@ -1361,8 +1361,10 @@ type AttackLayer3SummaryVectorParams struct {
 	Format param.Field[AttackLayer3SummaryVectorParamsFormat] `query:"format"`
 	// Filter for ip version.
 	IPVersion param.Field[[]AttackLayer3SummaryVectorParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
+	// within the specified time range. If the limitPerGroup is set, the response will
+	// include that number of items, with the remaining items grouped together under an
+	// "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,

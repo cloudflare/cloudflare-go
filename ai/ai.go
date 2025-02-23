@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -524,7 +524,7 @@ func (r AIRunResponseImageToText) ImplementsAIRunResponseUnion() {}
 
 type AIRunParams struct {
 	AccountID param.Field[string]  `path:"account_id,required"`
-	Body      AIRunParamsBodyUnion `json:"body,required"`
+	Body      AIRunParamsBodyUnion `json:"body"`
 }
 
 func (r AIRunParams) MarshalJSON() (data []byte, err error) {

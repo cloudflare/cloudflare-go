@@ -11,13 +11,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -29,6 +29,7 @@ import (
 // the [NewTunnelWARPConnectorService] method instead.
 type TunnelWARPConnectorService struct {
 	Options []option.RequestOption
+	Token   *TunnelWARPConnectorTokenService
 }
 
 // NewTunnelWARPConnectorService generates a new service that applies the given
@@ -37,6 +38,7 @@ type TunnelWARPConnectorService struct {
 func NewTunnelWARPConnectorService(opts ...option.RequestOption) (r *TunnelWARPConnectorService) {
 	r = &TunnelWARPConnectorService{}
 	r.Options = opts
+	r.Token = NewTunnelWARPConnectorTokenService(opts...)
 	return
 }
 
@@ -139,28 +141,6 @@ func (r *TunnelWARPConnectorService) Get(ctx context.Context, tunnelID string, q
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", query.AccountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Gets the token used to associate warp device with a specific Warp Connector
-// tunnel.
-func (r *TunnelWARPConnectorService) Token(ctx context.Context, tunnelID string, query TunnelWARPConnectorTokenParams, opts ...option.RequestOption) (res *string, err error) {
-	var env TunnelWARPConnectorTokenResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if tunnelID == "" {
-		err = errors.New("missing required tunnel_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/warp_connector/%s/token", query.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1688,10 +1668,10 @@ type TunnelWARPConnectorListParams struct {
 	// Cloudflare account ID
 	AccountID     param.Field[string] `path:"account_id,required"`
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
-	// If provided, include only tunnels that were created (and not deleted) before
-	// this time.
-	ExistedAt     param.Field[time.Time] `query:"existed_at" format:"date-time"`
-	IncludePrefix param.Field[string]    `query:"include_prefix"`
+	// If provided, include only resources that were created (and not deleted) before
+	// this time. URL encoded.
+	ExistedAt     param.Field[string] `query:"existed_at" format:"url-encoded-date-time"`
+	IncludePrefix param.Field[string] `query:"include_prefix"`
 	// If `true`, only include deleted tunnels. If `false`, exclude deleted tunnels. If
 	// empty, all tunnels will be included.
 	IsDeleted param.Field[bool] `query:"is_deleted"`
@@ -1893,56 +1873,6 @@ const (
 func (r TunnelWARPConnectorGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case TunnelWARPConnectorGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type TunnelWARPConnectorTokenParams struct {
-	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type TunnelWARPConnectorTokenResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// The Tunnel Token is used as a mechanism to authenticate the operation of a
-	// tunnel.
-	Result string `json:"result,required"`
-	// Whether the API call was successful
-	Success TunnelWARPConnectorTokenResponseEnvelopeSuccess `json:"success,required"`
-	JSON    tunnelWARPConnectorTokenResponseEnvelopeJSON    `json:"-"`
-}
-
-// tunnelWARPConnectorTokenResponseEnvelopeJSON contains the JSON metadata for the
-// struct [TunnelWARPConnectorTokenResponseEnvelope]
-type tunnelWARPConnectorTokenResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelWARPConnectorTokenResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelWARPConnectorTokenResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type TunnelWARPConnectorTokenResponseEnvelopeSuccess bool
-
-const (
-	TunnelWARPConnectorTokenResponseEnvelopeSuccessTrue TunnelWARPConnectorTokenResponseEnvelopeSuccess = true
-)
-
-func (r TunnelWARPConnectorTokenResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TunnelWARPConnectorTokenResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
