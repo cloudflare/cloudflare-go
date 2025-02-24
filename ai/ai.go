@@ -570,6 +570,7 @@ type AIRunParamsBody struct {
 	Raw param.Field[bool] `json:"raw"`
 	// Penalty for repeated tokens; higher values discourage repetition.
 	RepetitionPenalty param.Field[float64]     `json:"repetition_penalty"`
+	ResponseFormat    param.Field[interface{}] `json:"response_format"`
 	Seed              param.Field[interface{}] `json:"seed"`
 	// The language of the recorded audio
 	SourceLang param.Field[string] `json:"source_lang"`
@@ -752,7 +753,8 @@ type AIRunParamsBodyPrompt struct {
 	// model's expected formatting.
 	Raw param.Field[bool] `json:"raw"`
 	// Penalty for repeated tokens; higher values discourage repetition.
-	RepetitionPenalty param.Field[float64] `json:"repetition_penalty"`
+	RepetitionPenalty param.Field[float64]                             `json:"repetition_penalty"`
+	ResponseFormat    param.Field[AIRunParamsBodyPromptResponseFormat] `json:"response_format"`
 	// Random seed for reproducibility of the generation.
 	Seed param.Field[int64] `json:"seed"`
 	// If true, the response will be streamed back incrementally using SSE, Server Sent
@@ -777,6 +779,30 @@ func (r AIRunParamsBodyPrompt) MarshalJSON() (data []byte, err error) {
 
 func (r AIRunParamsBodyPrompt) implementsAIRunParamsBodyUnion() {}
 
+type AIRunParamsBodyPromptResponseFormat struct {
+	JsonSchema param.Field[interface{}]                             `json:"json_schema"`
+	Type       param.Field[AIRunParamsBodyPromptResponseFormatType] `json:"type"`
+}
+
+func (r AIRunParamsBodyPromptResponseFormat) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIRunParamsBodyPromptResponseFormatType string
+
+const (
+	AIRunParamsBodyPromptResponseFormatTypeJsonObject AIRunParamsBodyPromptResponseFormatType = "json_object"
+	AIRunParamsBodyPromptResponseFormatTypeJsonSchema AIRunParamsBodyPromptResponseFormatType = "json_schema"
+)
+
+func (r AIRunParamsBodyPromptResponseFormatType) IsKnown() bool {
+	switch r {
+	case AIRunParamsBodyPromptResponseFormatTypeJsonObject, AIRunParamsBodyPromptResponseFormatTypeJsonSchema:
+		return true
+	}
+	return false
+}
+
 type AIRunParamsBodyMessages struct {
 	// An array of message objects representing the conversation history.
 	Messages param.Field[[]AIRunParamsBodyMessagesMessage] `json:"messages,required"`
@@ -788,7 +814,8 @@ type AIRunParamsBodyMessages struct {
 	// Increases the likelihood of the model introducing new topics.
 	PresencePenalty param.Field[float64] `json:"presence_penalty"`
 	// Penalty for repeated tokens; higher values discourage repetition.
-	RepetitionPenalty param.Field[float64] `json:"repetition_penalty"`
+	RepetitionPenalty param.Field[float64]                               `json:"repetition_penalty"`
+	ResponseFormat    param.Field[AIRunParamsBodyMessagesResponseFormat] `json:"response_format"`
 	// Random seed for reproducibility of the generation.
 	Seed param.Field[int64] `json:"seed"`
 	// If true, the response will be streamed back incrementally.
@@ -832,6 +859,30 @@ type AIRunParamsBodyMessagesFunction struct {
 
 func (r AIRunParamsBodyMessagesFunction) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type AIRunParamsBodyMessagesResponseFormat struct {
+	JsonSchema param.Field[interface{}]                               `json:"json_schema"`
+	Type       param.Field[AIRunParamsBodyMessagesResponseFormatType] `json:"type"`
+}
+
+func (r AIRunParamsBodyMessagesResponseFormat) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIRunParamsBodyMessagesResponseFormatType string
+
+const (
+	AIRunParamsBodyMessagesResponseFormatTypeJsonObject AIRunParamsBodyMessagesResponseFormatType = "json_object"
+	AIRunParamsBodyMessagesResponseFormatTypeJsonSchema AIRunParamsBodyMessagesResponseFormatType = "json_schema"
+)
+
+func (r AIRunParamsBodyMessagesResponseFormatType) IsKnown() bool {
+	switch r {
+	case AIRunParamsBodyMessagesResponseFormatTypeJsonObject, AIRunParamsBodyMessagesResponseFormatTypeJsonSchema:
+		return true
+	}
+	return false
 }
 
 type AIRunParamsBodyMessagesTool struct {
