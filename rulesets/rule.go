@@ -2008,21 +2008,27 @@ func (r LogCustomFieldRuleAction) IsKnown() bool {
 type LogCustomFieldRuleActionParameters struct {
 	// The cookie fields to log.
 	CookieFields []LogCustomFieldRuleActionParametersCookieField `json:"cookie_fields"`
-	// The request fields to log.
+	// The raw response fields to log.
+	RawResponseFields []LogCustomFieldRuleActionParametersRawResponseField `json:"raw_response_fields"`
+	// The raw request fields to log.
 	RequestFields []LogCustomFieldRuleActionParametersRequestField `json:"request_fields"`
-	// The response fields to log.
+	// The transformed response fields to log.
 	ResponseFields []LogCustomFieldRuleActionParametersResponseField `json:"response_fields"`
-	JSON           logCustomFieldRuleActionParametersJSON            `json:"-"`
+	// The transformed request fields to log.
+	TransformedRequestFields []LogCustomFieldRuleActionParametersTransformedRequestField `json:"transformed_request_fields"`
+	JSON                     logCustomFieldRuleActionParametersJSON                      `json:"-"`
 }
 
 // logCustomFieldRuleActionParametersJSON contains the JSON metadata for the struct
 // [LogCustomFieldRuleActionParameters]
 type logCustomFieldRuleActionParametersJSON struct {
-	CookieFields   apijson.Field
-	RequestFields  apijson.Field
-	ResponseFields apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	CookieFields             apijson.Field
+	RawResponseFields        apijson.Field
+	RequestFields            apijson.Field
+	ResponseFields           apijson.Field
+	TransformedRequestFields apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *LogCustomFieldRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
@@ -2056,7 +2062,33 @@ func (r logCustomFieldRuleActionParametersCookieFieldJSON) RawJSON() string {
 	return r.raw
 }
 
-// The request field to log.
+// The raw response field to log.
+type LogCustomFieldRuleActionParametersRawResponseField struct {
+	// The name of the field.
+	Name string `json:"name,required"`
+	// Whether to log duplicate values of the same header.
+	PreserveDuplicates bool                                                   `json:"preserve_duplicates"`
+	JSON               logCustomFieldRuleActionParametersRawResponseFieldJSON `json:"-"`
+}
+
+// logCustomFieldRuleActionParametersRawResponseFieldJSON contains the JSON
+// metadata for the struct [LogCustomFieldRuleActionParametersRawResponseField]
+type logCustomFieldRuleActionParametersRawResponseFieldJSON struct {
+	Name               apijson.Field
+	PreserveDuplicates apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *LogCustomFieldRuleActionParametersRawResponseField) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logCustomFieldRuleActionParametersRawResponseFieldJSON) RawJSON() string {
+	return r.raw
+}
+
+// The raw request field to log.
 type LogCustomFieldRuleActionParametersRequestField struct {
 	// The name of the field.
 	Name string                                             `json:"name,required"`
@@ -2079,19 +2111,22 @@ func (r logCustomFieldRuleActionParametersRequestFieldJSON) RawJSON() string {
 	return r.raw
 }
 
-// The response field to log.
+// The transformed response field to log.
 type LogCustomFieldRuleActionParametersResponseField struct {
 	// The name of the field.
-	Name string                                              `json:"name,required"`
-	JSON logCustomFieldRuleActionParametersResponseFieldJSON `json:"-"`
+	Name string `json:"name,required"`
+	// Whether to log duplicate values of the same header.
+	PreserveDuplicates bool                                                `json:"preserve_duplicates"`
+	JSON               logCustomFieldRuleActionParametersResponseFieldJSON `json:"-"`
 }
 
 // logCustomFieldRuleActionParametersResponseFieldJSON contains the JSON metadata
 // for the struct [LogCustomFieldRuleActionParametersResponseField]
 type logCustomFieldRuleActionParametersResponseFieldJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name               apijson.Field
+	PreserveDuplicates apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *LogCustomFieldRuleActionParametersResponseField) UnmarshalJSON(data []byte) (err error) {
@@ -2099,6 +2134,30 @@ func (r *LogCustomFieldRuleActionParametersResponseField) UnmarshalJSON(data []b
 }
 
 func (r logCustomFieldRuleActionParametersResponseFieldJSON) RawJSON() string {
+	return r.raw
+}
+
+// The transformed request field to log.
+type LogCustomFieldRuleActionParametersTransformedRequestField struct {
+	// The name of the field.
+	Name string                                                        `json:"name,required"`
+	JSON logCustomFieldRuleActionParametersTransformedRequestFieldJSON `json:"-"`
+}
+
+// logCustomFieldRuleActionParametersTransformedRequestFieldJSON contains the JSON
+// metadata for the struct
+// [LogCustomFieldRuleActionParametersTransformedRequestField]
+type logCustomFieldRuleActionParametersTransformedRequestFieldJSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LogCustomFieldRuleActionParametersTransformedRequestField) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logCustomFieldRuleActionParametersTransformedRequestFieldJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2233,10 +2292,14 @@ func (r LogCustomFieldRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 type LogCustomFieldRuleActionParametersParam struct {
 	// The cookie fields to log.
 	CookieFields param.Field[[]LogCustomFieldRuleActionParametersCookieFieldParam] `json:"cookie_fields"`
-	// The request fields to log.
+	// The raw response fields to log.
+	RawResponseFields param.Field[[]LogCustomFieldRuleActionParametersRawResponseFieldParam] `json:"raw_response_fields"`
+	// The raw request fields to log.
 	RequestFields param.Field[[]LogCustomFieldRuleActionParametersRequestFieldParam] `json:"request_fields"`
-	// The response fields to log.
+	// The transformed response fields to log.
 	ResponseFields param.Field[[]LogCustomFieldRuleActionParametersResponseFieldParam] `json:"response_fields"`
+	// The transformed request fields to log.
+	TransformedRequestFields param.Field[[]LogCustomFieldRuleActionParametersTransformedRequestFieldParam] `json:"transformed_request_fields"`
 }
 
 func (r LogCustomFieldRuleActionParametersParam) MarshalJSON() (data []byte, err error) {
@@ -2253,7 +2316,19 @@ func (r LogCustomFieldRuleActionParametersCookieFieldParam) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-// The request field to log.
+// The raw response field to log.
+type LogCustomFieldRuleActionParametersRawResponseFieldParam struct {
+	// The name of the field.
+	Name param.Field[string] `json:"name,required"`
+	// Whether to log duplicate values of the same header.
+	PreserveDuplicates param.Field[bool] `json:"preserve_duplicates"`
+}
+
+func (r LogCustomFieldRuleActionParametersRawResponseFieldParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The raw request field to log.
 type LogCustomFieldRuleActionParametersRequestFieldParam struct {
 	// The name of the field.
 	Name param.Field[string] `json:"name,required"`
@@ -2263,13 +2338,25 @@ func (r LogCustomFieldRuleActionParametersRequestFieldParam) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-// The response field to log.
+// The transformed response field to log.
 type LogCustomFieldRuleActionParametersResponseFieldParam struct {
+	// The name of the field.
+	Name param.Field[string] `json:"name,required"`
+	// Whether to log duplicate values of the same header.
+	PreserveDuplicates param.Field[bool] `json:"preserve_duplicates"`
+}
+
+func (r LogCustomFieldRuleActionParametersResponseFieldParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The transformed request field to log.
+type LogCustomFieldRuleActionParametersTransformedRequestFieldParam struct {
 	// The name of the field.
 	Name param.Field[string] `json:"name,required"`
 }
 
-func (r LogCustomFieldRuleActionParametersResponseFieldParam) MarshalJSON() (data []byte, err error) {
+func (r LogCustomFieldRuleActionParametersTransformedRequestFieldParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
