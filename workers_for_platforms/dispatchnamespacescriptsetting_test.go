@@ -36,10 +36,9 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 		workers_for_platforms.DispatchNamespaceScriptSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Settings: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettings{
-				Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingUnion{workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPlainText{
+				Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingUnion{workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAI{
 					Name: cloudflare.F("MY_ENV_VAR"),
-					Text: cloudflare.F("my_data"),
-					Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypePlainText),
+					Type: cloudflare.F("plain_text"),
 				}}),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
