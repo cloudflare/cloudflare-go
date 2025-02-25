@@ -167,38 +167,49 @@ type MagicNetworkMonitoringRule struct {
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
 	AutomaticAdvertisement bool `json:"automatic_advertisement,required,nullable"`
-	// The amount of time that the rule threshold must be exceeded to send an alert
-	// notification. The final value must be equivalent to one of the following 8
-	// values ["1m","5m","10m","15m","20m","30m","45m","60m"]. The format is
-	// AhBmCsDmsEusFns where A, B, C, D, E and F durations are optional; however at
-	// least one unit must be provided.
-	Duration string `json:"duration,required"`
 	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
 	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
 	// the rule name. Max 256 characters.
 	Name     string   `json:"name,required"`
 	Prefixes []string `json:"prefixes,required"`
+	// MNM rule type.
+	Type MagicNetworkMonitoringRuleType `json:"type,required"`
 	// The id of the rule. Must be unique.
 	ID string `json:"id"`
 	// The number of bits per second for the rule. When this value is exceeded for the
 	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
 	BandwidthThreshold float64 `json:"bandwidth_threshold"`
+	// The amount of time that the rule threshold must be exceeded to send an alert
+	// notification. The final value must be equivalent to one of the following 8
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
+	Duration MagicNetworkMonitoringRuleDuration `json:"duration"`
 	// The number of packets per second for the rule. When this value is exceeded for
 	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
-	PacketThreshold float64                        `json:"packet_threshold"`
-	JSON            magicNetworkMonitoringRuleJSON `json:"-"`
+	PacketThreshold float64 `json:"packet_threshold"`
+	// Prefix match type to be applied for a prefix auto advertisement when using an
+	// advanced_ddos rule.
+	PrefixMatch MagicNetworkMonitoringRulePrefixMatch `json:"prefix_match,nullable"`
+	// Level of sensitivity set for zscore rules.
+	ZscoreSensitivity MagicNetworkMonitoringRuleZscoreSensitivity `json:"zscore_sensitivity,nullable"`
+	// Target of the zscore rule analysis.
+	ZscoreTarget MagicNetworkMonitoringRuleZscoreTarget `json:"zscore_target,nullable"`
+	JSON         magicNetworkMonitoringRuleJSON         `json:"-"`
 }
 
 // magicNetworkMonitoringRuleJSON contains the JSON metadata for the struct
 // [MagicNetworkMonitoringRule]
 type magicNetworkMonitoringRuleJSON struct {
 	AutomaticAdvertisement apijson.Field
-	Duration               apijson.Field
 	Name                   apijson.Field
 	Prefixes               apijson.Field
+	Type                   apijson.Field
 	ID                     apijson.Field
 	BandwidthThreshold     apijson.Field
+	Duration               apijson.Field
 	PacketThreshold        apijson.Field
+	PrefixMatch            apijson.Field
+	ZscoreSensitivity      apijson.Field
+	ZscoreTarget           apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -211,14 +222,104 @@ func (r magicNetworkMonitoringRuleJSON) RawJSON() string {
 	return r.raw
 }
 
+// MNM rule type.
+type MagicNetworkMonitoringRuleType string
+
+const (
+	MagicNetworkMonitoringRuleTypeThreshold    MagicNetworkMonitoringRuleType = "threshold"
+	MagicNetworkMonitoringRuleTypeZscore       MagicNetworkMonitoringRuleType = "zscore"
+	MagicNetworkMonitoringRuleTypeAdvancedDDoS MagicNetworkMonitoringRuleType = "advanced_ddos"
+)
+
+func (r MagicNetworkMonitoringRuleType) IsKnown() bool {
+	switch r {
+	case MagicNetworkMonitoringRuleTypeThreshold, MagicNetworkMonitoringRuleTypeZscore, MagicNetworkMonitoringRuleTypeAdvancedDDoS:
+		return true
+	}
+	return false
+}
+
+// The amount of time that the rule threshold must be exceeded to send an alert
+// notification. The final value must be equivalent to one of the following 8
+// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
+type MagicNetworkMonitoringRuleDuration string
+
+const (
+	MagicNetworkMonitoringRuleDuration1m  MagicNetworkMonitoringRuleDuration = "1m"
+	MagicNetworkMonitoringRuleDuration5m  MagicNetworkMonitoringRuleDuration = "5m"
+	MagicNetworkMonitoringRuleDuration10m MagicNetworkMonitoringRuleDuration = "10m"
+	MagicNetworkMonitoringRuleDuration15m MagicNetworkMonitoringRuleDuration = "15m"
+	MagicNetworkMonitoringRuleDuration20m MagicNetworkMonitoringRuleDuration = "20m"
+	MagicNetworkMonitoringRuleDuration30m MagicNetworkMonitoringRuleDuration = "30m"
+	MagicNetworkMonitoringRuleDuration45m MagicNetworkMonitoringRuleDuration = "45m"
+	MagicNetworkMonitoringRuleDuration60m MagicNetworkMonitoringRuleDuration = "60m"
+)
+
+func (r MagicNetworkMonitoringRuleDuration) IsKnown() bool {
+	switch r {
+	case MagicNetworkMonitoringRuleDuration1m, MagicNetworkMonitoringRuleDuration5m, MagicNetworkMonitoringRuleDuration10m, MagicNetworkMonitoringRuleDuration15m, MagicNetworkMonitoringRuleDuration20m, MagicNetworkMonitoringRuleDuration30m, MagicNetworkMonitoringRuleDuration45m, MagicNetworkMonitoringRuleDuration60m:
+		return true
+	}
+	return false
+}
+
+// Prefix match type to be applied for a prefix auto advertisement when using an
+// advanced_ddos rule.
+type MagicNetworkMonitoringRulePrefixMatch string
+
+const (
+	MagicNetworkMonitoringRulePrefixMatchExact    MagicNetworkMonitoringRulePrefixMatch = "exact"
+	MagicNetworkMonitoringRulePrefixMatchSubnet   MagicNetworkMonitoringRulePrefixMatch = "subnet"
+	MagicNetworkMonitoringRulePrefixMatchSupernet MagicNetworkMonitoringRulePrefixMatch = "supernet"
+)
+
+func (r MagicNetworkMonitoringRulePrefixMatch) IsKnown() bool {
+	switch r {
+	case MagicNetworkMonitoringRulePrefixMatchExact, MagicNetworkMonitoringRulePrefixMatchSubnet, MagicNetworkMonitoringRulePrefixMatchSupernet:
+		return true
+	}
+	return false
+}
+
+// Level of sensitivity set for zscore rules.
+type MagicNetworkMonitoringRuleZscoreSensitivity string
+
+const (
+	MagicNetworkMonitoringRuleZscoreSensitivityLow    MagicNetworkMonitoringRuleZscoreSensitivity = "low"
+	MagicNetworkMonitoringRuleZscoreSensitivityMedium MagicNetworkMonitoringRuleZscoreSensitivity = "medium"
+	MagicNetworkMonitoringRuleZscoreSensitivityHigh   MagicNetworkMonitoringRuleZscoreSensitivity = "high"
+)
+
+func (r MagicNetworkMonitoringRuleZscoreSensitivity) IsKnown() bool {
+	switch r {
+	case MagicNetworkMonitoringRuleZscoreSensitivityLow, MagicNetworkMonitoringRuleZscoreSensitivityMedium, MagicNetworkMonitoringRuleZscoreSensitivityHigh:
+		return true
+	}
+	return false
+}
+
+// Target of the zscore rule analysis.
+type MagicNetworkMonitoringRuleZscoreTarget string
+
+const (
+	MagicNetworkMonitoringRuleZscoreTargetBits    MagicNetworkMonitoringRuleZscoreTarget = "bits"
+	MagicNetworkMonitoringRuleZscoreTargetPackets MagicNetworkMonitoringRuleZscoreTarget = "packets"
+)
+
+func (r MagicNetworkMonitoringRuleZscoreTarget) IsKnown() bool {
+	switch r {
+	case MagicNetworkMonitoringRuleZscoreTargetBits, MagicNetworkMonitoringRuleZscoreTargetPackets:
+		return true
+	}
+	return false
+}
+
 type RuleNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The amount of time that the rule threshold must be exceeded to send an alert
 	// notification. The final value must be equivalent to one of the following 8
-	// values ["1m","5m","10m","15m","20m","30m","45m","60m"]. The format is
-	// AhBmCsDmsEusFns where A, B, C, D, E and F durations are optional; however at
-	// least one unit must be provided.
-	Duration param.Field[string] `json:"duration,required"`
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
+	Duration param.Field[RuleNewParamsDuration] `json:"duration,required"`
 	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
 	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
 	// the rule name. Max 256 characters.
@@ -238,6 +339,30 @@ type RuleNewParams struct {
 
 func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The amount of time that the rule threshold must be exceeded to send an alert
+// notification. The final value must be equivalent to one of the following 8
+// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
+type RuleNewParamsDuration string
+
+const (
+	RuleNewParamsDuration1m  RuleNewParamsDuration = "1m"
+	RuleNewParamsDuration5m  RuleNewParamsDuration = "5m"
+	RuleNewParamsDuration10m RuleNewParamsDuration = "10m"
+	RuleNewParamsDuration15m RuleNewParamsDuration = "15m"
+	RuleNewParamsDuration20m RuleNewParamsDuration = "20m"
+	RuleNewParamsDuration30m RuleNewParamsDuration = "30m"
+	RuleNewParamsDuration45m RuleNewParamsDuration = "45m"
+	RuleNewParamsDuration60m RuleNewParamsDuration = "60m"
+)
+
+func (r RuleNewParamsDuration) IsKnown() bool {
+	switch r {
+	case RuleNewParamsDuration1m, RuleNewParamsDuration5m, RuleNewParamsDuration10m, RuleNewParamsDuration15m, RuleNewParamsDuration20m, RuleNewParamsDuration30m, RuleNewParamsDuration45m, RuleNewParamsDuration60m:
+		return true
+	}
+	return false
 }
 
 type RuleNewResponseEnvelope struct {
@@ -287,10 +412,8 @@ type RuleUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The amount of time that the rule threshold must be exceeded to send an alert
 	// notification. The final value must be equivalent to one of the following 8
-	// values ["1m","5m","10m","15m","20m","30m","45m","60m"]. The format is
-	// AhBmCsDmsEusFns where A, B, C, D, E and F durations are optional; however at
-	// least one unit must be provided.
-	Duration param.Field[string] `json:"duration,required"`
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
+	Duration param.Field[RuleUpdateParamsDuration] `json:"duration,required"`
 	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
 	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
 	// the rule name. Max 256 characters.
@@ -312,6 +435,30 @@ type RuleUpdateParams struct {
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The amount of time that the rule threshold must be exceeded to send an alert
+// notification. The final value must be equivalent to one of the following 8
+// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
+type RuleUpdateParamsDuration string
+
+const (
+	RuleUpdateParamsDuration1m  RuleUpdateParamsDuration = "1m"
+	RuleUpdateParamsDuration5m  RuleUpdateParamsDuration = "5m"
+	RuleUpdateParamsDuration10m RuleUpdateParamsDuration = "10m"
+	RuleUpdateParamsDuration15m RuleUpdateParamsDuration = "15m"
+	RuleUpdateParamsDuration20m RuleUpdateParamsDuration = "20m"
+	RuleUpdateParamsDuration30m RuleUpdateParamsDuration = "30m"
+	RuleUpdateParamsDuration45m RuleUpdateParamsDuration = "45m"
+	RuleUpdateParamsDuration60m RuleUpdateParamsDuration = "60m"
+)
+
+func (r RuleUpdateParamsDuration) IsKnown() bool {
+	switch r {
+	case RuleUpdateParamsDuration1m, RuleUpdateParamsDuration5m, RuleUpdateParamsDuration10m, RuleUpdateParamsDuration15m, RuleUpdateParamsDuration20m, RuleUpdateParamsDuration30m, RuleUpdateParamsDuration45m, RuleUpdateParamsDuration60m:
+		return true
+	}
+	return false
 }
 
 type RuleUpdateResponseEnvelope struct {
@@ -419,10 +566,8 @@ type RuleEditParams struct {
 	Bandwidth param.Field[float64] `json:"bandwidth"`
 	// The amount of time that the rule threshold must be exceeded to send an alert
 	// notification. The final value must be equivalent to one of the following 8
-	// values ["1m","5m","10m","15m","20m","30m","45m","60m"]. The format is
-	// AhBmCsDmsEusFns where A, B, C, D, E and F durations are optional; however at
-	// least one unit must be provided.
-	Duration param.Field[string] `json:"duration"`
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
+	Duration param.Field[RuleEditParamsDuration] `json:"duration"`
 	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
 	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
 	// the rule name. Max 256 characters.
@@ -435,6 +580,30 @@ type RuleEditParams struct {
 
 func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The amount of time that the rule threshold must be exceeded to send an alert
+// notification. The final value must be equivalent to one of the following 8
+// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
+type RuleEditParamsDuration string
+
+const (
+	RuleEditParamsDuration1m  RuleEditParamsDuration = "1m"
+	RuleEditParamsDuration5m  RuleEditParamsDuration = "5m"
+	RuleEditParamsDuration10m RuleEditParamsDuration = "10m"
+	RuleEditParamsDuration15m RuleEditParamsDuration = "15m"
+	RuleEditParamsDuration20m RuleEditParamsDuration = "20m"
+	RuleEditParamsDuration30m RuleEditParamsDuration = "30m"
+	RuleEditParamsDuration45m RuleEditParamsDuration = "45m"
+	RuleEditParamsDuration60m RuleEditParamsDuration = "60m"
+)
+
+func (r RuleEditParamsDuration) IsKnown() bool {
+	switch r {
+	case RuleEditParamsDuration1m, RuleEditParamsDuration5m, RuleEditParamsDuration10m, RuleEditParamsDuration15m, RuleEditParamsDuration20m, RuleEditParamsDuration30m, RuleEditParamsDuration45m, RuleEditParamsDuration60m:
+		return true
+	}
+	return false
 }
 
 type RuleEditResponseEnvelope struct {

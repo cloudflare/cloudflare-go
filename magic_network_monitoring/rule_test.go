@@ -29,7 +29,7 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.New(context.TODO(), magic_network_monitoring.RuleNewParams{
 		AccountID:              cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-		Duration:               cloudflare.F("300s"),
+		Duration:               cloudflare.F(magic_network_monitoring.RuleNewParamsDuration1m),
 		Name:                   cloudflare.F("my_rule_1"),
 		AutomaticAdvertisement: cloudflare.F(true),
 		Bandwidth:              cloudflare.F(1000.000000),
@@ -61,7 +61,7 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.Update(context.TODO(), magic_network_monitoring.RuleUpdateParams{
 		AccountID:              cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-		Duration:               cloudflare.F("300s"),
+		Duration:               cloudflare.F(magic_network_monitoring.RuleUpdateParamsDuration1m),
 		Name:                   cloudflare.F("my_rule_1"),
 		ID:                     cloudflare.F("2890e6fa406311ed9b5a23f70f6fb8cf"),
 		AutomaticAdvertisement: cloudflare.F(true),
@@ -152,7 +152,7 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 			AccountID:              cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 			AutomaticAdvertisement: cloudflare.F(true),
 			Bandwidth:              cloudflare.F(1000.000000),
-			Duration:               cloudflare.F("300s"),
+			Duration:               cloudflare.F(magic_network_monitoring.RuleEditParamsDuration1m),
 			Name:                   cloudflare.F("my_rule_1"),
 			PacketThreshold:        cloudflare.F(10000.000000),
 			Prefixes:               cloudflare.F([]string{"203.0.113.1/32"}),
