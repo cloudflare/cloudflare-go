@@ -275,7 +275,7 @@ type ScriptVersionNewParamsMetadataBinding struct {
 	CertificateID param.Field[string] `json:"certificate_id"`
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name"`
-	// The dataset name to bind to.
+	// The name of the dataset to bind to.
 	Dataset param.Field[string] `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
@@ -309,22 +309,21 @@ func (r ScriptVersionNewParamsMetadataBinding) implementsScriptVersionNewParamsM
 // A binding to allow the Worker to communicate with resources
 //
 // Satisfied by
-// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngine],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssets],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRendering],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespace],
-// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace],
-// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificate],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue],
-// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2],
-// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecret],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Bucket],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretText],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindService],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumer],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorize],
@@ -334,26 +333,11 @@ type ScriptVersionNewParamsMetadataBindingUnion interface {
 	implementsScriptVersionNewParamsMetadataBindingUnion()
 }
 
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny struct {
-	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
-	// The kind of resource that the binding provides.
-	Type        param.Field[string]    `json:"type,required"`
-	ExtraFields map[string]interface{} `json:"-,extras"`
-}
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny) implementsScriptVersionNewParamsMetadataBindingUnion() {
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI) MarshalJSON() (data []byte, err error) {
@@ -363,28 +347,13 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI) MarshalJSON(
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAI ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "ai"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAI:
-		return true
-	}
-	return false
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngine struct {
-	// The dataset name to bind to.
+	// The name of the dataset to bind to.
 	Dataset param.Field[string] `json:"dataset,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) MarshalJSON() (data []byte, err error) {
@@ -394,26 +363,11 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngine)
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
-		return true
-	}
-	return false
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssets struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssets) MarshalJSON() (data []byte, err error) {
@@ -423,26 +377,11 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssets) MarshalJ
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssets) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "assets"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets:
-		return true
-	}
-	return false
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRendering struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRendering) MarshalJSON() (data []byte, err error) {
@@ -452,28 +391,13 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRendering
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRendering) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering:
-		return true
-	}
-	return false
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1 struct {
 	// Identifier of the D1 database to bind to.
 	ID param.Field[string] `json:"id,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1) MarshalJSON() (data []byte, err error) {
@@ -483,28 +407,13 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1) MarshalJSON(
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeD1 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "d1"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeD1:
-		return true
-	}
-	return false
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Namespace to bind to.
 	Namespace param.Field[string] `json:"namespace,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 	// Outbound worker.
 	Outbound param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutbound] `json:"outbound"`
 }
@@ -514,21 +423,6 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespac
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespace) implementsScriptVersionNewParamsMetadataBindingUnion() {
-}
-
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
-		return true
-	}
-	return false
 }
 
 // Outbound worker.
@@ -556,13 +450,13 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespac
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo struct {
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace struct {
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
@@ -572,26 +466,11 @@ type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo struct {
 	ScriptName param.Field[string] `json:"script_name"`
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo) MarshalJSON() (data []byte, err error) {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo) implementsScriptVersionNewParamsMetadataBindingUnion() {
-}
-
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoType = "durable_object_namespace"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoTypeDurableObjectNamespace:
-		return true
-	}
-	return false
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive struct {
@@ -600,7 +479,7 @@ type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive) MarshalJSON() (data []byte, err error) {
@@ -610,28 +489,13 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive) Mars
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
-		return true
-	}
-	return false
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
 	Json param.Field[string] `json:"json,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson) MarshalJSON() (data []byte, err error) {
@@ -641,28 +505,13 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson) MarshalJSO
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeJson ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "json"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeJson:
-		return true
-	}
-	return false
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace) MarshalJSON() (data []byte, err error) {
@@ -672,50 +521,20 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace) Mar
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
-		return true
-	}
-	return false
-}
-
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT struct {
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificate struct {
 	// Identifier of the certificate to bind to.
 	CertificateID param.Field[string] `json:"certificate_id,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT) MarshalJSON() (data []byte, err error) {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT) implementsScriptVersionNewParamsMetadataBindingUnion() {
-}
-
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTTypeMTLSCertificate ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTType = "mtls_certificate"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTTypeMTLSCertificate:
-		return true
-	}
-	return false
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificate) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText struct {
@@ -724,7 +543,7 @@ type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText struct {
 	// The text value to use.
 	Text param.Field[string] `json:"text,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText) MarshalJSON() (data []byte, err error) {
@@ -734,28 +553,13 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText) Marsh
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "plain_text"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText:
-		return true
-	}
-	return false
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Name of the Queue to bind to.
 	QueueName param.Field[string] `json:"queue_name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue) MarshalJSON() (data []byte, err error) {
@@ -765,81 +569,36 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue) MarshalJS
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeQueue ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "queue"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeQueue:
-		return true
-	}
-	return false
-}
-
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2 struct {
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
 	BucketName param.Field[string] `json:"bucket_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Type] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2) MarshalJSON() (data []byte, err error) {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Bucket) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2) implementsScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Bucket) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Type string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2TypeR2Bucket ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Type = "r2_bucket"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Type) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2TypeR2Bucket:
-		return true
-	}
-	return false
-}
-
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecret struct {
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The secret value to use.
 	Text param.Field[string] `json:"text,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecret) MarshalJSON() (data []byte, err error) {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretText) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecret) implementsScriptVersionNewParamsMetadataBindingUnion() {
-}
-
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTypeSecretText ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretType = "secret_text"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTypeSecretText:
-		return true
-	}
-	return false
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretText) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindService struct {
@@ -850,7 +609,7 @@ type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindService struct {
 	// Name of Worker to bind to.
 	Service param.Field[string] `json:"service,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindService) MarshalJSON() (data []byte, err error) {
@@ -860,28 +619,13 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindService) Marshal
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindService) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeService ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "service"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeService:
-		return true
-	}
-	return false
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumer struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// Name of Tail Worker to bind to.
 	Service param.Field[string] `json:"service,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumer) MarshalJSON() (data []byte, err error) {
@@ -891,28 +635,13 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumer) Ma
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumer) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
-		return true
-	}
-	return false
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorize struct {
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorize) MarshalJSON() (data []byte, err error) {
@@ -922,26 +651,11 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorize) Marsh
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorize) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "vectorize"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize:
-		return true
-	}
-	return false
-}
-
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadata struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType] `json:"type,required"`
+	Type param.Field[string] `json:"type,required"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadata) MarshalJSON() (data []byte, err error) {
@@ -949,21 +663,6 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadata)
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadata) implementsScriptVersionNewParamsMetadataBindingUnion() {
-}
-
-// The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType string
-
-const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
-)
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
-	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
-		return true
-	}
-	return false
 }
 
 // Usage model for the Worker invocations.
