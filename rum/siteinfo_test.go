@@ -61,7 +61,9 @@ func TestSiteInfoUpdateWithOptionalParams(t *testing.T) {
 		rum.SiteInfoUpdateParams{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AutoInstall: cloudflare.F(true),
+			Enabled:     cloudflare.F(true),
 			Host:        cloudflare.F("example.com"),
+			Lite:        cloudflare.F(true),
 			ZoneTag:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
