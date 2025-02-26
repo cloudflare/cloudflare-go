@@ -36,7 +36,7 @@ func NewRobotsTXTTopService(opts ...option.RequestOption) (r *RobotsTXTTopServic
 	return
 }
 
-// Get the top domain categories by the number of robots.txt files parsed.
+// Retrieves the top domain categories by the number of robots.txt files parsed.
 func (r *RobotsTXTTopService) DomainCategories(ctx context.Context, query RobotsTXTTopDomainCategoriesParams, opts ...option.RequestOption) (res *RobotsTXTTopDomainCategoriesResponse, err error) {
 	var env RobotsTXTTopDomainCategoriesResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -232,13 +232,13 @@ func (r robotsTXTTopDomainCategoriesResponseTop0JSON) RawJSON() string {
 type RobotsTXTTopDomainCategoriesParams struct {
 	// Array of dates to filter the ranking.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[RobotsTXTTopDomainCategoriesParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter by user agent category.
+	// Filters results by user agent category.
 	UserAgentCategory param.Field[RobotsTXTTopDomainCategoriesParamsUserAgentCategory] `query:"userAgentCategory"`
 }
 
@@ -251,7 +251,7 @@ func (r RobotsTXTTopDomainCategoriesParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type RobotsTXTTopDomainCategoriesParamsFormat string
 
 const (
@@ -267,7 +267,7 @@ func (r RobotsTXTTopDomainCategoriesParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filter by user agent category.
+// Filters results by user agent category.
 type RobotsTXTTopDomainCategoriesParamsUserAgentCategory string
 
 const (

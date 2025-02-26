@@ -34,9 +34,9 @@ func NewTrafficAnomalyLocationService(opts ...option.RequestOption) (r *TrafficA
 	return
 }
 
-// Internet traffic anomalies are signals that might point to an outage. These
-// alerts are automatically detected by Radar and then manually verified by our
-// team. This endpoint returns the sum of alerts grouped by location.
+// Retrieves the sum of Internet traffic anomalies, grouped by location. These
+// anomalies are signals that might indicate an outage, automatically detected by
+// Radar and manually verified by our team.
 func (r *TrafficAnomalyLocationService) Get(ctx context.Context, query TrafficAnomalyLocationGetParams, opts ...option.RequestOption) (res *TrafficAnomalyLocationGetResponse, err error) {
 	var env TrafficAnomalyLocationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -103,9 +103,9 @@ type TrafficAnomalyLocationGetParams struct {
 	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[TrafficAnomalyLocationGetParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit  param.Field[int64]                                 `query:"limit"`
 	Status param.Field[TrafficAnomalyLocationGetParamsStatus] `query:"status"`
 }
@@ -119,7 +119,7 @@ func (r TrafficAnomalyLocationGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type TrafficAnomalyLocationGetParamsFormat string
 
 const (

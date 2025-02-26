@@ -38,7 +38,7 @@ func TestEmailRoutingTimeseriesGroupARCWithOptionalParams(t *testing.T) {
 		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsEncrypted{radar.EmailRoutingTimeseriesGroupARCParamsEncryptedEncrypted}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupARCParamsFormatJson),
 		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsIPVersion{radar.EmailRoutingTimeseriesGroupARCParamsIPVersionIPv4}),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsSPF{radar.EmailRoutingTimeseriesGroupARCParamsSPFPass}),
 	})
 	if err != nil {
@@ -73,7 +73,7 @@ func TestEmailRoutingTimeseriesGroupDKIMWithOptionalParams(t *testing.T) {
 		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsEncrypted{radar.EmailRoutingTimeseriesGroupDKIMParamsEncryptedEncrypted}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupDKIMParamsFormatJson),
 		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsIPVersion{radar.EmailRoutingTimeseriesGroupDKIMParamsIPVersionIPv4}),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsSPF{radar.EmailRoutingTimeseriesGroupDKIMParamsSPFPass}),
 	})
 	if err != nil {
@@ -108,7 +108,7 @@ func TestEmailRoutingTimeseriesGroupDMARCWithOptionalParams(t *testing.T) {
 		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsEncrypted{radar.EmailRoutingTimeseriesGroupDMARCParamsEncryptedEncrypted}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupDMARCParamsFormatJson),
 		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsIPVersion{radar.EmailRoutingTimeseriesGroupDMARCParamsIPVersionIPv4}),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsSPF{radar.EmailRoutingTimeseriesGroupDMARCParamsSPFPass}),
 	})
 	if err != nil {
@@ -143,7 +143,7 @@ func TestEmailRoutingTimeseriesGroupEncryptedWithOptionalParams(t *testing.T) {
 		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsDMARC{radar.EmailRoutingTimeseriesGroupEncryptedParamsDMARCPass}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupEncryptedParamsFormatJson),
 		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsIPVersion{radar.EmailRoutingTimeseriesGroupEncryptedParamsIPVersionIPv4}),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsSPF{radar.EmailRoutingTimeseriesGroupEncryptedParamsSPFPass}),
 	})
 	if err != nil {
@@ -178,7 +178,7 @@ func TestEmailRoutingTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsDMARC{radar.EmailRoutingTimeseriesGroupIPVersionParamsDMARCPass}),
 		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsEncrypted{radar.EmailRoutingTimeseriesGroupIPVersionParamsEncryptedEncrypted}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupIPVersionParamsFormatJson),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsSPF{radar.EmailRoutingTimeseriesGroupIPVersionParamsSPFPass}),
 	})
 	if err != nil {
@@ -214,7 +214,7 @@ func TestEmailRoutingTimeseriesGroupSPFWithOptionalParams(t *testing.T) {
 		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsEncrypted{radar.EmailRoutingTimeseriesGroupSPFParamsEncryptedEncrypted}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupSPFParamsFormatJson),
 		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsIPVersion{radar.EmailRoutingTimeseriesGroupSPFParamsIPVersionIPv4}),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

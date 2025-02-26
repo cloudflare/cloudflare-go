@@ -35,7 +35,7 @@ func NewDatasetService(opts ...option.RequestOption) (r *DatasetService) {
 	return
 }
 
-// Get a list of datasets.
+// Retrieves a list of datasets.
 func (r *DatasetService) List(ctx context.Context, query DatasetListParams, opts ...option.RequestOption) (res *DatasetListResponse, err error) {
 	var env DatasetListResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -48,7 +48,7 @@ func (r *DatasetService) List(ctx context.Context, query DatasetListParams, opts
 	return
 }
 
-// Get a URL to download a single dataset.
+// Retrieves an URL to download a single dataset.
 func (r *DatasetService) Download(ctx context.Context, params DatasetDownloadParams, opts ...option.RequestOption) (res *DatasetDownloadResponse, err error) {
 	var env DatasetDownloadResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -61,9 +61,9 @@ func (r *DatasetService) Download(ctx context.Context, params DatasetDownloadPar
 	return
 }
 
-// Get the CSV content of a given dataset by alias or ID. When getting the content
-// by alias the latest dataset is returned, optionally filtered by the latest
-// available at a given date.
+// Retrieves the CSV content of a given dataset by alias or ID. When getting the
+// content by alias the latest dataset is returned, optionally filtered by the
+// latest available at a given date.
 func (r *DatasetService) Get(ctx context.Context, alias string, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
@@ -171,13 +171,13 @@ func (r datasetDownloadResponseDatasetJSON) RawJSON() string {
 }
 
 type DatasetListParams struct {
-	// Dataset type.
+	// Filters results by dataset type.
 	DatasetType param.Field[DatasetListParamsDatasetType] `query:"datasetType"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[DatasetListParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Number of objects to skip before grabbing results.
+	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`
 }
 
@@ -189,7 +189,7 @@ func (r DatasetListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Dataset type.
+// Filters results by dataset type.
 type DatasetListParamsDatasetType string
 
 const (
@@ -205,7 +205,7 @@ func (r DatasetListParamsDatasetType) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type DatasetListParamsFormat string
 
 const (
@@ -246,7 +246,7 @@ func (r datasetListResponseEnvelopeJSON) RawJSON() string {
 
 type DatasetDownloadParams struct {
 	DatasetID param.Field[int64] `json:"datasetId,required"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[DatasetDownloadParamsFormat] `query:"format"`
 }
 
@@ -262,7 +262,7 @@ func (r DatasetDownloadParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type DatasetDownloadParamsFormat string
 
 const (

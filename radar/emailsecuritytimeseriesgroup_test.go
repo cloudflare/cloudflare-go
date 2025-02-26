@@ -36,7 +36,7 @@ func TestEmailSecurityTimeseriesGroupARCWithOptionalParams(t *testing.T) {
 		DKIM:        cloudflare.F([]radar.EmailSecurityTimeseriesGroupARCParamsDKIM{radar.EmailSecurityTimeseriesGroupARCParamsDKIMPass}),
 		DMARC:       cloudflare.F([]radar.EmailSecurityTimeseriesGroupARCParamsDMARC{radar.EmailSecurityTimeseriesGroupARCParamsDMARCPass}),
 		Format:      cloudflare.F(radar.EmailSecurityTimeseriesGroupARCParamsFormatJson),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailSecurityTimeseriesGroupARCParamsSPF{radar.EmailSecurityTimeseriesGroupARCParamsSPFPass}),
 		TLSVersion:  cloudflare.F([]radar.EmailSecurityTimeseriesGroupARCParamsTLSVersion{radar.EmailSecurityTimeseriesGroupARCParamsTLSVersionTlSv1_0}),
 	})
@@ -70,7 +70,7 @@ func TestEmailSecurityTimeseriesGroupDKIMWithOptionalParams(t *testing.T) {
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
 		DMARC:       cloudflare.F([]radar.EmailSecurityTimeseriesGroupDKIMParamsDMARC{radar.EmailSecurityTimeseriesGroupDKIMParamsDMARCPass}),
 		Format:      cloudflare.F(radar.EmailSecurityTimeseriesGroupDKIMParamsFormatJson),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailSecurityTimeseriesGroupDKIMParamsSPF{radar.EmailSecurityTimeseriesGroupDKIMParamsSPFPass}),
 		TLSVersion:  cloudflare.F([]radar.EmailSecurityTimeseriesGroupDKIMParamsTLSVersion{radar.EmailSecurityTimeseriesGroupDKIMParamsTLSVersionTlSv1_0}),
 	})
@@ -104,7 +104,7 @@ func TestEmailSecurityTimeseriesGroupDMARCWithOptionalParams(t *testing.T) {
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
 		DKIM:        cloudflare.F([]radar.EmailSecurityTimeseriesGroupDMARCParamsDKIM{radar.EmailSecurityTimeseriesGroupDMARCParamsDKIMPass}),
 		Format:      cloudflare.F(radar.EmailSecurityTimeseriesGroupDMARCParamsFormatJson),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailSecurityTimeseriesGroupDMARCParamsSPF{radar.EmailSecurityTimeseriesGroupDMARCParamsSPFPass}),
 		TLSVersion:  cloudflare.F([]radar.EmailSecurityTimeseriesGroupDMARCParamsTLSVersion{radar.EmailSecurityTimeseriesGroupDMARCParamsTLSVersionTlSv1_0}),
 	})
@@ -139,7 +139,7 @@ func TestEmailSecurityTimeseriesGroupMaliciousWithOptionalParams(t *testing.T) {
 		DKIM:        cloudflare.F([]radar.EmailSecurityTimeseriesGroupMaliciousParamsDKIM{radar.EmailSecurityTimeseriesGroupMaliciousParamsDKIMPass}),
 		DMARC:       cloudflare.F([]radar.EmailSecurityTimeseriesGroupMaliciousParamsDMARC{radar.EmailSecurityTimeseriesGroupMaliciousParamsDMARCPass}),
 		Format:      cloudflare.F(radar.EmailSecurityTimeseriesGroupMaliciousParamsFormatJson),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailSecurityTimeseriesGroupMaliciousParamsSPF{radar.EmailSecurityTimeseriesGroupMaliciousParamsSPFPass}),
 		TLSVersion:  cloudflare.F([]radar.EmailSecurityTimeseriesGroupMaliciousParamsTLSVersion{radar.EmailSecurityTimeseriesGroupMaliciousParamsTLSVersionTlSv1_0}),
 	})
@@ -174,7 +174,7 @@ func TestEmailSecurityTimeseriesGroupSpamWithOptionalParams(t *testing.T) {
 		DKIM:        cloudflare.F([]radar.EmailSecurityTimeseriesGroupSpamParamsDKIM{radar.EmailSecurityTimeseriesGroupSpamParamsDKIMPass}),
 		DMARC:       cloudflare.F([]radar.EmailSecurityTimeseriesGroupSpamParamsDMARC{radar.EmailSecurityTimeseriesGroupSpamParamsDMARCPass}),
 		Format:      cloudflare.F(radar.EmailSecurityTimeseriesGroupSpamParamsFormatJson),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailSecurityTimeseriesGroupSpamParamsSPF{radar.EmailSecurityTimeseriesGroupSpamParamsSPFPass}),
 		TLSVersion:  cloudflare.F([]radar.EmailSecurityTimeseriesGroupSpamParamsTLSVersion{radar.EmailSecurityTimeseriesGroupSpamParamsTLSVersionTlSv1_0}),
 	})
@@ -209,7 +209,7 @@ func TestEmailSecurityTimeseriesGroupSPFWithOptionalParams(t *testing.T) {
 		DKIM:        cloudflare.F([]radar.EmailSecurityTimeseriesGroupSPFParamsDKIM{radar.EmailSecurityTimeseriesGroupSPFParamsDKIMPass}),
 		DMARC:       cloudflare.F([]radar.EmailSecurityTimeseriesGroupSPFParamsDMARC{radar.EmailSecurityTimeseriesGroupSPFParamsDMARCPass}),
 		Format:      cloudflare.F(radar.EmailSecurityTimeseriesGroupSPFParamsFormatJson),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		TLSVersion:  cloudflare.F([]radar.EmailSecurityTimeseriesGroupSPFParamsTLSVersion{radar.EmailSecurityTimeseriesGroupSPFParamsTLSVersionTlSv1_0}),
 	})
 	if err != nil {
@@ -243,7 +243,7 @@ func TestEmailSecurityTimeseriesGroupSpoofWithOptionalParams(t *testing.T) {
 		DKIM:        cloudflare.F([]radar.EmailSecurityTimeseriesGroupSpoofParamsDKIM{radar.EmailSecurityTimeseriesGroupSpoofParamsDKIMPass}),
 		DMARC:       cloudflare.F([]radar.EmailSecurityTimeseriesGroupSpoofParamsDMARC{radar.EmailSecurityTimeseriesGroupSpoofParamsDMARCPass}),
 		Format:      cloudflare.F(radar.EmailSecurityTimeseriesGroupSpoofParamsFormatJson),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailSecurityTimeseriesGroupSpoofParamsSPF{radar.EmailSecurityTimeseriesGroupSpoofParamsSPFPass}),
 		TLSVersion:  cloudflare.F([]radar.EmailSecurityTimeseriesGroupSpoofParamsTLSVersion{radar.EmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_0}),
 	})
@@ -278,7 +278,7 @@ func TestEmailSecurityTimeseriesGroupThreatCategoryWithOptionalParams(t *testing
 		DKIM:        cloudflare.F([]radar.EmailSecurityTimeseriesGroupThreatCategoryParamsDKIM{radar.EmailSecurityTimeseriesGroupThreatCategoryParamsDKIMPass}),
 		DMARC:       cloudflare.F([]radar.EmailSecurityTimeseriesGroupThreatCategoryParamsDMARC{radar.EmailSecurityTimeseriesGroupThreatCategoryParamsDMARCPass}),
 		Format:      cloudflare.F(radar.EmailSecurityTimeseriesGroupThreatCategoryParamsFormatJson),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailSecurityTimeseriesGroupThreatCategoryParamsSPF{radar.EmailSecurityTimeseriesGroupThreatCategoryParamsSPFPass}),
 		TLSVersion:  cloudflare.F([]radar.EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersion{radar.EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersionTlSv1_0}),
 	})
@@ -313,7 +313,7 @@ func TestEmailSecurityTimeseriesGroupTLSVersionWithOptionalParams(t *testing.T) 
 		DKIM:        cloudflare.F([]radar.EmailSecurityTimeseriesGroupTLSVersionParamsDKIM{radar.EmailSecurityTimeseriesGroupTLSVersionParamsDKIMPass}),
 		DMARC:       cloudflare.F([]radar.EmailSecurityTimeseriesGroupTLSVersionParamsDMARC{radar.EmailSecurityTimeseriesGroupTLSVersionParamsDMARCPass}),
 		Format:      cloudflare.F(radar.EmailSecurityTimeseriesGroupTLSVersionParamsFormatJson),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		SPF:         cloudflare.F([]radar.EmailSecurityTimeseriesGroupTLSVersionParamsSPF{radar.EmailSecurityTimeseriesGroupTLSVersionParamsSPFPass}),
 	})
 	if err != nil {

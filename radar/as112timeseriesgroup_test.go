@@ -37,7 +37,7 @@ func TestAS112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
 		Format:      cloudflare.F(radar.AS112TimeseriesGroupDNSSECParamsFormatJson),
 		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -70,7 +70,7 @@ func TestAS112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
 		Format:      cloudflare.F(radar.AS112TimeseriesGroupEdnsParamsFormatJson),
 		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -103,7 +103,7 @@ func TestAS112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
 		Format:      cloudflare.F(radar.AS112TimeseriesGroupIPVersionParamsFormatJson),
 		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -136,7 +136,7 @@ func TestAS112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
 		Format:      cloudflare.F(radar.AS112TimeseriesGroupProtocolParamsFormatJson),
 		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -170,7 +170,7 @@ func TestAS112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 		Format:        cloudflare.F(radar.AS112TimeseriesGroupQueryTypeParamsFormatJson),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -204,7 +204,7 @@ func TestAS112TimeseriesGroupResponseCodesWithOptionalParams(t *testing.T) {
 		Format:        cloudflare.F(radar.AS112TimeseriesGroupResponseCodesParamsFormatJson),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

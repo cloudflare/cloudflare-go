@@ -34,7 +34,7 @@ func TestRankingInternetServiceTimeseriesGroupsWithOptionalParams(t *testing.T) 
 		DateStart:       cloudflare.F([]time.Time{time.Now()}),
 		Format:          cloudflare.F(radar.RankingInternetServiceTimeseriesGroupsParamsFormatJson),
 		Limit:           cloudflare.F(int64(5)),
-		Name:            cloudflare.F([]string{"string"}),
+		Name:            cloudflare.F([]string{"main_series"}),
 		ServiceCategory: cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
@@ -63,7 +63,7 @@ func TestRankingInternetServiceTopWithOptionalParams(t *testing.T) {
 		Date:            cloudflare.F([]time.Time{time.Now()}),
 		Format:          cloudflare.F(radar.RankingInternetServiceTopParamsFormatJson),
 		Limit:           cloudflare.F(int64(5)),
-		Name:            cloudflare.F([]string{"string"}),
+		Name:            cloudflare.F([]string{"main_series"}),
 		ServiceCategory: cloudflare.F([]string{"string"}),
 	})
 	if err != nil {

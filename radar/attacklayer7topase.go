@@ -34,8 +34,8 @@ func NewAttackLayer7TopAseService(opts ...option.RequestOption) (r *AttackLayer7
 	return
 }
 
-// Get the top origin Autonomous Systems of and by Layer 7 attacks. Values are a
-// percentage out of the total Layer 7 attacks. The origin Autonomous Systems is
+// Retrieves the top origin autonomous systems of layer 7 attacks. Values are
+// percentages of the total layer 7 attacks, with the origin autonomous systems
 // determined by the client IP address.
 func (r *AttackLayer7TopAseService) Origin(ctx context.Context, query AttackLayer7TopAseOriginParams, opts ...option.RequestOption) (res *AttackLayer7TopAseOriginResponse, err error) {
 	var env AttackLayer7TopAseOriginResponseEnvelope
@@ -207,35 +207,35 @@ func (r attackLayer7TopAseOriginResponseTop0JSON) RawJSON() string {
 }
 
 type AttackLayer7TopAseOriginParams struct {
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer7TopAseOriginParamsFormat] `query:"format"`
-	// Filter for http method.
+	// Filters results by HTTP method.
 	HTTPMethod param.Field[[]AttackLayer7TopAseOriginParamsHTTPMethod] `query:"httpMethod"`
-	// Filter for http version.
+	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]AttackLayer7TopAseOriginParamsHTTPVersion] `query:"httpVersion"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer7TopAseOriginParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of L7 mitigation products.
 	MitigationProduct param.Field[[]AttackLayer7TopAseOriginParamsMitigationProduct] `query:"mitigationProduct"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -248,7 +248,7 @@ func (r AttackLayer7TopAseOriginParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer7TopAseOriginParamsFormat string
 
 const (

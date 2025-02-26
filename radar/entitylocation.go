@@ -35,7 +35,7 @@ func NewEntityLocationService(opts ...option.RequestOption) (r *EntityLocationSe
 	return
 }
 
-// Get a list of locations.
+// Retrieves a list of locations.
 func (r *EntityLocationService) List(ctx context.Context, query EntityLocationListParams, opts ...option.RequestOption) (res *EntityLocationListResponse, err error) {
 	var env EntityLocationListResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -48,9 +48,9 @@ func (r *EntityLocationService) List(ctx context.Context, query EntityLocationLi
 	return
 }
 
-// Get the requested location information. (A confidence level below `5` indicates
-// a low level of confidence in the traffic data - normally this happens because
-// Cloudflare has a small amount of traffic from/to this location).
+// Retrieves the requested location information. (A confidence level below `5`
+// indicates a low level of confidence in the traffic data - normally this happens
+// because Cloudflare has a small amount of traffic from/to this location).
 func (r *EntityLocationService) Get(ctx context.Context, location string, query EntityLocationGetParams, opts ...option.RequestOption) (res *EntityLocationGetResponse, err error) {
 	var env EntityLocationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -170,13 +170,13 @@ func (r entityLocationGetResponseLocationJSON) RawJSON() string {
 }
 
 type EntityLocationListParams struct {
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EntityLocationListParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Comma separated list of locations.
+	// Comma-separated list of locations (alpha-2 location codes).
 	Location param.Field[string] `query:"location"`
-	// Number of objects to skip before grabbing results.
+	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`
 }
 
@@ -189,7 +189,7 @@ func (r EntityLocationListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EntityLocationListParamsFormat string
 
 const (
@@ -229,7 +229,7 @@ func (r entityLocationListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EntityLocationGetParams struct {
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EntityLocationGetParamsFormat] `query:"format"`
 }
 
@@ -242,7 +242,7 @@ func (r EntityLocationGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EntityLocationGetParamsFormat string
 
 const (

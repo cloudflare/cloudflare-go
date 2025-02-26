@@ -36,9 +36,9 @@ func NewTrafficAnomalyService(opts ...option.RequestOption) (r *TrafficAnomalySe
 	return
 }
 
-// Internet traffic anomalies are signals that might point to an outage. These
-// alerts are automatically detected by Radar and then manually verified by our
-// team. This endpoint returns the latest alerts.
+// Retrieves the latest Internet traffic anomalies, which are signals that might
+// indicate an outage. These alerts are automatically detected by Radar and
+// manually verified by our team.
 func (r *TrafficAnomalyService) Get(ctx context.Context, query TrafficAnomalyGetParams, opts ...option.RequestOption) (res *TrafficAnomalyGetResponse, err error) {
 	var env TrafficAnomalyGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -181,7 +181,7 @@ func (r trafficAnomalyGetResponseTrafficAnomaliesLocationDetailsJSON) RawJSON() 
 }
 
 type TrafficAnomalyGetParams struct {
-	// Single ASN as integer.
+	// Single Autonomous System Number (ASN) as integer.
 	ASN param.Field[int64] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
@@ -190,13 +190,13 @@ type TrafficAnomalyGetParams struct {
 	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[TrafficAnomalyGetParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Location Alpha2 code.
+	// Location alpha-2 code.
 	Location param.Field[string] `query:"location"`
-	// Number of objects to skip before grabbing results.
+	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64]                         `query:"offset"`
 	Status param.Field[TrafficAnomalyGetParamsStatus] `query:"status"`
 }
@@ -210,7 +210,7 @@ func (r TrafficAnomalyGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type TrafficAnomalyGetParamsFormat string
 
 const (

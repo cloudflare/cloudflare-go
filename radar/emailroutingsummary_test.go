@@ -37,7 +37,7 @@ func TestEmailRoutingSummaryARCWithOptionalParams(t *testing.T) {
 		Encrypted: cloudflare.F([]radar.EmailRoutingSummaryARCParamsEncrypted{radar.EmailRoutingSummaryARCParamsEncryptedEncrypted}),
 		Format:    cloudflare.F(radar.EmailRoutingSummaryARCParamsFormatJson),
 		IPVersion: cloudflare.F([]radar.EmailRoutingSummaryARCParamsIPVersion{radar.EmailRoutingSummaryARCParamsIPVersionIPv4}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 		SPF:       cloudflare.F([]radar.EmailRoutingSummaryARCParamsSPF{radar.EmailRoutingSummaryARCParamsSPFPass}),
 	})
 	if err != nil {
@@ -71,7 +71,7 @@ func TestEmailRoutingSummaryDKIMWithOptionalParams(t *testing.T) {
 		Encrypted: cloudflare.F([]radar.EmailRoutingSummaryDKIMParamsEncrypted{radar.EmailRoutingSummaryDKIMParamsEncryptedEncrypted}),
 		Format:    cloudflare.F(radar.EmailRoutingSummaryDKIMParamsFormatJson),
 		IPVersion: cloudflare.F([]radar.EmailRoutingSummaryDKIMParamsIPVersion{radar.EmailRoutingSummaryDKIMParamsIPVersionIPv4}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 		SPF:       cloudflare.F([]radar.EmailRoutingSummaryDKIMParamsSPF{radar.EmailRoutingSummaryDKIMParamsSPFPass}),
 	})
 	if err != nil {
@@ -105,7 +105,7 @@ func TestEmailRoutingSummaryDMARCWithOptionalParams(t *testing.T) {
 		Encrypted: cloudflare.F([]radar.EmailRoutingSummaryDMARCParamsEncrypted{radar.EmailRoutingSummaryDMARCParamsEncryptedEncrypted}),
 		Format:    cloudflare.F(radar.EmailRoutingSummaryDMARCParamsFormatJson),
 		IPVersion: cloudflare.F([]radar.EmailRoutingSummaryDMARCParamsIPVersion{radar.EmailRoutingSummaryDMARCParamsIPVersionIPv4}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 		SPF:       cloudflare.F([]radar.EmailRoutingSummaryDMARCParamsSPF{radar.EmailRoutingSummaryDMARCParamsSPFPass}),
 	})
 	if err != nil {
@@ -139,7 +139,7 @@ func TestEmailRoutingSummaryEncryptedWithOptionalParams(t *testing.T) {
 		DMARC:     cloudflare.F([]radar.EmailRoutingSummaryEncryptedParamsDMARC{radar.EmailRoutingSummaryEncryptedParamsDMARCPass}),
 		Format:    cloudflare.F(radar.EmailRoutingSummaryEncryptedParamsFormatJson),
 		IPVersion: cloudflare.F([]radar.EmailRoutingSummaryEncryptedParamsIPVersion{radar.EmailRoutingSummaryEncryptedParamsIPVersionIPv4}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 		SPF:       cloudflare.F([]radar.EmailRoutingSummaryEncryptedParamsSPF{radar.EmailRoutingSummaryEncryptedParamsSPFPass}),
 	})
 	if err != nil {
@@ -173,7 +173,7 @@ func TestEmailRoutingSummaryIPVersionWithOptionalParams(t *testing.T) {
 		DMARC:     cloudflare.F([]radar.EmailRoutingSummaryIPVersionParamsDMARC{radar.EmailRoutingSummaryIPVersionParamsDMARCPass}),
 		Encrypted: cloudflare.F([]radar.EmailRoutingSummaryIPVersionParamsEncrypted{radar.EmailRoutingSummaryIPVersionParamsEncryptedEncrypted}),
 		Format:    cloudflare.F(radar.EmailRoutingSummaryIPVersionParamsFormatJson),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 		SPF:       cloudflare.F([]radar.EmailRoutingSummaryIPVersionParamsSPF{radar.EmailRoutingSummaryIPVersionParamsSPFPass}),
 	})
 	if err != nil {
@@ -208,7 +208,7 @@ func TestEmailRoutingSummarySPFWithOptionalParams(t *testing.T) {
 		Encrypted: cloudflare.F([]radar.EmailRoutingSummarySPFParamsEncrypted{radar.EmailRoutingSummarySPFParamsEncryptedEncrypted}),
 		Format:    cloudflare.F(radar.EmailRoutingSummarySPFParamsFormatJson),
 		IPVersion: cloudflare.F([]radar.EmailRoutingSummarySPFParamsIPVersion{radar.EmailRoutingSummarySPFParamsIPVersionIPv4}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -35,7 +35,7 @@ func NewEmailSecurityTopTldSpoofService(opts ...option.RequestOption) (r *EmailS
 	return
 }
 
-// Get the TLDs by emails classified as spoof or not.
+// Retrieves the top TLDs by emails classified as spoof or not.
 func (r *EmailSecurityTopTldSpoofService) Get(ctx context.Context, spoof EmailSecurityTopTldSpoofGetParamsSpoof, query EmailSecurityTopTldSpoofGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTldSpoofGetResponse, err error) {
 	var env EmailSecurityTopTldSpoofGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -202,31 +202,32 @@ func (r emailSecurityTopTldSpoofGetResponseTop0JSON) RawJSON() string {
 }
 
 type EmailSecurityTopTldSpoofGetParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecurityTopTldSpoofGetParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecurityTopTldSpoofGetParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecurityTopTldSpoofGetParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecurityTopTldSpoofGetParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecurityTopTldSpoofGetParamsSPF] `query:"spf"`
-	// Filter for TLDs by category.
+	// Filters results by TLD category.
 	TldCategory param.Field[EmailSecurityTopTldSpoofGetParamsTldCategory] `query:"tldCategory"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecurityTopTldSpoofGetParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -239,7 +240,7 @@ func (r EmailSecurityTopTldSpoofGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Spoof.
+// Spoof classification.
 type EmailSecurityTopTldSpoofGetParamsSpoof string
 
 const (
@@ -303,7 +304,7 @@ func (r EmailSecurityTopTldSpoofGetParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecurityTopTldSpoofGetParamsFormat string
 
 const (
@@ -335,7 +336,7 @@ func (r EmailSecurityTopTldSpoofGetParamsSPF) IsKnown() bool {
 	return false
 }
 
-// Filter for TLDs by category.
+// Filters results by TLD category.
 type EmailSecurityTopTldSpoofGetParamsTldCategory string
 
 const (

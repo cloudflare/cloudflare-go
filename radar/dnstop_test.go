@@ -38,7 +38,7 @@ func TestDNSTopAsesWithOptionalParams(t *testing.T) {
 		Format:    cloudflare.F(radar.DNSTopAsesParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -72,7 +72,7 @@ func TestDNSTopLocationsWithOptionalParams(t *testing.T) {
 		Format:    cloudflare.F(radar.DNSTopLocationsParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

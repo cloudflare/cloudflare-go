@@ -34,7 +34,7 @@ func NewAttackLayer3SummaryService(opts ...option.RequestOption) (r *AttackLayer
 	return
 }
 
-// Percentage distribution of attacks by bitrate.
+// Retrieves the distribution of layer 3 attacks by bitrate.
 func (r *AttackLayer3SummaryService) Bitrate(ctx context.Context, query AttackLayer3SummaryBitrateParams, opts ...option.RequestOption) (res *AttackLayer3SummaryBitrateResponse, err error) {
 	var env AttackLayer3SummaryBitrateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +47,7 @@ func (r *AttackLayer3SummaryService) Bitrate(ctx context.Context, query AttackLa
 	return
 }
 
-// Percentage distribution of attacks by duration.
+// Retrieves the distribution of layer 3 attacks by duration.
 func (r *AttackLayer3SummaryService) Duration(ctx context.Context, query AttackLayer3SummaryDurationParams, opts ...option.RequestOption) (res *AttackLayer3SummaryDurationResponse, err error) {
 	var env AttackLayer3SummaryDurationResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +60,7 @@ func (r *AttackLayer3SummaryService) Duration(ctx context.Context, query AttackL
 	return
 }
 
-// Percentage distribution of attacks by ip version used.
+// Retrieves the distribution of layer 3 attacks by IP version.
 func (r *AttackLayer3SummaryService) IPVersion(ctx context.Context, query AttackLayer3SummaryIPVersionParams, opts ...option.RequestOption) (res *AttackLayer3SummaryIPVersionResponse, err error) {
 	var env AttackLayer3SummaryIPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -73,7 +73,7 @@ func (r *AttackLayer3SummaryService) IPVersion(ctx context.Context, query Attack
 	return
 }
 
-// Percentage distribution of attacks by protocol used.
+// Retrieves the distribution of layer 3 attacks by protocol.
 func (r *AttackLayer3SummaryService) Protocol(ctx context.Context, query AttackLayer3SummaryProtocolParams, opts ...option.RequestOption) (res *AttackLayer3SummaryProtocolResponse, err error) {
 	var env AttackLayer3SummaryProtocolResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -86,7 +86,7 @@ func (r *AttackLayer3SummaryService) Protocol(ctx context.Context, query AttackL
 	return
 }
 
-// Percentage distribution of attacks by vector.
+// Retrieves the distribution of layer 3 attacks by vector.
 func (r *AttackLayer3SummaryService) Vector(ctx context.Context, query AttackLayer3SummaryVectorParams, opts ...option.RequestOption) (res *AttackLayer3SummaryVectorResponse, err error) {
 	var env AttackLayer3SummaryVectorResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -870,30 +870,30 @@ func (r attackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotationJSON) RawJS
 }
 
 type AttackLayer3SummaryBitrateParams struct {
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3SummaryBitrateParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3SummaryBitrateParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3SummaryBitrateParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Array of L3/4 attack types.
 	Protocol param.Field[[]AttackLayer3SummaryBitrateParamsProtocol] `query:"protocol"`
@@ -925,7 +925,7 @@ func (r AttackLayer3SummaryBitrateParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3SummaryBitrateParamsFormat string
 
 const (
@@ -997,30 +997,30 @@ func (r attackLayer3SummaryBitrateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryDurationParams struct {
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3SummaryDurationParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3SummaryDurationParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3SummaryDurationParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Array of L3/4 attack types.
 	Protocol param.Field[[]AttackLayer3SummaryDurationParamsProtocol] `query:"protocol"`
@@ -1052,7 +1052,7 @@ func (r AttackLayer3SummaryDurationParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3SummaryDurationParamsFormat string
 
 const (
@@ -1124,28 +1124,28 @@ func (r attackLayer3SummaryDurationResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryIPVersionParams struct {
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3SummaryIPVersionParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3SummaryIPVersionParamsFormat] `query:"format"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Array of L3/4 attack types.
 	Protocol param.Field[[]AttackLayer3SummaryIPVersionParamsProtocol] `query:"protocol"`
@@ -1177,7 +1177,7 @@ func (r AttackLayer3SummaryIPVersionParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3SummaryIPVersionParamsFormat string
 
 const (
@@ -1234,30 +1234,30 @@ func (r attackLayer3SummaryIPVersionResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryProtocolParams struct {
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3SummaryProtocolParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3SummaryProtocolParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3SummaryProtocolParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -1287,7 +1287,7 @@ func (r AttackLayer3SummaryProtocolParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3SummaryProtocolParamsFormat string
 
 const (
@@ -1342,35 +1342,35 @@ func (r attackLayer3SummaryProtocolResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryVectorParams struct {
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3SummaryVectorParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3SummaryVectorParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3SummaryVectorParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
-	// within the specified time range. If the limitPerGroup is set, the response will
-	// include that number of items, with the remaining items grouped together under an
-	// "other" category.
+	// Limits the number of objects per group to the top items within the specified
+	// time range. If there are more items than the limit, the response will include
+	// the count of items, with any remaining items grouped together under an "other"
+	// category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Array of L3/4 attack types.
 	Protocol param.Field[[]AttackLayer3SummaryVectorParamsProtocol] `query:"protocol"`
@@ -1402,7 +1402,7 @@ func (r AttackLayer3SummaryVectorParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3SummaryVectorParamsFormat string
 
 const (

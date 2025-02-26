@@ -45,7 +45,7 @@ func TestHTTPAseDeviceTypeGetWithOptionalParams(t *testing.T) {
 			IPVersion:     cloudflare.F([]radar.HTTPAseDeviceTypeGetParamsIPVersion{radar.HTTPAseDeviceTypeGetParamsIPVersionIPv4}),
 			Limit:         cloudflare.F(int64(5)),
 			Location:      cloudflare.F([]string{"string"}),
-			Name:          cloudflare.F([]string{"string"}),
+			Name:          cloudflare.F([]string{"main_series"}),
 			OS:            cloudflare.F([]radar.HTTPAseDeviceTypeGetParamsOS{radar.HTTPAseDeviceTypeGetParamsOSWindows}),
 			TLSVersion:    cloudflare.F([]radar.HTTPAseDeviceTypeGetParamsTLSVersion{radar.HTTPAseDeviceTypeGetParamsTLSVersionTlSv1_0}),
 		},

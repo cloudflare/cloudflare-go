@@ -40,7 +40,7 @@ func TestAttackLayer7TopLocationOriginWithOptionalParams(t *testing.T) {
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TopLocationOriginParamsIPVersion{radar.AttackLayer7TopLocationOriginParamsIPVersionIPv4}),
 		Limit:             cloudflare.F(int64(5)),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopLocationOriginParamsMitigationProduct{radar.AttackLayer7TopLocationOriginParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -75,7 +75,7 @@ func TestAttackLayer7TopLocationTargetWithOptionalParams(t *testing.T) {
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TopLocationTargetParamsIPVersion{radar.AttackLayer7TopLocationTargetParamsIPVersionIPv4}),
 		Limit:             cloudflare.F(int64(5)),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopLocationTargetParamsMitigationProduct{radar.AttackLayer7TopLocationTargetParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

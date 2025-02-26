@@ -42,7 +42,7 @@ func TestAttackLayer7TimeseriesWithOptionalParams(t *testing.T) {
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TimeseriesParamsIPVersion{radar.AttackLayer7TimeseriesParamsIPVersionIPv4}),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesParamsMitigationProduct{radar.AttackLayer7TimeseriesParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesParamsNormalizationPercentageChange),
 	})
 	if err != nil {

@@ -38,7 +38,7 @@ func TestAttackLayer3TimeseriesGroupBitrateWithOptionalParams(t *testing.T) {
 		Format:        cloudflare.F(radar.AttackLayer3TimeseriesGroupBitrateParamsFormatJson),
 		IPVersion:     cloudflare.F([]radar.AttackLayer3TimeseriesGroupBitrateParamsIPVersion{radar.AttackLayer3TimeseriesGroupBitrateParamsIPVersionIPv4}),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesGroupBitrateParamsNormalizationPercentage),
 		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupBitrateParamsProtocol{radar.AttackLayer3TimeseriesGroupBitrateParamsProtocolUdp}),
 	})
@@ -74,7 +74,7 @@ func TestAttackLayer3TimeseriesGroupDurationWithOptionalParams(t *testing.T) {
 		Format:        cloudflare.F(radar.AttackLayer3TimeseriesGroupDurationParamsFormatJson),
 		IPVersion:     cloudflare.F([]radar.AttackLayer3TimeseriesGroupDurationParamsIPVersion{radar.AttackLayer3TimeseriesGroupDurationParamsIPVersionIPv4}),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesGroupDurationParamsNormalizationPercentage),
 		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupDurationParamsProtocol{radar.AttackLayer3TimeseriesGroupDurationParamsProtocolUdp}),
 	})
@@ -111,7 +111,7 @@ func TestAttackLayer3TimeseriesGroupIndustryWithOptionalParams(t *testing.T) {
 		IPVersion:     cloudflare.F([]radar.AttackLayer3TimeseriesGroupIndustryParamsIPVersion{radar.AttackLayer3TimeseriesGroupIndustryParamsIPVersionIPv4}),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesGroupIndustryParamsNormalizationPercentage),
 		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupIndustryParamsProtocol{radar.AttackLayer3TimeseriesGroupIndustryParamsProtocolUdp}),
 	})
@@ -146,7 +146,7 @@ func TestAttackLayer3TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		Direction:     cloudflare.F(radar.AttackLayer3TimeseriesGroupIPVersionParamsDirectionOrigin),
 		Format:        cloudflare.F(radar.AttackLayer3TimeseriesGroupIPVersionParamsFormatJson),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesGroupIPVersionParamsNormalizationPercentage),
 		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupIPVersionParamsProtocol{radar.AttackLayer3TimeseriesGroupIPVersionParamsProtocolUdp}),
 	})
@@ -182,7 +182,7 @@ func TestAttackLayer3TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 		Format:        cloudflare.F(radar.AttackLayer3TimeseriesGroupProtocolParamsFormatJson),
 		IPVersion:     cloudflare.F([]radar.AttackLayer3TimeseriesGroupProtocolParamsIPVersion{radar.AttackLayer3TimeseriesGroupProtocolParamsIPVersionIPv4}),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesGroupProtocolParamsNormalizationPercentage),
 	})
 	if err != nil {
@@ -218,7 +218,7 @@ func TestAttackLayer3TimeseriesGroupVectorWithOptionalParams(t *testing.T) {
 		IPVersion:     cloudflare.F([]radar.AttackLayer3TimeseriesGroupVectorParamsIPVersion{radar.AttackLayer3TimeseriesGroupVectorParamsIPVersionIPv4}),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesGroupVectorParamsNormalizationPercentage),
 		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupVectorParamsProtocol{radar.AttackLayer3TimeseriesGroupVectorParamsProtocolUdp}),
 	})
@@ -255,7 +255,7 @@ func TestAttackLayer3TimeseriesGroupVerticalWithOptionalParams(t *testing.T) {
 		IPVersion:     cloudflare.F([]radar.AttackLayer3TimeseriesGroupVerticalParamsIPVersion{radar.AttackLayer3TimeseriesGroupVerticalParamsIPVersionIPv4}),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesGroupVerticalParamsNormalizationPercentage),
 		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesGroupVerticalParamsProtocol{radar.AttackLayer3TimeseriesGroupVerticalParamsProtocolUdp}),
 	})
