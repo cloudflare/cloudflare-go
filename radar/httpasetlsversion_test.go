@@ -46,7 +46,7 @@ func TestHTTPAseTLSVersionGetWithOptionalParams(t *testing.T) {
 			IPVersion:     cloudflare.F([]radar.HTTPAseTLSVersionGetParamsIPVersion{radar.HTTPAseTLSVersionGetParamsIPVersionIPv4}),
 			Limit:         cloudflare.F(int64(5)),
 			Location:      cloudflare.F([]string{"string"}),
-			Name:          cloudflare.F([]string{"string"}),
+			Name:          cloudflare.F([]string{"main_series"}),
 			OS:            cloudflare.F([]radar.HTTPAseTLSVersionGetParamsOS{radar.HTTPAseTLSVersionGetParamsOSWindows}),
 		},
 	)

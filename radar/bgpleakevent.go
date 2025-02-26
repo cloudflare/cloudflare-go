@@ -35,7 +35,7 @@ func NewBGPLeakEventService(opts ...option.RequestOption) (r *BGPLeakEventServic
 	return
 }
 
-// Get the BGP route leak events (Beta).
+// Retrieves the BGP route leak events.
 func (r *BGPLeakEventService) List(ctx context.Context, query BGPLeakEventListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[BGPLeakEventListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -53,7 +53,7 @@ func (r *BGPLeakEventService) List(ctx context.Context, query BGPLeakEventListPa
 	return res, nil
 }
 
-// Get the BGP route leak events (Beta).
+// Retrieves the BGP route leak events.
 func (r *BGPLeakEventService) ListAutoPaging(ctx context.Context, query BGPLeakEventListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[BGPLeakEventListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, query, opts...))
 }
@@ -159,23 +159,23 @@ type BGPLeakEventListParams struct {
 	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
-	// The unique identifier of a event
+	// The unique identifier of a event.
 	EventID param.Field[int64] `query:"eventId"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[BGPLeakEventListParamsFormat] `query:"format"`
-	// ASN that is causing or affected by a route leak event
+	// ASN that is causing or affected by a route leak event.
 	InvolvedASN param.Field[int64] `query:"involvedAsn"`
-	// Country code of a involved ASN in a route leak event
+	// Country code of a involved ASN in a route leak event.
 	InvolvedCountry param.Field[string] `query:"involvedCountry"`
-	// The leaking AS of a route leak event
+	// The leaking AS of a route leak event.
 	LeakASN param.Field[int64] `query:"leakAsn"`
-	// Current page number, starting from 1
+	// Current page number, starting from 1.
 	Page param.Field[int64] `query:"page"`
-	// Number of entries per page
+	// Number of entries per page.
 	PerPage param.Field[int64] `query:"per_page"`
-	// Sort events by field
+	// Sorts results by the specified field.
 	SortBy param.Field[BGPLeakEventListParamsSortBy] `query:"sortBy"`
-	// Sort order
+	// Sort order.
 	SortOrder param.Field[BGPLeakEventListParamsSortOrder] `query:"sortOrder"`
 }
 
@@ -187,7 +187,7 @@ func (r BGPLeakEventListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type BGPLeakEventListParamsFormat string
 
 const (
@@ -203,7 +203,7 @@ func (r BGPLeakEventListParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Sort events by field
+// Sorts results by the specified field.
 type BGPLeakEventListParamsSortBy string
 
 const (
@@ -223,7 +223,7 @@ func (r BGPLeakEventListParamsSortBy) IsKnown() bool {
 	return false
 }
 
-// Sort order
+// Sort order.
 type BGPLeakEventListParamsSortOrder string
 
 const (

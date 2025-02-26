@@ -37,7 +37,7 @@ func TestNetflowTopAsesWithOptionalParams(t *testing.T) {
 		Format:    cloudflare.F(radar.NetflowTopAsesParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -70,7 +70,7 @@ func TestNetflowTopLocationsWithOptionalParams(t *testing.T) {
 		Format:    cloudflare.F(radar.NetflowTopLocationsParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

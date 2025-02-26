@@ -34,7 +34,8 @@ func NewEmailSecurityTimeseriesGroupService(opts ...option.RequestOption) (r *Em
 	return
 }
 
-// Percentage distribution of emails classified by ARC validation over time.
+// Retrieves the distribution of emails by ARC (Authenticated Received Chain)
+// validation over time.
 func (r *EmailSecurityTimeseriesGroupService) ARC(ctx context.Context, query EmailSecurityTimeseriesGroupARCParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupARCResponse, err error) {
 	var env EmailSecurityTimeseriesGroupARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +48,8 @@ func (r *EmailSecurityTimeseriesGroupService) ARC(ctx context.Context, query Ema
 	return
 }
 
-// Percentage distribution of emails classified by DKIM validation over time.
+// Retrieves the distribution of emails by DKIM (DomainKeys Identified Mail)
+// validation over time.
 func (r *EmailSecurityTimeseriesGroupService) DKIM(ctx context.Context, query EmailSecurityTimeseriesGroupDKIMParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupDKIMResponse, err error) {
 	var env EmailSecurityTimeseriesGroupDKIMResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +62,8 @@ func (r *EmailSecurityTimeseriesGroupService) DKIM(ctx context.Context, query Em
 	return
 }
 
-// Percentage distribution of emails classified by DMARC validation over time.
+// Retrieves the distribution of emails by DMARC (Domain-based Message
+// Authentication, Reporting and Conformance) validation over time.
 func (r *EmailSecurityTimeseriesGroupService) DMARC(ctx context.Context, query EmailSecurityTimeseriesGroupDMARCParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupDMARCResponse, err error) {
 	var env EmailSecurityTimeseriesGroupDMARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -73,7 +76,7 @@ func (r *EmailSecurityTimeseriesGroupService) DMARC(ctx context.Context, query E
 	return
 }
 
-// Percentage distribution of emails classified as MALICIOUS over time.
+// Retrieves the distribution of emails by malicious classification over time.
 func (r *EmailSecurityTimeseriesGroupService) Malicious(ctx context.Context, query EmailSecurityTimeseriesGroupMaliciousParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupMaliciousResponse, err error) {
 	var env EmailSecurityTimeseriesGroupMaliciousResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -86,7 +89,8 @@ func (r *EmailSecurityTimeseriesGroupService) Malicious(ctx context.Context, que
 	return
 }
 
-// Percentage distribution of emails classified as SPAM over time.
+// Retrieves the distribution of emails by spam classification (spam vs. non-spam)
+// over time.
 func (r *EmailSecurityTimeseriesGroupService) Spam(ctx context.Context, query EmailSecurityTimeseriesGroupSpamParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSpamResponse, err error) {
 	var env EmailSecurityTimeseriesGroupSpamResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +103,8 @@ func (r *EmailSecurityTimeseriesGroupService) Spam(ctx context.Context, query Em
 	return
 }
 
-// Percentage distribution of emails classified by SPF validation over time.
+// Retrieves the distribution of emails by SPF (Sender Policy Framework) validation
+// over time.
 func (r *EmailSecurityTimeseriesGroupService) SPF(ctx context.Context, query EmailSecurityTimeseriesGroupSPFParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSPFResponse, err error) {
 	var env EmailSecurityTimeseriesGroupSPFResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -112,7 +117,8 @@ func (r *EmailSecurityTimeseriesGroupService) SPF(ctx context.Context, query Ema
 	return
 }
 
-// Percentage distribution of emails classified as SPOOF over time.
+// Retrieves the distribution of emails by spoof classification (spoof vs.
+// non-spoof) over time.
 func (r *EmailSecurityTimeseriesGroupService) Spoof(ctx context.Context, query EmailSecurityTimeseriesGroupSpoofParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSpoofResponse, err error) {
 	var env EmailSecurityTimeseriesGroupSpoofResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -125,7 +131,7 @@ func (r *EmailSecurityTimeseriesGroupService) Spoof(ctx context.Context, query E
 	return
 }
 
-// Percentage distribution of emails classified by threat category over time.
+// Retrieves the distribution of emails by threat category over time.
 func (r *EmailSecurityTimeseriesGroupService) ThreatCategory(ctx context.Context, query EmailSecurityTimeseriesGroupThreatCategoryParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupThreatCategoryResponse, err error) {
 	var env EmailSecurityTimeseriesGroupThreatCategoryResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -138,7 +144,7 @@ func (r *EmailSecurityTimeseriesGroupService) ThreatCategory(ctx context.Context
 	return
 }
 
-// Percentage distribution of emails classified by TLS version over time.
+// Retrieves the distribution of emails by TLS version over time.
 func (r *EmailSecurityTimeseriesGroupService) TLSVersion(ctx context.Context, query EmailSecurityTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupTLSVersionResponse, err error) {
 	var env EmailSecurityTimeseriesGroupTLSVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -489,23 +495,24 @@ type EmailSecurityTimeseriesGroupARCParams struct {
 	AggInterval param.Field[EmailSecurityTimeseriesGroupARCParamsAggInterval] `query:"aggInterval"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecurityTimeseriesGroupARCParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecurityTimeseriesGroupARCParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecurityTimeseriesGroupARCParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecurityTimeseriesGroupARCParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecurityTimeseriesGroupARCParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -570,7 +577,7 @@ func (r EmailSecurityTimeseriesGroupARCParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecurityTimeseriesGroupARCParamsFormat string
 
 const (
@@ -647,25 +654,26 @@ type EmailSecurityTimeseriesGroupDKIMParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailSecurityTimeseriesGroupDKIMParamsAggInterval] `query:"aggInterval"`
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecurityTimeseriesGroupDKIMParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecurityTimeseriesGroupDKIMParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecurityTimeseriesGroupDKIMParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecurityTimeseriesGroupDKIMParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecurityTimeseriesGroupDKIMParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -730,7 +738,7 @@ func (r EmailSecurityTimeseriesGroupDKIMParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecurityTimeseriesGroupDKIMParamsFormat string
 
 const (
@@ -807,25 +815,25 @@ type EmailSecurityTimeseriesGroupDMARCParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailSecurityTimeseriesGroupDMARCParamsAggInterval] `query:"aggInterval"`
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecurityTimeseriesGroupDMARCParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecurityTimeseriesGroupDMARCParamsDKIM] `query:"dkim"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecurityTimeseriesGroupDMARCParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecurityTimeseriesGroupDMARCParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecurityTimeseriesGroupDMARCParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -890,7 +898,7 @@ func (r EmailSecurityTimeseriesGroupDMARCParamsDKIM) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecurityTimeseriesGroupDMARCParamsFormat string
 
 const (
@@ -967,27 +975,28 @@ type EmailSecurityTimeseriesGroupMaliciousParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailSecurityTimeseriesGroupMaliciousParamsAggInterval] `query:"aggInterval"`
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecurityTimeseriesGroupMaliciousParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecurityTimeseriesGroupMaliciousParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecurityTimeseriesGroupMaliciousParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecurityTimeseriesGroupMaliciousParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecurityTimeseriesGroupMaliciousParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecurityTimeseriesGroupMaliciousParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1068,7 +1077,7 @@ func (r EmailSecurityTimeseriesGroupMaliciousParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecurityTimeseriesGroupMaliciousParamsFormat string
 
 const (
@@ -1145,27 +1154,28 @@ type EmailSecurityTimeseriesGroupSpamParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailSecurityTimeseriesGroupSpamParamsAggInterval] `query:"aggInterval"`
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecurityTimeseriesGroupSpamParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecurityTimeseriesGroupSpamParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecurityTimeseriesGroupSpamParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecurityTimeseriesGroupSpamParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecurityTimeseriesGroupSpamParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecurityTimeseriesGroupSpamParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1246,7 +1256,7 @@ func (r EmailSecurityTimeseriesGroupSpamParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecurityTimeseriesGroupSpamParamsFormat string
 
 const (
@@ -1323,25 +1333,26 @@ type EmailSecurityTimeseriesGroupSPFParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailSecurityTimeseriesGroupSPFParamsAggInterval] `query:"aggInterval"`
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecurityTimeseriesGroupSPFParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecurityTimeseriesGroupSPFParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecurityTimeseriesGroupSPFParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecurityTimeseriesGroupSPFParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecurityTimeseriesGroupSPFParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1422,7 +1433,7 @@ func (r EmailSecurityTimeseriesGroupSPFParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecurityTimeseriesGroupSPFParamsFormat string
 
 const (
@@ -1483,27 +1494,28 @@ type EmailSecurityTimeseriesGroupSpoofParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailSecurityTimeseriesGroupSpoofParamsAggInterval] `query:"aggInterval"`
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecurityTimeseriesGroupSpoofParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecurityTimeseriesGroupSpoofParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecurityTimeseriesGroupSpoofParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecurityTimeseriesGroupSpoofParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecurityTimeseriesGroupSpoofParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecurityTimeseriesGroupSpoofParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1584,7 +1596,7 @@ func (r EmailSecurityTimeseriesGroupSpoofParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecurityTimeseriesGroupSpoofParamsFormat string
 
 const (
@@ -1661,27 +1673,28 @@ type EmailSecurityTimeseriesGroupThreatCategoryParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailSecurityTimeseriesGroupThreatCategoryParamsAggInterval] `query:"aggInterval"`
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecurityTimeseriesGroupThreatCategoryParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecurityTimeseriesGroupThreatCategoryParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecurityTimeseriesGroupThreatCategoryParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecurityTimeseriesGroupThreatCategoryParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecurityTimeseriesGroupThreatCategoryParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1762,7 +1775,7 @@ func (r EmailSecurityTimeseriesGroupThreatCategoryParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecurityTimeseriesGroupThreatCategoryParamsFormat string
 
 const (
@@ -1840,25 +1853,26 @@ type EmailSecurityTimeseriesGroupTLSVersionParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailSecurityTimeseriesGroupTLSVersionParamsAggInterval] `query:"aggInterval"`
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecurityTimeseriesGroupTLSVersionParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecurityTimeseriesGroupTLSVersionParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecurityTimeseriesGroupTLSVersionParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecurityTimeseriesGroupTLSVersionParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecurityTimeseriesGroupTLSVersionParamsSPF] `query:"spf"`
 }
 
@@ -1939,7 +1953,7 @@ func (r EmailSecurityTimeseriesGroupTLSVersionParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecurityTimeseriesGroupTLSVersionParamsFormat string
 
 const (

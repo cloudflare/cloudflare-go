@@ -35,7 +35,7 @@ func NewEmailSecurityTopTldSpamService(opts ...option.RequestOption) (r *EmailSe
 	return
 }
 
-// Get the top TLDs by emails classified as spam or not.
+// Retrieves the top TLDs by emails classified as spam or not.
 func (r *EmailSecurityTopTldSpamService) Get(ctx context.Context, spam EmailSecurityTopTldSpamGetParamsSpam, query EmailSecurityTopTldSpamGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTldSpamGetResponse, err error) {
 	var env EmailSecurityTopTldSpamGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -202,31 +202,32 @@ func (r emailSecurityTopTldSpamGetResponseTop0JSON) RawJSON() string {
 }
 
 type EmailSecurityTopTldSpamGetParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecurityTopTldSpamGetParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecurityTopTldSpamGetParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecurityTopTldSpamGetParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecurityTopTldSpamGetParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecurityTopTldSpamGetParamsSPF] `query:"spf"`
-	// Filter for TLDs by category.
+	// Filters results by TLD category.
 	TldCategory param.Field[EmailSecurityTopTldSpamGetParamsTldCategory] `query:"tldCategory"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecurityTopTldSpamGetParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -239,7 +240,7 @@ func (r EmailSecurityTopTldSpamGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Spam.
+// Spam classification.
 type EmailSecurityTopTldSpamGetParamsSpam string
 
 const (
@@ -303,7 +304,7 @@ func (r EmailSecurityTopTldSpamGetParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecurityTopTldSpamGetParamsFormat string
 
 const (
@@ -335,7 +336,7 @@ func (r EmailSecurityTopTldSpamGetParamsSPF) IsKnown() bool {
 	return false
 }
 
-// Filter for TLDs by category.
+// Filters results by TLD category.
 type EmailSecurityTopTldSpamGetParamsTldCategory string
 
 const (

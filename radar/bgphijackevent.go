@@ -35,7 +35,7 @@ func NewBGPHijackEventService(opts ...option.RequestOption) (r *BGPHijackEventSe
 	return
 }
 
-// Get the BGP hijack events. (Beta)
+// Retrieves the BGP hijack events.
 func (r *BGPHijackEventService) List(ctx context.Context, query BGPHijackEventListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[BGPHijackEventListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -53,7 +53,7 @@ func (r *BGPHijackEventService) List(ctx context.Context, query BGPHijackEventLi
 	return res, nil
 }
 
-// Get the BGP hijack events. (Beta)
+// Retrieves the BGP hijack events.
 func (r *BGPHijackEventService) ListAutoPaging(ctx context.Context, query BGPHijackEventListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[BGPHijackEventListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, query, opts...))
 }
@@ -194,31 +194,31 @@ type BGPHijackEventListParams struct {
 	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
-	// The unique identifier of a event
+	// The unique identifier of a event.
 	EventID param.Field[int64] `query:"eventId"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[BGPHijackEventListParamsFormat] `query:"format"`
-	// The potential hijacker AS of a BGP hijack event
+	// The potential hijacker AS of a BGP hijack event.
 	HijackerASN param.Field[int64] `query:"hijackerAsn"`
-	// The potential hijacker or victim AS of a BGP hijack event
+	// The potential hijacker or victim AS of a BGP hijack event.
 	InvolvedASN param.Field[int64] `query:"involvedAsn"`
-	// The country code of the potential hijacker or victim AS of a BGP hijack event
+	// The country code of the potential hijacker or victim AS of a BGP hijack event.
 	InvolvedCountry param.Field[string] `query:"involvedCountry"`
-	// The maximum confidence score to filter events (1-4 low, 5-7 mid, 8+ high)
+	// The maximum confidence score to filter events (1-4 low, 5-7 mid, 8+ high).
 	MaxConfidence param.Field[int64] `query:"maxConfidence"`
-	// The minimum confidence score to filter events (1-4 low, 5-7 mid, 8+ high)
+	// The minimum confidence score to filter events (1-4 low, 5-7 mid, 8+ high).
 	MinConfidence param.Field[int64] `query:"minConfidence"`
-	// Current page number, starting from 1
+	// Current page number, starting from 1.
 	Page param.Field[int64] `query:"page"`
-	// Number of entries per page
+	// Number of entries per page.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Network prefix, IPv4 or IPv6.
 	Prefix param.Field[string] `query:"prefix"`
-	// Sort events by field
+	// Sorts results by the specified field.
 	SortBy param.Field[BGPHijackEventListParamsSortBy] `query:"sortBy"`
-	// Sort order
+	// Sort order.
 	SortOrder param.Field[BGPHijackEventListParamsSortOrder] `query:"sortOrder"`
-	// The potential victim AS of a BGP hijack event
+	// The potential victim AS of a BGP hijack event.
 	VictimASN param.Field[int64] `query:"victimAsn"`
 }
 
@@ -231,7 +231,7 @@ func (r BGPHijackEventListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type BGPHijackEventListParamsFormat string
 
 const (
@@ -247,7 +247,7 @@ func (r BGPHijackEventListParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Sort events by field
+// Sorts results by the specified field.
 type BGPHijackEventListParamsSortBy string
 
 const (
@@ -264,7 +264,7 @@ func (r BGPHijackEventListParamsSortBy) IsKnown() bool {
 	return false
 }
 
-// Sort order
+// Sort order.
 type BGPHijackEventListParamsSortOrder string
 
 const (

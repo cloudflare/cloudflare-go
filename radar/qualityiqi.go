@@ -34,8 +34,8 @@ func NewQualityIQIService(opts ...option.RequestOption) (r *QualityIQIService) {
 	return
 }
 
-// Get a summary (percentiles) of bandwidth, latency or DNS response time from the
-// Radar Internet Quality Index (IQI).
+// Retrieves a summary (percentiles) of bandwidth, latency, or DNS response time
+// from the Radar Internet Quality Index (IQI).
 func (r *QualityIQIService) Summary(ctx context.Context, query QualityIQISummaryParams, opts ...option.RequestOption) (res *QualityIQISummaryResponse, err error) {
 	var env QualityIQISummaryResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -48,8 +48,8 @@ func (r *QualityIQIService) Summary(ctx context.Context, query QualityIQISummary
 	return
 }
 
-// Get a time series (percentiles) of bandwidth, latency or DNS response time from
-// the Radar Internet Quality Index (IQI).
+// Retrieves a time series (percentiles) of bandwidth, latency, or DNS response
+// time from the Radar Internet Quality Index (IQI).
 func (r *QualityIQIService) TimeseriesGroups(ctx context.Context, query QualityIQITimeseriesGroupsParams, opts ...option.RequestOption) (res *QualityIQITimeseriesGroupsResponse, err error) {
 	var env QualityIQITimeseriesGroupsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -269,31 +269,31 @@ func (r qualityIQITimeseriesGroupsResponseSerie0JSON) RawJSON() string {
 }
 
 type QualityIQISummaryParams struct {
-	// Which metric to return: bandwidth, latency or DNS response time.
+	// Defines which metric to return (bandwidth, latency, or DNS response time).
 	Metric param.Field[QualityIQISummaryParamsMetric] `query:"metric,required"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[QualityIQISummaryParamsFormat] `query:"format"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -306,7 +306,7 @@ func (r QualityIQISummaryParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Which metric to return: bandwidth, latency or DNS response time.
+// Defines which metric to return (bandwidth, latency, or DNS response time).
 type QualityIQISummaryParamsMetric string
 
 const (
@@ -323,7 +323,7 @@ func (r QualityIQISummaryParamsMetric) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type QualityIQISummaryParamsFormat string
 
 const (
@@ -363,37 +363,37 @@ func (r qualityIQISummaryResponseEnvelopeJSON) RawJSON() string {
 }
 
 type QualityIQITimeseriesGroupsParams struct {
-	// Which metric to return: bandwidth, latency or DNS response time.
+	// Defines which metric to return (bandwidth, latency, or DNS response time).
 	Metric param.Field[QualityIQITimeseriesGroupsParamsMetric] `query:"metric,required"`
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[QualityIQITimeseriesGroupsParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[QualityIQITimeseriesGroupsParamsFormat] `query:"format"`
-	// Enable interpolation for all series (using the average).
+	// Enables interpolation for all series (using the average).
 	Interpolation param.Field[bool] `query:"interpolation"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -406,7 +406,7 @@ func (r QualityIQITimeseriesGroupsParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Which metric to return: bandwidth, latency or DNS response time.
+// Defines which metric to return (bandwidth, latency, or DNS response time).
 type QualityIQITimeseriesGroupsParamsMetric string
 
 const (
@@ -443,7 +443,7 @@ func (r QualityIQITimeseriesGroupsParamsAggInterval) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type QualityIQITimeseriesGroupsParamsFormat string
 
 const (

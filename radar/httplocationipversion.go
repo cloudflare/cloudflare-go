@@ -35,8 +35,7 @@ func NewHTTPLocationIPVersionService(opts ...option.RequestOption) (r *HTTPLocat
 	return
 }
 
-// Get the top locations, by HTTP traffic, of the requested IP version. Values are
-// a percentage out of the total traffic.
+// Retrieves the top locations, by HTTP requests, of the requested IP version.
 func (r *HTTPLocationIPVersionService) Get(ctx context.Context, ipVersion HTTPLocationIPVersionGetParamsIPVersion, query HTTPLocationIPVersionGetParams, opts ...option.RequestOption) (res *HTTPLocationIPVersionGetResponse, err error) {
 	var env HTTPLocationIPVersionGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -205,46 +204,46 @@ func (r httpLocationIPVersionGetResponseTop0JSON) RawJSON() string {
 }
 
 type HTTPLocationIPVersionGetParams struct {
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filter for bot class. Refer to
+	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPLocationIPVersionGetParamsBotClass] `query:"botClass"`
-	// Filter for browser family.
+	// Filters results by browser family.
 	BrowserFamily param.Field[[]HTTPLocationIPVersionGetParamsBrowserFamily] `query:"browserFamily"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for device type.
+	// Filters results by device type.
 	DeviceType param.Field[[]HTTPLocationIPVersionGetParamsDeviceType] `query:"deviceType"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[HTTPLocationIPVersionGetParamsFormat] `query:"format"`
-	// Filter for http protocol.
+	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPLocationIPVersionGetParamsHTTPProtocol] `query:"httpProtocol"`
-	// Filter for http version.
+	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]HTTPLocationIPVersionGetParamsHTTPVersion] `query:"httpVersion"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for os name.
+	// Filters results by operating system.
 	OS param.Field[[]HTTPLocationIPVersionGetParamsOS] `query:"os"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]HTTPLocationIPVersionGetParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -321,7 +320,7 @@ func (r HTTPLocationIPVersionGetParamsDeviceType) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type HTTPLocationIPVersionGetParamsFormat string
 
 const (

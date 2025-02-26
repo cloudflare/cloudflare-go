@@ -40,7 +40,7 @@ func TestHTTPSummaryBotClassWithOptionalParams(t *testing.T) {
 		HTTPVersion:  cloudflare.F([]radar.HTTPSummaryBotClassParamsHTTPVersion{radar.HTTPSummaryBotClassParamsHTTPVersionHttPv1}),
 		IPVersion:    cloudflare.F([]radar.HTTPSummaryBotClassParamsIPVersion{radar.HTTPSummaryBotClassParamsIPVersionIPv4}),
 		Location:     cloudflare.F([]string{"string"}),
-		Name:         cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
 		OS:           cloudflare.F([]radar.HTTPSummaryBotClassParamsOS{radar.HTTPSummaryBotClassParamsOSWindows}),
 		TLSVersion:   cloudflare.F([]radar.HTTPSummaryBotClassParamsTLSVersion{radar.HTTPSummaryBotClassParamsTLSVersionTlSv1_0}),
 	})
@@ -78,7 +78,7 @@ func TestHTTPSummaryDeviceTypeWithOptionalParams(t *testing.T) {
 		HTTPVersion:  cloudflare.F([]radar.HTTPSummaryDeviceTypeParamsHTTPVersion{radar.HTTPSummaryDeviceTypeParamsHTTPVersionHttPv1}),
 		IPVersion:    cloudflare.F([]radar.HTTPSummaryDeviceTypeParamsIPVersion{radar.HTTPSummaryDeviceTypeParamsIPVersionIPv4}),
 		Location:     cloudflare.F([]string{"string"}),
-		Name:         cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
 		OS:           cloudflare.F([]radar.HTTPSummaryDeviceTypeParamsOS{radar.HTTPSummaryDeviceTypeParamsOSWindows}),
 		TLSVersion:   cloudflare.F([]radar.HTTPSummaryDeviceTypeParamsTLSVersion{radar.HTTPSummaryDeviceTypeParamsTLSVersionTlSv1_0}),
 	})
@@ -116,7 +116,7 @@ func TestHTTPSummaryHTTPProtocolWithOptionalParams(t *testing.T) {
 		HTTPVersion: cloudflare.F([]radar.HTTPSummaryHTTPProtocolParamsHTTPVersion{radar.HTTPSummaryHTTPProtocolParamsHTTPVersionHttPv1}),
 		IPVersion:   cloudflare.F([]radar.HTTPSummaryHTTPProtocolParamsIPVersion{radar.HTTPSummaryHTTPProtocolParamsIPVersionIPv4}),
 		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 		OS:          cloudflare.F([]radar.HTTPSummaryHTTPProtocolParamsOS{radar.HTTPSummaryHTTPProtocolParamsOSWindows}),
 		TLSVersion:  cloudflare.F([]radar.HTTPSummaryHTTPProtocolParamsTLSVersion{radar.HTTPSummaryHTTPProtocolParamsTLSVersionTlSv1_0}),
 	})
@@ -154,7 +154,7 @@ func TestHTTPSummaryHTTPVersionWithOptionalParams(t *testing.T) {
 		HTTPProtocol: cloudflare.F([]radar.HTTPSummaryHTTPVersionParamsHTTPProtocol{radar.HTTPSummaryHTTPVersionParamsHTTPProtocolHTTP}),
 		IPVersion:    cloudflare.F([]radar.HTTPSummaryHTTPVersionParamsIPVersion{radar.HTTPSummaryHTTPVersionParamsIPVersionIPv4}),
 		Location:     cloudflare.F([]string{"string"}),
-		Name:         cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
 		OS:           cloudflare.F([]radar.HTTPSummaryHTTPVersionParamsOS{radar.HTTPSummaryHTTPVersionParamsOSWindows}),
 		TLSVersion:   cloudflare.F([]radar.HTTPSummaryHTTPVersionParamsTLSVersion{radar.HTTPSummaryHTTPVersionParamsTLSVersionTlSv1_0}),
 	})
@@ -192,7 +192,7 @@ func TestHTTPSummaryIPVersionWithOptionalParams(t *testing.T) {
 		HTTPProtocol: cloudflare.F([]radar.HTTPSummaryIPVersionParamsHTTPProtocol{radar.HTTPSummaryIPVersionParamsHTTPProtocolHTTP}),
 		HTTPVersion:  cloudflare.F([]radar.HTTPSummaryIPVersionParamsHTTPVersion{radar.HTTPSummaryIPVersionParamsHTTPVersionHttPv1}),
 		Location:     cloudflare.F([]string{"string"}),
-		Name:         cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
 		OS:           cloudflare.F([]radar.HTTPSummaryIPVersionParamsOS{radar.HTTPSummaryIPVersionParamsOSWindows}),
 		TLSVersion:   cloudflare.F([]radar.HTTPSummaryIPVersionParamsTLSVersion{radar.HTTPSummaryIPVersionParamsTLSVersionTlSv1_0}),
 	})
@@ -231,7 +231,7 @@ func TestHTTPSummaryOSWithOptionalParams(t *testing.T) {
 		HTTPVersion:  cloudflare.F([]radar.HTTPSummaryOSParamsHTTPVersion{radar.HTTPSummaryOSParamsHTTPVersionHttPv1}),
 		IPVersion:    cloudflare.F([]radar.HTTPSummaryOSParamsIPVersion{radar.HTTPSummaryOSParamsIPVersionIPv4}),
 		Location:     cloudflare.F([]string{"string"}),
-		Name:         cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
 		TLSVersion:   cloudflare.F([]radar.HTTPSummaryOSParamsTLSVersion{radar.HTTPSummaryOSParamsTLSVersionTlSv1_0}),
 	})
 	if err != nil {
@@ -269,7 +269,7 @@ func TestHTTPSummaryPostQuantumWithOptionalParams(t *testing.T) {
 		HTTPVersion:  cloudflare.F([]radar.HTTPSummaryPostQuantumParamsHTTPVersion{radar.HTTPSummaryPostQuantumParamsHTTPVersionHttPv1}),
 		IPVersion:    cloudflare.F([]radar.HTTPSummaryPostQuantumParamsIPVersion{radar.HTTPSummaryPostQuantumParamsIPVersionIPv4}),
 		Location:     cloudflare.F([]string{"string"}),
-		Name:         cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
 		OS:           cloudflare.F([]radar.HTTPSummaryPostQuantumParamsOS{radar.HTTPSummaryPostQuantumParamsOSWindows}),
 		TLSVersion:   cloudflare.F([]radar.HTTPSummaryPostQuantumParamsTLSVersion{radar.HTTPSummaryPostQuantumParamsTLSVersionTlSv1_0}),
 	})
@@ -308,7 +308,7 @@ func TestHTTPSummaryTLSVersionWithOptionalParams(t *testing.T) {
 		HTTPVersion:  cloudflare.F([]radar.HTTPSummaryTLSVersionParamsHTTPVersion{radar.HTTPSummaryTLSVersionParamsHTTPVersionHttPv1}),
 		IPVersion:    cloudflare.F([]radar.HTTPSummaryTLSVersionParamsIPVersion{radar.HTTPSummaryTLSVersionParamsIPVersionIPv4}),
 		Location:     cloudflare.F([]string{"string"}),
-		Name:         cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
 		OS:           cloudflare.F([]radar.HTTPSummaryTLSVersionParamsOS{radar.HTTPSummaryTLSVersionParamsOSWindows}),
 	})
 	if err != nil {

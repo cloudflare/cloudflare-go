@@ -36,8 +36,8 @@ func NewRankingDomainService(opts ...option.RequestOption) (r *RankingDomainServ
 	return
 }
 
-// Gets Domains Rank details. Cloudflare provides an ordered rank for the top 100
-// domains, but for the remainder it only provides ranking buckets like top 200
+// Retrieves domain rank details. Cloudflare provides an ordered rank for the top
+// 100 domains, but for the remainder it only provides ranking buckets like top 200
 // thousand, top one million, etc.. These are available through Radar datasets
 // endpoints.
 func (r *RankingDomainService) Get(ctx context.Context, domain string, query RankingDomainGetParams, opts ...option.RequestOption) (res *RankingDomainGetResponse, err error) {
@@ -58,6 +58,7 @@ func (r *RankingDomainService) Get(ctx context.Context, domain string, query Ran
 
 type RankingDomainGetResponse struct {
 	Details0 RankingDomainGetResponseDetails0 `json:"details_0,required"`
+	Meta     RankingDomainGetResponseMeta     `json:"meta,required"`
 	JSON     rankingDomainGetResponseJSON     `json:"-"`
 }
 
@@ -65,6 +66,7 @@ type RankingDomainGetResponse struct {
 // [RankingDomainGetResponse]
 type rankingDomainGetResponseJSON struct {
 	Details0    apijson.Field
+	Meta        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -155,18 +157,64 @@ func (r rankingDomainGetResponseDetails0TopLocationJSON) RawJSON() string {
 	return r.raw
 }
 
+type RankingDomainGetResponseMeta struct {
+	DateRange []RankingDomainGetResponseMetaDateRange `json:"dateRange,required"`
+	JSON      rankingDomainGetResponseMetaJSON        `json:"-"`
+}
+
+// rankingDomainGetResponseMetaJSON contains the JSON metadata for the struct
+// [RankingDomainGetResponseMeta]
+type rankingDomainGetResponseMetaJSON struct {
+	DateRange   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RankingDomainGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rankingDomainGetResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RankingDomainGetResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                 `json:"startTime,required" format:"date-time"`
+	JSON      rankingDomainGetResponseMetaDateRangeJSON `json:"-"`
+}
+
+// rankingDomainGetResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [RankingDomainGetResponseMetaDateRange]
+type rankingDomainGetResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RankingDomainGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rankingDomainGetResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RankingDomainGetParams struct {
 	// Array of dates to filter the ranking.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[RankingDomainGetParamsFormat] `query:"format"`
-	// Include top locations in the response.
+	// Includes top locations in the response.
 	IncludeTopLocations param.Field[bool] `query:"includeTopLocations"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// The ranking type.
+	// Ranking type.
 	RankingType param.Field[RankingDomainGetParamsRankingType] `query:"rankingType"`
 }
 
@@ -178,7 +226,7 @@ func (r RankingDomainGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type RankingDomainGetParamsFormat string
 
 const (
@@ -194,7 +242,7 @@ func (r RankingDomainGetParamsFormat) IsKnown() bool {
 	return false
 }
 
-// The ranking type.
+// Ranking type.
 type RankingDomainGetParamsRankingType string
 
 const (

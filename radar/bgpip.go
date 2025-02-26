@@ -34,8 +34,8 @@ func NewBGPIPService(opts ...option.RequestOption) (r *BGPIPService) {
 	return
 }
 
-// Get time series data for the announced IP space count, represented as the number
-// of IPv4 /24s and IPv6 /48s, for a given ASN.
+// Retrieves time series data for the announced IP space count, represented as the
+// number of IPv4 /24s and IPv6 /48s, for a given ASN.
 func (r *BGPIPService) Timeseries(ctx context.Context, query BGPIPTimeseriesParams, opts ...option.RequestOption) (res *BgpipTimeseriesResponse, err error) {
 	var env BgpipTimeseriesResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -164,27 +164,27 @@ func (r bgpipTimeseriesResponseSerie174JSON) RawJSON() string {
 }
 
 type BGPIPTimeseriesParams struct {
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[BgpipTimeseriesParamsFormat] `query:"format"`
-	// Include data delay meta information
+	// Include data delay meta information.
 	IncludeDelay param.Field[bool] `query:"includeDelay"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]BgpipTimeseriesParamsIPVersion] `query:"ipVersion"`
-	// Array of locations (alpha-2 country codes).
+	// Comma-separated list of locations (alpha-2 codes).
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -196,7 +196,7 @@ func (r BGPIPTimeseriesParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type BgpipTimeseriesParamsFormat string
 
 const (

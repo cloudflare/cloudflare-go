@@ -37,7 +37,7 @@ func TestAS112TimeseriesWithOptionalParams(t *testing.T) {
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
 		Format:      cloudflare.F(radar.AS112TimeseriesParamsFormatJson),
 		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -37,7 +37,7 @@ func NewRankingInternetServiceService(opts ...option.RequestOption) (r *RankingI
 	return
 }
 
-// Gets Internet Services rank update changes over time. Raw values are returned.
+// Retrieves Internet Services rank update changes over time.
 func (r *RankingInternetServiceService) TimeseriesGroups(ctx context.Context, query RankingInternetServiceTimeseriesGroupsParams, opts ...option.RequestOption) (res *RankingInternetServiceTimeseriesGroupsResponse, err error) {
 	var env RankingInternetServiceTimeseriesGroupsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -50,7 +50,7 @@ func (r *RankingInternetServiceService) TimeseriesGroups(ctx context.Context, qu
 	return
 }
 
-// Get top Internet services based on their rank.
+// Retrieves top Internet services based on their rank.
 func (r *RankingInternetServiceService) Top(ctx context.Context, query RankingInternetServiceTopParams, opts ...option.RequestOption) (res *RankingInternetServiceTopResponse, err error) {
 	var env RankingInternetServiceTopResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -268,19 +268,19 @@ func (r rankingInternetServiceTopResponseTop0JSON) RawJSON() string {
 type RankingInternetServiceTimeseriesGroupsParams struct {
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[RankingInternetServiceTimeseriesGroupsParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for services category.
+	// Filters results by Internet service category.
 	ServiceCategory param.Field[[]string] `query:"serviceCategory"`
 }
 
@@ -293,7 +293,7 @@ func (r RankingInternetServiceTimeseriesGroupsParams) URLQuery() (v url.Values) 
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type RankingInternetServiceTimeseriesGroupsParamsFormat string
 
 const (
@@ -335,13 +335,13 @@ func (r rankingInternetServiceTimeseriesGroupsResponseEnvelopeJSON) RawJSON() st
 type RankingInternetServiceTopParams struct {
 	// Array of dates to filter the ranking.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[RankingInternetServiceTopParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for services category.
+	// Filters results by Internet service category.
 	ServiceCategory param.Field[[]string] `query:"serviceCategory"`
 }
 
@@ -354,7 +354,7 @@ func (r RankingInternetServiceTopParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type RankingInternetServiceTopParamsFormat string
 
 const (

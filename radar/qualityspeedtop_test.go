@@ -35,7 +35,7 @@ func TestQualitySpeedTopAsesWithOptionalParams(t *testing.T) {
 		Format:    cloudflare.F(radar.QualitySpeedTopAsesParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 		OrderBy:   cloudflare.F(radar.QualitySpeedTopAsesParamsOrderByBandwidthDownload),
 		Reverse:   cloudflare.F(true),
 	})
@@ -68,7 +68,7 @@ func TestQualitySpeedTopLocationsWithOptionalParams(t *testing.T) {
 		Format:    cloudflare.F(radar.QualitySpeedTopLocationsParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 		OrderBy:   cloudflare.F(radar.QualitySpeedTopLocationsParamsOrderByBandwidthDownload),
 		Reverse:   cloudflare.F(true),
 	})
