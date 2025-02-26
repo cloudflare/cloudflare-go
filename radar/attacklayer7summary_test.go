@@ -40,7 +40,7 @@ func TestAttackLayer7SummaryHTTPMethodWithOptionalParams(t *testing.T) {
 		LimitPerGroup:     cloudflare.F(int64(10)),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryHTTPMethodParamsMitigationProduct{radar.AttackLayer7SummaryHTTPMethodParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -75,7 +75,7 @@ func TestAttackLayer7SummaryHTTPVersionWithOptionalParams(t *testing.T) {
 		IPVersion:         cloudflare.F([]radar.AttackLayer7SummaryHTTPVersionParamsIPVersion{radar.AttackLayer7SummaryHTTPVersionParamsIPVersionIPv4}),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryHTTPVersionParamsMitigationProduct{radar.AttackLayer7SummaryHTTPVersionParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -110,7 +110,7 @@ func TestAttackLayer7SummaryIPVersionWithOptionalParams(t *testing.T) {
 		HTTPVersion:       cloudflare.F([]radar.AttackLayer7SummaryIPVersionParamsHTTPVersion{radar.AttackLayer7SummaryIPVersionParamsHTTPVersionHttPv1}),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryIPVersionParamsMitigationProduct{radar.AttackLayer7SummaryIPVersionParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -147,7 +147,7 @@ func TestAttackLayer7SummaryManagedRulesWithOptionalParams(t *testing.T) {
 		LimitPerGroup:     cloudflare.F(int64(10)),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryManagedRulesParamsMitigationProduct{radar.AttackLayer7SummaryManagedRulesParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -183,7 +183,7 @@ func TestAttackLayer7SummaryMitigationProductWithOptionalParams(t *testing.T) {
 		IPVersion:     cloudflare.F([]radar.AttackLayer7SummaryMitigationProductParamsIPVersion{radar.AttackLayer7SummaryMitigationProductParamsIPVersionIPv4}),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

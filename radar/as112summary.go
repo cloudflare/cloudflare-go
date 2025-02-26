@@ -34,7 +34,8 @@ func NewAS112SummaryService(opts ...option.RequestOption) (r *AS112SummaryServic
 	return
 }
 
-// Percentage distribution of DNS queries to AS112 by DNSSEC support.
+// Retrieves the distribution of DNS queries to AS112 by DNSSEC (DNS Security
+// Extensions) support.
 func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSSECParams, opts ...option.RequestOption) (res *AS112SummaryDNSSECResponse, err error) {
 	var env AS112SummaryDNSSECResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +48,8 @@ func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSS
 	return
 }
 
-// Percentage distribution of DNS queries to AS112 by EDNS support.
+// Retrieves the distribution of DNS queries to AS112 by EDNS (Extension Mechanisms
+// for DNS) support.
 func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsParams, opts ...option.RequestOption) (res *AS112SummaryEdnsResponse, err error) {
 	var env AS112SummaryEdnsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +62,7 @@ func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsPa
 	return
 }
 
-// Percentage distribution of DNS queries to AS112 per IP Version.
+// Retrieves the distribution of DNS queries to AS112 by IP version.
 func (r *AS112SummaryService) IPVersion(ctx context.Context, query AS112SummaryIPVersionParams, opts ...option.RequestOption) (res *AS112SummaryIPVersionResponse, err error) {
 	var env AS112SummaryIPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -73,7 +75,7 @@ func (r *AS112SummaryService) IPVersion(ctx context.Context, query AS112SummaryI
 	return
 }
 
-// Percentage distribution of DNS queries to AS112 per protocol.
+// Retrieves the distribution of DNS queries to AS112 by protocol.
 func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryProtocolParams, opts ...option.RequestOption) (res *AS112SummaryProtocolResponse, err error) {
 	var env AS112SummaryProtocolResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -86,7 +88,7 @@ func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryPr
 	return
 }
 
-// Percentage distribution of DNS queries to AS112 by query type.
+// Retrieves the distribution of DNS queries to AS112 by type.
 func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQueryTypeParams, opts ...option.RequestOption) (res *AS112SummaryQueryTypeResponse, err error) {
 	var env AS112SummaryQueryTypeResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +101,7 @@ func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQ
 	return
 }
 
-// Percentage distribution of AS112 DNS requests classified by response code.
+// Retrieves the distribution of AS112 DNS requests classified by response code.
 func (r *AS112SummaryService) ResponseCodes(ctx context.Context, query AS112SummaryResponseCodesParams, opts ...option.RequestOption) (res *AS112SummaryResponseCodesResponse, err error) {
 	var env AS112SummaryResponseCodesResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -995,29 +997,29 @@ func (r as112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON) RawJS
 }
 
 type AS112SummaryDNSSECParams struct {
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AS112SummaryDNSSECParamsFormat] `query:"format"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -1030,7 +1032,7 @@ func (r AS112SummaryDNSSECParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AS112SummaryDNSSECParamsFormat string
 
 const (
@@ -1070,29 +1072,29 @@ func (r as112SummaryDNSSECResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AS112SummaryEdnsParams struct {
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AS112SummaryEdnsParamsFormat] `query:"format"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -1104,7 +1106,7 @@ func (r AS112SummaryEdnsParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AS112SummaryEdnsParamsFormat string
 
 const (
@@ -1144,29 +1146,29 @@ func (r as112SummaryEdnsResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AS112SummaryIPVersionParams struct {
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AS112SummaryIPVersionParamsFormat] `query:"format"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -1179,7 +1181,7 @@ func (r AS112SummaryIPVersionParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AS112SummaryIPVersionParamsFormat string
 
 const (
@@ -1219,29 +1221,29 @@ func (r as112SummaryIPVersionResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AS112SummaryProtocolParams struct {
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AS112SummaryProtocolParamsFormat] `query:"format"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -1254,7 +1256,7 @@ func (r AS112SummaryProtocolParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AS112SummaryProtocolParamsFormat string
 
 const (
@@ -1294,34 +1296,34 @@ func (r as112SummaryProtocolResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AS112SummaryQueryTypeParams struct {
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AS112SummaryQueryTypeParamsFormat] `query:"format"`
-	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
-	// within the specified time range. If the limitPerGroup is set, the response will
-	// include that number of items, with the remaining items grouped together under an
-	// "other" category.
+	// Limits the number of objects per group to the top items within the specified
+	// time range. If there are more items than the limit, the response will include
+	// the count of items, with any remaining items grouped together under an "other"
+	// category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -1334,7 +1336,7 @@ func (r AS112SummaryQueryTypeParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AS112SummaryQueryTypeParamsFormat string
 
 const (
@@ -1374,34 +1376,34 @@ func (r as112SummaryQueryTypeResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AS112SummaryResponseCodesParams struct {
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AS112SummaryResponseCodesParamsFormat] `query:"format"`
-	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
-	// within the specified time range. If the limitPerGroup is set, the response will
-	// include that number of items, with the remaining items grouped together under an
-	// "other" category.
+	// Limits the number of objects per group to the top items within the specified
+	// time range. If there are more items than the limit, the response will include
+	// the count of items, with any remaining items grouped together under an "other"
+	// category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -1414,7 +1416,7 @@ func (r AS112SummaryResponseCodesParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AS112SummaryResponseCodesParamsFormat string
 
 const (

@@ -33,7 +33,7 @@ func NewBGPRouteService(opts ...option.RequestOption) (r *BGPRouteService) {
 	return
 }
 
-// List all ASes in current global routing tables with routing statistics
+// Retrieves all ASes in the current global routing tables with routing statistics.
 func (r *BGPRouteService) Ases(ctx context.Context, query BGPRouteAsesParams, opts ...option.RequestOption) (res *BGPRouteAsesResponse, err error) {
 	var env BGPRouteAsesResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -46,7 +46,7 @@ func (r *BGPRouteService) Ases(ctx context.Context, query BGPRouteAsesParams, op
 	return
 }
 
-// List all Multi-Origin AS (MOAS) prefixes on the global routing tables.
+// Retrieves all Multi-Origin AS (MOAS) prefixes in the global routing tables.
 func (r *BGPRouteService) Moas(ctx context.Context, query BGPRouteMoasParams, opts ...option.RequestOption) (res *BGPRouteMoasResponse, err error) {
 	var env BGPRouteMoasResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -59,7 +59,7 @@ func (r *BGPRouteService) Moas(ctx context.Context, query BGPRouteMoasParams, op
 	return
 }
 
-// Lookup prefix-to-ASN mapping on global routing tables.
+// Retrieves the prefix-to-ASN mapping from global routing tables.
 func (r *BGPRouteService) Pfx2as(ctx context.Context, query BGPRoutePfx2asParams, opts ...option.RequestOption) (res *BGPRoutePfx2asResponse, err error) {
 	var env BGPRoutePfx2asResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -72,7 +72,7 @@ func (r *BGPRouteService) Pfx2as(ctx context.Context, query BGPRoutePfx2asParams
 	return
 }
 
-// Get the BGP routing table stats (Beta).
+// Retrieves the BGP routing table stats.
 func (r *BGPRouteService) Stats(ctx context.Context, query BGPRouteStatsParams, opts ...option.RequestOption) (res *BGPRouteStatsResponse, err error) {
 	var env BGPRouteStatsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -459,15 +459,15 @@ func (r bgpRouteStatsResponseStatsJSON) RawJSON() string {
 }
 
 type BGPRouteAsesParams struct {
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[BGPRouteAsesParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Location Alpha2 code.
+	// Location alpha-2 code.
 	Location param.Field[string] `query:"location"`
-	// Return order results by given type
+	// Sorts results by the specified field.
 	SortBy param.Field[BGPRouteAsesParamsSortBy] `query:"sortBy"`
-	// Sort by value ascending or descending
+	// Sort order.
 	SortOrder param.Field[BGPRouteAsesParamsSortOrder] `query:"sortOrder"`
 }
 
@@ -479,7 +479,7 @@ func (r BGPRouteAsesParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type BGPRouteAsesParamsFormat string
 
 const (
@@ -495,7 +495,7 @@ func (r BGPRouteAsesParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Return order results by given type
+// Sorts results by the specified field.
 type BGPRouteAsesParamsSortBy string
 
 const (
@@ -516,12 +516,12 @@ func (r BGPRouteAsesParamsSortBy) IsKnown() bool {
 	return false
 }
 
-// Sort by value ascending or descending
+// Sort order.
 type BGPRouteAsesParamsSortOrder string
 
 const (
-	BGPRouteAsesParamsSortOrderAsc  BGPRouteAsesParamsSortOrder = "asc"
-	BGPRouteAsesParamsSortOrderDesc BGPRouteAsesParamsSortOrder = "desc"
+	BGPRouteAsesParamsSortOrderAsc  BGPRouteAsesParamsSortOrder = "ASC"
+	BGPRouteAsesParamsSortOrderDesc BGPRouteAsesParamsSortOrder = "DESC"
 )
 
 func (r BGPRouteAsesParamsSortOrder) IsKnown() bool {
@@ -556,11 +556,11 @@ func (r bgpRouteAsesResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BGPRouteMoasParams struct {
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[BGPRouteMoasParamsFormat] `query:"format"`
-	// Lookup only RPKI invalid MOASes
+	// Lookup only RPKI invalid MOASes.
 	InvalidOnly param.Field[bool] `query:"invalid_only"`
-	// Lookup MOASes originated by the given ASN
+	// Lookup MOASes originated by the given ASN.
 	Origin param.Field[int64] `query:"origin"`
 	// Network prefix, IPv4 or IPv6.
 	Prefix param.Field[string] `query:"prefix"`
@@ -574,7 +574,7 @@ func (r BGPRouteMoasParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type BGPRouteMoasParamsFormat string
 
 const (
@@ -614,16 +614,16 @@ func (r bgpRouteMoasResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BGPRoutePfx2asParams struct {
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[BGPRoutePfx2asParamsFormat] `query:"format"`
 	// Return only results with the longest prefix match for the given prefix. For
 	// example, specify a /32 prefix to lookup the origin ASN for an IPv4 address.
 	LongestPrefixMatch param.Field[bool] `query:"longestPrefixMatch"`
-	// Lookup prefixes originated by the given ASN
+	// Lookup prefixes originated by the given ASN.
 	Origin param.Field[int64] `query:"origin"`
 	// Network prefix, IPv4 or IPv6.
 	Prefix param.Field[string] `query:"prefix"`
-	// Return only results with matching rpki status: valid, invalid or unknown
+	// Return only results with matching rpki status: valid, invalid or unknown.
 	RPKIStatus param.Field[BGPRoutePfx2asParamsRPKIStatus] `query:"rpkiStatus"`
 }
 
@@ -635,7 +635,7 @@ func (r BGPRoutePfx2asParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type BGPRoutePfx2asParamsFormat string
 
 const (
@@ -651,7 +651,7 @@ func (r BGPRoutePfx2asParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Return only results with matching rpki status: valid, invalid or unknown
+// Return only results with matching rpki status: valid, invalid or unknown.
 type BGPRoutePfx2asParamsRPKIStatus string
 
 const (
@@ -692,11 +692,11 @@ func (r bgpRoutePfx2asResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BGPRouteStatsParams struct {
-	// Single ASN as integer.
+	// Single Autonomous System Number (ASN) as integer.
 	ASN param.Field[int64] `query:"asn"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[BGPRouteStatsParamsFormat] `query:"format"`
-	// Location Alpha2 code.
+	// Location alpha-2 code.
 	Location param.Field[string] `query:"location"`
 }
 
@@ -708,7 +708,7 @@ func (r BGPRouteStatsParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type BGPRouteStatsParamsFormat string
 
 const (

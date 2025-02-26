@@ -37,7 +37,7 @@ func TestBGPIPTimeseriesWithOptionalParams(t *testing.T) {
 		IncludeDelay: cloudflare.F(true),
 		IPVersion:    cloudflare.F([]radar.BgpipTimeseriesParamsIPVersion{radar.BgpipTimeseriesParamsIPVersionIPv4}),
 		Location:     cloudflare.F([]string{"string"}),
-		Name:         cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

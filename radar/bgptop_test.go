@@ -35,7 +35,7 @@ func TestBGPTopPrefixesWithOptionalParams(t *testing.T) {
 		DateStart:  cloudflare.F([]time.Time{time.Now()}),
 		Format:     cloudflare.F(radar.BGPTopPrefixesParamsFormatJson),
 		Limit:      cloudflare.F(int64(5)),
-		Name:       cloudflare.F([]string{"string"}),
+		Name:       cloudflare.F([]string{"main_series"}),
 		UpdateType: cloudflare.F([]radar.BGPTopPrefixesParamsUpdateType{radar.BGPTopPrefixesParamsUpdateTypeAnnouncement}),
 	})
 	if err != nil {

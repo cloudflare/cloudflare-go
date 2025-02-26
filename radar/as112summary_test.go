@@ -36,7 +36,7 @@ func TestAS112SummaryDNSSECWithOptionalParams(t *testing.T) {
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.AS112SummaryDNSSECParamsFormatJson),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -68,7 +68,7 @@ func TestAS112SummaryEdnsWithOptionalParams(t *testing.T) {
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.AS112SummaryEdnsParamsFormatJson),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -100,7 +100,7 @@ func TestAS112SummaryIPVersionWithOptionalParams(t *testing.T) {
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.AS112SummaryIPVersionParamsFormatJson),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -132,7 +132,7 @@ func TestAS112SummaryProtocolWithOptionalParams(t *testing.T) {
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.AS112SummaryProtocolParamsFormatJson),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -165,7 +165,7 @@ func TestAS112SummaryQueryTypeWithOptionalParams(t *testing.T) {
 		Format:        cloudflare.F(radar.AS112SummaryQueryTypeParamsFormatJson),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -198,7 +198,7 @@ func TestAS112SummaryResponseCodesWithOptionalParams(t *testing.T) {
 		Format:        cloudflare.F(radar.AS112SummaryResponseCodesParamsFormatJson),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

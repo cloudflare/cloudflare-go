@@ -37,7 +37,7 @@ func TestAttackLayer3TopLocationOriginWithOptionalParams(t *testing.T) {
 		IPVersion: cloudflare.F([]radar.AttackLayer3TopLocationOriginParamsIPVersion{radar.AttackLayer3TopLocationOriginParamsIPVersionIPv4}),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 		Protocol:  cloudflare.F([]radar.AttackLayer3TopLocationOriginParamsProtocol{radar.AttackLayer3TopLocationOriginParamsProtocolUdp}),
 	})
 	if err != nil {
@@ -71,7 +71,7 @@ func TestAttackLayer3TopLocationTargetWithOptionalParams(t *testing.T) {
 		IPVersion: cloudflare.F([]radar.AttackLayer3TopLocationTargetParamsIPVersion{radar.AttackLayer3TopLocationTargetParamsIPVersionIPv4}),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 		Protocol:  cloudflare.F([]radar.AttackLayer3TopLocationTargetParamsProtocol{radar.AttackLayer3TopLocationTargetParamsProtocolUdp}),
 	})
 	if err != nil {

@@ -41,7 +41,7 @@ func NewRankingService(opts ...option.RequestOption) (r *RankingService) {
 	return
 }
 
-// Gets Domains Rank updates change over time. Raw values are returned.
+// Retrieves domains rank over time.
 func (r *RankingService) TimeseriesGroups(ctx context.Context, query RankingTimeseriesGroupsParams, opts ...option.RequestOption) (res *RankingTimeseriesGroupsResponse, err error) {
 	var env RankingTimeseriesGroupsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -54,10 +54,10 @@ func (r *RankingService) TimeseriesGroups(ctx context.Context, query RankingTime
 	return
 }
 
-// Get top or trending domains based on their rank. Popular domains are domains of
-// broad appeal based on how people use the Internet. Trending domains are domains
-// that are generating a surge in interest. For more information on top domains,
-// see https://blog.cloudflare.com/radar-domain-rankings/.
+// Retrieves the top or trending domains based on their rank. Popular domains are
+// domains of broad appeal based on how people use the Internet. Trending domains
+// are domains that are generating a surge in interest. For more information on top
+// domains, see https://blog.cloudflare.com/radar-domain-rankings/.
 func (r *RankingService) Top(ctx context.Context, query RankingTopParams, opts ...option.RequestOption) (res *RankingTopResponse, err error) {
 	var env RankingTopResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -302,25 +302,25 @@ func (r rankingTopResponseTop0CategoryJSON) RawJSON() string {
 type RankingTimeseriesGroupsParams struct {
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter by domain category.
+	// Filters results by domain category.
 	DomainCategory param.Field[[]string] `query:"domainCategory"`
-	// Array of comma separated list of domains names.
+	// Comma-separated list of domain names.
 	Domains param.Field[[]string] `query:"domains"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[RankingTimeseriesGroupsParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of locations (alpha-2 country codes).
+	// Comma-separated list of locations (alpha-2 codes).
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// The ranking type.
+	// Ranking type.
 	RankingType param.Field[RankingTimeseriesGroupsParamsRankingType] `query:"rankingType"`
 }
 
@@ -333,7 +333,7 @@ func (r RankingTimeseriesGroupsParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type RankingTimeseriesGroupsParamsFormat string
 
 const (
@@ -349,7 +349,7 @@ func (r RankingTimeseriesGroupsParamsFormat) IsKnown() bool {
 	return false
 }
 
-// The ranking type.
+// Ranking type.
 type RankingTimeseriesGroupsParamsRankingType string
 
 const (
@@ -392,17 +392,17 @@ func (r rankingTimeseriesGroupsResponseEnvelopeJSON) RawJSON() string {
 type RankingTopParams struct {
 	// Array of dates to filter the ranking.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
-	// Filter by domain category.
+	// Filters results by domain category.
 	DomainCategory param.Field[[]string] `query:"domainCategory"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[RankingTopParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of locations (alpha-2 country codes).
+	// Comma-separated list of locations (alpha-2 codes).
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// The ranking type.
+	// Ranking type.
 	RankingType param.Field[RankingTopParamsRankingType] `query:"rankingType"`
 }
 
@@ -414,7 +414,7 @@ func (r RankingTopParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type RankingTopParamsFormat string
 
 const (
@@ -430,7 +430,7 @@ func (r RankingTopParamsFormat) IsKnown() bool {
 	return false
 }
 
-// The ranking type.
+// Ranking type.
 type RankingTopParamsRankingType string
 
 const (

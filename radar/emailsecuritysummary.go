@@ -34,7 +34,8 @@ func NewEmailSecuritySummaryService(opts ...option.RequestOption) (r *EmailSecur
 	return
 }
 
-// Percentage distribution of emails classified by ARC validation.
+// Retrieves the distribution of emails by ARC (Authenticated Received Chain)
+// validation.
 func (r *EmailSecuritySummaryService) ARC(ctx context.Context, query EmailSecuritySummaryARCParams, opts ...option.RequestOption) (res *EmailSecuritySummaryARCResponse, err error) {
 	var env EmailSecuritySummaryARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +48,8 @@ func (r *EmailSecuritySummaryService) ARC(ctx context.Context, query EmailSecuri
 	return
 }
 
-// Percentage distribution of emails classified by DKIM validation.
+// Retrieves the distribution of emails by DKIM (DomainKeys Identified Mail)
+// validation.
 func (r *EmailSecuritySummaryService) DKIM(ctx context.Context, query EmailSecuritySummaryDKIMParams, opts ...option.RequestOption) (res *EmailSecuritySummaryDKIMResponse, err error) {
 	var env EmailSecuritySummaryDKIMResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +62,8 @@ func (r *EmailSecuritySummaryService) DKIM(ctx context.Context, query EmailSecur
 	return
 }
 
-// Percentage distribution of emails classified by DMARC validation.
+// Retrieves the distribution of emails by DMARC (Domain-based Message
+// Authentication, Reporting and Conformance) validation.
 func (r *EmailSecuritySummaryService) DMARC(ctx context.Context, query EmailSecuritySummaryDMARCParams, opts ...option.RequestOption) (res *EmailSecuritySummaryDMARCResponse, err error) {
 	var env EmailSecuritySummaryDMARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -73,7 +76,7 @@ func (r *EmailSecuritySummaryService) DMARC(ctx context.Context, query EmailSecu
 	return
 }
 
-// Percentage distribution of emails classified as MALICIOUS.
+// Retrieves the distribution of emails by malicious classification.
 func (r *EmailSecuritySummaryService) Malicious(ctx context.Context, query EmailSecuritySummaryMaliciousParams, opts ...option.RequestOption) (res *EmailSecuritySummaryMaliciousResponse, err error) {
 	var env EmailSecuritySummaryMaliciousResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -86,7 +89,7 @@ func (r *EmailSecuritySummaryService) Malicious(ctx context.Context, query Email
 	return
 }
 
-// Proportion of emails categorized as either spam or legitimate (non-spam).
+// Retrieves the proportion of emails by spam classification (spam vs. non-spam).
 func (r *EmailSecuritySummaryService) Spam(ctx context.Context, query EmailSecuritySummarySpamParams, opts ...option.RequestOption) (res *EmailSecuritySummarySpamResponse, err error) {
 	var env EmailSecuritySummarySpamResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +102,8 @@ func (r *EmailSecuritySummaryService) Spam(ctx context.Context, query EmailSecur
 	return
 }
 
-// Percentage distribution of emails classified by SPF validation.
+// Retrieves the distribution of emails by SPF (Sender Policy Framework)
+// validation.
 func (r *EmailSecuritySummaryService) SPF(ctx context.Context, query EmailSecuritySummarySPFParams, opts ...option.RequestOption) (res *EmailSecuritySummarySPFResponse, err error) {
 	var env EmailSecuritySummarySPFResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -112,7 +116,8 @@ func (r *EmailSecuritySummaryService) SPF(ctx context.Context, query EmailSecuri
 	return
 }
 
-// Proportion of emails categorized as either spoof or legitimate (non-spoof).
+// Retrieves the proportion of emails by spoof classification (spoof vs.
+// non-spoof).
 func (r *EmailSecuritySummaryService) Spoof(ctx context.Context, query EmailSecuritySummarySpoofParams, opts ...option.RequestOption) (res *EmailSecuritySummarySpoofResponse, err error) {
 	var env EmailSecuritySummarySpoofResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -125,7 +130,7 @@ func (r *EmailSecuritySummaryService) Spoof(ctx context.Context, query EmailSecu
 	return
 }
 
-// Percentage distribution of emails classified in Threat Categories.
+// Retrieves the distribution of emails by threat categories.
 func (r *EmailSecuritySummaryService) ThreatCategory(ctx context.Context, query EmailSecuritySummaryThreatCategoryParams, opts ...option.RequestOption) (res *EmailSecuritySummaryThreatCategoryResponse, err error) {
 	var env EmailSecuritySummaryThreatCategoryResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -138,7 +143,7 @@ func (r *EmailSecuritySummaryService) ThreatCategory(ctx context.Context, query 
 	return
 }
 
-// Percentage distribution of emails classified by TLS version.
+// Retrieves the distribution of emails by TLS version.
 func (r *EmailSecuritySummaryService) TLSVersion(ctx context.Context, query EmailSecuritySummaryTLSVersionParams, opts ...option.RequestOption) (res *EmailSecuritySummaryTLSVersionResponse, err error) {
 	var env EmailSecuritySummaryTLSVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -1469,23 +1474,24 @@ func (r emailSecuritySummaryTLSVersionResponseSummary0JSON) RawJSON() string {
 type EmailSecuritySummaryARCParams struct {
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummaryARCParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecuritySummaryARCParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecuritySummaryARCParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecuritySummaryARCParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecuritySummaryARCParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1530,7 +1536,7 @@ func (r EmailSecuritySummaryARCParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecuritySummaryARCParamsFormat string
 
 const (
@@ -1603,25 +1609,26 @@ func (r emailSecuritySummaryARCResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryDKIMParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummaryDKIMParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecuritySummaryDKIMParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecuritySummaryDKIMParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecuritySummaryDKIMParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecuritySummaryDKIMParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1666,7 +1673,7 @@ func (r EmailSecuritySummaryDKIMParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecuritySummaryDKIMParamsFormat string
 
 const (
@@ -1739,25 +1746,25 @@ func (r emailSecuritySummaryDKIMResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryDMARCParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummaryDMARCParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummaryDMARCParamsDKIM] `query:"dkim"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecuritySummaryDMARCParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecuritySummaryDMARCParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecuritySummaryDMARCParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1802,7 +1809,7 @@ func (r EmailSecuritySummaryDMARCParamsDKIM) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecuritySummaryDMARCParamsFormat string
 
 const (
@@ -1875,27 +1882,28 @@ func (r emailSecuritySummaryDMARCResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryMaliciousParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummaryMaliciousParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummaryMaliciousParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecuritySummaryMaliciousParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecuritySummaryMaliciousParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecuritySummaryMaliciousParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecuritySummaryMaliciousParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1956,7 +1964,7 @@ func (r EmailSecuritySummaryMaliciousParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecuritySummaryMaliciousParamsFormat string
 
 const (
@@ -2029,27 +2037,28 @@ func (r emailSecuritySummaryMaliciousResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailSecuritySummarySpamParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummarySpamParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummarySpamParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecuritySummarySpamParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecuritySummarySpamParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecuritySummarySpamParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecuritySummarySpamParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -2110,7 +2119,7 @@ func (r EmailSecuritySummarySpamParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecuritySummarySpamParamsFormat string
 
 const (
@@ -2183,25 +2192,26 @@ func (r emailSecuritySummarySpamResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailSecuritySummarySPFParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummarySPFParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummarySPFParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecuritySummarySPFParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecuritySummarySPFParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecuritySummarySPFParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -2262,7 +2272,7 @@ func (r EmailSecuritySummarySPFParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecuritySummarySPFParamsFormat string
 
 const (
@@ -2319,27 +2329,28 @@ func (r emailSecuritySummarySPFResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailSecuritySummarySpoofParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummarySpoofParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummarySpoofParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecuritySummarySpoofParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecuritySummarySpoofParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecuritySummarySpoofParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecuritySummarySpoofParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -2400,7 +2411,7 @@ func (r EmailSecuritySummarySpoofParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecuritySummarySpoofParamsFormat string
 
 const (
@@ -2473,27 +2484,28 @@ func (r emailSecuritySummarySpoofResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryThreatCategoryParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummaryThreatCategoryParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummaryThreatCategoryParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecuritySummaryThreatCategoryParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecuritySummaryThreatCategoryParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecuritySummaryThreatCategoryParamsSPF] `query:"spf"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]EmailSecuritySummaryThreatCategoryParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -2554,7 +2566,7 @@ func (r EmailSecuritySummaryThreatCategoryParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecuritySummaryThreatCategoryParamsFormat string
 
 const (
@@ -2627,25 +2639,26 @@ func (r emailSecuritySummaryThreatCategoryResponseEnvelopeJSON) RawJSON() string
 }
 
 type EmailSecuritySummaryTLSVersionParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummaryTLSVersionParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummaryTLSVersionParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailSecuritySummaryTLSVersionParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailSecuritySummaryTLSVersionParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailSecuritySummaryTLSVersionParamsSPF] `query:"spf"`
 }
 
@@ -2706,7 +2719,7 @@ func (r EmailSecuritySummaryTLSVersionParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailSecuritySummaryTLSVersionParamsFormat string
 
 const (

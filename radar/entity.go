@@ -37,7 +37,7 @@ func NewEntityService(opts ...option.RequestOption) (r *EntityService) {
 	return
 }
 
-// Get IP address information.
+// Retrieves IP address information.
 func (r *EntityService) Get(ctx context.Context, query EntityGetParams, opts ...option.RequestOption) (res *EntityGetResponse, err error) {
 	var env EntityGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -109,7 +109,7 @@ func (r entityGetResponseIPJSON) RawJSON() string {
 type EntityGetParams struct {
 	// IP address.
 	IP param.Field[string] `query:"ip,required" format:"ip"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EntityGetParamsFormat] `query:"format"`
 }
 
@@ -121,7 +121,7 @@ func (r EntityGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EntityGetParamsFormat string
 
 const (

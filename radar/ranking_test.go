@@ -37,7 +37,7 @@ func TestRankingTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		Format:         cloudflare.F(radar.RankingTimeseriesGroupsParamsFormatJson),
 		Limit:          cloudflare.F(int64(5)),
 		Location:       cloudflare.F([]string{"string"}),
-		Name:           cloudflare.F([]string{"string"}),
+		Name:           cloudflare.F([]string{"main_series"}),
 		RankingType:    cloudflare.F(radar.RankingTimeseriesGroupsParamsRankingTypePopular),
 	})
 	if err != nil {
@@ -68,7 +68,7 @@ func TestRankingTopWithOptionalParams(t *testing.T) {
 		Format:         cloudflare.F(radar.RankingTopParamsFormatJson),
 		Limit:          cloudflare.F(int64(5)),
 		Location:       cloudflare.F([]string{"string"}),
-		Name:           cloudflare.F([]string{"string"}),
+		Name:           cloudflare.F([]string{"main_series"}),
 		RankingType:    cloudflare.F(radar.RankingTopParamsRankingTypePopular),
 	})
 	if err != nil {

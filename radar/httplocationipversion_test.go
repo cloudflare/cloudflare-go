@@ -45,7 +45,7 @@ func TestHTTPLocationIPVersionGetWithOptionalParams(t *testing.T) {
 			HTTPVersion:   cloudflare.F([]radar.HTTPLocationIPVersionGetParamsHTTPVersion{radar.HTTPLocationIPVersionGetParamsHTTPVersionHttPv1}),
 			Limit:         cloudflare.F(int64(5)),
 			Location:      cloudflare.F([]string{"string"}),
-			Name:          cloudflare.F([]string{"string"}),
+			Name:          cloudflare.F([]string{"main_series"}),
 			OS:            cloudflare.F([]radar.HTTPLocationIPVersionGetParamsOS{radar.HTTPLocationIPVersionGetParamsOSWindows}),
 			TLSVersion:    cloudflare.F([]radar.HTTPLocationIPVersionGetParamsTLSVersion{radar.HTTPLocationIPVersionGetParamsTLSVersionTlSv1_0}),
 		},

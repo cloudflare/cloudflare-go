@@ -42,7 +42,7 @@ func TestHTTPTimeseriesWithOptionalParams(t *testing.T) {
 		HTTPVersion:   cloudflare.F([]radar.HTTPTimeseriesParamsHTTPVersion{radar.HTTPTimeseriesParamsHTTPVersionHttPv1}),
 		IPVersion:     cloudflare.F([]radar.HTTPTimeseriesParamsIPVersion{radar.HTTPTimeseriesParamsIPVersionIPv4}),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 		Normalization: cloudflare.F(radar.HTTPTimeseriesParamsNormalizationPercentageChange),
 		OS:            cloudflare.F([]radar.HTTPTimeseriesParamsOS{radar.HTTPTimeseriesParamsOSWindows}),
 		TLSVersion:    cloudflare.F([]radar.HTTPTimeseriesParamsTLSVersion{radar.HTTPTimeseriesParamsTLSVersionTlSv1_0}),

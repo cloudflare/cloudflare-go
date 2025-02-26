@@ -34,7 +34,7 @@ func NewEntityASNService(opts ...option.RequestOption) (r *EntityASNService) {
 	return
 }
 
-// Get a list of autonomous systems (ASes).
+// Retrieves a list of autonomous systems.
 func (r *EntityASNService) List(ctx context.Context, query EntityASNListParams, opts ...option.RequestOption) (res *EntityASNListResponse, err error) {
 	var env EntityASNListResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,10 +47,10 @@ func (r *EntityASNService) List(ctx context.Context, query EntityASNListParams, 
 	return
 }
 
-// Get the requested autonomous system information. (A confidence level below `5`
-// indicates a low level of confidence in the traffic data - normally this happens
-// because Cloudflare has a small amount of traffic from/to this AS). Population
-// estimates come from APNIC (refer to https://labs.apnic.net/?p=526).
+// Retrieves the requested autonomous system information. (A confidence level below
+// `5` indicates a low level of confidence in the traffic data - normally this
+// happens because Cloudflare has a small amount of traffic from/to this AS).
+// Population estimates come from APNIC (refer to https://labs.apnic.net/?p=526).
 func (r *EntityASNService) Get(ctx context.Context, asn int64, query EntityASNGetParams, opts ...option.RequestOption) (res *EntityASNGetResponse, err error) {
 	var env EntityASNGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -63,8 +63,8 @@ func (r *EntityASNService) Get(ctx context.Context, asn int64, query EntityASNGe
 	return
 }
 
-// Get the requested autonomous system information based on IP address. Population
-// estimates come from APNIC (refer to https://labs.apnic.net/?p=526).
+// Retrieves the requested autonomous system information based on IP address.
+// Population estimates come from APNIC (refer to https://labs.apnic.net/?p=526).
 func (r *EntityASNService) IP(ctx context.Context, query EntityASNIPParams, opts ...option.RequestOption) (res *EntityAsnipResponse, err error) {
 	var env EntityAsnipResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -77,7 +77,7 @@ func (r *EntityASNService) IP(ctx context.Context, query EntityASNIPParams, opts
 	return
 }
 
-// Get AS-level relationship for given networks.
+// Retrieves AS-level relationship for given networks.
 func (r *EntityASNService) Rel(ctx context.Context, asn int64, query EntityASNRelParams, opts ...option.RequestOption) (res *EntityASNRelResponse, err error) {
 	var env EntityASNRelResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -515,17 +515,17 @@ func (r entityASNRelResponseRelJSON) RawJSON() string {
 }
 
 type EntityASNListParams struct {
-	// Comma separated list of ASNs.
+	// Comma-separated list of Autonomous System Numbers (ASNs).
 	ASN param.Field[string] `query:"asn"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EntityASNListParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Location Alpha2 to filter results.
+	// Location alpha-2 code.
 	Location param.Field[string] `query:"location"`
-	// Number of objects to skip before grabbing results.
+	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`
-	// Order asn list.
+	// Metric to order the ASNs by.
 	OrderBy param.Field[EntityASNListParamsOrderBy] `query:"orderBy"`
 }
 
@@ -537,7 +537,7 @@ func (r EntityASNListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EntityASNListParamsFormat string
 
 const (
@@ -553,7 +553,7 @@ func (r EntityASNListParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Order asn list.
+// Metric to order the ASNs by.
 type EntityASNListParamsOrderBy string
 
 const (
@@ -593,7 +593,7 @@ func (r entityASNListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EntityASNGetParams struct {
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EntityASNGetParamsFormat] `query:"format"`
 }
 
@@ -605,7 +605,7 @@ func (r EntityASNGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EntityASNGetParamsFormat string
 
 const (
@@ -647,7 +647,7 @@ func (r entityASNGetResponseEnvelopeJSON) RawJSON() string {
 type EntityASNIPParams struct {
 	// IP address.
 	IP param.Field[string] `query:"ip,required" format:"ip"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EntityAsnipParamsFormat] `query:"format"`
 }
 
@@ -659,7 +659,7 @@ func (r EntityASNIPParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EntityAsnipParamsFormat string
 
 const (
@@ -699,9 +699,9 @@ func (r entityAsnipResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EntityASNRelParams struct {
-	// Get the AS relationship of ASN2 with respect to the given ASN
+	// Retrieves the AS relationship of ASN2 with respect to the given ASN.
 	Asn2 param.Field[int64] `query:"asn2"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EntityASNRelParamsFormat] `query:"format"`
 }
 
@@ -713,7 +713,7 @@ func (r EntityASNRelParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EntityASNRelParamsFormat string
 
 const (

@@ -32,7 +32,7 @@ func TestRobotsTXTTopDomainCategoriesWithOptionalParams(t *testing.T) {
 		Date:              cloudflare.F([]time.Time{time.Now()}),
 		Format:            cloudflare.F(radar.RobotsTXTTopDomainCategoriesParamsFormatJson),
 		Limit:             cloudflare.F(int64(5)),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 		UserAgentCategory: cloudflare.F(radar.RobotsTXTTopDomainCategoriesParamsUserAgentCategoryAI),
 	})
 	if err != nil {

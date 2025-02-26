@@ -59,7 +59,7 @@ func TestEntityASNGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Entities.ASNs.Get(
 		context.TODO(),
-		int64(3),
+		int64(174),
 		radar.EntityASNGetParams{
 			Format: cloudflare.F(radar.EntityASNGetParamsFormatJson),
 		},

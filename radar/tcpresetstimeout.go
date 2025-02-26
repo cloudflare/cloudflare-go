@@ -34,8 +34,8 @@ func NewTCPResetsTimeoutService(opts ...option.RequestOption) (r *TCPResetsTimeo
 	return
 }
 
-// Percentage distribution by connection stage of TCP connections terminated within
-// the first 10 packets by a reset or timeout, for a given time period.
+// Retrieves the distribution of connection stage by TCP connections terminated
+// within the first 10 packets by a reset or timeout.
 func (r *TCPResetsTimeoutService) Summary(ctx context.Context, query TCPResetsTimeoutSummaryParams, opts ...option.RequestOption) (res *TCPResetsTimeoutSummaryResponse, err error) {
 	var env TCPResetsTimeoutSummaryResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -48,8 +48,8 @@ func (r *TCPResetsTimeoutService) Summary(ctx context.Context, query TCPResetsTi
 	return
 }
 
-// Percentage distribution by connection stage of TCP connections terminated within
-// the first 10 packets by a reset or timeout, over time.
+// Retrieves the distribution of connection stage by TCP connections terminated
+// within the first 10 packets by a reset or timeout over time.
 func (r *TCPResetsTimeoutService) TimeseriesGroups(ctx context.Context, query TCPResetsTimeoutTimeseriesGroupsParams, opts ...option.RequestOption) (res *TCPResetsTimeoutTimeseriesGroupsResponse, err error) {
 	var env TCPResetsTimeoutTimeseriesGroupsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -393,29 +393,29 @@ func (r tcpResetsTimeoutTimeseriesGroupsResponseSerie0JSON) RawJSON() string {
 }
 
 type TCPResetsTimeoutSummaryParams struct {
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[TCPResetsTimeoutSummaryParamsFormat] `query:"format"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -428,7 +428,7 @@ func (r TCPResetsTimeoutSummaryParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type TCPResetsTimeoutSummaryParamsFormat string
 
 const (
@@ -472,29 +472,29 @@ type TCPResetsTimeoutTimeseriesGroupsParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[TCPResetsTimeoutTimeseriesGroupsParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[TCPResetsTimeoutTimeseriesGroupsParamsFormat] `query:"format"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -527,7 +527,7 @@ func (r TCPResetsTimeoutTimeseriesGroupsParamsAggInterval) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type TCPResetsTimeoutTimeseriesGroupsParamsFormat string
 
 const (

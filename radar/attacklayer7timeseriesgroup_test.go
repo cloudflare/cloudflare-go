@@ -41,7 +41,7 @@ func TestAttackLayer7TimeseriesGroupHTTPMethodWithOptionalParams(t *testing.T) {
 		LimitPerGroup:     cloudflare.F(int64(10)),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupHTTPMethodParamsNormalizationPercentage),
 	})
 	if err != nil {
@@ -78,7 +78,7 @@ func TestAttackLayer7TimeseriesGroupHTTPVersionWithOptionalParams(t *testing.T) 
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersion{radar.AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersionIPv4}),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupHTTPVersionParamsNormalizationPercentage),
 	})
 	if err != nil {
@@ -117,7 +117,7 @@ func TestAttackLayer7TimeseriesGroupIndustryWithOptionalParams(t *testing.T) {
 		LimitPerGroup:     cloudflare.F(int64(10)),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupIndustryParamsNormalizationPercentage),
 	})
 	if err != nil {
@@ -154,7 +154,7 @@ func TestAttackLayer7TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		HTTPVersion:       cloudflare.F([]radar.AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion{radar.AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv1}),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupIPVersionParamsNormalizationPercentage),
 	})
 	if err != nil {
@@ -193,7 +193,7 @@ func TestAttackLayer7TimeseriesGroupManagedRulesWithOptionalParams(t *testing.T)
 		LimitPerGroup:     cloudflare.F(int64(10)),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupManagedRulesParamsNormalizationPercentage),
 	})
 	if err != nil {
@@ -231,7 +231,7 @@ func TestAttackLayer7TimeseriesGroupMitigationProductWithOptionalParams(t *testi
 		IPVersion:     cloudflare.F([]radar.AttackLayer7TimeseriesGroupMitigationProductParamsIPVersion{radar.AttackLayer7TimeseriesGroupMitigationProductParamsIPVersionIPv4}),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 		Normalization: cloudflare.F(radar.AttackLayer7TimeseriesGroupMitigationProductParamsNormalizationPercentage),
 	})
 	if err != nil {
@@ -270,7 +270,7 @@ func TestAttackLayer7TimeseriesGroupVerticalWithOptionalParams(t *testing.T) {
 		LimitPerGroup:     cloudflare.F(int64(10)),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupVerticalParamsNormalizationPercentage),
 	})
 	if err != nil {

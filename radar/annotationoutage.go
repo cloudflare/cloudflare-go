@@ -34,7 +34,7 @@ func NewAnnotationOutageService(opts ...option.RequestOption) (r *AnnotationOuta
 	return
 }
 
-// Get latest Internet outages and anomalies.
+// Retrieves the latest Internet outages and anomalies.
 func (r *AnnotationOutageService) Get(ctx context.Context, query AnnotationOutageGetParams, opts ...option.RequestOption) (res *AnnotationOutageGetResponse, err error) {
 	var env AnnotationOutageGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +47,7 @@ func (r *AnnotationOutageService) Get(ctx context.Context, query AnnotationOutag
 	return
 }
 
-// Get the number of outages by location.
+// Retrieves the number of outages by location.
 func (r *AnnotationOutageService) Locations(ctx context.Context, query AnnotationOutageLocationsParams, opts ...option.RequestOption) (res *AnnotationOutageLocationsResponse, err error) {
 	var env AnnotationOutageLocationsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -268,7 +268,7 @@ func (r annotationOutageLocationsResponseAnnotationJSON) RawJSON() string {
 }
 
 type AnnotationOutageGetParams struct {
-	// Single ASN as integer.
+	// Single Autonomous System Number (ASN) as integer.
 	ASN param.Field[int64] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
@@ -277,13 +277,13 @@ type AnnotationOutageGetParams struct {
 	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AnnotationOutageGetParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Location Alpha2 code.
+	// Location alpha-2 code.
 	Location param.Field[string] `query:"location"`
-	// Number of objects to skip before grabbing results.
+	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`
 }
 
@@ -296,7 +296,7 @@ func (r AnnotationOutageGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AnnotationOutageGetParamsFormat string
 
 const (
@@ -343,9 +343,9 @@ type AnnotationOutageLocationsParams struct {
 	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AnnotationOutageLocationsParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 }
 
@@ -358,7 +358,7 @@ func (r AnnotationOutageLocationsParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AnnotationOutageLocationsParamsFormat string
 
 const (

@@ -44,9 +44,8 @@ func NewBGPService(opts ...option.RequestOption) (r *BGPService) {
 	return
 }
 
-// Get BGP updates change over time. Raw values are returned. When requesting
-// updates for an autonomous system (AS), only BGP updates of type announcement are
-// returned.
+// Retrieves BGP updates over time. When requesting updates for an autonomous
+// system, only BGP updates of type announcement are returned.
 func (r *BGPService) Timeseries(ctx context.Context, query BGPTimeseriesParams, opts ...option.RequestOption) (res *BGPTimeseriesResponse, err error) {
 	var env BGPTimeseriesResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -218,21 +217,21 @@ type BGPTimeseriesParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[BGPTimeseriesParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[BGPTimeseriesParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Array of BGP network prefixes.
 	Prefix param.Field[[]string] `query:"prefix"`
@@ -268,7 +267,7 @@ func (r BGPTimeseriesParamsAggInterval) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type BGPTimeseriesParamsFormat string
 
 const (

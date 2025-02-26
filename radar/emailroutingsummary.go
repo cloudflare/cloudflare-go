@@ -34,7 +34,8 @@ func NewEmailRoutingSummaryService(opts ...option.RequestOption) (r *EmailRoutin
 	return
 }
 
-// Percentage distribution of emails classified by ARC validation.
+// Retrieves the distribution of emails by ARC (Authenticated Received Chain)
+// validation.
 func (r *EmailRoutingSummaryService) ARC(ctx context.Context, query EmailRoutingSummaryARCParams, opts ...option.RequestOption) (res *EmailRoutingSummaryARCResponse, err error) {
 	var env EmailRoutingSummaryARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +48,8 @@ func (r *EmailRoutingSummaryService) ARC(ctx context.Context, query EmailRouting
 	return
 }
 
-// Percentage distribution of emails classified by DKIM validation.
+// Retrieves the distribution of emails by DKIM (DomainKeys Identified Mail)
+// validation.
 func (r *EmailRoutingSummaryService) DKIM(ctx context.Context, query EmailRoutingSummaryDKIMParams, opts ...option.RequestOption) (res *EmailRoutingSummaryDKIMResponse, err error) {
 	var env EmailRoutingSummaryDKIMResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +62,8 @@ func (r *EmailRoutingSummaryService) DKIM(ctx context.Context, query EmailRoutin
 	return
 }
 
-// Percentage distribution of emails classified by DMARC validation.
+// Retrieves the distribution of emails by DMARC (Domain-based Message
+// Authentication, Reporting and Conformance) validation.
 func (r *EmailRoutingSummaryService) DMARC(ctx context.Context, query EmailRoutingSummaryDMARCParams, opts ...option.RequestOption) (res *EmailRoutingSummaryDMARCResponse, err error) {
 	var env EmailRoutingSummaryDMARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -73,7 +76,8 @@ func (r *EmailRoutingSummaryService) DMARC(ctx context.Context, query EmailRouti
 	return
 }
 
-// Percentage distribution of emails by encryption status.
+// Retrieves the distribution of emails by encryption status (encrypted vs.
+// not-encrypted).
 func (r *EmailRoutingSummaryService) Encrypted(ctx context.Context, query EmailRoutingSummaryEncryptedParams, opts ...option.RequestOption) (res *EmailRoutingSummaryEncryptedResponse, err error) {
 	var env EmailRoutingSummaryEncryptedResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -86,7 +90,7 @@ func (r *EmailRoutingSummaryService) Encrypted(ctx context.Context, query EmailR
 	return
 }
 
-// Percentage distribution of emails by IP version.
+// Retrieves the distribution of emails by IP version.
 func (r *EmailRoutingSummaryService) IPVersion(ctx context.Context, query EmailRoutingSummaryIPVersionParams, opts ...option.RequestOption) (res *EmailRoutingSummaryIPVersionResponse, err error) {
 	var env EmailRoutingSummaryIPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +103,8 @@ func (r *EmailRoutingSummaryService) IPVersion(ctx context.Context, query EmailR
 	return
 }
 
-// Percentage distribution of emails classified by SPF validation.
+// Retrieves the distribution of emails by SPF (Sender Policy Framework)
+// validation.
 func (r *EmailRoutingSummaryService) SPF(ctx context.Context, query EmailRoutingSummarySPFParams, opts ...option.RequestOption) (res *EmailRoutingSummarySPFResponse, err error) {
 	var env EmailRoutingSummarySPFResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -953,25 +958,26 @@ func (r emailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON) RawJSON(
 type EmailRoutingSummaryARCParams struct {
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailRoutingSummaryARCParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailRoutingSummaryARCParamsDMARC] `query:"dmarc"`
-	// Filter for encrypted emails.
+	// Filters results by encryption status (encrypted vs. not-encrypted).
 	Encrypted param.Field[[]EmailRoutingSummaryARCParamsEncrypted] `query:"encrypted"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailRoutingSummaryARCParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]EmailRoutingSummaryARCParamsIPVersion] `query:"ipVersion"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailRoutingSummaryARCParamsSPF] `query:"spf"`
 }
 
@@ -1031,7 +1037,7 @@ func (r EmailRoutingSummaryARCParamsEncrypted) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailRoutingSummaryARCParamsFormat string
 
 const (
@@ -1102,27 +1108,28 @@ func (r emailRoutingSummaryARCResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryDKIMParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingSummaryDKIMParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailRoutingSummaryDKIMParamsDMARC] `query:"dmarc"`
-	// Filter for encrypted emails.
+	// Filters results by encryption status (encrypted vs. not-encrypted).
 	Encrypted param.Field[[]EmailRoutingSummaryDKIMParamsEncrypted] `query:"encrypted"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailRoutingSummaryDKIMParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]EmailRoutingSummaryDKIMParamsIPVersion] `query:"ipVersion"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailRoutingSummaryDKIMParamsSPF] `query:"spf"`
 }
 
@@ -1182,7 +1189,7 @@ func (r EmailRoutingSummaryDKIMParamsEncrypted) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailRoutingSummaryDKIMParamsFormat string
 
 const (
@@ -1253,27 +1260,27 @@ func (r emailRoutingSummaryDKIMResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryDMARCParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingSummaryDMARCParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailRoutingSummaryDMARCParamsDKIM] `query:"dkim"`
-	// Filter for encrypted emails.
+	// Filters results by encryption status (encrypted vs. not-encrypted).
 	Encrypted param.Field[[]EmailRoutingSummaryDMARCParamsEncrypted] `query:"encrypted"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailRoutingSummaryDMARCParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]EmailRoutingSummaryDMARCParamsIPVersion] `query:"ipVersion"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailRoutingSummaryDMARCParamsSPF] `query:"spf"`
 }
 
@@ -1333,7 +1340,7 @@ func (r EmailRoutingSummaryDMARCParamsEncrypted) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailRoutingSummaryDMARCParamsFormat string
 
 const (
@@ -1404,27 +1411,28 @@ func (r emailRoutingSummaryDMARCResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryEncryptedParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingSummaryEncryptedParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailRoutingSummaryEncryptedParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailRoutingSummaryEncryptedParamsDMARC] `query:"dmarc"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailRoutingSummaryEncryptedParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]EmailRoutingSummaryEncryptedParamsIPVersion] `query:"ipVersion"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailRoutingSummaryEncryptedParamsSPF] `query:"spf"`
 }
 
@@ -1485,7 +1493,7 @@ func (r EmailRoutingSummaryEncryptedParamsDMARC) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailRoutingSummaryEncryptedParamsFormat string
 
 const (
@@ -1556,27 +1564,28 @@ func (r emailRoutingSummaryEncryptedResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryIPVersionParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingSummaryIPVersionParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailRoutingSummaryIPVersionParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailRoutingSummaryIPVersionParamsDMARC] `query:"dmarc"`
-	// Filter for encrypted emails.
+	// Filters results by encryption status (encrypted vs. not-encrypted).
 	Encrypted param.Field[[]EmailRoutingSummaryIPVersionParamsEncrypted] `query:"encrypted"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailRoutingSummaryIPVersionParamsFormat] `query:"format"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for spf.
+	// Filters results by SPF (Sender Policy Framework) validation status.
 	SPF param.Field[[]EmailRoutingSummaryIPVersionParamsSPF] `query:"spf"`
 }
 
@@ -1652,7 +1661,7 @@ func (r EmailRoutingSummaryIPVersionParamsEncrypted) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailRoutingSummaryIPVersionParamsFormat string
 
 const (
@@ -1708,27 +1717,28 @@ func (r emailRoutingSummaryIPVersionResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailRoutingSummarySPFParams struct {
-	// Filter for arc (Authenticated Received Chain).
+	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingSummarySPFParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for dkim.
+	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailRoutingSummarySPFParamsDKIM] `query:"dkim"`
-	// Filter for dmarc.
+	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
+	// Conformance) validation status.
 	DMARC param.Field[[]EmailRoutingSummarySPFParamsDMARC] `query:"dmarc"`
-	// Filter for encrypted emails.
+	// Filters results by encryption status (encrypted vs. not-encrypted).
 	Encrypted param.Field[[]EmailRoutingSummarySPFParamsEncrypted] `query:"encrypted"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[EmailRoutingSummarySPFParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]EmailRoutingSummarySPFParamsIPVersion] `query:"ipVersion"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -1804,7 +1814,7 @@ func (r EmailRoutingSummarySPFParamsEncrypted) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type EmailRoutingSummarySPFParamsFormat string
 
 const (

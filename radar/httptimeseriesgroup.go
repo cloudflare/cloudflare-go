@@ -34,10 +34,9 @@ func NewHTTPTimeseriesGroupService(opts ...option.RequestOption) (r *HTTPTimeser
 	return
 }
 
-// Get a time series of the percentage distribution of traffic classified as
-// automated or human. Visit
-// https://developers.cloudflare.com/radar/concepts/bot-classes/ for more
-// information.
+// Retrieves the distribution of HTTP requests classified as automated or human
+// over time. Visit https://developers.cloudflare.com/radar/concepts/bot-classes/
+// for more information.
 func (r *HTTPTimeseriesGroupService) BotClass(ctx context.Context, query HTTPTimeseriesGroupBotClassParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBotClassResponse, err error) {
 	var env HTTPTimeseriesGroupBotClassResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -50,8 +49,7 @@ func (r *HTTPTimeseriesGroupService) BotClass(ctx context.Context, query HTTPTim
 	return
 }
 
-// Get a time series of the percentage distribution of traffic of the top user
-// agents.
+// Retrieves the distribution of HTTP requests by user agent over time.
 func (r *HTTPTimeseriesGroupService) Browser(ctx context.Context, query HTTPTimeseriesGroupBrowserParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBrowserResponse, err error) {
 	var env HTTPTimeseriesGroupBrowserResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -64,8 +62,7 @@ func (r *HTTPTimeseriesGroupService) Browser(ctx context.Context, query HTTPTime
 	return
 }
 
-// Get a time series of the percentage distribution of traffic of the top user
-// agents aggregated in families.
+// Retrieves the distribution of HTTP requests by user agent family over time.
 func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HTTPTimeseriesGroupBrowserFamilyParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBrowserFamilyResponse, err error) {
 	var env HTTPTimeseriesGroupBrowserFamilyResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -78,7 +75,7 @@ func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HT
 	return
 }
 
-// Get a time series of the percentage distribution of traffic by device type.
+// Retrieves the distribution of HTTP requests by device type over time.
 func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPTimeseriesGroupDeviceTypeParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupDeviceTypeResponse, err error) {
 	var env HTTPTimeseriesGroupDeviceTypeResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -91,7 +88,8 @@ func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPT
 	return
 }
 
-// Get a time series of the percentage distribution of traffic by HTTP protocol.
+// Retrieves the distribution of HTTP requests by HTTP protocol (HTTP vs. HTTPS)
+// over time.
 func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTTPTimeseriesGroupHTTPProtocolParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPProtocolResponse, err error) {
 	var env HTTPTimeseriesGroupHTTPProtocolResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -104,7 +102,7 @@ func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTT
 	return
 }
 
-// Get a time series of the percentage distribution of traffic by HTTP version.
+// Retrieves the distribution of HTTP requests by HTTP version over time.
 func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTPTimeseriesGroupHTTPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPVersionResponse, err error) {
 	var env HTTPTimeseriesGroupHTTPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -117,7 +115,7 @@ func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTP
 	return
 }
 
-// Get a time series of the percentage distribution of traffic by IP version.
+// Retrieves the distribution of HTTP requests by IP version over time.
 func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupIPVersionResponse, err error) {
 	var env HTTPTimeseriesGroupIPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -130,8 +128,7 @@ func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTi
 	return
 }
 
-// Get a time series of the percentage distribution of traffic of the top operating
-// systems.
+// Retrieves the distribution of HTTP requests by operating system over time.
 func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeseriesGroupOSParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupOSResponse, err error) {
 	var env HTTPTimeseriesGroupOSResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -144,8 +141,7 @@ func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeserie
 	return
 }
 
-// Get a time series of the percentage distribution of traffic by post-quantum
-// suport.
+// Retrieves the distribution of HTTP requests by post-quantum support over time.
 func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTPTimeseriesGroupPostQuantumParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupPostQuantumResponse, err error) {
 	var env HTTPTimeseriesGroupPostQuantumResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -158,8 +154,7 @@ func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTP
 	return
 }
 
-// Get a time series of the percentage distribution of traffic by TLS protocol
-// version.
+// Retrieves the distribution of HTTP requests by TLS version over time.
 func (r *HTTPTimeseriesGroupService) TLSVersion(ctx context.Context, query HTTPTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupTLSVersionResponse, err error) {
 	var env HTTPTimeseriesGroupTLSVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -658,41 +653,41 @@ type HTTPTimeseriesGroupBotClassParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesGroupBotClassParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for device type.
+	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupBotClassParamsDeviceType] `query:"deviceType"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupBotClassParamsFormat] `query:"format"`
-	// Filter for http protocol.
+	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupBotClassParamsHTTPProtocol] `query:"httpProtocol"`
-	// Filter for http version.
+	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupBotClassParamsHTTPVersion] `query:"httpVersion"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]HTTPTimeseriesGroupBotClassParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for os name.
+	// Filters results by operating system.
 	OS param.Field[[]HTTPTimeseriesGroupBotClassParamsOS] `query:"os"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]HTTPTimeseriesGroupBotClassParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -741,7 +736,7 @@ func (r HTTPTimeseriesGroupBotClassParamsDeviceType) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type HTTPTimeseriesGroupBotClassParamsFormat string
 
 const (
@@ -869,49 +864,49 @@ type HTTPTimeseriesGroupBrowserParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesGroupBrowserParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filter for bot class. Refer to
+	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTimeseriesGroupBrowserParamsBotClass] `query:"botClass"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for device type.
+	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupBrowserParamsDeviceType] `query:"deviceType"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupBrowserParamsFormat] `query:"format"`
-	// Filter for http protocol.
+	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupBrowserParamsHTTPProtocol] `query:"httpProtocol"`
-	// Filter for http version.
+	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupBrowserParamsHTTPVersion] `query:"httpVersion"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]HTTPTimeseriesGroupBrowserParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
-	// within the specified time range. If the limitPerGroup is set, the response will
-	// include that number of items, with the remaining items grouped together under an
-	// "other" category.
+	// Limits the number of objects per group to the top items within the specified
+	// time range. If there are more items than the limit, the response will include
+	// the count of items, with any remaining items grouped together under an "other"
+	// category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for os name.
+	// Filters results by operating system.
 	OS param.Field[[]HTTPTimeseriesGroupBrowserParamsOS] `query:"os"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]HTTPTimeseriesGroupBrowserParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -975,7 +970,7 @@ func (r HTTPTimeseriesGroupBrowserParamsDeviceType) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type HTTPTimeseriesGroupBrowserParamsFormat string
 
 const (
@@ -1103,49 +1098,49 @@ type HTTPTimeseriesGroupBrowserFamilyParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesGroupBrowserFamilyParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filter for bot class. Refer to
+	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsBotClass] `query:"botClass"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for device type.
+	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsDeviceType] `query:"deviceType"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupBrowserFamilyParamsFormat] `query:"format"`
-	// Filter for http protocol.
+	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsHTTPProtocol] `query:"httpProtocol"`
-	// Filter for http version.
+	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsHTTPVersion] `query:"httpVersion"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (e.g., browsers, verticals, etc.) to the top items
-	// within the specified time range. If the limitPerGroup is set, the response will
-	// include that number of items, with the remaining items grouped together under an
-	// "other" category.
+	// Limits the number of objects per group to the top items within the specified
+	// time range. If there are more items than the limit, the response will include
+	// the count of items, with any remaining items grouped together under an "other"
+	// category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for os name.
+	// Filters results by operating system.
 	OS param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsOS] `query:"os"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1209,7 +1204,7 @@ func (r HTTPTimeseriesGroupBrowserFamilyParamsDeviceType) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type HTTPTimeseriesGroupBrowserFamilyParamsFormat string
 
 const (
@@ -1337,42 +1332,42 @@ type HTTPTimeseriesGroupDeviceTypeParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesGroupDeviceTypeParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filter for bot class. Refer to
+	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTimeseriesGroupDeviceTypeParamsBotClass] `query:"botClass"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupDeviceTypeParamsFormat] `query:"format"`
-	// Filter for http protocol.
+	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupDeviceTypeParamsHTTPProtocol] `query:"httpProtocol"`
-	// Filter for http version.
+	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupDeviceTypeParamsHTTPVersion] `query:"httpVersion"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]HTTPTimeseriesGroupDeviceTypeParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for os name.
+	// Filters results by operating system.
 	OS param.Field[[]HTTPTimeseriesGroupDeviceTypeParamsOS] `query:"os"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]HTTPTimeseriesGroupDeviceTypeParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1420,7 +1415,7 @@ func (r HTTPTimeseriesGroupDeviceTypeParamsBotClass) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type HTTPTimeseriesGroupDeviceTypeParamsFormat string
 
 const (
@@ -1548,42 +1543,42 @@ type HTTPTimeseriesGroupHTTPProtocolParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesGroupHTTPProtocolParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filter for bot class. Refer to
+	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTimeseriesGroupHTTPProtocolParamsBotClass] `query:"botClass"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for device type.
+	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupHTTPProtocolParamsDeviceType] `query:"deviceType"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupHTTPProtocolParamsFormat] `query:"format"`
-	// Filter for http version.
+	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupHTTPProtocolParamsHTTPVersion] `query:"httpVersion"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]HTTPTimeseriesGroupHTTPProtocolParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for os name.
+	// Filters results by operating system.
 	OS param.Field[[]HTTPTimeseriesGroupHTTPProtocolParamsOS] `query:"os"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]HTTPTimeseriesGroupHTTPProtocolParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1647,7 +1642,7 @@ func (r HTTPTimeseriesGroupHTTPProtocolParamsDeviceType) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type HTTPTimeseriesGroupHTTPProtocolParamsFormat string
 
 const (
@@ -1760,42 +1755,42 @@ type HTTPTimeseriesGroupHTTPVersionParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesGroupHTTPVersionParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filter for bot class. Refer to
+	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTimeseriesGroupHTTPVersionParamsBotClass] `query:"botClass"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for device type.
+	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupHTTPVersionParamsDeviceType] `query:"deviceType"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupHTTPVersionParamsFormat] `query:"format"`
-	// Filter for http protocol.
+	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupHTTPVersionParamsHTTPProtocol] `query:"httpProtocol"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]HTTPTimeseriesGroupHTTPVersionParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for os name.
+	// Filters results by operating system.
 	OS param.Field[[]HTTPTimeseriesGroupHTTPVersionParamsOS] `query:"os"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]HTTPTimeseriesGroupHTTPVersionParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -1859,7 +1854,7 @@ func (r HTTPTimeseriesGroupHTTPVersionParamsDeviceType) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type HTTPTimeseriesGroupHTTPVersionParamsFormat string
 
 const (
@@ -1971,42 +1966,42 @@ type HTTPTimeseriesGroupIPVersionParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesGroupIPVersionParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filter for bot class. Refer to
+	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTimeseriesGroupIPVersionParamsBotClass] `query:"botClass"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for device type.
+	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupIPVersionParamsDeviceType] `query:"deviceType"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupIPVersionParamsFormat] `query:"format"`
-	// Filter for http protocol.
+	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupIPVersionParamsHTTPProtocol] `query:"httpProtocol"`
-	// Filter for http version.
+	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupIPVersionParamsHTTPVersion] `query:"httpVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for os name.
+	// Filters results by operating system.
 	OS param.Field[[]HTTPTimeseriesGroupIPVersionParamsOS] `query:"os"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]HTTPTimeseriesGroupIPVersionParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -2070,7 +2065,7 @@ func (r HTTPTimeseriesGroupIPVersionParamsDeviceType) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type HTTPTimeseriesGroupIPVersionParamsFormat string
 
 const (
@@ -2183,42 +2178,42 @@ type HTTPTimeseriesGroupOSParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesGroupOSParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filter for bot class. Refer to
+	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTimeseriesGroupOSParamsBotClass] `query:"botClass"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for device type.
+	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupOSParamsDeviceType] `query:"deviceType"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupOSParamsFormat] `query:"format"`
-	// Filter for http protocol.
+	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupOSParamsHTTPProtocol] `query:"httpProtocol"`
-	// Filter for http version.
+	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupOSParamsHTTPVersion] `query:"httpVersion"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]HTTPTimeseriesGroupOSParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]HTTPTimeseriesGroupOSParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -2282,7 +2277,7 @@ func (r HTTPTimeseriesGroupOSParamsDeviceType) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type HTTPTimeseriesGroupOSParamsFormat string
 
 const (
@@ -2390,44 +2385,44 @@ type HTTPTimeseriesGroupPostQuantumParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesGroupPostQuantumParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filter for bot class. Refer to
+	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTimeseriesGroupPostQuantumParamsBotClass] `query:"botClass"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for device type.
+	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupPostQuantumParamsDeviceType] `query:"deviceType"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupPostQuantumParamsFormat] `query:"format"`
-	// Filter for http protocol.
+	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupPostQuantumParamsHTTPProtocol] `query:"httpProtocol"`
-	// Filter for http version.
+	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupPostQuantumParamsHTTPVersion] `query:"httpVersion"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]HTTPTimeseriesGroupPostQuantumParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for os name.
+	// Filters results by operating system.
 	OS param.Field[[]HTTPTimeseriesGroupPostQuantumParamsOS] `query:"os"`
-	// Filter for tls version.
+	// Filters results by TLS version.
 	TLSVersion param.Field[[]HTTPTimeseriesGroupPostQuantumParamsTLSVersion] `query:"tlsVersion"`
 }
 
@@ -2491,7 +2486,7 @@ func (r HTTPTimeseriesGroupPostQuantumParamsDeviceType) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type HTTPTimeseriesGroupPostQuantumParamsFormat string
 
 const (
@@ -2619,42 +2614,42 @@ type HTTPTimeseriesGroupTLSVersionParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesGroupTLSVersionParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Filter for bot class. Refer to
+	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTimeseriesGroupTLSVersionParamsBotClass] `query:"botClass"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Filter for device type.
+	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupTLSVersionParamsDeviceType] `query:"deviceType"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupTLSVersionParamsFormat] `query:"format"`
-	// Filter for http protocol.
+	// Filters results by HTTP protocol (HTTP vs. HTTPS).
 	HTTPProtocol param.Field[[]HTTPTimeseriesGroupTLSVersionParamsHTTPProtocol] `query:"httpProtocol"`
-	// Filter for http version.
+	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]HTTPTimeseriesGroupTLSVersionParamsHTTPVersion] `query:"httpVersion"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]HTTPTimeseriesGroupTLSVersionParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for os name.
+	// Filters results by operating system.
 	OS param.Field[[]HTTPTimeseriesGroupTLSVersionParamsOS] `query:"os"`
 }
 
@@ -2718,7 +2713,7 @@ func (r HTTPTimeseriesGroupTLSVersionParamsDeviceType) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type HTTPTimeseriesGroupTLSVersionParamsFormat string
 
 const (
