@@ -66,7 +66,7 @@ func TestNetworkRouteListWithOptionalParams(t *testing.T) {
 		Page:             cloudflare.F(1.000000),
 		PerPage:          cloudflare.F(1.000000),
 		RouteID:          cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
-		TunTypes:         cloudflare.F("cfd_tunnel,warp_connector"),
+		TunTypes:         cloudflare.F([]zero_trust.NetworkRouteListParamsTunType{zero_trust.NetworkRouteListParamsTunTypeCfdTunnel}),
 		TunnelID:         cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		VirtualNetworkID: cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 	})
