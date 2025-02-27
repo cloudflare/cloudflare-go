@@ -191,6 +191,8 @@ type NetworkRouteNetworkDeleteParamsTunType string
 const (
 	NetworkRouteNetworkDeleteParamsTunTypeCfdTunnel     NetworkRouteNetworkDeleteParamsTunType = "cfd_tunnel"
 	NetworkRouteNetworkDeleteParamsTunTypeWARPConnector NetworkRouteNetworkDeleteParamsTunType = "warp_connector"
+	NetworkRouteNetworkDeleteParamsTunTypeWARP          NetworkRouteNetworkDeleteParamsTunType = "warp"
+	NetworkRouteNetworkDeleteParamsTunTypeMagic         NetworkRouteNetworkDeleteParamsTunType = "magic"
 	NetworkRouteNetworkDeleteParamsTunTypeIPSec         NetworkRouteNetworkDeleteParamsTunType = "ip_sec"
 	NetworkRouteNetworkDeleteParamsTunTypeGRE           NetworkRouteNetworkDeleteParamsTunType = "gre"
 	NetworkRouteNetworkDeleteParamsTunTypeCNI           NetworkRouteNetworkDeleteParamsTunType = "cni"
@@ -198,7 +200,7 @@ const (
 
 func (r NetworkRouteNetworkDeleteParamsTunType) IsKnown() bool {
 	switch r {
-	case NetworkRouteNetworkDeleteParamsTunTypeCfdTunnel, NetworkRouteNetworkDeleteParamsTunTypeWARPConnector, NetworkRouteNetworkDeleteParamsTunTypeIPSec, NetworkRouteNetworkDeleteParamsTunTypeGRE, NetworkRouteNetworkDeleteParamsTunTypeCNI:
+	case NetworkRouteNetworkDeleteParamsTunTypeCfdTunnel, NetworkRouteNetworkDeleteParamsTunTypeWARPConnector, NetworkRouteNetworkDeleteParamsTunTypeWARP, NetworkRouteNetworkDeleteParamsTunTypeMagic, NetworkRouteNetworkDeleteParamsTunTypeIPSec, NetworkRouteNetworkDeleteParamsTunTypeGRE, NetworkRouteNetworkDeleteParamsTunTypeCNI:
 		return true
 	}
 	return false

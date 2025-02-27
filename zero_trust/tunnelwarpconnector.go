@@ -388,6 +388,8 @@ type TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunType string
 const (
 	TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel     TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "cfd_tunnel"
 	TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeWARPConnector TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "warp_connector"
+	TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeWARP          TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "warp"
+	TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeMagic         TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "magic"
 	TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeIPSec         TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "ip_sec"
 	TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeGRE           TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "gre"
 	TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCNI           TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "cni"
@@ -395,7 +397,7 @@ const (
 
 func (r TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	switch r {
-	case TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCNI:
+	case TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeWARP, TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeMagic, TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelWARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCNI:
 		return true
 	}
 	return false
@@ -428,6 +430,8 @@ type TunnelWARPConnectorNewResponseTunType string
 const (
 	TunnelWARPConnectorNewResponseTunTypeCfdTunnel     TunnelWARPConnectorNewResponseTunType = "cfd_tunnel"
 	TunnelWARPConnectorNewResponseTunTypeWARPConnector TunnelWARPConnectorNewResponseTunType = "warp_connector"
+	TunnelWARPConnectorNewResponseTunTypeWARP          TunnelWARPConnectorNewResponseTunType = "warp"
+	TunnelWARPConnectorNewResponseTunTypeMagic         TunnelWARPConnectorNewResponseTunType = "magic"
 	TunnelWARPConnectorNewResponseTunTypeIPSec         TunnelWARPConnectorNewResponseTunType = "ip_sec"
 	TunnelWARPConnectorNewResponseTunTypeGRE           TunnelWARPConnectorNewResponseTunType = "gre"
 	TunnelWARPConnectorNewResponseTunTypeCNI           TunnelWARPConnectorNewResponseTunType = "cni"
@@ -435,7 +439,7 @@ const (
 
 func (r TunnelWARPConnectorNewResponseTunType) IsKnown() bool {
 	switch r {
-	case TunnelWARPConnectorNewResponseTunTypeCfdTunnel, TunnelWARPConnectorNewResponseTunTypeWARPConnector, TunnelWARPConnectorNewResponseTunTypeIPSec, TunnelWARPConnectorNewResponseTunTypeGRE, TunnelWARPConnectorNewResponseTunTypeCNI:
+	case TunnelWARPConnectorNewResponseTunTypeCfdTunnel, TunnelWARPConnectorNewResponseTunTypeWARPConnector, TunnelWARPConnectorNewResponseTunTypeWARP, TunnelWARPConnectorNewResponseTunTypeMagic, TunnelWARPConnectorNewResponseTunTypeIPSec, TunnelWARPConnectorNewResponseTunTypeGRE, TunnelWARPConnectorNewResponseTunTypeCNI:
 		return true
 	}
 	return false
@@ -680,6 +684,8 @@ type TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunType string
 const (
 	TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel     TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "cfd_tunnel"
 	TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "warp_connector"
+	TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeWARP          TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "warp"
+	TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeMagic         TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "magic"
 	TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeIPSec         TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "ip_sec"
 	TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeGRE           TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "gre"
 	TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCNI           TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "cni"
@@ -687,7 +693,7 @@ const (
 
 func (r TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	switch r {
-	case TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCNI:
+	case TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeWARP, TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeMagic, TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelWARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCNI:
 		return true
 	}
 	return false
@@ -720,6 +726,8 @@ type TunnelWARPConnectorListResponseTunType string
 const (
 	TunnelWARPConnectorListResponseTunTypeCfdTunnel     TunnelWARPConnectorListResponseTunType = "cfd_tunnel"
 	TunnelWARPConnectorListResponseTunTypeWARPConnector TunnelWARPConnectorListResponseTunType = "warp_connector"
+	TunnelWARPConnectorListResponseTunTypeWARP          TunnelWARPConnectorListResponseTunType = "warp"
+	TunnelWARPConnectorListResponseTunTypeMagic         TunnelWARPConnectorListResponseTunType = "magic"
 	TunnelWARPConnectorListResponseTunTypeIPSec         TunnelWARPConnectorListResponseTunType = "ip_sec"
 	TunnelWARPConnectorListResponseTunTypeGRE           TunnelWARPConnectorListResponseTunType = "gre"
 	TunnelWARPConnectorListResponseTunTypeCNI           TunnelWARPConnectorListResponseTunType = "cni"
@@ -727,7 +735,7 @@ const (
 
 func (r TunnelWARPConnectorListResponseTunType) IsKnown() bool {
 	switch r {
-	case TunnelWARPConnectorListResponseTunTypeCfdTunnel, TunnelWARPConnectorListResponseTunTypeWARPConnector, TunnelWARPConnectorListResponseTunTypeIPSec, TunnelWARPConnectorListResponseTunTypeGRE, TunnelWARPConnectorListResponseTunTypeCNI:
+	case TunnelWARPConnectorListResponseTunTypeCfdTunnel, TunnelWARPConnectorListResponseTunTypeWARPConnector, TunnelWARPConnectorListResponseTunTypeWARP, TunnelWARPConnectorListResponseTunTypeMagic, TunnelWARPConnectorListResponseTunTypeIPSec, TunnelWARPConnectorListResponseTunTypeGRE, TunnelWARPConnectorListResponseTunTypeCNI:
 		return true
 	}
 	return false
@@ -972,6 +980,8 @@ type TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType string
 const (
 	TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel     TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "cfd_tunnel"
 	TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeWARPConnector TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "warp_connector"
+	TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeWARP          TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "warp"
+	TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeMagic         TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "magic"
 	TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeIPSec         TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "ip_sec"
 	TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeGRE           TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "gre"
 	TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCNI           TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "cni"
@@ -979,7 +989,7 @@ const (
 
 func (r TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	switch r {
-	case TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCNI:
+	case TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeWARP, TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeMagic, TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelWARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCNI:
 		return true
 	}
 	return false
@@ -1012,6 +1022,8 @@ type TunnelWARPConnectorDeleteResponseTunType string
 const (
 	TunnelWARPConnectorDeleteResponseTunTypeCfdTunnel     TunnelWARPConnectorDeleteResponseTunType = "cfd_tunnel"
 	TunnelWARPConnectorDeleteResponseTunTypeWARPConnector TunnelWARPConnectorDeleteResponseTunType = "warp_connector"
+	TunnelWARPConnectorDeleteResponseTunTypeWARP          TunnelWARPConnectorDeleteResponseTunType = "warp"
+	TunnelWARPConnectorDeleteResponseTunTypeMagic         TunnelWARPConnectorDeleteResponseTunType = "magic"
 	TunnelWARPConnectorDeleteResponseTunTypeIPSec         TunnelWARPConnectorDeleteResponseTunType = "ip_sec"
 	TunnelWARPConnectorDeleteResponseTunTypeGRE           TunnelWARPConnectorDeleteResponseTunType = "gre"
 	TunnelWARPConnectorDeleteResponseTunTypeCNI           TunnelWARPConnectorDeleteResponseTunType = "cni"
@@ -1019,7 +1031,7 @@ const (
 
 func (r TunnelWARPConnectorDeleteResponseTunType) IsKnown() bool {
 	switch r {
-	case TunnelWARPConnectorDeleteResponseTunTypeCfdTunnel, TunnelWARPConnectorDeleteResponseTunTypeWARPConnector, TunnelWARPConnectorDeleteResponseTunTypeIPSec, TunnelWARPConnectorDeleteResponseTunTypeGRE, TunnelWARPConnectorDeleteResponseTunTypeCNI:
+	case TunnelWARPConnectorDeleteResponseTunTypeCfdTunnel, TunnelWARPConnectorDeleteResponseTunTypeWARPConnector, TunnelWARPConnectorDeleteResponseTunTypeWARP, TunnelWARPConnectorDeleteResponseTunTypeMagic, TunnelWARPConnectorDeleteResponseTunTypeIPSec, TunnelWARPConnectorDeleteResponseTunTypeGRE, TunnelWARPConnectorDeleteResponseTunTypeCNI:
 		return true
 	}
 	return false
@@ -1264,6 +1276,8 @@ type TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunType string
 const (
 	TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel     TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "cfd_tunnel"
 	TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeWARPConnector TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "warp_connector"
+	TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeWARP          TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "warp"
+	TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeMagic         TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "magic"
 	TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeIPSec         TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "ip_sec"
 	TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeGRE           TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "gre"
 	TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCNI           TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "cni"
@@ -1271,7 +1285,7 @@ const (
 
 func (r TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	switch r {
-	case TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCNI:
+	case TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeWARP, TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeMagic, TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelWARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCNI:
 		return true
 	}
 	return false
@@ -1304,6 +1318,8 @@ type TunnelWARPConnectorEditResponseTunType string
 const (
 	TunnelWARPConnectorEditResponseTunTypeCfdTunnel     TunnelWARPConnectorEditResponseTunType = "cfd_tunnel"
 	TunnelWARPConnectorEditResponseTunTypeWARPConnector TunnelWARPConnectorEditResponseTunType = "warp_connector"
+	TunnelWARPConnectorEditResponseTunTypeWARP          TunnelWARPConnectorEditResponseTunType = "warp"
+	TunnelWARPConnectorEditResponseTunTypeMagic         TunnelWARPConnectorEditResponseTunType = "magic"
 	TunnelWARPConnectorEditResponseTunTypeIPSec         TunnelWARPConnectorEditResponseTunType = "ip_sec"
 	TunnelWARPConnectorEditResponseTunTypeGRE           TunnelWARPConnectorEditResponseTunType = "gre"
 	TunnelWARPConnectorEditResponseTunTypeCNI           TunnelWARPConnectorEditResponseTunType = "cni"
@@ -1311,7 +1327,7 @@ const (
 
 func (r TunnelWARPConnectorEditResponseTunType) IsKnown() bool {
 	switch r {
-	case TunnelWARPConnectorEditResponseTunTypeCfdTunnel, TunnelWARPConnectorEditResponseTunTypeWARPConnector, TunnelWARPConnectorEditResponseTunTypeIPSec, TunnelWARPConnectorEditResponseTunTypeGRE, TunnelWARPConnectorEditResponseTunTypeCNI:
+	case TunnelWARPConnectorEditResponseTunTypeCfdTunnel, TunnelWARPConnectorEditResponseTunTypeWARPConnector, TunnelWARPConnectorEditResponseTunTypeWARP, TunnelWARPConnectorEditResponseTunTypeMagic, TunnelWARPConnectorEditResponseTunTypeIPSec, TunnelWARPConnectorEditResponseTunTypeGRE, TunnelWARPConnectorEditResponseTunTypeCNI:
 		return true
 	}
 	return false
@@ -1556,6 +1572,8 @@ type TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunType string
 const (
 	TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel     TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "cfd_tunnel"
 	TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeWARPConnector TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "warp_connector"
+	TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeWARP          TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "warp"
+	TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeMagic         TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "magic"
 	TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeIPSec         TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "ip_sec"
 	TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeGRE           TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "gre"
 	TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCNI           TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "cni"
@@ -1563,7 +1581,7 @@ const (
 
 func (r TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	switch r {
-	case TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCNI:
+	case TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeWARP, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeMagic, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelWARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCNI:
 		return true
 	}
 	return false
@@ -1596,6 +1614,8 @@ type TunnelWARPConnectorGetResponseTunType string
 const (
 	TunnelWARPConnectorGetResponseTunTypeCfdTunnel     TunnelWARPConnectorGetResponseTunType = "cfd_tunnel"
 	TunnelWARPConnectorGetResponseTunTypeWARPConnector TunnelWARPConnectorGetResponseTunType = "warp_connector"
+	TunnelWARPConnectorGetResponseTunTypeWARP          TunnelWARPConnectorGetResponseTunType = "warp"
+	TunnelWARPConnectorGetResponseTunTypeMagic         TunnelWARPConnectorGetResponseTunType = "magic"
 	TunnelWARPConnectorGetResponseTunTypeIPSec         TunnelWARPConnectorGetResponseTunType = "ip_sec"
 	TunnelWARPConnectorGetResponseTunTypeGRE           TunnelWARPConnectorGetResponseTunType = "gre"
 	TunnelWARPConnectorGetResponseTunTypeCNI           TunnelWARPConnectorGetResponseTunType = "cni"
@@ -1603,7 +1623,7 @@ const (
 
 func (r TunnelWARPConnectorGetResponseTunType) IsKnown() bool {
 	switch r {
-	case TunnelWARPConnectorGetResponseTunTypeCfdTunnel, TunnelWARPConnectorGetResponseTunTypeWARPConnector, TunnelWARPConnectorGetResponseTunTypeIPSec, TunnelWARPConnectorGetResponseTunTypeGRE, TunnelWARPConnectorGetResponseTunTypeCNI:
+	case TunnelWARPConnectorGetResponseTunTypeCfdTunnel, TunnelWARPConnectorGetResponseTunTypeWARPConnector, TunnelWARPConnectorGetResponseTunTypeWARP, TunnelWARPConnectorGetResponseTunTypeMagic, TunnelWARPConnectorGetResponseTunTypeIPSec, TunnelWARPConnectorGetResponseTunTypeGRE, TunnelWARPConnectorGetResponseTunTypeCNI:
 		return true
 	}
 	return false
