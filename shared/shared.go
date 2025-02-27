@@ -370,6 +370,8 @@ type CloudflareTunnelTunType string
 const (
 	CloudflareTunnelTunTypeCfdTunnel     CloudflareTunnelTunType = "cfd_tunnel"
 	CloudflareTunnelTunTypeWARPConnector CloudflareTunnelTunType = "warp_connector"
+	CloudflareTunnelTunTypeWARP          CloudflareTunnelTunType = "warp"
+	CloudflareTunnelTunTypeMagic         CloudflareTunnelTunType = "magic"
 	CloudflareTunnelTunTypeIPSec         CloudflareTunnelTunType = "ip_sec"
 	CloudflareTunnelTunTypeGRE           CloudflareTunnelTunType = "gre"
 	CloudflareTunnelTunTypeCNI           CloudflareTunnelTunType = "cni"
@@ -377,7 +379,7 @@ const (
 
 func (r CloudflareTunnelTunType) IsKnown() bool {
 	switch r {
-	case CloudflareTunnelTunTypeCfdTunnel, CloudflareTunnelTunTypeWARPConnector, CloudflareTunnelTunTypeIPSec, CloudflareTunnelTunTypeGRE, CloudflareTunnelTunTypeCNI:
+	case CloudflareTunnelTunTypeCfdTunnel, CloudflareTunnelTunTypeWARPConnector, CloudflareTunnelTunTypeWARP, CloudflareTunnelTunTypeMagic, CloudflareTunnelTunTypeIPSec, CloudflareTunnelTunTypeGRE, CloudflareTunnelTunTypeCNI:
 		return true
 	}
 	return false

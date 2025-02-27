@@ -307,6 +307,8 @@ type TunnelListResponseTunnelWARPConnectorTunnelTunType string
 const (
 	TunnelListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel     TunnelListResponseTunnelWARPConnectorTunnelTunType = "cfd_tunnel"
 	TunnelListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector TunnelListResponseTunnelWARPConnectorTunnelTunType = "warp_connector"
+	TunnelListResponseTunnelWARPConnectorTunnelTunTypeWARP          TunnelListResponseTunnelWARPConnectorTunnelTunType = "warp"
+	TunnelListResponseTunnelWARPConnectorTunnelTunTypeMagic         TunnelListResponseTunnelWARPConnectorTunnelTunType = "magic"
 	TunnelListResponseTunnelWARPConnectorTunnelTunTypeIPSec         TunnelListResponseTunnelWARPConnectorTunnelTunType = "ip_sec"
 	TunnelListResponseTunnelWARPConnectorTunnelTunTypeGRE           TunnelListResponseTunnelWARPConnectorTunnelTunType = "gre"
 	TunnelListResponseTunnelWARPConnectorTunnelTunTypeCNI           TunnelListResponseTunnelWARPConnectorTunnelTunType = "cni"
@@ -314,7 +316,7 @@ const (
 
 func (r TunnelListResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	switch r {
-	case TunnelListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelListResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelListResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelListResponseTunnelWARPConnectorTunnelTunTypeCNI:
+	case TunnelListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelListResponseTunnelWARPConnectorTunnelTunTypeWARP, TunnelListResponseTunnelWARPConnectorTunnelTunTypeMagic, TunnelListResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelListResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelListResponseTunnelWARPConnectorTunnelTunTypeCNI:
 		return true
 	}
 	return false
@@ -347,6 +349,8 @@ type TunnelListResponseTunType string
 const (
 	TunnelListResponseTunTypeCfdTunnel     TunnelListResponseTunType = "cfd_tunnel"
 	TunnelListResponseTunTypeWARPConnector TunnelListResponseTunType = "warp_connector"
+	TunnelListResponseTunTypeWARP          TunnelListResponseTunType = "warp"
+	TunnelListResponseTunTypeMagic         TunnelListResponseTunType = "magic"
 	TunnelListResponseTunTypeIPSec         TunnelListResponseTunType = "ip_sec"
 	TunnelListResponseTunTypeGRE           TunnelListResponseTunType = "gre"
 	TunnelListResponseTunTypeCNI           TunnelListResponseTunType = "cni"
@@ -354,7 +358,7 @@ const (
 
 func (r TunnelListResponseTunType) IsKnown() bool {
 	switch r {
-	case TunnelListResponseTunTypeCfdTunnel, TunnelListResponseTunTypeWARPConnector, TunnelListResponseTunTypeIPSec, TunnelListResponseTunTypeGRE, TunnelListResponseTunTypeCNI:
+	case TunnelListResponseTunTypeCfdTunnel, TunnelListResponseTunTypeWARPConnector, TunnelListResponseTunTypeWARP, TunnelListResponseTunTypeMagic, TunnelListResponseTunTypeIPSec, TunnelListResponseTunTypeGRE, TunnelListResponseTunTypeCNI:
 		return true
 	}
 	return false
@@ -382,8 +386,8 @@ type TunnelListParams struct {
 	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
 	Status param.Field[TunnelListParamsStatus] `query:"status"`
-	// The types of tunnels to filter separated by a comma.
-	TunTypes param.Field[string] `query:"tun_types"`
+	// The types of tunnels to filter by, separated by commas.
+	TunTypes param.Field[[]TunnelListParamsTunType] `query:"tun_types"`
 	// UUID of the tunnel.
 	UUID          param.Field[string]    `query:"uuid" format:"uuid"`
 	WasActiveAt   param.Field[time.Time] `query:"was_active_at" format:"date-time"`
@@ -414,6 +418,27 @@ const (
 func (r TunnelListParamsStatus) IsKnown() bool {
 	switch r {
 	case TunnelListParamsStatusInactive, TunnelListParamsStatusDegraded, TunnelListParamsStatusHealthy, TunnelListParamsStatusDown:
+		return true
+	}
+	return false
+}
+
+// The type of tunnel.
+type TunnelListParamsTunType string
+
+const (
+	TunnelListParamsTunTypeCfdTunnel     TunnelListParamsTunType = "cfd_tunnel"
+	TunnelListParamsTunTypeWARPConnector TunnelListParamsTunType = "warp_connector"
+	TunnelListParamsTunTypeWARP          TunnelListParamsTunType = "warp"
+	TunnelListParamsTunTypeMagic         TunnelListParamsTunType = "magic"
+	TunnelListParamsTunTypeIPSec         TunnelListParamsTunType = "ip_sec"
+	TunnelListParamsTunTypeGRE           TunnelListParamsTunType = "gre"
+	TunnelListParamsTunTypeCNI           TunnelListParamsTunType = "cni"
+)
+
+func (r TunnelListParamsTunType) IsKnown() bool {
+	switch r {
+	case TunnelListParamsTunTypeCfdTunnel, TunnelListParamsTunTypeWARPConnector, TunnelListParamsTunTypeWARP, TunnelListParamsTunTypeMagic, TunnelListParamsTunTypeIPSec, TunnelListParamsTunTypeGRE, TunnelListParamsTunTypeCNI:
 		return true
 	}
 	return false

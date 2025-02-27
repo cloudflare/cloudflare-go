@@ -245,6 +245,8 @@ type TeamnetTunType string
 const (
 	TeamnetTunTypeCfdTunnel     TeamnetTunType = "cfd_tunnel"
 	TeamnetTunTypeWARPConnector TeamnetTunType = "warp_connector"
+	TeamnetTunTypeWARP          TeamnetTunType = "warp"
+	TeamnetTunTypeMagic         TeamnetTunType = "magic"
 	TeamnetTunTypeIPSec         TeamnetTunType = "ip_sec"
 	TeamnetTunTypeGRE           TeamnetTunType = "gre"
 	TeamnetTunTypeCNI           TeamnetTunType = "cni"
@@ -252,7 +254,7 @@ const (
 
 func (r TeamnetTunType) IsKnown() bool {
 	switch r {
-	case TeamnetTunTypeCfdTunnel, TeamnetTunTypeWARPConnector, TeamnetTunTypeIPSec, TeamnetTunTypeGRE, TeamnetTunTypeCNI:
+	case TeamnetTunTypeCfdTunnel, TeamnetTunTypeWARPConnector, TeamnetTunTypeWARP, TeamnetTunTypeMagic, TeamnetTunTypeIPSec, TeamnetTunTypeGRE, TeamnetTunTypeCNI:
 		return true
 	}
 	return false
@@ -339,8 +341,8 @@ type NetworkRouteListParams struct {
 	PerPage param.Field[float64] `query:"per_page"`
 	// UUID of the route.
 	RouteID param.Field[string] `query:"route_id"`
-	// The types of tunnels to filter separated by a comma.
-	TunTypes param.Field[string] `query:"tun_types"`
+	// The types of tunnels to filter by, separated by commas.
+	TunTypes param.Field[[]NetworkRouteListParamsTunType] `query:"tun_types"`
 	// UUID of the tunnel.
 	TunnelID param.Field[string] `query:"tunnel_id" format:"uuid"`
 	// UUID of the virtual network.
@@ -353,6 +355,27 @@ func (r NetworkRouteListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// The type of tunnel.
+type NetworkRouteListParamsTunType string
+
+const (
+	NetworkRouteListParamsTunTypeCfdTunnel     NetworkRouteListParamsTunType = "cfd_tunnel"
+	NetworkRouteListParamsTunTypeWARPConnector NetworkRouteListParamsTunType = "warp_connector"
+	NetworkRouteListParamsTunTypeWARP          NetworkRouteListParamsTunType = "warp"
+	NetworkRouteListParamsTunTypeMagic         NetworkRouteListParamsTunType = "magic"
+	NetworkRouteListParamsTunTypeIPSec         NetworkRouteListParamsTunType = "ip_sec"
+	NetworkRouteListParamsTunTypeGRE           NetworkRouteListParamsTunType = "gre"
+	NetworkRouteListParamsTunTypeCNI           NetworkRouteListParamsTunType = "cni"
+)
+
+func (r NetworkRouteListParamsTunType) IsKnown() bool {
+	switch r {
+	case NetworkRouteListParamsTunTypeCfdTunnel, NetworkRouteListParamsTunTypeWARPConnector, NetworkRouteListParamsTunTypeWARP, NetworkRouteListParamsTunTypeMagic, NetworkRouteListParamsTunTypeIPSec, NetworkRouteListParamsTunTypeGRE, NetworkRouteListParamsTunTypeCNI:
+		return true
+	}
+	return false
 }
 
 type NetworkRouteDeleteParams struct {
