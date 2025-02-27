@@ -8111,3 +8111,47 @@ Response Types:
 Methods:
 
 - <code title="get /{accounts_or_zones}/{account_or_zone_id}/security-center/insights/type">client.SecurityCenter.Insights.Type.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightTypeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center">security_center</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightTypeGetParams">InsightTypeGetParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center">security_center</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/security_center#InsightTypeGetResponse">InsightTypeGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+# BrowsingRendering
+
+## Content
+
+Methods:
+
+- <code title="post /accounts/{accountId}/browser-rendering/content">client.BrowsingRendering.Content.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ContentService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ContentNewParams">ContentNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Pdf
+
+Methods:
+
+- <code title="post /accounts/{accountId}/browser-rendering/pdf">client.BrowsingRendering.Pdf.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#PdfService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#PdfNewParams">PdfNewParams</a>) (http.Response, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Scrape
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ScrapeNewResponse">ScrapeNewResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{accountId}/browser-rendering/scrape">client.BrowsingRendering.Scrape.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ScrapeService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ScrapeNewParams">ScrapeNewParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ScrapeNewResponse">ScrapeNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Screenshot
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ScreenshotNewResponse">ScreenshotNewResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{accountId}/browser-rendering/screenshot">client.BrowsingRendering.Screenshot.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ScreenshotService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ScreenshotNewParams">ScreenshotNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ScreenshotNewResponse">ScreenshotNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Snapshot
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#SnapshotNewResponse">SnapshotNewResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{accountId}/browser-rendering/snapshot">client.BrowsingRendering.Snapshot.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#SnapshotService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#SnapshotNewParams">SnapshotNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#SnapshotNewResponse">SnapshotNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>

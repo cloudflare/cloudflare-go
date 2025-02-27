@@ -21,6 +21,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/bot_management"
 	"github.com/cloudflare/cloudflare-go/v4/botnet_feed"
 	"github.com/cloudflare/cloudflare-go/v4/brand_protection"
+	"github.com/cloudflare/cloudflare-go/v4/browsing_rendering"
 	"github.com/cloudflare/cloudflare-go/v4/cache"
 	"github.com/cloudflare/cloudflare-go/v4/calls"
 	"github.com/cloudflare/cloudflare-go/v4/certificate_authorities"
@@ -202,6 +203,7 @@ type Client struct {
 	AbuseReports                *abuse_reports.AbuseReportService
 	AI                          *ai.AIService
 	SecurityCenter              *security_center.SecurityCenterService
+	BrowsingRendering           *browsing_rendering.BrowsingRenderingService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -316,6 +318,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
 	r.AI = ai.NewAIService(opts...)
 	r.SecurityCenter = security_center.NewSecurityCenterService(opts...)
+	r.BrowsingRendering = browsing_rendering.NewBrowsingRenderingService(opts...)
 
 	return
 }
