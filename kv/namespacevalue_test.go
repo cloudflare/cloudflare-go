@@ -38,7 +38,7 @@ func TestNamespaceValueUpdateWithOptionalParams(t *testing.T) {
 		"My-Key",
 		kv.NamespaceValueUpdateParams{
 			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Metadata:      cloudflare.F("{\"someMetadataKey\": \"someMetadataValue\"}"),
+			Metadata:      cloudflare.F(`{"someMetadataKey": "someMetadataValue"}`),
 			Value:         cloudflare.F("Some Value"),
 			Expiration:    cloudflare.F(1578435000.000000),
 			ExpirationTTL: cloudflare.F(300.000000),

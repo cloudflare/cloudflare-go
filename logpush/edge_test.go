@@ -30,7 +30,7 @@ func TestEdgeNewWithOptionalParams(t *testing.T) {
 	_, err := client.Logpush.Edge.New(context.TODO(), logpush.EdgeNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Fields: cloudflare.F("ClientIP,ClientRequestHost,ClientRequestMethod,ClientRequestURI,EdgeEndTimestamp,EdgeResponseBytes,EdgeResponseStatus,EdgeStartTimestamp,RayID"),
-		Filter: cloudflare.F("{\"where\":{\"and\":[{\"key\":\"ClientCountry\",\"operator\":\"neq\",\"value\":\"ca\"}]}}"),
+		Filter: cloudflare.F(`{"where":{"and":[{"key":"ClientCountry","operator":"neq","value":"ca"}]}}`),
 		Sample: cloudflare.F(int64(1)),
 	})
 	if err != nil {
