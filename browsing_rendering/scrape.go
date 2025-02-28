@@ -236,7 +236,7 @@ const (
 	ScrapeNewParamsAllowResourceTypeFont               ScrapeNewParamsAllowResourceType = "font"
 	ScrapeNewParamsAllowResourceTypeScript             ScrapeNewParamsAllowResourceType = "script"
 	ScrapeNewParamsAllowResourceTypeTexttrack          ScrapeNewParamsAllowResourceType = "texttrack"
-	ScrapeNewParamsAllowResourceTypeXhr                ScrapeNewParamsAllowResourceType = "xhr"
+	ScrapeNewParamsAllowResourceTypeXHR                ScrapeNewParamsAllowResourceType = "xhr"
 	ScrapeNewParamsAllowResourceTypeFetch              ScrapeNewParamsAllowResourceType = "fetch"
 	ScrapeNewParamsAllowResourceTypePrefetch           ScrapeNewParamsAllowResourceType = "prefetch"
 	ScrapeNewParamsAllowResourceTypeEventsource        ScrapeNewParamsAllowResourceType = "eventsource"
@@ -251,7 +251,7 @@ const (
 
 func (r ScrapeNewParamsAllowResourceType) IsKnown() bool {
 	switch r {
-	case ScrapeNewParamsAllowResourceTypeDocument, ScrapeNewParamsAllowResourceTypeStylesheet, ScrapeNewParamsAllowResourceTypeImage, ScrapeNewParamsAllowResourceTypeMedia, ScrapeNewParamsAllowResourceTypeFont, ScrapeNewParamsAllowResourceTypeScript, ScrapeNewParamsAllowResourceTypeTexttrack, ScrapeNewParamsAllowResourceTypeXhr, ScrapeNewParamsAllowResourceTypeFetch, ScrapeNewParamsAllowResourceTypePrefetch, ScrapeNewParamsAllowResourceTypeEventsource, ScrapeNewParamsAllowResourceTypeWebsocket, ScrapeNewParamsAllowResourceTypeManifest, ScrapeNewParamsAllowResourceTypeSignedexchange, ScrapeNewParamsAllowResourceTypePing, ScrapeNewParamsAllowResourceTypeCspviolationreport, ScrapeNewParamsAllowResourceTypePreflight, ScrapeNewParamsAllowResourceTypeOther:
+	case ScrapeNewParamsAllowResourceTypeDocument, ScrapeNewParamsAllowResourceTypeStylesheet, ScrapeNewParamsAllowResourceTypeImage, ScrapeNewParamsAllowResourceTypeMedia, ScrapeNewParamsAllowResourceTypeFont, ScrapeNewParamsAllowResourceTypeScript, ScrapeNewParamsAllowResourceTypeTexttrack, ScrapeNewParamsAllowResourceTypeXHR, ScrapeNewParamsAllowResourceTypeFetch, ScrapeNewParamsAllowResourceTypePrefetch, ScrapeNewParamsAllowResourceTypeEventsource, ScrapeNewParamsAllowResourceTypeWebsocket, ScrapeNewParamsAllowResourceTypeManifest, ScrapeNewParamsAllowResourceTypeSignedexchange, ScrapeNewParamsAllowResourceTypePing, ScrapeNewParamsAllowResourceTypeCspviolationreport, ScrapeNewParamsAllowResourceTypePreflight, ScrapeNewParamsAllowResourceTypeOther:
 		return true
 	}
 	return false
@@ -406,7 +406,7 @@ const (
 	ScrapeNewParamsRejectResourceTypeFont               ScrapeNewParamsRejectResourceType = "font"
 	ScrapeNewParamsRejectResourceTypeScript             ScrapeNewParamsRejectResourceType = "script"
 	ScrapeNewParamsRejectResourceTypeTexttrack          ScrapeNewParamsRejectResourceType = "texttrack"
-	ScrapeNewParamsRejectResourceTypeXhr                ScrapeNewParamsRejectResourceType = "xhr"
+	ScrapeNewParamsRejectResourceTypeXHR                ScrapeNewParamsRejectResourceType = "xhr"
 	ScrapeNewParamsRejectResourceTypeFetch              ScrapeNewParamsRejectResourceType = "fetch"
 	ScrapeNewParamsRejectResourceTypePrefetch           ScrapeNewParamsRejectResourceType = "prefetch"
 	ScrapeNewParamsRejectResourceTypeEventsource        ScrapeNewParamsRejectResourceType = "eventsource"
@@ -421,7 +421,7 @@ const (
 
 func (r ScrapeNewParamsRejectResourceType) IsKnown() bool {
 	switch r {
-	case ScrapeNewParamsRejectResourceTypeDocument, ScrapeNewParamsRejectResourceTypeStylesheet, ScrapeNewParamsRejectResourceTypeImage, ScrapeNewParamsRejectResourceTypeMedia, ScrapeNewParamsRejectResourceTypeFont, ScrapeNewParamsRejectResourceTypeScript, ScrapeNewParamsRejectResourceTypeTexttrack, ScrapeNewParamsRejectResourceTypeXhr, ScrapeNewParamsRejectResourceTypeFetch, ScrapeNewParamsRejectResourceTypePrefetch, ScrapeNewParamsRejectResourceTypeEventsource, ScrapeNewParamsRejectResourceTypeWebsocket, ScrapeNewParamsRejectResourceTypeManifest, ScrapeNewParamsRejectResourceTypeSignedexchange, ScrapeNewParamsRejectResourceTypePing, ScrapeNewParamsRejectResourceTypeCspviolationreport, ScrapeNewParamsRejectResourceTypePreflight, ScrapeNewParamsRejectResourceTypeOther:
+	case ScrapeNewParamsRejectResourceTypeDocument, ScrapeNewParamsRejectResourceTypeStylesheet, ScrapeNewParamsRejectResourceTypeImage, ScrapeNewParamsRejectResourceTypeMedia, ScrapeNewParamsRejectResourceTypeFont, ScrapeNewParamsRejectResourceTypeScript, ScrapeNewParamsRejectResourceTypeTexttrack, ScrapeNewParamsRejectResourceTypeXHR, ScrapeNewParamsRejectResourceTypeFetch, ScrapeNewParamsRejectResourceTypePrefetch, ScrapeNewParamsRejectResourceTypeEventsource, ScrapeNewParamsRejectResourceTypeWebsocket, ScrapeNewParamsRejectResourceTypeManifest, ScrapeNewParamsRejectResourceTypeSignedexchange, ScrapeNewParamsRejectResourceTypePing, ScrapeNewParamsRejectResourceTypeCspviolationreport, ScrapeNewParamsRejectResourceTypePreflight, ScrapeNewParamsRejectResourceTypeOther:
 		return true
 	}
 	return false

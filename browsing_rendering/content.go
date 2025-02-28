@@ -140,7 +140,7 @@ const (
 	ContentNewParamsAllowResourceTypeFont               ContentNewParamsAllowResourceType = "font"
 	ContentNewParamsAllowResourceTypeScript             ContentNewParamsAllowResourceType = "script"
 	ContentNewParamsAllowResourceTypeTexttrack          ContentNewParamsAllowResourceType = "texttrack"
-	ContentNewParamsAllowResourceTypeXhr                ContentNewParamsAllowResourceType = "xhr"
+	ContentNewParamsAllowResourceTypeXHR                ContentNewParamsAllowResourceType = "xhr"
 	ContentNewParamsAllowResourceTypeFetch              ContentNewParamsAllowResourceType = "fetch"
 	ContentNewParamsAllowResourceTypePrefetch           ContentNewParamsAllowResourceType = "prefetch"
 	ContentNewParamsAllowResourceTypeEventsource        ContentNewParamsAllowResourceType = "eventsource"
@@ -155,7 +155,7 @@ const (
 
 func (r ContentNewParamsAllowResourceType) IsKnown() bool {
 	switch r {
-	case ContentNewParamsAllowResourceTypeDocument, ContentNewParamsAllowResourceTypeStylesheet, ContentNewParamsAllowResourceTypeImage, ContentNewParamsAllowResourceTypeMedia, ContentNewParamsAllowResourceTypeFont, ContentNewParamsAllowResourceTypeScript, ContentNewParamsAllowResourceTypeTexttrack, ContentNewParamsAllowResourceTypeXhr, ContentNewParamsAllowResourceTypeFetch, ContentNewParamsAllowResourceTypePrefetch, ContentNewParamsAllowResourceTypeEventsource, ContentNewParamsAllowResourceTypeWebsocket, ContentNewParamsAllowResourceTypeManifest, ContentNewParamsAllowResourceTypeSignedexchange, ContentNewParamsAllowResourceTypePing, ContentNewParamsAllowResourceTypeCspviolationreport, ContentNewParamsAllowResourceTypePreflight, ContentNewParamsAllowResourceTypeOther:
+	case ContentNewParamsAllowResourceTypeDocument, ContentNewParamsAllowResourceTypeStylesheet, ContentNewParamsAllowResourceTypeImage, ContentNewParamsAllowResourceTypeMedia, ContentNewParamsAllowResourceTypeFont, ContentNewParamsAllowResourceTypeScript, ContentNewParamsAllowResourceTypeTexttrack, ContentNewParamsAllowResourceTypeXHR, ContentNewParamsAllowResourceTypeFetch, ContentNewParamsAllowResourceTypePrefetch, ContentNewParamsAllowResourceTypeEventsource, ContentNewParamsAllowResourceTypeWebsocket, ContentNewParamsAllowResourceTypeManifest, ContentNewParamsAllowResourceTypeSignedexchange, ContentNewParamsAllowResourceTypePing, ContentNewParamsAllowResourceTypeCspviolationreport, ContentNewParamsAllowResourceTypePreflight, ContentNewParamsAllowResourceTypeOther:
 		return true
 	}
 	return false
@@ -310,7 +310,7 @@ const (
 	ContentNewParamsRejectResourceTypeFont               ContentNewParamsRejectResourceType = "font"
 	ContentNewParamsRejectResourceTypeScript             ContentNewParamsRejectResourceType = "script"
 	ContentNewParamsRejectResourceTypeTexttrack          ContentNewParamsRejectResourceType = "texttrack"
-	ContentNewParamsRejectResourceTypeXhr                ContentNewParamsRejectResourceType = "xhr"
+	ContentNewParamsRejectResourceTypeXHR                ContentNewParamsRejectResourceType = "xhr"
 	ContentNewParamsRejectResourceTypeFetch              ContentNewParamsRejectResourceType = "fetch"
 	ContentNewParamsRejectResourceTypePrefetch           ContentNewParamsRejectResourceType = "prefetch"
 	ContentNewParamsRejectResourceTypeEventsource        ContentNewParamsRejectResourceType = "eventsource"
@@ -325,7 +325,7 @@ const (
 
 func (r ContentNewParamsRejectResourceType) IsKnown() bool {
 	switch r {
-	case ContentNewParamsRejectResourceTypeDocument, ContentNewParamsRejectResourceTypeStylesheet, ContentNewParamsRejectResourceTypeImage, ContentNewParamsRejectResourceTypeMedia, ContentNewParamsRejectResourceTypeFont, ContentNewParamsRejectResourceTypeScript, ContentNewParamsRejectResourceTypeTexttrack, ContentNewParamsRejectResourceTypeXhr, ContentNewParamsRejectResourceTypeFetch, ContentNewParamsRejectResourceTypePrefetch, ContentNewParamsRejectResourceTypeEventsource, ContentNewParamsRejectResourceTypeWebsocket, ContentNewParamsRejectResourceTypeManifest, ContentNewParamsRejectResourceTypeSignedexchange, ContentNewParamsRejectResourceTypePing, ContentNewParamsRejectResourceTypeCspviolationreport, ContentNewParamsRejectResourceTypePreflight, ContentNewParamsRejectResourceTypeOther:
+	case ContentNewParamsRejectResourceTypeDocument, ContentNewParamsRejectResourceTypeStylesheet, ContentNewParamsRejectResourceTypeImage, ContentNewParamsRejectResourceTypeMedia, ContentNewParamsRejectResourceTypeFont, ContentNewParamsRejectResourceTypeScript, ContentNewParamsRejectResourceTypeTexttrack, ContentNewParamsRejectResourceTypeXHR, ContentNewParamsRejectResourceTypeFetch, ContentNewParamsRejectResourceTypePrefetch, ContentNewParamsRejectResourceTypeEventsource, ContentNewParamsRejectResourceTypeWebsocket, ContentNewParamsRejectResourceTypeManifest, ContentNewParamsRejectResourceTypeSignedexchange, ContentNewParamsRejectResourceTypePing, ContentNewParamsRejectResourceTypeCspviolationreport, ContentNewParamsRejectResourceTypePreflight, ContentNewParamsRejectResourceTypeOther:
 		return true
 	}
 	return false
