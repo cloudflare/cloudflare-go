@@ -14,7 +14,7 @@ import (
 // the [NewMagicNetworkMonitoringService] method instead.
 type MagicNetworkMonitoringService struct {
 	Options  []option.RequestOption
-	VpcFlows *VpcFlowService
+	VPCFlows *VPCFlowService
 	Configs  *ConfigService
 	Rules    *RuleService
 }
@@ -25,7 +25,7 @@ type MagicNetworkMonitoringService struct {
 func NewMagicNetworkMonitoringService(opts ...option.RequestOption) (r *MagicNetworkMonitoringService) {
 	r = &MagicNetworkMonitoringService{}
 	r.Options = opts
-	r.VpcFlows = NewVpcFlowService(opts...)
+	r.VPCFlows = NewVPCFlowService(opts...)
 	r.Configs = NewConfigService(opts...)
 	r.Rules = NewRuleService(opts...)
 	return
