@@ -189,7 +189,7 @@ const (
 	ScreenshotNewParamsAllowResourceTypeFont               ScreenshotNewParamsAllowResourceType = "font"
 	ScreenshotNewParamsAllowResourceTypeScript             ScreenshotNewParamsAllowResourceType = "script"
 	ScreenshotNewParamsAllowResourceTypeTexttrack          ScreenshotNewParamsAllowResourceType = "texttrack"
-	ScreenshotNewParamsAllowResourceTypeXhr                ScreenshotNewParamsAllowResourceType = "xhr"
+	ScreenshotNewParamsAllowResourceTypeXHR                ScreenshotNewParamsAllowResourceType = "xhr"
 	ScreenshotNewParamsAllowResourceTypeFetch              ScreenshotNewParamsAllowResourceType = "fetch"
 	ScreenshotNewParamsAllowResourceTypePrefetch           ScreenshotNewParamsAllowResourceType = "prefetch"
 	ScreenshotNewParamsAllowResourceTypeEventsource        ScreenshotNewParamsAllowResourceType = "eventsource"
@@ -204,7 +204,7 @@ const (
 
 func (r ScreenshotNewParamsAllowResourceType) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsAllowResourceTypeDocument, ScreenshotNewParamsAllowResourceTypeStylesheet, ScreenshotNewParamsAllowResourceTypeImage, ScreenshotNewParamsAllowResourceTypeMedia, ScreenshotNewParamsAllowResourceTypeFont, ScreenshotNewParamsAllowResourceTypeScript, ScreenshotNewParamsAllowResourceTypeTexttrack, ScreenshotNewParamsAllowResourceTypeXhr, ScreenshotNewParamsAllowResourceTypeFetch, ScreenshotNewParamsAllowResourceTypePrefetch, ScreenshotNewParamsAllowResourceTypeEventsource, ScreenshotNewParamsAllowResourceTypeWebsocket, ScreenshotNewParamsAllowResourceTypeManifest, ScreenshotNewParamsAllowResourceTypeSignedexchange, ScreenshotNewParamsAllowResourceTypePing, ScreenshotNewParamsAllowResourceTypeCspviolationreport, ScreenshotNewParamsAllowResourceTypePreflight, ScreenshotNewParamsAllowResourceTypeOther:
+	case ScreenshotNewParamsAllowResourceTypeDocument, ScreenshotNewParamsAllowResourceTypeStylesheet, ScreenshotNewParamsAllowResourceTypeImage, ScreenshotNewParamsAllowResourceTypeMedia, ScreenshotNewParamsAllowResourceTypeFont, ScreenshotNewParamsAllowResourceTypeScript, ScreenshotNewParamsAllowResourceTypeTexttrack, ScreenshotNewParamsAllowResourceTypeXHR, ScreenshotNewParamsAllowResourceTypeFetch, ScreenshotNewParamsAllowResourceTypePrefetch, ScreenshotNewParamsAllowResourceTypeEventsource, ScreenshotNewParamsAllowResourceTypeWebsocket, ScreenshotNewParamsAllowResourceTypeManifest, ScreenshotNewParamsAllowResourceTypeSignedexchange, ScreenshotNewParamsAllowResourceTypePing, ScreenshotNewParamsAllowResourceTypeCspviolationreport, ScreenshotNewParamsAllowResourceTypePreflight, ScreenshotNewParamsAllowResourceTypeOther:
 		return true
 	}
 	return false
@@ -359,7 +359,7 @@ const (
 	ScreenshotNewParamsRejectResourceTypeFont               ScreenshotNewParamsRejectResourceType = "font"
 	ScreenshotNewParamsRejectResourceTypeScript             ScreenshotNewParamsRejectResourceType = "script"
 	ScreenshotNewParamsRejectResourceTypeTexttrack          ScreenshotNewParamsRejectResourceType = "texttrack"
-	ScreenshotNewParamsRejectResourceTypeXhr                ScreenshotNewParamsRejectResourceType = "xhr"
+	ScreenshotNewParamsRejectResourceTypeXHR                ScreenshotNewParamsRejectResourceType = "xhr"
 	ScreenshotNewParamsRejectResourceTypeFetch              ScreenshotNewParamsRejectResourceType = "fetch"
 	ScreenshotNewParamsRejectResourceTypePrefetch           ScreenshotNewParamsRejectResourceType = "prefetch"
 	ScreenshotNewParamsRejectResourceTypeEventsource        ScreenshotNewParamsRejectResourceType = "eventsource"
@@ -374,7 +374,7 @@ const (
 
 func (r ScreenshotNewParamsRejectResourceType) IsKnown() bool {
 	switch r {
-	case ScreenshotNewParamsRejectResourceTypeDocument, ScreenshotNewParamsRejectResourceTypeStylesheet, ScreenshotNewParamsRejectResourceTypeImage, ScreenshotNewParamsRejectResourceTypeMedia, ScreenshotNewParamsRejectResourceTypeFont, ScreenshotNewParamsRejectResourceTypeScript, ScreenshotNewParamsRejectResourceTypeTexttrack, ScreenshotNewParamsRejectResourceTypeXhr, ScreenshotNewParamsRejectResourceTypeFetch, ScreenshotNewParamsRejectResourceTypePrefetch, ScreenshotNewParamsRejectResourceTypeEventsource, ScreenshotNewParamsRejectResourceTypeWebsocket, ScreenshotNewParamsRejectResourceTypeManifest, ScreenshotNewParamsRejectResourceTypeSignedexchange, ScreenshotNewParamsRejectResourceTypePing, ScreenshotNewParamsRejectResourceTypeCspviolationreport, ScreenshotNewParamsRejectResourceTypePreflight, ScreenshotNewParamsRejectResourceTypeOther:
+	case ScreenshotNewParamsRejectResourceTypeDocument, ScreenshotNewParamsRejectResourceTypeStylesheet, ScreenshotNewParamsRejectResourceTypeImage, ScreenshotNewParamsRejectResourceTypeMedia, ScreenshotNewParamsRejectResourceTypeFont, ScreenshotNewParamsRejectResourceTypeScript, ScreenshotNewParamsRejectResourceTypeTexttrack, ScreenshotNewParamsRejectResourceTypeXHR, ScreenshotNewParamsRejectResourceTypeFetch, ScreenshotNewParamsRejectResourceTypePrefetch, ScreenshotNewParamsRejectResourceTypeEventsource, ScreenshotNewParamsRejectResourceTypeWebsocket, ScreenshotNewParamsRejectResourceTypeManifest, ScreenshotNewParamsRejectResourceTypeSignedexchange, ScreenshotNewParamsRejectResourceTypePing, ScreenshotNewParamsRejectResourceTypeCspviolationreport, ScreenshotNewParamsRejectResourceTypePreflight, ScreenshotNewParamsRejectResourceTypeOther:
 		return true
 	}
 	return false

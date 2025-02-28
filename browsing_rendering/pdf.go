@@ -136,7 +136,7 @@ const (
 	PDFNewParamsAllowResourceTypeFont               PDFNewParamsAllowResourceType = "font"
 	PDFNewParamsAllowResourceTypeScript             PDFNewParamsAllowResourceType = "script"
 	PDFNewParamsAllowResourceTypeTexttrack          PDFNewParamsAllowResourceType = "texttrack"
-	PDFNewParamsAllowResourceTypeXhr                PDFNewParamsAllowResourceType = "xhr"
+	PDFNewParamsAllowResourceTypeXHR                PDFNewParamsAllowResourceType = "xhr"
 	PDFNewParamsAllowResourceTypeFetch              PDFNewParamsAllowResourceType = "fetch"
 	PDFNewParamsAllowResourceTypePrefetch           PDFNewParamsAllowResourceType = "prefetch"
 	PDFNewParamsAllowResourceTypeEventsource        PDFNewParamsAllowResourceType = "eventsource"
@@ -151,7 +151,7 @@ const (
 
 func (r PDFNewParamsAllowResourceType) IsKnown() bool {
 	switch r {
-	case PDFNewParamsAllowResourceTypeDocument, PDFNewParamsAllowResourceTypeStylesheet, PDFNewParamsAllowResourceTypeImage, PDFNewParamsAllowResourceTypeMedia, PDFNewParamsAllowResourceTypeFont, PDFNewParamsAllowResourceTypeScript, PDFNewParamsAllowResourceTypeTexttrack, PDFNewParamsAllowResourceTypeXhr, PDFNewParamsAllowResourceTypeFetch, PDFNewParamsAllowResourceTypePrefetch, PDFNewParamsAllowResourceTypeEventsource, PDFNewParamsAllowResourceTypeWebsocket, PDFNewParamsAllowResourceTypeManifest, PDFNewParamsAllowResourceTypeSignedexchange, PDFNewParamsAllowResourceTypePing, PDFNewParamsAllowResourceTypeCspviolationreport, PDFNewParamsAllowResourceTypePreflight, PDFNewParamsAllowResourceTypeOther:
+	case PDFNewParamsAllowResourceTypeDocument, PDFNewParamsAllowResourceTypeStylesheet, PDFNewParamsAllowResourceTypeImage, PDFNewParamsAllowResourceTypeMedia, PDFNewParamsAllowResourceTypeFont, PDFNewParamsAllowResourceTypeScript, PDFNewParamsAllowResourceTypeTexttrack, PDFNewParamsAllowResourceTypeXHR, PDFNewParamsAllowResourceTypeFetch, PDFNewParamsAllowResourceTypePrefetch, PDFNewParamsAllowResourceTypeEventsource, PDFNewParamsAllowResourceTypeWebsocket, PDFNewParamsAllowResourceTypeManifest, PDFNewParamsAllowResourceTypeSignedexchange, PDFNewParamsAllowResourceTypePing, PDFNewParamsAllowResourceTypeCspviolationreport, PDFNewParamsAllowResourceTypePreflight, PDFNewParamsAllowResourceTypeOther:
 		return true
 	}
 	return false
@@ -304,7 +304,7 @@ const (
 	PDFNewParamsRejectResourceTypeFont               PDFNewParamsRejectResourceType = "font"
 	PDFNewParamsRejectResourceTypeScript             PDFNewParamsRejectResourceType = "script"
 	PDFNewParamsRejectResourceTypeTexttrack          PDFNewParamsRejectResourceType = "texttrack"
-	PDFNewParamsRejectResourceTypeXhr                PDFNewParamsRejectResourceType = "xhr"
+	PDFNewParamsRejectResourceTypeXHR                PDFNewParamsRejectResourceType = "xhr"
 	PDFNewParamsRejectResourceTypeFetch              PDFNewParamsRejectResourceType = "fetch"
 	PDFNewParamsRejectResourceTypePrefetch           PDFNewParamsRejectResourceType = "prefetch"
 	PDFNewParamsRejectResourceTypeEventsource        PDFNewParamsRejectResourceType = "eventsource"
@@ -319,7 +319,7 @@ const (
 
 func (r PDFNewParamsRejectResourceType) IsKnown() bool {
 	switch r {
-	case PDFNewParamsRejectResourceTypeDocument, PDFNewParamsRejectResourceTypeStylesheet, PDFNewParamsRejectResourceTypeImage, PDFNewParamsRejectResourceTypeMedia, PDFNewParamsRejectResourceTypeFont, PDFNewParamsRejectResourceTypeScript, PDFNewParamsRejectResourceTypeTexttrack, PDFNewParamsRejectResourceTypeXhr, PDFNewParamsRejectResourceTypeFetch, PDFNewParamsRejectResourceTypePrefetch, PDFNewParamsRejectResourceTypeEventsource, PDFNewParamsRejectResourceTypeWebsocket, PDFNewParamsRejectResourceTypeManifest, PDFNewParamsRejectResourceTypeSignedexchange, PDFNewParamsRejectResourceTypePing, PDFNewParamsRejectResourceTypeCspviolationreport, PDFNewParamsRejectResourceTypePreflight, PDFNewParamsRejectResourceTypeOther:
+	case PDFNewParamsRejectResourceTypeDocument, PDFNewParamsRejectResourceTypeStylesheet, PDFNewParamsRejectResourceTypeImage, PDFNewParamsRejectResourceTypeMedia, PDFNewParamsRejectResourceTypeFont, PDFNewParamsRejectResourceTypeScript, PDFNewParamsRejectResourceTypeTexttrack, PDFNewParamsRejectResourceTypeXHR, PDFNewParamsRejectResourceTypeFetch, PDFNewParamsRejectResourceTypePrefetch, PDFNewParamsRejectResourceTypeEventsource, PDFNewParamsRejectResourceTypeWebsocket, PDFNewParamsRejectResourceTypeManifest, PDFNewParamsRejectResourceTypeSignedexchange, PDFNewParamsRejectResourceTypePing, PDFNewParamsRejectResourceTypeCspviolationreport, PDFNewParamsRejectResourceTypePreflight, PDFNewParamsRejectResourceTypeOther:
 		return true
 	}
 	return false

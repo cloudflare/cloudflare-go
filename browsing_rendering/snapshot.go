@@ -166,7 +166,7 @@ const (
 	SnapshotNewParamsAllowResourceTypeFont               SnapshotNewParamsAllowResourceType = "font"
 	SnapshotNewParamsAllowResourceTypeScript             SnapshotNewParamsAllowResourceType = "script"
 	SnapshotNewParamsAllowResourceTypeTexttrack          SnapshotNewParamsAllowResourceType = "texttrack"
-	SnapshotNewParamsAllowResourceTypeXhr                SnapshotNewParamsAllowResourceType = "xhr"
+	SnapshotNewParamsAllowResourceTypeXHR                SnapshotNewParamsAllowResourceType = "xhr"
 	SnapshotNewParamsAllowResourceTypeFetch              SnapshotNewParamsAllowResourceType = "fetch"
 	SnapshotNewParamsAllowResourceTypePrefetch           SnapshotNewParamsAllowResourceType = "prefetch"
 	SnapshotNewParamsAllowResourceTypeEventsource        SnapshotNewParamsAllowResourceType = "eventsource"
@@ -181,7 +181,7 @@ const (
 
 func (r SnapshotNewParamsAllowResourceType) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsAllowResourceTypeDocument, SnapshotNewParamsAllowResourceTypeStylesheet, SnapshotNewParamsAllowResourceTypeImage, SnapshotNewParamsAllowResourceTypeMedia, SnapshotNewParamsAllowResourceTypeFont, SnapshotNewParamsAllowResourceTypeScript, SnapshotNewParamsAllowResourceTypeTexttrack, SnapshotNewParamsAllowResourceTypeXhr, SnapshotNewParamsAllowResourceTypeFetch, SnapshotNewParamsAllowResourceTypePrefetch, SnapshotNewParamsAllowResourceTypeEventsource, SnapshotNewParamsAllowResourceTypeWebsocket, SnapshotNewParamsAllowResourceTypeManifest, SnapshotNewParamsAllowResourceTypeSignedexchange, SnapshotNewParamsAllowResourceTypePing, SnapshotNewParamsAllowResourceTypeCspviolationreport, SnapshotNewParamsAllowResourceTypePreflight, SnapshotNewParamsAllowResourceTypeOther:
+	case SnapshotNewParamsAllowResourceTypeDocument, SnapshotNewParamsAllowResourceTypeStylesheet, SnapshotNewParamsAllowResourceTypeImage, SnapshotNewParamsAllowResourceTypeMedia, SnapshotNewParamsAllowResourceTypeFont, SnapshotNewParamsAllowResourceTypeScript, SnapshotNewParamsAllowResourceTypeTexttrack, SnapshotNewParamsAllowResourceTypeXHR, SnapshotNewParamsAllowResourceTypeFetch, SnapshotNewParamsAllowResourceTypePrefetch, SnapshotNewParamsAllowResourceTypeEventsource, SnapshotNewParamsAllowResourceTypeWebsocket, SnapshotNewParamsAllowResourceTypeManifest, SnapshotNewParamsAllowResourceTypeSignedexchange, SnapshotNewParamsAllowResourceTypePing, SnapshotNewParamsAllowResourceTypeCspviolationreport, SnapshotNewParamsAllowResourceTypePreflight, SnapshotNewParamsAllowResourceTypeOther:
 		return true
 	}
 	return false
@@ -336,7 +336,7 @@ const (
 	SnapshotNewParamsRejectResourceTypeFont               SnapshotNewParamsRejectResourceType = "font"
 	SnapshotNewParamsRejectResourceTypeScript             SnapshotNewParamsRejectResourceType = "script"
 	SnapshotNewParamsRejectResourceTypeTexttrack          SnapshotNewParamsRejectResourceType = "texttrack"
-	SnapshotNewParamsRejectResourceTypeXhr                SnapshotNewParamsRejectResourceType = "xhr"
+	SnapshotNewParamsRejectResourceTypeXHR                SnapshotNewParamsRejectResourceType = "xhr"
 	SnapshotNewParamsRejectResourceTypeFetch              SnapshotNewParamsRejectResourceType = "fetch"
 	SnapshotNewParamsRejectResourceTypePrefetch           SnapshotNewParamsRejectResourceType = "prefetch"
 	SnapshotNewParamsRejectResourceTypeEventsource        SnapshotNewParamsRejectResourceType = "eventsource"
@@ -351,7 +351,7 @@ const (
 
 func (r SnapshotNewParamsRejectResourceType) IsKnown() bool {
 	switch r {
-	case SnapshotNewParamsRejectResourceTypeDocument, SnapshotNewParamsRejectResourceTypeStylesheet, SnapshotNewParamsRejectResourceTypeImage, SnapshotNewParamsRejectResourceTypeMedia, SnapshotNewParamsRejectResourceTypeFont, SnapshotNewParamsRejectResourceTypeScript, SnapshotNewParamsRejectResourceTypeTexttrack, SnapshotNewParamsRejectResourceTypeXhr, SnapshotNewParamsRejectResourceTypeFetch, SnapshotNewParamsRejectResourceTypePrefetch, SnapshotNewParamsRejectResourceTypeEventsource, SnapshotNewParamsRejectResourceTypeWebsocket, SnapshotNewParamsRejectResourceTypeManifest, SnapshotNewParamsRejectResourceTypeSignedexchange, SnapshotNewParamsRejectResourceTypePing, SnapshotNewParamsRejectResourceTypeCspviolationreport, SnapshotNewParamsRejectResourceTypePreflight, SnapshotNewParamsRejectResourceTypeOther:
+	case SnapshotNewParamsRejectResourceTypeDocument, SnapshotNewParamsRejectResourceTypeStylesheet, SnapshotNewParamsRejectResourceTypeImage, SnapshotNewParamsRejectResourceTypeMedia, SnapshotNewParamsRejectResourceTypeFont, SnapshotNewParamsRejectResourceTypeScript, SnapshotNewParamsRejectResourceTypeTexttrack, SnapshotNewParamsRejectResourceTypeXHR, SnapshotNewParamsRejectResourceTypeFetch, SnapshotNewParamsRejectResourceTypePrefetch, SnapshotNewParamsRejectResourceTypeEventsource, SnapshotNewParamsRejectResourceTypeWebsocket, SnapshotNewParamsRejectResourceTypeManifest, SnapshotNewParamsRejectResourceTypeSignedexchange, SnapshotNewParamsRejectResourceTypePing, SnapshotNewParamsRejectResourceTypeCspviolationreport, SnapshotNewParamsRejectResourceTypePreflight, SnapshotNewParamsRejectResourceTypeOther:
 		return true
 	}
 	return false
