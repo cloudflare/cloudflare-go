@@ -940,7 +940,7 @@ type RuleSettingQuarantineFileType string
 
 const (
 	RuleSettingQuarantineFileTypeExe  RuleSettingQuarantineFileType = "exe"
-	RuleSettingQuarantineFileTypePdf  RuleSettingQuarantineFileType = "pdf"
+	RuleSettingQuarantineFileTypePDF  RuleSettingQuarantineFileType = "pdf"
 	RuleSettingQuarantineFileTypeDoc  RuleSettingQuarantineFileType = "doc"
 	RuleSettingQuarantineFileTypeDocm RuleSettingQuarantineFileType = "docm"
 	RuleSettingQuarantineFileTypeDocx RuleSettingQuarantineFileType = "docx"
@@ -956,7 +956,7 @@ const (
 
 func (r RuleSettingQuarantineFileType) IsKnown() bool {
 	switch r {
-	case RuleSettingQuarantineFileTypeExe, RuleSettingQuarantineFileTypePdf, RuleSettingQuarantineFileTypeDoc, RuleSettingQuarantineFileTypeDocm, RuleSettingQuarantineFileTypeDocx, RuleSettingQuarantineFileTypeRtf, RuleSettingQuarantineFileTypePpt, RuleSettingQuarantineFileTypePptx, RuleSettingQuarantineFileTypeXls, RuleSettingQuarantineFileTypeXlsm, RuleSettingQuarantineFileTypeXlsx, RuleSettingQuarantineFileTypeZip, RuleSettingQuarantineFileTypeRar:
+	case RuleSettingQuarantineFileTypeExe, RuleSettingQuarantineFileTypePDF, RuleSettingQuarantineFileTypeDoc, RuleSettingQuarantineFileTypeDocm, RuleSettingQuarantineFileTypeDocx, RuleSettingQuarantineFileTypeRtf, RuleSettingQuarantineFileTypePpt, RuleSettingQuarantineFileTypePptx, RuleSettingQuarantineFileTypeXls, RuleSettingQuarantineFileTypeXlsm, RuleSettingQuarantineFileTypeXlsx, RuleSettingQuarantineFileTypeZip, RuleSettingQuarantineFileTypeRar:
 		return true
 	}
 	return false

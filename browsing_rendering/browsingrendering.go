@@ -15,7 +15,7 @@ import (
 type BrowsingRenderingService struct {
 	Options    []option.RequestOption
 	Content    *ContentService
-	Pdf        *PdfService
+	PDF        *PDFService
 	Scrape     *ScrapeService
 	Screenshot *ScreenshotService
 	Snapshot   *SnapshotService
@@ -28,7 +28,7 @@ func NewBrowsingRenderingService(opts ...option.RequestOption) (r *BrowsingRende
 	r = &BrowsingRenderingService{}
 	r.Options = opts
 	r.Content = NewContentService(opts...)
-	r.Pdf = NewPdfService(opts...)
+	r.PDF = NewPDFService(opts...)
 	r.Scrape = NewScrapeService(opts...)
 	r.Screenshot = NewScreenshotService(opts...)
 	r.Snapshot = NewSnapshotService(opts...)

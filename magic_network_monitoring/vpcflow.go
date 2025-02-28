@@ -6,23 +6,23 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-// VpcFlowService contains methods and other services that help with interacting
+// VPCFlowService contains methods and other services that help with interacting
 // with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewVpcFlowService] method instead.
-type VpcFlowService struct {
+// the [NewVPCFlowService] method instead.
+type VPCFlowService struct {
 	Options []option.RequestOption
-	Tokens  *VpcFlowTokenService
+	Tokens  *VPCFlowTokenService
 }
 
-// NewVpcFlowService generates a new service that applies the given options to each
+// NewVPCFlowService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewVpcFlowService(opts ...option.RequestOption) (r *VpcFlowService) {
-	r = &VpcFlowService{}
+func NewVPCFlowService(opts ...option.RequestOption) (r *VPCFlowService) {
+	r = &VPCFlowService{}
 	r.Options = opts
-	r.Tokens = NewVpcFlowTokenService(opts...)
+	r.Tokens = NewVPCFlowTokenService(opts...)
 	return
 }
