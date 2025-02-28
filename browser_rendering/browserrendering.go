@@ -1,18 +1,18 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package browsing_rendering
+package browser_rendering
 
 import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-// BrowsingRenderingService contains methods and other services that help with
+// BrowserRenderingService contains methods and other services that help with
 // interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewBrowsingRenderingService] method instead.
-type BrowsingRenderingService struct {
+// the [NewBrowserRenderingService] method instead.
+type BrowserRenderingService struct {
 	Options    []option.RequestOption
 	Content    *ContentService
 	PDF        *PDFService
@@ -21,11 +21,11 @@ type BrowsingRenderingService struct {
 	Snapshot   *SnapshotService
 }
 
-// NewBrowsingRenderingService generates a new service that applies the given
+// NewBrowserRenderingService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewBrowsingRenderingService(opts ...option.RequestOption) (r *BrowsingRenderingService) {
-	r = &BrowsingRenderingService{}
+func NewBrowserRenderingService(opts ...option.RequestOption) (r *BrowserRenderingService) {
+	r = &BrowserRenderingService{}
 	r.Options = opts
 	r.Content = NewContentService(opts...)
 	r.PDF = NewPDFService(opts...)

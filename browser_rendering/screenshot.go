@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package browsing_rendering
+package browser_rendering
 
 import (
 	"context"
@@ -301,8 +301,8 @@ func (r ScreenshotNewParamsGotoOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Satisfied by [browsing_rendering.ScreenshotNewParamsGotoOptionsWaitUntilString],
-// [browsing_rendering.ScreenshotNewParamsGotoOptionsWaitUntilArray].
+// Satisfied by [browser_rendering.ScreenshotNewParamsGotoOptionsWaitUntilString],
+// [browser_rendering.ScreenshotNewParamsGotoOptionsWaitUntilArray].
 type ScreenshotNewParamsGotoOptionsWaitUntilUnion interface {
 	implementsScreenshotNewParamsGotoOptionsWaitUntilUnion()
 }
