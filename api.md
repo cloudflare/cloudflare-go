@@ -3721,6 +3721,14 @@ Methods:
 
 # MagicNetworkMonitoring
 
+## VpcFlows
+
+### Tokens
+
+Methods:
+
+- <code title="post /accounts/{account_id}/mnm/vpc-flows/token">client.MagicNetworkMonitoring.VpcFlows.Tokens.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring#VpcFlowTokenService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring">magic_network_monitoring</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring#VpcFlowTokenNewParams">VpcFlowTokenNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Configs
 
 Response Types:
