@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package browsing_rendering_test
+package browser_rendering_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/browsing_rendering"
+	"github.com/cloudflare/cloudflare-go/v4/browser_rendering"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestScrapeNewWithOptionalParams(t *testing.T) {
+func TestContentNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,32 +27,29 @@ func TestScrapeNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.BrowsingRendering.Scrape.New(
+	_, err := client.BrowserRendering.Content.New(
 		context.TODO(),
 		"accountId",
-		browsing_rendering.ScrapeNewParams{
-			Elements: cloudflare.F([]browsing_rendering.ScrapeNewParamsElement{{
-				Selector: cloudflare.F("selector"),
-			}}),
+		browser_rendering.ContentNewParams{
 			CacheTTL: cloudflare.F(86400.000000),
-			AddScriptTag: cloudflare.F([]browsing_rendering.ScrapeNewParamsAddScriptTag{{
+			AddScriptTag: cloudflare.F([]browser_rendering.ContentNewParamsAddScriptTag{{
 				ID:      cloudflare.F("id"),
 				Content: cloudflare.F("content"),
 				Type:    cloudflare.F("type"),
 				URL:     cloudflare.F("url"),
 			}}),
-			AddStyleTag: cloudflare.F([]browsing_rendering.ScrapeNewParamsAddStyleTag{{
+			AddStyleTag: cloudflare.F([]browser_rendering.ContentNewParamsAddStyleTag{{
 				Content: cloudflare.F("content"),
 				URL:     cloudflare.F("url"),
 			}}),
 			AllowRequestPattern: cloudflare.F([]string{"string"}),
-			AllowResourceTypes:  cloudflare.F([]browsing_rendering.ScrapeNewParamsAllowResourceType{browsing_rendering.ScrapeNewParamsAllowResourceTypeDocument}),
-			Authenticate: cloudflare.F(browsing_rendering.ScrapeNewParamsAuthenticate{
+			AllowResourceTypes:  cloudflare.F([]browser_rendering.ContentNewParamsAllowResourceType{browser_rendering.ContentNewParamsAllowResourceTypeDocument}),
+			Authenticate: cloudflare.F(browser_rendering.ContentNewParamsAuthenticate{
 				Password: cloudflare.F("x"),
 				Username: cloudflare.F("x"),
 			}),
 			BestAttempt: cloudflare.F(true),
-			Cookies: cloudflare.F([]browsing_rendering.ScrapeNewParamsCookie{{
+			Cookies: cloudflare.F([]browser_rendering.ContentNewParamsCookie{{
 				Name:         cloudflare.F("name"),
 				Value:        cloudflare.F("value"),
 				Domain:       cloudflare.F("domain"),
@@ -60,31 +57,31 @@ func TestScrapeNewWithOptionalParams(t *testing.T) {
 				HTTPOnly:     cloudflare.F(true),
 				PartitionKey: cloudflare.F("partitionKey"),
 				Path:         cloudflare.F("path"),
-				Priority:     cloudflare.F(browsing_rendering.ScrapeNewParamsCookiesPriorityLow),
+				Priority:     cloudflare.F(browser_rendering.ContentNewParamsCookiesPriorityLow),
 				SameParty:    cloudflare.F(true),
-				SameSite:     cloudflare.F(browsing_rendering.ScrapeNewParamsCookiesSameSiteStrict),
+				SameSite:     cloudflare.F(browser_rendering.ContentNewParamsCookiesSameSiteStrict),
 				Secure:       cloudflare.F(true),
 				SourcePort:   cloudflare.F(0.000000),
-				SourceScheme: cloudflare.F(browsing_rendering.ScrapeNewParamsCookiesSourceSchemeUnset),
+				SourceScheme: cloudflare.F(browser_rendering.ContentNewParamsCookiesSourceSchemeUnset),
 				URL:          cloudflare.F("url"),
 			}}),
 			EmulateMediaType: cloudflare.F("emulateMediaType"),
-			GotoOptions: cloudflare.F(browsing_rendering.ScrapeNewParamsGotoOptions{
+			GotoOptions: cloudflare.F(browser_rendering.ContentNewParamsGotoOptions{
 				Referer:        cloudflare.F("referer"),
 				ReferrerPolicy: cloudflare.F("referrerPolicy"),
 				Timeout:        cloudflare.F(60000.000000),
-				WaitUntil:      cloudflare.F[browsing_rendering.ScrapeNewParamsGotoOptionsWaitUntilUnion](browsing_rendering.ScrapeNewParamsGotoOptionsWaitUntilString(browsing_rendering.ScrapeNewParamsGotoOptionsWaitUntilStringLoad)),
+				WaitUntil:      cloudflare.F[browser_rendering.ContentNewParamsGotoOptionsWaitUntilUnion](browser_rendering.ContentNewParamsGotoOptionsWaitUntilString(browser_rendering.ContentNewParamsGotoOptionsWaitUntilStringLoad)),
 			}),
 			HTML:                 cloudflare.F("x"),
 			RejectRequestPattern: cloudflare.F([]string{"string"}),
-			RejectResourceTypes:  cloudflare.F([]browsing_rendering.ScrapeNewParamsRejectResourceType{browsing_rendering.ScrapeNewParamsRejectResourceTypeDocument}),
+			RejectResourceTypes:  cloudflare.F([]browser_rendering.ContentNewParamsRejectResourceType{browser_rendering.ContentNewParamsRejectResourceTypeDocument}),
 			SetExtraHTTPHeaders: cloudflare.F(map[string]string{
 				"foo": "string",
 			}),
 			SetJavaScriptEnabled: cloudflare.F(true),
 			URL:                  cloudflare.F("https://example.com"),
 			UserAgent:            cloudflare.F("userAgent"),
-			Viewport: cloudflare.F(browsing_rendering.ScrapeNewParamsViewport{
+			Viewport: cloudflare.F(browser_rendering.ContentNewParamsViewport{
 				Height:            cloudflare.F(0.000000),
 				Width:             cloudflare.F(0.000000),
 				DeviceScaleFactor: cloudflare.F(0.000000),
@@ -92,11 +89,11 @@ func TestScrapeNewWithOptionalParams(t *testing.T) {
 				IsLandscape:       cloudflare.F(true),
 				IsMobile:          cloudflare.F(true),
 			}),
-			WaitForSelector: cloudflare.F(browsing_rendering.ScrapeNewParamsWaitForSelector{
+			WaitForSelector: cloudflare.F(browser_rendering.ContentNewParamsWaitForSelector{
 				Selector: cloudflare.F("selector"),
-				Hidden:   cloudflare.F(browsing_rendering.ScrapeNewParamsWaitForSelectorHiddenTrue),
+				Hidden:   cloudflare.F(browser_rendering.ContentNewParamsWaitForSelectorHiddenTrue),
 				Timeout:  cloudflare.F(60000.000000),
-				Visible:  cloudflare.F(browsing_rendering.ScrapeNewParamsWaitForSelectorVisibleTrue),
+				Visible:  cloudflare.F(browser_rendering.ContentNewParamsWaitForSelectorVisibleTrue),
 			}),
 			WaitForTimeout: cloudflare.F(60000.000000),
 		},

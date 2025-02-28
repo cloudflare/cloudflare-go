@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package browsing_rendering
+package browser_rendering
 
 import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/apierror"

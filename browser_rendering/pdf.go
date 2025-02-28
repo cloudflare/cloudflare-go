@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package browsing_rendering
+package browser_rendering
 
 import (
 	"context"
@@ -248,8 +248,8 @@ func (r PDFNewParamsGotoOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Satisfied by [browsing_rendering.PDFNewParamsGotoOptionsWaitUntilString],
-// [browsing_rendering.PDFNewParamsGotoOptionsWaitUntilArray].
+// Satisfied by [browser_rendering.PDFNewParamsGotoOptionsWaitUntilString],
+// [browser_rendering.PDFNewParamsGotoOptionsWaitUntilArray].
 type PDFNewParamsGotoOptionsWaitUntilUnion interface {
 	implementsPDFNewParamsGotoOptionsWaitUntilUnion()
 }
