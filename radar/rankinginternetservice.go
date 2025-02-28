@@ -37,6 +37,19 @@ func NewRankingInternetServiceService(opts ...option.RequestOption) (r *RankingI
 	return
 }
 
+// Retrieves the list of Internet services categories.
+func (r *RankingInternetServiceService) Categories(ctx context.Context, query RankingInternetServiceCategoriesParams, opts ...option.RequestOption) (res *RankingInternetServiceCategoriesResponse, err error) {
+	var env RankingInternetServiceCategoriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	path := "radar/ranking/internet_services/categories"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Retrieves Internet Services rank update changes over time.
 func (r *RankingInternetServiceService) TimeseriesGroups(ctx context.Context, query RankingInternetServiceTimeseriesGroupsParams, opts ...option.RequestOption) (res *RankingInternetServiceTimeseriesGroupsResponse, err error) {
 	var env RankingInternetServiceTimeseriesGroupsResponseEnvelope
@@ -61,6 +74,48 @@ func (r *RankingInternetServiceService) Top(ctx context.Context, query RankingIn
 	}
 	res = &env.Result
 	return
+}
+
+type RankingInternetServiceCategoriesResponse struct {
+	Categories0 []RankingInternetServiceCategoriesResponseCategories0 `json:"categories_0,required"`
+	JSON        rankingInternetServiceCategoriesResponseJSON          `json:"-"`
+}
+
+// rankingInternetServiceCategoriesResponseJSON contains the JSON metadata for the
+// struct [RankingInternetServiceCategoriesResponse]
+type rankingInternetServiceCategoriesResponseJSON struct {
+	Categories0 apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RankingInternetServiceCategoriesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rankingInternetServiceCategoriesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RankingInternetServiceCategoriesResponseCategories0 struct {
+	Name string                                                  `json:"name,required"`
+	JSON rankingInternetServiceCategoriesResponseCategories0JSON `json:"-"`
+}
+
+// rankingInternetServiceCategoriesResponseCategories0JSON contains the JSON
+// metadata for the struct [RankingInternetServiceCategoriesResponseCategories0]
+type rankingInternetServiceCategoriesResponseCategories0JSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RankingInternetServiceCategoriesResponseCategories0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rankingInternetServiceCategoriesResponseCategories0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RankingInternetServiceTimeseriesGroupsResponse struct {
@@ -262,6 +317,65 @@ func (r *RankingInternetServiceTopResponseTop0) UnmarshalJSON(data []byte) (err 
 }
 
 func (r rankingInternetServiceTopResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
+type RankingInternetServiceCategoriesParams struct {
+	// Array of dates to filter the ranking.
+	Date param.Field[[]time.Time] `query:"date" format:"date"`
+	// Format in which results will be returned.
+	Format param.Field[RankingInternetServiceCategoriesParamsFormat] `query:"format"`
+	// Limits the number of objects returned in the response.
+	Limit param.Field[int64] `query:"limit"`
+	// Array of names used to label the series in the response.
+	Name param.Field[[]string] `query:"name"`
+}
+
+// URLQuery serializes [RankingInternetServiceCategoriesParams]'s query parameters
+// as `url.Values`.
+func (r RankingInternetServiceCategoriesParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Format in which results will be returned.
+type RankingInternetServiceCategoriesParamsFormat string
+
+const (
+	RankingInternetServiceCategoriesParamsFormatJson RankingInternetServiceCategoriesParamsFormat = "JSON"
+	RankingInternetServiceCategoriesParamsFormatCsv  RankingInternetServiceCategoriesParamsFormat = "CSV"
+)
+
+func (r RankingInternetServiceCategoriesParamsFormat) IsKnown() bool {
+	switch r {
+	case RankingInternetServiceCategoriesParamsFormatJson, RankingInternetServiceCategoriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type RankingInternetServiceCategoriesResponseEnvelope struct {
+	Result  RankingInternetServiceCategoriesResponse             `json:"result,required"`
+	Success bool                                                 `json:"success,required"`
+	JSON    rankingInternetServiceCategoriesResponseEnvelopeJSON `json:"-"`
+}
+
+// rankingInternetServiceCategoriesResponseEnvelopeJSON contains the JSON metadata
+// for the struct [RankingInternetServiceCategoriesResponseEnvelope]
+type rankingInternetServiceCategoriesResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RankingInternetServiceCategoriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rankingInternetServiceCategoriesResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
