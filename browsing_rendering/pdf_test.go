@@ -16,7 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestPdfNewWithOptionalParams(t *testing.T) {
+func TestPDFNewWithOptionalParams(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
 		w.Write([]byte("abc"))
@@ -28,29 +28,29 @@ func TestPdfNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	resp, err := client.BrowsingRendering.Pdf.New(
+	resp, err := client.BrowsingRendering.PDF.New(
 		context.TODO(),
 		"accountId",
-		browsing_rendering.PdfNewParams{
+		browsing_rendering.PDFNewParams{
 			CacheTTL: cloudflare.F(86400.000000),
-			AddScriptTag: cloudflare.F([]browsing_rendering.PdfNewParamsAddScriptTag{{
+			AddScriptTag: cloudflare.F([]browsing_rendering.PDFNewParamsAddScriptTag{{
 				ID:      cloudflare.F("id"),
 				Content: cloudflare.F("content"),
 				Type:    cloudflare.F("type"),
 				URL:     cloudflare.F("url"),
 			}}),
-			AddStyleTag: cloudflare.F([]browsing_rendering.PdfNewParamsAddStyleTag{{
+			AddStyleTag: cloudflare.F([]browsing_rendering.PDFNewParamsAddStyleTag{{
 				Content: cloudflare.F("content"),
 				URL:     cloudflare.F("url"),
 			}}),
 			AllowRequestPattern: cloudflare.F([]string{"string"}),
-			AllowResourceTypes:  cloudflare.F([]browsing_rendering.PdfNewParamsAllowResourceType{browsing_rendering.PdfNewParamsAllowResourceTypeDocument}),
-			Authenticate: cloudflare.F(browsing_rendering.PdfNewParamsAuthenticate{
+			AllowResourceTypes:  cloudflare.F([]browsing_rendering.PDFNewParamsAllowResourceType{browsing_rendering.PDFNewParamsAllowResourceTypeDocument}),
+			Authenticate: cloudflare.F(browsing_rendering.PDFNewParamsAuthenticate{
 				Password: cloudflare.F("x"),
 				Username: cloudflare.F("x"),
 			}),
 			BestAttempt: cloudflare.F(true),
-			Cookies: cloudflare.F([]browsing_rendering.PdfNewParamsCookie{{
+			Cookies: cloudflare.F([]browsing_rendering.PDFNewParamsCookie{{
 				Name:         cloudflare.F("name"),
 				Value:        cloudflare.F("value"),
 				Domain:       cloudflare.F("domain"),
@@ -58,31 +58,31 @@ func TestPdfNewWithOptionalParams(t *testing.T) {
 				HTTPOnly:     cloudflare.F(true),
 				PartitionKey: cloudflare.F("partitionKey"),
 				Path:         cloudflare.F("path"),
-				Priority:     cloudflare.F(browsing_rendering.PdfNewParamsCookiesPriorityLow),
+				Priority:     cloudflare.F(browsing_rendering.PDFNewParamsCookiesPriorityLow),
 				SameParty:    cloudflare.F(true),
-				SameSite:     cloudflare.F(browsing_rendering.PdfNewParamsCookiesSameSiteStrict),
+				SameSite:     cloudflare.F(browsing_rendering.PDFNewParamsCookiesSameSiteStrict),
 				Secure:       cloudflare.F(true),
 				SourcePort:   cloudflare.F(0.000000),
-				SourceScheme: cloudflare.F(browsing_rendering.PdfNewParamsCookiesSourceSchemeUnset),
+				SourceScheme: cloudflare.F(browsing_rendering.PDFNewParamsCookiesSourceSchemeUnset),
 				URL:          cloudflare.F("url"),
 			}}),
 			EmulateMediaType: cloudflare.F("emulateMediaType"),
-			GotoOptions: cloudflare.F(browsing_rendering.PdfNewParamsGotoOptions{
+			GotoOptions: cloudflare.F(browsing_rendering.PDFNewParamsGotoOptions{
 				Referer:        cloudflare.F("referer"),
 				ReferrerPolicy: cloudflare.F("referrerPolicy"),
 				Timeout:        cloudflare.F(60000.000000),
-				WaitUntil:      cloudflare.F[browsing_rendering.PdfNewParamsGotoOptionsWaitUntilUnion](browsing_rendering.PdfNewParamsGotoOptionsWaitUntilString(browsing_rendering.PdfNewParamsGotoOptionsWaitUntilStringLoad)),
+				WaitUntil:      cloudflare.F[browsing_rendering.PDFNewParamsGotoOptionsWaitUntilUnion](browsing_rendering.PDFNewParamsGotoOptionsWaitUntilString(browsing_rendering.PDFNewParamsGotoOptionsWaitUntilStringLoad)),
 			}),
 			HTML:                 cloudflare.F("x"),
 			RejectRequestPattern: cloudflare.F([]string{"string"}),
-			RejectResourceTypes:  cloudflare.F([]browsing_rendering.PdfNewParamsRejectResourceType{browsing_rendering.PdfNewParamsRejectResourceTypeDocument}),
+			RejectResourceTypes:  cloudflare.F([]browsing_rendering.PDFNewParamsRejectResourceType{browsing_rendering.PDFNewParamsRejectResourceTypeDocument}),
 			SetExtraHTTPHeaders: cloudflare.F(map[string]string{
 				"foo": "string",
 			}),
 			SetJavaScriptEnabled: cloudflare.F(true),
 			URL:                  cloudflare.F("https://example.com"),
 			UserAgent:            cloudflare.F("userAgent"),
-			Viewport: cloudflare.F(browsing_rendering.PdfNewParamsViewport{
+			Viewport: cloudflare.F(browsing_rendering.PDFNewParamsViewport{
 				Height:            cloudflare.F(0.000000),
 				Width:             cloudflare.F(0.000000),
 				DeviceScaleFactor: cloudflare.F(0.000000),
@@ -90,11 +90,11 @@ func TestPdfNewWithOptionalParams(t *testing.T) {
 				IsLandscape:       cloudflare.F(true),
 				IsMobile:          cloudflare.F(true),
 			}),
-			WaitForSelector: cloudflare.F(browsing_rendering.PdfNewParamsWaitForSelector{
+			WaitForSelector: cloudflare.F(browsing_rendering.PDFNewParamsWaitForSelector{
 				Selector: cloudflare.F("selector"),
-				Hidden:   cloudflare.F(browsing_rendering.PdfNewParamsWaitForSelectorHiddenTrue),
+				Hidden:   cloudflare.F(browsing_rendering.PDFNewParamsWaitForSelectorHiddenTrue),
 				Timeout:  cloudflare.F(60000.000000),
-				Visible:  cloudflare.F(browsing_rendering.PdfNewParamsWaitForSelectorVisibleTrue),
+				Visible:  cloudflare.F(browsing_rendering.PDFNewParamsWaitForSelectorVisibleTrue),
 			}),
 			WaitForTimeout: cloudflare.F(60000.000000),
 		},

@@ -15,28 +15,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
-// VpcFlowTokenService contains methods and other services that help with
+// VPCFlowTokenService contains methods and other services that help with
 // interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewVpcFlowTokenService] method instead.
-type VpcFlowTokenService struct {
+// the [NewVPCFlowTokenService] method instead.
+type VPCFlowTokenService struct {
 	Options []option.RequestOption
 }
 
-// NewVpcFlowTokenService generates a new service that applies the given options to
+// NewVPCFlowTokenService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewVpcFlowTokenService(opts ...option.RequestOption) (r *VpcFlowTokenService) {
-	r = &VpcFlowTokenService{}
+func NewVPCFlowTokenService(opts ...option.RequestOption) (r *VPCFlowTokenService) {
+	r = &VPCFlowTokenService{}
 	r.Options = opts
 	return
 }
 
 // Generate authentication token for VPC flow logs export.
-func (r *VpcFlowTokenService) New(ctx context.Context, body VpcFlowTokenNewParams, opts ...option.RequestOption) (res *string, err error) {
-	var env VpcFlowTokenNewResponseEnvelope
+func (r *VPCFlowTokenService) New(ctx context.Context, body VPCFlowTokenNewParams, opts ...option.RequestOption) (res *string, err error) {
+	var env VPCFlowTokenNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -51,22 +51,22 @@ func (r *VpcFlowTokenService) New(ctx context.Context, body VpcFlowTokenNewParam
 	return
 }
 
-type VpcFlowTokenNewParams struct {
+type VPCFlowTokenNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type VpcFlowTokenNewResponseEnvelope struct {
+type VPCFlowTokenNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Authentication token to be used for VPC Flows export authentication.
 	Result string `json:"result,required"`
 	// Whether the API call was successful
-	Success VpcFlowTokenNewResponseEnvelopeSuccess `json:"success,required"`
+	Success VPCFlowTokenNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    vpcFlowTokenNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // vpcFlowTokenNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [VpcFlowTokenNewResponseEnvelope]
+// [VPCFlowTokenNewResponseEnvelope]
 type vpcFlowTokenNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -76,7 +76,7 @@ type vpcFlowTokenNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VpcFlowTokenNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *VPCFlowTokenNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -85,15 +85,15 @@ func (r vpcFlowTokenNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 // Whether the API call was successful
-type VpcFlowTokenNewResponseEnvelopeSuccess bool
+type VPCFlowTokenNewResponseEnvelopeSuccess bool
 
 const (
-	VpcFlowTokenNewResponseEnvelopeSuccessTrue VpcFlowTokenNewResponseEnvelopeSuccess = true
+	VPCFlowTokenNewResponseEnvelopeSuccessTrue VPCFlowTokenNewResponseEnvelopeSuccess = true
 )
 
-func (r VpcFlowTokenNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r VPCFlowTokenNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case VpcFlowTokenNewResponseEnvelopeSuccessTrue:
+	case VPCFlowTokenNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

@@ -3721,13 +3721,13 @@ Methods:
 
 # MagicNetworkMonitoring
 
-## VpcFlows
+## VPCFlows
 
 ### Tokens
 
 Methods:
 
-- <code title="post /accounts/{account_id}/mnm/vpc-flows/token">client.MagicNetworkMonitoring.VpcFlows.Tokens.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring#VpcFlowTokenService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring">magic_network_monitoring</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring#VpcFlowTokenNewParams">VpcFlowTokenNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/mnm/vpc-flows/token">client.MagicNetworkMonitoring.VPCFlows.Tokens.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring#VPCFlowTokenService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring">magic_network_monitoring</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring#VPCFlowTokenNewParams">VPCFlowTokenNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Configs
 
@@ -8128,11 +8128,11 @@ Methods:
 
 - <code title="post /accounts/{accountId}/browser-rendering/content">client.BrowsingRendering.Content.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ContentService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#ContentNewParams">ContentNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## Pdf
+## PDF
 
 Methods:
 
-- <code title="post /accounts/{accountId}/browser-rendering/pdf">client.BrowsingRendering.Pdf.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#PdfService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#PdfNewParams">PdfNewParams</a>) (http.Response, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{accountId}/browser-rendering/pdf">client.BrowsingRendering.PDF.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#PDFService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering">browsing_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browsing_rendering#PDFNewParams">PDFNewParams</a>) (http.Response, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Scrape
 

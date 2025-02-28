@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestVpcFlowTokenNew(t *testing.T) {
+func TestVPCFlowTokenNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,7 +27,7 @@ func TestVpcFlowTokenNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicNetworkMonitoring.VpcFlows.Tokens.New(context.TODO(), magic_network_monitoring.VpcFlowTokenNewParams{
+	_, err := client.MagicNetworkMonitoring.VPCFlows.Tokens.New(context.TODO(), magic_network_monitoring.VPCFlowTokenNewParams{
 		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 	})
 	if err != nil {
