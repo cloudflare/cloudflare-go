@@ -41,7 +41,7 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 				}),
 				Bindings: cloudflare.F([]workers.ScriptVersionNewParamsMetadataBindingUnion{workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI{
 					Name: cloudflare.F("MY_ENV_VAR"),
-					Type: cloudflare.F("plain_text"),
+					Type: cloudflare.F(workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAI),
 				}}),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
