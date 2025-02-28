@@ -13,9 +13,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewMagicNetworkMonitoringService] method instead.
 type MagicNetworkMonitoringService struct {
-	Options []option.RequestOption
-	Configs *ConfigService
-	Rules   *RuleService
+	Options  []option.RequestOption
+	VpcFlows *VpcFlowService
+	Configs  *ConfigService
+	Rules    *RuleService
 }
 
 // NewMagicNetworkMonitoringService generates a new service that applies the given
@@ -24,6 +25,7 @@ type MagicNetworkMonitoringService struct {
 func NewMagicNetworkMonitoringService(opts ...option.RequestOption) (r *MagicNetworkMonitoringService) {
 	r = &MagicNetworkMonitoringService{}
 	r.Options = opts
+	r.VpcFlows = NewVpcFlowService(opts...)
 	r.Configs = NewConfigService(opts...)
 	r.Rules = NewRuleService(opts...)
 	return
