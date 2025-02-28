@@ -29,8 +29,8 @@ func TestDetectionNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.LeakedCredentialChecks.Detections.New(context.TODO(), leaked_credential_checks.DetectionNewParams{
 		ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Password: cloudflare.F("lookup_json_string(http.request.body.raw, \"secret\")"),
-		Username: cloudflare.F("lookup_json_string(http.request.body.raw, \"user\")"),
+		Password: cloudflare.F(`lookup_json_string(http.request.body.raw, "secret")`),
+		Username: cloudflare.F(`lookup_json_string(http.request.body.raw, "user")`),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -59,8 +59,8 @@ func TestDetectionUpdateWithOptionalParams(t *testing.T) {
 		"18a14bafaa8eb1df04ce683ec18c765e",
 		leaked_credential_checks.DetectionUpdateParams{
 			ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Password: cloudflare.F("lookup_json_string(http.request.body.raw, \"secret\")"),
-			Username: cloudflare.F("lookup_json_string(http.request.body.raw, \"user\")"),
+			Password: cloudflare.F(`lookup_json_string(http.request.body.raw, "secret")`),
+			Username: cloudflare.F(`lookup_json_string(http.request.body.raw, "user")`),
 		},
 	)
 	if err != nil {

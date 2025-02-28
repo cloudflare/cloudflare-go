@@ -33,7 +33,7 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 			ID:          cloudflare.F("95c365e17e1b46599cd99e5b231fac4e"),
 			Description: cloudflare.F("Rule description"),
 			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
+			Expression:  cloudflare.F(`http.cookie eq "a=b"`),
 			Parameters: cloudflare.F(cloud_connector.RuleUpdateParamsRulesParameters{
 				Host: cloudflare.F("examplebucket.s3.eu-north-1.amazonaws.com"),
 			}),

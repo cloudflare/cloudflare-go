@@ -33,7 +33,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		Action:        cloudflare.F(zero_trust.GatewayRuleNewParamsActionOn),
 		Name:          cloudflare.F("block bad websites"),
 		Description:   cloudflare.F("Block bad websites based on their host name."),
-		DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
+		DevicePosture: cloudflare.F(`any(device_posture.checks.passed[*] in {"1308749e-fcfb-4ebc-b051-fe022b632644"})`),
 		Enabled:       cloudflare.F(true),
 		Expiration: cloudflare.F(zero_trust.GatewayRuleNewParamsExpiration{
 			ExpiresAt: cloudflare.F(time.Now()),
@@ -41,7 +41,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			Expired:   cloudflare.F(false),
 		}),
 		Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
-		Identity:   cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
+		Identity:   cloudflare.F(`any(identity.groups.name[*] in {"finance"})`),
 		Precedence: cloudflare.F(int64(0)),
 		RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
 			AddHeaders: cloudflare.F(map[string]string{
@@ -131,7 +131,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			Tue:      cloudflare.F("08:00-12:30,13:30-17:00"),
 			Wed:      cloudflare.F("08:00-12:30,13:30-17:00"),
 		}),
-		Traffic: cloudflare.F("http.request.uri matches \".*a/partial/uri.*\" and http.request.host in $01302951-49f9-47c9-a400-0297e60b6a10"),
+		Traffic: cloudflare.F(`http.request.uri matches ".*a/partial/uri.*" and http.request.host in $01302951-49f9-47c9-a400-0297e60b6a10`),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -163,7 +163,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 			Action:        cloudflare.F(zero_trust.GatewayRuleUpdateParamsActionOn),
 			Name:          cloudflare.F("block bad websites"),
 			Description:   cloudflare.F("Block bad websites based on their host name."),
-			DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
+			DevicePosture: cloudflare.F(`any(device_posture.checks.passed[*] in {"1308749e-fcfb-4ebc-b051-fe022b632644"})`),
 			Enabled:       cloudflare.F(true),
 			Expiration: cloudflare.F(zero_trust.GatewayRuleUpdateParamsExpiration{
 				ExpiresAt: cloudflare.F(time.Now()),
@@ -171,7 +171,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				Expired:   cloudflare.F(false),
 			}),
 			Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
-			Identity:   cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
+			Identity:   cloudflare.F(`any(identity.groups.name[*] in {"finance"})`),
 			Precedence: cloudflare.F(int64(0)),
 			RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
 				AddHeaders: cloudflare.F(map[string]string{
@@ -261,7 +261,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				Tue:      cloudflare.F("08:00-12:30,13:30-17:00"),
 				Wed:      cloudflare.F("08:00-12:30,13:30-17:00"),
 			}),
-			Traffic: cloudflare.F("http.request.uri matches \".*a/partial/uri.*\" and http.request.host in $01302951-49f9-47c9-a400-0297e60b6a10"),
+			Traffic: cloudflare.F(`http.request.uri matches ".*a/partial/uri.*" and http.request.host in $01302951-49f9-47c9-a400-0297e60b6a10`),
 		},
 	)
 	if err != nil {
