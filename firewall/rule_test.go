@@ -41,7 +41,7 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 		}),
 		Filter: cloudflare.F(filters.FirewallFilterParam{
 			Description: cloudflare.F("Restrict access from these browsers on this address range."),
-			Expression:  cloudflare.F("(http.request.uri.path ~ \".*wp-login.php\" or http.request.uri.path ~ \".*xmlrpc.php\") and ip.addr ne 172.16.22.155"),
+			Expression:  cloudflare.F(`(http.request.uri.path ~ ".*wp-login.php" or http.request.uri.path ~ ".*xmlrpc.php") and ip.addr ne 172.16.22.155`),
 			Paused:      cloudflare.F(false),
 			Ref:         cloudflare.F("FIL-100"),
 		}),
@@ -84,7 +84,7 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 			}),
 			Filter: cloudflare.F(filters.FirewallFilterParam{
 				Description: cloudflare.F("Restrict access from these browsers on this address range."),
-				Expression:  cloudflare.F("(http.request.uri.path ~ \".*wp-login.php\" or http.request.uri.path ~ \".*xmlrpc.php\") and ip.addr ne 172.16.22.155"),
+				Expression:  cloudflare.F(`(http.request.uri.path ~ ".*wp-login.php" or http.request.uri.path ~ ".*xmlrpc.php") and ip.addr ne 172.16.22.155`),
 				Paused:      cloudflare.F(false),
 				Ref:         cloudflare.F("FIL-100"),
 			}),

@@ -33,7 +33,7 @@ func TestPolicyNew(t *testing.T) {
 			Action:      cloudflare.F(page_shield.PolicyActionAllow),
 			Description: cloudflare.F("Checkout page CSP policy"),
 			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("ends_with(http.request.uri.path, \"/checkout\")"),
+			Expression:  cloudflare.F(`ends_with(http.request.uri.path, "/checkout")`),
 			Value:       cloudflare.F("script-src 'none';"),
 		},
 	})
@@ -67,7 +67,7 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 			Action:      cloudflare.F(page_shield.PolicyUpdateParamsActionAllow),
 			Description: cloudflare.F("Checkout page CSP policy"),
 			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("ends_with(http.request.uri.path, \"/checkout\")"),
+			Expression:  cloudflare.F(`ends_with(http.request.uri.path, "/checkout")`),
 			Value:       cloudflare.F("script-src 'none';"),
 		},
 	)

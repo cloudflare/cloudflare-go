@@ -30,7 +30,7 @@ func TestDevicePolicyCustomNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.Policies.Custom.New(context.TODO(), zero_trust.DevicePolicyCustomNewParams{
 		AccountID:                  cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Match:                      cloudflare.F("user.identity == \"test@cloudflare.com\""),
+		Match:                      cloudflare.F(`user.identity == "test@cloudflare.com"`),
 		Name:                       cloudflare.F("Allow Developers"),
 		Precedence:                 cloudflare.F(100.000000),
 		AllowModeSwitch:            cloudflare.F(true),
@@ -146,7 +146,7 @@ func TestDevicePolicyCustomEditWithOptionalParams(t *testing.T) {
 			DOHInTunnel:                cloudflare.F(true),
 			Enabled:                    cloudflare.F(true),
 			ExcludeOfficeIPs:           cloudflare.F(true),
-			Match:                      cloudflare.F("user.identity == \"test@cloudflare.com\""),
+			Match:                      cloudflare.F(`user.identity == "test@cloudflare.com"`),
 			Name:                       cloudflare.F("Allow Developers"),
 			Precedence:                 cloudflare.F(100.000000),
 			RegisterInterfaceIPWithDNS: cloudflare.F(true),
