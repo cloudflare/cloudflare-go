@@ -45,7 +45,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Bindings: cloudflare.F([]workers.ScriptUpdateParamsMetadataBindingUnion{workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI{
 					Name: cloudflare.F("MY_ENV_VAR"),
-					Type: cloudflare.F("plain_text"),
+					Type: cloudflare.F(workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI),
 				}}),
 				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
