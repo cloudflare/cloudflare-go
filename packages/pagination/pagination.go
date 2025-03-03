@@ -87,7 +87,7 @@ func (r v4PagePaginationJSON) RawJSON() string {
 // will not return an error
 func (r *V4PagePagination[T]) GetNextPage() (res *V4PagePagination[T], err error) {
 	u := r.cfg.Request.URL
-	currentPage, err := strconv.Atoi(u.Query().Get("page"))
+	currentPage, err := strconv.ParseInt(u.Query().Get("page"), 10, 64)
 	if err != nil {
 		currentPage = 1
 	}
@@ -211,7 +211,7 @@ func (r v4PagePaginationArrayJSON) RawJSON() string {
 // will not return an error
 func (r *V4PagePaginationArray[T]) GetNextPage() (res *V4PagePaginationArray[T], err error) {
 	u := r.cfg.Request.URL
-	currentPage, err := strconv.Atoi(u.Query().Get("page"))
+	currentPage, err := strconv.ParseInt(u.Query().Get("page"), 10, 64)
 	if err != nil {
 		currentPage = 1
 	}
