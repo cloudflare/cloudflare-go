@@ -47,7 +47,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingUnion{workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAI{
 					Name: cloudflare.F("MY_ENV_VAR"),
-					Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI),
+					Type: cloudflare.F("plain_text"),
 				}}),
 				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
