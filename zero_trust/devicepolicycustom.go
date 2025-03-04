@@ -187,10 +187,6 @@ type DevicePolicyCustomNewParams struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
-	// Determines how the WARP client sends DNS requests to Cloudflare Gateway. When
-	// `true`, DNS traffic is sent over DoH inside the WARP tunnel. When `false`, the
-	// DoH connection operates outside of the WARP tunnel.
-	DOHInTunnel param.Field[bool] `json:"doh_in_tunnel"`
 	// Whether the policy will be applied to matching devices.
 	Enabled param.Field[bool] `json:"enabled"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
@@ -300,10 +296,6 @@ type DevicePolicyCustomEditParams struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
-	// Determines how the WARP client sends DNS requests to Cloudflare Gateway. When
-	// `true`, DNS traffic is sent over DoH inside the WARP tunnel. When `false`, the
-	// DoH connection operates outside of the WARP tunnel.
-	DOHInTunnel param.Field[bool] `json:"doh_in_tunnel"`
 	// Whether the policy will be applied to matching devices.
 	Enabled param.Field[bool] `json:"enabled"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
