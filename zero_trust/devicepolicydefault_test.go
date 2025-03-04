@@ -35,7 +35,6 @@ func TestDevicePolicyDefaultEditWithOptionalParams(t *testing.T) {
 		AutoConnect:                cloudflare.F(0.000000),
 		CaptivePortal:              cloudflare.F(180.000000),
 		DisableAutoFallback:        cloudflare.F(true),
-		DOHInTunnel:                cloudflare.F(true),
 		ExcludeOfficeIPs:           cloudflare.F(true),
 		RegisterInterfaceIPWithDNS: cloudflare.F(true),
 		ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyDefaultEditParamsServiceModeV2{

@@ -94,10 +94,6 @@ type DevicePolicyDefaultEditResponse struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback bool `json:"disable_auto_fallback"`
-	// Determines how the WARP client sends DNS requests to Cloudflare Gateway. When
-	// `true`, DNS traffic is sent over DoH inside the WARP tunnel. When `false`, the
-	// DoH connection operates outside of the WARP tunnel.
-	DOHInTunnel bool `json:"doh_in_tunnel"`
 	// Whether the policy will be applied to matching devices.
 	Enabled bool                 `json:"enabled"`
 	Exclude []SplitTunnelExclude `json:"exclude"`
@@ -129,7 +125,6 @@ type devicePolicyDefaultEditResponseJSON struct {
 	CaptivePortal              apijson.Field
 	Default                    apijson.Field
 	DisableAutoFallback        apijson.Field
-	DOHInTunnel                apijson.Field
 	Enabled                    apijson.Field
 	Exclude                    apijson.Field
 	ExcludeOfficeIPs           apijson.Field
@@ -196,10 +191,6 @@ type DevicePolicyDefaultGetResponse struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback bool `json:"disable_auto_fallback"`
-	// Determines how the WARP client sends DNS requests to Cloudflare Gateway. When
-	// `true`, DNS traffic is sent over DoH inside the WARP tunnel. When `false`, the
-	// DoH connection operates outside of the WARP tunnel.
-	DOHInTunnel bool `json:"doh_in_tunnel"`
 	// Whether the policy will be applied to matching devices.
 	Enabled bool                 `json:"enabled"`
 	Exclude []SplitTunnelExclude `json:"exclude"`
@@ -231,7 +222,6 @@ type devicePolicyDefaultGetResponseJSON struct {
 	CaptivePortal              apijson.Field
 	Default                    apijson.Field
 	DisableAutoFallback        apijson.Field
-	DOHInTunnel                apijson.Field
 	Enabled                    apijson.Field
 	Exclude                    apijson.Field
 	ExcludeOfficeIPs           apijson.Field
@@ -297,10 +287,6 @@ type DevicePolicyDefaultEditParams struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
-	// Determines how the WARP client sends DNS requests to Cloudflare Gateway. When
-	// `true`, DNS traffic is sent over DoH inside the WARP tunnel. When `false`, the
-	// DoH connection operates outside of the WARP tunnel.
-	DOHInTunnel param.Field[bool] `json:"doh_in_tunnel"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
 	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
 	// Determines if the operating system will register WARP's local interface IP with
