@@ -272,15 +272,16 @@ func (r DNSResolverSettingsV6Param) MarshalJSON() (data []byte, err error) {
 type GatewayFilter string
 
 const (
-	GatewayFilterHTTP   GatewayFilter = "http"
-	GatewayFilterDNS    GatewayFilter = "dns"
-	GatewayFilterL4     GatewayFilter = "l4"
-	GatewayFilterEgress GatewayFilter = "egress"
+	GatewayFilterHTTP        GatewayFilter = "http"
+	GatewayFilterDNS         GatewayFilter = "dns"
+	GatewayFilterL4          GatewayFilter = "l4"
+	GatewayFilterEgress      GatewayFilter = "egress"
+	GatewayFilterDNSResolver GatewayFilter = "dns_resolver"
 )
 
 func (r GatewayFilter) IsKnown() bool {
 	switch r {
-	case GatewayFilterHTTP, GatewayFilterDNS, GatewayFilterL4, GatewayFilterEgress:
+	case GatewayFilterHTTP, GatewayFilterDNS, GatewayFilterL4, GatewayFilterEgress, GatewayFilterDNSResolver:
 		return true
 	}
 	return false
