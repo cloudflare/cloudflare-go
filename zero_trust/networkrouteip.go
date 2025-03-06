@@ -60,6 +60,11 @@ func (r *NetworkRouteIPService) Get(ctx context.Context, ip string, params Netwo
 type NetworkRouteIPGetParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
+	// When the virtual_network_id parameter is not provided the request filter will
+	// default search routes that are in the default virtual network for the account.
+	// If this parameter is set to false, the search will include routes that do not
+	// have a virtual network.
+	DefaultVirtualNetworkFallback param.Field[bool] `query:"default_virtual_network_fallback"`
 	// UUID of the virtual network.
 	VirtualNetworkID param.Field[string] `query:"virtual_network_id" format:"uuid"`
 }
