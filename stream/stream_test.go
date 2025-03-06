@@ -34,6 +34,7 @@ func TestStreamNewWithOptionalParams(t *testing.T) {
 		Body:           map[string]interface{}{},
 		TusResumable:   cloudflare.F(stream.StreamNewParamsTusResumable1_0_0),
 		UploadLength:   cloudflare.F(int64(0)),
+		DirectUser:     cloudflare.F(true),
 		UploadCreator:  cloudflare.F("creator-id_abcde12345"),
 		UploadMetadata: cloudflare.F("name aGVsbG8gd29ybGQ=, requiresignedurls, allowedorigins ZXhhbXBsZS5jb20sdGVzdC5jb20="),
 	})
