@@ -58,7 +58,7 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 }
 
 type SettingUpdateResponse struct {
-	DefaultASN int64                     `json:"default_asn,nullable"`
+	DefaultASN int64                     `json:"default_asn,required"`
 	JSON       settingUpdateResponseJSON `json:"-"`
 }
 
@@ -79,7 +79,7 @@ func (r settingUpdateResponseJSON) RawJSON() string {
 }
 
 type SettingGetResponse struct {
-	DefaultASN int64                  `json:"default_asn,nullable"`
+	DefaultASN int64                  `json:"default_asn,required"`
 	JSON       settingGetResponseJSON `json:"-"`
 }
 
