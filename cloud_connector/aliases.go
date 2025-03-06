@@ -134,6 +134,9 @@ const CloudflareTunnelTunTypeCNI = shared.CloudflareTunnelTunTypeCNI
 type ErrorData = shared.ErrorData
 
 // This is an alias to an internal type.
+type ErrorDataSource = shared.ErrorDataSource
+
+// This is an alias to an internal type.
 type Member = shared.Member
 
 // This is an alias to an internal type.
