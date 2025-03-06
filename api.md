@@ -8190,42 +8190,10 @@ Methods:
 
 ## Content
 
-Methods:
-
-- <code title="post /accounts/{accountId}/browser-rendering/content">client.BrowserRendering.Content.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#ContentService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#ContentNewParams">ContentNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## PDF
-
-Methods:
-
-- <code title="post /accounts/{accountId}/browser-rendering/pdf">client.BrowserRendering.PDF.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#PDFService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#PDFNewParams">PDFNewParams</a>) (http.Response, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Scrape
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#ScrapeNewResponse">ScrapeNewResponse</a>
-
-Methods:
-
-- <code title="post /accounts/{accountId}/browser-rendering/scrape">client.BrowserRendering.Scrape.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#ScrapeService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#ScrapeNewParams">ScrapeNewParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#ScrapeNewResponse">ScrapeNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## Screenshot
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#ScreenshotNewResponse">ScreenshotNewResponse</a>
-
-Methods:
-
-- <code title="post /accounts/{accountId}/browser-rendering/screenshot">client.BrowserRendering.Screenshot.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#ScreenshotService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#ScreenshotNewParams">ScreenshotNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#ScreenshotNewResponse">ScreenshotNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## Snapshot
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#SnapshotNewResponse">SnapshotNewResponse</a>
-
-Methods:
-
-- <code title="post /accounts/{accountId}/browser-rendering/snapshot">client.BrowserRendering.Snapshot.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#SnapshotService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#SnapshotNewParams">SnapshotNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#SnapshotNewResponse">SnapshotNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
