@@ -8229,29 +8229,3 @@ Response Types:
 Methods:
 
 - <code title="post /accounts/{accountId}/browser-rendering/snapshot">client.BrowserRendering.Snapshot.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#SnapshotService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#SnapshotNewParams">SnapshotNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/browser_rendering#SnapshotNewResponse">SnapshotNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-# PortScans
-
-## Config
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigNewResponse">ConfigNewResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigDeleteResponse">ConfigDeleteResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigGetResponse">ConfigGetResponse</a>
-
-Methods:
-
-- <code title="post /{account_id}/scans/config">client.PortScans.Config.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigNewParams">ConfigNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigNewResponse">ConfigNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="delete /{account_id}/scans/config">client.PortScans.Config.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigDeleteParams">ConfigDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigDeleteResponse">ConfigDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /{account_id}/scans/config">client.PortScans.Config.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigGetParams">ConfigGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ConfigGetResponse">ConfigGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-## Results
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ResultListResponse">ResultListResponse</a>
-
-Methods:
-
-- <code title="get /{account_id}/scans/results">client.PortScans.Results.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ResultService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ResultListParams">ResultListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans">port_scans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/port_scans#ResultListResponse">ResultListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
