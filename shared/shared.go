@@ -386,17 +386,21 @@ func (r CloudflareTunnelTunType) IsKnown() bool {
 }
 
 type ErrorData struct {
-	Code    int64         `json:"code"`
-	Message string        `json:"message"`
-	JSON    errorDataJSON `json:"-"`
+	Code             int64           `json:"code"`
+	DocumentationURL string          `json:"documentation_url"`
+	Message          string          `json:"message"`
+	Source           ErrorDataSource `json:"source"`
+	JSON             errorDataJSON   `json:"-"`
 }
 
 // errorDataJSON contains the JSON metadata for the struct [ErrorData]
 type errorDataJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Code             apijson.Field
+	DocumentationURL apijson.Field
+	Message          apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *ErrorData) UnmarshalJSON(data []byte) (err error) {
@@ -404,6 +408,26 @@ func (r *ErrorData) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r errorDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type ErrorDataSource struct {
+	Pointer string              `json:"pointer"`
+	JSON    errorDataSourceJSON `json:"-"`
+}
+
+// errorDataSourceJSON contains the JSON metadata for the struct [ErrorDataSource]
+type errorDataSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ErrorDataSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r errorDataSourceJSON) RawJSON() string {
 	return r.raw
 }
 
