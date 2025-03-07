@@ -14,6 +14,7 @@ import (
 // the [NewCloudforceOneService] method instead.
 type CloudforceOneService struct {
 	Options  []option.RequestOption
+	Scans    *ScanService
 	Requests *RequestService
 }
 
@@ -23,6 +24,7 @@ type CloudforceOneService struct {
 func NewCloudforceOneService(opts ...option.RequestOption) (r *CloudforceOneService) {
 	r = &CloudforceOneService{}
 	r.Options = opts
+	r.Scans = NewScanService(opts...)
 	r.Requests = NewRequestService(opts...)
 	return
 }
