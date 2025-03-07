@@ -164,6 +164,11 @@ type ConnectorSnapshotGetResponse struct {
 	// Time spent in user mode (milliseconds)
 	CPUTimeUserMs float64                            `json:"cpu_time_user_ms"`
 	Disks         []ConnectorSnapshotGetResponseDisk `json:"disks"`
+	// Name of high availability state
+	HaState string `json:"ha_state"`
+	// Numeric value associated with high availability state (0 = unknown, 1 = active,
+	// 2 = standby, 3 = disabled, 4 = fault)
+	HaValue float64 `json:"ha_value"`
 	// Percentage of time over a 10 second window that all tasks were stalled
 	IoPressureFull10s float64 `json:"io_pressure_full_10s"`
 	// Percentage of time over a 5 minute window that all tasks were stalled
@@ -480,6 +485,8 @@ type connectorSnapshotGetResponseJSON struct {
 	CPUTimeSystemMs                apijson.Field
 	CPUTimeUserMs                  apijson.Field
 	Disks                          apijson.Field
+	HaState                        apijson.Field
+	HaValue                        apijson.Field
 	IoPressureFull10s              apijson.Field
 	IoPressureFull300s             apijson.Field
 	IoPressureFull60s              apijson.Field
