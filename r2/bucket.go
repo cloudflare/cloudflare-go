@@ -178,11 +178,12 @@ const (
 	BucketLocationEnam BucketLocation = "enam"
 	BucketLocationWeur BucketLocation = "weur"
 	BucketLocationWnam BucketLocation = "wnam"
+	BucketLocationOc   BucketLocation = "oc"
 )
 
 func (r BucketLocation) IsKnown() bool {
 	switch r {
-	case BucketLocationApac, BucketLocationEeur, BucketLocationEnam, BucketLocationWeur, BucketLocationWnam:
+	case BucketLocationApac, BucketLocationEeur, BucketLocationEnam, BucketLocationWeur, BucketLocationWnam, BucketLocationOc:
 		return true
 	}
 	return false
@@ -253,11 +254,12 @@ const (
 	BucketNewParamsLocationHintEnam BucketNewParamsLocationHint = "enam"
 	BucketNewParamsLocationHintWeur BucketNewParamsLocationHint = "weur"
 	BucketNewParamsLocationHintWnam BucketNewParamsLocationHint = "wnam"
+	BucketNewParamsLocationHintOc   BucketNewParamsLocationHint = "oc"
 )
 
 func (r BucketNewParamsLocationHint) IsKnown() bool {
 	switch r {
-	case BucketNewParamsLocationHintApac, BucketNewParamsLocationHintEeur, BucketNewParamsLocationHintEnam, BucketNewParamsLocationHintWeur, BucketNewParamsLocationHintWnam:
+	case BucketNewParamsLocationHintApac, BucketNewParamsLocationHintEeur, BucketNewParamsLocationHintEnam, BucketNewParamsLocationHintWeur, BucketNewParamsLocationHintWnam, BucketNewParamsLocationHintOc:
 		return true
 	}
 	return false
