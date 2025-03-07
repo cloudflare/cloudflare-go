@@ -72,9 +72,9 @@ func (r scanResultListResponseJSON) RawJSON() string {
 }
 
 type ScanResultListResponse1_1_1_1 struct {
-	Number float64                           `json:"number,required"`
-	Proto  string                            `json:"proto,required"`
-	Status string                            `json:"status,required"`
+	Number float64                           `json:"number"`
+	Proto  string                            `json:"proto"`
+	Status string                            `json:"status"`
 	JSON   scanResultListResponse1_1_1_1JSON `json:"-"`
 }
 

@@ -29,7 +29,7 @@ func TestScanConfigNew(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Scans.Config.New(context.TODO(), cloudforce_one.ScanConfigNewParams{
 		AccountID: cloudflare.F("account_id"),
-		Frequency: cloudflare.F(1.000000),
+		Frequency: cloudflare.F(7.000000),
 		IPs:       cloudflare.F([]string{"1.1.1.1"}),
 	})
 	if err != nil {

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScanConfigService contains methods and other services that help with interacting
@@ -138,9 +139,12 @@ type ScanConfigDeleteResponse = interface{}
 
 type ScanConfigNewParams struct {
 	// Account ID
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Frequency param.Field[float64]  `json:"frequency,required"`
-	IPs       param.Field[[]string] `json:"ips,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The number of days between each scan (0 = no recurring scans)
+	Frequency param.Field[float64] `json:"frequency,required"`
+	// A list of IP addresses or CIDR blocks to scan. The maximum number of total IP
+	// addresses allowed is 5000.
+	IPs param.Field[[]string] `json:"ips,required"`
 }
 
 func (r ScanConfigNewParams) MarshalJSON() (data []byte, err error) {
@@ -148,11 +152,12 @@ func (r ScanConfigNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScanConfigNewResponseEnvelope struct {
-	Errors   []string                          `json:"errors,required"`
-	Messages []string                          `json:"messages,required"`
-	Result   ScanConfigNewResponse             `json:"result,required"`
-	Success  bool                              `json:"success,required"`
-	JSON     scanConfigNewResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success ScanConfigNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScanConfigNewResponse                `json:"result"`
+	JSON    scanConfigNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // scanConfigNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -160,8 +165,8 @@ type ScanConfigNewResponseEnvelope struct {
 type scanConfigNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -174,17 +179,33 @@ func (r scanConfigNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Whether the API call was successful
+type ScanConfigNewResponseEnvelopeSuccess bool
+
+const (
+	ScanConfigNewResponseEnvelopeSuccessTrue ScanConfigNewResponseEnvelopeSuccess = true
+)
+
+func (r ScanConfigNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScanConfigNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ScanConfigListParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ScanConfigListResponseEnvelope struct {
-	Errors   []string                           `json:"errors,required"`
-	Messages []string                           `json:"messages,required"`
-	Result   ScanConfigListResponse             `json:"result,required"`
-	Success  bool                               `json:"success,required"`
-	JSON     scanConfigListResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success ScanConfigListResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScanConfigListResponse                `json:"result"`
+	JSON    scanConfigListResponseEnvelopeJSON    `json:"-"`
 }
 
 // scanConfigListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -192,8 +213,8 @@ type ScanConfigListResponseEnvelope struct {
 type scanConfigListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -204,6 +225,21 @@ func (r *ScanConfigListResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 
 func (r scanConfigListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type ScanConfigListResponseEnvelopeSuccess bool
+
+const (
+	ScanConfigListResponseEnvelopeSuccessTrue ScanConfigListResponseEnvelopeSuccess = true
+)
+
+func (r ScanConfigListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScanConfigListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type ScanConfigDeleteParams struct {
