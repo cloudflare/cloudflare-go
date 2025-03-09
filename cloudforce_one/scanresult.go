@@ -50,9 +50,33 @@ func (r *ScanResultService) List(ctx context.Context, query ScanResultListParams
 	return
 }
 
+type ScanResult struct {
+	Number float64        `json:"number"`
+	Proto  string         `json:"proto"`
+	Status string         `json:"status"`
+	JSON   scanResultJSON `json:"-"`
+}
+
+// scanResultJSON contains the JSON metadata for the struct [ScanResult]
+type scanResultJSON struct {
+	Number      apijson.Field
+	Proto       apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanResultJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScanResultListResponse struct {
-	OneOneOneOne []ScanResultListResponse1_1_1_1 `json:"1.1.1.1,required"`
-	JSON         scanResultListResponseJSON      `json:"-"`
+	OneOneOneOne []ScanResult               `json:"1.1.1.1,required"`
+	JSON         scanResultListResponseJSON `json:"-"`
 }
 
 // scanResultListResponseJSON contains the JSON metadata for the struct
@@ -68,31 +92,6 @@ func (r *ScanResultListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scanResultListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScanResultListResponse1_1_1_1 struct {
-	Number float64                           `json:"number"`
-	Proto  string                            `json:"proto"`
-	Status string                            `json:"status"`
-	JSON   scanResultListResponse1_1_1_1JSON `json:"-"`
-}
-
-// scanResultListResponse1_1_1_1JSON contains the JSON metadata for the struct
-// [ScanResultListResponse1_1_1_1]
-type scanResultListResponse1_1_1_1JSON struct {
-	Number      apijson.Field
-	Proto       apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanResultListResponse1_1_1_1) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanResultListResponse1_1_1_1JSON) RawJSON() string {
 	return r.raw
 }
 
