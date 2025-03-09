@@ -86,7 +86,7 @@ func TestScrapeNewWithOptionalParams(t *testing.T) {
 			Height:            cloudflare.F(0.000000),
 			Width:             cloudflare.F(0.000000),
 			DeviceScaleFactor: cloudflare.F(0.000000),
-			HasTouch:          cloudflare.F(true),
+			HAsTouch:          cloudflare.F(true),
 			IsLandscape:       cloudflare.F(true),
 			IsMobile:          cloudflare.F(true),
 		}),

@@ -372,7 +372,7 @@ type HTTPLocationBotClassGetParamsOS string
 const (
 	HTTPLocationBotClassGetParamsOSWindows  HTTPLocationBotClassGetParamsOS = "WINDOWS"
 	HTTPLocationBotClassGetParamsOSMacosx   HTTPLocationBotClassGetParamsOS = "MACOSX"
-	HTTPLocationBotClassGetParamsOSIos      HTTPLocationBotClassGetParamsOS = "IOS"
+	HTTPLocationBotClassGetParamsOSIOs      HTTPLocationBotClassGetParamsOS = "IOS"
 	HTTPLocationBotClassGetParamsOSAndroid  HTTPLocationBotClassGetParamsOS = "ANDROID"
 	HTTPLocationBotClassGetParamsOSChromeos HTTPLocationBotClassGetParamsOS = "CHROMEOS"
 	HTTPLocationBotClassGetParamsOSLinux    HTTPLocationBotClassGetParamsOS = "LINUX"
@@ -381,7 +381,7 @@ const (
 
 func (r HTTPLocationBotClassGetParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPLocationBotClassGetParamsOSWindows, HTTPLocationBotClassGetParamsOSMacosx, HTTPLocationBotClassGetParamsOSIos, HTTPLocationBotClassGetParamsOSAndroid, HTTPLocationBotClassGetParamsOSChromeos, HTTPLocationBotClassGetParamsOSLinux, HTTPLocationBotClassGetParamsOSSmartTv:
+	case HTTPLocationBotClassGetParamsOSWindows, HTTPLocationBotClassGetParamsOSMacosx, HTTPLocationBotClassGetParamsOSIOs, HTTPLocationBotClassGetParamsOSAndroid, HTTPLocationBotClassGetParamsOSChromeos, HTTPLocationBotClassGetParamsOSLinux, HTTPLocationBotClassGetParamsOSSmartTv:
 		return true
 	}
 	return false

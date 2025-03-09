@@ -391,7 +391,7 @@ type HTTPAseTLSVersionGetParamsOS string
 const (
 	HTTPAseTLSVersionGetParamsOSWindows  HTTPAseTLSVersionGetParamsOS = "WINDOWS"
 	HTTPAseTLSVersionGetParamsOSMacosx   HTTPAseTLSVersionGetParamsOS = "MACOSX"
-	HTTPAseTLSVersionGetParamsOSIos      HTTPAseTLSVersionGetParamsOS = "IOS"
+	HTTPAseTLSVersionGetParamsOSIOs      HTTPAseTLSVersionGetParamsOS = "IOS"
 	HTTPAseTLSVersionGetParamsOSAndroid  HTTPAseTLSVersionGetParamsOS = "ANDROID"
 	HTTPAseTLSVersionGetParamsOSChromeos HTTPAseTLSVersionGetParamsOS = "CHROMEOS"
 	HTTPAseTLSVersionGetParamsOSLinux    HTTPAseTLSVersionGetParamsOS = "LINUX"
@@ -400,7 +400,7 @@ const (
 
 func (r HTTPAseTLSVersionGetParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPAseTLSVersionGetParamsOSWindows, HTTPAseTLSVersionGetParamsOSMacosx, HTTPAseTLSVersionGetParamsOSIos, HTTPAseTLSVersionGetParamsOSAndroid, HTTPAseTLSVersionGetParamsOSChromeos, HTTPAseTLSVersionGetParamsOSLinux, HTTPAseTLSVersionGetParamsOSSmartTv:
+	case HTTPAseTLSVersionGetParamsOSWindows, HTTPAseTLSVersionGetParamsOSMacosx, HTTPAseTLSVersionGetParamsOSIOs, HTTPAseTLSVersionGetParamsOSAndroid, HTTPAseTLSVersionGetParamsOSChromeos, HTTPAseTLSVersionGetParamsOSLinux, HTTPAseTLSVersionGetParamsOSSmartTv:
 		return true
 	}
 	return false

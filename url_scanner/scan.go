@@ -624,9 +624,9 @@ func (r scanGetResponseDataRequestJSON) RawJSON() string {
 
 type ScanGetResponseDataRequestsRequest struct {
 	DocumentURL          string                                             `json:"documentURL,required"`
-	HasUserGesture       bool                                               `json:"hasUserGesture,required"`
+	HAsUserGesture       bool                                               `json:"hasUserGesture,required"`
 	Initiator            ScanGetResponseDataRequestsRequestInitiator        `json:"initiator,required"`
-	RedirectHasExtraInfo bool                                               `json:"redirectHasExtraInfo,required"`
+	RedirectHAsExtraInfo bool                                               `json:"redirectHasExtraInfo,required"`
 	Request              ScanGetResponseDataRequestsRequestRequest          `json:"request,required"`
 	RequestID            string                                             `json:"requestId,required"`
 	Type                 string                                             `json:"type,required"`
@@ -642,9 +642,9 @@ type ScanGetResponseDataRequestsRequest struct {
 // [ScanGetResponseDataRequestsRequest]
 type scanGetResponseDataRequestsRequestJSON struct {
 	DocumentURL          apijson.Field
-	HasUserGesture       apijson.Field
+	HAsUserGesture       apijson.Field
 	Initiator            apijson.Field
-	RedirectHasExtraInfo apijson.Field
+	RedirectHAsExtraInfo apijson.Field
 	Request              apijson.Field
 	RequestID            apijson.Field
 	Type                 apijson.Field
@@ -793,7 +793,7 @@ type ScanGetResponseDataRequestsResponse struct {
 	DataLength        float64                                     `json:"dataLength,required"`
 	EncodedDataLength float64                                     `json:"encodedDataLength,required"`
 	Geoip             ScanGetResponseDataRequestsResponseGeoip    `json:"geoip,required"`
-	HasExtraInfo      bool                                        `json:"hasExtraInfo,required"`
+	HAsExtraInfo      bool                                        `json:"hasExtraInfo,required"`
 	RequestID         string                                      `json:"requestId,required"`
 	Response          ScanGetResponseDataRequestsResponseResponse `json:"response,required"`
 	Size              float64                                     `json:"size,required"`
@@ -810,7 +810,7 @@ type scanGetResponseDataRequestsResponseJSON struct {
 	DataLength        apijson.Field
 	EncodedDataLength apijson.Field
 	Geoip             apijson.Field
-	HasExtraInfo      apijson.Field
+	HAsExtraInfo      apijson.Field
 	RequestID         apijson.Field
 	Response          apijson.Field
 	Size              apijson.Field
@@ -2219,7 +2219,7 @@ func (r scanGetResponseVerdictsJSON) RawJSON() string {
 
 type ScanGetResponseVerdictsOverall struct {
 	Categories  []string                           `json:"categories,required"`
-	HasVerdicts bool                               `json:"hasVerdicts,required"`
+	HAsVerdicts bool                               `json:"hasVerdicts,required"`
 	Malicious   bool                               `json:"malicious,required"`
 	Tags        []string                           `json:"tags,required"`
 	JSON        scanGetResponseVerdictsOverallJSON `json:"-"`
@@ -2229,7 +2229,7 @@ type ScanGetResponseVerdictsOverall struct {
 // [ScanGetResponseVerdictsOverall]
 type scanGetResponseVerdictsOverallJSON struct {
 	Categories  apijson.Field
-	HasVerdicts apijson.Field
+	HAsVerdicts apijson.Field
 	Malicious   apijson.Field
 	Tags        apijson.Field
 	raw         string

@@ -282,7 +282,7 @@ type LAN struct {
 	ID string `json:"id"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
-	HaLink        bool           `json:"ha_link"`
+	HALink        bool           `json:"ha_link"`
 	Name          string         `json:"name"`
 	Nat           Nat            `json:"nat"`
 	Physport      int64          `json:"physport"`
@@ -301,7 +301,7 @@ type LAN struct {
 // lanJSON contains the JSON metadata for the struct [LAN]
 type lanJSON struct {
 	ID               apijson.Field
-	HaLink           apijson.Field
+	HALink           apijson.Field
 	Name             apijson.Field
 	Nat              apijson.Field
 	Physport         apijson.Field
@@ -450,7 +450,7 @@ type SiteLANNewParams struct {
 	VlanTag param.Field[int64] `json:"vlan_tag,required"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
-	HaLink        param.Field[bool]                `json:"ha_link"`
+	HALink        param.Field[bool]                `json:"ha_link"`
 	Name          param.Field[string]              `json:"name"`
 	Nat           param.Field[NatParam]            `json:"nat"`
 	RoutedSubnets param.Field[[]RoutedSubnetParam] `json:"routed_subnets"`
