@@ -1055,7 +1055,7 @@ func (r httpSummaryOSResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string 
 
 type HTTPSummaryOSResponseSummary0 struct {
 	Android string                            `json:"ANDROID,required"`
-	IOs     string                            `json:"IOS,required"`
+	Ios     string                            `json:"IOS,required"`
 	JSON    httpSummaryOSResponseSummary0JSON `json:"-"`
 }
 
@@ -1063,7 +1063,7 @@ type HTTPSummaryOSResponseSummary0 struct {
 // [HTTPSummaryOSResponseSummary0]
 type httpSummaryOSResponseSummary0JSON struct {
 	Android     apijson.Field
-	IOs         apijson.Field
+	Ios         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1523,7 +1523,7 @@ type HTTPSummaryBotClassParamsOS string
 const (
 	HTTPSummaryBotClassParamsOSWindows  HTTPSummaryBotClassParamsOS = "WINDOWS"
 	HTTPSummaryBotClassParamsOSMacosx   HTTPSummaryBotClassParamsOS = "MACOSX"
-	HTTPSummaryBotClassParamsOSIOs      HTTPSummaryBotClassParamsOS = "IOS"
+	HTTPSummaryBotClassParamsOSIos      HTTPSummaryBotClassParamsOS = "IOS"
 	HTTPSummaryBotClassParamsOSAndroid  HTTPSummaryBotClassParamsOS = "ANDROID"
 	HTTPSummaryBotClassParamsOSChromeos HTTPSummaryBotClassParamsOS = "CHROMEOS"
 	HTTPSummaryBotClassParamsOSLinux    HTTPSummaryBotClassParamsOS = "LINUX"
@@ -1532,7 +1532,7 @@ const (
 
 func (r HTTPSummaryBotClassParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPSummaryBotClassParamsOSWindows, HTTPSummaryBotClassParamsOSMacosx, HTTPSummaryBotClassParamsOSIOs, HTTPSummaryBotClassParamsOSAndroid, HTTPSummaryBotClassParamsOSChromeos, HTTPSummaryBotClassParamsOSLinux, HTTPSummaryBotClassParamsOSSmartTv:
+	case HTTPSummaryBotClassParamsOSWindows, HTTPSummaryBotClassParamsOSMacosx, HTTPSummaryBotClassParamsOSIos, HTTPSummaryBotClassParamsOSAndroid, HTTPSummaryBotClassParamsOSChromeos, HTTPSummaryBotClassParamsOSLinux, HTTPSummaryBotClassParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -1710,7 +1710,7 @@ type HTTPSummaryDeviceTypeParamsOS string
 const (
 	HTTPSummaryDeviceTypeParamsOSWindows  HTTPSummaryDeviceTypeParamsOS = "WINDOWS"
 	HTTPSummaryDeviceTypeParamsOSMacosx   HTTPSummaryDeviceTypeParamsOS = "MACOSX"
-	HTTPSummaryDeviceTypeParamsOSIOs      HTTPSummaryDeviceTypeParamsOS = "IOS"
+	HTTPSummaryDeviceTypeParamsOSIos      HTTPSummaryDeviceTypeParamsOS = "IOS"
 	HTTPSummaryDeviceTypeParamsOSAndroid  HTTPSummaryDeviceTypeParamsOS = "ANDROID"
 	HTTPSummaryDeviceTypeParamsOSChromeos HTTPSummaryDeviceTypeParamsOS = "CHROMEOS"
 	HTTPSummaryDeviceTypeParamsOSLinux    HTTPSummaryDeviceTypeParamsOS = "LINUX"
@@ -1719,7 +1719,7 @@ const (
 
 func (r HTTPSummaryDeviceTypeParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPSummaryDeviceTypeParamsOSWindows, HTTPSummaryDeviceTypeParamsOSMacosx, HTTPSummaryDeviceTypeParamsOSIOs, HTTPSummaryDeviceTypeParamsOSAndroid, HTTPSummaryDeviceTypeParamsOSChromeos, HTTPSummaryDeviceTypeParamsOSLinux, HTTPSummaryDeviceTypeParamsOSSmartTv:
+	case HTTPSummaryDeviceTypeParamsOSWindows, HTTPSummaryDeviceTypeParamsOSMacosx, HTTPSummaryDeviceTypeParamsOSIos, HTTPSummaryDeviceTypeParamsOSAndroid, HTTPSummaryDeviceTypeParamsOSChromeos, HTTPSummaryDeviceTypeParamsOSLinux, HTTPSummaryDeviceTypeParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -1898,7 +1898,7 @@ type HTTPSummaryHTTPProtocolParamsOS string
 const (
 	HTTPSummaryHTTPProtocolParamsOSWindows  HTTPSummaryHTTPProtocolParamsOS = "WINDOWS"
 	HTTPSummaryHTTPProtocolParamsOSMacosx   HTTPSummaryHTTPProtocolParamsOS = "MACOSX"
-	HTTPSummaryHTTPProtocolParamsOSIOs      HTTPSummaryHTTPProtocolParamsOS = "IOS"
+	HTTPSummaryHTTPProtocolParamsOSIos      HTTPSummaryHTTPProtocolParamsOS = "IOS"
 	HTTPSummaryHTTPProtocolParamsOSAndroid  HTTPSummaryHTTPProtocolParamsOS = "ANDROID"
 	HTTPSummaryHTTPProtocolParamsOSChromeos HTTPSummaryHTTPProtocolParamsOS = "CHROMEOS"
 	HTTPSummaryHTTPProtocolParamsOSLinux    HTTPSummaryHTTPProtocolParamsOS = "LINUX"
@@ -1907,7 +1907,7 @@ const (
 
 func (r HTTPSummaryHTTPProtocolParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPSummaryHTTPProtocolParamsOSWindows, HTTPSummaryHTTPProtocolParamsOSMacosx, HTTPSummaryHTTPProtocolParamsOSIOs, HTTPSummaryHTTPProtocolParamsOSAndroid, HTTPSummaryHTTPProtocolParamsOSChromeos, HTTPSummaryHTTPProtocolParamsOSLinux, HTTPSummaryHTTPProtocolParamsOSSmartTv:
+	case HTTPSummaryHTTPProtocolParamsOSWindows, HTTPSummaryHTTPProtocolParamsOSMacosx, HTTPSummaryHTTPProtocolParamsOSIos, HTTPSummaryHTTPProtocolParamsOSAndroid, HTTPSummaryHTTPProtocolParamsOSChromeos, HTTPSummaryHTTPProtocolParamsOSLinux, HTTPSummaryHTTPProtocolParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -2085,7 +2085,7 @@ type HTTPSummaryHTTPVersionParamsOS string
 const (
 	HTTPSummaryHTTPVersionParamsOSWindows  HTTPSummaryHTTPVersionParamsOS = "WINDOWS"
 	HTTPSummaryHTTPVersionParamsOSMacosx   HTTPSummaryHTTPVersionParamsOS = "MACOSX"
-	HTTPSummaryHTTPVersionParamsOSIOs      HTTPSummaryHTTPVersionParamsOS = "IOS"
+	HTTPSummaryHTTPVersionParamsOSIos      HTTPSummaryHTTPVersionParamsOS = "IOS"
 	HTTPSummaryHTTPVersionParamsOSAndroid  HTTPSummaryHTTPVersionParamsOS = "ANDROID"
 	HTTPSummaryHTTPVersionParamsOSChromeos HTTPSummaryHTTPVersionParamsOS = "CHROMEOS"
 	HTTPSummaryHTTPVersionParamsOSLinux    HTTPSummaryHTTPVersionParamsOS = "LINUX"
@@ -2094,7 +2094,7 @@ const (
 
 func (r HTTPSummaryHTTPVersionParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPSummaryHTTPVersionParamsOSWindows, HTTPSummaryHTTPVersionParamsOSMacosx, HTTPSummaryHTTPVersionParamsOSIOs, HTTPSummaryHTTPVersionParamsOSAndroid, HTTPSummaryHTTPVersionParamsOSChromeos, HTTPSummaryHTTPVersionParamsOSLinux, HTTPSummaryHTTPVersionParamsOSSmartTv:
+	case HTTPSummaryHTTPVersionParamsOSWindows, HTTPSummaryHTTPVersionParamsOSMacosx, HTTPSummaryHTTPVersionParamsOSIos, HTTPSummaryHTTPVersionParamsOSAndroid, HTTPSummaryHTTPVersionParamsOSChromeos, HTTPSummaryHTTPVersionParamsOSLinux, HTTPSummaryHTTPVersionParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -2273,7 +2273,7 @@ type HTTPSummaryIPVersionParamsOS string
 const (
 	HTTPSummaryIPVersionParamsOSWindows  HTTPSummaryIPVersionParamsOS = "WINDOWS"
 	HTTPSummaryIPVersionParamsOSMacosx   HTTPSummaryIPVersionParamsOS = "MACOSX"
-	HTTPSummaryIPVersionParamsOSIOs      HTTPSummaryIPVersionParamsOS = "IOS"
+	HTTPSummaryIPVersionParamsOSIos      HTTPSummaryIPVersionParamsOS = "IOS"
 	HTTPSummaryIPVersionParamsOSAndroid  HTTPSummaryIPVersionParamsOS = "ANDROID"
 	HTTPSummaryIPVersionParamsOSChromeos HTTPSummaryIPVersionParamsOS = "CHROMEOS"
 	HTTPSummaryIPVersionParamsOSLinux    HTTPSummaryIPVersionParamsOS = "LINUX"
@@ -2282,7 +2282,7 @@ const (
 
 func (r HTTPSummaryIPVersionParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPSummaryIPVersionParamsOSWindows, HTTPSummaryIPVersionParamsOSMacosx, HTTPSummaryIPVersionParamsOSIOs, HTTPSummaryIPVersionParamsOSAndroid, HTTPSummaryIPVersionParamsOSChromeos, HTTPSummaryIPVersionParamsOSLinux, HTTPSummaryIPVersionParamsOSSmartTv:
+	case HTTPSummaryIPVersionParamsOSWindows, HTTPSummaryIPVersionParamsOSMacosx, HTTPSummaryIPVersionParamsOSIos, HTTPSummaryIPVersionParamsOSAndroid, HTTPSummaryIPVersionParamsOSChromeos, HTTPSummaryIPVersionParamsOSLinux, HTTPSummaryIPVersionParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -2660,7 +2660,7 @@ type HTTPSummaryPostQuantumParamsOS string
 const (
 	HTTPSummaryPostQuantumParamsOSWindows  HTTPSummaryPostQuantumParamsOS = "WINDOWS"
 	HTTPSummaryPostQuantumParamsOSMacosx   HTTPSummaryPostQuantumParamsOS = "MACOSX"
-	HTTPSummaryPostQuantumParamsOSIOs      HTTPSummaryPostQuantumParamsOS = "IOS"
+	HTTPSummaryPostQuantumParamsOSIos      HTTPSummaryPostQuantumParamsOS = "IOS"
 	HTTPSummaryPostQuantumParamsOSAndroid  HTTPSummaryPostQuantumParamsOS = "ANDROID"
 	HTTPSummaryPostQuantumParamsOSChromeos HTTPSummaryPostQuantumParamsOS = "CHROMEOS"
 	HTTPSummaryPostQuantumParamsOSLinux    HTTPSummaryPostQuantumParamsOS = "LINUX"
@@ -2669,7 +2669,7 @@ const (
 
 func (r HTTPSummaryPostQuantumParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPSummaryPostQuantumParamsOSWindows, HTTPSummaryPostQuantumParamsOSMacosx, HTTPSummaryPostQuantumParamsOSIOs, HTTPSummaryPostQuantumParamsOSAndroid, HTTPSummaryPostQuantumParamsOSChromeos, HTTPSummaryPostQuantumParamsOSLinux, HTTPSummaryPostQuantumParamsOSSmartTv:
+	case HTTPSummaryPostQuantumParamsOSWindows, HTTPSummaryPostQuantumParamsOSMacosx, HTTPSummaryPostQuantumParamsOSIos, HTTPSummaryPostQuantumParamsOSAndroid, HTTPSummaryPostQuantumParamsOSChromeos, HTTPSummaryPostQuantumParamsOSLinux, HTTPSummaryPostQuantumParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -2863,7 +2863,7 @@ type HTTPSummaryTLSVersionParamsOS string
 const (
 	HTTPSummaryTLSVersionParamsOSWindows  HTTPSummaryTLSVersionParamsOS = "WINDOWS"
 	HTTPSummaryTLSVersionParamsOSMacosx   HTTPSummaryTLSVersionParamsOS = "MACOSX"
-	HTTPSummaryTLSVersionParamsOSIOs      HTTPSummaryTLSVersionParamsOS = "IOS"
+	HTTPSummaryTLSVersionParamsOSIos      HTTPSummaryTLSVersionParamsOS = "IOS"
 	HTTPSummaryTLSVersionParamsOSAndroid  HTTPSummaryTLSVersionParamsOS = "ANDROID"
 	HTTPSummaryTLSVersionParamsOSChromeos HTTPSummaryTLSVersionParamsOS = "CHROMEOS"
 	HTTPSummaryTLSVersionParamsOSLinux    HTTPSummaryTLSVersionParamsOS = "LINUX"
@@ -2872,7 +2872,7 @@ const (
 
 func (r HTTPSummaryTLSVersionParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPSummaryTLSVersionParamsOSWindows, HTTPSummaryTLSVersionParamsOSMacosx, HTTPSummaryTLSVersionParamsOSIOs, HTTPSummaryTLSVersionParamsOSAndroid, HTTPSummaryTLSVersionParamsOSChromeos, HTTPSummaryTLSVersionParamsOSLinux, HTTPSummaryTLSVersionParamsOSSmartTv:
+	case HTTPSummaryTLSVersionParamsOSWindows, HTTPSummaryTLSVersionParamsOSMacosx, HTTPSummaryTLSVersionParamsOSIos, HTTPSummaryTLSVersionParamsOSAndroid, HTTPSummaryTLSVersionParamsOSChromeos, HTTPSummaryTLSVersionParamsOSLinux, HTTPSummaryTLSVersionParamsOSSmartTv:
 		return true
 	}
 	return false
