@@ -51,16 +51,16 @@ func (r *ScanResultService) List(ctx context.Context, query ScanResultListParams
 }
 
 type ScanResultListResponse struct {
-	Number1_1_1_1 []ScanResultListResponse1_1_1_1 `json:"1.1.1.1,required"`
-	JSON          scanResultListResponseJSON      `json:"-"`
+	OneOneOneOne []ScanResultListResponse1_1_1_1 `json:"1.1.1.1,required"`
+	JSON         scanResultListResponseJSON      `json:"-"`
 }
 
 // scanResultListResponseJSON contains the JSON metadata for the struct
 // [ScanResultListResponse]
 type scanResultListResponseJSON struct {
-	Number1_1_1_1 apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	OneOneOneOne apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ScanResultListResponse) UnmarshalJSON(data []byte) (err error) {
