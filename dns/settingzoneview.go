@@ -19,28 +19,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
-// SettingViewService contains methods and other services that help with
+// SettingZoneViewService contains methods and other services that help with
 // interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewSettingViewService] method instead.
-type SettingViewService struct {
+// the [NewSettingZoneViewService] method instead.
+type SettingZoneViewService struct {
 	Options []option.RequestOption
 }
 
-// NewSettingViewService generates a new service that applies the given options to
-// each request. These options are applied after the parent client's options (if
+// NewSettingZoneViewService generates a new service that applies the given options
+// to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewSettingViewService(opts ...option.RequestOption) (r *SettingViewService) {
-	r = &SettingViewService{}
+func NewSettingZoneViewService(opts ...option.RequestOption) (r *SettingZoneViewService) {
+	r = &SettingZoneViewService{}
 	r.Options = opts
 	return
 }
 
 // Create Internal DNS View for an account
-func (r *SettingViewService) New(ctx context.Context, params SettingViewNewParams, opts ...option.RequestOption) (res *SettingViewNewResponse, err error) {
-	var env SettingViewNewResponseEnvelope
+func (r *SettingZoneViewService) New(ctx context.Context, params SettingZoneViewNewParams, opts ...option.RequestOption) (res *SettingZoneViewNewResponse, err error) {
+	var env SettingZoneViewNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -56,7 +56,7 @@ func (r *SettingViewService) New(ctx context.Context, params SettingViewNewParam
 }
 
 // List DNS Internal Views for an Account
-func (r *SettingViewService) List(ctx context.Context, params SettingViewListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingViewListResponse], err error) {
+func (r *SettingZoneViewService) List(ctx context.Context, params SettingZoneViewListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingZoneViewListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,13 +78,13 @@ func (r *SettingViewService) List(ctx context.Context, params SettingViewListPar
 }
 
 // List DNS Internal Views for an Account
-func (r *SettingViewService) ListAutoPaging(ctx context.Context, params SettingViewListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingViewListResponse] {
+func (r *SettingZoneViewService) ListAutoPaging(ctx context.Context, params SettingZoneViewListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingZoneViewListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete an existing Internal DNS View
-func (r *SettingViewService) Delete(ctx context.Context, viewID string, body SettingViewDeleteParams, opts ...option.RequestOption) (res *SettingViewDeleteResponse, err error) {
-	var env SettingViewDeleteResponseEnvelope
+func (r *SettingZoneViewService) Delete(ctx context.Context, viewID string, body SettingZoneViewDeleteParams, opts ...option.RequestOption) (res *SettingZoneViewDeleteResponse, err error) {
+	var env SettingZoneViewDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -104,8 +104,8 @@ func (r *SettingViewService) Delete(ctx context.Context, viewID string, body Set
 }
 
 // Update an existing Internal DNS View
-func (r *SettingViewService) Edit(ctx context.Context, viewID string, params SettingViewEditParams, opts ...option.RequestOption) (res *SettingViewEditResponse, err error) {
-	var env SettingViewEditResponseEnvelope
+func (r *SettingZoneViewService) Edit(ctx context.Context, viewID string, params SettingZoneViewEditParams, opts ...option.RequestOption) (res *SettingZoneViewEditResponse, err error) {
+	var env SettingZoneViewEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -125,8 +125,8 @@ func (r *SettingViewService) Edit(ctx context.Context, viewID string, params Set
 }
 
 // Get DNS Internal View
-func (r *SettingViewService) Get(ctx context.Context, viewID string, query SettingViewGetParams, opts ...option.RequestOption) (res *SettingViewGetResponse, err error) {
-	var env SettingViewGetResponseEnvelope
+func (r *SettingZoneViewService) Get(ctx context.Context, viewID string, query SettingZoneViewGetParams, opts ...option.RequestOption) (res *SettingZoneViewGetResponse, err error) {
+	var env SettingZoneViewGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -145,7 +145,7 @@ func (r *SettingViewService) Get(ctx context.Context, viewID string, query Setti
 	return
 }
 
-type SettingViewNewResponse struct {
+type SettingZoneViewNewResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the view was created.
@@ -155,13 +155,13 @@ type SettingViewNewResponse struct {
 	// The name of the view.
 	Name string `json:"name,required"`
 	// The list of zones linked to this view.
-	Zones []string                   `json:"zones,required"`
-	JSON  settingViewNewResponseJSON `json:"-"`
+	Zones []string                       `json:"zones,required"`
+	JSON  settingZoneViewNewResponseJSON `json:"-"`
 }
 
-// settingViewNewResponseJSON contains the JSON metadata for the struct
-// [SettingViewNewResponse]
-type settingViewNewResponseJSON struct {
+// settingZoneViewNewResponseJSON contains the JSON metadata for the struct
+// [SettingZoneViewNewResponse]
+type settingZoneViewNewResponseJSON struct {
 	ID           apijson.Field
 	CreatedTime  apijson.Field
 	ModifiedTime apijson.Field
@@ -171,15 +171,15 @@ type settingViewNewResponseJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SettingViewNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZoneViewNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingViewNewResponseJSON) RawJSON() string {
+func (r settingZoneViewNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingViewListResponse struct {
+type SettingZoneViewListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the view was created.
@@ -189,13 +189,13 @@ type SettingViewListResponse struct {
 	// The name of the view.
 	Name string `json:"name,required"`
 	// The list of zones linked to this view.
-	Zones []string                    `json:"zones,required"`
-	JSON  settingViewListResponseJSON `json:"-"`
+	Zones []string                        `json:"zones,required"`
+	JSON  settingZoneViewListResponseJSON `json:"-"`
 }
 
-// settingViewListResponseJSON contains the JSON metadata for the struct
-// [SettingViewListResponse]
-type settingViewListResponseJSON struct {
+// settingZoneViewListResponseJSON contains the JSON metadata for the struct
+// [SettingZoneViewListResponse]
+type settingZoneViewListResponseJSON struct {
 	ID           apijson.Field
 	CreatedTime  apijson.Field
 	ModifiedTime apijson.Field
@@ -205,37 +205,37 @@ type settingViewListResponseJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SettingViewListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZoneViewListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingViewListResponseJSON) RawJSON() string {
+func (r settingZoneViewListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingViewDeleteResponse struct {
+type SettingZoneViewDeleteResponse struct {
 	// Identifier
-	ID   string                        `json:"id"`
-	JSON settingViewDeleteResponseJSON `json:"-"`
+	ID   string                            `json:"id"`
+	JSON settingZoneViewDeleteResponseJSON `json:"-"`
 }
 
-// settingViewDeleteResponseJSON contains the JSON metadata for the struct
-// [SettingViewDeleteResponse]
-type settingViewDeleteResponseJSON struct {
+// settingZoneViewDeleteResponseJSON contains the JSON metadata for the struct
+// [SettingZoneViewDeleteResponse]
+type settingZoneViewDeleteResponseJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingViewDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZoneViewDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingViewDeleteResponseJSON) RawJSON() string {
+func (r settingZoneViewDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingViewEditResponse struct {
+type SettingZoneViewEditResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the view was created.
@@ -245,13 +245,13 @@ type SettingViewEditResponse struct {
 	// The name of the view.
 	Name string `json:"name,required"`
 	// The list of zones linked to this view.
-	Zones []string                    `json:"zones,required"`
-	JSON  settingViewEditResponseJSON `json:"-"`
+	Zones []string                        `json:"zones,required"`
+	JSON  settingZoneViewEditResponseJSON `json:"-"`
 }
 
-// settingViewEditResponseJSON contains the JSON metadata for the struct
-// [SettingViewEditResponse]
-type settingViewEditResponseJSON struct {
+// settingZoneViewEditResponseJSON contains the JSON metadata for the struct
+// [SettingZoneViewEditResponse]
+type settingZoneViewEditResponseJSON struct {
 	ID           apijson.Field
 	CreatedTime  apijson.Field
 	ModifiedTime apijson.Field
@@ -261,15 +261,15 @@ type settingViewEditResponseJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SettingViewEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZoneViewEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingViewEditResponseJSON) RawJSON() string {
+func (r settingZoneViewEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingViewGetResponse struct {
+type SettingZoneViewGetResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the view was created.
@@ -279,13 +279,13 @@ type SettingViewGetResponse struct {
 	// The name of the view.
 	Name string `json:"name,required"`
 	// The list of zones linked to this view.
-	Zones []string                   `json:"zones,required"`
-	JSON  settingViewGetResponseJSON `json:"-"`
+	Zones []string                       `json:"zones,required"`
+	JSON  settingZoneViewGetResponseJSON `json:"-"`
 }
 
-// settingViewGetResponseJSON contains the JSON metadata for the struct
-// [SettingViewGetResponse]
-type settingViewGetResponseJSON struct {
+// settingZoneViewGetResponseJSON contains the JSON metadata for the struct
+// [SettingZoneViewGetResponse]
+type settingZoneViewGetResponseJSON struct {
 	ID           apijson.Field
 	CreatedTime  apijson.Field
 	ModifiedTime apijson.Field
@@ -295,15 +295,15 @@ type settingViewGetResponseJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SettingViewGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZoneViewGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingViewGetResponseJSON) RawJSON() string {
+func (r settingZoneViewGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingViewNewParams struct {
+type SettingZoneViewNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the view.
@@ -312,22 +312,22 @@ type SettingViewNewParams struct {
 	Zones param.Field[[]string] `json:"zones,required"`
 }
 
-func (r SettingViewNewParams) MarshalJSON() (data []byte, err error) {
+func (r SettingZoneViewNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SettingViewNewResponseEnvelope struct {
+type SettingZoneViewNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success SettingViewNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  SettingViewNewResponse                `json:"result"`
-	JSON    settingViewNewResponseEnvelopeJSON    `json:"-"`
+	Success SettingZoneViewNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  SettingZoneViewNewResponse                `json:"result"`
+	JSON    settingZoneViewNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// settingViewNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingViewNewResponseEnvelope]
-type settingViewNewResponseEnvelopeJSON struct {
+// settingZoneViewNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingZoneViewNewResponseEnvelope]
+type settingZoneViewNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -336,41 +336,41 @@ type settingViewNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingViewNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZoneViewNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingViewNewResponseEnvelopeJSON) RawJSON() string {
+func (r settingZoneViewNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SettingViewNewResponseEnvelopeSuccess bool
+type SettingZoneViewNewResponseEnvelopeSuccess bool
 
 const (
-	SettingViewNewResponseEnvelopeSuccessTrue SettingViewNewResponseEnvelopeSuccess = true
+	SettingZoneViewNewResponseEnvelopeSuccessTrue SettingZoneViewNewResponseEnvelopeSuccess = true
 )
 
-func (r SettingViewNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r SettingZoneViewNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SettingViewNewResponseEnvelopeSuccessTrue:
+	case SettingZoneViewNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type SettingViewListParams struct {
+type SettingZoneViewListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Direction to order DNS views in.
-	Direction param.Field[SettingViewListParamsDirection] `query:"direction"`
+	Direction param.Field[SettingZoneViewListParamsDirection] `query:"direction"`
 	// Whether to match all search requirements or at least one (any). If set to `all`,
 	// acts like a logical AND between filters. If set to `any`, acts like a logical OR
 	// instead.
-	Match param.Field[SettingViewListParamsMatch] `query:"match"`
-	Name  param.Field[SettingViewListParamsName]  `query:"name"`
+	Match param.Field[SettingZoneViewListParamsMatch] `query:"match"`
+	Name  param.Field[SettingZoneViewListParamsName]  `query:"name"`
 	// Field to order DNS views by.
-	Order param.Field[SettingViewListParamsOrder] `query:"order"`
+	Order param.Field[SettingZoneViewListParamsOrder] `query:"order"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of DNS views per page.
@@ -381,8 +381,9 @@ type SettingViewListParams struct {
 	ZoneName param.Field[string] `query:"zone_name"`
 }
 
-// URLQuery serializes [SettingViewListParams]'s query parameters as `url.Values`.
-func (r SettingViewListParams) URLQuery() (v url.Values) {
+// URLQuery serializes [SettingZoneViewListParams]'s query parameters as
+// `url.Values`.
+func (r SettingZoneViewListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -390,16 +391,16 @@ func (r SettingViewListParams) URLQuery() (v url.Values) {
 }
 
 // Direction to order DNS views in.
-type SettingViewListParamsDirection string
+type SettingZoneViewListParamsDirection string
 
 const (
-	SettingViewListParamsDirectionAsc  SettingViewListParamsDirection = "asc"
-	SettingViewListParamsDirectionDesc SettingViewListParamsDirection = "desc"
+	SettingZoneViewListParamsDirectionAsc  SettingZoneViewListParamsDirection = "asc"
+	SettingZoneViewListParamsDirectionDesc SettingZoneViewListParamsDirection = "desc"
 )
 
-func (r SettingViewListParamsDirection) IsKnown() bool {
+func (r SettingZoneViewListParamsDirection) IsKnown() bool {
 	switch r {
-	case SettingViewListParamsDirectionAsc, SettingViewListParamsDirectionDesc:
+	case SettingZoneViewListParamsDirectionAsc, SettingZoneViewListParamsDirectionDesc:
 		return true
 	}
 	return false
@@ -408,22 +409,22 @@ func (r SettingViewListParamsDirection) IsKnown() bool {
 // Whether to match all search requirements or at least one (any). If set to `all`,
 // acts like a logical AND between filters. If set to `any`, acts like a logical OR
 // instead.
-type SettingViewListParamsMatch string
+type SettingZoneViewListParamsMatch string
 
 const (
-	SettingViewListParamsMatchAny SettingViewListParamsMatch = "any"
-	SettingViewListParamsMatchAll SettingViewListParamsMatch = "all"
+	SettingZoneViewListParamsMatchAny SettingZoneViewListParamsMatch = "any"
+	SettingZoneViewListParamsMatchAll SettingZoneViewListParamsMatch = "all"
 )
 
-func (r SettingViewListParamsMatch) IsKnown() bool {
+func (r SettingZoneViewListParamsMatch) IsKnown() bool {
 	switch r {
-	case SettingViewListParamsMatchAny, SettingViewListParamsMatchAll:
+	case SettingZoneViewListParamsMatchAny, SettingZoneViewListParamsMatchAll:
 		return true
 	}
 	return false
 }
 
-type SettingViewListParamsName struct {
+type SettingZoneViewListParamsName struct {
 	// Substring of the DNS view name.
 	Contains param.Field[string] `query:"contains"`
 	// Suffix of the DNS view name.
@@ -434,9 +435,9 @@ type SettingViewListParamsName struct {
 	Startswith param.Field[string] `query:"startswith"`
 }
 
-// URLQuery serializes [SettingViewListParamsName]'s query parameters as
+// URLQuery serializes [SettingZoneViewListParamsName]'s query parameters as
 // `url.Values`.
-func (r SettingViewListParamsName) URLQuery() (v url.Values) {
+func (r SettingZoneViewListParamsName) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -444,49 +445,49 @@ func (r SettingViewListParamsName) URLQuery() (v url.Values) {
 }
 
 // Field to order DNS views by.
-type SettingViewListParamsOrder string
+type SettingZoneViewListParamsOrder string
 
 const (
-	SettingViewListParamsOrderName       SettingViewListParamsOrder = "name"
-	SettingViewListParamsOrderCreatedOn  SettingViewListParamsOrder = "created_on"
-	SettingViewListParamsOrderModifiedOn SettingViewListParamsOrder = "modified_on"
+	SettingZoneViewListParamsOrderName       SettingZoneViewListParamsOrder = "name"
+	SettingZoneViewListParamsOrderCreatedOn  SettingZoneViewListParamsOrder = "created_on"
+	SettingZoneViewListParamsOrderModifiedOn SettingZoneViewListParamsOrder = "modified_on"
 )
 
-func (r SettingViewListParamsOrder) IsKnown() bool {
+func (r SettingZoneViewListParamsOrder) IsKnown() bool {
 	switch r {
-	case SettingViewListParamsOrderName, SettingViewListParamsOrderCreatedOn, SettingViewListParamsOrderModifiedOn:
+	case SettingZoneViewListParamsOrderName, SettingZoneViewListParamsOrderCreatedOn, SettingZoneViewListParamsOrderModifiedOn:
 		return true
 	}
 	return false
 }
 
-type SettingViewDeleteParams struct {
+type SettingZoneViewDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SettingViewDeleteResponseEnvelope struct {
-	Result SettingViewDeleteResponse             `json:"result"`
-	JSON   settingViewDeleteResponseEnvelopeJSON `json:"-"`
+type SettingZoneViewDeleteResponseEnvelope struct {
+	Result SettingZoneViewDeleteResponse             `json:"result"`
+	JSON   settingZoneViewDeleteResponseEnvelopeJSON `json:"-"`
 }
 
-// settingViewDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingViewDeleteResponseEnvelope]
-type settingViewDeleteResponseEnvelopeJSON struct {
+// settingZoneViewDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingZoneViewDeleteResponseEnvelope]
+type settingZoneViewDeleteResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingViewDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZoneViewDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingViewDeleteResponseEnvelopeJSON) RawJSON() string {
+func (r settingZoneViewDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingViewEditParams struct {
+type SettingZoneViewEditParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the view.
@@ -495,22 +496,22 @@ type SettingViewEditParams struct {
 	Zones param.Field[[]string] `json:"zones"`
 }
 
-func (r SettingViewEditParams) MarshalJSON() (data []byte, err error) {
+func (r SettingZoneViewEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SettingViewEditResponseEnvelope struct {
+type SettingZoneViewEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success SettingViewEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  SettingViewEditResponse                `json:"result"`
-	JSON    settingViewEditResponseEnvelopeJSON    `json:"-"`
+	Success SettingZoneViewEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  SettingZoneViewEditResponse                `json:"result"`
+	JSON    settingZoneViewEditResponseEnvelopeJSON    `json:"-"`
 }
 
-// settingViewEditResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingViewEditResponseEnvelope]
-type settingViewEditResponseEnvelopeJSON struct {
+// settingZoneViewEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingZoneViewEditResponseEnvelope]
+type settingZoneViewEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -519,46 +520,46 @@ type settingViewEditResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingViewEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZoneViewEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingViewEditResponseEnvelopeJSON) RawJSON() string {
+func (r settingZoneViewEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SettingViewEditResponseEnvelopeSuccess bool
+type SettingZoneViewEditResponseEnvelopeSuccess bool
 
 const (
-	SettingViewEditResponseEnvelopeSuccessTrue SettingViewEditResponseEnvelopeSuccess = true
+	SettingZoneViewEditResponseEnvelopeSuccessTrue SettingZoneViewEditResponseEnvelopeSuccess = true
 )
 
-func (r SettingViewEditResponseEnvelopeSuccess) IsKnown() bool {
+func (r SettingZoneViewEditResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SettingViewEditResponseEnvelopeSuccessTrue:
+	case SettingZoneViewEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type SettingViewGetParams struct {
+type SettingZoneViewGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SettingViewGetResponseEnvelope struct {
+type SettingZoneViewGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success SettingViewGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  SettingViewGetResponse                `json:"result"`
-	JSON    settingViewGetResponseEnvelopeJSON    `json:"-"`
+	Success SettingZoneViewGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  SettingZoneViewGetResponse                `json:"result"`
+	JSON    settingZoneViewGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// settingViewGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingViewGetResponseEnvelope]
-type settingViewGetResponseEnvelopeJSON struct {
+// settingZoneViewGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingZoneViewGetResponseEnvelope]
+type settingZoneViewGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -567,24 +568,24 @@ type settingViewGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingViewGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZoneViewGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingViewGetResponseEnvelopeJSON) RawJSON() string {
+func (r settingZoneViewGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SettingViewGetResponseEnvelopeSuccess bool
+type SettingZoneViewGetResponseEnvelopeSuccess bool
 
 const (
-	SettingViewGetResponseEnvelopeSuccessTrue SettingViewGetResponseEnvelopeSuccess = true
+	SettingZoneViewGetResponseEnvelopeSuccessTrue SettingZoneViewGetResponseEnvelopeSuccess = true
 )
 
-func (r SettingViewGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r SettingZoneViewGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SettingViewGetResponseEnvelopeSuccessTrue:
+	case SettingZoneViewGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
