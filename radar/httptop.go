@@ -534,7 +534,7 @@ type HTTPTopBrowserParamsOS string
 const (
 	HTTPTopBrowserParamsOSWindows  HTTPTopBrowserParamsOS = "WINDOWS"
 	HTTPTopBrowserParamsOSMacosx   HTTPTopBrowserParamsOS = "MACOSX"
-	HTTPTopBrowserParamsOSIOs      HTTPTopBrowserParamsOS = "IOS"
+	HTTPTopBrowserParamsOSIos      HTTPTopBrowserParamsOS = "IOS"
 	HTTPTopBrowserParamsOSAndroid  HTTPTopBrowserParamsOS = "ANDROID"
 	HTTPTopBrowserParamsOSChromeos HTTPTopBrowserParamsOS = "CHROMEOS"
 	HTTPTopBrowserParamsOSLinux    HTTPTopBrowserParamsOS = "LINUX"
@@ -543,7 +543,7 @@ const (
 
 func (r HTTPTopBrowserParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTopBrowserParamsOSWindows, HTTPTopBrowserParamsOSMacosx, HTTPTopBrowserParamsOSIOs, HTTPTopBrowserParamsOSAndroid, HTTPTopBrowserParamsOSChromeos, HTTPTopBrowserParamsOSLinux, HTTPTopBrowserParamsOSSmartTv:
+	case HTTPTopBrowserParamsOSWindows, HTTPTopBrowserParamsOSMacosx, HTTPTopBrowserParamsOSIos, HTTPTopBrowserParamsOSAndroid, HTTPTopBrowserParamsOSChromeos, HTTPTopBrowserParamsOSLinux, HTTPTopBrowserParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -741,7 +741,7 @@ type HTTPTopBrowserFamilyParamsOS string
 const (
 	HTTPTopBrowserFamilyParamsOSWindows  HTTPTopBrowserFamilyParamsOS = "WINDOWS"
 	HTTPTopBrowserFamilyParamsOSMacosx   HTTPTopBrowserFamilyParamsOS = "MACOSX"
-	HTTPTopBrowserFamilyParamsOSIOs      HTTPTopBrowserFamilyParamsOS = "IOS"
+	HTTPTopBrowserFamilyParamsOSIos      HTTPTopBrowserFamilyParamsOS = "IOS"
 	HTTPTopBrowserFamilyParamsOSAndroid  HTTPTopBrowserFamilyParamsOS = "ANDROID"
 	HTTPTopBrowserFamilyParamsOSChromeos HTTPTopBrowserFamilyParamsOS = "CHROMEOS"
 	HTTPTopBrowserFamilyParamsOSLinux    HTTPTopBrowserFamilyParamsOS = "LINUX"
@@ -750,7 +750,7 @@ const (
 
 func (r HTTPTopBrowserFamilyParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTopBrowserFamilyParamsOSWindows, HTTPTopBrowserFamilyParamsOSMacosx, HTTPTopBrowserFamilyParamsOSIOs, HTTPTopBrowserFamilyParamsOSAndroid, HTTPTopBrowserFamilyParamsOSChromeos, HTTPTopBrowserFamilyParamsOSLinux, HTTPTopBrowserFamilyParamsOSSmartTv:
+	case HTTPTopBrowserFamilyParamsOSWindows, HTTPTopBrowserFamilyParamsOSMacosx, HTTPTopBrowserFamilyParamsOSIos, HTTPTopBrowserFamilyParamsOSAndroid, HTTPTopBrowserFamilyParamsOSChromeos, HTTPTopBrowserFamilyParamsOSLinux, HTTPTopBrowserFamilyParamsOSSmartTv:
 		return true
 	}
 	return false

@@ -373,7 +373,7 @@ type HTTPAseBrowserFamilyGetParamsOS string
 const (
 	HTTPAseBrowserFamilyGetParamsOSWindows  HTTPAseBrowserFamilyGetParamsOS = "WINDOWS"
 	HTTPAseBrowserFamilyGetParamsOSMacosx   HTTPAseBrowserFamilyGetParamsOS = "MACOSX"
-	HTTPAseBrowserFamilyGetParamsOSIOs      HTTPAseBrowserFamilyGetParamsOS = "IOS"
+	HTTPAseBrowserFamilyGetParamsOSIos      HTTPAseBrowserFamilyGetParamsOS = "IOS"
 	HTTPAseBrowserFamilyGetParamsOSAndroid  HTTPAseBrowserFamilyGetParamsOS = "ANDROID"
 	HTTPAseBrowserFamilyGetParamsOSChromeos HTTPAseBrowserFamilyGetParamsOS = "CHROMEOS"
 	HTTPAseBrowserFamilyGetParamsOSLinux    HTTPAseBrowserFamilyGetParamsOS = "LINUX"
@@ -382,7 +382,7 @@ const (
 
 func (r HTTPAseBrowserFamilyGetParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPAseBrowserFamilyGetParamsOSWindows, HTTPAseBrowserFamilyGetParamsOSMacosx, HTTPAseBrowserFamilyGetParamsOSIOs, HTTPAseBrowserFamilyGetParamsOSAndroid, HTTPAseBrowserFamilyGetParamsOSChromeos, HTTPAseBrowserFamilyGetParamsOSLinux, HTTPAseBrowserFamilyGetParamsOSSmartTv:
+	case HTTPAseBrowserFamilyGetParamsOSWindows, HTTPAseBrowserFamilyGetParamsOSMacosx, HTTPAseBrowserFamilyGetParamsOSIos, HTTPAseBrowserFamilyGetParamsOSAndroid, HTTPAseBrowserFamilyGetParamsOSChromeos, HTTPAseBrowserFamilyGetParamsOSLinux, HTTPAseBrowserFamilyGetParamsOSSmartTv:
 		return true
 	}
 	return false

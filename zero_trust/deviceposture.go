@@ -915,13 +915,13 @@ const (
 	DeviceInputOperatingSystemLinux    DeviceInputOperatingSystem = "linux"
 	DeviceInputOperatingSystemMac      DeviceInputOperatingSystem = "mac"
 	DeviceInputOperatingSystemAndroid  DeviceInputOperatingSystem = "android"
-	DeviceInputOperatingSystemIOs      DeviceInputOperatingSystem = "ios"
+	DeviceInputOperatingSystemIos      DeviceInputOperatingSystem = "ios"
 	DeviceInputOperatingSystemChromeos DeviceInputOperatingSystem = "chromeos"
 )
 
 func (r DeviceInputOperatingSystem) IsKnown() bool {
 	switch r {
-	case DeviceInputOperatingSystemWindows, DeviceInputOperatingSystemLinux, DeviceInputOperatingSystemMac, DeviceInputOperatingSystemAndroid, DeviceInputOperatingSystemIOs, DeviceInputOperatingSystemChromeos:
+	case DeviceInputOperatingSystemWindows, DeviceInputOperatingSystemLinux, DeviceInputOperatingSystemMac, DeviceInputOperatingSystemAndroid, DeviceInputOperatingSystemIos, DeviceInputOperatingSystemChromeos:
 		return true
 	}
 	return false
@@ -1260,12 +1260,12 @@ const (
 	DeviceMatchPlatformMac     DeviceMatchPlatform = "mac"
 	DeviceMatchPlatformLinux   DeviceMatchPlatform = "linux"
 	DeviceMatchPlatformAndroid DeviceMatchPlatform = "android"
-	DeviceMatchPlatformIOs     DeviceMatchPlatform = "ios"
+	DeviceMatchPlatformIos     DeviceMatchPlatform = "ios"
 )
 
 func (r DeviceMatchPlatform) IsKnown() bool {
 	switch r {
-	case DeviceMatchPlatformWindows, DeviceMatchPlatformMac, DeviceMatchPlatformLinux, DeviceMatchPlatformAndroid, DeviceMatchPlatformIOs:
+	case DeviceMatchPlatformWindows, DeviceMatchPlatformMac, DeviceMatchPlatformLinux, DeviceMatchPlatformAndroid, DeviceMatchPlatformIos:
 		return true
 	}
 	return false
@@ -2134,13 +2134,13 @@ type UniqueClientIDInputOperatingSystem string
 
 const (
 	UniqueClientIDInputOperatingSystemAndroid  UniqueClientIDInputOperatingSystem = "android"
-	UniqueClientIDInputOperatingSystemIOs      UniqueClientIDInputOperatingSystem = "ios"
+	UniqueClientIDInputOperatingSystemIos      UniqueClientIDInputOperatingSystem = "ios"
 	UniqueClientIDInputOperatingSystemChromeos UniqueClientIDInputOperatingSystem = "chromeos"
 )
 
 func (r UniqueClientIDInputOperatingSystem) IsKnown() bool {
 	switch r {
-	case UniqueClientIDInputOperatingSystemAndroid, UniqueClientIDInputOperatingSystemIOs, UniqueClientIDInputOperatingSystemChromeos:
+	case UniqueClientIDInputOperatingSystemAndroid, UniqueClientIDInputOperatingSystemIos, UniqueClientIDInputOperatingSystemChromeos:
 		return true
 	}
 	return false
