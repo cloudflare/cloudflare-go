@@ -434,7 +434,7 @@ type ScrapeNewParamsViewport struct {
 	Height            param.Field[float64] `json:"height,required"`
 	Width             param.Field[float64] `json:"width,required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
-	HAsTouch          param.Field[bool]    `json:"hasTouch"`
+	HasTouch          param.Field[bool]    `json:"hasTouch"`
 	IsLandscape       param.Field[bool]    `json:"isLandscape"`
 	IsMobile          param.Field[bool]    `json:"isMobile"`
 }

@@ -162,9 +162,9 @@ type DispatchNamespaceScriptUpdateResponse struct {
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
 	// Whether a Worker contains assets.
-	HAsAssets bool `json:"has_assets"`
+	HasAssets bool `json:"has_assets"`
 	// Whether a Worker contains modules.
-	HAsModules bool `json:"has_modules"`
+	HasModules bool `json:"has_modules"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
 	// When the script was last modified.
@@ -196,8 +196,8 @@ type dispatchNamespaceScriptUpdateResponseJSON struct {
 	ID              apijson.Field
 	CreatedOn       apijson.Field
 	Etag            apijson.Field
-	HAsAssets       apijson.Field
-	HAsModules      apijson.Field
+	HasAssets       apijson.Field
+	HasModules      apijson.Field
 	Logpush         apijson.Field
 	ModifiedOn      apijson.Field
 	Placement       apijson.Field

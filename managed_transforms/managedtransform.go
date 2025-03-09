@@ -114,7 +114,7 @@ type ManagedTransformListResponseManagedRequestHeader struct {
 	Enabled bool `json:"enabled,required"`
 	// Whether the Managed Transform conflicts with the currently-enabled Managed
 	// Transforms.
-	HAsConflict bool `json:"has_conflict,required"`
+	HasConflict bool `json:"has_conflict,required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
 	ConflictsWith []string                                             `json:"conflicts_with"`
 	JSON          managedTransformListResponseManagedRequestHeaderJSON `json:"-"`
@@ -125,7 +125,7 @@ type ManagedTransformListResponseManagedRequestHeader struct {
 type managedTransformListResponseManagedRequestHeaderJSON struct {
 	ID            apijson.Field
 	Enabled       apijson.Field
-	HAsConflict   apijson.Field
+	HasConflict   apijson.Field
 	ConflictsWith apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -147,7 +147,7 @@ type ManagedTransformListResponseManagedResponseHeader struct {
 	Enabled bool `json:"enabled,required"`
 	// Whether the Managed Transform conflicts with the currently-enabled Managed
 	// Transforms.
-	HAsConflict bool `json:"has_conflict,required"`
+	HasConflict bool `json:"has_conflict,required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
 	ConflictsWith []string                                              `json:"conflicts_with"`
 	JSON          managedTransformListResponseManagedResponseHeaderJSON `json:"-"`
@@ -158,7 +158,7 @@ type ManagedTransformListResponseManagedResponseHeader struct {
 type managedTransformListResponseManagedResponseHeaderJSON struct {
 	ID            apijson.Field
 	Enabled       apijson.Field
-	HAsConflict   apijson.Field
+	HasConflict   apijson.Field
 	ConflictsWith apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -206,7 +206,7 @@ type ManagedTransformEditResponseManagedRequestHeader struct {
 	Enabled bool `json:"enabled,required"`
 	// Whether the Managed Transform conflicts with the currently-enabled Managed
 	// Transforms.
-	HAsConflict bool `json:"has_conflict,required"`
+	HasConflict bool `json:"has_conflict,required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
 	ConflictsWith []string                                             `json:"conflicts_with"`
 	JSON          managedTransformEditResponseManagedRequestHeaderJSON `json:"-"`
@@ -217,7 +217,7 @@ type ManagedTransformEditResponseManagedRequestHeader struct {
 type managedTransformEditResponseManagedRequestHeaderJSON struct {
 	ID            apijson.Field
 	Enabled       apijson.Field
-	HAsConflict   apijson.Field
+	HasConflict   apijson.Field
 	ConflictsWith apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -239,7 +239,7 @@ type ManagedTransformEditResponseManagedResponseHeader struct {
 	Enabled bool `json:"enabled,required"`
 	// Whether the Managed Transform conflicts with the currently-enabled Managed
 	// Transforms.
-	HAsConflict bool `json:"has_conflict,required"`
+	HasConflict bool `json:"has_conflict,required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
 	ConflictsWith []string                                              `json:"conflicts_with"`
 	JSON          managedTransformEditResponseManagedResponseHeaderJSON `json:"-"`
@@ -250,7 +250,7 @@ type ManagedTransformEditResponseManagedResponseHeader struct {
 type managedTransformEditResponseManagedResponseHeaderJSON struct {
 	ID            apijson.Field
 	Enabled       apijson.Field
-	HAsConflict   apijson.Field
+	HasConflict   apijson.Field
 	ConflictsWith apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field

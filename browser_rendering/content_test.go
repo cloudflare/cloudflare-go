@@ -83,7 +83,7 @@ func TestContentNewWithOptionalParams(t *testing.T) {
 			Height:            cloudflare.F(0.000000),
 			Width:             cloudflare.F(0.000000),
 			DeviceScaleFactor: cloudflare.F(0.000000),
-			HAsTouch:          cloudflare.F(true),
+			HasTouch:          cloudflare.F(true),
 			IsLandscape:       cloudflare.F(true),
 			IsMobile:          cloudflare.F(true),
 		}),
