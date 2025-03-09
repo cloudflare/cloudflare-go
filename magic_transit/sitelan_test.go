@@ -34,7 +34,7 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Physport:  cloudflare.F(int64(1)),
 			VlanTag:   cloudflare.F(int64(0)),
-			HaLink:    cloudflare.F(true),
+			HALink:    cloudflare.F(true),
 			Name:      cloudflare.F("name"),
 			Nat: cloudflare.F(magic_transit.NatParam{
 				StaticPrefix: cloudflare.F("192.0.2.0/24"),

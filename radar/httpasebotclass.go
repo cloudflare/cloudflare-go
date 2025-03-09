@@ -372,7 +372,7 @@ type HTTPAseBotClassGetParamsOS string
 const (
 	HTTPAseBotClassGetParamsOSWindows  HTTPAseBotClassGetParamsOS = "WINDOWS"
 	HTTPAseBotClassGetParamsOSMacosx   HTTPAseBotClassGetParamsOS = "MACOSX"
-	HTTPAseBotClassGetParamsOSIos      HTTPAseBotClassGetParamsOS = "IOS"
+	HTTPAseBotClassGetParamsOSIOs      HTTPAseBotClassGetParamsOS = "IOS"
 	HTTPAseBotClassGetParamsOSAndroid  HTTPAseBotClassGetParamsOS = "ANDROID"
 	HTTPAseBotClassGetParamsOSChromeos HTTPAseBotClassGetParamsOS = "CHROMEOS"
 	HTTPAseBotClassGetParamsOSLinux    HTTPAseBotClassGetParamsOS = "LINUX"
@@ -381,7 +381,7 @@ const (
 
 func (r HTTPAseBotClassGetParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPAseBotClassGetParamsOSWindows, HTTPAseBotClassGetParamsOSMacosx, HTTPAseBotClassGetParamsOSIos, HTTPAseBotClassGetParamsOSAndroid, HTTPAseBotClassGetParamsOSChromeos, HTTPAseBotClassGetParamsOSLinux, HTTPAseBotClassGetParamsOSSmartTv:
+	case HTTPAseBotClassGetParamsOSWindows, HTTPAseBotClassGetParamsOSMacosx, HTTPAseBotClassGetParamsOSIOs, HTTPAseBotClassGetParamsOSAndroid, HTTPAseBotClassGetParamsOSChromeos, HTTPAseBotClassGetParamsOSLinux, HTTPAseBotClassGetParamsOSSmartTv:
 		return true
 	}
 	return false

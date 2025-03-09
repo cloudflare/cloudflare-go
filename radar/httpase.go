@@ -386,7 +386,7 @@ type HTTPAseGetParamsOS string
 const (
 	HTTPAseGetParamsOSWindows  HTTPAseGetParamsOS = "WINDOWS"
 	HTTPAseGetParamsOSMacosx   HTTPAseGetParamsOS = "MACOSX"
-	HTTPAseGetParamsOSIos      HTTPAseGetParamsOS = "IOS"
+	HTTPAseGetParamsOSIOs      HTTPAseGetParamsOS = "IOS"
 	HTTPAseGetParamsOSAndroid  HTTPAseGetParamsOS = "ANDROID"
 	HTTPAseGetParamsOSChromeos HTTPAseGetParamsOS = "CHROMEOS"
 	HTTPAseGetParamsOSLinux    HTTPAseGetParamsOS = "LINUX"
@@ -395,7 +395,7 @@ const (
 
 func (r HTTPAseGetParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPAseGetParamsOSWindows, HTTPAseGetParamsOSMacosx, HTTPAseGetParamsOSIos, HTTPAseGetParamsOSAndroid, HTTPAseGetParamsOSChromeos, HTTPAseGetParamsOSLinux, HTTPAseGetParamsOSSmartTv:
+	case HTTPAseGetParamsOSWindows, HTTPAseGetParamsOSMacosx, HTTPAseGetParamsOSIOs, HTTPAseGetParamsOSAndroid, HTTPAseGetParamsOSChromeos, HTTPAseGetParamsOSLinux, HTTPAseGetParamsOSSmartTv:
 		return true
 	}
 	return false

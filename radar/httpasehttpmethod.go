@@ -373,7 +373,7 @@ type HTTPAseHTTPMethodGetParamsOS string
 const (
 	HTTPAseHTTPMethodGetParamsOSWindows  HTTPAseHTTPMethodGetParamsOS = "WINDOWS"
 	HTTPAseHTTPMethodGetParamsOSMacosx   HTTPAseHTTPMethodGetParamsOS = "MACOSX"
-	HTTPAseHTTPMethodGetParamsOSIos      HTTPAseHTTPMethodGetParamsOS = "IOS"
+	HTTPAseHTTPMethodGetParamsOSIOs      HTTPAseHTTPMethodGetParamsOS = "IOS"
 	HTTPAseHTTPMethodGetParamsOSAndroid  HTTPAseHTTPMethodGetParamsOS = "ANDROID"
 	HTTPAseHTTPMethodGetParamsOSChromeos HTTPAseHTTPMethodGetParamsOS = "CHROMEOS"
 	HTTPAseHTTPMethodGetParamsOSLinux    HTTPAseHTTPMethodGetParamsOS = "LINUX"
@@ -382,7 +382,7 @@ const (
 
 func (r HTTPAseHTTPMethodGetParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPAseHTTPMethodGetParamsOSWindows, HTTPAseHTTPMethodGetParamsOSMacosx, HTTPAseHTTPMethodGetParamsOSIos, HTTPAseHTTPMethodGetParamsOSAndroid, HTTPAseHTTPMethodGetParamsOSChromeos, HTTPAseHTTPMethodGetParamsOSLinux, HTTPAseHTTPMethodGetParamsOSSmartTv:
+	case HTTPAseHTTPMethodGetParamsOSWindows, HTTPAseHTTPMethodGetParamsOSMacosx, HTTPAseHTTPMethodGetParamsOSIOs, HTTPAseHTTPMethodGetParamsOSAndroid, HTTPAseHTTPMethodGetParamsOSChromeos, HTTPAseHTTPMethodGetParamsOSLinux, HTTPAseHTTPMethodGetParamsOSSmartTv:
 		return true
 	}
 	return false

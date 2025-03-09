@@ -403,7 +403,7 @@ type HTTPTimeseriesParamsOS string
 const (
 	HTTPTimeseriesParamsOSWindows  HTTPTimeseriesParamsOS = "WINDOWS"
 	HTTPTimeseriesParamsOSMacosx   HTTPTimeseriesParamsOS = "MACOSX"
-	HTTPTimeseriesParamsOSIos      HTTPTimeseriesParamsOS = "IOS"
+	HTTPTimeseriesParamsOSIOs      HTTPTimeseriesParamsOS = "IOS"
 	HTTPTimeseriesParamsOSAndroid  HTTPTimeseriesParamsOS = "ANDROID"
 	HTTPTimeseriesParamsOSChromeos HTTPTimeseriesParamsOS = "CHROMEOS"
 	HTTPTimeseriesParamsOSLinux    HTTPTimeseriesParamsOS = "LINUX"
@@ -412,7 +412,7 @@ const (
 
 func (r HTTPTimeseriesParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesParamsOSWindows, HTTPTimeseriesParamsOSMacosx, HTTPTimeseriesParamsOSIos, HTTPTimeseriesParamsOSAndroid, HTTPTimeseriesParamsOSChromeos, HTTPTimeseriesParamsOSLinux, HTTPTimeseriesParamsOSSmartTv:
+	case HTTPTimeseriesParamsOSWindows, HTTPTimeseriesParamsOSMacosx, HTTPTimeseriesParamsOSIOs, HTTPTimeseriesParamsOSAndroid, HTTPTimeseriesParamsOSChromeos, HTTPTimeseriesParamsOSLinux, HTTPTimeseriesParamsOSSmartTv:
 		return true
 	}
 	return false

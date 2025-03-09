@@ -165,26 +165,26 @@ type ConnectorSnapshotGetResponse struct {
 	CPUTimeUserMs float64                            `json:"cpu_time_user_ms"`
 	Disks         []ConnectorSnapshotGetResponseDisk `json:"disks"`
 	// Name of high availability state
-	HaState string `json:"ha_state"`
+	HAState string `json:"ha_state"`
 	// Numeric value associated with high availability state (0 = unknown, 1 = active,
 	// 2 = standby, 3 = disabled, 4 = fault)
-	HaValue float64 `json:"ha_value"`
+	HAValue float64 `json:"ha_value"`
 	// Percentage of time over a 10 second window that all tasks were stalled
-	IoPressureFull10s float64 `json:"io_pressure_full_10s"`
+	IOPressureFull10s float64 `json:"io_pressure_full_10s"`
 	// Percentage of time over a 5 minute window that all tasks were stalled
-	IoPressureFull300s float64 `json:"io_pressure_full_300s"`
+	IOPressureFull300s float64 `json:"io_pressure_full_300s"`
 	// Percentage of time over a 1 minute window that all tasks were stalled
-	IoPressureFull60s float64 `json:"io_pressure_full_60s"`
+	IOPressureFull60s float64 `json:"io_pressure_full_60s"`
 	// Total stall time (microseconds)
-	IoPressureFullTotalUs float64 `json:"io_pressure_full_total_us"`
+	IOPressureFullTotalUs float64 `json:"io_pressure_full_total_us"`
 	// Percentage of time over a 10 second window that some tasks were stalled
-	IoPressureSome10s float64 `json:"io_pressure_some_10s"`
+	IOPressureSome10s float64 `json:"io_pressure_some_10s"`
 	// Percentage of time over a 3 minute window that some tasks were stalled
-	IoPressureSome300s float64 `json:"io_pressure_some_300s"`
+	IOPressureSome300s float64 `json:"io_pressure_some_300s"`
 	// Percentage of time over a 1 minute window that some tasks were stalled
-	IoPressureSome60s float64 `json:"io_pressure_some_60s"`
+	IOPressureSome60s float64 `json:"io_pressure_some_60s"`
 	// Total stall time (microseconds)
-	IoPressureSomeTotalUs float64 `json:"io_pressure_some_total_us"`
+	IOPressureSomeTotalUs float64 `json:"io_pressure_some_total_us"`
 	// Boot time (seconds since Unix epoch)
 	KernelBtime float64 `json:"kernel_btime"`
 	// Number of context switches that the system underwent
@@ -485,16 +485,16 @@ type connectorSnapshotGetResponseJSON struct {
 	CPUTimeSystemMs                apijson.Field
 	CPUTimeUserMs                  apijson.Field
 	Disks                          apijson.Field
-	HaState                        apijson.Field
-	HaValue                        apijson.Field
-	IoPressureFull10s              apijson.Field
-	IoPressureFull300s             apijson.Field
-	IoPressureFull60s              apijson.Field
-	IoPressureFullTotalUs          apijson.Field
-	IoPressureSome10s              apijson.Field
-	IoPressureSome300s             apijson.Field
-	IoPressureSome60s              apijson.Field
-	IoPressureSomeTotalUs          apijson.Field
+	HAState                        apijson.Field
+	HAValue                        apijson.Field
+	IOPressureFull10s              apijson.Field
+	IOPressureFull300s             apijson.Field
+	IOPressureFull60s              apijson.Field
+	IOPressureFullTotalUs          apijson.Field
+	IOPressureSome10s              apijson.Field
+	IOPressureSome300s             apijson.Field
+	IOPressureSome60s              apijson.Field
+	IOPressureSomeTotalUs          apijson.Field
 	KernelBtime                    apijson.Field
 	KernelCtxt                     apijson.Field
 	KernelProcesses                apijson.Field

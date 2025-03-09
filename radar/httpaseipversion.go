@@ -373,7 +373,7 @@ type HTTPAseIPVersionGetParamsOS string
 const (
 	HTTPAseIPVersionGetParamsOSWindows  HTTPAseIPVersionGetParamsOS = "WINDOWS"
 	HTTPAseIPVersionGetParamsOSMacosx   HTTPAseIPVersionGetParamsOS = "MACOSX"
-	HTTPAseIPVersionGetParamsOSIos      HTTPAseIPVersionGetParamsOS = "IOS"
+	HTTPAseIPVersionGetParamsOSIOs      HTTPAseIPVersionGetParamsOS = "IOS"
 	HTTPAseIPVersionGetParamsOSAndroid  HTTPAseIPVersionGetParamsOS = "ANDROID"
 	HTTPAseIPVersionGetParamsOSChromeos HTTPAseIPVersionGetParamsOS = "CHROMEOS"
 	HTTPAseIPVersionGetParamsOSLinux    HTTPAseIPVersionGetParamsOS = "LINUX"
@@ -382,7 +382,7 @@ const (
 
 func (r HTTPAseIPVersionGetParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPAseIPVersionGetParamsOSWindows, HTTPAseIPVersionGetParamsOSMacosx, HTTPAseIPVersionGetParamsOSIos, HTTPAseIPVersionGetParamsOSAndroid, HTTPAseIPVersionGetParamsOSChromeos, HTTPAseIPVersionGetParamsOSLinux, HTTPAseIPVersionGetParamsOSSmartTv:
+	case HTTPAseIPVersionGetParamsOSWindows, HTTPAseIPVersionGetParamsOSMacosx, HTTPAseIPVersionGetParamsOSIOs, HTTPAseIPVersionGetParamsOSAndroid, HTTPAseIPVersionGetParamsOSChromeos, HTTPAseIPVersionGetParamsOSLinux, HTTPAseIPVersionGetParamsOSSmartTv:
 		return true
 	}
 	return false

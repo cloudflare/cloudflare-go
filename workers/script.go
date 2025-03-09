@@ -147,9 +147,9 @@ type Script struct {
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
 	// Whether a Worker contains assets.
-	HasAssets bool `json:"has_assets"`
+	HAsAssets bool `json:"has_assets"`
 	// Whether a Worker contains modules.
-	HasModules bool `json:"has_modules"`
+	HAsModules bool `json:"has_modules"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
 	// When the script was last modified.
@@ -179,8 +179,8 @@ type scriptJSON struct {
 	ID              apijson.Field
 	CreatedOn       apijson.Field
 	Etag            apijson.Field
-	HasAssets       apijson.Field
-	HasModules      apijson.Field
+	HAsAssets       apijson.Field
+	HAsModules      apijson.Field
 	Logpush         apijson.Field
 	ModifiedOn      apijson.Field
 	Placement       apijson.Field
@@ -365,9 +365,9 @@ type ScriptUpdateResponse struct {
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
 	// Whether a Worker contains assets.
-	HasAssets bool `json:"has_assets"`
+	HAsAssets bool `json:"has_assets"`
 	// Whether a Worker contains modules.
-	HasModules bool `json:"has_modules"`
+	HAsModules bool `json:"has_modules"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
 	// When the script was last modified.
@@ -399,8 +399,8 @@ type scriptUpdateResponseJSON struct {
 	ID              apijson.Field
 	CreatedOn       apijson.Field
 	Etag            apijson.Field
-	HasAssets       apijson.Field
-	HasModules      apijson.Field
+	HAsAssets       apijson.Field
+	HAsModules      apijson.Field
 	Logpush         apijson.Field
 	ModifiedOn      apijson.Field
 	Placement       apijson.Field

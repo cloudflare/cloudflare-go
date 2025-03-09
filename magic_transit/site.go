@@ -186,7 +186,7 @@ type Site struct {
 	Description string `json:"description"`
 	// Site high availability mode. If set to true, the site can have two connectors
 	// and runs in high availability mode.
-	HaMode bool `json:"ha_mode"`
+	HAMode bool `json:"ha_mode"`
 	// Location of site in latitude and longitude.
 	Location SiteLocation `json:"location"`
 	// The name of the site.
@@ -201,7 +201,7 @@ type siteJSON struct {
 	ID                   apijson.Field
 	ConnectorID          apijson.Field
 	Description          apijson.Field
-	HaMode               apijson.Field
+	HAMode               apijson.Field
 	Location             apijson.Field
 	Name                 apijson.Field
 	SecondaryConnectorID apijson.Field
@@ -264,7 +264,7 @@ type SiteNewParams struct {
 	Description param.Field[string] `json:"description"`
 	// Site high availability mode. If set to true, the site can have two connectors
 	// and runs in high availability mode.
-	HaMode param.Field[bool] `json:"ha_mode"`
+	HAMode param.Field[bool] `json:"ha_mode"`
 	// Location of site in latitude and longitude.
 	Location param.Field[SiteLocationParam] `json:"location"`
 	// Magic Connector identifier tag. Used when high availability mode is on.

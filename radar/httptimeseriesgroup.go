@@ -803,7 +803,7 @@ type HTTPTimeseriesGroupBotClassParamsOS string
 const (
 	HTTPTimeseriesGroupBotClassParamsOSWindows  HTTPTimeseriesGroupBotClassParamsOS = "WINDOWS"
 	HTTPTimeseriesGroupBotClassParamsOSMacosx   HTTPTimeseriesGroupBotClassParamsOS = "MACOSX"
-	HTTPTimeseriesGroupBotClassParamsOSIos      HTTPTimeseriesGroupBotClassParamsOS = "IOS"
+	HTTPTimeseriesGroupBotClassParamsOSIOs      HTTPTimeseriesGroupBotClassParamsOS = "IOS"
 	HTTPTimeseriesGroupBotClassParamsOSAndroid  HTTPTimeseriesGroupBotClassParamsOS = "ANDROID"
 	HTTPTimeseriesGroupBotClassParamsOSChromeos HTTPTimeseriesGroupBotClassParamsOS = "CHROMEOS"
 	HTTPTimeseriesGroupBotClassParamsOSLinux    HTTPTimeseriesGroupBotClassParamsOS = "LINUX"
@@ -812,7 +812,7 @@ const (
 
 func (r HTTPTimeseriesGroupBotClassParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupBotClassParamsOSWindows, HTTPTimeseriesGroupBotClassParamsOSMacosx, HTTPTimeseriesGroupBotClassParamsOSIos, HTTPTimeseriesGroupBotClassParamsOSAndroid, HTTPTimeseriesGroupBotClassParamsOSChromeos, HTTPTimeseriesGroupBotClassParamsOSLinux, HTTPTimeseriesGroupBotClassParamsOSSmartTv:
+	case HTTPTimeseriesGroupBotClassParamsOSWindows, HTTPTimeseriesGroupBotClassParamsOSMacosx, HTTPTimeseriesGroupBotClassParamsOSIOs, HTTPTimeseriesGroupBotClassParamsOSAndroid, HTTPTimeseriesGroupBotClassParamsOSChromeos, HTTPTimeseriesGroupBotClassParamsOSLinux, HTTPTimeseriesGroupBotClassParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -1037,7 +1037,7 @@ type HTTPTimeseriesGroupBrowserParamsOS string
 const (
 	HTTPTimeseriesGroupBrowserParamsOSWindows  HTTPTimeseriesGroupBrowserParamsOS = "WINDOWS"
 	HTTPTimeseriesGroupBrowserParamsOSMacosx   HTTPTimeseriesGroupBrowserParamsOS = "MACOSX"
-	HTTPTimeseriesGroupBrowserParamsOSIos      HTTPTimeseriesGroupBrowserParamsOS = "IOS"
+	HTTPTimeseriesGroupBrowserParamsOSIOs      HTTPTimeseriesGroupBrowserParamsOS = "IOS"
 	HTTPTimeseriesGroupBrowserParamsOSAndroid  HTTPTimeseriesGroupBrowserParamsOS = "ANDROID"
 	HTTPTimeseriesGroupBrowserParamsOSChromeos HTTPTimeseriesGroupBrowserParamsOS = "CHROMEOS"
 	HTTPTimeseriesGroupBrowserParamsOSLinux    HTTPTimeseriesGroupBrowserParamsOS = "LINUX"
@@ -1046,7 +1046,7 @@ const (
 
 func (r HTTPTimeseriesGroupBrowserParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupBrowserParamsOSWindows, HTTPTimeseriesGroupBrowserParamsOSMacosx, HTTPTimeseriesGroupBrowserParamsOSIos, HTTPTimeseriesGroupBrowserParamsOSAndroid, HTTPTimeseriesGroupBrowserParamsOSChromeos, HTTPTimeseriesGroupBrowserParamsOSLinux, HTTPTimeseriesGroupBrowserParamsOSSmartTv:
+	case HTTPTimeseriesGroupBrowserParamsOSWindows, HTTPTimeseriesGroupBrowserParamsOSMacosx, HTTPTimeseriesGroupBrowserParamsOSIOs, HTTPTimeseriesGroupBrowserParamsOSAndroid, HTTPTimeseriesGroupBrowserParamsOSChromeos, HTTPTimeseriesGroupBrowserParamsOSLinux, HTTPTimeseriesGroupBrowserParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -1271,7 +1271,7 @@ type HTTPTimeseriesGroupBrowserFamilyParamsOS string
 const (
 	HTTPTimeseriesGroupBrowserFamilyParamsOSWindows  HTTPTimeseriesGroupBrowserFamilyParamsOS = "WINDOWS"
 	HTTPTimeseriesGroupBrowserFamilyParamsOSMacosx   HTTPTimeseriesGroupBrowserFamilyParamsOS = "MACOSX"
-	HTTPTimeseriesGroupBrowserFamilyParamsOSIos      HTTPTimeseriesGroupBrowserFamilyParamsOS = "IOS"
+	HTTPTimeseriesGroupBrowserFamilyParamsOSIOs      HTTPTimeseriesGroupBrowserFamilyParamsOS = "IOS"
 	HTTPTimeseriesGroupBrowserFamilyParamsOSAndroid  HTTPTimeseriesGroupBrowserFamilyParamsOS = "ANDROID"
 	HTTPTimeseriesGroupBrowserFamilyParamsOSChromeos HTTPTimeseriesGroupBrowserFamilyParamsOS = "CHROMEOS"
 	HTTPTimeseriesGroupBrowserFamilyParamsOSLinux    HTTPTimeseriesGroupBrowserFamilyParamsOS = "LINUX"
@@ -1280,7 +1280,7 @@ const (
 
 func (r HTTPTimeseriesGroupBrowserFamilyParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupBrowserFamilyParamsOSWindows, HTTPTimeseriesGroupBrowserFamilyParamsOSMacosx, HTTPTimeseriesGroupBrowserFamilyParamsOSIos, HTTPTimeseriesGroupBrowserFamilyParamsOSAndroid, HTTPTimeseriesGroupBrowserFamilyParamsOSChromeos, HTTPTimeseriesGroupBrowserFamilyParamsOSLinux, HTTPTimeseriesGroupBrowserFamilyParamsOSSmartTv:
+	case HTTPTimeseriesGroupBrowserFamilyParamsOSWindows, HTTPTimeseriesGroupBrowserFamilyParamsOSMacosx, HTTPTimeseriesGroupBrowserFamilyParamsOSIOs, HTTPTimeseriesGroupBrowserFamilyParamsOSAndroid, HTTPTimeseriesGroupBrowserFamilyParamsOSChromeos, HTTPTimeseriesGroupBrowserFamilyParamsOSLinux, HTTPTimeseriesGroupBrowserFamilyParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -1482,7 +1482,7 @@ type HTTPTimeseriesGroupDeviceTypeParamsOS string
 const (
 	HTTPTimeseriesGroupDeviceTypeParamsOSWindows  HTTPTimeseriesGroupDeviceTypeParamsOS = "WINDOWS"
 	HTTPTimeseriesGroupDeviceTypeParamsOSMacosx   HTTPTimeseriesGroupDeviceTypeParamsOS = "MACOSX"
-	HTTPTimeseriesGroupDeviceTypeParamsOSIos      HTTPTimeseriesGroupDeviceTypeParamsOS = "IOS"
+	HTTPTimeseriesGroupDeviceTypeParamsOSIOs      HTTPTimeseriesGroupDeviceTypeParamsOS = "IOS"
 	HTTPTimeseriesGroupDeviceTypeParamsOSAndroid  HTTPTimeseriesGroupDeviceTypeParamsOS = "ANDROID"
 	HTTPTimeseriesGroupDeviceTypeParamsOSChromeos HTTPTimeseriesGroupDeviceTypeParamsOS = "CHROMEOS"
 	HTTPTimeseriesGroupDeviceTypeParamsOSLinux    HTTPTimeseriesGroupDeviceTypeParamsOS = "LINUX"
@@ -1491,7 +1491,7 @@ const (
 
 func (r HTTPTimeseriesGroupDeviceTypeParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupDeviceTypeParamsOSWindows, HTTPTimeseriesGroupDeviceTypeParamsOSMacosx, HTTPTimeseriesGroupDeviceTypeParamsOSIos, HTTPTimeseriesGroupDeviceTypeParamsOSAndroid, HTTPTimeseriesGroupDeviceTypeParamsOSChromeos, HTTPTimeseriesGroupDeviceTypeParamsOSLinux, HTTPTimeseriesGroupDeviceTypeParamsOSSmartTv:
+	case HTTPTimeseriesGroupDeviceTypeParamsOSWindows, HTTPTimeseriesGroupDeviceTypeParamsOSMacosx, HTTPTimeseriesGroupDeviceTypeParamsOSIOs, HTTPTimeseriesGroupDeviceTypeParamsOSAndroid, HTTPTimeseriesGroupDeviceTypeParamsOSChromeos, HTTPTimeseriesGroupDeviceTypeParamsOSLinux, HTTPTimeseriesGroupDeviceTypeParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -1694,7 +1694,7 @@ type HTTPTimeseriesGroupHTTPProtocolParamsOS string
 const (
 	HTTPTimeseriesGroupHTTPProtocolParamsOSWindows  HTTPTimeseriesGroupHTTPProtocolParamsOS = "WINDOWS"
 	HTTPTimeseriesGroupHTTPProtocolParamsOSMacosx   HTTPTimeseriesGroupHTTPProtocolParamsOS = "MACOSX"
-	HTTPTimeseriesGroupHTTPProtocolParamsOSIos      HTTPTimeseriesGroupHTTPProtocolParamsOS = "IOS"
+	HTTPTimeseriesGroupHTTPProtocolParamsOSIOs      HTTPTimeseriesGroupHTTPProtocolParamsOS = "IOS"
 	HTTPTimeseriesGroupHTTPProtocolParamsOSAndroid  HTTPTimeseriesGroupHTTPProtocolParamsOS = "ANDROID"
 	HTTPTimeseriesGroupHTTPProtocolParamsOSChromeos HTTPTimeseriesGroupHTTPProtocolParamsOS = "CHROMEOS"
 	HTTPTimeseriesGroupHTTPProtocolParamsOSLinux    HTTPTimeseriesGroupHTTPProtocolParamsOS = "LINUX"
@@ -1703,7 +1703,7 @@ const (
 
 func (r HTTPTimeseriesGroupHTTPProtocolParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupHTTPProtocolParamsOSWindows, HTTPTimeseriesGroupHTTPProtocolParamsOSMacosx, HTTPTimeseriesGroupHTTPProtocolParamsOSIos, HTTPTimeseriesGroupHTTPProtocolParamsOSAndroid, HTTPTimeseriesGroupHTTPProtocolParamsOSChromeos, HTTPTimeseriesGroupHTTPProtocolParamsOSLinux, HTTPTimeseriesGroupHTTPProtocolParamsOSSmartTv:
+	case HTTPTimeseriesGroupHTTPProtocolParamsOSWindows, HTTPTimeseriesGroupHTTPProtocolParamsOSMacosx, HTTPTimeseriesGroupHTTPProtocolParamsOSIOs, HTTPTimeseriesGroupHTTPProtocolParamsOSAndroid, HTTPTimeseriesGroupHTTPProtocolParamsOSChromeos, HTTPTimeseriesGroupHTTPProtocolParamsOSLinux, HTTPTimeseriesGroupHTTPProtocolParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -1905,7 +1905,7 @@ type HTTPTimeseriesGroupHTTPVersionParamsOS string
 const (
 	HTTPTimeseriesGroupHTTPVersionParamsOSWindows  HTTPTimeseriesGroupHTTPVersionParamsOS = "WINDOWS"
 	HTTPTimeseriesGroupHTTPVersionParamsOSMacosx   HTTPTimeseriesGroupHTTPVersionParamsOS = "MACOSX"
-	HTTPTimeseriesGroupHTTPVersionParamsOSIos      HTTPTimeseriesGroupHTTPVersionParamsOS = "IOS"
+	HTTPTimeseriesGroupHTTPVersionParamsOSIOs      HTTPTimeseriesGroupHTTPVersionParamsOS = "IOS"
 	HTTPTimeseriesGroupHTTPVersionParamsOSAndroid  HTTPTimeseriesGroupHTTPVersionParamsOS = "ANDROID"
 	HTTPTimeseriesGroupHTTPVersionParamsOSChromeos HTTPTimeseriesGroupHTTPVersionParamsOS = "CHROMEOS"
 	HTTPTimeseriesGroupHTTPVersionParamsOSLinux    HTTPTimeseriesGroupHTTPVersionParamsOS = "LINUX"
@@ -1914,7 +1914,7 @@ const (
 
 func (r HTTPTimeseriesGroupHTTPVersionParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupHTTPVersionParamsOSWindows, HTTPTimeseriesGroupHTTPVersionParamsOSMacosx, HTTPTimeseriesGroupHTTPVersionParamsOSIos, HTTPTimeseriesGroupHTTPVersionParamsOSAndroid, HTTPTimeseriesGroupHTTPVersionParamsOSChromeos, HTTPTimeseriesGroupHTTPVersionParamsOSLinux, HTTPTimeseriesGroupHTTPVersionParamsOSSmartTv:
+	case HTTPTimeseriesGroupHTTPVersionParamsOSWindows, HTTPTimeseriesGroupHTTPVersionParamsOSMacosx, HTTPTimeseriesGroupHTTPVersionParamsOSIOs, HTTPTimeseriesGroupHTTPVersionParamsOSAndroid, HTTPTimeseriesGroupHTTPVersionParamsOSChromeos, HTTPTimeseriesGroupHTTPVersionParamsOSLinux, HTTPTimeseriesGroupHTTPVersionParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -2117,7 +2117,7 @@ type HTTPTimeseriesGroupIPVersionParamsOS string
 const (
 	HTTPTimeseriesGroupIPVersionParamsOSWindows  HTTPTimeseriesGroupIPVersionParamsOS = "WINDOWS"
 	HTTPTimeseriesGroupIPVersionParamsOSMacosx   HTTPTimeseriesGroupIPVersionParamsOS = "MACOSX"
-	HTTPTimeseriesGroupIPVersionParamsOSIos      HTTPTimeseriesGroupIPVersionParamsOS = "IOS"
+	HTTPTimeseriesGroupIPVersionParamsOSIOs      HTTPTimeseriesGroupIPVersionParamsOS = "IOS"
 	HTTPTimeseriesGroupIPVersionParamsOSAndroid  HTTPTimeseriesGroupIPVersionParamsOS = "ANDROID"
 	HTTPTimeseriesGroupIPVersionParamsOSChromeos HTTPTimeseriesGroupIPVersionParamsOS = "CHROMEOS"
 	HTTPTimeseriesGroupIPVersionParamsOSLinux    HTTPTimeseriesGroupIPVersionParamsOS = "LINUX"
@@ -2126,7 +2126,7 @@ const (
 
 func (r HTTPTimeseriesGroupIPVersionParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupIPVersionParamsOSWindows, HTTPTimeseriesGroupIPVersionParamsOSMacosx, HTTPTimeseriesGroupIPVersionParamsOSIos, HTTPTimeseriesGroupIPVersionParamsOSAndroid, HTTPTimeseriesGroupIPVersionParamsOSChromeos, HTTPTimeseriesGroupIPVersionParamsOSLinux, HTTPTimeseriesGroupIPVersionParamsOSSmartTv:
+	case HTTPTimeseriesGroupIPVersionParamsOSWindows, HTTPTimeseriesGroupIPVersionParamsOSMacosx, HTTPTimeseriesGroupIPVersionParamsOSIOs, HTTPTimeseriesGroupIPVersionParamsOSAndroid, HTTPTimeseriesGroupIPVersionParamsOSChromeos, HTTPTimeseriesGroupIPVersionParamsOSLinux, HTTPTimeseriesGroupIPVersionParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -2553,7 +2553,7 @@ type HTTPTimeseriesGroupPostQuantumParamsOS string
 const (
 	HTTPTimeseriesGroupPostQuantumParamsOSWindows  HTTPTimeseriesGroupPostQuantumParamsOS = "WINDOWS"
 	HTTPTimeseriesGroupPostQuantumParamsOSMacosx   HTTPTimeseriesGroupPostQuantumParamsOS = "MACOSX"
-	HTTPTimeseriesGroupPostQuantumParamsOSIos      HTTPTimeseriesGroupPostQuantumParamsOS = "IOS"
+	HTTPTimeseriesGroupPostQuantumParamsOSIOs      HTTPTimeseriesGroupPostQuantumParamsOS = "IOS"
 	HTTPTimeseriesGroupPostQuantumParamsOSAndroid  HTTPTimeseriesGroupPostQuantumParamsOS = "ANDROID"
 	HTTPTimeseriesGroupPostQuantumParamsOSChromeos HTTPTimeseriesGroupPostQuantumParamsOS = "CHROMEOS"
 	HTTPTimeseriesGroupPostQuantumParamsOSLinux    HTTPTimeseriesGroupPostQuantumParamsOS = "LINUX"
@@ -2562,7 +2562,7 @@ const (
 
 func (r HTTPTimeseriesGroupPostQuantumParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupPostQuantumParamsOSWindows, HTTPTimeseriesGroupPostQuantumParamsOSMacosx, HTTPTimeseriesGroupPostQuantumParamsOSIos, HTTPTimeseriesGroupPostQuantumParamsOSAndroid, HTTPTimeseriesGroupPostQuantumParamsOSChromeos, HTTPTimeseriesGroupPostQuantumParamsOSLinux, HTTPTimeseriesGroupPostQuantumParamsOSSmartTv:
+	case HTTPTimeseriesGroupPostQuantumParamsOSWindows, HTTPTimeseriesGroupPostQuantumParamsOSMacosx, HTTPTimeseriesGroupPostQuantumParamsOSIOs, HTTPTimeseriesGroupPostQuantumParamsOSAndroid, HTTPTimeseriesGroupPostQuantumParamsOSChromeos, HTTPTimeseriesGroupPostQuantumParamsOSLinux, HTTPTimeseriesGroupPostQuantumParamsOSSmartTv:
 		return true
 	}
 	return false
@@ -2780,7 +2780,7 @@ type HTTPTimeseriesGroupTLSVersionParamsOS string
 const (
 	HTTPTimeseriesGroupTLSVersionParamsOSWindows  HTTPTimeseriesGroupTLSVersionParamsOS = "WINDOWS"
 	HTTPTimeseriesGroupTLSVersionParamsOSMacosx   HTTPTimeseriesGroupTLSVersionParamsOS = "MACOSX"
-	HTTPTimeseriesGroupTLSVersionParamsOSIos      HTTPTimeseriesGroupTLSVersionParamsOS = "IOS"
+	HTTPTimeseriesGroupTLSVersionParamsOSIOs      HTTPTimeseriesGroupTLSVersionParamsOS = "IOS"
 	HTTPTimeseriesGroupTLSVersionParamsOSAndroid  HTTPTimeseriesGroupTLSVersionParamsOS = "ANDROID"
 	HTTPTimeseriesGroupTLSVersionParamsOSChromeos HTTPTimeseriesGroupTLSVersionParamsOS = "CHROMEOS"
 	HTTPTimeseriesGroupTLSVersionParamsOSLinux    HTTPTimeseriesGroupTLSVersionParamsOS = "LINUX"
@@ -2789,7 +2789,7 @@ const (
 
 func (r HTTPTimeseriesGroupTLSVersionParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupTLSVersionParamsOSWindows, HTTPTimeseriesGroupTLSVersionParamsOSMacosx, HTTPTimeseriesGroupTLSVersionParamsOSIos, HTTPTimeseriesGroupTLSVersionParamsOSAndroid, HTTPTimeseriesGroupTLSVersionParamsOSChromeos, HTTPTimeseriesGroupTLSVersionParamsOSLinux, HTTPTimeseriesGroupTLSVersionParamsOSSmartTv:
+	case HTTPTimeseriesGroupTLSVersionParamsOSWindows, HTTPTimeseriesGroupTLSVersionParamsOSMacosx, HTTPTimeseriesGroupTLSVersionParamsOSIOs, HTTPTimeseriesGroupTLSVersionParamsOSAndroid, HTTPTimeseriesGroupTLSVersionParamsOSChromeos, HTTPTimeseriesGroupTLSVersionParamsOSLinux, HTTPTimeseriesGroupTLSVersionParamsOSSmartTv:
 		return true
 	}
 	return false
