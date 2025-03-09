@@ -372,7 +372,7 @@ type HTTPLocationDeviceTypeGetParamsOS string
 const (
 	HTTPLocationDeviceTypeGetParamsOSWindows  HTTPLocationDeviceTypeGetParamsOS = "WINDOWS"
 	HTTPLocationDeviceTypeGetParamsOSMacosx   HTTPLocationDeviceTypeGetParamsOS = "MACOSX"
-	HTTPLocationDeviceTypeGetParamsOSIos      HTTPLocationDeviceTypeGetParamsOS = "IOS"
+	HTTPLocationDeviceTypeGetParamsOSIOs      HTTPLocationDeviceTypeGetParamsOS = "IOS"
 	HTTPLocationDeviceTypeGetParamsOSAndroid  HTTPLocationDeviceTypeGetParamsOS = "ANDROID"
 	HTTPLocationDeviceTypeGetParamsOSChromeos HTTPLocationDeviceTypeGetParamsOS = "CHROMEOS"
 	HTTPLocationDeviceTypeGetParamsOSLinux    HTTPLocationDeviceTypeGetParamsOS = "LINUX"
@@ -381,7 +381,7 @@ const (
 
 func (r HTTPLocationDeviceTypeGetParamsOS) IsKnown() bool {
 	switch r {
-	case HTTPLocationDeviceTypeGetParamsOSWindows, HTTPLocationDeviceTypeGetParamsOSMacosx, HTTPLocationDeviceTypeGetParamsOSIos, HTTPLocationDeviceTypeGetParamsOSAndroid, HTTPLocationDeviceTypeGetParamsOSChromeos, HTTPLocationDeviceTypeGetParamsOSLinux, HTTPLocationDeviceTypeGetParamsOSSmartTv:
+	case HTTPLocationDeviceTypeGetParamsOSWindows, HTTPLocationDeviceTypeGetParamsOSMacosx, HTTPLocationDeviceTypeGetParamsOSIOs, HTTPLocationDeviceTypeGetParamsOSAndroid, HTTPLocationDeviceTypeGetParamsOSChromeos, HTTPLocationDeviceTypeGetParamsOSLinux, HTTPLocationDeviceTypeGetParamsOSSmartTv:
 		return true
 	}
 	return false

@@ -185,12 +185,12 @@ const (
 	DeviceDeviceTypeMac     DeviceDeviceType = "mac"
 	DeviceDeviceTypeLinux   DeviceDeviceType = "linux"
 	DeviceDeviceTypeAndroid DeviceDeviceType = "android"
-	DeviceDeviceTypeIos     DeviceDeviceType = "ios"
+	DeviceDeviceTypeIOs     DeviceDeviceType = "ios"
 )
 
 func (r DeviceDeviceType) IsKnown() bool {
 	switch r {
-	case DeviceDeviceTypeWindows, DeviceDeviceTypeMac, DeviceDeviceTypeLinux, DeviceDeviceTypeAndroid, DeviceDeviceTypeIos:
+	case DeviceDeviceTypeWindows, DeviceDeviceTypeMac, DeviceDeviceTypeLinux, DeviceDeviceTypeAndroid, DeviceDeviceTypeIOs:
 		return true
 	}
 	return false

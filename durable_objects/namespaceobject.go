@@ -71,14 +71,14 @@ type DurableObject struct {
 	// ID of the Durable Object.
 	ID string `json:"id"`
 	// Whether the Durable Object has stored data.
-	HasStoredData bool              `json:"hasStoredData"`
+	HAsStoredData bool              `json:"hasStoredData"`
 	JSON          durableObjectJSON `json:"-"`
 }
 
 // durableObjectJSON contains the JSON metadata for the struct [DurableObject]
 type durableObjectJSON struct {
 	ID            apijson.Field
-	HasStoredData apijson.Field
+	HAsStoredData apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
