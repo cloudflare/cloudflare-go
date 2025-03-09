@@ -393,26 +393,26 @@ func (r attackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotationJSON) Raw
 }
 
 type AttackLayer3SummaryDurationResponseSummary0 struct {
-	OneHourToThreeHours    string                                          `json:"_1_HOUR_TO_3_HOURS,required"`
-	TenMinsToTwentyMinds   string                                          `json:"_10_MINS_TO_20_MINS,required"`
-	TwentyMinsToFortyMinds string                                          `json:"_20_MINS_TO_40_MINS,required"`
-	FortyMinsToOneHour     string                                          `json:"_40_MINS_TO_1_HOUR,required"`
-	Over3Hours             string                                          `json:"OVER_3_HOURS,required"`
-	Under10Mins            string                                          `json:"UNDER_10_MINS,required"`
-	JSON                   attackLayer3SummaryDurationResponseSummary0JSON `json:"-"`
+	OneHourToThreeHours   string                                          `json:"_1_HOUR_TO_3_HOURS,required"`
+	TenMinsToTwentyMins   string                                          `json:"_10_MINS_TO_20_MINS,required"`
+	TwentyMinsToFortyMins string                                          `json:"_20_MINS_TO_40_MINS,required"`
+	FortyMinsToOneHour    string                                          `json:"_40_MINS_TO_1_HOUR,required"`
+	Over3Hours            string                                          `json:"OVER_3_HOURS,required"`
+	Under10Mins           string                                          `json:"UNDER_10_MINS,required"`
+	JSON                  attackLayer3SummaryDurationResponseSummary0JSON `json:"-"`
 }
 
 // attackLayer3SummaryDurationResponseSummary0JSON contains the JSON metadata for
 // the struct [AttackLayer3SummaryDurationResponseSummary0]
 type attackLayer3SummaryDurationResponseSummary0JSON struct {
-	OneHourToThreeHours    apijson.Field
-	TenMinsToTwentyMinds   apijson.Field
-	TwentyMinsToFortyMinds apijson.Field
-	FortyMinsToOneHour     apijson.Field
-	Over3Hours             apijson.Field
-	Under10Mins            apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	OneHourToThreeHours   apijson.Field
+	TenMinsToTwentyMins   apijson.Field
+	TwentyMinsToFortyMins apijson.Field
+	FortyMinsToOneHour    apijson.Field
+	Over3Hours            apijson.Field
+	Under10Mins           apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *AttackLayer3SummaryDurationResponseSummary0) UnmarshalJSON(data []byte) (err error) {
