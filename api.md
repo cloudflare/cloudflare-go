@@ -7645,6 +7645,7 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanResult">ScanResult</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanResultListResponse">ScanResultListResponse</a>
 
 Methods:
