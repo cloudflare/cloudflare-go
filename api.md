@@ -1106,7 +1106,27 @@ Methods:
 
 ### Zone
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingZoneEditResponse">SettingZoneEditResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingZoneGetResponse">SettingZoneGetResponse</a>
+
+Methods:
+
+- <code title="patch /zones/{zone_id}/dns_settings">client.DNS.Settings.Zone.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingZoneService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingZoneEditParams">SettingZoneEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingZoneEditResponse">SettingZoneEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/dns_settings">client.DNS.Settings.Zone.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingZoneService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingZoneGetParams">SettingZoneGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingZoneGetResponse">SettingZoneGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Account
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingAccountEditResponse">SettingAccountEditResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingAccountGetResponse">SettingAccountGetResponse</a>
+
+Methods:
+
+- <code title="patch /accounts/{account_id}/dns_settings">client.DNS.Settings.Account.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingAccountService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingAccountEditParams">SettingAccountEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingAccountEditResponse">SettingAccountEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/dns_settings">client.DNS.Settings.Account.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingAccountService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingAccountGetParams">SettingAccountGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/dns#SettingAccountGetResponse">SettingAccountGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Subresources
 
