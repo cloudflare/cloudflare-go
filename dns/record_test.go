@@ -208,7 +208,7 @@ func TestRecordBatchWithOptionalParams(t *testing.T) {
 		Deletes: cloudflare.F([]dns.RecordBatchParamsDelete{{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}}),
-		Patches: cloudflare.F([]dns.BatchPatchUnionParam{dns.BatchPatchARecordParam(dns.BatchPatchARecordParam{
+		Patches: cloudflare.F([]dns.BatchPatchUnionParam{dns.BatchPatchAParam(dns.BatchPatchAParam{
 			ARecordParam: dns.ARecordParam{
 				Comment: cloudflare.F("Domain verification record"),
 				Content: cloudflare.F("198.51.100.4"),
@@ -237,7 +237,7 @@ func TestRecordBatchWithOptionalParams(t *testing.T) {
 			TTL:  cloudflare.F(dns.TTL1),
 			Type: cloudflare.F(dns.ARecordTypeA),
 		}}),
-		Puts: cloudflare.F([]dns.BatchPutUnionParam{dns.BatchPutARecordParam(dns.BatchPutARecordParam{
+		Puts: cloudflare.F([]dns.BatchPutUnionParam{dns.BatchPutAParam(dns.BatchPutAParam{
 			ARecordParam: dns.ARecordParam{
 				Comment: cloudflare.F("Domain verification record"),
 				Content: cloudflare.F("198.51.100.4"),
