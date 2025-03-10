@@ -569,164 +569,162 @@ func (r AAAARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Satisfied by [dns.BatchPatchARecordParam], [dns.BatchPatchAAAARecordParam],
-// [dns.BatchPatchCAARecordParam], [dns.BatchPatchCERTRecordParam],
-// [dns.BatchPatchCNAMERecordParam], [dns.BatchPatchDNSKEYRecordParam],
-// [dns.BatchPatchDSRecordParam], [dns.BatchPatchHTTPSRecordParam],
-// [dns.BatchPatchLOCRecordParam], [dns.BatchPatchMXRecordParam],
-// [dns.BatchPatchNAPTRRecordParam], [dns.BatchPatchNSRecordParam],
-// [dns.BatchPatchOpenpgpkeyParam], [dns.BatchPatchPTRRecordParam],
-// [dns.BatchPatchSMIMEARecordParam], [dns.BatchPatchSRVRecordParam],
-// [dns.BatchPatchSSHFPRecordParam], [dns.BatchPatchSVCBRecordParam],
-// [dns.BatchPatchTLSARecordParam], [dns.BatchPatchTXTRecordParam],
-// [dns.BatchPatchURIRecordParam].
+// Satisfied by [dns.BatchPatchAParam], [dns.BatchPatchAAAAParam],
+// [dns.BatchPatchCAAParam], [dns.BatchPatchCERTParam], [dns.BatchPatchCNAMEParam],
+// [dns.BatchPatchDNSKEYParam], [dns.BatchPatchDSParam],
+// [dns.BatchPatchHTTPSParam], [dns.BatchPatchLOCParam], [dns.BatchPatchMXParam],
+// [dns.BatchPatchNAPTRParam], [dns.BatchPatchNSParam],
+// [dns.BatchPatchOpenpgpkeyParam], [dns.BatchPatchPTRParam],
+// [dns.BatchPatchSMIMEAParam], [dns.BatchPatchSRVParam],
+// [dns.BatchPatchSSHFPParam], [dns.BatchPatchSVCBParam],
+// [dns.BatchPatchTLSAParam], [dns.BatchPatchTXTParam], [dns.BatchPatchURIParam].
 type BatchPatchUnionParam interface {
 	implementsBatchPatchUnionParam()
 }
 
-type BatchPatchARecordParam struct {
+type BatchPatchAParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	ARecordParam
 }
 
-func (r BatchPatchARecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchAParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchARecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchAParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchAAAARecordParam struct {
+type BatchPatchAAAAParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	AAAARecordParam
 }
 
-func (r BatchPatchAAAARecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchAAAAParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchAAAARecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchAAAAParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchCAARecordParam struct {
+type BatchPatchCAAParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	CAARecordParam
 }
 
-func (r BatchPatchCAARecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchCAAParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchCAARecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchCAAParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchCERTRecordParam struct {
+type BatchPatchCERTParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	CERTRecordParam
 }
 
-func (r BatchPatchCERTRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchCERTParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchCERTRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchCERTParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchCNAMERecordParam struct {
+type BatchPatchCNAMEParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	CNAMERecordParam
 }
 
-func (r BatchPatchCNAMERecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchCNAMEParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchCNAMERecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchCNAMEParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchDNSKEYRecordParam struct {
+type BatchPatchDNSKEYParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	DNSKEYRecordParam
 }
 
-func (r BatchPatchDNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchDNSKEYParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchDNSKEYRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchDNSKEYParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchDSRecordParam struct {
+type BatchPatchDSParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	DSRecordParam
 }
 
-func (r BatchPatchDSRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchDSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchDSRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchDSParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchHTTPSRecordParam struct {
+type BatchPatchHTTPSParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	HTTPSRecordParam
 }
 
-func (r BatchPatchHTTPSRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchHTTPSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchHTTPSRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchHTTPSParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchLOCRecordParam struct {
+type BatchPatchLOCParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	LOCRecordParam
 }
 
-func (r BatchPatchLOCRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchLOCParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchLOCRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchLOCParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchMXRecordParam struct {
+type BatchPatchMXParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	MXRecordParam
 }
 
-func (r BatchPatchMXRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchMXParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchMXRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchMXParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchNAPTRRecordParam struct {
+type BatchPatchNAPTRParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	NAPTRRecordParam
 }
 
-func (r BatchPatchNAPTRRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchNAPTRParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchNAPTRRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchNAPTRParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchNSRecordParam struct {
+type BatchPatchNSParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	NSRecordParam
 }
 
-func (r BatchPatchNSRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchNSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchNSRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchNSParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchOpenpgpkeyParam struct {
 	// Identifier
@@ -792,260 +790,257 @@ func (r BatchPatchOpenpgpkeyType) IsKnown() bool {
 	return false
 }
 
-type BatchPatchPTRRecordParam struct {
+type BatchPatchPTRParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	PTRRecordParam
 }
 
-func (r BatchPatchPTRRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchPTRParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchPTRRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchPTRParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchSMIMEARecordParam struct {
+type BatchPatchSMIMEAParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	SMIMEARecordParam
 }
 
-func (r BatchPatchSMIMEARecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchSMIMEAParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchSMIMEARecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchSMIMEAParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchSRVRecordParam struct {
+type BatchPatchSRVParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	SRVRecordParam
 }
 
-func (r BatchPatchSRVRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchSRVParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchSRVRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchSRVParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchSSHFPRecordParam struct {
+type BatchPatchSSHFPParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	SSHFPRecordParam
 }
 
-func (r BatchPatchSSHFPRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchSSHFPParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchSSHFPRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchSSHFPParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchSVCBRecordParam struct {
+type BatchPatchSVCBParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	SVCBRecordParam
 }
 
-func (r BatchPatchSVCBRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchSVCBParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchSVCBRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchSVCBParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchTLSARecordParam struct {
+type BatchPatchTLSAParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	TLSARecordParam
 }
 
-func (r BatchPatchTLSARecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchTLSAParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchTLSARecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchTLSAParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchTXTRecordParam struct {
+type BatchPatchTXTParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	TXTRecordParam
 }
 
-func (r BatchPatchTXTRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchTXTParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchTXTRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchTXTParam) implementsBatchPatchUnionParam() {}
 
-type BatchPatchURIRecordParam struct {
+type BatchPatchURIParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	URIRecordParam
 }
 
-func (r BatchPatchURIRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPatchURIParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPatchURIRecordParam) implementsBatchPatchUnionParam() {}
+func (r BatchPatchURIParam) implementsBatchPatchUnionParam() {}
 
-// Satisfied by [dns.BatchPutARecordParam], [dns.BatchPutAAAARecordParam],
-// [dns.BatchPutCAARecordParam], [dns.BatchPutCERTRecordParam],
-// [dns.BatchPutCNAMERecordParam], [dns.BatchPutDNSKEYRecordParam],
-// [dns.BatchPutDSRecordParam], [dns.BatchPutHTTPSRecordParam],
-// [dns.BatchPutLOCRecordParam], [dns.BatchPutMXRecordParam],
-// [dns.BatchPutNAPTRRecordParam], [dns.BatchPutNSRecordParam],
-// [dns.BatchPutOpenpgpkeyParam], [dns.BatchPutPTRRecordParam],
-// [dns.BatchPutSMIMEARecordParam], [dns.BatchPutSRVRecordParam],
-// [dns.BatchPutSSHFPRecordParam], [dns.BatchPutSVCBRecordParam],
-// [dns.BatchPutTLSARecordParam], [dns.BatchPutTXTRecordParam],
-// [dns.BatchPutURIRecordParam].
+// Satisfied by [dns.BatchPutAParam], [dns.BatchPutAAAAParam],
+// [dns.BatchPutCAAParam], [dns.BatchPutCERTParam], [dns.BatchPutCNAMEParam],
+// [dns.BatchPutDNSKEYParam], [dns.BatchPutDSParam], [dns.BatchPutHTTPSParam],
+// [dns.BatchPutLOCParam], [dns.BatchPutMXParam], [dns.BatchPutNAPTRParam],
+// [dns.BatchPutNSParam], [dns.BatchPutOpenpgpkeyParam], [dns.BatchPutPTRParam],
+// [dns.BatchPutSMIMEAParam], [dns.BatchPutSRVParam], [dns.BatchPutSSHFPParam],
+// [dns.BatchPutSVCBParam], [dns.BatchPutTLSAParam], [dns.BatchPutTXTParam],
+// [dns.BatchPutURIParam].
 type BatchPutUnionParam interface {
 	implementsBatchPutUnionParam()
 }
 
-type BatchPutARecordParam struct {
+type BatchPutAParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	ARecordParam
 }
 
-func (r BatchPutARecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutAParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutARecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutAParam) implementsBatchPutUnionParam() {}
 
-type BatchPutAAAARecordParam struct {
+type BatchPutAAAAParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	AAAARecordParam
 }
 
-func (r BatchPutAAAARecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutAAAAParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutAAAARecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutAAAAParam) implementsBatchPutUnionParam() {}
 
-type BatchPutCAARecordParam struct {
+type BatchPutCAAParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	CAARecordParam
 }
 
-func (r BatchPutCAARecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutCAAParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutCAARecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutCAAParam) implementsBatchPutUnionParam() {}
 
-type BatchPutCERTRecordParam struct {
+type BatchPutCERTParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	CERTRecordParam
 }
 
-func (r BatchPutCERTRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutCERTParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutCERTRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutCERTParam) implementsBatchPutUnionParam() {}
 
-type BatchPutCNAMERecordParam struct {
+type BatchPutCNAMEParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	CNAMERecordParam
 }
 
-func (r BatchPutCNAMERecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutCNAMEParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutCNAMERecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutCNAMEParam) implementsBatchPutUnionParam() {}
 
-type BatchPutDNSKEYRecordParam struct {
+type BatchPutDNSKEYParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	DNSKEYRecordParam
 }
 
-func (r BatchPutDNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutDNSKEYParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutDNSKEYRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutDNSKEYParam) implementsBatchPutUnionParam() {}
 
-type BatchPutDSRecordParam struct {
+type BatchPutDSParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	DSRecordParam
 }
 
-func (r BatchPutDSRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutDSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutDSRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutDSParam) implementsBatchPutUnionParam() {}
 
-type BatchPutHTTPSRecordParam struct {
+type BatchPutHTTPSParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	HTTPSRecordParam
 }
 
-func (r BatchPutHTTPSRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutHTTPSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutHTTPSRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutHTTPSParam) implementsBatchPutUnionParam() {}
 
-type BatchPutLOCRecordParam struct {
+type BatchPutLOCParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	LOCRecordParam
 }
 
-func (r BatchPutLOCRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutLOCParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutLOCRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutLOCParam) implementsBatchPutUnionParam() {}
 
-type BatchPutMXRecordParam struct {
+type BatchPutMXParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	MXRecordParam
 }
 
-func (r BatchPutMXRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutMXParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutMXRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutMXParam) implementsBatchPutUnionParam() {}
 
-type BatchPutNAPTRRecordParam struct {
+type BatchPutNAPTRParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	NAPTRRecordParam
 }
 
-func (r BatchPutNAPTRRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutNAPTRParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutNAPTRRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutNAPTRParam) implementsBatchPutUnionParam() {}
 
-type BatchPutNSRecordParam struct {
+type BatchPutNSParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	NSRecordParam
 }
 
-func (r BatchPutNSRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutNSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutNSRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutNSParam) implementsBatchPutUnionParam() {}
 
 type BatchPutOpenpgpkeyParam struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
@@ -1111,101 +1106,101 @@ func (r BatchPutOpenpgpkeySettingsParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-type BatchPutPTRRecordParam struct {
+type BatchPutPTRParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	PTRRecordParam
 }
 
-func (r BatchPutPTRRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutPTRParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutPTRRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutPTRParam) implementsBatchPutUnionParam() {}
 
-type BatchPutSMIMEARecordParam struct {
+type BatchPutSMIMEAParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	SMIMEARecordParam
 }
 
-func (r BatchPutSMIMEARecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutSMIMEAParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutSMIMEARecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutSMIMEAParam) implementsBatchPutUnionParam() {}
 
-type BatchPutSRVRecordParam struct {
+type BatchPutSRVParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	SRVRecordParam
 }
 
-func (r BatchPutSRVRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutSRVParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutSRVRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutSRVParam) implementsBatchPutUnionParam() {}
 
-type BatchPutSSHFPRecordParam struct {
+type BatchPutSSHFPParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	SSHFPRecordParam
 }
 
-func (r BatchPutSSHFPRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutSSHFPParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutSSHFPRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutSSHFPParam) implementsBatchPutUnionParam() {}
 
-type BatchPutSVCBRecordParam struct {
+type BatchPutSVCBParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	SVCBRecordParam
 }
 
-func (r BatchPutSVCBRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutSVCBParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutSVCBRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutSVCBParam) implementsBatchPutUnionParam() {}
 
-type BatchPutTLSARecordParam struct {
+type BatchPutTLSAParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	TLSARecordParam
 }
 
-func (r BatchPutTLSARecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutTLSAParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutTLSARecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutTLSAParam) implementsBatchPutUnionParam() {}
 
-type BatchPutTXTRecordParam struct {
+type BatchPutTXTParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	TXTRecordParam
 }
 
-func (r BatchPutTXTRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutTXTParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutTXTRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutTXTParam) implementsBatchPutUnionParam() {}
 
-type BatchPutURIRecordParam struct {
+type BatchPutURIParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	URIRecordParam
 }
 
-func (r BatchPutURIRecordParam) MarshalJSON() (data []byte, err error) {
+func (r BatchPutURIParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BatchPutURIRecordParam) implementsBatchPutUnionParam() {}
+func (r BatchPutURIParam) implementsBatchPutUnionParam() {}
 
 type CAARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3421,32 +3416,27 @@ func (r *RecordResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RecordResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [dns.RecordResponseARecord],
-// [dns.RecordResponseAAAARecord], [dns.RecordResponseCAARecord],
-// [dns.RecordResponseCERTRecord], [dns.RecordResponseCNAMERecord],
-// [dns.RecordResponseDNSKEYRecord], [dns.RecordResponseDSRecord],
-// [dns.RecordResponseHTTPSRecord], [dns.RecordResponseLOCRecord],
-// [dns.RecordResponseMXRecord], [dns.RecordResponseNAPTRRecord],
-// [dns.RecordResponseNSRecord], [dns.RecordResponseOpenpgpkey],
-// [dns.RecordResponsePTRRecord], [dns.RecordResponseSMIMEARecord],
-// [dns.RecordResponseSRVRecord], [dns.RecordResponseSSHFPRecord],
-// [dns.RecordResponseSVCBRecord], [dns.RecordResponseTLSARecord],
-// [dns.RecordResponseTXTRecord], [dns.RecordResponseURIRecord].
+// Possible runtime types of the union are [dns.RecordResponseA],
+// [dns.RecordResponseAAAA], [dns.RecordResponseCAA], [dns.RecordResponseCERT],
+// [dns.RecordResponseCNAME], [dns.RecordResponseDNSKEY], [dns.RecordResponseDS],
+// [dns.RecordResponseHTTPS], [dns.RecordResponseLOC], [dns.RecordResponseMX],
+// [dns.RecordResponseNAPTR], [dns.RecordResponseNS],
+// [dns.RecordResponseOpenpgpkey], [dns.RecordResponsePTR],
+// [dns.RecordResponseSMIMEA], [dns.RecordResponseSRV], [dns.RecordResponseSSHFP],
+// [dns.RecordResponseSVCB], [dns.RecordResponseTLSA], [dns.RecordResponseTXT],
+// [dns.RecordResponseURI].
 func (r RecordResponse) AsUnion() RecordResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [dns.RecordResponseARecord], [dns.RecordResponseAAAARecord],
-// [dns.RecordResponseCAARecord], [dns.RecordResponseCERTRecord],
-// [dns.RecordResponseCNAMERecord], [dns.RecordResponseDNSKEYRecord],
-// [dns.RecordResponseDSRecord], [dns.RecordResponseHTTPSRecord],
-// [dns.RecordResponseLOCRecord], [dns.RecordResponseMXRecord],
-// [dns.RecordResponseNAPTRRecord], [dns.RecordResponseNSRecord],
-// [dns.RecordResponseOpenpgpkey], [dns.RecordResponsePTRRecord],
-// [dns.RecordResponseSMIMEARecord], [dns.RecordResponseSRVRecord],
-// [dns.RecordResponseSSHFPRecord], [dns.RecordResponseSVCBRecord],
-// [dns.RecordResponseTLSARecord], [dns.RecordResponseTXTRecord] or
-// [dns.RecordResponseURIRecord].
+// Union satisfied by [dns.RecordResponseA], [dns.RecordResponseAAAA],
+// [dns.RecordResponseCAA], [dns.RecordResponseCERT], [dns.RecordResponseCNAME],
+// [dns.RecordResponseDNSKEY], [dns.RecordResponseDS], [dns.RecordResponseHTTPS],
+// [dns.RecordResponseLOC], [dns.RecordResponseMX], [dns.RecordResponseNAPTR],
+// [dns.RecordResponseNS], [dns.RecordResponseOpenpgpkey], [dns.RecordResponsePTR],
+// [dns.RecordResponseSMIMEA], [dns.RecordResponseSRV], [dns.RecordResponseSSHFP],
+// [dns.RecordResponseSVCB], [dns.RecordResponseTLSA], [dns.RecordResponseTXT] or
+// [dns.RecordResponseURI].
 type RecordResponseUnion interface {
 	implementsRecordResponse()
 }
@@ -3457,62 +3447,62 @@ func init() {
 		"type",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseARecord{}),
+			Type:               reflect.TypeOf(RecordResponseA{}),
 			DiscriminatorValue: "A",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseAAAARecord{}),
+			Type:               reflect.TypeOf(RecordResponseAAAA{}),
 			DiscriminatorValue: "AAAA",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseCAARecord{}),
+			Type:               reflect.TypeOf(RecordResponseCAA{}),
 			DiscriminatorValue: "CAA",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseCERTRecord{}),
+			Type:               reflect.TypeOf(RecordResponseCERT{}),
 			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseCNAMERecord{}),
+			Type:               reflect.TypeOf(RecordResponseCNAME{}),
 			DiscriminatorValue: "CNAME",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseDNSKEYRecord{}),
+			Type:               reflect.TypeOf(RecordResponseDNSKEY{}),
 			DiscriminatorValue: "DNSKEY",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseDSRecord{}),
+			Type:               reflect.TypeOf(RecordResponseDS{}),
 			DiscriminatorValue: "DS",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseHTTPSRecord{}),
+			Type:               reflect.TypeOf(RecordResponseHTTPS{}),
 			DiscriminatorValue: "HTTPS",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseLOCRecord{}),
+			Type:               reflect.TypeOf(RecordResponseLOC{}),
 			DiscriminatorValue: "LOC",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseMXRecord{}),
+			Type:               reflect.TypeOf(RecordResponseMX{}),
 			DiscriminatorValue: "MX",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseNAPTRRecord{}),
+			Type:               reflect.TypeOf(RecordResponseNAPTR{}),
 			DiscriminatorValue: "NAPTR",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseNSRecord{}),
+			Type:               reflect.TypeOf(RecordResponseNS{}),
 			DiscriminatorValue: "NS",
 		},
 		apijson.UnionVariant{
@@ -3522,48 +3512,48 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponsePTRRecord{}),
+			Type:               reflect.TypeOf(RecordResponsePTR{}),
 			DiscriminatorValue: "PTR",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSMIMEARecord{}),
+			Type:               reflect.TypeOf(RecordResponseSMIMEA{}),
 			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSRVRecord{}),
+			Type:               reflect.TypeOf(RecordResponseSRV{}),
 			DiscriminatorValue: "SRV",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSSHFPRecord{}),
+			Type:               reflect.TypeOf(RecordResponseSSHFP{}),
 			DiscriminatorValue: "SSHFP",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSVCBRecord{}),
+			Type:               reflect.TypeOf(RecordResponseSVCB{}),
 			DiscriminatorValue: "SVCB",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseTLSARecord{}),
+			Type:               reflect.TypeOf(RecordResponseTLSA{}),
 			DiscriminatorValue: "TLSA",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseTXTRecord{}),
+			Type:               reflect.TypeOf(RecordResponseTXT{}),
 			DiscriminatorValue: "TXT",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseURIRecord{}),
+			Type:               reflect.TypeOf(RecordResponseURI{}),
 			DiscriminatorValue: "URI",
 		},
 	)
 }
 
-type RecordResponseARecord struct {
+type RecordResponseA struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3577,14 +3567,13 @@ type RecordResponseARecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                 `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseARecordJSON `json:"-"`
+	TagsModifiedOn time.Time           `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseAJSON `json:"-"`
 	ARecord
 }
 
-// recordResponseARecordJSON contains the JSON metadata for the struct
-// [RecordResponseARecord]
-type recordResponseARecordJSON struct {
+// recordResponseAJSON contains the JSON metadata for the struct [RecordResponseA]
+type recordResponseAJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3596,17 +3585,17 @@ type recordResponseARecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseARecordJSON) RawJSON() string {
+func (r recordResponseAJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseARecord) implementsRecordResponse() {}
+func (r RecordResponseA) implementsRecordResponse() {}
 
-type RecordResponseAAAARecord struct {
+type RecordResponseAAAA struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3620,14 +3609,14 @@ type RecordResponseAAAARecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseAAAARecordJSON `json:"-"`
+	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseAAAAJSON `json:"-"`
 	AAAARecord
 }
 
-// recordResponseAAAARecordJSON contains the JSON metadata for the struct
-// [RecordResponseAAAARecord]
-type recordResponseAAAARecordJSON struct {
+// recordResponseAAAAJSON contains the JSON metadata for the struct
+// [RecordResponseAAAA]
+type recordResponseAAAAJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3639,17 +3628,17 @@ type recordResponseAAAARecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseAAAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseAAAARecordJSON) RawJSON() string {
+func (r recordResponseAAAAJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseAAAARecord) implementsRecordResponse() {}
+func (r RecordResponseAAAA) implementsRecordResponse() {}
 
-type RecordResponseCAARecord struct {
+type RecordResponseCAA struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3663,14 +3652,14 @@ type RecordResponseCAARecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCAARecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseCAAJSON `json:"-"`
 	CAARecord
 }
 
-// recordResponseCAARecordJSON contains the JSON metadata for the struct
-// [RecordResponseCAARecord]
-type recordResponseCAARecordJSON struct {
+// recordResponseCAAJSON contains the JSON metadata for the struct
+// [RecordResponseCAA]
+type recordResponseCAAJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3682,17 +3671,17 @@ type recordResponseCAARecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseCAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseCAARecordJSON) RawJSON() string {
+func (r recordResponseCAAJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCAARecord) implementsRecordResponse() {}
+func (r RecordResponseCAA) implementsRecordResponse() {}
 
-type RecordResponseCERTRecord struct {
+type RecordResponseCERT struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3706,14 +3695,14 @@ type RecordResponseCERTRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCERTRecordJSON `json:"-"`
+	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseCERTJSON `json:"-"`
 	CERTRecord
 }
 
-// recordResponseCERTRecordJSON contains the JSON metadata for the struct
-// [RecordResponseCERTRecord]
-type recordResponseCERTRecordJSON struct {
+// recordResponseCERTJSON contains the JSON metadata for the struct
+// [RecordResponseCERT]
+type recordResponseCERTJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3725,17 +3714,17 @@ type recordResponseCERTRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseCERTRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseCERT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseCERTRecordJSON) RawJSON() string {
+func (r recordResponseCERTJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCERTRecord) implementsRecordResponse() {}
+func (r RecordResponseCERT) implementsRecordResponse() {}
 
-type RecordResponseCNAMERecord struct {
+type RecordResponseCNAME struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3749,14 +3738,14 @@ type RecordResponseCNAMERecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCNAMERecordJSON `json:"-"`
+	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseCNAMEJSON `json:"-"`
 	CNAMERecord
 }
 
-// recordResponseCNAMERecordJSON contains the JSON metadata for the struct
-// [RecordResponseCNAMERecord]
-type recordResponseCNAMERecordJSON struct {
+// recordResponseCNAMEJSON contains the JSON metadata for the struct
+// [RecordResponseCNAME]
+type recordResponseCNAMEJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3768,17 +3757,17 @@ type recordResponseCNAMERecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseCNAMERecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseCNAMERecordJSON) RawJSON() string {
+func (r recordResponseCNAMEJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCNAMERecord) implementsRecordResponse() {}
+func (r RecordResponseCNAME) implementsRecordResponse() {}
 
-type RecordResponseDNSKEYRecord struct {
+type RecordResponseDNSKEY struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3792,14 +3781,14 @@ type RecordResponseDNSKEYRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                      `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseDNSKEYRecordJSON `json:"-"`
+	TagsModifiedOn time.Time                `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseDNSKEYJSON `json:"-"`
 	DNSKEYRecord
 }
 
-// recordResponseDNSKEYRecordJSON contains the JSON metadata for the struct
-// [RecordResponseDNSKEYRecord]
-type recordResponseDNSKEYRecordJSON struct {
+// recordResponseDNSKEYJSON contains the JSON metadata for the struct
+// [RecordResponseDNSKEY]
+type recordResponseDNSKEYJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3811,17 +3800,17 @@ type recordResponseDNSKEYRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseDNSKEYRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseDNSKEYRecordJSON) RawJSON() string {
+func (r recordResponseDNSKEYJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseDNSKEYRecord) implementsRecordResponse() {}
+func (r RecordResponseDNSKEY) implementsRecordResponse() {}
 
-type RecordResponseDSRecord struct {
+type RecordResponseDS struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3835,14 +3824,14 @@ type RecordResponseDSRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                  `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseDSRecordJSON `json:"-"`
+	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseDSJSON `json:"-"`
 	DSRecord
 }
 
-// recordResponseDSRecordJSON contains the JSON metadata for the struct
-// [RecordResponseDSRecord]
-type recordResponseDSRecordJSON struct {
+// recordResponseDSJSON contains the JSON metadata for the struct
+// [RecordResponseDS]
+type recordResponseDSJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3854,17 +3843,17 @@ type recordResponseDSRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseDSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseDSRecordJSON) RawJSON() string {
+func (r recordResponseDSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseDSRecord) implementsRecordResponse() {}
+func (r RecordResponseDS) implementsRecordResponse() {}
 
-type RecordResponseHTTPSRecord struct {
+type RecordResponseHTTPS struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3878,14 +3867,14 @@ type RecordResponseHTTPSRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseHTTPSRecordJSON `json:"-"`
+	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseHTTPSJSON `json:"-"`
 	HTTPSRecord
 }
 
-// recordResponseHTTPSRecordJSON contains the JSON metadata for the struct
-// [RecordResponseHTTPSRecord]
-type recordResponseHTTPSRecordJSON struct {
+// recordResponseHTTPSJSON contains the JSON metadata for the struct
+// [RecordResponseHTTPS]
+type recordResponseHTTPSJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3897,17 +3886,17 @@ type recordResponseHTTPSRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseHTTPSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseHTTPSRecordJSON) RawJSON() string {
+func (r recordResponseHTTPSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseHTTPSRecord) implementsRecordResponse() {}
+func (r RecordResponseHTTPS) implementsRecordResponse() {}
 
-type RecordResponseLOCRecord struct {
+type RecordResponseLOC struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3921,14 +3910,14 @@ type RecordResponseLOCRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseLOCRecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseLOCJSON `json:"-"`
 	LOCRecord
 }
 
-// recordResponseLOCRecordJSON contains the JSON metadata for the struct
-// [RecordResponseLOCRecord]
-type recordResponseLOCRecordJSON struct {
+// recordResponseLOCJSON contains the JSON metadata for the struct
+// [RecordResponseLOC]
+type recordResponseLOCJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3940,17 +3929,17 @@ type recordResponseLOCRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseLOCRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseLOCRecordJSON) RawJSON() string {
+func (r recordResponseLOCJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseLOCRecord) implementsRecordResponse() {}
+func (r RecordResponseLOC) implementsRecordResponse() {}
 
-type RecordResponseMXRecord struct {
+type RecordResponseMX struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -3964,14 +3953,14 @@ type RecordResponseMXRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                  `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseMXRecordJSON `json:"-"`
+	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseMXJSON `json:"-"`
 	MXRecord
 }
 
-// recordResponseMXRecordJSON contains the JSON metadata for the struct
-// [RecordResponseMXRecord]
-type recordResponseMXRecordJSON struct {
+// recordResponseMXJSON contains the JSON metadata for the struct
+// [RecordResponseMX]
+type recordResponseMXJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3983,17 +3972,17 @@ type recordResponseMXRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseMXRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseMXRecordJSON) RawJSON() string {
+func (r recordResponseMXJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseMXRecord) implementsRecordResponse() {}
+func (r RecordResponseMX) implementsRecordResponse() {}
 
-type RecordResponseNAPTRRecord struct {
+type RecordResponseNAPTR struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4007,14 +3996,14 @@ type RecordResponseNAPTRRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseNAPTRRecordJSON `json:"-"`
+	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseNAPTRJSON `json:"-"`
 	NAPTRRecord
 }
 
-// recordResponseNAPTRRecordJSON contains the JSON metadata for the struct
-// [RecordResponseNAPTRRecord]
-type recordResponseNAPTRRecordJSON struct {
+// recordResponseNAPTRJSON contains the JSON metadata for the struct
+// [RecordResponseNAPTR]
+type recordResponseNAPTRJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4026,17 +4015,17 @@ type recordResponseNAPTRRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseNAPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseNAPTRRecordJSON) RawJSON() string {
+func (r recordResponseNAPTRJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseNAPTRRecord) implementsRecordResponse() {}
+func (r RecordResponseNAPTR) implementsRecordResponse() {}
 
-type RecordResponseNSRecord struct {
+type RecordResponseNS struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4050,14 +4039,14 @@ type RecordResponseNSRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                  `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseNSRecordJSON `json:"-"`
+	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseNSJSON `json:"-"`
 	NSRecord
 }
 
-// recordResponseNSRecordJSON contains the JSON metadata for the struct
-// [RecordResponseNSRecord]
-type recordResponseNSRecordJSON struct {
+// recordResponseNSJSON contains the JSON metadata for the struct
+// [RecordResponseNS]
+type recordResponseNSJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4069,15 +4058,15 @@ type recordResponseNSRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseNSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseNSRecordJSON) RawJSON() string {
+func (r recordResponseNSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseNSRecord) implementsRecordResponse() {}
+func (r RecordResponseNS) implementsRecordResponse() {}
 
 type RecordResponseOpenpgpkey struct {
 	// Identifier
@@ -4196,7 +4185,7 @@ func (r RecordResponseOpenpgpkeyType) IsKnown() bool {
 	return false
 }
 
-type RecordResponsePTRRecord struct {
+type RecordResponsePTR struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4210,14 +4199,14 @@ type RecordResponsePTRRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponsePTRRecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponsePTRJSON `json:"-"`
 	PTRRecord
 }
 
-// recordResponsePTRRecordJSON contains the JSON metadata for the struct
-// [RecordResponsePTRRecord]
-type recordResponsePTRRecordJSON struct {
+// recordResponsePTRJSON contains the JSON metadata for the struct
+// [RecordResponsePTR]
+type recordResponsePTRJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4229,17 +4218,17 @@ type recordResponsePTRRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponsePTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponsePTRRecordJSON) RawJSON() string {
+func (r recordResponsePTRJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponsePTRRecord) implementsRecordResponse() {}
+func (r RecordResponsePTR) implementsRecordResponse() {}
 
-type RecordResponseSMIMEARecord struct {
+type RecordResponseSMIMEA struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4253,14 +4242,14 @@ type RecordResponseSMIMEARecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                      `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSMIMEARecordJSON `json:"-"`
+	TagsModifiedOn time.Time                `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSMIMEAJSON `json:"-"`
 	SMIMEARecord
 }
 
-// recordResponseSMIMEARecordJSON contains the JSON metadata for the struct
-// [RecordResponseSMIMEARecord]
-type recordResponseSMIMEARecordJSON struct {
+// recordResponseSMIMEAJSON contains the JSON metadata for the struct
+// [RecordResponseSMIMEA]
+type recordResponseSMIMEAJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4272,17 +4261,17 @@ type recordResponseSMIMEARecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSMIMEARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSMIMEA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSMIMEARecordJSON) RawJSON() string {
+func (r recordResponseSMIMEAJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSMIMEARecord) implementsRecordResponse() {}
+func (r RecordResponseSMIMEA) implementsRecordResponse() {}
 
-type RecordResponseSRVRecord struct {
+type RecordResponseSRV struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4296,14 +4285,14 @@ type RecordResponseSRVRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSRVRecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSRVJSON `json:"-"`
 	SRVRecord
 }
 
-// recordResponseSRVRecordJSON contains the JSON metadata for the struct
-// [RecordResponseSRVRecord]
-type recordResponseSRVRecordJSON struct {
+// recordResponseSRVJSON contains the JSON metadata for the struct
+// [RecordResponseSRV]
+type recordResponseSRVJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4315,17 +4304,17 @@ type recordResponseSRVRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSRVRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSRVRecordJSON) RawJSON() string {
+func (r recordResponseSRVJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSRVRecord) implementsRecordResponse() {}
+func (r RecordResponseSRV) implementsRecordResponse() {}
 
-type RecordResponseSSHFPRecord struct {
+type RecordResponseSSHFP struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4339,14 +4328,14 @@ type RecordResponseSSHFPRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSSHFPRecordJSON `json:"-"`
+	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSSHFPJSON `json:"-"`
 	SSHFPRecord
 }
 
-// recordResponseSSHFPRecordJSON contains the JSON metadata for the struct
-// [RecordResponseSSHFPRecord]
-type recordResponseSSHFPRecordJSON struct {
+// recordResponseSSHFPJSON contains the JSON metadata for the struct
+// [RecordResponseSSHFP]
+type recordResponseSSHFPJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4358,17 +4347,17 @@ type recordResponseSSHFPRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSSHFPRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSSHFPRecordJSON) RawJSON() string {
+func (r recordResponseSSHFPJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSSHFPRecord) implementsRecordResponse() {}
+func (r RecordResponseSSHFP) implementsRecordResponse() {}
 
-type RecordResponseSVCBRecord struct {
+type RecordResponseSVCB struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4382,14 +4371,14 @@ type RecordResponseSVCBRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSVCBRecordJSON `json:"-"`
+	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSVCBJSON `json:"-"`
 	SVCBRecord
 }
 
-// recordResponseSVCBRecordJSON contains the JSON metadata for the struct
-// [RecordResponseSVCBRecord]
-type recordResponseSVCBRecordJSON struct {
+// recordResponseSVCBJSON contains the JSON metadata for the struct
+// [RecordResponseSVCB]
+type recordResponseSVCBJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4401,17 +4390,17 @@ type recordResponseSVCBRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSVCBRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSVCBRecordJSON) RawJSON() string {
+func (r recordResponseSVCBJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSVCBRecord) implementsRecordResponse() {}
+func (r RecordResponseSVCB) implementsRecordResponse() {}
 
-type RecordResponseTLSARecord struct {
+type RecordResponseTLSA struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4425,14 +4414,14 @@ type RecordResponseTLSARecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseTLSARecordJSON `json:"-"`
+	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseTLSAJSON `json:"-"`
 	TLSARecord
 }
 
-// recordResponseTLSARecordJSON contains the JSON metadata for the struct
-// [RecordResponseTLSARecord]
-type recordResponseTLSARecordJSON struct {
+// recordResponseTLSAJSON contains the JSON metadata for the struct
+// [RecordResponseTLSA]
+type recordResponseTLSAJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4444,17 +4433,17 @@ type recordResponseTLSARecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseTLSARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseTLSARecordJSON) RawJSON() string {
+func (r recordResponseTLSAJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseTLSARecord) implementsRecordResponse() {}
+func (r RecordResponseTLSA) implementsRecordResponse() {}
 
-type RecordResponseTXTRecord struct {
+type RecordResponseTXT struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4468,14 +4457,14 @@ type RecordResponseTXTRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseTXTRecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseTXTJSON `json:"-"`
 	TXTRecord
 }
 
-// recordResponseTXTRecordJSON contains the JSON metadata for the struct
-// [RecordResponseTXTRecord]
-type recordResponseTXTRecordJSON struct {
+// recordResponseTXTJSON contains the JSON metadata for the struct
+// [RecordResponseTXT]
+type recordResponseTXTJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4487,17 +4476,17 @@ type recordResponseTXTRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseTXTRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseTXTRecordJSON) RawJSON() string {
+func (r recordResponseTXTJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseTXTRecord) implementsRecordResponse() {}
+func (r RecordResponseTXT) implementsRecordResponse() {}
 
-type RecordResponseURIRecord struct {
+type RecordResponseURI struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// When the record was created.
@@ -4511,14 +4500,14 @@ type RecordResponseURIRecord struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseURIRecordJSON `json:"-"`
+	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseURIJSON `json:"-"`
 	URIRecord
 }
 
-// recordResponseURIRecordJSON contains the JSON metadata for the struct
-// [RecordResponseURIRecord]
-type recordResponseURIRecordJSON struct {
+// recordResponseURIJSON contains the JSON metadata for the struct
+// [RecordResponseURI]
+type recordResponseURIJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4530,15 +4519,15 @@ type recordResponseURIRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseURIRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseURIRecordJSON) RawJSON() string {
+func (r recordResponseURIJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseURIRecord) implementsRecordResponse() {}
+func (r RecordResponseURI) implementsRecordResponse() {}
 
 // Record type.
 type RecordResponseType string
