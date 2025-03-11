@@ -10,6 +10,7 @@ import (
 	"io"
 	"math"
 	"math/rand"
+	"mime"
 	"net/http"
 	"net/url"
 	"runtime"
@@ -488,7 +489,8 @@ func (cfg *RequestConfig) Execute() (err error) {
 
 	// If we are not json, return plaintext
 	contentType := res.Header.Get("content-type")
-	isJSON := strings.Contains(contentType, "application/json") || strings.Contains(contentType, "application/vnd.api+json")
+	mediaType, _, _ := mime.ParseMediaType(contentType)
+	isJSON := strings.Contains(mediaType, "application/json") || strings.HasSuffix(mediaType, "+json")
 	if !isJSON {
 		switch dst := cfg.ResponseBodyInto.(type) {
 		case *string:
@@ -499,7 +501,7 @@ func (cfg *RequestConfig) Execute() (err error) {
 		case *[]byte:
 			*dst = contents
 		default:
-			return fmt.Errorf("expected destination type of 'string' or '[]byte' for responses with content-type that is not 'application/json'")
+			return fmt.Errorf("expected destination type of 'string' or '[]byte' for responses with content-type '%s' that is not 'application/json'", contentType)
 		}
 		return nil
 	}
