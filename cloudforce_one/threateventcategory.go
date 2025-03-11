@@ -1,0 +1,245 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+package cloudforce_one
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+)
+
+// ThreatEventCategoryService contains methods and other services that help with
+// interacting with the cloudflare API.
+//
+// Note, unlike clients, this service does not read variables from the environment
+// automatically. You should not instantiate this service directly, and instead use
+// the [NewThreatEventCategoryService] method instead.
+type ThreatEventCategoryService struct {
+	Options []option.RequestOption
+}
+
+// NewThreatEventCategoryService generates a new service that applies the given
+// options to each request. These options are applied after the parent client's
+// options (if there is one), and before any request-specific options.
+func NewThreatEventCategoryService(opts ...option.RequestOption) (r *ThreatEventCategoryService) {
+	r = &ThreatEventCategoryService{}
+	r.Options = opts
+	return
+}
+
+// Creates a new category
+func (r *ThreatEventCategoryService) New(ctx context.Context, accountID float64, body ThreatEventCategoryNewParams, opts ...option.RequestOption) (res *ThreatEventCategoryNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/categories/create", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
+// Updates a category
+func (r *ThreatEventCategoryService) Update(ctx context.Context, accountID float64, categoryID string, body ThreatEventCategoryUpdateParams, opts ...option.RequestOption) (res *ThreatEventCategoryUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if categoryID == "" {
+		err = errors.New("missing required categoryId parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/categories/%s", accountID, categoryID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
+// Lists categories
+func (r *ThreatEventCategoryService) List(ctx context.Context, accountID float64, opts ...option.RequestOption) (res *[]ThreatEventCategoryListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/categories", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+// Deletes a category
+func (r *ThreatEventCategoryService) Delete(ctx context.Context, accountID float64, categoryID string, opts ...option.RequestOption) (res *ThreatEventCategoryDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if categoryID == "" {
+		err = errors.New("missing required categoryId parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/categories/%s", accountID, categoryID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return
+}
+
+// Reads a category
+func (r *ThreatEventCategoryService) Get(ctx context.Context, accountID float64, categoryID string, opts ...option.RequestOption) (res *ThreatEventCategoryGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if categoryID == "" {
+		err = errors.New("missing required categoryId parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/categories/%s", accountID, categoryID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+type ThreatEventCategoryNewResponse struct {
+	KillChain   float64                            `json:"killChain,required"`
+	Name        string                             `json:"name,required"`
+	UUID        string                             `json:"uuid,required"`
+	MitreAttack []string                           `json:"mitreAttack"`
+	Shortname   string                             `json:"shortname"`
+	JSON        threatEventCategoryNewResponseJSON `json:"-"`
+}
+
+// threatEventCategoryNewResponseJSON contains the JSON metadata for the struct
+// [ThreatEventCategoryNewResponse]
+type threatEventCategoryNewResponseJSON struct {
+	KillChain   apijson.Field
+	Name        apijson.Field
+	UUID        apijson.Field
+	MitreAttack apijson.Field
+	Shortname   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventCategoryNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventCategoryNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventCategoryUpdateResponse struct {
+	KillChain   float64                               `json:"killChain,required"`
+	Name        string                                `json:"name,required"`
+	UUID        string                                `json:"uuid,required"`
+	MitreAttack []string                              `json:"mitreAttack"`
+	Shortname   string                                `json:"shortname"`
+	JSON        threatEventCategoryUpdateResponseJSON `json:"-"`
+}
+
+// threatEventCategoryUpdateResponseJSON contains the JSON metadata for the struct
+// [ThreatEventCategoryUpdateResponse]
+type threatEventCategoryUpdateResponseJSON struct {
+	KillChain   apijson.Field
+	Name        apijson.Field
+	UUID        apijson.Field
+	MitreAttack apijson.Field
+	Shortname   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventCategoryUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventCategoryUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventCategoryListResponse struct {
+	KillChain   float64                             `json:"killChain,required"`
+	Name        string                              `json:"name,required"`
+	UUID        string                              `json:"uuid,required"`
+	MitreAttack []string                            `json:"mitreAttack"`
+	Shortname   string                              `json:"shortname"`
+	JSON        threatEventCategoryListResponseJSON `json:"-"`
+}
+
+// threatEventCategoryListResponseJSON contains the JSON metadata for the struct
+// [ThreatEventCategoryListResponse]
+type threatEventCategoryListResponseJSON struct {
+	KillChain   apijson.Field
+	Name        apijson.Field
+	UUID        apijson.Field
+	MitreAttack apijson.Field
+	Shortname   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventCategoryListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventCategoryListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventCategoryDeleteResponse struct {
+	UUID string                                `json:"uuid,required"`
+	JSON threatEventCategoryDeleteResponseJSON `json:"-"`
+}
+
+// threatEventCategoryDeleteResponseJSON contains the JSON metadata for the struct
+// [ThreatEventCategoryDeleteResponse]
+type threatEventCategoryDeleteResponseJSON struct {
+	UUID        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventCategoryDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventCategoryDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventCategoryGetResponse struct {
+	KillChain   float64                            `json:"killChain,required"`
+	Name        string                             `json:"name,required"`
+	UUID        string                             `json:"uuid,required"`
+	MitreAttack []string                           `json:"mitreAttack"`
+	Shortname   string                             `json:"shortname"`
+	JSON        threatEventCategoryGetResponseJSON `json:"-"`
+}
+
+// threatEventCategoryGetResponseJSON contains the JSON metadata for the struct
+// [ThreatEventCategoryGetResponse]
+type threatEventCategoryGetResponseJSON struct {
+	KillChain   apijson.Field
+	Name        apijson.Field
+	UUID        apijson.Field
+	MitreAttack apijson.Field
+	Shortname   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventCategoryGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventCategoryGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventCategoryNewParams struct {
+	KillChain   param.Field[float64]  `json:"killChain,required"`
+	Name        param.Field[string]   `json:"name,required"`
+	MitreAttack param.Field[[]string] `json:"mitreAttack"`
+	Shortname   param.Field[string]   `json:"shortname"`
+}
+
+func (r ThreatEventCategoryNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ThreatEventCategoryUpdateParams struct {
+	KillChain   param.Field[float64]  `json:"killChain"`
+	MitreAttack param.Field[[]string] `json:"mitreAttack"`
+	Name        param.Field[string]   `json:"name"`
+	Shortname   param.Field[string]   `json:"shortname"`
+}
+
+func (r ThreatEventCategoryUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
