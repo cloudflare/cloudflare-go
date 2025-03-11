@@ -13,10 +13,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewSettingService] method instead.
 type SettingService struct {
-	Options      []option.RequestOption
-	Zone         *SettingZoneService
-	Account      *SettingAccountService
-	Subresources *SettingSubresourceService
+	Options []option.RequestOption
+	Zone    *SettingZoneService
+	Account *SettingAccountService
 }
 
 // NewSettingService generates a new service that applies the given options to each
@@ -27,6 +26,5 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r.Options = opts
 	r.Zone = NewSettingZoneService(opts...)
 	r.Account = NewSettingAccountService(opts...)
-	r.Subresources = NewSettingSubresourceService(opts...)
 	return
 }
