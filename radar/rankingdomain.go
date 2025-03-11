@@ -204,7 +204,7 @@ func (r rankingDomainGetResponseMetaDateRangeJSON) RawJSON() string {
 }
 
 type RankingDomainGetParams struct {
-	// Array of dates to filter the ranking.
+	// Array of dates to filter the results.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Format in which results will be returned.
 	Format param.Field[RankingDomainGetParamsFormat] `query:"format"`

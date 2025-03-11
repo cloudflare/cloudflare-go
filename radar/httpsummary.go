@@ -1397,6 +1397,8 @@ type HTTPSummaryBotClassParams struct {
 	// exclude ASNs from results. For example, `-174, 3356` excludes results from
 	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
+	// Filters results by browser family.
+	BrowserFamily param.Field[[]HTTPSummaryBotClassParamsBrowserFamily] `query:"browserFamily"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -1438,6 +1440,23 @@ func (r HTTPSummaryBotClassParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type HTTPSummaryBotClassParamsBrowserFamily string
+
+const (
+	HTTPSummaryBotClassParamsBrowserFamilyChrome  HTTPSummaryBotClassParamsBrowserFamily = "CHROME"
+	HTTPSummaryBotClassParamsBrowserFamilyEdge    HTTPSummaryBotClassParamsBrowserFamily = "EDGE"
+	HTTPSummaryBotClassParamsBrowserFamilyFirefox HTTPSummaryBotClassParamsBrowserFamily = "FIREFOX"
+	HTTPSummaryBotClassParamsBrowserFamilySafari  HTTPSummaryBotClassParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPSummaryBotClassParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPSummaryBotClassParamsBrowserFamilyChrome, HTTPSummaryBotClassParamsBrowserFamilyEdge, HTTPSummaryBotClassParamsBrowserFamilyFirefox, HTTPSummaryBotClassParamsBrowserFamilySafari:
+		return true
+	}
+	return false
 }
 
 type HTTPSummaryBotClassParamsDeviceType string
@@ -1587,6 +1606,8 @@ type HTTPSummaryDeviceTypeParams struct {
 	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPSummaryDeviceTypeParamsBotClass] `query:"botClass"`
+	// Filters results by browser family.
+	BrowserFamily param.Field[[]HTTPSummaryDeviceTypeParamsBrowserFamily] `query:"browserFamily"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -1638,6 +1659,23 @@ const (
 func (r HTTPSummaryDeviceTypeParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryDeviceTypeParamsBotClassLikelyAutomated, HTTPSummaryDeviceTypeParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryDeviceTypeParamsBrowserFamily string
+
+const (
+	HTTPSummaryDeviceTypeParamsBrowserFamilyChrome  HTTPSummaryDeviceTypeParamsBrowserFamily = "CHROME"
+	HTTPSummaryDeviceTypeParamsBrowserFamilyEdge    HTTPSummaryDeviceTypeParamsBrowserFamily = "EDGE"
+	HTTPSummaryDeviceTypeParamsBrowserFamilyFirefox HTTPSummaryDeviceTypeParamsBrowserFamily = "FIREFOX"
+	HTTPSummaryDeviceTypeParamsBrowserFamilySafari  HTTPSummaryDeviceTypeParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPSummaryDeviceTypeParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPSummaryDeviceTypeParamsBrowserFamilyChrome, HTTPSummaryDeviceTypeParamsBrowserFamilyEdge, HTTPSummaryDeviceTypeParamsBrowserFamilyFirefox, HTTPSummaryDeviceTypeParamsBrowserFamilySafari:
 		return true
 	}
 	return false
@@ -1774,6 +1812,8 @@ type HTTPSummaryHTTPProtocolParams struct {
 	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPSummaryHTTPProtocolParamsBotClass] `query:"botClass"`
+	// Filters results by browser family.
+	BrowserFamily param.Field[[]HTTPSummaryHTTPProtocolParamsBrowserFamily] `query:"browserFamily"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -1825,6 +1865,23 @@ const (
 func (r HTTPSummaryHTTPProtocolParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryHTTPProtocolParamsBotClassLikelyAutomated, HTTPSummaryHTTPProtocolParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryHTTPProtocolParamsBrowserFamily string
+
+const (
+	HTTPSummaryHTTPProtocolParamsBrowserFamilyChrome  HTTPSummaryHTTPProtocolParamsBrowserFamily = "CHROME"
+	HTTPSummaryHTTPProtocolParamsBrowserFamilyEdge    HTTPSummaryHTTPProtocolParamsBrowserFamily = "EDGE"
+	HTTPSummaryHTTPProtocolParamsBrowserFamilyFirefox HTTPSummaryHTTPProtocolParamsBrowserFamily = "FIREFOX"
+	HTTPSummaryHTTPProtocolParamsBrowserFamilySafari  HTTPSummaryHTTPProtocolParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPSummaryHTTPProtocolParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPProtocolParamsBrowserFamilyChrome, HTTPSummaryHTTPProtocolParamsBrowserFamilyEdge, HTTPSummaryHTTPProtocolParamsBrowserFamilyFirefox, HTTPSummaryHTTPProtocolParamsBrowserFamilySafari:
 		return true
 	}
 	return false
@@ -1962,6 +2019,8 @@ type HTTPSummaryHTTPVersionParams struct {
 	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPSummaryHTTPVersionParamsBotClass] `query:"botClass"`
+	// Filters results by browser family.
+	BrowserFamily param.Field[[]HTTPSummaryHTTPVersionParamsBrowserFamily] `query:"browserFamily"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -2013,6 +2072,23 @@ const (
 func (r HTTPSummaryHTTPVersionParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryHTTPVersionParamsBotClassLikelyAutomated, HTTPSummaryHTTPVersionParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryHTTPVersionParamsBrowserFamily string
+
+const (
+	HTTPSummaryHTTPVersionParamsBrowserFamilyChrome  HTTPSummaryHTTPVersionParamsBrowserFamily = "CHROME"
+	HTTPSummaryHTTPVersionParamsBrowserFamilyEdge    HTTPSummaryHTTPVersionParamsBrowserFamily = "EDGE"
+	HTTPSummaryHTTPVersionParamsBrowserFamilyFirefox HTTPSummaryHTTPVersionParamsBrowserFamily = "FIREFOX"
+	HTTPSummaryHTTPVersionParamsBrowserFamilySafari  HTTPSummaryHTTPVersionParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPSummaryHTTPVersionParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPVersionParamsBrowserFamilyChrome, HTTPSummaryHTTPVersionParamsBrowserFamilyEdge, HTTPSummaryHTTPVersionParamsBrowserFamilyFirefox, HTTPSummaryHTTPVersionParamsBrowserFamilySafari:
 		return true
 	}
 	return false
@@ -2149,6 +2225,8 @@ type HTTPSummaryIPVersionParams struct {
 	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPSummaryIPVersionParamsBotClass] `query:"botClass"`
+	// Filters results by browser family.
+	BrowserFamily param.Field[[]HTTPSummaryIPVersionParamsBrowserFamily] `query:"browserFamily"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -2200,6 +2278,23 @@ const (
 func (r HTTPSummaryIPVersionParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryIPVersionParamsBotClassLikelyAutomated, HTTPSummaryIPVersionParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryIPVersionParamsBrowserFamily string
+
+const (
+	HTTPSummaryIPVersionParamsBrowserFamilyChrome  HTTPSummaryIPVersionParamsBrowserFamily = "CHROME"
+	HTTPSummaryIPVersionParamsBrowserFamilyEdge    HTTPSummaryIPVersionParamsBrowserFamily = "EDGE"
+	HTTPSummaryIPVersionParamsBrowserFamilyFirefox HTTPSummaryIPVersionParamsBrowserFamily = "FIREFOX"
+	HTTPSummaryIPVersionParamsBrowserFamilySafari  HTTPSummaryIPVersionParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPSummaryIPVersionParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPSummaryIPVersionParamsBrowserFamilyChrome, HTTPSummaryIPVersionParamsBrowserFamilyEdge, HTTPSummaryIPVersionParamsBrowserFamilyFirefox, HTTPSummaryIPVersionParamsBrowserFamilySafari:
 		return true
 	}
 	return false
@@ -2337,6 +2432,8 @@ type HTTPSummaryOSParams struct {
 	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPSummaryOSParamsBotClass] `query:"botClass"`
+	// Filters results by browser family.
+	BrowserFamily param.Field[[]HTTPSummaryOSParamsBrowserFamily] `query:"browserFamily"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -2387,6 +2484,23 @@ const (
 func (r HTTPSummaryOSParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryOSParamsBotClassLikelyAutomated, HTTPSummaryOSParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryOSParamsBrowserFamily string
+
+const (
+	HTTPSummaryOSParamsBrowserFamilyChrome  HTTPSummaryOSParamsBrowserFamily = "CHROME"
+	HTTPSummaryOSParamsBrowserFamilyEdge    HTTPSummaryOSParamsBrowserFamily = "EDGE"
+	HTTPSummaryOSParamsBrowserFamilyFirefox HTTPSummaryOSParamsBrowserFamily = "FIREFOX"
+	HTTPSummaryOSParamsBrowserFamilySafari  HTTPSummaryOSParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPSummaryOSParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPSummaryOSParamsBrowserFamilyChrome, HTTPSummaryOSParamsBrowserFamilyEdge, HTTPSummaryOSParamsBrowserFamilyFirefox, HTTPSummaryOSParamsBrowserFamilySafari:
 		return true
 	}
 	return false
@@ -2519,6 +2633,8 @@ type HTTPSummaryPostQuantumParams struct {
 	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPSummaryPostQuantumParamsBotClass] `query:"botClass"`
+	// Filters results by browser family.
+	BrowserFamily param.Field[[]HTTPSummaryPostQuantumParamsBrowserFamily] `query:"browserFamily"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -2572,6 +2688,23 @@ const (
 func (r HTTPSummaryPostQuantumParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryPostQuantumParamsBotClassLikelyAutomated, HTTPSummaryPostQuantumParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryPostQuantumParamsBrowserFamily string
+
+const (
+	HTTPSummaryPostQuantumParamsBrowserFamilyChrome  HTTPSummaryPostQuantumParamsBrowserFamily = "CHROME"
+	HTTPSummaryPostQuantumParamsBrowserFamilyEdge    HTTPSummaryPostQuantumParamsBrowserFamily = "EDGE"
+	HTTPSummaryPostQuantumParamsBrowserFamilyFirefox HTTPSummaryPostQuantumParamsBrowserFamily = "FIREFOX"
+	HTTPSummaryPostQuantumParamsBrowserFamilySafari  HTTPSummaryPostQuantumParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPSummaryPostQuantumParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPSummaryPostQuantumParamsBrowserFamilyChrome, HTTPSummaryPostQuantumParamsBrowserFamilyEdge, HTTPSummaryPostQuantumParamsBrowserFamilyFirefox, HTTPSummaryPostQuantumParamsBrowserFamilySafari:
 		return true
 	}
 	return false
@@ -2724,6 +2857,8 @@ type HTTPSummaryTLSVersionParams struct {
 	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPSummaryTLSVersionParamsBotClass] `query:"botClass"`
+	// Filters results by browser family.
+	BrowserFamily param.Field[[]HTTPSummaryTLSVersionParamsBrowserFamily] `query:"browserFamily"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -2775,6 +2910,23 @@ const (
 func (r HTTPSummaryTLSVersionParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryTLSVersionParamsBotClassLikelyAutomated, HTTPSummaryTLSVersionParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryTLSVersionParamsBrowserFamily string
+
+const (
+	HTTPSummaryTLSVersionParamsBrowserFamilyChrome  HTTPSummaryTLSVersionParamsBrowserFamily = "CHROME"
+	HTTPSummaryTLSVersionParamsBrowserFamilyEdge    HTTPSummaryTLSVersionParamsBrowserFamily = "EDGE"
+	HTTPSummaryTLSVersionParamsBrowserFamilyFirefox HTTPSummaryTLSVersionParamsBrowserFamily = "FIREFOX"
+	HTTPSummaryTLSVersionParamsBrowserFamilySafari  HTTPSummaryTLSVersionParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPSummaryTLSVersionParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPSummaryTLSVersionParamsBrowserFamilyChrome, HTTPSummaryTLSVersionParamsBrowserFamilyEdge, HTTPSummaryTLSVersionParamsBrowserFamilyFirefox, HTTPSummaryTLSVersionParamsBrowserFamilySafari:
 		return true
 	}
 	return false

@@ -223,6 +223,8 @@ type HTTPTimeseriesParams struct {
 	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTimeseriesParamsBotClass] `query:"botClass"`
+	// Filters results by browser family.
+	BrowserFamily param.Field[[]HTTPTimeseriesParamsBrowserFamily] `query:"browserFamily"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -298,6 +300,23 @@ const (
 func (r HTTPTimeseriesParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesParamsBotClassLikelyAutomated, HTTPTimeseriesParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesParamsBrowserFamily string
+
+const (
+	HTTPTimeseriesParamsBrowserFamilyChrome  HTTPTimeseriesParamsBrowserFamily = "CHROME"
+	HTTPTimeseriesParamsBrowserFamilyEdge    HTTPTimeseriesParamsBrowserFamily = "EDGE"
+	HTTPTimeseriesParamsBrowserFamilyFirefox HTTPTimeseriesParamsBrowserFamily = "FIREFOX"
+	HTTPTimeseriesParamsBrowserFamilySafari  HTTPTimeseriesParamsBrowserFamily = "SAFARI"
+)
+
+func (r HTTPTimeseriesParamsBrowserFamily) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsBrowserFamilyChrome, HTTPTimeseriesParamsBrowserFamilyEdge, HTTPTimeseriesParamsBrowserFamilyFirefox, HTTPTimeseriesParamsBrowserFamilySafari:
 		return true
 	}
 	return false
