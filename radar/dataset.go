@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
@@ -173,6 +174,8 @@ func (r datasetDownloadResponseDatasetJSON) RawJSON() string {
 type DatasetListParams struct {
 	// Filters results by dataset type.
 	DatasetType param.Field[DatasetListParamsDatasetType] `query:"datasetType"`
+	// Filters results by the specified date.
+	Date param.Field[time.Time] `query:"date" format:"date"`
 	// Format in which results will be returned.
 	Format param.Field[DatasetListParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.

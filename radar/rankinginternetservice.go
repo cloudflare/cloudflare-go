@@ -321,7 +321,7 @@ func (r rankingInternetServiceTopResponseTop0JSON) RawJSON() string {
 }
 
 type RankingInternetServiceCategoriesParams struct {
-	// Array of dates to filter the ranking.
+	// Array of dates to filter the results.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Format in which results will be returned.
 	Format param.Field[RankingInternetServiceCategoriesParamsFormat] `query:"format"`
@@ -447,7 +447,7 @@ func (r rankingInternetServiceTimeseriesGroupsResponseEnvelopeJSON) RawJSON() st
 }
 
 type RankingInternetServiceTopParams struct {
-	// Array of dates to filter the ranking.
+	// Array of dates to filter the results.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Format in which results will be returned.
 	Format param.Field[RankingInternetServiceTopParamsFormat] `query:"format"`

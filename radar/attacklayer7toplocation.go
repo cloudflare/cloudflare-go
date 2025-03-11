@@ -586,12 +586,6 @@ type AttackLayer7TopLocationTargetParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[AttackLayer7TopLocationTargetParamsFormat] `query:"format"`
-	// Filters results by HTTP method.
-	HTTPMethod param.Field[[]AttackLayer7TopLocationTargetParamsHTTPMethod] `query:"httpMethod"`
-	// Filters results by HTTP version.
-	HTTPVersion param.Field[[]AttackLayer7TopLocationTargetParamsHTTPVersion] `query:"httpVersion"`
-	// Filters results by IP version (Ipv4 vs. IPv6).
-	IPVersion param.Field[[]AttackLayer7TopLocationTargetParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of L7 mitigation products.
@@ -620,96 +614,6 @@ const (
 func (r AttackLayer7TopLocationTargetParamsFormat) IsKnown() bool {
 	switch r {
 	case AttackLayer7TopLocationTargetParamsFormatJson, AttackLayer7TopLocationTargetParamsFormatCsv:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TopLocationTargetParamsHTTPMethod string
-
-const (
-	AttackLayer7TopLocationTargetParamsHTTPMethodGet             AttackLayer7TopLocationTargetParamsHTTPMethod = "GET"
-	AttackLayer7TopLocationTargetParamsHTTPMethodPost            AttackLayer7TopLocationTargetParamsHTTPMethod = "POST"
-	AttackLayer7TopLocationTargetParamsHTTPMethodDelete          AttackLayer7TopLocationTargetParamsHTTPMethod = "DELETE"
-	AttackLayer7TopLocationTargetParamsHTTPMethodPut             AttackLayer7TopLocationTargetParamsHTTPMethod = "PUT"
-	AttackLayer7TopLocationTargetParamsHTTPMethodHead            AttackLayer7TopLocationTargetParamsHTTPMethod = "HEAD"
-	AttackLayer7TopLocationTargetParamsHTTPMethodPurge           AttackLayer7TopLocationTargetParamsHTTPMethod = "PURGE"
-	AttackLayer7TopLocationTargetParamsHTTPMethodOptions         AttackLayer7TopLocationTargetParamsHTTPMethod = "OPTIONS"
-	AttackLayer7TopLocationTargetParamsHTTPMethodPropfind        AttackLayer7TopLocationTargetParamsHTTPMethod = "PROPFIND"
-	AttackLayer7TopLocationTargetParamsHTTPMethodMkcol           AttackLayer7TopLocationTargetParamsHTTPMethod = "MKCOL"
-	AttackLayer7TopLocationTargetParamsHTTPMethodPatch           AttackLayer7TopLocationTargetParamsHTTPMethod = "PATCH"
-	AttackLayer7TopLocationTargetParamsHTTPMethodACL             AttackLayer7TopLocationTargetParamsHTTPMethod = "ACL"
-	AttackLayer7TopLocationTargetParamsHTTPMethodBcopy           AttackLayer7TopLocationTargetParamsHTTPMethod = "BCOPY"
-	AttackLayer7TopLocationTargetParamsHTTPMethodBdelete         AttackLayer7TopLocationTargetParamsHTTPMethod = "BDELETE"
-	AttackLayer7TopLocationTargetParamsHTTPMethodBmove           AttackLayer7TopLocationTargetParamsHTTPMethod = "BMOVE"
-	AttackLayer7TopLocationTargetParamsHTTPMethodBpropfind       AttackLayer7TopLocationTargetParamsHTTPMethod = "BPROPFIND"
-	AttackLayer7TopLocationTargetParamsHTTPMethodBproppatch      AttackLayer7TopLocationTargetParamsHTTPMethod = "BPROPPATCH"
-	AttackLayer7TopLocationTargetParamsHTTPMethodCheckin         AttackLayer7TopLocationTargetParamsHTTPMethod = "CHECKIN"
-	AttackLayer7TopLocationTargetParamsHTTPMethodCheckout        AttackLayer7TopLocationTargetParamsHTTPMethod = "CHECKOUT"
-	AttackLayer7TopLocationTargetParamsHTTPMethodConnect         AttackLayer7TopLocationTargetParamsHTTPMethod = "CONNECT"
-	AttackLayer7TopLocationTargetParamsHTTPMethodCopy            AttackLayer7TopLocationTargetParamsHTTPMethod = "COPY"
-	AttackLayer7TopLocationTargetParamsHTTPMethodLabel           AttackLayer7TopLocationTargetParamsHTTPMethod = "LABEL"
-	AttackLayer7TopLocationTargetParamsHTTPMethodLock            AttackLayer7TopLocationTargetParamsHTTPMethod = "LOCK"
-	AttackLayer7TopLocationTargetParamsHTTPMethodMerge           AttackLayer7TopLocationTargetParamsHTTPMethod = "MERGE"
-	AttackLayer7TopLocationTargetParamsHTTPMethodMkactivity      AttackLayer7TopLocationTargetParamsHTTPMethod = "MKACTIVITY"
-	AttackLayer7TopLocationTargetParamsHTTPMethodMkworkspace     AttackLayer7TopLocationTargetParamsHTTPMethod = "MKWORKSPACE"
-	AttackLayer7TopLocationTargetParamsHTTPMethodMove            AttackLayer7TopLocationTargetParamsHTTPMethod = "MOVE"
-	AttackLayer7TopLocationTargetParamsHTTPMethodNotify          AttackLayer7TopLocationTargetParamsHTTPMethod = "NOTIFY"
-	AttackLayer7TopLocationTargetParamsHTTPMethodOrderpatch      AttackLayer7TopLocationTargetParamsHTTPMethod = "ORDERPATCH"
-	AttackLayer7TopLocationTargetParamsHTTPMethodPoll            AttackLayer7TopLocationTargetParamsHTTPMethod = "POLL"
-	AttackLayer7TopLocationTargetParamsHTTPMethodProppatch       AttackLayer7TopLocationTargetParamsHTTPMethod = "PROPPATCH"
-	AttackLayer7TopLocationTargetParamsHTTPMethodReport          AttackLayer7TopLocationTargetParamsHTTPMethod = "REPORT"
-	AttackLayer7TopLocationTargetParamsHTTPMethodSearch          AttackLayer7TopLocationTargetParamsHTTPMethod = "SEARCH"
-	AttackLayer7TopLocationTargetParamsHTTPMethodSubscribe       AttackLayer7TopLocationTargetParamsHTTPMethod = "SUBSCRIBE"
-	AttackLayer7TopLocationTargetParamsHTTPMethodTrace           AttackLayer7TopLocationTargetParamsHTTPMethod = "TRACE"
-	AttackLayer7TopLocationTargetParamsHTTPMethodUncheckout      AttackLayer7TopLocationTargetParamsHTTPMethod = "UNCHECKOUT"
-	AttackLayer7TopLocationTargetParamsHTTPMethodUnlock          AttackLayer7TopLocationTargetParamsHTTPMethod = "UNLOCK"
-	AttackLayer7TopLocationTargetParamsHTTPMethodUnsubscribe     AttackLayer7TopLocationTargetParamsHTTPMethod = "UNSUBSCRIBE"
-	AttackLayer7TopLocationTargetParamsHTTPMethodUpdate          AttackLayer7TopLocationTargetParamsHTTPMethod = "UPDATE"
-	AttackLayer7TopLocationTargetParamsHTTPMethodVersioncontrol  AttackLayer7TopLocationTargetParamsHTTPMethod = "VERSIONCONTROL"
-	AttackLayer7TopLocationTargetParamsHTTPMethodBaselinecontrol AttackLayer7TopLocationTargetParamsHTTPMethod = "BASELINECONTROL"
-	AttackLayer7TopLocationTargetParamsHTTPMethodXmsenumatts     AttackLayer7TopLocationTargetParamsHTTPMethod = "XMSENUMATTS"
-	AttackLayer7TopLocationTargetParamsHTTPMethodRpcOutData      AttackLayer7TopLocationTargetParamsHTTPMethod = "RPC_OUT_DATA"
-	AttackLayer7TopLocationTargetParamsHTTPMethodRpcInData       AttackLayer7TopLocationTargetParamsHTTPMethod = "RPC_IN_DATA"
-	AttackLayer7TopLocationTargetParamsHTTPMethodJson            AttackLayer7TopLocationTargetParamsHTTPMethod = "JSON"
-	AttackLayer7TopLocationTargetParamsHTTPMethodCook            AttackLayer7TopLocationTargetParamsHTTPMethod = "COOK"
-	AttackLayer7TopLocationTargetParamsHTTPMethodTrack           AttackLayer7TopLocationTargetParamsHTTPMethod = "TRACK"
-)
-
-func (r AttackLayer7TopLocationTargetParamsHTTPMethod) IsKnown() bool {
-	switch r {
-	case AttackLayer7TopLocationTargetParamsHTTPMethodGet, AttackLayer7TopLocationTargetParamsHTTPMethodPost, AttackLayer7TopLocationTargetParamsHTTPMethodDelete, AttackLayer7TopLocationTargetParamsHTTPMethodPut, AttackLayer7TopLocationTargetParamsHTTPMethodHead, AttackLayer7TopLocationTargetParamsHTTPMethodPurge, AttackLayer7TopLocationTargetParamsHTTPMethodOptions, AttackLayer7TopLocationTargetParamsHTTPMethodPropfind, AttackLayer7TopLocationTargetParamsHTTPMethodMkcol, AttackLayer7TopLocationTargetParamsHTTPMethodPatch, AttackLayer7TopLocationTargetParamsHTTPMethodACL, AttackLayer7TopLocationTargetParamsHTTPMethodBcopy, AttackLayer7TopLocationTargetParamsHTTPMethodBdelete, AttackLayer7TopLocationTargetParamsHTTPMethodBmove, AttackLayer7TopLocationTargetParamsHTTPMethodBpropfind, AttackLayer7TopLocationTargetParamsHTTPMethodBproppatch, AttackLayer7TopLocationTargetParamsHTTPMethodCheckin, AttackLayer7TopLocationTargetParamsHTTPMethodCheckout, AttackLayer7TopLocationTargetParamsHTTPMethodConnect, AttackLayer7TopLocationTargetParamsHTTPMethodCopy, AttackLayer7TopLocationTargetParamsHTTPMethodLabel, AttackLayer7TopLocationTargetParamsHTTPMethodLock, AttackLayer7TopLocationTargetParamsHTTPMethodMerge, AttackLayer7TopLocationTargetParamsHTTPMethodMkactivity, AttackLayer7TopLocationTargetParamsHTTPMethodMkworkspace, AttackLayer7TopLocationTargetParamsHTTPMethodMove, AttackLayer7TopLocationTargetParamsHTTPMethodNotify, AttackLayer7TopLocationTargetParamsHTTPMethodOrderpatch, AttackLayer7TopLocationTargetParamsHTTPMethodPoll, AttackLayer7TopLocationTargetParamsHTTPMethodProppatch, AttackLayer7TopLocationTargetParamsHTTPMethodReport, AttackLayer7TopLocationTargetParamsHTTPMethodSearch, AttackLayer7TopLocationTargetParamsHTTPMethodSubscribe, AttackLayer7TopLocationTargetParamsHTTPMethodTrace, AttackLayer7TopLocationTargetParamsHTTPMethodUncheckout, AttackLayer7TopLocationTargetParamsHTTPMethodUnlock, AttackLayer7TopLocationTargetParamsHTTPMethodUnsubscribe, AttackLayer7TopLocationTargetParamsHTTPMethodUpdate, AttackLayer7TopLocationTargetParamsHTTPMethodVersioncontrol, AttackLayer7TopLocationTargetParamsHTTPMethodBaselinecontrol, AttackLayer7TopLocationTargetParamsHTTPMethodXmsenumatts, AttackLayer7TopLocationTargetParamsHTTPMethodRpcOutData, AttackLayer7TopLocationTargetParamsHTTPMethodRpcInData, AttackLayer7TopLocationTargetParamsHTTPMethodJson, AttackLayer7TopLocationTargetParamsHTTPMethodCook, AttackLayer7TopLocationTargetParamsHTTPMethodTrack:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TopLocationTargetParamsHTTPVersion string
-
-const (
-	AttackLayer7TopLocationTargetParamsHTTPVersionHttPv1 AttackLayer7TopLocationTargetParamsHTTPVersion = "HTTPv1"
-	AttackLayer7TopLocationTargetParamsHTTPVersionHttPv2 AttackLayer7TopLocationTargetParamsHTTPVersion = "HTTPv2"
-	AttackLayer7TopLocationTargetParamsHTTPVersionHttPv3 AttackLayer7TopLocationTargetParamsHTTPVersion = "HTTPv3"
-)
-
-func (r AttackLayer7TopLocationTargetParamsHTTPVersion) IsKnown() bool {
-	switch r {
-	case AttackLayer7TopLocationTargetParamsHTTPVersionHttPv1, AttackLayer7TopLocationTargetParamsHTTPVersionHttPv2, AttackLayer7TopLocationTargetParamsHTTPVersionHttPv3:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TopLocationTargetParamsIPVersion string
-
-const (
-	AttackLayer7TopLocationTargetParamsIPVersionIPv4 AttackLayer7TopLocationTargetParamsIPVersion = "IPv4"
-	AttackLayer7TopLocationTargetParamsIPVersionIPv6 AttackLayer7TopLocationTargetParamsIPVersion = "IPv6"
-)
-
-func (r AttackLayer7TopLocationTargetParamsIPVersion) IsKnown() bool {
-	switch r {
-	case AttackLayer7TopLocationTargetParamsIPVersionIPv4, AttackLayer7TopLocationTargetParamsIPVersionIPv6:
 		return true
 	}
 	return false
