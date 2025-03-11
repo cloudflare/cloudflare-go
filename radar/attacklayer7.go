@@ -217,8 +217,6 @@ type AttackLayer7TimeseriesParams struct {
 	// exclude ASNs from results. For example, `-174, 3356` excludes results from
 	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// This field is deprecated, please use the new `mitigationProduct`.
-	Attack param.Field[[]AttackLayer7TimeseriesParamsAttack] `query:"attack"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -276,26 +274,6 @@ const (
 func (r AttackLayer7TimeseriesParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AttackLayer7TimeseriesParamsAggInterval15m, AttackLayer7TimeseriesParamsAggInterval1h, AttackLayer7TimeseriesParamsAggInterval1d, AttackLayer7TimeseriesParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TimeseriesParamsAttack string
-
-const (
-	AttackLayer7TimeseriesParamsAttackDDoS               AttackLayer7TimeseriesParamsAttack = "DDOS"
-	AttackLayer7TimeseriesParamsAttackWAF                AttackLayer7TimeseriesParamsAttack = "WAF"
-	AttackLayer7TimeseriesParamsAttackBotManagement      AttackLayer7TimeseriesParamsAttack = "BOT_MANAGEMENT"
-	AttackLayer7TimeseriesParamsAttackAccessRules        AttackLayer7TimeseriesParamsAttack = "ACCESS_RULES"
-	AttackLayer7TimeseriesParamsAttackIPReputation       AttackLayer7TimeseriesParamsAttack = "IP_REPUTATION"
-	AttackLayer7TimeseriesParamsAttackAPIShield          AttackLayer7TimeseriesParamsAttack = "API_SHIELD"
-	AttackLayer7TimeseriesParamsAttackDataLossPrevention AttackLayer7TimeseriesParamsAttack = "DATA_LOSS_PREVENTION"
-)
-
-func (r AttackLayer7TimeseriesParamsAttack) IsKnown() bool {
-	switch r {
-	case AttackLayer7TimeseriesParamsAttackDDoS, AttackLayer7TimeseriesParamsAttackWAF, AttackLayer7TimeseriesParamsAttackBotManagement, AttackLayer7TimeseriesParamsAttackAccessRules, AttackLayer7TimeseriesParamsAttackIPReputation, AttackLayer7TimeseriesParamsAttackAPIShield, AttackLayer7TimeseriesParamsAttackDataLossPrevention:
 		return true
 	}
 	return false

@@ -565,12 +565,6 @@ type AttackLayer7TopAttacksParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[AttackLayer7TopAttacksParamsFormat] `query:"format"`
-	// Filters results by HTTP method.
-	HTTPMethod param.Field[[]AttackLayer7TopAttacksParamsHTTPMethod] `query:"httpMethod"`
-	// Filters results by HTTP version.
-	HTTPVersion param.Field[[]AttackLayer7TopAttacksParamsHTTPVersion] `query:"httpVersion"`
-	// Filters results by IP version (Ipv4 vs. IPv6).
-	IPVersion param.Field[[]AttackLayer7TopAttacksParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of attack origin/target location attack limits. Together with
@@ -584,8 +578,9 @@ type AttackLayer7TopAttacksParams struct {
 	// locations from results. For example, `-US,PT` excludes results from the US, but
 	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Attack magnitude can be defined by total requests mitigated or by total zones
-	// attacked.
+	// This parameter is deprecated. In the future, we will only support attack
+	// magnitude defined by the total number of mitigated requests
+	// (MITIGATED_REQUESTS).
 	Magnitude param.Field[AttackLayer7TopAttacksParamsMagnitude] `query:"magnitude"`
 	// Array of L7 mitigation products.
 	MitigationProduct param.Field[[]AttackLayer7TopAttacksParamsMitigationProduct] `query:"mitigationProduct"`
@@ -621,96 +616,6 @@ func (r AttackLayer7TopAttacksParamsFormat) IsKnown() bool {
 	return false
 }
 
-type AttackLayer7TopAttacksParamsHTTPMethod string
-
-const (
-	AttackLayer7TopAttacksParamsHTTPMethodGet             AttackLayer7TopAttacksParamsHTTPMethod = "GET"
-	AttackLayer7TopAttacksParamsHTTPMethodPost            AttackLayer7TopAttacksParamsHTTPMethod = "POST"
-	AttackLayer7TopAttacksParamsHTTPMethodDelete          AttackLayer7TopAttacksParamsHTTPMethod = "DELETE"
-	AttackLayer7TopAttacksParamsHTTPMethodPut             AttackLayer7TopAttacksParamsHTTPMethod = "PUT"
-	AttackLayer7TopAttacksParamsHTTPMethodHead            AttackLayer7TopAttacksParamsHTTPMethod = "HEAD"
-	AttackLayer7TopAttacksParamsHTTPMethodPurge           AttackLayer7TopAttacksParamsHTTPMethod = "PURGE"
-	AttackLayer7TopAttacksParamsHTTPMethodOptions         AttackLayer7TopAttacksParamsHTTPMethod = "OPTIONS"
-	AttackLayer7TopAttacksParamsHTTPMethodPropfind        AttackLayer7TopAttacksParamsHTTPMethod = "PROPFIND"
-	AttackLayer7TopAttacksParamsHTTPMethodMkcol           AttackLayer7TopAttacksParamsHTTPMethod = "MKCOL"
-	AttackLayer7TopAttacksParamsHTTPMethodPatch           AttackLayer7TopAttacksParamsHTTPMethod = "PATCH"
-	AttackLayer7TopAttacksParamsHTTPMethodACL             AttackLayer7TopAttacksParamsHTTPMethod = "ACL"
-	AttackLayer7TopAttacksParamsHTTPMethodBcopy           AttackLayer7TopAttacksParamsHTTPMethod = "BCOPY"
-	AttackLayer7TopAttacksParamsHTTPMethodBdelete         AttackLayer7TopAttacksParamsHTTPMethod = "BDELETE"
-	AttackLayer7TopAttacksParamsHTTPMethodBmove           AttackLayer7TopAttacksParamsHTTPMethod = "BMOVE"
-	AttackLayer7TopAttacksParamsHTTPMethodBpropfind       AttackLayer7TopAttacksParamsHTTPMethod = "BPROPFIND"
-	AttackLayer7TopAttacksParamsHTTPMethodBproppatch      AttackLayer7TopAttacksParamsHTTPMethod = "BPROPPATCH"
-	AttackLayer7TopAttacksParamsHTTPMethodCheckin         AttackLayer7TopAttacksParamsHTTPMethod = "CHECKIN"
-	AttackLayer7TopAttacksParamsHTTPMethodCheckout        AttackLayer7TopAttacksParamsHTTPMethod = "CHECKOUT"
-	AttackLayer7TopAttacksParamsHTTPMethodConnect         AttackLayer7TopAttacksParamsHTTPMethod = "CONNECT"
-	AttackLayer7TopAttacksParamsHTTPMethodCopy            AttackLayer7TopAttacksParamsHTTPMethod = "COPY"
-	AttackLayer7TopAttacksParamsHTTPMethodLabel           AttackLayer7TopAttacksParamsHTTPMethod = "LABEL"
-	AttackLayer7TopAttacksParamsHTTPMethodLock            AttackLayer7TopAttacksParamsHTTPMethod = "LOCK"
-	AttackLayer7TopAttacksParamsHTTPMethodMerge           AttackLayer7TopAttacksParamsHTTPMethod = "MERGE"
-	AttackLayer7TopAttacksParamsHTTPMethodMkactivity      AttackLayer7TopAttacksParamsHTTPMethod = "MKACTIVITY"
-	AttackLayer7TopAttacksParamsHTTPMethodMkworkspace     AttackLayer7TopAttacksParamsHTTPMethod = "MKWORKSPACE"
-	AttackLayer7TopAttacksParamsHTTPMethodMove            AttackLayer7TopAttacksParamsHTTPMethod = "MOVE"
-	AttackLayer7TopAttacksParamsHTTPMethodNotify          AttackLayer7TopAttacksParamsHTTPMethod = "NOTIFY"
-	AttackLayer7TopAttacksParamsHTTPMethodOrderpatch      AttackLayer7TopAttacksParamsHTTPMethod = "ORDERPATCH"
-	AttackLayer7TopAttacksParamsHTTPMethodPoll            AttackLayer7TopAttacksParamsHTTPMethod = "POLL"
-	AttackLayer7TopAttacksParamsHTTPMethodProppatch       AttackLayer7TopAttacksParamsHTTPMethod = "PROPPATCH"
-	AttackLayer7TopAttacksParamsHTTPMethodReport          AttackLayer7TopAttacksParamsHTTPMethod = "REPORT"
-	AttackLayer7TopAttacksParamsHTTPMethodSearch          AttackLayer7TopAttacksParamsHTTPMethod = "SEARCH"
-	AttackLayer7TopAttacksParamsHTTPMethodSubscribe       AttackLayer7TopAttacksParamsHTTPMethod = "SUBSCRIBE"
-	AttackLayer7TopAttacksParamsHTTPMethodTrace           AttackLayer7TopAttacksParamsHTTPMethod = "TRACE"
-	AttackLayer7TopAttacksParamsHTTPMethodUncheckout      AttackLayer7TopAttacksParamsHTTPMethod = "UNCHECKOUT"
-	AttackLayer7TopAttacksParamsHTTPMethodUnlock          AttackLayer7TopAttacksParamsHTTPMethod = "UNLOCK"
-	AttackLayer7TopAttacksParamsHTTPMethodUnsubscribe     AttackLayer7TopAttacksParamsHTTPMethod = "UNSUBSCRIBE"
-	AttackLayer7TopAttacksParamsHTTPMethodUpdate          AttackLayer7TopAttacksParamsHTTPMethod = "UPDATE"
-	AttackLayer7TopAttacksParamsHTTPMethodVersioncontrol  AttackLayer7TopAttacksParamsHTTPMethod = "VERSIONCONTROL"
-	AttackLayer7TopAttacksParamsHTTPMethodBaselinecontrol AttackLayer7TopAttacksParamsHTTPMethod = "BASELINECONTROL"
-	AttackLayer7TopAttacksParamsHTTPMethodXmsenumatts     AttackLayer7TopAttacksParamsHTTPMethod = "XMSENUMATTS"
-	AttackLayer7TopAttacksParamsHTTPMethodRpcOutData      AttackLayer7TopAttacksParamsHTTPMethod = "RPC_OUT_DATA"
-	AttackLayer7TopAttacksParamsHTTPMethodRpcInData       AttackLayer7TopAttacksParamsHTTPMethod = "RPC_IN_DATA"
-	AttackLayer7TopAttacksParamsHTTPMethodJson            AttackLayer7TopAttacksParamsHTTPMethod = "JSON"
-	AttackLayer7TopAttacksParamsHTTPMethodCook            AttackLayer7TopAttacksParamsHTTPMethod = "COOK"
-	AttackLayer7TopAttacksParamsHTTPMethodTrack           AttackLayer7TopAttacksParamsHTTPMethod = "TRACK"
-)
-
-func (r AttackLayer7TopAttacksParamsHTTPMethod) IsKnown() bool {
-	switch r {
-	case AttackLayer7TopAttacksParamsHTTPMethodGet, AttackLayer7TopAttacksParamsHTTPMethodPost, AttackLayer7TopAttacksParamsHTTPMethodDelete, AttackLayer7TopAttacksParamsHTTPMethodPut, AttackLayer7TopAttacksParamsHTTPMethodHead, AttackLayer7TopAttacksParamsHTTPMethodPurge, AttackLayer7TopAttacksParamsHTTPMethodOptions, AttackLayer7TopAttacksParamsHTTPMethodPropfind, AttackLayer7TopAttacksParamsHTTPMethodMkcol, AttackLayer7TopAttacksParamsHTTPMethodPatch, AttackLayer7TopAttacksParamsHTTPMethodACL, AttackLayer7TopAttacksParamsHTTPMethodBcopy, AttackLayer7TopAttacksParamsHTTPMethodBdelete, AttackLayer7TopAttacksParamsHTTPMethodBmove, AttackLayer7TopAttacksParamsHTTPMethodBpropfind, AttackLayer7TopAttacksParamsHTTPMethodBproppatch, AttackLayer7TopAttacksParamsHTTPMethodCheckin, AttackLayer7TopAttacksParamsHTTPMethodCheckout, AttackLayer7TopAttacksParamsHTTPMethodConnect, AttackLayer7TopAttacksParamsHTTPMethodCopy, AttackLayer7TopAttacksParamsHTTPMethodLabel, AttackLayer7TopAttacksParamsHTTPMethodLock, AttackLayer7TopAttacksParamsHTTPMethodMerge, AttackLayer7TopAttacksParamsHTTPMethodMkactivity, AttackLayer7TopAttacksParamsHTTPMethodMkworkspace, AttackLayer7TopAttacksParamsHTTPMethodMove, AttackLayer7TopAttacksParamsHTTPMethodNotify, AttackLayer7TopAttacksParamsHTTPMethodOrderpatch, AttackLayer7TopAttacksParamsHTTPMethodPoll, AttackLayer7TopAttacksParamsHTTPMethodProppatch, AttackLayer7TopAttacksParamsHTTPMethodReport, AttackLayer7TopAttacksParamsHTTPMethodSearch, AttackLayer7TopAttacksParamsHTTPMethodSubscribe, AttackLayer7TopAttacksParamsHTTPMethodTrace, AttackLayer7TopAttacksParamsHTTPMethodUncheckout, AttackLayer7TopAttacksParamsHTTPMethodUnlock, AttackLayer7TopAttacksParamsHTTPMethodUnsubscribe, AttackLayer7TopAttacksParamsHTTPMethodUpdate, AttackLayer7TopAttacksParamsHTTPMethodVersioncontrol, AttackLayer7TopAttacksParamsHTTPMethodBaselinecontrol, AttackLayer7TopAttacksParamsHTTPMethodXmsenumatts, AttackLayer7TopAttacksParamsHTTPMethodRpcOutData, AttackLayer7TopAttacksParamsHTTPMethodRpcInData, AttackLayer7TopAttacksParamsHTTPMethodJson, AttackLayer7TopAttacksParamsHTTPMethodCook, AttackLayer7TopAttacksParamsHTTPMethodTrack:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TopAttacksParamsHTTPVersion string
-
-const (
-	AttackLayer7TopAttacksParamsHTTPVersionHttPv1 AttackLayer7TopAttacksParamsHTTPVersion = "HTTPv1"
-	AttackLayer7TopAttacksParamsHTTPVersionHttPv2 AttackLayer7TopAttacksParamsHTTPVersion = "HTTPv2"
-	AttackLayer7TopAttacksParamsHTTPVersionHttPv3 AttackLayer7TopAttacksParamsHTTPVersion = "HTTPv3"
-)
-
-func (r AttackLayer7TopAttacksParamsHTTPVersion) IsKnown() bool {
-	switch r {
-	case AttackLayer7TopAttacksParamsHTTPVersionHttPv1, AttackLayer7TopAttacksParamsHTTPVersionHttPv2, AttackLayer7TopAttacksParamsHTTPVersionHttPv3:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TopAttacksParamsIPVersion string
-
-const (
-	AttackLayer7TopAttacksParamsIPVersionIPv4 AttackLayer7TopAttacksParamsIPVersion = "IPv4"
-	AttackLayer7TopAttacksParamsIPVersionIPv6 AttackLayer7TopAttacksParamsIPVersion = "IPv6"
-)
-
-func (r AttackLayer7TopAttacksParamsIPVersion) IsKnown() bool {
-	switch r {
-	case AttackLayer7TopAttacksParamsIPVersionIPv4, AttackLayer7TopAttacksParamsIPVersionIPv6:
-		return true
-	}
-	return false
-}
-
 // Array of attack origin/target location attack limits. Together with
 // `limitPerLocation`, limits how many objects will be fetched per origin/target
 // location.
@@ -729,8 +634,9 @@ func (r AttackLayer7TopAttacksParamsLimitDirection) IsKnown() bool {
 	return false
 }
 
-// Attack magnitude can be defined by total requests mitigated or by total zones
-// attacked.
+// This parameter is deprecated. In the future, we will only support attack
+// magnitude defined by the total number of mitigated requests
+// (MITIGATED_REQUESTS).
 type AttackLayer7TopAttacksParamsMagnitude string
 
 const (

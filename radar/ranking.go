@@ -390,7 +390,7 @@ func (r rankingTimeseriesGroupsResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RankingTopParams struct {
-	// Array of dates to filter the ranking.
+	// Array of dates to filter the results.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Filters results by domain category.
 	DomainCategory param.Field[[]string] `query:"domainCategory"`
