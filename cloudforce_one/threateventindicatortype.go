@@ -3,6 +3,13 @@
 package cloudforce_one
 
 import (
+	"context"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
@@ -23,4 +30,61 @@ func NewThreatEventIndicatorTypeService(opts ...option.RequestOption) (r *Threat
 	r = &ThreatEventIndicatorTypeService{}
 	r.Options = opts
 	return
+}
+
+// Lists all indicator types
+func (r *ThreatEventIndicatorTypeService) List(ctx context.Context, query ThreatEventIndicatorTypeListParams, opts ...option.RequestOption) (res *ThreatEventIndicatorTypeListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/indicatorTypes", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+type ThreatEventIndicatorTypeListResponse struct {
+	Items ThreatEventIndicatorTypeListResponseItems `json:"items,required"`
+	Type  string                                    `json:"type,required"`
+	JSON  threatEventIndicatorTypeListResponseJSON  `json:"-"`
+}
+
+// threatEventIndicatorTypeListResponseJSON contains the JSON metadata for the
+// struct [ThreatEventIndicatorTypeListResponse]
+type threatEventIndicatorTypeListResponseJSON struct {
+	Items       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorTypeListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorTypeListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorTypeListResponseItems struct {
+	Type string                                        `json:"type,required"`
+	JSON threatEventIndicatorTypeListResponseItemsJSON `json:"-"`
+}
+
+// threatEventIndicatorTypeListResponseItemsJSON contains the JSON metadata for the
+// struct [ThreatEventIndicatorTypeListResponseItems]
+type threatEventIndicatorTypeListResponseItemsJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorTypeListResponseItems) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorTypeListResponseItemsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorTypeListParams struct {
+	// Account ID
+	AccountID param.Field[float64] `path:"account_id,required"`
 }

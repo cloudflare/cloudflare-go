@@ -3,6 +3,13 @@
 package cloudforce_one
 
 import (
+	"context"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
@@ -23,4 +30,63 @@ func NewThreatEventCountryService(opts ...option.RequestOption) (r *ThreatEventC
 	r = &ThreatEventCountryService{}
 	r.Options = opts
 	return
+}
+
+// Retrieves countries information for all countries
+func (r *ThreatEventCountryService) List(ctx context.Context, query ThreatEventCountryListParams, opts ...option.RequestOption) (res *[]ThreatEventCountryListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/countries", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+type ThreatEventCountryListResponse struct {
+	Result  []ThreatEventCountryListResponseResult `json:"result,required"`
+	Success string                                 `json:"success,required"`
+	JSON    threatEventCountryListResponseJSON     `json:"-"`
+}
+
+// threatEventCountryListResponseJSON contains the JSON metadata for the struct
+// [ThreatEventCountryListResponse]
+type threatEventCountryListResponseJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventCountryListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventCountryListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventCountryListResponseResult struct {
+	Alpha3 string                                   `json:"alpha3,required"`
+	Name   string                                   `json:"name,required"`
+	JSON   threatEventCountryListResponseResultJSON `json:"-"`
+}
+
+// threatEventCountryListResponseResultJSON contains the JSON metadata for the
+// struct [ThreatEventCountryListResponseResult]
+type threatEventCountryListResponseResultJSON struct {
+	Alpha3      apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventCountryListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventCountryListResponseResultJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventCountryListParams struct {
+	// Account ID
+	AccountID param.Field[float64] `path:"account_id,required"`
 }
