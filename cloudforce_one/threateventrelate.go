@@ -3,6 +3,14 @@
 package cloudforce_one
 
 import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
@@ -23,4 +31,70 @@ func NewThreatEventRelateService(opts ...option.RequestOption) (r *ThreatEventRe
 	r = &ThreatEventRelateService{}
 	r.Options = opts
 	return
+}
+
+// Removes an event reference
+func (r *ThreatEventRelateService) Delete(ctx context.Context, eventID string, body ThreatEventRelateDeleteParams, opts ...option.RequestOption) (res *ThreatEventRelateDeleteResponse, err error) {
+	var env ThreatEventRelateDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if eventID == "" {
+		err = errors.New("missing required event_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/relate/%s", body.AccountID, eventID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type ThreatEventRelateDeleteResponse struct {
+	Success bool                                `json:"success,required"`
+	JSON    threatEventRelateDeleteResponseJSON `json:"-"`
+}
+
+// threatEventRelateDeleteResponseJSON contains the JSON metadata for the struct
+// [ThreatEventRelateDeleteResponse]
+type threatEventRelateDeleteResponseJSON struct {
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventRelateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventRelateDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventRelateDeleteParams struct {
+	// Account ID
+	AccountID param.Field[float64] `path:"account_id,required"`
+}
+
+type ThreatEventRelateDeleteResponseEnvelope struct {
+	Result  ThreatEventRelateDeleteResponse             `json:"result,required"`
+	Success bool                                        `json:"success,required"`
+	JSON    threatEventRelateDeleteResponseEnvelopeJSON `json:"-"`
+}
+
+// threatEventRelateDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ThreatEventRelateDeleteResponseEnvelope]
+type threatEventRelateDeleteResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventRelateDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventRelateDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
