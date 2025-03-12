@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
@@ -15,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/tidwall/gjson"
 )
 
 // ProjectService contains methods and other services that help with interacting
@@ -180,10 +182,10 @@ type Deployment struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Info about what caused the deployment.
 	DeploymentTrigger DeploymentDeploymentTrigger `json:"deployment_trigger"`
-	// A dict of env variables to build this deploy.
+	// Environment variables used for builds and Pages Functions.
 	EnvVars map[string]DeploymentEnvVar `json:"env_vars"`
 	// Type of deploy.
-	Environment string `json:"environment"`
+	Environment DeploymentEnvironment `json:"environment"`
 	// If the deployment has been skipped.
 	IsSkipped bool `json:"is_skipped"`
 	// The status of the deployment.
@@ -277,7 +279,7 @@ type DeploymentDeploymentTrigger struct {
 	// Additional info about the trigger.
 	Metadata DeploymentDeploymentTriggerMetadata `json:"metadata"`
 	// What caused the deployment.
-	Type string                          `json:"type"`
+	Type DeploymentDeploymentTriggerType `json:"type"`
 	JSON deploymentDeploymentTriggerJSON `json:"-"`
 }
 
@@ -327,30 +329,199 @@ func (r deploymentDeploymentTriggerMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
-// Environment variable.
+// What caused the deployment.
+type DeploymentDeploymentTriggerType string
+
+const (
+	DeploymentDeploymentTriggerTypePush  DeploymentDeploymentTriggerType = "push"
+	DeploymentDeploymentTriggerTypeADHoc DeploymentDeploymentTriggerType = "ad_hoc"
+)
+
+func (r DeploymentDeploymentTriggerType) IsKnown() bool {
+	switch r {
+	case DeploymentDeploymentTriggerTypePush, DeploymentDeploymentTriggerTypeADHoc:
+		return true
+	}
+	return false
+}
+
+// A plaintext environment variable.
 type DeploymentEnvVar struct {
+	Type DeploymentEnvVarsType `json:"type,required"`
 	// Environment variable value.
-	Value string `json:"value,required"`
-	// The type of environment variable.
-	Type string               `json:"type"`
-	JSON deploymentEnvVarJSON `json:"-"`
+	Value string               `json:"value,required"`
+	JSON  deploymentEnvVarJSON `json:"-"`
+	union DeploymentEnvVarsUnion
 }
 
 // deploymentEnvVarJSON contains the JSON metadata for the struct
 // [DeploymentEnvVar]
 type deploymentEnvVarJSON struct {
-	Value       apijson.Field
 	Type        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
+func (r deploymentEnvVarJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r *DeploymentEnvVar) UnmarshalJSON(data []byte) (err error) {
+	*r = DeploymentEnvVar{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [DeploymentEnvVarsUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [pages.DeploymentEnvVarsPagesPlainTextEnvVar],
+// [pages.DeploymentEnvVarsPagesSecretTextEnvVar].
+func (r DeploymentEnvVar) AsUnion() DeploymentEnvVarsUnion {
+	return r.union
+}
+
+// A plaintext environment variable.
+//
+// Union satisfied by [pages.DeploymentEnvVarsPagesPlainTextEnvVar] or
+// [pages.DeploymentEnvVarsPagesSecretTextEnvVar].
+type DeploymentEnvVarsUnion interface {
+	implementsDeploymentEnvVar()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DeploymentEnvVarsUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DeploymentEnvVarsPagesPlainTextEnvVar{}),
+			DiscriminatorValue: "plain_text",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DeploymentEnvVarsPagesSecretTextEnvVar{}),
+			DiscriminatorValue: "secret_text",
+		},
+	)
+}
+
+// A plaintext environment variable.
+type DeploymentEnvVarsPagesPlainTextEnvVar struct {
+	Type DeploymentEnvVarsPagesPlainTextEnvVarType `json:"type,required"`
+	// Environment variable value.
+	Value string                                    `json:"value,required"`
+	JSON  deploymentEnvVarsPagesPlainTextEnvVarJSON `json:"-"`
+}
+
+// deploymentEnvVarsPagesPlainTextEnvVarJSON contains the JSON metadata for the
+// struct [DeploymentEnvVarsPagesPlainTextEnvVar]
+type deploymentEnvVarsPagesPlainTextEnvVarJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeploymentEnvVarsPagesPlainTextEnvVar) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r deploymentEnvVarJSON) RawJSON() string {
+func (r deploymentEnvVarsPagesPlainTextEnvVarJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r DeploymentEnvVarsPagesPlainTextEnvVar) implementsDeploymentEnvVar() {}
+
+type DeploymentEnvVarsPagesPlainTextEnvVarType string
+
+const (
+	DeploymentEnvVarsPagesPlainTextEnvVarTypePlainText DeploymentEnvVarsPagesPlainTextEnvVarType = "plain_text"
+)
+
+func (r DeploymentEnvVarsPagesPlainTextEnvVarType) IsKnown() bool {
+	switch r {
+	case DeploymentEnvVarsPagesPlainTextEnvVarTypePlainText:
+		return true
+	}
+	return false
+}
+
+// An encrypted environment variable.
+type DeploymentEnvVarsPagesSecretTextEnvVar struct {
+	Type DeploymentEnvVarsPagesSecretTextEnvVarType `json:"type,required"`
+	// Secret value.
+	Value string                                     `json:"value,required"`
+	JSON  deploymentEnvVarsPagesSecretTextEnvVarJSON `json:"-"`
+}
+
+// deploymentEnvVarsPagesSecretTextEnvVarJSON contains the JSON metadata for the
+// struct [DeploymentEnvVarsPagesSecretTextEnvVar]
+type deploymentEnvVarsPagesSecretTextEnvVarJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeploymentEnvVarsPagesSecretTextEnvVar) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deploymentEnvVarsPagesSecretTextEnvVarJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DeploymentEnvVarsPagesSecretTextEnvVar) implementsDeploymentEnvVar() {}
+
+type DeploymentEnvVarsPagesSecretTextEnvVarType string
+
+const (
+	DeploymentEnvVarsPagesSecretTextEnvVarTypeSecretText DeploymentEnvVarsPagesSecretTextEnvVarType = "secret_text"
+)
+
+func (r DeploymentEnvVarsPagesSecretTextEnvVarType) IsKnown() bool {
+	switch r {
+	case DeploymentEnvVarsPagesSecretTextEnvVarTypeSecretText:
+		return true
+	}
+	return false
+}
+
+type DeploymentEnvVarsType string
+
+const (
+	DeploymentEnvVarsTypePlainText  DeploymentEnvVarsType = "plain_text"
+	DeploymentEnvVarsTypeSecretText DeploymentEnvVarsType = "secret_text"
+)
+
+func (r DeploymentEnvVarsType) IsKnown() bool {
+	switch r {
+	case DeploymentEnvVarsTypePlainText, DeploymentEnvVarsTypeSecretText:
+		return true
+	}
+	return false
+}
+
+// Type of deploy.
+type DeploymentEnvironment string
+
+const (
+	DeploymentEnvironmentPreview    DeploymentEnvironment = "preview"
+	DeploymentEnvironmentProduction DeploymentEnvironment = "production"
+)
+
+func (r DeploymentEnvironment) IsKnown() bool {
+	switch r {
+	case DeploymentEnvironmentPreview, DeploymentEnvironmentProduction:
+		return true
+	}
+	return false
 }
 
 type DeploymentSource struct {
@@ -436,6 +607,8 @@ func (r DeploymentSourceConfigPreviewDeploymentSetting) IsKnown() bool {
 type DeploymentParam struct {
 	// Configs for the project build process.
 	BuildConfig param.Field[DeploymentBuildConfigParam] `json:"build_config"`
+	// Environment variables used for builds and Pages Functions.
+	EnvVars param.Field[map[string]DeploymentEnvVarsUnionParam] `json:"env_vars"`
 }
 
 func (r DeploymentParam) MarshalJSON() (data []byte, err error) {
@@ -480,17 +653,52 @@ func (r DeploymentDeploymentTriggerMetadataParam) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-// Environment variable.
+// A plaintext environment variable.
 type DeploymentEnvVarParam struct {
+	Type param.Field[DeploymentEnvVarsType] `json:"type,required"`
 	// Environment variable value.
 	Value param.Field[string] `json:"value,required"`
-	// The type of environment variable.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r DeploymentEnvVarParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+func (r DeploymentEnvVarParam) implementsDeploymentEnvVarsUnionParam() {}
+
+// A plaintext environment variable.
+//
+// Satisfied by [pages.DeploymentEnvVarsPagesPlainTextEnvVarParam],
+// [pages.DeploymentEnvVarsPagesSecretTextEnvVarParam], [DeploymentEnvVarParam].
+type DeploymentEnvVarsUnionParam interface {
+	implementsDeploymentEnvVarsUnionParam()
+}
+
+// A plaintext environment variable.
+type DeploymentEnvVarsPagesPlainTextEnvVarParam struct {
+	Type param.Field[DeploymentEnvVarsPagesPlainTextEnvVarType] `json:"type,required"`
+	// Environment variable value.
+	Value param.Field[string] `json:"value,required"`
+}
+
+func (r DeploymentEnvVarsPagesPlainTextEnvVarParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DeploymentEnvVarsPagesPlainTextEnvVarParam) implementsDeploymentEnvVarsUnionParam() {}
+
+// An encrypted environment variable.
+type DeploymentEnvVarsPagesSecretTextEnvVarParam struct {
+	Type param.Field[DeploymentEnvVarsPagesSecretTextEnvVarType] `json:"type,required"`
+	// Secret value.
+	Value param.Field[string] `json:"value,required"`
+}
+
+func (r DeploymentEnvVarsPagesSecretTextEnvVarParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DeploymentEnvVarsPagesSecretTextEnvVarParam) implementsDeploymentEnvVarsUnionParam() {}
 
 type DeploymentSourceParam struct {
 	Config param.Field[DeploymentSourceConfigParam] `json:"config"`
@@ -647,10 +855,10 @@ type ProjectDeploymentConfigsPreview struct {
 	CompatibilityFlags []string `json:"compatibility_flags"`
 	// D1 databases used for Pages Functions.
 	D1Databases map[string]ProjectDeploymentConfigsPreviewD1Database `json:"d1_databases,nullable"`
-	// Durabble Object namespaces used for Pages Functions.
+	// Durable Object namespaces used for Pages Functions.
 	DurableObjectNamespaces map[string]ProjectDeploymentConfigsPreviewDurableObjectNamespace `json:"durable_object_namespaces,nullable"`
-	// Environment variables for build configs.
-	EnvVars map[string]ProjectDeploymentConfigsPreviewEnvVar `json:"env_vars,nullable"`
+	// Environment variables used for builds and Pages Functions.
+	EnvVars map[string]ProjectDeploymentConfigsPreviewEnvVar `json:"env_vars"`
 	// Hyperdrive bindings used for Pages Functions.
 	HyperdriveBindings map[string]ProjectDeploymentConfigsPreviewHyperdriveBinding `json:"hyperdrive_bindings,nullable"`
 	// KV namespaces used for Pages Functions.
@@ -789,9 +997,9 @@ func (r projectDeploymentConfigsPreviewD1DatabaseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Durabble Object binding.
+// Durable Object binding.
 type ProjectDeploymentConfigsPreviewDurableObjectNamespace struct {
-	// ID of the Durabble Object namespace.
+	// ID of the Durable Object namespace.
 	NamespaceID string                                                    `json:"namespace_id"`
 	JSON        projectDeploymentConfigsPreviewDurableObjectNamespaceJSON `json:"-"`
 }
@@ -812,33 +1020,159 @@ func (r projectDeploymentConfigsPreviewDurableObjectNamespaceJSON) RawJSON() str
 	return r.raw
 }
 
-// Environment variable.
+// A plaintext environment variable.
 type ProjectDeploymentConfigsPreviewEnvVar struct {
+	Type ProjectDeploymentConfigsPreviewEnvVarsType `json:"type,required"`
 	// Environment variable value.
-	Value string `json:"value,required"`
-	// The type of environment variable.
-	Type ProjectDeploymentConfigsPreviewEnvVarsType `json:"type"`
-	JSON projectDeploymentConfigsPreviewEnvVarJSON  `json:"-"`
+	Value string                                    `json:"value,required"`
+	JSON  projectDeploymentConfigsPreviewEnvVarJSON `json:"-"`
+	union ProjectDeploymentConfigsPreviewEnvVarsUnion
 }
 
 // projectDeploymentConfigsPreviewEnvVarJSON contains the JSON metadata for the
 // struct [ProjectDeploymentConfigsPreviewEnvVar]
 type projectDeploymentConfigsPreviewEnvVarJSON struct {
-	Value       apijson.Field
 	Type        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewEnvVar) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r projectDeploymentConfigsPreviewEnvVarJSON) RawJSON() string {
 	return r.raw
 }
 
-// The type of environment variable.
+func (r *ProjectDeploymentConfigsPreviewEnvVar) UnmarshalJSON(data []byte) (err error) {
+	*r = ProjectDeploymentConfigsPreviewEnvVar{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ProjectDeploymentConfigsPreviewEnvVarsUnion] interface which
+// you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [pages.ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar],
+// [pages.ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar].
+func (r ProjectDeploymentConfigsPreviewEnvVar) AsUnion() ProjectDeploymentConfigsPreviewEnvVarsUnion {
+	return r.union
+}
+
+// A plaintext environment variable.
+//
+// Union satisfied by
+// [pages.ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar] or
+// [pages.ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar].
+type ProjectDeploymentConfigsPreviewEnvVarsUnion interface {
+	implementsProjectDeploymentConfigsPreviewEnvVar()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProjectDeploymentConfigsPreviewEnvVarsUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar{}),
+			DiscriminatorValue: "plain_text",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar{}),
+			DiscriminatorValue: "secret_text",
+		},
+	)
+}
+
+// A plaintext environment variable.
+type ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar struct {
+	Type ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType `json:"type,required"`
+	// Environment variable value.
+	Value string                                                         `json:"value,required"`
+	JSON  projectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarJSON `json:"-"`
+}
+
+// projectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarJSON contains the JSON
+// metadata for the struct
+// [ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar]
+type projectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar) implementsProjectDeploymentConfigsPreviewEnvVar() {
+}
+
+type ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType string
+
+const (
+	ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarTypePlainText ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType = "plain_text"
+)
+
+func (r ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarTypePlainText:
+		return true
+	}
+	return false
+}
+
+// An encrypted environment variable.
+type ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar struct {
+	Type ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarType `json:"type,required"`
+	// Secret value.
+	Value string                                                          `json:"value,required"`
+	JSON  projectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarJSON `json:"-"`
+}
+
+// projectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarJSON contains the
+// JSON metadata for the struct
+// [ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar]
+type projectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar) implementsProjectDeploymentConfigsPreviewEnvVar() {
+}
+
+type ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarType string
+
+const (
+	ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarTypeSecretText ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarType = "secret_text"
+)
+
+func (r ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarType) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarTypeSecretText:
+		return true
+	}
+	return false
+}
+
 type ProjectDeploymentConfigsPreviewEnvVarsType string
 
 const (
@@ -1058,10 +1392,10 @@ type ProjectDeploymentConfigsProduction struct {
 	CompatibilityFlags []string `json:"compatibility_flags"`
 	// D1 databases used for Pages Functions.
 	D1Databases map[string]ProjectDeploymentConfigsProductionD1Database `json:"d1_databases,nullable"`
-	// Durabble Object namespaces used for Pages Functions.
+	// Durable Object namespaces used for Pages Functions.
 	DurableObjectNamespaces map[string]ProjectDeploymentConfigsProductionDurableObjectNamespace `json:"durable_object_namespaces,nullable"`
-	// Environment variables for build configs.
-	EnvVars map[string]ProjectDeploymentConfigsProductionEnvVar `json:"env_vars,nullable"`
+	// Environment variables used for builds and Pages Functions.
+	EnvVars map[string]ProjectDeploymentConfigsProductionEnvVar `json:"env_vars"`
 	// Hyperdrive bindings used for Pages Functions.
 	HyperdriveBindings map[string]ProjectDeploymentConfigsProductionHyperdriveBinding `json:"hyperdrive_bindings,nullable"`
 	// KV namespaces used for Pages Functions.
@@ -1201,9 +1535,9 @@ func (r projectDeploymentConfigsProductionD1DatabaseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Durabble Object binding.
+// Durable Object binding.
 type ProjectDeploymentConfigsProductionDurableObjectNamespace struct {
-	// ID of the Durabble Object namespace.
+	// ID of the Durable Object namespace.
 	NamespaceID string                                                       `json:"namespace_id"`
 	JSON        projectDeploymentConfigsProductionDurableObjectNamespaceJSON `json:"-"`
 }
@@ -1225,33 +1559,159 @@ func (r projectDeploymentConfigsProductionDurableObjectNamespaceJSON) RawJSON() 
 	return r.raw
 }
 
-// Environment variable.
+// A plaintext environment variable.
 type ProjectDeploymentConfigsProductionEnvVar struct {
+	Type ProjectDeploymentConfigsProductionEnvVarsType `json:"type,required"`
 	// Environment variable value.
-	Value string `json:"value,required"`
-	// The type of environment variable.
-	Type ProjectDeploymentConfigsProductionEnvVarsType `json:"type"`
-	JSON projectDeploymentConfigsProductionEnvVarJSON  `json:"-"`
+	Value string                                       `json:"value,required"`
+	JSON  projectDeploymentConfigsProductionEnvVarJSON `json:"-"`
+	union ProjectDeploymentConfigsProductionEnvVarsUnion
 }
 
 // projectDeploymentConfigsProductionEnvVarJSON contains the JSON metadata for the
 // struct [ProjectDeploymentConfigsProductionEnvVar]
 type projectDeploymentConfigsProductionEnvVarJSON struct {
-	Value       apijson.Field
 	Type        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionEnvVar) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r projectDeploymentConfigsProductionEnvVarJSON) RawJSON() string {
 	return r.raw
 }
 
-// The type of environment variable.
+func (r *ProjectDeploymentConfigsProductionEnvVar) UnmarshalJSON(data []byte) (err error) {
+	*r = ProjectDeploymentConfigsProductionEnvVar{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ProjectDeploymentConfigsProductionEnvVarsUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [pages.ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar],
+// [pages.ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar].
+func (r ProjectDeploymentConfigsProductionEnvVar) AsUnion() ProjectDeploymentConfigsProductionEnvVarsUnion {
+	return r.union
+}
+
+// A plaintext environment variable.
+//
+// Union satisfied by
+// [pages.ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar] or
+// [pages.ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar].
+type ProjectDeploymentConfigsProductionEnvVarsUnion interface {
+	implementsProjectDeploymentConfigsProductionEnvVar()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProjectDeploymentConfigsProductionEnvVarsUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar{}),
+			DiscriminatorValue: "plain_text",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar{}),
+			DiscriminatorValue: "secret_text",
+		},
+	)
+}
+
+// A plaintext environment variable.
+type ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar struct {
+	Type ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType `json:"type,required"`
+	// Environment variable value.
+	Value string                                                            `json:"value,required"`
+	JSON  projectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarJSON `json:"-"`
+}
+
+// projectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarJSON contains the
+// JSON metadata for the struct
+// [ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar]
+type projectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar) implementsProjectDeploymentConfigsProductionEnvVar() {
+}
+
+type ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType string
+
+const (
+	ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarTypePlainText ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType = "plain_text"
+)
+
+func (r ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarTypePlainText:
+		return true
+	}
+	return false
+}
+
+// An encrypted environment variable.
+type ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar struct {
+	Type ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarType `json:"type,required"`
+	// Secret value.
+	Value string                                                             `json:"value,required"`
+	JSON  projectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarJSON `json:"-"`
+}
+
+// projectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarJSON contains the
+// JSON metadata for the struct
+// [ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar]
+type projectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar) implementsProjectDeploymentConfigsProductionEnvVar() {
+}
+
+type ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarType string
+
+const (
+	ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarTypeSecretText ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarType = "secret_text"
+)
+
+func (r ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarType) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarTypeSecretText:
+		return true
+	}
+	return false
+}
+
 type ProjectDeploymentConfigsProductionEnvVarsType string
 
 const (
@@ -1597,10 +2057,10 @@ type ProjectDeploymentConfigsPreviewParam struct {
 	CompatibilityFlags param.Field[[]string] `json:"compatibility_flags"`
 	// D1 databases used for Pages Functions.
 	D1Databases param.Field[map[string]ProjectDeploymentConfigsPreviewD1DatabaseParam] `json:"d1_databases"`
-	// Durabble Object namespaces used for Pages Functions.
+	// Durable Object namespaces used for Pages Functions.
 	DurableObjectNamespaces param.Field[map[string]ProjectDeploymentConfigsPreviewDurableObjectNamespaceParam] `json:"durable_object_namespaces"`
-	// Environment variables for build configs.
-	EnvVars param.Field[map[string]ProjectDeploymentConfigsPreviewEnvVarParam] `json:"env_vars"`
+	// Environment variables used for builds and Pages Functions.
+	EnvVars param.Field[map[string]ProjectDeploymentConfigsPreviewEnvVarsUnionParam] `json:"env_vars"`
 	// Hyperdrive bindings used for Pages Functions.
 	HyperdriveBindings param.Field[map[string]ProjectDeploymentConfigsPreviewHyperdriveBindingParam] `json:"hyperdrive_bindings"`
 	// KV namespaces used for Pages Functions.
@@ -1660,9 +2120,9 @@ func (r ProjectDeploymentConfigsPreviewD1DatabaseParam) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-// Durabble Object binding.
+// Durable Object binding.
 type ProjectDeploymentConfigsPreviewDurableObjectNamespaceParam struct {
-	// ID of the Durabble Object namespace.
+	// ID of the Durable Object namespace.
 	NamespaceID param.Field[string] `json:"namespace_id"`
 }
 
@@ -1670,16 +2130,56 @@ func (r ProjectDeploymentConfigsPreviewDurableObjectNamespaceParam) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-// Environment variable.
+// A plaintext environment variable.
 type ProjectDeploymentConfigsPreviewEnvVarParam struct {
+	Type param.Field[ProjectDeploymentConfigsPreviewEnvVarsType] `json:"type,required"`
 	// Environment variable value.
 	Value param.Field[string] `json:"value,required"`
-	// The type of environment variable.
-	Type param.Field[ProjectDeploymentConfigsPreviewEnvVarsType] `json:"type"`
 }
 
 func (r ProjectDeploymentConfigsPreviewEnvVarParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r ProjectDeploymentConfigsPreviewEnvVarParam) implementsProjectDeploymentConfigsPreviewEnvVarsUnionParam() {
+}
+
+// A plaintext environment variable.
+//
+// Satisfied by
+// [pages.ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarParam],
+// [pages.ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarParam],
+// [ProjectDeploymentConfigsPreviewEnvVarParam].
+type ProjectDeploymentConfigsPreviewEnvVarsUnionParam interface {
+	implementsProjectDeploymentConfigsPreviewEnvVarsUnionParam()
+}
+
+// A plaintext environment variable.
+type ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarParam struct {
+	Type param.Field[ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType] `json:"type,required"`
+	// Environment variable value.
+	Value param.Field[string] `json:"value,required"`
+}
+
+func (r ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarParam) implementsProjectDeploymentConfigsPreviewEnvVarsUnionParam() {
+}
+
+// An encrypted environment variable.
+type ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarParam struct {
+	Type param.Field[ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarType] `json:"type,required"`
+	// Secret value.
+	Value param.Field[string] `json:"value,required"`
+}
+
+func (r ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarParam) implementsProjectDeploymentConfigsPreviewEnvVarsUnionParam() {
 }
 
 // Hyperdrive binding.
@@ -1779,10 +2279,10 @@ type ProjectDeploymentConfigsProductionParam struct {
 	CompatibilityFlags param.Field[[]string] `json:"compatibility_flags"`
 	// D1 databases used for Pages Functions.
 	D1Databases param.Field[map[string]ProjectDeploymentConfigsProductionD1DatabaseParam] `json:"d1_databases"`
-	// Durabble Object namespaces used for Pages Functions.
+	// Durable Object namespaces used for Pages Functions.
 	DurableObjectNamespaces param.Field[map[string]ProjectDeploymentConfigsProductionDurableObjectNamespaceParam] `json:"durable_object_namespaces"`
-	// Environment variables for build configs.
-	EnvVars param.Field[map[string]ProjectDeploymentConfigsProductionEnvVarParam] `json:"env_vars"`
+	// Environment variables used for builds and Pages Functions.
+	EnvVars param.Field[map[string]ProjectDeploymentConfigsProductionEnvVarsUnionParam] `json:"env_vars"`
 	// Hyperdrive bindings used for Pages Functions.
 	HyperdriveBindings param.Field[map[string]ProjectDeploymentConfigsProductionHyperdriveBindingParam] `json:"hyperdrive_bindings"`
 	// KV namespaces used for Pages Functions.
@@ -1842,9 +2342,9 @@ func (r ProjectDeploymentConfigsProductionD1DatabaseParam) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-// Durabble Object binding.
+// Durable Object binding.
 type ProjectDeploymentConfigsProductionDurableObjectNamespaceParam struct {
-	// ID of the Durabble Object namespace.
+	// ID of the Durable Object namespace.
 	NamespaceID param.Field[string] `json:"namespace_id"`
 }
 
@@ -1852,16 +2352,56 @@ func (r ProjectDeploymentConfigsProductionDurableObjectNamespaceParam) MarshalJS
 	return apijson.MarshalRoot(r)
 }
 
-// Environment variable.
+// A plaintext environment variable.
 type ProjectDeploymentConfigsProductionEnvVarParam struct {
+	Type param.Field[ProjectDeploymentConfigsProductionEnvVarsType] `json:"type,required"`
 	// Environment variable value.
 	Value param.Field[string] `json:"value,required"`
-	// The type of environment variable.
-	Type param.Field[ProjectDeploymentConfigsProductionEnvVarsType] `json:"type"`
 }
 
 func (r ProjectDeploymentConfigsProductionEnvVarParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r ProjectDeploymentConfigsProductionEnvVarParam) implementsProjectDeploymentConfigsProductionEnvVarsUnionParam() {
+}
+
+// A plaintext environment variable.
+//
+// Satisfied by
+// [pages.ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarParam],
+// [pages.ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarParam],
+// [ProjectDeploymentConfigsProductionEnvVarParam].
+type ProjectDeploymentConfigsProductionEnvVarsUnionParam interface {
+	implementsProjectDeploymentConfigsProductionEnvVarsUnionParam()
+}
+
+// A plaintext environment variable.
+type ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarParam struct {
+	Type param.Field[ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType] `json:"type,required"`
+	// Environment variable value.
+	Value param.Field[string] `json:"value,required"`
+}
+
+func (r ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarParam) implementsProjectDeploymentConfigsProductionEnvVarsUnionParam() {
+}
+
+// An encrypted environment variable.
+type ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarParam struct {
+	Type param.Field[ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarType] `json:"type,required"`
+	// Secret value.
+	Value param.Field[string] `json:"value,required"`
+}
+
+func (r ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarParam) implementsProjectDeploymentConfigsProductionEnvVarsUnionParam() {
 }
 
 // Hyperdrive binding.
@@ -1979,12 +2519,12 @@ type Stage struct {
 	// When the stage ended.
 	EndedOn time.Time `json:"ended_on,nullable" format:"date-time"`
 	// The current build stage.
-	Name string `json:"name"`
+	Name StageName `json:"name"`
 	// When the stage started.
 	StartedOn time.Time `json:"started_on,nullable" format:"date-time"`
 	// State of the current stage.
-	Status string    `json:"status"`
-	JSON   stageJSON `json:"-"`
+	Status StageStatus `json:"status"`
+	JSON   stageJSON   `json:"-"`
 }
 
 // stageJSON contains the JSON metadata for the struct [Stage]
@@ -2005,10 +2545,48 @@ func (r stageJSON) RawJSON() string {
 	return r.raw
 }
 
+// The current build stage.
+type StageName string
+
+const (
+	StageNameQueued     StageName = "queued"
+	StageNameInitialize StageName = "initialize"
+	StageNameCloneRepo  StageName = "clone_repo"
+	StageNameBuild      StageName = "build"
+	StageNameDeploy     StageName = "deploy"
+)
+
+func (r StageName) IsKnown() bool {
+	switch r {
+	case StageNameQueued, StageNameInitialize, StageNameCloneRepo, StageNameBuild, StageNameDeploy:
+		return true
+	}
+	return false
+}
+
+// State of the current stage.
+type StageStatus string
+
+const (
+	StageStatusSuccess  StageStatus = "success"
+	StageStatusIdle     StageStatus = "idle"
+	StageStatusActive   StageStatus = "active"
+	StageStatusFailure  StageStatus = "failure"
+	StageStatusCanceled StageStatus = "canceled"
+)
+
+func (r StageStatus) IsKnown() bool {
+	switch r {
+	case StageStatusSuccess, StageStatusIdle, StageStatusActive, StageStatusFailure, StageStatusCanceled:
+		return true
+	}
+	return false
+}
+
 // The status of the deployment.
 type StageParam struct {
 	// The current build stage.
-	Name param.Field[string] `json:"name"`
+	Name param.Field[StageName] `json:"name"`
 }
 
 func (r StageParam) MarshalJSON() (data []byte, err error) {
