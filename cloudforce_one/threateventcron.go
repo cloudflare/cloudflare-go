@@ -3,12 +3,6 @@
 package cloudforce_one
 
 import (
-	"context"
-	"fmt"
-	"net/http"
-
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
@@ -29,64 +23,4 @@ func NewThreatEventCronService(opts ...option.RequestOption) (r *ThreatEventCron
 	r = &ThreatEventCronService{}
 	r.Options = opts
 	return
-}
-
-// Reads the last cron update time
-func (r *ThreatEventCronService) New(ctx context.Context, accountID float64, opts ...option.RequestOption) (res *ThreatEventCronNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/cron", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
-}
-
-// Reads the last cron update time
-func (r *ThreatEventCronService) List(ctx context.Context, accountID float64, opts ...option.RequestOption) (res *ThreatEventCronListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/cron", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
-type ThreatEventCronNewResponse struct {
-	ID     float64                        `json:"id,required"`
-	Update string                         `json:"update,required"`
-	JSON   threatEventCronNewResponseJSON `json:"-"`
-}
-
-// threatEventCronNewResponseJSON contains the JSON metadata for the struct
-// [ThreatEventCronNewResponse]
-type threatEventCronNewResponseJSON struct {
-	ID          apijson.Field
-	Update      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ThreatEventCronNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r threatEventCronNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ThreatEventCronListResponse struct {
-	Update string                          `json:"update,required"`
-	JSON   threatEventCronListResponseJSON `json:"-"`
-}
-
-// threatEventCronListResponseJSON contains the JSON metadata for the struct
-// [ThreatEventCronListResponse]
-type threatEventCronListResponseJSON struct {
-	Update      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ThreatEventCronListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r threatEventCronListResponseJSON) RawJSON() string {
-	return r.raw
 }
