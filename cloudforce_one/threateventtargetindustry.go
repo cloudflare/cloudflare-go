@@ -3,12 +3,6 @@
 package cloudforce_one
 
 import (
-	"context"
-	"fmt"
-	"net/http"
-
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
@@ -29,56 +23,4 @@ func NewThreatEventTargetIndustryService(opts ...option.RequestOption) (r *Threa
 	r = &ThreatEventTargetIndustryService{}
 	r.Options = opts
 	return
-}
-
-// Lists all target industries
-func (r *ThreatEventTargetIndustryService) List(ctx context.Context, accountID float64, opts ...option.RequestOption) (res *ThreatEventTargetIndustryListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/targetIndustries", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
-type ThreatEventTargetIndustryListResponse struct {
-	Items ThreatEventTargetIndustryListResponseItems `json:"items,required"`
-	Type  string                                     `json:"type,required"`
-	JSON  threatEventTargetIndustryListResponseJSON  `json:"-"`
-}
-
-// threatEventTargetIndustryListResponseJSON contains the JSON metadata for the
-// struct [ThreatEventTargetIndustryListResponse]
-type threatEventTargetIndustryListResponseJSON struct {
-	Items       apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ThreatEventTargetIndustryListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r threatEventTargetIndustryListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ThreatEventTargetIndustryListResponseItems struct {
-	Type string                                         `json:"type,required"`
-	JSON threatEventTargetIndustryListResponseItemsJSON `json:"-"`
-}
-
-// threatEventTargetIndustryListResponseItemsJSON contains the JSON metadata for
-// the struct [ThreatEventTargetIndustryListResponseItems]
-type threatEventTargetIndustryListResponseItemsJSON struct {
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ThreatEventTargetIndustryListResponseItems) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r threatEventTargetIndustryListResponseItemsJSON) RawJSON() string {
-	return r.raw
 }
