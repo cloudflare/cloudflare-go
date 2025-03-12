@@ -1875,7 +1875,7 @@ type ConfigurationVariable struct {
 	Name string                     `json:"name,required"`
 	Type ConfigurationVariablesType `json:"type,required"`
 	// This field can have the runtime type of [string],
-	// [ConfigurationVariablesObjectValue].
+	// [ConfigurationVariablesZarazWorkerVariableValue].
 	Value interface{}               `json:"value,required"`
 	JSON  configurationVariableJSON `json:"-"`
 	union ConfigurationVariablesUnion
@@ -1907,14 +1907,17 @@ func (r *ConfigurationVariable) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ConfigurationVariablesUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are [zaraz.ConfigurationVariablesObject],
-// [zaraz.ConfigurationVariablesObject].
+// Possible runtime types of the union are
+// [zaraz.ConfigurationVariablesZarazStringVariable],
+// [zaraz.ConfigurationVariablesZarazSecretVariable],
+// [zaraz.ConfigurationVariablesZarazWorkerVariable].
 func (r ConfigurationVariable) AsUnion() ConfigurationVariablesUnion {
 	return r.union
 }
 
-// Union satisfied by [zaraz.ConfigurationVariablesObject] or
-// [zaraz.ConfigurationVariablesObject].
+// Union satisfied by [zaraz.ConfigurationVariablesZarazStringVariable],
+// [zaraz.ConfigurationVariablesZarazSecretVariable] or
+// [zaraz.ConfigurationVariablesZarazWorkerVariable].
 type ConfigurationVariablesUnion interface {
 	implementsConfigurationVariable()
 }
@@ -1922,28 +1925,35 @@ type ConfigurationVariablesUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*ConfigurationVariablesUnion)(nil)).Elem(),
-		"",
+		"type",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConfigurationVariablesObject{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConfigurationVariablesZarazStringVariable{}),
+			DiscriminatorValue: "string",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConfigurationVariablesObject{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConfigurationVariablesZarazSecretVariable{}),
+			DiscriminatorValue: "secret",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConfigurationVariablesZarazWorkerVariable{}),
+			DiscriminatorValue: "worker",
 		},
 	)
 }
 
-type ConfigurationVariablesObject struct {
-	Name  string                           `json:"name,required"`
-	Type  ConfigurationVariablesObjectType `json:"type,required"`
-	Value string                           `json:"value,required"`
-	JSON  configurationVariablesObjectJSON `json:"-"`
+type ConfigurationVariablesZarazStringVariable struct {
+	Name  string                                        `json:"name,required"`
+	Type  ConfigurationVariablesZarazStringVariableType `json:"type,required"`
+	Value string                                        `json:"value,required"`
+	JSON  configurationVariablesZarazStringVariableJSON `json:"-"`
 }
 
-// configurationVariablesObjectJSON contains the JSON metadata for the struct
-// [ConfigurationVariablesObject]
-type configurationVariablesObjectJSON struct {
+// configurationVariablesZarazStringVariableJSON contains the JSON metadata for the
+// struct [ConfigurationVariablesZarazStringVariable]
+type configurationVariablesZarazStringVariableJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	Value       apijson.Field
@@ -1951,29 +1961,133 @@ type configurationVariablesObjectJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ConfigurationVariablesObject) UnmarshalJSON(data []byte) (err error) {
+func (r *ConfigurationVariablesZarazStringVariable) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r configurationVariablesObjectJSON) RawJSON() string {
+func (r configurationVariablesZarazStringVariableJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ConfigurationVariablesObject) implementsConfigurationVariable() {}
+func (r ConfigurationVariablesZarazStringVariable) implementsConfigurationVariable() {}
 
-type ConfigurationVariablesObjectType string
+type ConfigurationVariablesZarazStringVariableType string
 
 const (
-	ConfigurationVariablesObjectTypeString ConfigurationVariablesObjectType = "string"
-	ConfigurationVariablesObjectTypeSecret ConfigurationVariablesObjectType = "secret"
+	ConfigurationVariablesZarazStringVariableTypeString ConfigurationVariablesZarazStringVariableType = "string"
 )
 
-func (r ConfigurationVariablesObjectType) IsKnown() bool {
+func (r ConfigurationVariablesZarazStringVariableType) IsKnown() bool {
 	switch r {
-	case ConfigurationVariablesObjectTypeString, ConfigurationVariablesObjectTypeSecret:
+	case ConfigurationVariablesZarazStringVariableTypeString:
 		return true
 	}
 	return false
+}
+
+type ConfigurationVariablesZarazSecretVariable struct {
+	Name  string                                        `json:"name,required"`
+	Type  ConfigurationVariablesZarazSecretVariableType `json:"type,required"`
+	Value string                                        `json:"value,required"`
+	JSON  configurationVariablesZarazSecretVariableJSON `json:"-"`
+}
+
+// configurationVariablesZarazSecretVariableJSON contains the JSON metadata for the
+// struct [ConfigurationVariablesZarazSecretVariable]
+type configurationVariablesZarazSecretVariableJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigurationVariablesZarazSecretVariable) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configurationVariablesZarazSecretVariableJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConfigurationVariablesZarazSecretVariable) implementsConfigurationVariable() {}
+
+type ConfigurationVariablesZarazSecretVariableType string
+
+const (
+	ConfigurationVariablesZarazSecretVariableTypeSecret ConfigurationVariablesZarazSecretVariableType = "secret"
+)
+
+func (r ConfigurationVariablesZarazSecretVariableType) IsKnown() bool {
+	switch r {
+	case ConfigurationVariablesZarazSecretVariableTypeSecret:
+		return true
+	}
+	return false
+}
+
+type ConfigurationVariablesZarazWorkerVariable struct {
+	Name  string                                         `json:"name,required"`
+	Type  ConfigurationVariablesZarazWorkerVariableType  `json:"type,required"`
+	Value ConfigurationVariablesZarazWorkerVariableValue `json:"value,required"`
+	JSON  configurationVariablesZarazWorkerVariableJSON  `json:"-"`
+}
+
+// configurationVariablesZarazWorkerVariableJSON contains the JSON metadata for the
+// struct [ConfigurationVariablesZarazWorkerVariable]
+type configurationVariablesZarazWorkerVariableJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigurationVariablesZarazWorkerVariable) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configurationVariablesZarazWorkerVariableJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConfigurationVariablesZarazWorkerVariable) implementsConfigurationVariable() {}
+
+type ConfigurationVariablesZarazWorkerVariableType string
+
+const (
+	ConfigurationVariablesZarazWorkerVariableTypeWorker ConfigurationVariablesZarazWorkerVariableType = "worker"
+)
+
+func (r ConfigurationVariablesZarazWorkerVariableType) IsKnown() bool {
+	switch r {
+	case ConfigurationVariablesZarazWorkerVariableTypeWorker:
+		return true
+	}
+	return false
+}
+
+type ConfigurationVariablesZarazWorkerVariableValue struct {
+	EscapedWorkerName string                                             `json:"escapedWorkerName,required"`
+	WorkerTag         string                                             `json:"workerTag,required"`
+	JSON              configurationVariablesZarazWorkerVariableValueJSON `json:"-"`
+}
+
+// configurationVariablesZarazWorkerVariableValueJSON contains the JSON metadata
+// for the struct [ConfigurationVariablesZarazWorkerVariableValue]
+type configurationVariablesZarazWorkerVariableValueJSON struct {
+	EscapedWorkerName apijson.Field
+	WorkerTag         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ConfigurationVariablesZarazWorkerVariableValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configurationVariablesZarazWorkerVariableValueJSON) RawJSON() string {
+	return r.raw
 }
 
 type ConfigurationVariablesType string
@@ -3104,37 +3218,102 @@ func (r ConfigUpdateParamsVariables) MarshalJSON() (data []byte, err error) {
 
 func (r ConfigUpdateParamsVariables) implementsConfigUpdateParamsVariablesUnion() {}
 
-// Satisfied by [zaraz.ConfigUpdateParamsVariablesObject],
-// [zaraz.ConfigUpdateParamsVariablesObject], [ConfigUpdateParamsVariables].
+// Satisfied by [zaraz.ConfigUpdateParamsVariablesZarazStringVariable],
+// [zaraz.ConfigUpdateParamsVariablesZarazSecretVariable],
+// [zaraz.ConfigUpdateParamsVariablesZarazWorkerVariable],
+// [ConfigUpdateParamsVariables].
 type ConfigUpdateParamsVariablesUnion interface {
 	implementsConfigUpdateParamsVariablesUnion()
 }
 
-type ConfigUpdateParamsVariablesObject struct {
-	Name  param.Field[string]                                `json:"name,required"`
-	Type  param.Field[ConfigUpdateParamsVariablesObjectType] `json:"type,required"`
-	Value param.Field[string]                                `json:"value,required"`
+type ConfigUpdateParamsVariablesZarazStringVariable struct {
+	Name  param.Field[string]                                             `json:"name,required"`
+	Type  param.Field[ConfigUpdateParamsVariablesZarazStringVariableType] `json:"type,required"`
+	Value param.Field[string]                                             `json:"value,required"`
 }
 
-func (r ConfigUpdateParamsVariablesObject) MarshalJSON() (data []byte, err error) {
+func (r ConfigUpdateParamsVariablesZarazStringVariable) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigUpdateParamsVariablesObject) implementsConfigUpdateParamsVariablesUnion() {}
+func (r ConfigUpdateParamsVariablesZarazStringVariable) implementsConfigUpdateParamsVariablesUnion() {
+}
 
-type ConfigUpdateParamsVariablesObjectType string
+type ConfigUpdateParamsVariablesZarazStringVariableType string
 
 const (
-	ConfigUpdateParamsVariablesObjectTypeString ConfigUpdateParamsVariablesObjectType = "string"
-	ConfigUpdateParamsVariablesObjectTypeSecret ConfigUpdateParamsVariablesObjectType = "secret"
+	ConfigUpdateParamsVariablesZarazStringVariableTypeString ConfigUpdateParamsVariablesZarazStringVariableType = "string"
 )
 
-func (r ConfigUpdateParamsVariablesObjectType) IsKnown() bool {
+func (r ConfigUpdateParamsVariablesZarazStringVariableType) IsKnown() bool {
 	switch r {
-	case ConfigUpdateParamsVariablesObjectTypeString, ConfigUpdateParamsVariablesObjectTypeSecret:
+	case ConfigUpdateParamsVariablesZarazStringVariableTypeString:
 		return true
 	}
 	return false
+}
+
+type ConfigUpdateParamsVariablesZarazSecretVariable struct {
+	Name  param.Field[string]                                             `json:"name,required"`
+	Type  param.Field[ConfigUpdateParamsVariablesZarazSecretVariableType] `json:"type,required"`
+	Value param.Field[string]                                             `json:"value,required"`
+}
+
+func (r ConfigUpdateParamsVariablesZarazSecretVariable) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigUpdateParamsVariablesZarazSecretVariable) implementsConfigUpdateParamsVariablesUnion() {
+}
+
+type ConfigUpdateParamsVariablesZarazSecretVariableType string
+
+const (
+	ConfigUpdateParamsVariablesZarazSecretVariableTypeSecret ConfigUpdateParamsVariablesZarazSecretVariableType = "secret"
+)
+
+func (r ConfigUpdateParamsVariablesZarazSecretVariableType) IsKnown() bool {
+	switch r {
+	case ConfigUpdateParamsVariablesZarazSecretVariableTypeSecret:
+		return true
+	}
+	return false
+}
+
+type ConfigUpdateParamsVariablesZarazWorkerVariable struct {
+	Name  param.Field[string]                                              `json:"name,required"`
+	Type  param.Field[ConfigUpdateParamsVariablesZarazWorkerVariableType]  `json:"type,required"`
+	Value param.Field[ConfigUpdateParamsVariablesZarazWorkerVariableValue] `json:"value,required"`
+}
+
+func (r ConfigUpdateParamsVariablesZarazWorkerVariable) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigUpdateParamsVariablesZarazWorkerVariable) implementsConfigUpdateParamsVariablesUnion() {
+}
+
+type ConfigUpdateParamsVariablesZarazWorkerVariableType string
+
+const (
+	ConfigUpdateParamsVariablesZarazWorkerVariableTypeWorker ConfigUpdateParamsVariablesZarazWorkerVariableType = "worker"
+)
+
+func (r ConfigUpdateParamsVariablesZarazWorkerVariableType) IsKnown() bool {
+	switch r {
+	case ConfigUpdateParamsVariablesZarazWorkerVariableTypeWorker:
+		return true
+	}
+	return false
+}
+
+type ConfigUpdateParamsVariablesZarazWorkerVariableValue struct {
+	EscapedWorkerName param.Field[string] `json:"escapedWorkerName,required"`
+	WorkerTag         param.Field[string] `json:"workerTag,required"`
+}
+
+func (r ConfigUpdateParamsVariablesZarazWorkerVariableValue) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ConfigUpdateParamsVariablesType string

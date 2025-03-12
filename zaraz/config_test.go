@@ -104,9 +104,9 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 			},
 		}),
 		Variables: cloudflare.F(map[string]zaraz.ConfigUpdateParamsVariablesUnion{
-			"foo": zaraz.ConfigUpdateParamsVariablesObject{
+			"foo": zaraz.ConfigUpdateParamsVariablesZarazStringVariable{
 				Name:  cloudflare.F("name"),
-				Type:  cloudflare.F(zaraz.ConfigUpdateParamsVariablesObjectTypeString),
+				Type:  cloudflare.F(zaraz.ConfigUpdateParamsVariablesZarazStringVariableTypeString),
 				Value: cloudflare.F("value"),
 			},
 		}),
