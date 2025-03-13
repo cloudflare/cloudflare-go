@@ -33,6 +33,23 @@ func NewThreatEventEventTagService(opts ...option.RequestOption) (r *ThreatEvent
 	return
 }
 
+// Adds a tag to an event
+func (r *ThreatEventEventTagService) New(ctx context.Context, eventID string, params ThreatEventEventTagNewParams, opts ...option.RequestOption) (res *ThreatEventEventTagNewResponse, err error) {
+	var env ThreatEventEventTagNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if eventID == "" {
+		err = errors.New("missing required event_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/event_tag/%s/create", params.AccountID, eventID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Removes a tag from an event
 func (r *ThreatEventEventTagService) Delete(ctx context.Context, eventID string, body ThreatEventEventTagDeleteParams, opts ...option.RequestOption) (res *ThreatEventEventTagDeleteResponse, err error) {
 	var env ThreatEventEventTagDeleteResponseEnvelope
@@ -48,6 +65,27 @@ func (r *ThreatEventEventTagService) Delete(ctx context.Context, eventID string,
 	}
 	res = &env.Result
 	return
+}
+
+type ThreatEventEventTagNewResponse struct {
+	Success bool                               `json:"success,required"`
+	JSON    threatEventEventTagNewResponseJSON `json:"-"`
+}
+
+// threatEventEventTagNewResponseJSON contains the JSON metadata for the struct
+// [ThreatEventEventTagNewResponse]
+type threatEventEventTagNewResponseJSON struct {
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventEventTagNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventEventTagNewResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ThreatEventEventTagDeleteResponse struct {
@@ -68,6 +106,39 @@ func (r *ThreatEventEventTagDeleteResponse) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r threatEventEventTagDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventEventTagNewParams struct {
+	// Account ID
+	AccountID param.Field[float64]  `path:"account_id,required"`
+	Tags      param.Field[[]string] `json:"tags,required"`
+}
+
+func (r ThreatEventEventTagNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ThreatEventEventTagNewResponseEnvelope struct {
+	Result  ThreatEventEventTagNewResponse             `json:"result,required"`
+	Success bool                                       `json:"success,required"`
+	JSON    threatEventEventTagNewResponseEnvelopeJSON `json:"-"`
+}
+
+// threatEventEventTagNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ThreatEventEventTagNewResponseEnvelope]
+type threatEventEventTagNewResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventEventTagNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventEventTagNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 

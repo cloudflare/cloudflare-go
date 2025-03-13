@@ -7881,11 +7881,23 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventEventTagNewResponse">ThreatEventEventTagNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventEventTagDeleteResponse">ThreatEventEventTagDeleteResponse</a>
 
 Methods:
 
+- <code title="post /accounts/{account_id}/cloudforce-one/events/event_tag/{event_id}/create">client.CloudforceOne.ThreatEvents.EventTags.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventEventTagService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, eventID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventEventTagNewParams">ThreatEventEventTagNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventEventTagNewResponse">ThreatEventEventTagNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="delete /accounts/{account_id}/cloudforce-one/events/event_tag/{event_id}">client.CloudforceOne.ThreatEvents.EventTags.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventEventTagService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, eventID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventEventTagDeleteParams">ThreatEventEventTagDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventEventTagDeleteResponse">ThreatEventEventTagDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### Tags
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventTagNewResponse">ThreatEventTagNewResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/cloudforce-one/events/tags/create">client.CloudforceOne.ThreatEvents.Tags.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventTagService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventTagNewParams">ThreatEventTagNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ThreatEventTagNewResponse">ThreatEventTagNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### TargetIndustries
 
