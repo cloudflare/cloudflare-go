@@ -35,7 +35,7 @@ func NewDispatchNamespaceScriptSecretService(opts ...option.RequestOption) (r *D
 	return
 }
 
-// Put secrets to a script uploaded to a Workers for Platforms namespace.
+// Add a secret to a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSecretUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretUpdateResponse, err error) {
 	var env DispatchNamespaceScriptSecretUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +60,7 @@ func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispa
 	return
 }
 
-// List secrets from a script uploaded to a Workers for Platforms namespace.
+// List secrets bound to a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) List(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSecretListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DispatchNamespaceScriptSecretListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -90,12 +90,13 @@ func (r *DispatchNamespaceScriptSecretService) List(ctx context.Context, dispatc
 	return res, nil
 }
 
-// List secrets from a script uploaded to a Workers for Platforms namespace.
+// List secrets bound to a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) ListAutoPaging(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSecretListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DispatchNamespaceScriptSecretListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, dispatchNamespace, scriptName, query, opts...))
 }
 
-// Get secret from a script uploaded to a Workers for Platforms namespace.
+// Get a given secret binding (value omitted) on a script uploaded to a Workers for
+// Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, query DispatchNamespaceScriptSecretGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretGetResponse, err error) {
 	var env DispatchNamespaceScriptSecretGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
