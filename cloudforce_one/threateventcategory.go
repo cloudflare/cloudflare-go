@@ -36,6 +36,10 @@ func NewThreatEventCategoryService(opts ...option.RequestOption) (r *ThreatEvent
 // Creates a new category
 func (r *ThreatEventCategoryService) New(ctx context.Context, params ThreatEventCategoryNewParams, opts ...option.RequestOption) (res *ThreatEventCategoryNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !params.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/categories/create", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
@@ -44,6 +48,10 @@ func (r *ThreatEventCategoryService) New(ctx context.Context, params ThreatEvent
 // Lists categories
 func (r *ThreatEventCategoryService) List(ctx context.Context, query ThreatEventCategoryListParams, opts ...option.RequestOption) (res *[]ThreatEventCategoryListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !query.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/categories", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
@@ -52,6 +60,10 @@ func (r *ThreatEventCategoryService) List(ctx context.Context, query ThreatEvent
 // Deletes a category
 func (r *ThreatEventCategoryService) Delete(ctx context.Context, categoryID string, body ThreatEventCategoryDeleteParams, opts ...option.RequestOption) (res *ThreatEventCategoryDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !body.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if categoryID == "" {
 		err = errors.New("missing required category_id parameter")
 		return
@@ -64,6 +76,10 @@ func (r *ThreatEventCategoryService) Delete(ctx context.Context, categoryID stri
 // Updates a category
 func (r *ThreatEventCategoryService) Edit(ctx context.Context, categoryID string, params ThreatEventCategoryEditParams, opts ...option.RequestOption) (res *ThreatEventCategoryEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !params.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if categoryID == "" {
 		err = errors.New("missing required category_id parameter")
 		return
@@ -76,6 +92,10 @@ func (r *ThreatEventCategoryService) Edit(ctx context.Context, categoryID string
 // Reads a category
 func (r *ThreatEventCategoryService) Get(ctx context.Context, categoryID string, query ThreatEventCategoryGetParams, opts ...option.RequestOption) (res *ThreatEventCategoryGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !query.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if categoryID == "" {
 		err = errors.New("missing required category_id parameter")
 		return

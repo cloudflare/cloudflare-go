@@ -36,6 +36,10 @@ func NewThreatEventDatasetService(opts ...option.RequestOption) (r *ThreatEventD
 // Creates a dataset
 func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventDatasetNewParams, opts ...option.RequestOption) (res *ThreatEventDatasetNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !params.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/dataset/create", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
@@ -44,6 +48,10 @@ func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventD
 // Lists all datasets in an account
 func (r *ThreatEventDatasetService) List(ctx context.Context, query ThreatEventDatasetListParams, opts ...option.RequestOption) (res *[]ThreatEventDatasetListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !query.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/dataset", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
@@ -52,6 +60,10 @@ func (r *ThreatEventDatasetService) List(ctx context.Context, query ThreatEventD
 // Updates an existing dataset
 func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, params ThreatEventDatasetEditParams, opts ...option.RequestOption) (res *ThreatEventDatasetEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !params.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if datasetID == "" {
 		err = errors.New("missing required dataset_id parameter")
 		return
@@ -64,6 +76,10 @@ func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, 
 // Reads a dataset
 func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, query ThreatEventDatasetGetParams, opts ...option.RequestOption) (res *ThreatEventDatasetGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !query.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if datasetID == "" {
 		err = errors.New("missing required dataset_id parameter")
 		return
@@ -76,6 +92,10 @@ func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, q
 // Reads data for a raw event
 func (r *ThreatEventDatasetService) Raw(ctx context.Context, datasetID string, eventID string, query ThreatEventDatasetRawParams, opts ...option.RequestOption) (res *ThreatEventDatasetRawResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !query.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if datasetID == "" {
 		err = errors.New("missing required dataset_id parameter")
 		return
