@@ -32,6 +32,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/custom_certificates"
 	"github.com/cloudflare/cloudflare-go/v4/custom_hostnames"
 	"github.com/cloudflare/cloudflare-go/v4/custom_nameservers"
+	"github.com/cloudflare/cloudflare-go/v4/custom_pages"
 	"github.com/cloudflare/cloudflare-go/v4/d1"
 	"github.com/cloudflare/cloudflare-go/v4/dcv_delegation"
 	"github.com/cloudflare/cloudflare-go/v4/diagnostics"
@@ -204,6 +205,7 @@ type Client struct {
 	AI                          *ai.AIService
 	SecurityCenter              *security_center.SecurityCenterService
 	BrowserRendering            *browser_rendering.BrowserRenderingService
+	CustomPages                 *custom_pages.CustomPageService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -319,6 +321,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.AI = ai.NewAIService(opts...)
 	r.SecurityCenter = security_center.NewSecurityCenterService(opts...)
 	r.BrowserRendering = browser_rendering.NewBrowserRenderingService(opts...)
+	r.CustomPages = custom_pages.NewCustomPageService(opts...)
 
 	return
 }
