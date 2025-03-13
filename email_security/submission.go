@@ -68,7 +68,6 @@ type SubmissionListResponse struct {
 	RequestedTs          time.Time                                  `json:"requested_ts,required" format:"date-time"`
 	SubmissionID         string                                     `json:"submission_id,required"`
 	OriginalDisposition  SubmissionListResponseOriginalDisposition  `json:"original_disposition,nullable"`
-	OriginalEdfHash      string                                     `json:"original_edf_hash,nullable"`
 	Outcome              string                                     `json:"outcome,nullable"`
 	OutcomeDisposition   SubmissionListResponseOutcomeDisposition   `json:"outcome_disposition,nullable"`
 	RequestedBy          string                                     `json:"requested_by,nullable"`
@@ -85,7 +84,6 @@ type submissionListResponseJSON struct {
 	RequestedTs          apijson.Field
 	SubmissionID         apijson.Field
 	OriginalDisposition  apijson.Field
-	OriginalEdfHash      apijson.Field
 	Outcome              apijson.Field
 	OutcomeDisposition   apijson.Field
 	RequestedBy          apijson.Field

@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/cloudforce_one"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 func TestThreatEventNewWithOptionalParams(t *testing.T) {
@@ -30,17 +29,25 @@ func TestThreatEventNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.New(context.TODO(), cloudforce_one.ThreatEventNewParams{
-		AccountID: cloudflare.F(0.000000),
-		DatasetID: cloudflare.F([]string{"7632a037-fdef-4899-9b12-148470aae772"}),
-		Order:     cloudflare.F(cloudforce_one.ThreatEventNewParamsOrderAsc),
-		OrderBy:   cloudflare.F("created"),
-		Page:      cloudflare.F(1.000000),
-		PageSize:  cloudflare.F(100.000000),
-		Search: cloudflare.F([]cloudforce_one.ThreatEventNewParamsSearch{{
-			Field: cloudflare.F("attackerCountry"),
-			Op:    cloudflare.F("equals"),
-			Value: cloudflare.F[cloudforce_one.ThreatEventNewParamsSearchValueUnion](shared.UnionString("usa")),
-		}}),
+		PathAccountID:   cloudflare.F(0.000000),
+		Attacker:        cloudflare.F("Flying Yeti"),
+		AttackerCountry: cloudflare.F("CN"),
+		Category:        cloudflare.F("Domain Resolution"),
+		Date:            cloudflare.F(time.Now()),
+		Event:           cloudflare.F("An attacker registered the domain domain.com"),
+		IndicatorType:   cloudflare.F("domain"),
+		Raw: cloudflare.F(cloudforce_one.ThreatEventNewParamsRaw{
+			Data:   cloudflare.F[any](map[string]interface{}{}),
+			Source: cloudflare.F("example.com"),
+			TLP:    cloudflare.F("amber"),
+		}),
+		TLP:            cloudflare.F("amber"),
+		BodyAccountID:  cloudflare.F(123456.000000),
+		DatasetID:      cloudflare.F("durableObjectName"),
+		Indicator:      cloudflare.F("domain.com"),
+		Tags:           cloudflare.F([]string{"malware"}),
+		TargetCountry:  cloudflare.F("US"),
+		TargetIndustry: cloudflare.F("Agriculture"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

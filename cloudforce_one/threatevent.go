@@ -58,14 +58,14 @@ func NewThreatEventService(opts ...option.RequestOption) (r *ThreatEventService)
 	return
 }
 
-// Filter and list events
-func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParams, opts ...option.RequestOption) (res *[]ThreatEventNewResponse, err error) {
+// Creates a new event
+func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParams, opts ...option.RequestOption) (res *ThreatEventNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
+	if !params.PathAccountID.Present {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events", params.AccountID)
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/create", params.PathAccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
@@ -445,57 +445,35 @@ func (r threatEventGetResponseJSON) RawJSON() string {
 
 type ThreatEventNewParams struct {
 	// Account ID
-	AccountID param.Field[float64]                      `path:"account_id,required"`
-	DatasetID param.Field[[]string]                     `json:"datasetId"`
-	Order     param.Field[ThreatEventNewParamsOrder]    `json:"order"`
-	OrderBy   param.Field[string]                       `json:"orderBy"`
-	Page      param.Field[float64]                      `json:"page"`
-	PageSize  param.Field[float64]                      `json:"pageSize"`
-	Search    param.Field[[]ThreatEventNewParamsSearch] `json:"search"`
+	PathAccountID   param.Field[float64]                 `path:"account_id,required"`
+	Attacker        param.Field[string]                  `json:"attacker,required"`
+	AttackerCountry param.Field[string]                  `json:"attackerCountry,required"`
+	Category        param.Field[string]                  `json:"category,required"`
+	Date            param.Field[time.Time]               `json:"date,required" format:"date-time"`
+	Event           param.Field[string]                  `json:"event,required"`
+	IndicatorType   param.Field[string]                  `json:"indicatorType,required"`
+	Raw             param.Field[ThreatEventNewParamsRaw] `json:"raw,required"`
+	TLP             param.Field[string]                  `json:"tlp,required"`
+	BodyAccountID   param.Field[float64]                 `json:"accountId"`
+	DatasetID       param.Field[string]                  `json:"datasetId"`
+	Indicator       param.Field[string]                  `json:"indicator"`
+	Tags            param.Field[[]string]                `json:"tags"`
+	TargetCountry   param.Field[string]                  `json:"targetCountry"`
+	TargetIndustry  param.Field[string]                  `json:"targetIndustry"`
 }
 
 func (r ThreatEventNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ThreatEventNewParamsOrder string
-
-const (
-	ThreatEventNewParamsOrderAsc  ThreatEventNewParamsOrder = "asc"
-	ThreatEventNewParamsOrderDesc ThreatEventNewParamsOrder = "desc"
-)
-
-func (r ThreatEventNewParamsOrder) IsKnown() bool {
-	switch r {
-	case ThreatEventNewParamsOrderAsc, ThreatEventNewParamsOrderDesc:
-		return true
-	}
-	return false
+type ThreatEventNewParamsRaw struct {
+	Data   param.Field[interface{}] `json:"data"`
+	Source param.Field[string]      `json:"source"`
+	TLP    param.Field[string]      `json:"tlp"`
 }
 
-type ThreatEventNewParamsSearch struct {
-	Field param.Field[string]                               `json:"field"`
-	Op    param.Field[string]                               `json:"op"`
-	Value param.Field[ThreatEventNewParamsSearchValueUnion] `json:"value"`
-}
-
-func (r ThreatEventNewParamsSearch) MarshalJSON() (data []byte, err error) {
+func (r ThreatEventNewParamsRaw) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Satisfied by [shared.UnionString], [shared.UnionFloat],
-// [cloudforce_one.ThreatEventNewParamsSearchValueArray].
-type ThreatEventNewParamsSearchValueUnion interface {
-	ImplementsThreatEventNewParamsSearchValueUnion()
-}
-
-type ThreatEventNewParamsSearchValueArray []ThreatEventNewParamsSearchValueArrayItemUnion
-
-func (r ThreatEventNewParamsSearchValueArray) ImplementsThreatEventNewParamsSearchValueUnion() {}
-
-// Satisfied by [shared.UnionString], [shared.UnionFloat].
-type ThreatEventNewParamsSearchValueArrayItemUnion interface {
-	ImplementsThreatEventNewParamsSearchValueArrayItemUnion()
 }
 
 type ThreatEventDeleteParams struct {
