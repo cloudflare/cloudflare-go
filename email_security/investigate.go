@@ -550,12 +550,11 @@ const (
 	InvestigateListParamsFinalDispositionSpoof      InvestigateListParamsFinalDisposition = "SPOOF"
 	InvestigateListParamsFinalDispositionSpam       InvestigateListParamsFinalDisposition = "SPAM"
 	InvestigateListParamsFinalDispositionBulk       InvestigateListParamsFinalDisposition = "BULK"
-	InvestigateListParamsFinalDispositionNone       InvestigateListParamsFinalDisposition = "NONE"
 )
 
 func (r InvestigateListParamsFinalDisposition) IsKnown() bool {
 	switch r {
-	case InvestigateListParamsFinalDispositionMalicious, InvestigateListParamsFinalDispositionSuspicious, InvestigateListParamsFinalDispositionSpoof, InvestigateListParamsFinalDispositionSpam, InvestigateListParamsFinalDispositionBulk, InvestigateListParamsFinalDispositionNone:
+	case InvestigateListParamsFinalDispositionMalicious, InvestigateListParamsFinalDispositionSuspicious, InvestigateListParamsFinalDispositionSpoof, InvestigateListParamsFinalDispositionSpam, InvestigateListParamsFinalDispositionBulk:
 		return true
 	}
 	return false
