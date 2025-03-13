@@ -36,6 +36,10 @@ func NewThreatEventRawService(opts ...option.RequestOption) (r *ThreatEventRawSe
 // Updates a raw event
 func (r *ThreatEventRawService) Edit(ctx context.Context, eventID string, rawID string, params ThreatEventRawEditParams, opts ...option.RequestOption) (res *ThreatEventRawEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !params.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
 		return
@@ -52,6 +56,10 @@ func (r *ThreatEventRawService) Edit(ctx context.Context, eventID string, rawID 
 // Reads data for a raw event
 func (r *ThreatEventRawService) Get(ctx context.Context, eventID string, rawID string, query ThreatEventRawGetParams, opts ...option.RequestOption) (res *ThreatEventRawGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !query.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
 		return

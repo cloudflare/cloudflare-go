@@ -4,6 +4,7 @@ package cloudforce_one
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -35,6 +36,10 @@ func NewThreatEventTargetIndustryService(opts ...option.RequestOption) (r *Threa
 // Lists all target industries
 func (r *ThreatEventTargetIndustryService) List(ctx context.Context, query ThreatEventTargetIndustryListParams, opts ...option.RequestOption) (res *ThreatEventTargetIndustryListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !query.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/targetIndustries", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
