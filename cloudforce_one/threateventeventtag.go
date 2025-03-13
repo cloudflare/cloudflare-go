@@ -37,6 +37,10 @@ func NewThreatEventEventTagService(opts ...option.RequestOption) (r *ThreatEvent
 func (r *ThreatEventEventTagService) New(ctx context.Context, eventID string, params ThreatEventEventTagNewParams, opts ...option.RequestOption) (res *ThreatEventEventTagNewResponse, err error) {
 	var env ThreatEventEventTagNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
+	if !params.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
 		return
@@ -54,6 +58,10 @@ func (r *ThreatEventEventTagService) New(ctx context.Context, eventID string, pa
 func (r *ThreatEventEventTagService) Delete(ctx context.Context, eventID string, body ThreatEventEventTagDeleteParams, opts ...option.RequestOption) (res *ThreatEventEventTagDeleteResponse, err error) {
 	var env ThreatEventEventTagDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
+	if !body.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
 		return

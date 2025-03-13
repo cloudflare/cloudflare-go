@@ -4,6 +4,7 @@ package cloudforce_one
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -35,6 +36,10 @@ func NewThreatEventIndicatorTypeService(opts ...option.RequestOption) (r *Threat
 // Lists all indicator types
 func (r *ThreatEventIndicatorTypeService) List(ctx context.Context, query ThreatEventIndicatorTypeListParams, opts ...option.RequestOption) (res *ThreatEventIndicatorTypeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	if !query.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/indicatorTypes", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

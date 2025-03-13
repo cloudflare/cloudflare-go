@@ -39,6 +39,10 @@ func NewConnectorSnapshotService(opts ...option.RequestOption) (r *ConnectorSnap
 func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string, params ConnectorSnapshotListParams, opts ...option.RequestOption) (res *ConnectorSnapshotListResponse, err error) {
 	var env ConnectorSnapshotListResponseEnvelope
 	opts = append(r.Options[:], opts...)
+	if !params.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if connectorID == "" {
 		err = errors.New("missing required connector_id parameter")
 		return
@@ -56,6 +60,10 @@ func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string,
 func (r *ConnectorSnapshotService) Get(ctx context.Context, connectorID string, snapshotT float64, query ConnectorSnapshotGetParams, opts ...option.RequestOption) (res *ConnectorSnapshotGetResponse, err error) {
 	var env ConnectorSnapshotGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
+	if !query.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if connectorID == "" {
 		err = errors.New("missing required connector_id parameter")
 		return

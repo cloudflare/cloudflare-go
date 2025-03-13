@@ -37,6 +37,10 @@ func NewThreatEventInsightService(opts ...option.RequestOption) (r *ThreatEventI
 func (r *ThreatEventInsightService) Delete(ctx context.Context, eventID string, insightID string, body ThreatEventInsightDeleteParams, opts ...option.RequestOption) (res *ThreatEventInsightDeleteResponse, err error) {
 	var env ThreatEventInsightDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
+	if !body.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
 		return
@@ -58,6 +62,10 @@ func (r *ThreatEventInsightService) Delete(ctx context.Context, eventID string, 
 func (r *ThreatEventInsightService) Creat(ctx context.Context, eventID string, params ThreatEventInsightCreatParams, opts ...option.RequestOption) (res *ThreatEventInsightCreatResponse, err error) {
 	var env ThreatEventInsightCreatResponseEnvelope
 	opts = append(r.Options[:], opts...)
+	if !params.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
 		return
@@ -75,6 +83,10 @@ func (r *ThreatEventInsightService) Creat(ctx context.Context, eventID string, p
 func (r *ThreatEventInsightService) Edit(ctx context.Context, eventID string, insightID string, params ThreatEventInsightEditParams, opts ...option.RequestOption) (res *ThreatEventInsightEditResponse, err error) {
 	var env ThreatEventInsightEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
+	if !params.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
 		return
@@ -96,6 +108,10 @@ func (r *ThreatEventInsightService) Edit(ctx context.Context, eventID string, in
 func (r *ThreatEventInsightService) Get(ctx context.Context, eventID string, insightID string, query ThreatEventInsightGetParams, opts ...option.RequestOption) (res *ThreatEventInsightGetResponse, err error) {
 	var env ThreatEventInsightGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
+	if !query.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
 		return

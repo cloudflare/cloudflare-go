@@ -37,6 +37,10 @@ func NewThreatEventRelateService(opts ...option.RequestOption) (r *ThreatEventRe
 func (r *ThreatEventRelateService) Delete(ctx context.Context, eventID string, body ThreatEventRelateDeleteParams, opts ...option.RequestOption) (res *ThreatEventRelateDeleteResponse, err error) {
 	var env ThreatEventRelateDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
+	if !body.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
 		return
