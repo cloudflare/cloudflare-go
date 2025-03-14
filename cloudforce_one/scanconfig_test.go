@@ -29,7 +29,7 @@ func TestScanConfigNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Scans.Config.New(context.TODO(), cloudforce_one.ScanConfigNewParams{
 		AccountID: cloudflare.F("account_id"),
-		IPs:       cloudflare.F([]string{"1.1.1.1"}),
+		IPs:       cloudflare.F([]string{"1.1.1.1", "2606:4700:4700::1111"}),
 		Frequency: cloudflare.F(7.000000),
 		Ports:     cloudflare.F([]string{"default"}),
 	})
@@ -115,7 +115,7 @@ func TestScanConfigEditWithOptionalParams(t *testing.T) {
 		cloudforce_one.ScanConfigEditParams{
 			AccountID: cloudflare.F("account_id"),
 			Frequency: cloudflare.F(7.000000),
-			IPs:       cloudflare.F([]string{"1.1.1.1"}),
+			IPs:       cloudflare.F([]string{"1.1.1.1", "2606:4700:4700::1111"}),
 			Ports:     cloudflare.F([]string{"default"}),
 		},
 	)

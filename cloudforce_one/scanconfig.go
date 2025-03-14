@@ -122,12 +122,19 @@ func (r *ScanConfigService) Edit(ctx context.Context, configID string, params Sc
 }
 
 type ScanConfigNewResponse struct {
-	ID        string                    `json:"id,required"`
-	AccountID string                    `json:"account_id,required"`
-	Frequency float64                   `json:"frequency,required"`
-	IPs       []string                  `json:"ips,required"`
-	Ports     []string                  `json:"ports,required"`
-	JSON      scanConfigNewResponseJSON `json:"-"`
+	// Config ID
+	ID        string `json:"id,required"`
+	AccountID string `json:"account_id,required"`
+	// The number of days between each scan (0 = no recurring scans).
+	Frequency float64 `json:"frequency,required"`
+	// A list of IP addresses or CIDR blocks to scan. The maximum number of total IP
+	// addresses allowed is 5000.
+	IPs []string `json:"ips,required"`
+	// A list of ports to scan. Allowed values:"default", "all", or a comma-separated
+	// list of ports or range of ports (e.g. ["1-80", "443"]). Default will scan the
+	// 100 most commonly open ports.
+	Ports []string                  `json:"ports,required"`
+	JSON  scanConfigNewResponseJSON `json:"-"`
 }
 
 // scanConfigNewResponseJSON contains the JSON metadata for the struct
@@ -151,12 +158,19 @@ func (r scanConfigNewResponseJSON) RawJSON() string {
 }
 
 type ScanConfigListResponse struct {
-	ID        string                     `json:"id,required"`
-	AccountID string                     `json:"account_id,required"`
-	Frequency float64                    `json:"frequency,required"`
-	IPs       []string                   `json:"ips,required"`
-	Ports     []string                   `json:"ports,required"`
-	JSON      scanConfigListResponseJSON `json:"-"`
+	// Config ID
+	ID        string `json:"id,required"`
+	AccountID string `json:"account_id,required"`
+	// The number of days between each scan (0 = no recurring scans).
+	Frequency float64 `json:"frequency,required"`
+	// A list of IP addresses or CIDR blocks to scan. The maximum number of total IP
+	// addresses allowed is 5000.
+	IPs []string `json:"ips,required"`
+	// A list of ports to scan. Allowed values:"default", "all", or a comma-separated
+	// list of ports or range of ports (e.g. ["1-80", "443"]). Default will scan the
+	// 100 most commonly open ports.
+	Ports []string                   `json:"ports,required"`
+	JSON  scanConfigListResponseJSON `json:"-"`
 }
 
 // scanConfigListResponseJSON contains the JSON metadata for the struct
@@ -182,12 +196,19 @@ func (r scanConfigListResponseJSON) RawJSON() string {
 type ScanConfigDeleteResponse = interface{}
 
 type ScanConfigEditResponse struct {
-	ID        string                     `json:"id,required"`
-	AccountID string                     `json:"account_id,required"`
-	Frequency float64                    `json:"frequency,required"`
-	IPs       []string                   `json:"ips,required"`
-	Ports     []string                   `json:"ports,required"`
-	JSON      scanConfigEditResponseJSON `json:"-"`
+	// Config ID
+	ID        string `json:"id,required"`
+	AccountID string `json:"account_id,required"`
+	// The number of days between each scan (0 = no recurring scans).
+	Frequency float64 `json:"frequency,required"`
+	// A list of IP addresses or CIDR blocks to scan. The maximum number of total IP
+	// addresses allowed is 5000.
+	IPs []string `json:"ips,required"`
+	// A list of ports to scan. Allowed values:"default", "all", or a comma-separated
+	// list of ports or range of ports (e.g. ["1-80", "443"]). Default will scan the
+	// 100 most commonly open ports.
+	Ports []string                   `json:"ports,required"`
+	JSON  scanConfigEditResponseJSON `json:"-"`
 }
 
 // scanConfigEditResponseJSON contains the JSON metadata for the struct
