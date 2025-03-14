@@ -95,13 +95,15 @@ type DevicePolicyDefaultEditResponse struct {
 	// option is set to `true`.
 	DisableAutoFallback bool `json:"disable_auto_fallback"`
 	// Whether the policy will be applied to matching devices.
-	Enabled bool                 `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// List of routes excluded in the WARP client's tunnel.
 	Exclude []SplitTunnelExclude `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs bool                 `json:"exclude_office_ips"`
-	FallbackDomains  []FallbackDomain     `json:"fallback_domains"`
-	GatewayUniqueID  string               `json:"gateway_unique_id"`
-	Include          []SplitTunnelInclude `json:"include"`
+	ExcludeOfficeIPs bool             `json:"exclude_office_ips"`
+	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
+	GatewayUniqueID  string           `json:"gateway_unique_id"`
+	// List of routes included in the WARP client's tunnel.
+	Include []SplitTunnelInclude `json:"include"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool                                         `json:"register_interface_ip_with_dns"`
@@ -192,13 +194,15 @@ type DevicePolicyDefaultGetResponse struct {
 	// option is set to `true`.
 	DisableAutoFallback bool `json:"disable_auto_fallback"`
 	// Whether the policy will be applied to matching devices.
-	Enabled bool                 `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// List of routes excluded in the WARP client's tunnel.
 	Exclude []SplitTunnelExclude `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs bool                 `json:"exclude_office_ips"`
-	FallbackDomains  []FallbackDomain     `json:"fallback_domains"`
-	GatewayUniqueID  string               `json:"gateway_unique_id"`
-	Include          []SplitTunnelInclude `json:"include"`
+	ExcludeOfficeIPs bool             `json:"exclude_office_ips"`
+	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
+	GatewayUniqueID  string           `json:"gateway_unique_id"`
+	// List of routes included in the WARP client's tunnel.
+	Include []SplitTunnelInclude `json:"include"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool                                        `json:"register_interface_ip_with_dns"`
@@ -287,8 +291,14 @@ type DevicePolicyDefaultEditParams struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
+	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
+	// 'include' cannot be set in the same request.
+	Exclude param.Field[[]SplitTunnelExcludeParam] `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
 	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
+	// List of routes included in the WARP client's tunnel. Both 'exclude' and
+	// 'include' cannot be set in the same request.
+	Include param.Field[[]SplitTunnelExcludeParam] `json:"include"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS param.Field[bool]                                       `json:"register_interface_ip_with_dns"`
