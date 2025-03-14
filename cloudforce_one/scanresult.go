@@ -3,6 +3,14 @@
 package cloudforce_one
 
 import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
@@ -23,4 +31,103 @@ func NewScanResultService(opts ...option.RequestOption) (r *ScanResultService) {
 	r = &ScanResultService{}
 	r.Options = opts
 	return
+}
+
+// Get the Latest Scan Result
+func (r *ScanResultService) Get(ctx context.Context, configID string, query ScanResultGetParams, opts ...option.RequestOption) (res *ScanResultGetResponse, err error) {
+	var env ScanResultGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if configID == "" {
+		err = errors.New("missing required config_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/scans/results/%s", query.AccountID, configID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type ScanResultGetResponse struct {
+	OneOneOneOne []ScanResultGetResponse1_1_1_1 `json:"1.1.1.1,required"`
+	JSON         scanResultGetResponseJSON      `json:"-"`
+}
+
+// scanResultGetResponseJSON contains the JSON metadata for the struct
+// [ScanResultGetResponse]
+type scanResultGetResponseJSON struct {
+	OneOneOneOne apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ScanResultGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanResultGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanResultGetResponse1_1_1_1 struct {
+	Number float64                          `json:"number"`
+	Proto  string                           `json:"proto"`
+	Status string                           `json:"status"`
+	JSON   scanResultGetResponse1_1_1_1JSON `json:"-"`
+}
+
+// scanResultGetResponse1_1_1_1JSON contains the JSON metadata for the struct
+// [ScanResultGetResponse1_1_1_1]
+type scanResultGetResponse1_1_1_1JSON struct {
+	Number      apijson.Field
+	Proto       apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanResultGetResponse1_1_1_1) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanResultGetResponse1_1_1_1JSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanResultGetParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ScanResultGetResponseEnvelope struct {
+	Errors   []string                          `json:"errors,required"`
+	Messages []string                          `json:"messages,required"`
+	Result   ScanResultGetResponse             `json:"result,required"`
+	Success  bool                              `json:"success,required"`
+	JSON     scanResultGetResponseEnvelopeJSON `json:"-"`
+}
+
+// scanResultGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ScanResultGetResponseEnvelope]
+type scanResultGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanResultGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanResultGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
