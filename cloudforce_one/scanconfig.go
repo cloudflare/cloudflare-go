@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
@@ -52,52 +53,49 @@ func (r *ScanConfigService) New(ctx context.Context, params ScanConfigNewParams,
 }
 
 // Get the Scan Config for An Account
-func (r *ScanConfigService) List(ctx context.Context, query ScanConfigListParams, opts ...option.RequestOption) (res *ScanConfigListResponse, err error) {
-	var env ScanConfigListResponseEnvelope
+func (r *ScanConfigService) List(ctx context.Context, query ScanConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ScanConfigListResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/scans/config", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-// Delete the Scan Config for an Account
-func (r *ScanConfigService) Delete(ctx context.Context, body ScanConfigDeleteParams, opts ...option.RequestOption) (res *ScanConfigDeleteResponse, err error) {
-	var env ScanConfigDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if body.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/scans/config", body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// Get the Scan Config for An Account
+func (r *ScanConfigService) ListAutoPaging(ctx context.Context, query ScanConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ScanConfigListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type ScanConfigNewResponse struct {
+	ID        string                    `json:"id,required"`
 	AccountID string                    `json:"account_id,required"`
 	Frequency float64                   `json:"frequency,required"`
 	IPs       []string                  `json:"ips,required"`
+	Ports     []string                  `json:"ports,required"`
 	JSON      scanConfigNewResponseJSON `json:"-"`
 }
 
 // scanConfigNewResponseJSON contains the JSON metadata for the struct
 // [ScanConfigNewResponse]
 type scanConfigNewResponseJSON struct {
+	ID          apijson.Field
 	AccountID   apijson.Field
 	Frequency   apijson.Field
 	IPs         apijson.Field
+	Ports       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -111,18 +109,22 @@ func (r scanConfigNewResponseJSON) RawJSON() string {
 }
 
 type ScanConfigListResponse struct {
+	ID        string                     `json:"id,required"`
 	AccountID string                     `json:"account_id,required"`
 	Frequency float64                    `json:"frequency,required"`
 	IPs       []string                   `json:"ips,required"`
+	Ports     []string                   `json:"ports,required"`
 	JSON      scanConfigListResponseJSON `json:"-"`
 }
 
 // scanConfigListResponseJSON contains the JSON metadata for the struct
 // [ScanConfigListResponse]
 type scanConfigListResponseJSON struct {
+	ID          apijson.Field
 	AccountID   apijson.Field
 	Frequency   apijson.Field
 	IPs         apijson.Field
+	Ports       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -135,16 +137,18 @@ func (r scanConfigListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScanConfigDeleteResponse = interface{}
-
 type ScanConfigNewParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The number of days between each scan (0 = no recurring scans)
-	Frequency param.Field[float64] `json:"frequency,required"`
 	// A list of IP addresses or CIDR blocks to scan. The maximum number of total IP
 	// addresses allowed is 5000.
 	IPs param.Field[[]string] `json:"ips,required"`
+	// The number of days between each scan (0 = no recurring scans).
+	Frequency param.Field[float64] `json:"frequency"`
+	// A list of ports to scan. Allowed values:"default", "all", or a comma-separated
+	// list of ports or range of ports (e.g. ["1-80", "443"]). Default will scan the
+	// 100 most commonly open ports.
+	Ports param.Field[[]string] `json:"ports"`
 }
 
 func (r ScanConfigNewParams) MarshalJSON() (data []byte, err error) {
@@ -197,79 +201,4 @@ func (r ScanConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 type ScanConfigListParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ScanConfigListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success ScanConfigListResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScanConfigListResponse                `json:"result"`
-	JSON    scanConfigListResponseEnvelopeJSON    `json:"-"`
-}
-
-// scanConfigListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ScanConfigListResponseEnvelope]
-type scanConfigListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanConfigListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanConfigListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ScanConfigListResponseEnvelopeSuccess bool
-
-const (
-	ScanConfigListResponseEnvelopeSuccessTrue ScanConfigListResponseEnvelopeSuccess = true
-)
-
-func (r ScanConfigListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ScanConfigListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type ScanConfigDeleteParams struct {
-	// Account ID
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ScanConfigDeleteResponseEnvelope struct {
-	Errors   []string                             `json:"errors,required"`
-	Messages []string                             `json:"messages,required"`
-	Result   ScanConfigDeleteResponse             `json:"result,required"`
-	Success  bool                                 `json:"success,required"`
-	JSON     scanConfigDeleteResponseEnvelopeJSON `json:"-"`
-}
-
-// scanConfigDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ScanConfigDeleteResponseEnvelope]
-type scanConfigDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanConfigDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanConfigDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }

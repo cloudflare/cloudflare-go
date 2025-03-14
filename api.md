@@ -7663,28 +7663,17 @@ Methods:
 
 ### Results
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanResult">ScanResult</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanResultListResponse">ScanResultListResponse</a>
-
-Methods:
-
-- <code title="get /accounts/{account_id}/cloudforce-one/scans/results">client.CloudforceOne.Scans.Results.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanResultService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanResultListParams">ScanResultListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanResultListResponse">ScanResultListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Config
 
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigNewResponse">ScanConfigNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigListResponse">ScanConfigListResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigDeleteResponse">ScanConfigDeleteResponse</a>
 
 Methods:
 
 - <code title="post /accounts/{account_id}/cloudforce-one/scans/config">client.CloudforceOne.Scans.Config.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigNewParams">ScanConfigNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigNewResponse">ScanConfigNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_id}/cloudforce-one/scans/config">client.CloudforceOne.Scans.Config.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigListParams">ScanConfigListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigListResponse">ScanConfigListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="delete /accounts/{account_id}/cloudforce-one/scans/config">client.CloudforceOne.Scans.Config.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigDeleteParams">ScanConfigDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigDeleteResponse">ScanConfigDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/cloudforce-one/scans/config">client.CloudforceOne.Scans.Config.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigListParams">ScanConfigListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/cloudforce_one#ScanConfigListResponse">ScanConfigListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Requests
 
