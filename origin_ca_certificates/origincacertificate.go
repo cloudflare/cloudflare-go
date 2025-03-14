@@ -247,7 +247,7 @@ func (r OriginCACertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCACertificateListParams struct {
 	// Identifier
-	ZoneID param.Field[string] `query:"zone_id"`
+	ZoneID param.Field[string] `query:"zone_id,required"`
 }
 
 // URLQuery serializes [OriginCACertificateListParams]'s query parameters as
