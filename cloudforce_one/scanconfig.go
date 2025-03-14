@@ -79,6 +79,27 @@ func (r *ScanConfigService) ListAutoPaging(ctx context.Context, query ScanConfig
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
+// Delete a Scan Config
+func (r *ScanConfigService) Delete(ctx context.Context, configID string, body ScanConfigDeleteParams, opts ...option.RequestOption) (res *ScanConfigDeleteResponse, err error) {
+	var env ScanConfigDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if configID == "" {
+		err = errors.New("missing required config_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/scans/config/%s", body.AccountID, configID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type ScanConfigNewResponse struct {
 	ID        string                    `json:"id,required"`
 	AccountID string                    `json:"account_id,required"`
@@ -136,6 +157,8 @@ func (r *ScanConfigListResponse) UnmarshalJSON(data []byte) (err error) {
 func (r scanConfigListResponseJSON) RawJSON() string {
 	return r.raw
 }
+
+type ScanConfigDeleteResponse = interface{}
 
 type ScanConfigNewParams struct {
 	// Account ID
@@ -201,4 +224,36 @@ func (r ScanConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 type ScanConfigListParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ScanConfigDeleteParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ScanConfigDeleteResponseEnvelope struct {
+	Errors   []string                             `json:"errors,required"`
+	Messages []string                             `json:"messages,required"`
+	Result   ScanConfigDeleteResponse             `json:"result,required"`
+	Success  bool                                 `json:"success,required"`
+	JSON     scanConfigDeleteResponseEnvelopeJSON `json:"-"`
+}
+
+// scanConfigDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ScanConfigDeleteResponseEnvelope]
+type scanConfigDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanConfigDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanConfigDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
