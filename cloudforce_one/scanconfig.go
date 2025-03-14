@@ -52,7 +52,7 @@ func (r *ScanConfigService) New(ctx context.Context, params ScanConfigNewParams,
 	return
 }
 
-// Get the Scan Config for An Account
+// List Scan Configs
 func (r *ScanConfigService) List(ctx context.Context, query ScanConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ScanConfigListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -74,7 +74,7 @@ func (r *ScanConfigService) List(ctx context.Context, query ScanConfigListParams
 	return res, nil
 }
 
-// Get the Scan Config for An Account
+// List Scan Configs
 func (r *ScanConfigService) ListAutoPaging(ctx context.Context, query ScanConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ScanConfigListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
