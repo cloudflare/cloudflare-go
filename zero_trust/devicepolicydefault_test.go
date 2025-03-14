@@ -28,14 +28,24 @@ func TestDevicePolicyDefaultEditWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.Default.Edit(context.TODO(), zero_trust.DevicePolicyDefaultEditParams{
-		AccountID:                  cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		AllowModeSwitch:            cloudflare.F(true),
-		AllowUpdates:               cloudflare.F(true),
-		AllowedToLeave:             cloudflare.F(true),
-		AutoConnect:                cloudflare.F(0.000000),
-		CaptivePortal:              cloudflare.F(180.000000),
-		DisableAutoFallback:        cloudflare.F(true),
-		ExcludeOfficeIPs:           cloudflare.F(true),
+		AccountID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		AllowModeSwitch:     cloudflare.F(true),
+		AllowUpdates:        cloudflare.F(true),
+		AllowedToLeave:      cloudflare.F(true),
+		AutoConnect:         cloudflare.F(0.000000),
+		CaptivePortal:       cloudflare.F(180.000000),
+		DisableAutoFallback: cloudflare.F(true),
+		Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+			Address:     cloudflare.F("192.0.2.0/24"),
+			Description: cloudflare.F("Exclude testing domains from the tunnel"),
+			Host:        cloudflare.F("*.example.com"),
+		}}),
+		ExcludeOfficeIPs: cloudflare.F(true),
+		Include: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+			Address:     cloudflare.F("192.0.2.0/24"),
+			Description: cloudflare.F("Exclude testing domains from the tunnel"),
+			Host:        cloudflare.F("*.example.com"),
+		}}),
 		RegisterInterfaceIPWithDNS: cloudflare.F(true),
 		ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyDefaultEditParamsServiceModeV2{
 			Mode: cloudflare.F("proxy"),

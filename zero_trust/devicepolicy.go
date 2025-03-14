@@ -102,13 +102,15 @@ type SettingsPolicy struct {
 	// option is set to `true`.
 	DisableAutoFallback bool `json:"disable_auto_fallback"`
 	// Whether the policy will be applied to matching devices.
-	Enabled bool                 `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// List of routes excluded in the WARP client's tunnel.
 	Exclude []SplitTunnelExclude `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs bool                 `json:"exclude_office_ips"`
-	FallbackDomains  []FallbackDomain     `json:"fallback_domains"`
-	GatewayUniqueID  string               `json:"gateway_unique_id"`
-	Include          []SplitTunnelInclude `json:"include"`
+	ExcludeOfficeIPs bool             `json:"exclude_office_ips"`
+	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
+	GatewayUniqueID  string           `json:"gateway_unique_id"`
+	// List of routes included in the WARP client's tunnel.
+	Include []SplitTunnelInclude `json:"include"`
 	// The amount of time in minutes a user is allowed access to their LAN. A value of
 	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
 	// laptop waking from sleep. Note that this field is omitted from the response if
