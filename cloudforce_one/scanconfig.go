@@ -100,6 +100,27 @@ func (r *ScanConfigService) Delete(ctx context.Context, configID string, body Sc
 	return
 }
 
+// Update an existing Scan Config
+func (r *ScanConfigService) Edit(ctx context.Context, configID string, params ScanConfigEditParams, opts ...option.RequestOption) (res *ScanConfigEditResponse, err error) {
+	var env ScanConfigEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if configID == "" {
+		err = errors.New("missing required config_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/scans/config/%s", params.AccountID, configID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type ScanConfigNewResponse struct {
 	ID        string                    `json:"id,required"`
 	AccountID string                    `json:"account_id,required"`
@@ -159,6 +180,35 @@ func (r scanConfigListResponseJSON) RawJSON() string {
 }
 
 type ScanConfigDeleteResponse = interface{}
+
+type ScanConfigEditResponse struct {
+	ID        string                     `json:"id,required"`
+	AccountID string                     `json:"account_id,required"`
+	Frequency float64                    `json:"frequency,required"`
+	IPs       []string                   `json:"ips,required"`
+	Ports     []string                   `json:"ports,required"`
+	JSON      scanConfigEditResponseJSON `json:"-"`
+}
+
+// scanConfigEditResponseJSON contains the JSON metadata for the struct
+// [ScanConfigEditResponse]
+type scanConfigEditResponseJSON struct {
+	ID          apijson.Field
+	AccountID   apijson.Field
+	Frequency   apijson.Field
+	IPs         apijson.Field
+	Ports       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanConfigEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanConfigEditResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type ScanConfigNewParams struct {
 	// Account ID
@@ -256,4 +306,65 @@ func (r *ScanConfigDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error
 
 func (r scanConfigDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+type ScanConfigEditParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The number of days between each scan (0 = no recurring scans).
+	Frequency param.Field[float64] `json:"frequency"`
+	// A list of IP addresses or CIDR blocks to scan. The maximum number of total IP
+	// addresses allowed is 5000.
+	IPs param.Field[[]string] `json:"ips"`
+	// A list of ports to scan. Allowed values:"default", "all", or a comma-separated
+	// list of ports or range of ports (e.g. ["1-80", "443"]). Default will scan the
+	// 100 most commonly open ports.
+	Ports param.Field[[]string] `json:"ports"`
+}
+
+func (r ScanConfigEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ScanConfigEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success ScanConfigEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  ScanConfigEditResponse                `json:"result"`
+	JSON    scanConfigEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// scanConfigEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ScanConfigEditResponseEnvelope]
+type scanConfigEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanConfigEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanConfigEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type ScanConfigEditResponseEnvelopeSuccess bool
+
+const (
+	ScanConfigEditResponseEnvelopeSuccessTrue ScanConfigEditResponseEnvelopeSuccess = true
+)
+
+func (r ScanConfigEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScanConfigEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
