@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
 	"github.com/tidwall/sjson"
 )
 
