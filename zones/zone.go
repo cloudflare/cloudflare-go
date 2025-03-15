@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // ZoneService contains methods and other services that help with interacting with
@@ -608,11 +608,12 @@ const (
 	ZoneEditParamsTypeFull      ZoneEditParamsType = "full"
 	ZoneEditParamsTypePartial   ZoneEditParamsType = "partial"
 	ZoneEditParamsTypeSecondary ZoneEditParamsType = "secondary"
+	ZoneEditParamsTypeInternal  ZoneEditParamsType = "internal"
 )
 
 func (r ZoneEditParamsType) IsKnown() bool {
 	switch r {
-	case ZoneEditParamsTypeFull, ZoneEditParamsTypePartial, ZoneEditParamsTypeSecondary:
+	case ZoneEditParamsTypeFull, ZoneEditParamsTypePartial, ZoneEditParamsTypeSecondary, ZoneEditParamsTypeInternal:
 		return true
 	}
 	return false

@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // LoadBalancerService contains methods and other services that help with
@@ -462,8 +462,9 @@ type LoadBalancer struct {
 	SteeringPolicy SteeringPolicy `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	TTL  float64          `json:"ttl"`
-	JSON loadBalancerJSON `json:"-"`
+	TTL      float64          `json:"ttl"`
+	ZoneName string           `json:"zone_name"`
+	JSON     loadBalancerJSON `json:"-"`
 }
 
 // loadBalancerJSON contains the JSON metadata for the struct [LoadBalancer]
@@ -490,6 +491,7 @@ type loadBalancerJSON struct {
 	SessionAffinityTTL        apijson.Field
 	SteeringPolicy            apijson.Field
 	TTL                       apijson.Field
+	ZoneName                  apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
 }

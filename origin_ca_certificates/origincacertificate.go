@@ -10,14 +10,14 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
-	"github.com/cloudflare/cloudflare-go/v4/ssl"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v5/ssl"
 )
 
 // OriginCACertificateService contains methods and other services that help with
@@ -247,7 +247,7 @@ func (r OriginCACertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCACertificateListParams struct {
 	// Identifier
-	ZoneID param.Field[string] `query:"zone_id"`
+	ZoneID param.Field[string] `query:"zone_id,required"`
 }
 
 // URLQuery serializes [OriginCACertificateListParams]'s query parameters as

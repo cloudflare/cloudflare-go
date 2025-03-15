@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/page_shield"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/page_shield"
 )
 
 func TestPolicyNew(t *testing.T) {
@@ -33,7 +33,7 @@ func TestPolicyNew(t *testing.T) {
 			Action:      cloudflare.F(page_shield.PolicyActionAllow),
 			Description: cloudflare.F("Checkout page CSP policy"),
 			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("ends_with(http.request.uri.path, \"/checkout\")"),
+			Expression:  cloudflare.F(`ends_with(http.request.uri.path, "/checkout")`),
 			Value:       cloudflare.F("script-src 'none';"),
 		},
 	})
@@ -67,7 +67,7 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 			Action:      cloudflare.F(page_shield.PolicyUpdateParamsActionAllow),
 			Description: cloudflare.F("Checkout page CSP policy"),
 			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("ends_with(http.request.uri.path, \"/checkout\")"),
+			Expression:  cloudflare.F(`ends_with(http.request.uri.path, "/checkout")`),
 			Value:       cloudflare.F("script-src 'none';"),
 		},
 	)

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/waiting_rooms"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/waiting_rooms"
 )
 
 func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
@@ -140,9 +140,9 @@ func TestWaitingRoomListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.WaitingRooms.List(context.TODO(), waiting_rooms.WaitingRoomListParams{
-		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Page:    cloudflare.F(1.000000),
-		PerPage: cloudflare.F(5.000000),
+		AccountID: cloudflare.F("account_id"),
+		Page:      cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(5.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/zero_trust"
 )
 
 func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
@@ -102,7 +102,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				Mappings: cloudflare.F([]zero_trust.SCIMConfigMappingParam{{
 					Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 					Enabled: cloudflare.F(true),
-					Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
+					Filter:  cloudflare.F(`title pr or userType eq "Intern"`),
 					Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 						Create: cloudflare.F(true),
 						Delete: cloudflare.F(true),
@@ -220,7 +220,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					Mappings: cloudflare.F([]zero_trust.SCIMConfigMappingParam{{
 						Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 						Enabled: cloudflare.F(true),
-						Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
+						Filter:  cloudflare.F(`title pr or userType eq "Intern"`),
 						Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 							Create: cloudflare.F(true),
 							Delete: cloudflare.F(true),

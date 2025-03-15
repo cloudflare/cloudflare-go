@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/radar"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/radar"
 )
 
 func TestBGPTopAseGetWithOptionalParams(t *testing.T) {
@@ -35,7 +35,7 @@ func TestBGPTopAseGetWithOptionalParams(t *testing.T) {
 		DateStart:  cloudflare.F([]time.Time{time.Now()}),
 		Format:     cloudflare.F(radar.BGPTopAseGetParamsFormatJson),
 		Limit:      cloudflare.F(int64(5)),
-		Name:       cloudflare.F([]string{"string"}),
+		Name:       cloudflare.F([]string{"main_series"}),
 		Prefix:     cloudflare.F([]string{"1.1.1.0/24"}),
 		UpdateType: cloudflare.F([]radar.BGPTopAseGetParamsUpdateType{radar.BGPTopAseGetParamsUpdateTypeAnnouncement}),
 	})

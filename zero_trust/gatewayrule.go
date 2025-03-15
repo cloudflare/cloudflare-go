@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // GatewayRuleService contains methods and other services that help with
@@ -272,15 +272,16 @@ func (r DNSResolverSettingsV6Param) MarshalJSON() (data []byte, err error) {
 type GatewayFilter string
 
 const (
-	GatewayFilterHTTP   GatewayFilter = "http"
-	GatewayFilterDNS    GatewayFilter = "dns"
-	GatewayFilterL4     GatewayFilter = "l4"
-	GatewayFilterEgress GatewayFilter = "egress"
+	GatewayFilterHTTP        GatewayFilter = "http"
+	GatewayFilterDNS         GatewayFilter = "dns"
+	GatewayFilterL4          GatewayFilter = "l4"
+	GatewayFilterEgress      GatewayFilter = "egress"
+	GatewayFilterDNSResolver GatewayFilter = "dns_resolver"
 )
 
 func (r GatewayFilter) IsKnown() bool {
 	switch r {
-	case GatewayFilterHTTP, GatewayFilterDNS, GatewayFilterL4, GatewayFilterEgress:
+	case GatewayFilterHTTP, GatewayFilterDNS, GatewayFilterL4, GatewayFilterEgress, GatewayFilterDNSResolver:
 		return true
 	}
 	return false
@@ -940,7 +941,7 @@ type RuleSettingQuarantineFileType string
 
 const (
 	RuleSettingQuarantineFileTypeExe  RuleSettingQuarantineFileType = "exe"
-	RuleSettingQuarantineFileTypePdf  RuleSettingQuarantineFileType = "pdf"
+	RuleSettingQuarantineFileTypePDF  RuleSettingQuarantineFileType = "pdf"
 	RuleSettingQuarantineFileTypeDoc  RuleSettingQuarantineFileType = "doc"
 	RuleSettingQuarantineFileTypeDocm RuleSettingQuarantineFileType = "docm"
 	RuleSettingQuarantineFileTypeDocx RuleSettingQuarantineFileType = "docx"
@@ -956,7 +957,7 @@ const (
 
 func (r RuleSettingQuarantineFileType) IsKnown() bool {
 	switch r {
-	case RuleSettingQuarantineFileTypeExe, RuleSettingQuarantineFileTypePdf, RuleSettingQuarantineFileTypeDoc, RuleSettingQuarantineFileTypeDocm, RuleSettingQuarantineFileTypeDocx, RuleSettingQuarantineFileTypeRtf, RuleSettingQuarantineFileTypePpt, RuleSettingQuarantineFileTypePptx, RuleSettingQuarantineFileTypeXls, RuleSettingQuarantineFileTypeXlsm, RuleSettingQuarantineFileTypeXlsx, RuleSettingQuarantineFileTypeZip, RuleSettingQuarantineFileTypeRar:
+	case RuleSettingQuarantineFileTypeExe, RuleSettingQuarantineFileTypePDF, RuleSettingQuarantineFileTypeDoc, RuleSettingQuarantineFileTypeDocm, RuleSettingQuarantineFileTypeDocx, RuleSettingQuarantineFileTypeRtf, RuleSettingQuarantineFileTypePpt, RuleSettingQuarantineFileTypePptx, RuleSettingQuarantineFileTypeXls, RuleSettingQuarantineFileTypeXlsm, RuleSettingQuarantineFileTypeXlsx, RuleSettingQuarantineFileTypeZip, RuleSettingQuarantineFileTypeRar:
 		return true
 	}
 	return false

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/logpush"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/logpush"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestJobNewWithOptionalParams(t *testing.T) {
@@ -43,7 +43,7 @@ func TestJobNewWithOptionalParams(t *testing.T) {
 		OutputOptions: cloudflare.F(logpush.OutputOptionsParam{
 			BatchPrefix:     cloudflare.F("batch_prefix"),
 			BatchSuffix:     cloudflare.F("batch_suffix"),
-			Cve2021_4428:    cloudflare.F(true),
+			Cve2021_44228:   cloudflare.F(true),
 			FieldDelimiter:  cloudflare.F("field_delimiter"),
 			FieldNames:      cloudflare.F([]string{"ClientIP", "EdgeStartTimestamp", "RayID"}),
 			OutputType:      cloudflare.F(logpush.OutputOptionsOutputTypeNdjson),
@@ -96,7 +96,7 @@ func TestJobUpdateWithOptionalParams(t *testing.T) {
 			OutputOptions: cloudflare.F(logpush.OutputOptionsParam{
 				BatchPrefix:     cloudflare.F("batch_prefix"),
 				BatchSuffix:     cloudflare.F("batch_suffix"),
-				Cve2021_4428:    cloudflare.F(true),
+				Cve2021_44228:   cloudflare.F(true),
 				FieldDelimiter:  cloudflare.F("field_delimiter"),
 				FieldNames:      cloudflare.F([]string{"ClientIP", "EdgeStartTimestamp", "RayID"}),
 				OutputType:      cloudflare.F(logpush.OutputOptionsOutputTypeNdjson),

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/snippets"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/snippets"
 )
 
 func TestRuleUpdateWithOptionalParams(t *testing.T) {
@@ -32,7 +32,7 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 		Rules: cloudflare.F([]snippets.RuleUpdateParamsRule{{
 			Description: cloudflare.F("Rule description"),
 			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
+			Expression:  cloudflare.F(`http.cookie eq "a=b"`),
 			SnippetName: cloudflare.F("snippet_name_01"),
 		}}),
 	})

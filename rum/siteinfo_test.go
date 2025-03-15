@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/rum"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/rum"
 )
 
 func TestSiteInfoNewWithOptionalParams(t *testing.T) {
@@ -61,7 +61,9 @@ func TestSiteInfoUpdateWithOptionalParams(t *testing.T) {
 		rum.SiteInfoUpdateParams{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AutoInstall: cloudflare.F(true),
+			Enabled:     cloudflare.F(true),
 			Host:        cloudflare.F("example.com"),
+			Lite:        cloudflare.F(true),
 			ZoneTag:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/load_balancers"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/load_balancers"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
@@ -63,7 +63,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 			"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 		}),
 		Rules: cloudflare.F([]load_balancers.RulesParam{{
-			Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
+			Condition: cloudflare.F(`http.request.uri.path contains "/testing"`),
 			Disabled:  cloudflare.F(true),
 			FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 				ContentType: cloudflare.F("application/json"),
@@ -193,7 +193,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 				"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 			}),
 			Rules: cloudflare.F([]load_balancers.RulesParam{{
-				Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
+				Condition: cloudflare.F(`http.request.uri.path contains "/testing"`),
 				Disabled:  cloudflare.F(true),
 				FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 					ContentType: cloudflare.F("application/json"),
@@ -377,7 +377,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 				"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 			}),
 			Rules: cloudflare.F([]load_balancers.RulesParam{{
-				Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
+				Condition: cloudflare.F(`http.request.uri.path contains "/testing"`),
 				Disabled:  cloudflare.F(true),
 				FixedResponse: cloudflare.F(load_balancers.RulesFixedResponseParam{
 					ContentType: cloudflare.F("application/json"),

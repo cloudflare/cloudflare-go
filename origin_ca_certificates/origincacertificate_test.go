@@ -8,12 +8,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/origin_ca_certificates"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
-	"github.com/cloudflare/cloudflare-go/v4/ssl"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/origin_ca_certificates"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
+	"github.com/cloudflare/cloudflare-go/v5/ssl"
 )
 
 func TestOriginCACertificateNewWithOptionalParams(t *testing.T) {
@@ -45,7 +45,7 @@ func TestOriginCACertificateNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestOriginCACertificateListWithOptionalParams(t *testing.T) {
+func TestOriginCACertificateList(t *testing.T) {
 	t.Skip("TODO: investigate auth errors on test suite")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

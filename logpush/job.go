@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // JobService contains methods and other services that help with interacting with
@@ -347,7 +347,7 @@ type OutputOptions struct {
 	BatchSuffix string `json:"batch_suffix,nullable"`
 	// If set to true, will cause all occurrences of `${` in the generated files to be
 	// replaced with `x{`.
-	Cve2021_4428 bool `json:"CVE-2021-4428,nullable"`
+	Cve2021_44228 bool `json:"CVE-2021-44228,nullable"`
 	// String to join fields. This field be ignored when `record_template` is set.
 	FieldDelimiter string `json:"field_delimiter,nullable"`
 	// List of field names to be included in the Logpush output. For the moment, there
@@ -382,7 +382,7 @@ type OutputOptions struct {
 type outputOptionsJSON struct {
 	BatchPrefix     apijson.Field
 	BatchSuffix     apijson.Field
-	Cve2021_4428    apijson.Field
+	Cve2021_44228   apijson.Field
 	FieldDelimiter  apijson.Field
 	FieldNames      apijson.Field
 	OutputType      apijson.Field
@@ -449,7 +449,7 @@ type OutputOptionsParam struct {
 	BatchSuffix param.Field[string] `json:"batch_suffix"`
 	// If set to true, will cause all occurrences of `${` in the generated files to be
 	// replaced with `x{`.
-	Cve2021_4428 param.Field[bool] `json:"CVE-2021-4428"`
+	Cve2021_44228 param.Field[bool] `json:"CVE-2021-44228"`
 	// String to join fields. This field be ignored when `record_template` is set.
 	FieldDelimiter param.Field[string] `json:"field_delimiter"`
 	// List of field names to be included in the Logpush output. For the moment, there

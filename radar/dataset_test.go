@@ -7,11 +7,12 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/radar"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/radar"
 )
 
 func TestDatasetListWithOptionalParams(t *testing.T) {
@@ -29,6 +30,7 @@ func TestDatasetListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Datasets.List(context.TODO(), radar.DatasetListParams{
 		DatasetType: cloudflare.F(radar.DatasetListParamsDatasetTypeRankingBucket),
+		Date:        cloudflare.F(time.Now()),
 		Format:      cloudflare.F(radar.DatasetListParamsFormatJson),
 		Limit:       cloudflare.F(int64(5)),
 		Offset:      cloudflare.F(int64(0)),

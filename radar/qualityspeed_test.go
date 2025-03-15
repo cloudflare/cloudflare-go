@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/radar"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/radar"
 )
 
 func TestQualitySpeedHistogramWithOptionalParams(t *testing.T) {
@@ -36,7 +36,7 @@ func TestQualitySpeedHistogramWithOptionalParams(t *testing.T) {
 		Format:      cloudflare.F(radar.QualitySpeedHistogramParamsFormatJson),
 		Location:    cloudflare.F([]string{"string"}),
 		MetricGroup: cloudflare.F(radar.QualitySpeedHistogramParamsMetricGroupBandwidth),
-		Name:        cloudflare.F([]string{"string"}),
+		Name:        cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -66,7 +66,7 @@ func TestQualitySpeedSummaryWithOptionalParams(t *testing.T) {
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.QualitySpeedSummaryParamsFormatJson),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

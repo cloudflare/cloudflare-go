@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/radar"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/radar"
 )
 
 func TestRobotsTXTTopUserAgentDirectiveWithOptionalParams(t *testing.T) {
@@ -34,7 +34,7 @@ func TestRobotsTXTTopUserAgentDirectiveWithOptionalParams(t *testing.T) {
 		DomainCategory:    cloudflare.F([]string{"string"}),
 		Format:            cloudflare.F(radar.RobotsTXTTopUserAgentDirectiveParamsFormatJson),
 		Limit:             cloudflare.F(int64(5)),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 		UserAgentCategory: cloudflare.F(radar.RobotsTXTTopUserAgentDirectiveParamsUserAgentCategoryAI),
 	})
 	if err != nil {

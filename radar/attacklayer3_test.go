@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/radar"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/radar"
 )
 
 func TestAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
@@ -40,7 +40,7 @@ func TestAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
 		IPVersion:     cloudflare.F([]radar.AttackLayer3TimeseriesParamsIPVersion{radar.AttackLayer3TimeseriesParamsIPVersionIPv4}),
 		Location:      cloudflare.F([]string{"string"}),
 		Metric:        cloudflare.F(radar.AttackLayer3TimeseriesParamsMetricBytes),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesParamsNormalizationPercentageChange),
 		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesParamsProtocol{radar.AttackLayer3TimeseriesParamsProtocolUdp}),
 	})

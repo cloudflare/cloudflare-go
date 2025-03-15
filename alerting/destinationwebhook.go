@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // DestinationWebhookService contains methods and other services that help with
@@ -152,10 +152,6 @@ type Webhooks struct {
 	// The name of the webhook destination. This will be included in the request body
 	// when you receive a webhook notification.
 	Name string `json:"name"`
-	// Optional secret that will be passed in the `cf-webhook-auth` header when
-	// dispatching generic webhook notifications or formatted for supported
-	// destinations. Secrets are not returned in any API response body.
-	Secret string `json:"secret"`
 	// Type of webhook endpoint.
 	Type WebhooksType `json:"type"`
 	// The POST endpoint to call when dispatching a notification.
@@ -170,7 +166,6 @@ type webhooksJSON struct {
 	LastFailure apijson.Field
 	LastSuccess apijson.Field
 	Name        apijson.Field
-	Secret      apijson.Field
 	Type        apijson.Field
 	URL         apijson.Field
 	raw         string

@@ -8,13 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/cloud_connector"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/cloud_connector"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
-func TestRuleUpdate(t *testing.T) {
+func TestRuleUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -33,7 +33,7 @@ func TestRuleUpdate(t *testing.T) {
 			ID:          cloudflare.F("95c365e17e1b46599cd99e5b231fac4e"),
 			Description: cloudflare.F("Rule description"),
 			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
+			Expression:  cloudflare.F(`http.cookie eq "a=b"`),
 			Parameters: cloudflare.F(cloud_connector.RuleUpdateParamsRulesParameters{
 				Host: cloudflare.F("examplebucket.s3.eu-north-1.amazonaws.com"),
 			}),

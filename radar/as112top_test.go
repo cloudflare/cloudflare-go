@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/radar"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/radar"
 )
 
 func TestAS112TopDNSSECWithOptionalParams(t *testing.T) {
@@ -40,7 +40,7 @@ func TestAS112TopDNSSECWithOptionalParams(t *testing.T) {
 			Format:    cloudflare.F(radar.AS112TopDNSSECParamsFormatJson),
 			Limit:     cloudflare.F(int64(5)),
 			Location:  cloudflare.F([]string{"string"}),
-			Name:      cloudflare.F([]string{"string"}),
+			Name:      cloudflare.F([]string{"main_series"}),
 		},
 	)
 	if err != nil {
@@ -77,7 +77,7 @@ func TestAS112TopEdnsWithOptionalParams(t *testing.T) {
 			Format:    cloudflare.F(radar.AS112TopEdnsParamsFormatJson),
 			Limit:     cloudflare.F(int64(5)),
 			Location:  cloudflare.F([]string{"string"}),
-			Name:      cloudflare.F([]string{"string"}),
+			Name:      cloudflare.F([]string{"main_series"}),
 		},
 	)
 	if err != nil {
@@ -114,7 +114,7 @@ func TestAS112TopIPVersionWithOptionalParams(t *testing.T) {
 			Format:    cloudflare.F(radar.AS112TopIPVersionParamsFormatJson),
 			Limit:     cloudflare.F(int64(5)),
 			Location:  cloudflare.F([]string{"string"}),
-			Name:      cloudflare.F([]string{"string"}),
+			Name:      cloudflare.F([]string{"main_series"}),
 		},
 	)
 	if err != nil {
@@ -148,7 +148,7 @@ func TestAS112TopLocationsWithOptionalParams(t *testing.T) {
 		Format:    cloudflare.F(radar.AS112TopLocationsParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

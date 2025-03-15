@@ -7,11 +7,11 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // SearchService contains methods and other services that help with interacting
@@ -33,7 +33,7 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 	return
 }
 
-// Lets you search for locations, autonomous systems (ASes), and reports.
+// Searches for locations, autonomous systems, and reports.
 func (r *SearchService) Global(ctx context.Context, query SearchGlobalParams, opts ...option.RequestOption) (res *SearchGlobalResponse, err error) {
 	var env SearchGlobalResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -93,15 +93,15 @@ func (r searchGlobalResponseSearchJSON) RawJSON() string {
 }
 
 type SearchGlobalParams struct {
-	// Search for locations, AS and reports.
+	// Search for locations, autonomous systems and reports.
 	Query param.Field[string] `query:"query,required"`
 	// Search types to be excluded from results.
 	Exclude param.Field[[]SearchGlobalParamsExclude] `query:"exclude"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[SearchGlobalParamsFormat] `query:"format"`
 	// Search types to be included in results.
 	Include param.Field[[]SearchGlobalParamsInclude] `query:"include"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Limit the number of objects per search category.
 	LimitPerGroup param.Field[float64] `query:"limitPerGroup"`
@@ -132,7 +132,7 @@ func (r SearchGlobalParamsExclude) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type SearchGlobalParamsFormat string
 
 const (

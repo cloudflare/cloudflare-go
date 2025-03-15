@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/logpush"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/logpush"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestEdgeNewWithOptionalParams(t *testing.T) {
@@ -30,7 +30,7 @@ func TestEdgeNewWithOptionalParams(t *testing.T) {
 	_, err := client.Logpush.Edge.New(context.TODO(), logpush.EdgeNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Fields: cloudflare.F("ClientIP,ClientRequestHost,ClientRequestMethod,ClientRequestURI,EdgeEndTimestamp,EdgeResponseBytes,EdgeResponseStatus,EdgeStartTimestamp,RayID"),
-		Filter: cloudflare.F("{\"where\":{\"and\":[{\"key\":\"ClientCountry\",\"operator\":\"neq\",\"value\":\"ca\"}]}}"),
+		Filter: cloudflare.F(`{"where":{"and":[{"key":"ClientCountry","operator":"neq","value":"ca"}]}}`),
 		Sample: cloudflare.F(int64(1)),
 	})
 	if err != nil {

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/filters"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/filters"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestFilterNew(t *testing.T) {
@@ -30,7 +30,7 @@ func TestFilterNew(t *testing.T) {
 	)
 	_, err := client.Filters.New(context.TODO(), filters.FilterNewParams{
 		ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Expression: cloudflare.F("(http.request.uri.path ~ \".*wp-login.php\" or http.request.uri.path ~ \".*xmlrpc.php\") and ip.addr ne 172.16.22.155"),
+		Expression: cloudflare.F(`(http.request.uri.path ~ ".*wp-login.php" or http.request.uri.path ~ ".*xmlrpc.php") and ip.addr ne 172.16.22.155`),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/ai_gateway"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/ai_gateway"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 func TestAIGatewayNewWithOptionalParams(t *testing.T) {
@@ -38,6 +38,7 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 		RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayNewParamsRateLimitingTechniqueFixed),
 		Authentication:          cloudflare.F(true),
 		LogManagement:           cloudflare.F(int64(10000)),
+		LogManagementStrategy:   cloudflare.F(ai_gateway.AIGatewayNewParamsLogManagementStrategyStopInserting),
 		Logpush:                 cloudflare.F(true),
 		LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
 	})
@@ -76,6 +77,7 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
 			Authentication:          cloudflare.F(true),
 			LogManagement:           cloudflare.F(int64(10000)),
+			LogManagementStrategy:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsLogManagementStrategyStopInserting),
 			Logpush:                 cloudflare.F(true),
 			LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
 		},

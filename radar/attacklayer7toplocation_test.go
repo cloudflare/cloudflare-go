@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/radar"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/radar"
 )
 
 func TestAttackLayer7TopLocationOriginWithOptionalParams(t *testing.T) {
@@ -40,7 +40,7 @@ func TestAttackLayer7TopLocationOriginWithOptionalParams(t *testing.T) {
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TopLocationOriginParamsIPVersion{radar.AttackLayer7TopLocationOriginParamsIPVersionIPv4}),
 		Limit:             cloudflare.F(int64(5)),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopLocationOriginParamsMitigationProduct{radar.AttackLayer7TopLocationOriginParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -70,12 +70,9 @@ func TestAttackLayer7TopLocationTargetWithOptionalParams(t *testing.T) {
 		DateRange:         cloudflare.F([]string{"7d"}),
 		DateStart:         cloudflare.F([]time.Time{time.Now()}),
 		Format:            cloudflare.F(radar.AttackLayer7TopLocationTargetParamsFormatJson),
-		HTTPMethod:        cloudflare.F([]radar.AttackLayer7TopLocationTargetParamsHTTPMethod{radar.AttackLayer7TopLocationTargetParamsHTTPMethodGet}),
-		HTTPVersion:       cloudflare.F([]radar.AttackLayer7TopLocationTargetParamsHTTPVersion{radar.AttackLayer7TopLocationTargetParamsHTTPVersionHttPv1}),
-		IPVersion:         cloudflare.F([]radar.AttackLayer7TopLocationTargetParamsIPVersion{radar.AttackLayer7TopLocationTargetParamsIPVersionIPv4}),
 		Limit:             cloudflare.F(int64(5)),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopLocationTargetParamsMitigationProduct{radar.AttackLayer7TopLocationTargetParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

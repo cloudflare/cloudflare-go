@@ -7,96 +7,99 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/cloudflare/cloudflare-go/v4/abuse_reports"
-	"github.com/cloudflare/cloudflare-go/v4/accounts"
-	"github.com/cloudflare/cloudflare-go/v4/acm"
-	"github.com/cloudflare/cloudflare-go/v4/addressing"
-	"github.com/cloudflare/cloudflare-go/v4/ai"
-	"github.com/cloudflare/cloudflare-go/v4/ai_gateway"
-	"github.com/cloudflare/cloudflare-go/v4/alerting"
-	"github.com/cloudflare/cloudflare-go/v4/api_gateway"
-	"github.com/cloudflare/cloudflare-go/v4/argo"
-	"github.com/cloudflare/cloudflare-go/v4/audit_logs"
-	"github.com/cloudflare/cloudflare-go/v4/billing"
-	"github.com/cloudflare/cloudflare-go/v4/bot_management"
-	"github.com/cloudflare/cloudflare-go/v4/botnet_feed"
-	"github.com/cloudflare/cloudflare-go/v4/brand_protection"
-	"github.com/cloudflare/cloudflare-go/v4/cache"
-	"github.com/cloudflare/cloudflare-go/v4/calls"
-	"github.com/cloudflare/cloudflare-go/v4/certificate_authorities"
-	"github.com/cloudflare/cloudflare-go/v4/client_certificates"
-	"github.com/cloudflare/cloudflare-go/v4/cloud_connector"
-	"github.com/cloudflare/cloudflare-go/v4/cloudforce_one"
-	"github.com/cloudflare/cloudflare-go/v4/content_scanning"
-	"github.com/cloudflare/cloudflare-go/v4/custom_certificates"
-	"github.com/cloudflare/cloudflare-go/v4/custom_hostnames"
-	"github.com/cloudflare/cloudflare-go/v4/custom_nameservers"
-	"github.com/cloudflare/cloudflare-go/v4/d1"
-	"github.com/cloudflare/cloudflare-go/v4/dcv_delegation"
-	"github.com/cloudflare/cloudflare-go/v4/diagnostics"
-	"github.com/cloudflare/cloudflare-go/v4/dns"
-	"github.com/cloudflare/cloudflare-go/v4/dns_firewall"
-	"github.com/cloudflare/cloudflare-go/v4/durable_objects"
-	"github.com/cloudflare/cloudflare-go/v4/email_routing"
-	"github.com/cloudflare/cloudflare-go/v4/email_security"
-	"github.com/cloudflare/cloudflare-go/v4/filters"
-	"github.com/cloudflare/cloudflare-go/v4/firewall"
-	"github.com/cloudflare/cloudflare-go/v4/healthchecks"
-	"github.com/cloudflare/cloudflare-go/v4/hostnames"
-	"github.com/cloudflare/cloudflare-go/v4/hyperdrive"
-	"github.com/cloudflare/cloudflare-go/v4/iam"
-	"github.com/cloudflare/cloudflare-go/v4/images"
-	"github.com/cloudflare/cloudflare-go/v4/intel"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/ips"
-	"github.com/cloudflare/cloudflare-go/v4/keyless_certificates"
-	"github.com/cloudflare/cloudflare-go/v4/kv"
-	"github.com/cloudflare/cloudflare-go/v4/leaked_credential_checks"
-	"github.com/cloudflare/cloudflare-go/v4/load_balancers"
-	"github.com/cloudflare/cloudflare-go/v4/logpush"
-	"github.com/cloudflare/cloudflare-go/v4/logs"
-	"github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring"
-	"github.com/cloudflare/cloudflare-go/v4/magic_transit"
-	"github.com/cloudflare/cloudflare-go/v4/managed_transforms"
-	"github.com/cloudflare/cloudflare-go/v4/memberships"
-	"github.com/cloudflare/cloudflare-go/v4/mtls_certificates"
-	"github.com/cloudflare/cloudflare-go/v4/network_interconnects"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/origin_ca_certificates"
-	"github.com/cloudflare/cloudflare-go/v4/origin_post_quantum_encryption"
-	"github.com/cloudflare/cloudflare-go/v4/origin_tls_client_auth"
-	"github.com/cloudflare/cloudflare-go/v4/page_rules"
-	"github.com/cloudflare/cloudflare-go/v4/page_shield"
-	"github.com/cloudflare/cloudflare-go/v4/pages"
-	"github.com/cloudflare/cloudflare-go/v4/queues"
-	"github.com/cloudflare/cloudflare-go/v4/r2"
-	"github.com/cloudflare/cloudflare-go/v4/radar"
-	"github.com/cloudflare/cloudflare-go/v4/rate_limits"
-	"github.com/cloudflare/cloudflare-go/v4/registrar"
-	"github.com/cloudflare/cloudflare-go/v4/request_tracers"
-	"github.com/cloudflare/cloudflare-go/v4/resource_sharing"
-	"github.com/cloudflare/cloudflare-go/v4/rules"
-	"github.com/cloudflare/cloudflare-go/v4/rulesets"
-	"github.com/cloudflare/cloudflare-go/v4/rum"
-	"github.com/cloudflare/cloudflare-go/v4/security_center"
-	"github.com/cloudflare/cloudflare-go/v4/security_txt"
-	"github.com/cloudflare/cloudflare-go/v4/snippets"
-	"github.com/cloudflare/cloudflare-go/v4/spectrum"
-	"github.com/cloudflare/cloudflare-go/v4/speed"
-	"github.com/cloudflare/cloudflare-go/v4/ssl"
-	"github.com/cloudflare/cloudflare-go/v4/stream"
-	"github.com/cloudflare/cloudflare-go/v4/turnstile"
-	"github.com/cloudflare/cloudflare-go/v4/url_normalization"
-	"github.com/cloudflare/cloudflare-go/v4/url_scanner"
-	"github.com/cloudflare/cloudflare-go/v4/user"
-	"github.com/cloudflare/cloudflare-go/v4/vectorize"
-	"github.com/cloudflare/cloudflare-go/v4/waiting_rooms"
-	"github.com/cloudflare/cloudflare-go/v4/web3"
-	"github.com/cloudflare/cloudflare-go/v4/workers"
-	"github.com/cloudflare/cloudflare-go/v4/workers_for_platforms"
-	"github.com/cloudflare/cloudflare-go/v4/workflows"
-	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
-	"github.com/cloudflare/cloudflare-go/v4/zones"
+	"github.com/cloudflare/cloudflare-go/v5/abuse_reports"
+	"github.com/cloudflare/cloudflare-go/v5/accounts"
+	"github.com/cloudflare/cloudflare-go/v5/acm"
+	"github.com/cloudflare/cloudflare-go/v5/addressing"
+	"github.com/cloudflare/cloudflare-go/v5/ai"
+	"github.com/cloudflare/cloudflare-go/v5/ai_gateway"
+	"github.com/cloudflare/cloudflare-go/v5/alerting"
+	"github.com/cloudflare/cloudflare-go/v5/api_gateway"
+	"github.com/cloudflare/cloudflare-go/v5/argo"
+	"github.com/cloudflare/cloudflare-go/v5/audit_logs"
+	"github.com/cloudflare/cloudflare-go/v5/billing"
+	"github.com/cloudflare/cloudflare-go/v5/bot_management"
+	"github.com/cloudflare/cloudflare-go/v5/botnet_feed"
+	"github.com/cloudflare/cloudflare-go/v5/brand_protection"
+	"github.com/cloudflare/cloudflare-go/v5/browser_rendering"
+	"github.com/cloudflare/cloudflare-go/v5/cache"
+	"github.com/cloudflare/cloudflare-go/v5/calls"
+	"github.com/cloudflare/cloudflare-go/v5/certificate_authorities"
+	"github.com/cloudflare/cloudflare-go/v5/client_certificates"
+	"github.com/cloudflare/cloudflare-go/v5/cloud_connector"
+	"github.com/cloudflare/cloudflare-go/v5/cloudforce_one"
+	"github.com/cloudflare/cloudflare-go/v5/content_scanning"
+	"github.com/cloudflare/cloudflare-go/v5/custom_certificates"
+	"github.com/cloudflare/cloudflare-go/v5/custom_hostnames"
+	"github.com/cloudflare/cloudflare-go/v5/custom_nameservers"
+	"github.com/cloudflare/cloudflare-go/v5/custom_pages"
+	"github.com/cloudflare/cloudflare-go/v5/d1"
+	"github.com/cloudflare/cloudflare-go/v5/dcv_delegation"
+	"github.com/cloudflare/cloudflare-go/v5/diagnostics"
+	"github.com/cloudflare/cloudflare-go/v5/dns"
+	"github.com/cloudflare/cloudflare-go/v5/dns_firewall"
+	"github.com/cloudflare/cloudflare-go/v5/durable_objects"
+	"github.com/cloudflare/cloudflare-go/v5/email_routing"
+	"github.com/cloudflare/cloudflare-go/v5/email_security"
+	"github.com/cloudflare/cloudflare-go/v5/filters"
+	"github.com/cloudflare/cloudflare-go/v5/firewall"
+	"github.com/cloudflare/cloudflare-go/v5/healthchecks"
+	"github.com/cloudflare/cloudflare-go/v5/hostnames"
+	"github.com/cloudflare/cloudflare-go/v5/hyperdrive"
+	"github.com/cloudflare/cloudflare-go/v5/iam"
+	"github.com/cloudflare/cloudflare-go/v5/images"
+	"github.com/cloudflare/cloudflare-go/v5/intel"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/ips"
+	"github.com/cloudflare/cloudflare-go/v5/keyless_certificates"
+	"github.com/cloudflare/cloudflare-go/v5/kv"
+	"github.com/cloudflare/cloudflare-go/v5/leaked_credential_checks"
+	"github.com/cloudflare/cloudflare-go/v5/load_balancers"
+	"github.com/cloudflare/cloudflare-go/v5/logpush"
+	"github.com/cloudflare/cloudflare-go/v5/logs"
+	"github.com/cloudflare/cloudflare-go/v5/magic_network_monitoring"
+	"github.com/cloudflare/cloudflare-go/v5/magic_transit"
+	"github.com/cloudflare/cloudflare-go/v5/managed_transforms"
+	"github.com/cloudflare/cloudflare-go/v5/memberships"
+	"github.com/cloudflare/cloudflare-go/v5/mtls_certificates"
+	"github.com/cloudflare/cloudflare-go/v5/network_interconnects"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/origin_ca_certificates"
+	"github.com/cloudflare/cloudflare-go/v5/origin_post_quantum_encryption"
+	"github.com/cloudflare/cloudflare-go/v5/origin_tls_client_auth"
+	"github.com/cloudflare/cloudflare-go/v5/page_rules"
+	"github.com/cloudflare/cloudflare-go/v5/page_shield"
+	"github.com/cloudflare/cloudflare-go/v5/pages"
+	"github.com/cloudflare/cloudflare-go/v5/queues"
+	"github.com/cloudflare/cloudflare-go/v5/r2"
+	"github.com/cloudflare/cloudflare-go/v5/radar"
+	"github.com/cloudflare/cloudflare-go/v5/rate_limits"
+	"github.com/cloudflare/cloudflare-go/v5/registrar"
+	"github.com/cloudflare/cloudflare-go/v5/request_tracers"
+	"github.com/cloudflare/cloudflare-go/v5/resource_sharing"
+	"github.com/cloudflare/cloudflare-go/v5/rules"
+	"github.com/cloudflare/cloudflare-go/v5/rulesets"
+	"github.com/cloudflare/cloudflare-go/v5/rum"
+	"github.com/cloudflare/cloudflare-go/v5/security_center"
+	"github.com/cloudflare/cloudflare-go/v5/security_txt"
+	"github.com/cloudflare/cloudflare-go/v5/snippets"
+	"github.com/cloudflare/cloudflare-go/v5/spectrum"
+	"github.com/cloudflare/cloudflare-go/v5/speed"
+	"github.com/cloudflare/cloudflare-go/v5/ssl"
+	"github.com/cloudflare/cloudflare-go/v5/stream"
+	"github.com/cloudflare/cloudflare-go/v5/turnstile"
+	"github.com/cloudflare/cloudflare-go/v5/url_normalization"
+	"github.com/cloudflare/cloudflare-go/v5/url_scanner"
+	"github.com/cloudflare/cloudflare-go/v5/user"
+	"github.com/cloudflare/cloudflare-go/v5/vectorize"
+	"github.com/cloudflare/cloudflare-go/v5/waiting_rooms"
+	"github.com/cloudflare/cloudflare-go/v5/web3"
+	"github.com/cloudflare/cloudflare-go/v5/workers"
+	"github.com/cloudflare/cloudflare-go/v5/workers_for_platforms"
+	"github.com/cloudflare/cloudflare-go/v5/workflows"
+	"github.com/cloudflare/cloudflare-go/v5/zaraz"
+	"github.com/cloudflare/cloudflare-go/v5/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v5/zones"
 )
 
 // Client creates a struct with services and top level methods that help with
@@ -182,6 +185,7 @@ type Client struct {
 	Radar                       *radar.RadarService
 	BotManagement               *bot_management.BotManagementService
 	OriginPostQuantumEncryption *origin_post_quantum_encryption.OriginPostQuantumEncryptionService
+	Zaraz                       *zaraz.ZarazService
 	Speed                       *speed.SpeedService
 	DCVDelegation               *dcv_delegation.DCVDelegationService
 	Hostnames                   *hostnames.HostnameService
@@ -200,14 +204,14 @@ type Client struct {
 	AbuseReports                *abuse_reports.AbuseReportService
 	AI                          *ai.AIService
 	SecurityCenter              *security_center.SecurityCenterService
+	BrowserRendering            *browser_rendering.BrowserRenderingService
+	CustomPages                 *custom_pages.CustomPageService
 }
 
-// NewClient generates a new client with the default option read from the
-// environment (CLOUDFLARE_API_TOKEN, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL,
-// CLOUDFLARE_API_USER_SERVICE_KEY). The option passed in as arguments are applied
-// after these default arguments, and all option will be passed down to the
-// services and requests that this client makes.
-func NewClient(opts ...option.RequestOption) (r *Client) {
+// DefaultClientOptions read from the environment (CLOUDFLARE_API_TOKEN,
+// CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL, CLOUDFLARE_API_USER_SERVICE_KEY). This
+// should be used to initialize new clients.
+func DefaultClientOptions() []option.RequestOption {
 	defaults := []option.RequestOption{option.WithEnvironmentProduction()}
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_TOKEN"); ok {
 		defaults = append(defaults, option.WithAPIToken(o))
@@ -221,7 +225,16 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_USER_SERVICE_KEY"); ok {
 		defaults = append(defaults, option.WithUserServiceKey(o))
 	}
-	opts = append(defaults, opts...)
+	return defaults
+}
+
+// NewClient generates a new client with the default option read from the
+// environment (CLOUDFLARE_API_TOKEN, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL,
+// CLOUDFLARE_API_USER_SERVICE_KEY). The option passed in as arguments are applied
+// after these default arguments, and all option will be passed down to the
+// services and requests that this client makes.
+func NewClient(opts ...option.RequestOption) (r *Client) {
+	opts = append(DefaultClientOptions(), opts...)
 
 	r = &Client{Options: opts}
 
@@ -295,6 +308,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Radar = radar.NewRadarService(opts...)
 	r.BotManagement = bot_management.NewBotManagementService(opts...)
 	r.OriginPostQuantumEncryption = origin_post_quantum_encryption.NewOriginPostQuantumEncryptionService(opts...)
+	r.Zaraz = zaraz.NewZarazService(opts...)
 	r.Speed = speed.NewSpeedService(opts...)
 	r.DCVDelegation = dcv_delegation.NewDCVDelegationService(opts...)
 	r.Hostnames = hostnames.NewHostnameService(opts...)
@@ -313,6 +327,8 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
 	r.AI = ai.NewAIService(opts...)
 	r.SecurityCenter = security_center.NewSecurityCenterService(opts...)
+	r.BrowserRendering = browser_rendering.NewBrowserRenderingService(opts...)
+	r.CustomPages = custom_pages.NewCustomPageService(opts...)
 
 	return
 }

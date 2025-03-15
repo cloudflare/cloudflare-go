@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/zero_trust"
 )
 
 func TestDevicePolicyDefaultEditWithOptionalParams(t *testing.T) {
@@ -35,7 +35,18 @@ func TestDevicePolicyDefaultEditWithOptionalParams(t *testing.T) {
 		AutoConnect:         cloudflare.F(0.000000),
 		CaptivePortal:       cloudflare.F(180.000000),
 		DisableAutoFallback: cloudflare.F(true),
-		ExcludeOfficeIPs:    cloudflare.F(true),
+		Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+			Address:     cloudflare.F("192.0.2.0/24"),
+			Description: cloudflare.F("Exclude testing domains from the tunnel"),
+			Host:        cloudflare.F("*.example.com"),
+		}}),
+		ExcludeOfficeIPs: cloudflare.F(true),
+		Include: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+			Address:     cloudflare.F("192.0.2.0/24"),
+			Description: cloudflare.F("Exclude testing domains from the tunnel"),
+			Host:        cloudflare.F("*.example.com"),
+		}}),
+		RegisterInterfaceIPWithDNS: cloudflare.F(true),
 		ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyDefaultEditParamsServiceModeV2{
 			Mode: cloudflare.F("proxy"),
 			Port: cloudflare.F(3000.000000),

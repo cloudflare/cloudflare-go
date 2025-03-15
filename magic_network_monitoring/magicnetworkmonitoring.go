@@ -3,7 +3,7 @@
 package magic_network_monitoring
 
 import (
-	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v5/option"
 )
 
 // MagicNetworkMonitoringService contains methods and other services that help with
@@ -13,9 +13,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewMagicNetworkMonitoringService] method instead.
 type MagicNetworkMonitoringService struct {
-	Options []option.RequestOption
-	Configs *ConfigService
-	Rules   *RuleService
+	Options  []option.RequestOption
+	VPCFlows *VPCFlowService
+	Configs  *ConfigService
+	Rules    *RuleService
 }
 
 // NewMagicNetworkMonitoringService generates a new service that applies the given
@@ -24,6 +25,7 @@ type MagicNetworkMonitoringService struct {
 func NewMagicNetworkMonitoringService(opts ...option.RequestOption) (r *MagicNetworkMonitoringService) {
 	r = &MagicNetworkMonitoringService{}
 	r.Options = opts
+	r.VPCFlows = NewVPCFlowService(opts...)
 	r.Configs = NewConfigService(opts...)
 	r.Rules = NewRuleService(opts...)
 	return

@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // SiteInfoService contains methods and other services that help with interacting
@@ -284,8 +284,14 @@ type SiteInfoUpdateParams struct {
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
 	AutoInstall param.Field[bool] `json:"auto_install"`
+	// Enables or disables RUM. This option can be used only when auto_install is set
+	// to true.
+	Enabled param.Field[bool] `json:"enabled"`
 	// The hostname to use for gray-clouded sites.
 	Host param.Field[string] `json:"host"`
+	// If enabled, the JavaScript snippet will not be injected for visitors from the
+	// EU.
+	Lite param.Field[bool] `json:"lite"`
 	// The zone identifier.
 	ZoneTag param.Field[string] `json:"zone_tag"`
 }

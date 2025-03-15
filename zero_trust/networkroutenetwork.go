@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v4/internal/param"
-	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v5/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v5/internal/param"
+	"github.com/cloudflare/cloudflare-go/v5/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/shared"
 )
 
 // NetworkRouteNetworkService contains methods and other services that help with
@@ -191,6 +191,8 @@ type NetworkRouteNetworkDeleteParamsTunType string
 const (
 	NetworkRouteNetworkDeleteParamsTunTypeCfdTunnel     NetworkRouteNetworkDeleteParamsTunType = "cfd_tunnel"
 	NetworkRouteNetworkDeleteParamsTunTypeWARPConnector NetworkRouteNetworkDeleteParamsTunType = "warp_connector"
+	NetworkRouteNetworkDeleteParamsTunTypeWARP          NetworkRouteNetworkDeleteParamsTunType = "warp"
+	NetworkRouteNetworkDeleteParamsTunTypeMagic         NetworkRouteNetworkDeleteParamsTunType = "magic"
 	NetworkRouteNetworkDeleteParamsTunTypeIPSec         NetworkRouteNetworkDeleteParamsTunType = "ip_sec"
 	NetworkRouteNetworkDeleteParamsTunTypeGRE           NetworkRouteNetworkDeleteParamsTunType = "gre"
 	NetworkRouteNetworkDeleteParamsTunTypeCNI           NetworkRouteNetworkDeleteParamsTunType = "cni"
@@ -198,7 +200,7 @@ const (
 
 func (r NetworkRouteNetworkDeleteParamsTunType) IsKnown() bool {
 	switch r {
-	case NetworkRouteNetworkDeleteParamsTunTypeCfdTunnel, NetworkRouteNetworkDeleteParamsTunTypeWARPConnector, NetworkRouteNetworkDeleteParamsTunTypeIPSec, NetworkRouteNetworkDeleteParamsTunTypeGRE, NetworkRouteNetworkDeleteParamsTunTypeCNI:
+	case NetworkRouteNetworkDeleteParamsTunTypeCfdTunnel, NetworkRouteNetworkDeleteParamsTunTypeWARPConnector, NetworkRouteNetworkDeleteParamsTunTypeWARP, NetworkRouteNetworkDeleteParamsTunTypeMagic, NetworkRouteNetworkDeleteParamsTunTypeIPSec, NetworkRouteNetworkDeleteParamsTunTypeGRE, NetworkRouteNetworkDeleteParamsTunTypeCNI:
 		return true
 	}
 	return false
