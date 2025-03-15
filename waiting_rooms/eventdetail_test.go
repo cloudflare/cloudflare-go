@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/waiting_rooms"
+	"github.com/cloudflare/cloudflare-go/v5"
+	"github.com/cloudflare/cloudflare-go/v5/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v5/waiting_rooms"
 )
 
 func TestEventDetailGet(t *testing.T) {
