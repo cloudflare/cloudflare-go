@@ -30,6 +30,7 @@ type AIGatewayService struct {
 	Logs            *LogService
 	Datasets        *DatasetService
 	Evaluations     *EvaluationService
+	URLs            *URLService
 }
 
 // NewAIGatewayService generates a new service that applies the given options to
@@ -42,6 +43,7 @@ func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 	r.Logs = NewLogService(opts...)
 	r.Datasets = NewDatasetService(opts...)
 	r.Evaluations = NewEvaluationService(opts...)
+	r.URLs = NewURLService(opts...)
 	return
 }
 
