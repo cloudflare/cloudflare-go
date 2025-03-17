@@ -278,15 +278,19 @@ func (r as112TimeseriesGroupProtocolResponseJSON) RawJSON() string {
 }
 
 type AS112TimeseriesGroupProtocolResponseSerie0 struct {
-	TCP  []string                                       `json:"tcp,required"`
-	Udp  []string                                       `json:"udp,required"`
-	JSON as112TimeseriesGroupProtocolResponseSerie0JSON `json:"-"`
+	HTTPS []string                                       `json:"HTTPS,required"`
+	TCP   []string                                       `json:"TCP,required"`
+	TLS   []string                                       `json:"TLS,required"`
+	Udp   []string                                       `json:"UDP,required"`
+	JSON  as112TimeseriesGroupProtocolResponseSerie0JSON `json:"-"`
 }
 
 // as112TimeseriesGroupProtocolResponseSerie0JSON contains the JSON metadata for
 // the struct [AS112TimeseriesGroupProtocolResponseSerie0]
 type as112TimeseriesGroupProtocolResponseSerie0JSON struct {
+	HTTPS       apijson.Field
 	TCP         apijson.Field
+	TLS         apijson.Field
 	Udp         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -324,22 +328,15 @@ func (r as112TimeseriesGroupQueryTypeResponseJSON) RawJSON() string {
 }
 
 type AS112TimeseriesGroupQueryTypeResponseSerie0 struct {
-	A    []string                                        `json:"A,required"`
-	AAAA []string                                        `json:"AAAA,required"`
-	PTR  []string                                        `json:"PTR,required"`
-	SOA  []string                                        `json:"SOA,required"`
-	SRV  []string                                        `json:"SRV,required"`
-	JSON as112TimeseriesGroupQueryTypeResponseSerie0JSON `json:"-"`
+	Timestamps  []string                                        `json:"timestamps,required"`
+	ExtraFields map[string][]string                             `json:"-,extras"`
+	JSON        as112TimeseriesGroupQueryTypeResponseSerie0JSON `json:"-"`
 }
 
 // as112TimeseriesGroupQueryTypeResponseSerie0JSON contains the JSON metadata for
 // the struct [AS112TimeseriesGroupQueryTypeResponseSerie0]
 type as112TimeseriesGroupQueryTypeResponseSerie0JSON struct {
-	A           apijson.Field
-	AAAA        apijson.Field
-	PTR         apijson.Field
-	SOA         apijson.Field
-	SRV         apijson.Field
+	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -376,16 +373,15 @@ func (r as112TimeseriesGroupResponseCodesResponseJSON) RawJSON() string {
 }
 
 type AS112TimeseriesGroupResponseCodesResponseSerie0 struct {
-	Noerror  []string                                            `json:"NOERROR,required"`
-	Nxdomain []string                                            `json:"NXDOMAIN,required"`
-	JSON     as112TimeseriesGroupResponseCodesResponseSerie0JSON `json:"-"`
+	Timestamps  []string                                            `json:"timestamps,required"`
+	ExtraFields map[string][]string                                 `json:"-,extras"`
+	JSON        as112TimeseriesGroupResponseCodesResponseSerie0JSON `json:"-"`
 }
 
 // as112TimeseriesGroupResponseCodesResponseSerie0JSON contains the JSON metadata
 // for the struct [AS112TimeseriesGroupResponseCodesResponseSerie0]
 type as112TimeseriesGroupResponseCodesResponseSerie0JSON struct {
-	Noerror     apijson.Field
-	Nxdomain    apijson.Field
+	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -427,6 +423,12 @@ type AS112TimeseriesGroupDNSSECParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by DNS transport protocol.
+	Protocol param.Field[AS112TimeseriesGroupDNSSECParamsProtocol] `query:"protocol"`
+	// Filters results by DNS query type.
+	QueryType param.Field[AS112TimeseriesGroupDNSSECParamsQueryType] `query:"queryType"`
+	// Filters results by DNS response code.
+	ResponseCode param.Field[AS112TimeseriesGroupDNSSECParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112TimeseriesGroupDNSSECParams]'s query parameters as
@@ -469,6 +471,159 @@ const (
 func (r AS112TimeseriesGroupDNSSECParamsFormat) IsKnown() bool {
 	switch r {
 	case AS112TimeseriesGroupDNSSECParamsFormatJson, AS112TimeseriesGroupDNSSECParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS transport protocol.
+type AS112TimeseriesGroupDNSSECParamsProtocol string
+
+const (
+	AS112TimeseriesGroupDNSSECParamsProtocolUdp   AS112TimeseriesGroupDNSSECParamsProtocol = "UDP"
+	AS112TimeseriesGroupDNSSECParamsProtocolTCP   AS112TimeseriesGroupDNSSECParamsProtocol = "TCP"
+	AS112TimeseriesGroupDNSSECParamsProtocolHTTPS AS112TimeseriesGroupDNSSECParamsProtocol = "HTTPS"
+	AS112TimeseriesGroupDNSSECParamsProtocolTLS   AS112TimeseriesGroupDNSSECParamsProtocol = "TLS"
+)
+
+func (r AS112TimeseriesGroupDNSSECParamsProtocol) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupDNSSECParamsProtocolUdp, AS112TimeseriesGroupDNSSECParamsProtocolTCP, AS112TimeseriesGroupDNSSECParamsProtocolHTTPS, AS112TimeseriesGroupDNSSECParamsProtocolTLS:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS query type.
+type AS112TimeseriesGroupDNSSECParamsQueryType string
+
+const (
+	AS112TimeseriesGroupDNSSECParamsQueryTypeA          AS112TimeseriesGroupDNSSECParamsQueryType = "A"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeAAAA       AS112TimeseriesGroupDNSSECParamsQueryType = "AAAA"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeA6         AS112TimeseriesGroupDNSSECParamsQueryType = "A6"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeAfsdb      AS112TimeseriesGroupDNSSECParamsQueryType = "AFSDB"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeAny        AS112TimeseriesGroupDNSSECParamsQueryType = "ANY"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeApl        AS112TimeseriesGroupDNSSECParamsQueryType = "APL"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeAtma       AS112TimeseriesGroupDNSSECParamsQueryType = "ATMA"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeAXFR       AS112TimeseriesGroupDNSSECParamsQueryType = "AXFR"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeCAA        AS112TimeseriesGroupDNSSECParamsQueryType = "CAA"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeCdnskey    AS112TimeseriesGroupDNSSECParamsQueryType = "CDNSKEY"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeCds        AS112TimeseriesGroupDNSSECParamsQueryType = "CDS"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeCERT       AS112TimeseriesGroupDNSSECParamsQueryType = "CERT"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeCNAME      AS112TimeseriesGroupDNSSECParamsQueryType = "CNAME"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeCsync      AS112TimeseriesGroupDNSSECParamsQueryType = "CSYNC"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeDhcid      AS112TimeseriesGroupDNSSECParamsQueryType = "DHCID"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeDlv        AS112TimeseriesGroupDNSSECParamsQueryType = "DLV"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeDname      AS112TimeseriesGroupDNSSECParamsQueryType = "DNAME"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeDNSKEY     AS112TimeseriesGroupDNSSECParamsQueryType = "DNSKEY"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeDoa        AS112TimeseriesGroupDNSSECParamsQueryType = "DOA"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeDS         AS112TimeseriesGroupDNSSECParamsQueryType = "DS"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeEid        AS112TimeseriesGroupDNSSECParamsQueryType = "EID"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeEui48      AS112TimeseriesGroupDNSSECParamsQueryType = "EUI48"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeEui64      AS112TimeseriesGroupDNSSECParamsQueryType = "EUI64"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeGpos       AS112TimeseriesGroupDNSSECParamsQueryType = "GPOS"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeGid        AS112TimeseriesGroupDNSSECParamsQueryType = "GID"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeHinfo      AS112TimeseriesGroupDNSSECParamsQueryType = "HINFO"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeHip        AS112TimeseriesGroupDNSSECParamsQueryType = "HIP"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeHTTPS      AS112TimeseriesGroupDNSSECParamsQueryType = "HTTPS"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeIpseckey   AS112TimeseriesGroupDNSSECParamsQueryType = "IPSECKEY"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeIsdn       AS112TimeseriesGroupDNSSECParamsQueryType = "ISDN"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeIxfr       AS112TimeseriesGroupDNSSECParamsQueryType = "IXFR"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeKey        AS112TimeseriesGroupDNSSECParamsQueryType = "KEY"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeKx         AS112TimeseriesGroupDNSSECParamsQueryType = "KX"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeL32        AS112TimeseriesGroupDNSSECParamsQueryType = "L32"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeL64        AS112TimeseriesGroupDNSSECParamsQueryType = "L64"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeLOC        AS112TimeseriesGroupDNSSECParamsQueryType = "LOC"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeLp         AS112TimeseriesGroupDNSSECParamsQueryType = "LP"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeMaila      AS112TimeseriesGroupDNSSECParamsQueryType = "MAILA"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeMailb      AS112TimeseriesGroupDNSSECParamsQueryType = "MAILB"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeMB         AS112TimeseriesGroupDNSSECParamsQueryType = "MB"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeMd         AS112TimeseriesGroupDNSSECParamsQueryType = "MD"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeMf         AS112TimeseriesGroupDNSSECParamsQueryType = "MF"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeMg         AS112TimeseriesGroupDNSSECParamsQueryType = "MG"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeMinfo      AS112TimeseriesGroupDNSSECParamsQueryType = "MINFO"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeMr         AS112TimeseriesGroupDNSSECParamsQueryType = "MR"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeMX         AS112TimeseriesGroupDNSSECParamsQueryType = "MX"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNAPTR      AS112TimeseriesGroupDNSSECParamsQueryType = "NAPTR"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNb         AS112TimeseriesGroupDNSSECParamsQueryType = "NB"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNbstat     AS112TimeseriesGroupDNSSECParamsQueryType = "NBSTAT"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNid        AS112TimeseriesGroupDNSSECParamsQueryType = "NID"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNimloc     AS112TimeseriesGroupDNSSECParamsQueryType = "NIMLOC"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNinfo      AS112TimeseriesGroupDNSSECParamsQueryType = "NINFO"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNS         AS112TimeseriesGroupDNSSECParamsQueryType = "NS"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNsap       AS112TimeseriesGroupDNSSECParamsQueryType = "NSAP"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNsec       AS112TimeseriesGroupDNSSECParamsQueryType = "NSEC"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNsec3      AS112TimeseriesGroupDNSSECParamsQueryType = "NSEC3"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNsec3Param AS112TimeseriesGroupDNSSECParamsQueryType = "NSEC3PARAM"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNull       AS112TimeseriesGroupDNSSECParamsQueryType = "NULL"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeNxt        AS112TimeseriesGroupDNSSECParamsQueryType = "NXT"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeOpenpgpkey AS112TimeseriesGroupDNSSECParamsQueryType = "OPENPGPKEY"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeOpt        AS112TimeseriesGroupDNSSECParamsQueryType = "OPT"
+	AS112TimeseriesGroupDNSSECParamsQueryTypePTR        AS112TimeseriesGroupDNSSECParamsQueryType = "PTR"
+	AS112TimeseriesGroupDNSSECParamsQueryTypePx         AS112TimeseriesGroupDNSSECParamsQueryType = "PX"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeRkey       AS112TimeseriesGroupDNSSECParamsQueryType = "RKEY"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeRp         AS112TimeseriesGroupDNSSECParamsQueryType = "RP"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeRrsig      AS112TimeseriesGroupDNSSECParamsQueryType = "RRSIG"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeRt         AS112TimeseriesGroupDNSSECParamsQueryType = "RT"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeSig        AS112TimeseriesGroupDNSSECParamsQueryType = "SIG"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeSink       AS112TimeseriesGroupDNSSECParamsQueryType = "SINK"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeSMIMEA     AS112TimeseriesGroupDNSSECParamsQueryType = "SMIMEA"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeSOA        AS112TimeseriesGroupDNSSECParamsQueryType = "SOA"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeSPF        AS112TimeseriesGroupDNSSECParamsQueryType = "SPF"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeSRV        AS112TimeseriesGroupDNSSECParamsQueryType = "SRV"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeSSHFP      AS112TimeseriesGroupDNSSECParamsQueryType = "SSHFP"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeSVCB       AS112TimeseriesGroupDNSSECParamsQueryType = "SVCB"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeTa         AS112TimeseriesGroupDNSSECParamsQueryType = "TA"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeTalink     AS112TimeseriesGroupDNSSECParamsQueryType = "TALINK"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeTkey       AS112TimeseriesGroupDNSSECParamsQueryType = "TKEY"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeTLSA       AS112TimeseriesGroupDNSSECParamsQueryType = "TLSA"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeTSIG       AS112TimeseriesGroupDNSSECParamsQueryType = "TSIG"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeTXT        AS112TimeseriesGroupDNSSECParamsQueryType = "TXT"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeUinfo      AS112TimeseriesGroupDNSSECParamsQueryType = "UINFO"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeUID        AS112TimeseriesGroupDNSSECParamsQueryType = "UID"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeUnspec     AS112TimeseriesGroupDNSSECParamsQueryType = "UNSPEC"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeURI        AS112TimeseriesGroupDNSSECParamsQueryType = "URI"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeWks        AS112TimeseriesGroupDNSSECParamsQueryType = "WKS"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeX25        AS112TimeseriesGroupDNSSECParamsQueryType = "X25"
+	AS112TimeseriesGroupDNSSECParamsQueryTypeZonemd     AS112TimeseriesGroupDNSSECParamsQueryType = "ZONEMD"
+)
+
+func (r AS112TimeseriesGroupDNSSECParamsQueryType) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupDNSSECParamsQueryTypeA, AS112TimeseriesGroupDNSSECParamsQueryTypeAAAA, AS112TimeseriesGroupDNSSECParamsQueryTypeA6, AS112TimeseriesGroupDNSSECParamsQueryTypeAfsdb, AS112TimeseriesGroupDNSSECParamsQueryTypeAny, AS112TimeseriesGroupDNSSECParamsQueryTypeApl, AS112TimeseriesGroupDNSSECParamsQueryTypeAtma, AS112TimeseriesGroupDNSSECParamsQueryTypeAXFR, AS112TimeseriesGroupDNSSECParamsQueryTypeCAA, AS112TimeseriesGroupDNSSECParamsQueryTypeCdnskey, AS112TimeseriesGroupDNSSECParamsQueryTypeCds, AS112TimeseriesGroupDNSSECParamsQueryTypeCERT, AS112TimeseriesGroupDNSSECParamsQueryTypeCNAME, AS112TimeseriesGroupDNSSECParamsQueryTypeCsync, AS112TimeseriesGroupDNSSECParamsQueryTypeDhcid, AS112TimeseriesGroupDNSSECParamsQueryTypeDlv, AS112TimeseriesGroupDNSSECParamsQueryTypeDname, AS112TimeseriesGroupDNSSECParamsQueryTypeDNSKEY, AS112TimeseriesGroupDNSSECParamsQueryTypeDoa, AS112TimeseriesGroupDNSSECParamsQueryTypeDS, AS112TimeseriesGroupDNSSECParamsQueryTypeEid, AS112TimeseriesGroupDNSSECParamsQueryTypeEui48, AS112TimeseriesGroupDNSSECParamsQueryTypeEui64, AS112TimeseriesGroupDNSSECParamsQueryTypeGpos, AS112TimeseriesGroupDNSSECParamsQueryTypeGid, AS112TimeseriesGroupDNSSECParamsQueryTypeHinfo, AS112TimeseriesGroupDNSSECParamsQueryTypeHip, AS112TimeseriesGroupDNSSECParamsQueryTypeHTTPS, AS112TimeseriesGroupDNSSECParamsQueryTypeIpseckey, AS112TimeseriesGroupDNSSECParamsQueryTypeIsdn, AS112TimeseriesGroupDNSSECParamsQueryTypeIxfr, AS112TimeseriesGroupDNSSECParamsQueryTypeKey, AS112TimeseriesGroupDNSSECParamsQueryTypeKx, AS112TimeseriesGroupDNSSECParamsQueryTypeL32, AS112TimeseriesGroupDNSSECParamsQueryTypeL64, AS112TimeseriesGroupDNSSECParamsQueryTypeLOC, AS112TimeseriesGroupDNSSECParamsQueryTypeLp, AS112TimeseriesGroupDNSSECParamsQueryTypeMaila, AS112TimeseriesGroupDNSSECParamsQueryTypeMailb, AS112TimeseriesGroupDNSSECParamsQueryTypeMB, AS112TimeseriesGroupDNSSECParamsQueryTypeMd, AS112TimeseriesGroupDNSSECParamsQueryTypeMf, AS112TimeseriesGroupDNSSECParamsQueryTypeMg, AS112TimeseriesGroupDNSSECParamsQueryTypeMinfo, AS112TimeseriesGroupDNSSECParamsQueryTypeMr, AS112TimeseriesGroupDNSSECParamsQueryTypeMX, AS112TimeseriesGroupDNSSECParamsQueryTypeNAPTR, AS112TimeseriesGroupDNSSECParamsQueryTypeNb, AS112TimeseriesGroupDNSSECParamsQueryTypeNbstat, AS112TimeseriesGroupDNSSECParamsQueryTypeNid, AS112TimeseriesGroupDNSSECParamsQueryTypeNimloc, AS112TimeseriesGroupDNSSECParamsQueryTypeNinfo, AS112TimeseriesGroupDNSSECParamsQueryTypeNS, AS112TimeseriesGroupDNSSECParamsQueryTypeNsap, AS112TimeseriesGroupDNSSECParamsQueryTypeNsec, AS112TimeseriesGroupDNSSECParamsQueryTypeNsec3, AS112TimeseriesGroupDNSSECParamsQueryTypeNsec3Param, AS112TimeseriesGroupDNSSECParamsQueryTypeNull, AS112TimeseriesGroupDNSSECParamsQueryTypeNxt, AS112TimeseriesGroupDNSSECParamsQueryTypeOpenpgpkey, AS112TimeseriesGroupDNSSECParamsQueryTypeOpt, AS112TimeseriesGroupDNSSECParamsQueryTypePTR, AS112TimeseriesGroupDNSSECParamsQueryTypePx, AS112TimeseriesGroupDNSSECParamsQueryTypeRkey, AS112TimeseriesGroupDNSSECParamsQueryTypeRp, AS112TimeseriesGroupDNSSECParamsQueryTypeRrsig, AS112TimeseriesGroupDNSSECParamsQueryTypeRt, AS112TimeseriesGroupDNSSECParamsQueryTypeSig, AS112TimeseriesGroupDNSSECParamsQueryTypeSink, AS112TimeseriesGroupDNSSECParamsQueryTypeSMIMEA, AS112TimeseriesGroupDNSSECParamsQueryTypeSOA, AS112TimeseriesGroupDNSSECParamsQueryTypeSPF, AS112TimeseriesGroupDNSSECParamsQueryTypeSRV, AS112TimeseriesGroupDNSSECParamsQueryTypeSSHFP, AS112TimeseriesGroupDNSSECParamsQueryTypeSVCB, AS112TimeseriesGroupDNSSECParamsQueryTypeTa, AS112TimeseriesGroupDNSSECParamsQueryTypeTalink, AS112TimeseriesGroupDNSSECParamsQueryTypeTkey, AS112TimeseriesGroupDNSSECParamsQueryTypeTLSA, AS112TimeseriesGroupDNSSECParamsQueryTypeTSIG, AS112TimeseriesGroupDNSSECParamsQueryTypeTXT, AS112TimeseriesGroupDNSSECParamsQueryTypeUinfo, AS112TimeseriesGroupDNSSECParamsQueryTypeUID, AS112TimeseriesGroupDNSSECParamsQueryTypeUnspec, AS112TimeseriesGroupDNSSECParamsQueryTypeURI, AS112TimeseriesGroupDNSSECParamsQueryTypeWks, AS112TimeseriesGroupDNSSECParamsQueryTypeX25, AS112TimeseriesGroupDNSSECParamsQueryTypeZonemd:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS response code.
+type AS112TimeseriesGroupDNSSECParamsResponseCode string
+
+const (
+	AS112TimeseriesGroupDNSSECParamsResponseCodeNoerror   AS112TimeseriesGroupDNSSECParamsResponseCode = "NOERROR"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeFormerr   AS112TimeseriesGroupDNSSECParamsResponseCode = "FORMERR"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeServfail  AS112TimeseriesGroupDNSSECParamsResponseCode = "SERVFAIL"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeNxdomain  AS112TimeseriesGroupDNSSECParamsResponseCode = "NXDOMAIN"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeNotimp    AS112TimeseriesGroupDNSSECParamsResponseCode = "NOTIMP"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeRefused   AS112TimeseriesGroupDNSSECParamsResponseCode = "REFUSED"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeYxdomain  AS112TimeseriesGroupDNSSECParamsResponseCode = "YXDOMAIN"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeYxrrset   AS112TimeseriesGroupDNSSECParamsResponseCode = "YXRRSET"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeNxrrset   AS112TimeseriesGroupDNSSECParamsResponseCode = "NXRRSET"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeNotauth   AS112TimeseriesGroupDNSSECParamsResponseCode = "NOTAUTH"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeNotzone   AS112TimeseriesGroupDNSSECParamsResponseCode = "NOTZONE"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeBadsig    AS112TimeseriesGroupDNSSECParamsResponseCode = "BADSIG"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeBadkey    AS112TimeseriesGroupDNSSECParamsResponseCode = "BADKEY"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeBadtime   AS112TimeseriesGroupDNSSECParamsResponseCode = "BADTIME"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeBadmode   AS112TimeseriesGroupDNSSECParamsResponseCode = "BADMODE"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeBadname   AS112TimeseriesGroupDNSSECParamsResponseCode = "BADNAME"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeBadalg    AS112TimeseriesGroupDNSSECParamsResponseCode = "BADALG"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeBadtrunc  AS112TimeseriesGroupDNSSECParamsResponseCode = "BADTRUNC"
+	AS112TimeseriesGroupDNSSECParamsResponseCodeBadcookie AS112TimeseriesGroupDNSSECParamsResponseCode = "BADCOOKIE"
+)
+
+func (r AS112TimeseriesGroupDNSSECParamsResponseCode) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupDNSSECParamsResponseCodeNoerror, AS112TimeseriesGroupDNSSECParamsResponseCodeFormerr, AS112TimeseriesGroupDNSSECParamsResponseCodeServfail, AS112TimeseriesGroupDNSSECParamsResponseCodeNxdomain, AS112TimeseriesGroupDNSSECParamsResponseCodeNotimp, AS112TimeseriesGroupDNSSECParamsResponseCodeRefused, AS112TimeseriesGroupDNSSECParamsResponseCodeYxdomain, AS112TimeseriesGroupDNSSECParamsResponseCodeYxrrset, AS112TimeseriesGroupDNSSECParamsResponseCodeNxrrset, AS112TimeseriesGroupDNSSECParamsResponseCodeNotauth, AS112TimeseriesGroupDNSSECParamsResponseCodeNotzone, AS112TimeseriesGroupDNSSECParamsResponseCodeBadsig, AS112TimeseriesGroupDNSSECParamsResponseCodeBadkey, AS112TimeseriesGroupDNSSECParamsResponseCodeBadtime, AS112TimeseriesGroupDNSSECParamsResponseCodeBadmode, AS112TimeseriesGroupDNSSECParamsResponseCodeBadname, AS112TimeseriesGroupDNSSECParamsResponseCodeBadalg, AS112TimeseriesGroupDNSSECParamsResponseCodeBadtrunc, AS112TimeseriesGroupDNSSECParamsResponseCodeBadcookie:
 		return true
 	}
 	return false
@@ -526,6 +681,12 @@ type AS112TimeseriesGroupEdnsParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by DNS transport protocol.
+	Protocol param.Field[AS112TimeseriesGroupEdnsParamsProtocol] `query:"protocol"`
+	// Filters results by DNS query type.
+	QueryType param.Field[AS112TimeseriesGroupEdnsParamsQueryType] `query:"queryType"`
+	// Filters results by DNS response code.
+	ResponseCode param.Field[AS112TimeseriesGroupEdnsParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112TimeseriesGroupEdnsParams]'s query parameters as
@@ -568,6 +729,159 @@ const (
 func (r AS112TimeseriesGroupEdnsParamsFormat) IsKnown() bool {
 	switch r {
 	case AS112TimeseriesGroupEdnsParamsFormatJson, AS112TimeseriesGroupEdnsParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS transport protocol.
+type AS112TimeseriesGroupEdnsParamsProtocol string
+
+const (
+	AS112TimeseriesGroupEdnsParamsProtocolUdp   AS112TimeseriesGroupEdnsParamsProtocol = "UDP"
+	AS112TimeseriesGroupEdnsParamsProtocolTCP   AS112TimeseriesGroupEdnsParamsProtocol = "TCP"
+	AS112TimeseriesGroupEdnsParamsProtocolHTTPS AS112TimeseriesGroupEdnsParamsProtocol = "HTTPS"
+	AS112TimeseriesGroupEdnsParamsProtocolTLS   AS112TimeseriesGroupEdnsParamsProtocol = "TLS"
+)
+
+func (r AS112TimeseriesGroupEdnsParamsProtocol) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupEdnsParamsProtocolUdp, AS112TimeseriesGroupEdnsParamsProtocolTCP, AS112TimeseriesGroupEdnsParamsProtocolHTTPS, AS112TimeseriesGroupEdnsParamsProtocolTLS:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS query type.
+type AS112TimeseriesGroupEdnsParamsQueryType string
+
+const (
+	AS112TimeseriesGroupEdnsParamsQueryTypeA          AS112TimeseriesGroupEdnsParamsQueryType = "A"
+	AS112TimeseriesGroupEdnsParamsQueryTypeAAAA       AS112TimeseriesGroupEdnsParamsQueryType = "AAAA"
+	AS112TimeseriesGroupEdnsParamsQueryTypeA6         AS112TimeseriesGroupEdnsParamsQueryType = "A6"
+	AS112TimeseriesGroupEdnsParamsQueryTypeAfsdb      AS112TimeseriesGroupEdnsParamsQueryType = "AFSDB"
+	AS112TimeseriesGroupEdnsParamsQueryTypeAny        AS112TimeseriesGroupEdnsParamsQueryType = "ANY"
+	AS112TimeseriesGroupEdnsParamsQueryTypeApl        AS112TimeseriesGroupEdnsParamsQueryType = "APL"
+	AS112TimeseriesGroupEdnsParamsQueryTypeAtma       AS112TimeseriesGroupEdnsParamsQueryType = "ATMA"
+	AS112TimeseriesGroupEdnsParamsQueryTypeAXFR       AS112TimeseriesGroupEdnsParamsQueryType = "AXFR"
+	AS112TimeseriesGroupEdnsParamsQueryTypeCAA        AS112TimeseriesGroupEdnsParamsQueryType = "CAA"
+	AS112TimeseriesGroupEdnsParamsQueryTypeCdnskey    AS112TimeseriesGroupEdnsParamsQueryType = "CDNSKEY"
+	AS112TimeseriesGroupEdnsParamsQueryTypeCds        AS112TimeseriesGroupEdnsParamsQueryType = "CDS"
+	AS112TimeseriesGroupEdnsParamsQueryTypeCERT       AS112TimeseriesGroupEdnsParamsQueryType = "CERT"
+	AS112TimeseriesGroupEdnsParamsQueryTypeCNAME      AS112TimeseriesGroupEdnsParamsQueryType = "CNAME"
+	AS112TimeseriesGroupEdnsParamsQueryTypeCsync      AS112TimeseriesGroupEdnsParamsQueryType = "CSYNC"
+	AS112TimeseriesGroupEdnsParamsQueryTypeDhcid      AS112TimeseriesGroupEdnsParamsQueryType = "DHCID"
+	AS112TimeseriesGroupEdnsParamsQueryTypeDlv        AS112TimeseriesGroupEdnsParamsQueryType = "DLV"
+	AS112TimeseriesGroupEdnsParamsQueryTypeDname      AS112TimeseriesGroupEdnsParamsQueryType = "DNAME"
+	AS112TimeseriesGroupEdnsParamsQueryTypeDNSKEY     AS112TimeseriesGroupEdnsParamsQueryType = "DNSKEY"
+	AS112TimeseriesGroupEdnsParamsQueryTypeDoa        AS112TimeseriesGroupEdnsParamsQueryType = "DOA"
+	AS112TimeseriesGroupEdnsParamsQueryTypeDS         AS112TimeseriesGroupEdnsParamsQueryType = "DS"
+	AS112TimeseriesGroupEdnsParamsQueryTypeEid        AS112TimeseriesGroupEdnsParamsQueryType = "EID"
+	AS112TimeseriesGroupEdnsParamsQueryTypeEui48      AS112TimeseriesGroupEdnsParamsQueryType = "EUI48"
+	AS112TimeseriesGroupEdnsParamsQueryTypeEui64      AS112TimeseriesGroupEdnsParamsQueryType = "EUI64"
+	AS112TimeseriesGroupEdnsParamsQueryTypeGpos       AS112TimeseriesGroupEdnsParamsQueryType = "GPOS"
+	AS112TimeseriesGroupEdnsParamsQueryTypeGid        AS112TimeseriesGroupEdnsParamsQueryType = "GID"
+	AS112TimeseriesGroupEdnsParamsQueryTypeHinfo      AS112TimeseriesGroupEdnsParamsQueryType = "HINFO"
+	AS112TimeseriesGroupEdnsParamsQueryTypeHip        AS112TimeseriesGroupEdnsParamsQueryType = "HIP"
+	AS112TimeseriesGroupEdnsParamsQueryTypeHTTPS      AS112TimeseriesGroupEdnsParamsQueryType = "HTTPS"
+	AS112TimeseriesGroupEdnsParamsQueryTypeIpseckey   AS112TimeseriesGroupEdnsParamsQueryType = "IPSECKEY"
+	AS112TimeseriesGroupEdnsParamsQueryTypeIsdn       AS112TimeseriesGroupEdnsParamsQueryType = "ISDN"
+	AS112TimeseriesGroupEdnsParamsQueryTypeIxfr       AS112TimeseriesGroupEdnsParamsQueryType = "IXFR"
+	AS112TimeseriesGroupEdnsParamsQueryTypeKey        AS112TimeseriesGroupEdnsParamsQueryType = "KEY"
+	AS112TimeseriesGroupEdnsParamsQueryTypeKx         AS112TimeseriesGroupEdnsParamsQueryType = "KX"
+	AS112TimeseriesGroupEdnsParamsQueryTypeL32        AS112TimeseriesGroupEdnsParamsQueryType = "L32"
+	AS112TimeseriesGroupEdnsParamsQueryTypeL64        AS112TimeseriesGroupEdnsParamsQueryType = "L64"
+	AS112TimeseriesGroupEdnsParamsQueryTypeLOC        AS112TimeseriesGroupEdnsParamsQueryType = "LOC"
+	AS112TimeseriesGroupEdnsParamsQueryTypeLp         AS112TimeseriesGroupEdnsParamsQueryType = "LP"
+	AS112TimeseriesGroupEdnsParamsQueryTypeMaila      AS112TimeseriesGroupEdnsParamsQueryType = "MAILA"
+	AS112TimeseriesGroupEdnsParamsQueryTypeMailb      AS112TimeseriesGroupEdnsParamsQueryType = "MAILB"
+	AS112TimeseriesGroupEdnsParamsQueryTypeMB         AS112TimeseriesGroupEdnsParamsQueryType = "MB"
+	AS112TimeseriesGroupEdnsParamsQueryTypeMd         AS112TimeseriesGroupEdnsParamsQueryType = "MD"
+	AS112TimeseriesGroupEdnsParamsQueryTypeMf         AS112TimeseriesGroupEdnsParamsQueryType = "MF"
+	AS112TimeseriesGroupEdnsParamsQueryTypeMg         AS112TimeseriesGroupEdnsParamsQueryType = "MG"
+	AS112TimeseriesGroupEdnsParamsQueryTypeMinfo      AS112TimeseriesGroupEdnsParamsQueryType = "MINFO"
+	AS112TimeseriesGroupEdnsParamsQueryTypeMr         AS112TimeseriesGroupEdnsParamsQueryType = "MR"
+	AS112TimeseriesGroupEdnsParamsQueryTypeMX         AS112TimeseriesGroupEdnsParamsQueryType = "MX"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNAPTR      AS112TimeseriesGroupEdnsParamsQueryType = "NAPTR"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNb         AS112TimeseriesGroupEdnsParamsQueryType = "NB"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNbstat     AS112TimeseriesGroupEdnsParamsQueryType = "NBSTAT"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNid        AS112TimeseriesGroupEdnsParamsQueryType = "NID"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNimloc     AS112TimeseriesGroupEdnsParamsQueryType = "NIMLOC"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNinfo      AS112TimeseriesGroupEdnsParamsQueryType = "NINFO"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNS         AS112TimeseriesGroupEdnsParamsQueryType = "NS"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNsap       AS112TimeseriesGroupEdnsParamsQueryType = "NSAP"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNsec       AS112TimeseriesGroupEdnsParamsQueryType = "NSEC"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNsec3      AS112TimeseriesGroupEdnsParamsQueryType = "NSEC3"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNsec3Param AS112TimeseriesGroupEdnsParamsQueryType = "NSEC3PARAM"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNull       AS112TimeseriesGroupEdnsParamsQueryType = "NULL"
+	AS112TimeseriesGroupEdnsParamsQueryTypeNxt        AS112TimeseriesGroupEdnsParamsQueryType = "NXT"
+	AS112TimeseriesGroupEdnsParamsQueryTypeOpenpgpkey AS112TimeseriesGroupEdnsParamsQueryType = "OPENPGPKEY"
+	AS112TimeseriesGroupEdnsParamsQueryTypeOpt        AS112TimeseriesGroupEdnsParamsQueryType = "OPT"
+	AS112TimeseriesGroupEdnsParamsQueryTypePTR        AS112TimeseriesGroupEdnsParamsQueryType = "PTR"
+	AS112TimeseriesGroupEdnsParamsQueryTypePx         AS112TimeseriesGroupEdnsParamsQueryType = "PX"
+	AS112TimeseriesGroupEdnsParamsQueryTypeRkey       AS112TimeseriesGroupEdnsParamsQueryType = "RKEY"
+	AS112TimeseriesGroupEdnsParamsQueryTypeRp         AS112TimeseriesGroupEdnsParamsQueryType = "RP"
+	AS112TimeseriesGroupEdnsParamsQueryTypeRrsig      AS112TimeseriesGroupEdnsParamsQueryType = "RRSIG"
+	AS112TimeseriesGroupEdnsParamsQueryTypeRt         AS112TimeseriesGroupEdnsParamsQueryType = "RT"
+	AS112TimeseriesGroupEdnsParamsQueryTypeSig        AS112TimeseriesGroupEdnsParamsQueryType = "SIG"
+	AS112TimeseriesGroupEdnsParamsQueryTypeSink       AS112TimeseriesGroupEdnsParamsQueryType = "SINK"
+	AS112TimeseriesGroupEdnsParamsQueryTypeSMIMEA     AS112TimeseriesGroupEdnsParamsQueryType = "SMIMEA"
+	AS112TimeseriesGroupEdnsParamsQueryTypeSOA        AS112TimeseriesGroupEdnsParamsQueryType = "SOA"
+	AS112TimeseriesGroupEdnsParamsQueryTypeSPF        AS112TimeseriesGroupEdnsParamsQueryType = "SPF"
+	AS112TimeseriesGroupEdnsParamsQueryTypeSRV        AS112TimeseriesGroupEdnsParamsQueryType = "SRV"
+	AS112TimeseriesGroupEdnsParamsQueryTypeSSHFP      AS112TimeseriesGroupEdnsParamsQueryType = "SSHFP"
+	AS112TimeseriesGroupEdnsParamsQueryTypeSVCB       AS112TimeseriesGroupEdnsParamsQueryType = "SVCB"
+	AS112TimeseriesGroupEdnsParamsQueryTypeTa         AS112TimeseriesGroupEdnsParamsQueryType = "TA"
+	AS112TimeseriesGroupEdnsParamsQueryTypeTalink     AS112TimeseriesGroupEdnsParamsQueryType = "TALINK"
+	AS112TimeseriesGroupEdnsParamsQueryTypeTkey       AS112TimeseriesGroupEdnsParamsQueryType = "TKEY"
+	AS112TimeseriesGroupEdnsParamsQueryTypeTLSA       AS112TimeseriesGroupEdnsParamsQueryType = "TLSA"
+	AS112TimeseriesGroupEdnsParamsQueryTypeTSIG       AS112TimeseriesGroupEdnsParamsQueryType = "TSIG"
+	AS112TimeseriesGroupEdnsParamsQueryTypeTXT        AS112TimeseriesGroupEdnsParamsQueryType = "TXT"
+	AS112TimeseriesGroupEdnsParamsQueryTypeUinfo      AS112TimeseriesGroupEdnsParamsQueryType = "UINFO"
+	AS112TimeseriesGroupEdnsParamsQueryTypeUID        AS112TimeseriesGroupEdnsParamsQueryType = "UID"
+	AS112TimeseriesGroupEdnsParamsQueryTypeUnspec     AS112TimeseriesGroupEdnsParamsQueryType = "UNSPEC"
+	AS112TimeseriesGroupEdnsParamsQueryTypeURI        AS112TimeseriesGroupEdnsParamsQueryType = "URI"
+	AS112TimeseriesGroupEdnsParamsQueryTypeWks        AS112TimeseriesGroupEdnsParamsQueryType = "WKS"
+	AS112TimeseriesGroupEdnsParamsQueryTypeX25        AS112TimeseriesGroupEdnsParamsQueryType = "X25"
+	AS112TimeseriesGroupEdnsParamsQueryTypeZonemd     AS112TimeseriesGroupEdnsParamsQueryType = "ZONEMD"
+)
+
+func (r AS112TimeseriesGroupEdnsParamsQueryType) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupEdnsParamsQueryTypeA, AS112TimeseriesGroupEdnsParamsQueryTypeAAAA, AS112TimeseriesGroupEdnsParamsQueryTypeA6, AS112TimeseriesGroupEdnsParamsQueryTypeAfsdb, AS112TimeseriesGroupEdnsParamsQueryTypeAny, AS112TimeseriesGroupEdnsParamsQueryTypeApl, AS112TimeseriesGroupEdnsParamsQueryTypeAtma, AS112TimeseriesGroupEdnsParamsQueryTypeAXFR, AS112TimeseriesGroupEdnsParamsQueryTypeCAA, AS112TimeseriesGroupEdnsParamsQueryTypeCdnskey, AS112TimeseriesGroupEdnsParamsQueryTypeCds, AS112TimeseriesGroupEdnsParamsQueryTypeCERT, AS112TimeseriesGroupEdnsParamsQueryTypeCNAME, AS112TimeseriesGroupEdnsParamsQueryTypeCsync, AS112TimeseriesGroupEdnsParamsQueryTypeDhcid, AS112TimeseriesGroupEdnsParamsQueryTypeDlv, AS112TimeseriesGroupEdnsParamsQueryTypeDname, AS112TimeseriesGroupEdnsParamsQueryTypeDNSKEY, AS112TimeseriesGroupEdnsParamsQueryTypeDoa, AS112TimeseriesGroupEdnsParamsQueryTypeDS, AS112TimeseriesGroupEdnsParamsQueryTypeEid, AS112TimeseriesGroupEdnsParamsQueryTypeEui48, AS112TimeseriesGroupEdnsParamsQueryTypeEui64, AS112TimeseriesGroupEdnsParamsQueryTypeGpos, AS112TimeseriesGroupEdnsParamsQueryTypeGid, AS112TimeseriesGroupEdnsParamsQueryTypeHinfo, AS112TimeseriesGroupEdnsParamsQueryTypeHip, AS112TimeseriesGroupEdnsParamsQueryTypeHTTPS, AS112TimeseriesGroupEdnsParamsQueryTypeIpseckey, AS112TimeseriesGroupEdnsParamsQueryTypeIsdn, AS112TimeseriesGroupEdnsParamsQueryTypeIxfr, AS112TimeseriesGroupEdnsParamsQueryTypeKey, AS112TimeseriesGroupEdnsParamsQueryTypeKx, AS112TimeseriesGroupEdnsParamsQueryTypeL32, AS112TimeseriesGroupEdnsParamsQueryTypeL64, AS112TimeseriesGroupEdnsParamsQueryTypeLOC, AS112TimeseriesGroupEdnsParamsQueryTypeLp, AS112TimeseriesGroupEdnsParamsQueryTypeMaila, AS112TimeseriesGroupEdnsParamsQueryTypeMailb, AS112TimeseriesGroupEdnsParamsQueryTypeMB, AS112TimeseriesGroupEdnsParamsQueryTypeMd, AS112TimeseriesGroupEdnsParamsQueryTypeMf, AS112TimeseriesGroupEdnsParamsQueryTypeMg, AS112TimeseriesGroupEdnsParamsQueryTypeMinfo, AS112TimeseriesGroupEdnsParamsQueryTypeMr, AS112TimeseriesGroupEdnsParamsQueryTypeMX, AS112TimeseriesGroupEdnsParamsQueryTypeNAPTR, AS112TimeseriesGroupEdnsParamsQueryTypeNb, AS112TimeseriesGroupEdnsParamsQueryTypeNbstat, AS112TimeseriesGroupEdnsParamsQueryTypeNid, AS112TimeseriesGroupEdnsParamsQueryTypeNimloc, AS112TimeseriesGroupEdnsParamsQueryTypeNinfo, AS112TimeseriesGroupEdnsParamsQueryTypeNS, AS112TimeseriesGroupEdnsParamsQueryTypeNsap, AS112TimeseriesGroupEdnsParamsQueryTypeNsec, AS112TimeseriesGroupEdnsParamsQueryTypeNsec3, AS112TimeseriesGroupEdnsParamsQueryTypeNsec3Param, AS112TimeseriesGroupEdnsParamsQueryTypeNull, AS112TimeseriesGroupEdnsParamsQueryTypeNxt, AS112TimeseriesGroupEdnsParamsQueryTypeOpenpgpkey, AS112TimeseriesGroupEdnsParamsQueryTypeOpt, AS112TimeseriesGroupEdnsParamsQueryTypePTR, AS112TimeseriesGroupEdnsParamsQueryTypePx, AS112TimeseriesGroupEdnsParamsQueryTypeRkey, AS112TimeseriesGroupEdnsParamsQueryTypeRp, AS112TimeseriesGroupEdnsParamsQueryTypeRrsig, AS112TimeseriesGroupEdnsParamsQueryTypeRt, AS112TimeseriesGroupEdnsParamsQueryTypeSig, AS112TimeseriesGroupEdnsParamsQueryTypeSink, AS112TimeseriesGroupEdnsParamsQueryTypeSMIMEA, AS112TimeseriesGroupEdnsParamsQueryTypeSOA, AS112TimeseriesGroupEdnsParamsQueryTypeSPF, AS112TimeseriesGroupEdnsParamsQueryTypeSRV, AS112TimeseriesGroupEdnsParamsQueryTypeSSHFP, AS112TimeseriesGroupEdnsParamsQueryTypeSVCB, AS112TimeseriesGroupEdnsParamsQueryTypeTa, AS112TimeseriesGroupEdnsParamsQueryTypeTalink, AS112TimeseriesGroupEdnsParamsQueryTypeTkey, AS112TimeseriesGroupEdnsParamsQueryTypeTLSA, AS112TimeseriesGroupEdnsParamsQueryTypeTSIG, AS112TimeseriesGroupEdnsParamsQueryTypeTXT, AS112TimeseriesGroupEdnsParamsQueryTypeUinfo, AS112TimeseriesGroupEdnsParamsQueryTypeUID, AS112TimeseriesGroupEdnsParamsQueryTypeUnspec, AS112TimeseriesGroupEdnsParamsQueryTypeURI, AS112TimeseriesGroupEdnsParamsQueryTypeWks, AS112TimeseriesGroupEdnsParamsQueryTypeX25, AS112TimeseriesGroupEdnsParamsQueryTypeZonemd:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS response code.
+type AS112TimeseriesGroupEdnsParamsResponseCode string
+
+const (
+	AS112TimeseriesGroupEdnsParamsResponseCodeNoerror   AS112TimeseriesGroupEdnsParamsResponseCode = "NOERROR"
+	AS112TimeseriesGroupEdnsParamsResponseCodeFormerr   AS112TimeseriesGroupEdnsParamsResponseCode = "FORMERR"
+	AS112TimeseriesGroupEdnsParamsResponseCodeServfail  AS112TimeseriesGroupEdnsParamsResponseCode = "SERVFAIL"
+	AS112TimeseriesGroupEdnsParamsResponseCodeNxdomain  AS112TimeseriesGroupEdnsParamsResponseCode = "NXDOMAIN"
+	AS112TimeseriesGroupEdnsParamsResponseCodeNotimp    AS112TimeseriesGroupEdnsParamsResponseCode = "NOTIMP"
+	AS112TimeseriesGroupEdnsParamsResponseCodeRefused   AS112TimeseriesGroupEdnsParamsResponseCode = "REFUSED"
+	AS112TimeseriesGroupEdnsParamsResponseCodeYxdomain  AS112TimeseriesGroupEdnsParamsResponseCode = "YXDOMAIN"
+	AS112TimeseriesGroupEdnsParamsResponseCodeYxrrset   AS112TimeseriesGroupEdnsParamsResponseCode = "YXRRSET"
+	AS112TimeseriesGroupEdnsParamsResponseCodeNxrrset   AS112TimeseriesGroupEdnsParamsResponseCode = "NXRRSET"
+	AS112TimeseriesGroupEdnsParamsResponseCodeNotauth   AS112TimeseriesGroupEdnsParamsResponseCode = "NOTAUTH"
+	AS112TimeseriesGroupEdnsParamsResponseCodeNotzone   AS112TimeseriesGroupEdnsParamsResponseCode = "NOTZONE"
+	AS112TimeseriesGroupEdnsParamsResponseCodeBadsig    AS112TimeseriesGroupEdnsParamsResponseCode = "BADSIG"
+	AS112TimeseriesGroupEdnsParamsResponseCodeBadkey    AS112TimeseriesGroupEdnsParamsResponseCode = "BADKEY"
+	AS112TimeseriesGroupEdnsParamsResponseCodeBadtime   AS112TimeseriesGroupEdnsParamsResponseCode = "BADTIME"
+	AS112TimeseriesGroupEdnsParamsResponseCodeBadmode   AS112TimeseriesGroupEdnsParamsResponseCode = "BADMODE"
+	AS112TimeseriesGroupEdnsParamsResponseCodeBadname   AS112TimeseriesGroupEdnsParamsResponseCode = "BADNAME"
+	AS112TimeseriesGroupEdnsParamsResponseCodeBadalg    AS112TimeseriesGroupEdnsParamsResponseCode = "BADALG"
+	AS112TimeseriesGroupEdnsParamsResponseCodeBadtrunc  AS112TimeseriesGroupEdnsParamsResponseCode = "BADTRUNC"
+	AS112TimeseriesGroupEdnsParamsResponseCodeBadcookie AS112TimeseriesGroupEdnsParamsResponseCode = "BADCOOKIE"
+)
+
+func (r AS112TimeseriesGroupEdnsParamsResponseCode) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupEdnsParamsResponseCodeNoerror, AS112TimeseriesGroupEdnsParamsResponseCodeFormerr, AS112TimeseriesGroupEdnsParamsResponseCodeServfail, AS112TimeseriesGroupEdnsParamsResponseCodeNxdomain, AS112TimeseriesGroupEdnsParamsResponseCodeNotimp, AS112TimeseriesGroupEdnsParamsResponseCodeRefused, AS112TimeseriesGroupEdnsParamsResponseCodeYxdomain, AS112TimeseriesGroupEdnsParamsResponseCodeYxrrset, AS112TimeseriesGroupEdnsParamsResponseCodeNxrrset, AS112TimeseriesGroupEdnsParamsResponseCodeNotauth, AS112TimeseriesGroupEdnsParamsResponseCodeNotzone, AS112TimeseriesGroupEdnsParamsResponseCodeBadsig, AS112TimeseriesGroupEdnsParamsResponseCodeBadkey, AS112TimeseriesGroupEdnsParamsResponseCodeBadtime, AS112TimeseriesGroupEdnsParamsResponseCodeBadmode, AS112TimeseriesGroupEdnsParamsResponseCodeBadname, AS112TimeseriesGroupEdnsParamsResponseCodeBadalg, AS112TimeseriesGroupEdnsParamsResponseCodeBadtrunc, AS112TimeseriesGroupEdnsParamsResponseCodeBadcookie:
 		return true
 	}
 	return false
@@ -625,6 +939,12 @@ type AS112TimeseriesGroupIPVersionParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by DNS transport protocol.
+	Protocol param.Field[AS112TimeseriesGroupIPVersionParamsProtocol] `query:"protocol"`
+	// Filters results by DNS query type.
+	QueryType param.Field[AS112TimeseriesGroupIPVersionParamsQueryType] `query:"queryType"`
+	// Filters results by DNS response code.
+	ResponseCode param.Field[AS112TimeseriesGroupIPVersionParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112TimeseriesGroupIPVersionParams]'s query parameters as
@@ -667,6 +987,159 @@ const (
 func (r AS112TimeseriesGroupIPVersionParamsFormat) IsKnown() bool {
 	switch r {
 	case AS112TimeseriesGroupIPVersionParamsFormatJson, AS112TimeseriesGroupIPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS transport protocol.
+type AS112TimeseriesGroupIPVersionParamsProtocol string
+
+const (
+	AS112TimeseriesGroupIPVersionParamsProtocolUdp   AS112TimeseriesGroupIPVersionParamsProtocol = "UDP"
+	AS112TimeseriesGroupIPVersionParamsProtocolTCP   AS112TimeseriesGroupIPVersionParamsProtocol = "TCP"
+	AS112TimeseriesGroupIPVersionParamsProtocolHTTPS AS112TimeseriesGroupIPVersionParamsProtocol = "HTTPS"
+	AS112TimeseriesGroupIPVersionParamsProtocolTLS   AS112TimeseriesGroupIPVersionParamsProtocol = "TLS"
+)
+
+func (r AS112TimeseriesGroupIPVersionParamsProtocol) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupIPVersionParamsProtocolUdp, AS112TimeseriesGroupIPVersionParamsProtocolTCP, AS112TimeseriesGroupIPVersionParamsProtocolHTTPS, AS112TimeseriesGroupIPVersionParamsProtocolTLS:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS query type.
+type AS112TimeseriesGroupIPVersionParamsQueryType string
+
+const (
+	AS112TimeseriesGroupIPVersionParamsQueryTypeA          AS112TimeseriesGroupIPVersionParamsQueryType = "A"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeAAAA       AS112TimeseriesGroupIPVersionParamsQueryType = "AAAA"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeA6         AS112TimeseriesGroupIPVersionParamsQueryType = "A6"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeAfsdb      AS112TimeseriesGroupIPVersionParamsQueryType = "AFSDB"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeAny        AS112TimeseriesGroupIPVersionParamsQueryType = "ANY"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeApl        AS112TimeseriesGroupIPVersionParamsQueryType = "APL"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeAtma       AS112TimeseriesGroupIPVersionParamsQueryType = "ATMA"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeAXFR       AS112TimeseriesGroupIPVersionParamsQueryType = "AXFR"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeCAA        AS112TimeseriesGroupIPVersionParamsQueryType = "CAA"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeCdnskey    AS112TimeseriesGroupIPVersionParamsQueryType = "CDNSKEY"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeCds        AS112TimeseriesGroupIPVersionParamsQueryType = "CDS"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeCERT       AS112TimeseriesGroupIPVersionParamsQueryType = "CERT"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeCNAME      AS112TimeseriesGroupIPVersionParamsQueryType = "CNAME"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeCsync      AS112TimeseriesGroupIPVersionParamsQueryType = "CSYNC"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeDhcid      AS112TimeseriesGroupIPVersionParamsQueryType = "DHCID"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeDlv        AS112TimeseriesGroupIPVersionParamsQueryType = "DLV"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeDname      AS112TimeseriesGroupIPVersionParamsQueryType = "DNAME"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeDNSKEY     AS112TimeseriesGroupIPVersionParamsQueryType = "DNSKEY"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeDoa        AS112TimeseriesGroupIPVersionParamsQueryType = "DOA"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeDS         AS112TimeseriesGroupIPVersionParamsQueryType = "DS"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeEid        AS112TimeseriesGroupIPVersionParamsQueryType = "EID"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeEui48      AS112TimeseriesGroupIPVersionParamsQueryType = "EUI48"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeEui64      AS112TimeseriesGroupIPVersionParamsQueryType = "EUI64"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeGpos       AS112TimeseriesGroupIPVersionParamsQueryType = "GPOS"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeGid        AS112TimeseriesGroupIPVersionParamsQueryType = "GID"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeHinfo      AS112TimeseriesGroupIPVersionParamsQueryType = "HINFO"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeHip        AS112TimeseriesGroupIPVersionParamsQueryType = "HIP"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeHTTPS      AS112TimeseriesGroupIPVersionParamsQueryType = "HTTPS"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeIpseckey   AS112TimeseriesGroupIPVersionParamsQueryType = "IPSECKEY"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeIsdn       AS112TimeseriesGroupIPVersionParamsQueryType = "ISDN"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeIxfr       AS112TimeseriesGroupIPVersionParamsQueryType = "IXFR"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeKey        AS112TimeseriesGroupIPVersionParamsQueryType = "KEY"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeKx         AS112TimeseriesGroupIPVersionParamsQueryType = "KX"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeL32        AS112TimeseriesGroupIPVersionParamsQueryType = "L32"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeL64        AS112TimeseriesGroupIPVersionParamsQueryType = "L64"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeLOC        AS112TimeseriesGroupIPVersionParamsQueryType = "LOC"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeLp         AS112TimeseriesGroupIPVersionParamsQueryType = "LP"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeMaila      AS112TimeseriesGroupIPVersionParamsQueryType = "MAILA"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeMailb      AS112TimeseriesGroupIPVersionParamsQueryType = "MAILB"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeMB         AS112TimeseriesGroupIPVersionParamsQueryType = "MB"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeMd         AS112TimeseriesGroupIPVersionParamsQueryType = "MD"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeMf         AS112TimeseriesGroupIPVersionParamsQueryType = "MF"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeMg         AS112TimeseriesGroupIPVersionParamsQueryType = "MG"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeMinfo      AS112TimeseriesGroupIPVersionParamsQueryType = "MINFO"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeMr         AS112TimeseriesGroupIPVersionParamsQueryType = "MR"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeMX         AS112TimeseriesGroupIPVersionParamsQueryType = "MX"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNAPTR      AS112TimeseriesGroupIPVersionParamsQueryType = "NAPTR"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNb         AS112TimeseriesGroupIPVersionParamsQueryType = "NB"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNbstat     AS112TimeseriesGroupIPVersionParamsQueryType = "NBSTAT"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNid        AS112TimeseriesGroupIPVersionParamsQueryType = "NID"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNimloc     AS112TimeseriesGroupIPVersionParamsQueryType = "NIMLOC"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNinfo      AS112TimeseriesGroupIPVersionParamsQueryType = "NINFO"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNS         AS112TimeseriesGroupIPVersionParamsQueryType = "NS"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNsap       AS112TimeseriesGroupIPVersionParamsQueryType = "NSAP"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNsec       AS112TimeseriesGroupIPVersionParamsQueryType = "NSEC"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNsec3      AS112TimeseriesGroupIPVersionParamsQueryType = "NSEC3"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNsec3Param AS112TimeseriesGroupIPVersionParamsQueryType = "NSEC3PARAM"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNull       AS112TimeseriesGroupIPVersionParamsQueryType = "NULL"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeNxt        AS112TimeseriesGroupIPVersionParamsQueryType = "NXT"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeOpenpgpkey AS112TimeseriesGroupIPVersionParamsQueryType = "OPENPGPKEY"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeOpt        AS112TimeseriesGroupIPVersionParamsQueryType = "OPT"
+	AS112TimeseriesGroupIPVersionParamsQueryTypePTR        AS112TimeseriesGroupIPVersionParamsQueryType = "PTR"
+	AS112TimeseriesGroupIPVersionParamsQueryTypePx         AS112TimeseriesGroupIPVersionParamsQueryType = "PX"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeRkey       AS112TimeseriesGroupIPVersionParamsQueryType = "RKEY"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeRp         AS112TimeseriesGroupIPVersionParamsQueryType = "RP"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeRrsig      AS112TimeseriesGroupIPVersionParamsQueryType = "RRSIG"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeRt         AS112TimeseriesGroupIPVersionParamsQueryType = "RT"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeSig        AS112TimeseriesGroupIPVersionParamsQueryType = "SIG"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeSink       AS112TimeseriesGroupIPVersionParamsQueryType = "SINK"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeSMIMEA     AS112TimeseriesGroupIPVersionParamsQueryType = "SMIMEA"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeSOA        AS112TimeseriesGroupIPVersionParamsQueryType = "SOA"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeSPF        AS112TimeseriesGroupIPVersionParamsQueryType = "SPF"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeSRV        AS112TimeseriesGroupIPVersionParamsQueryType = "SRV"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeSSHFP      AS112TimeseriesGroupIPVersionParamsQueryType = "SSHFP"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeSVCB       AS112TimeseriesGroupIPVersionParamsQueryType = "SVCB"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeTa         AS112TimeseriesGroupIPVersionParamsQueryType = "TA"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeTalink     AS112TimeseriesGroupIPVersionParamsQueryType = "TALINK"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeTkey       AS112TimeseriesGroupIPVersionParamsQueryType = "TKEY"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeTLSA       AS112TimeseriesGroupIPVersionParamsQueryType = "TLSA"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeTSIG       AS112TimeseriesGroupIPVersionParamsQueryType = "TSIG"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeTXT        AS112TimeseriesGroupIPVersionParamsQueryType = "TXT"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeUinfo      AS112TimeseriesGroupIPVersionParamsQueryType = "UINFO"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeUID        AS112TimeseriesGroupIPVersionParamsQueryType = "UID"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeUnspec     AS112TimeseriesGroupIPVersionParamsQueryType = "UNSPEC"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeURI        AS112TimeseriesGroupIPVersionParamsQueryType = "URI"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeWks        AS112TimeseriesGroupIPVersionParamsQueryType = "WKS"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeX25        AS112TimeseriesGroupIPVersionParamsQueryType = "X25"
+	AS112TimeseriesGroupIPVersionParamsQueryTypeZonemd     AS112TimeseriesGroupIPVersionParamsQueryType = "ZONEMD"
+)
+
+func (r AS112TimeseriesGroupIPVersionParamsQueryType) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupIPVersionParamsQueryTypeA, AS112TimeseriesGroupIPVersionParamsQueryTypeAAAA, AS112TimeseriesGroupIPVersionParamsQueryTypeA6, AS112TimeseriesGroupIPVersionParamsQueryTypeAfsdb, AS112TimeseriesGroupIPVersionParamsQueryTypeAny, AS112TimeseriesGroupIPVersionParamsQueryTypeApl, AS112TimeseriesGroupIPVersionParamsQueryTypeAtma, AS112TimeseriesGroupIPVersionParamsQueryTypeAXFR, AS112TimeseriesGroupIPVersionParamsQueryTypeCAA, AS112TimeseriesGroupIPVersionParamsQueryTypeCdnskey, AS112TimeseriesGroupIPVersionParamsQueryTypeCds, AS112TimeseriesGroupIPVersionParamsQueryTypeCERT, AS112TimeseriesGroupIPVersionParamsQueryTypeCNAME, AS112TimeseriesGroupIPVersionParamsQueryTypeCsync, AS112TimeseriesGroupIPVersionParamsQueryTypeDhcid, AS112TimeseriesGroupIPVersionParamsQueryTypeDlv, AS112TimeseriesGroupIPVersionParamsQueryTypeDname, AS112TimeseriesGroupIPVersionParamsQueryTypeDNSKEY, AS112TimeseriesGroupIPVersionParamsQueryTypeDoa, AS112TimeseriesGroupIPVersionParamsQueryTypeDS, AS112TimeseriesGroupIPVersionParamsQueryTypeEid, AS112TimeseriesGroupIPVersionParamsQueryTypeEui48, AS112TimeseriesGroupIPVersionParamsQueryTypeEui64, AS112TimeseriesGroupIPVersionParamsQueryTypeGpos, AS112TimeseriesGroupIPVersionParamsQueryTypeGid, AS112TimeseriesGroupIPVersionParamsQueryTypeHinfo, AS112TimeseriesGroupIPVersionParamsQueryTypeHip, AS112TimeseriesGroupIPVersionParamsQueryTypeHTTPS, AS112TimeseriesGroupIPVersionParamsQueryTypeIpseckey, AS112TimeseriesGroupIPVersionParamsQueryTypeIsdn, AS112TimeseriesGroupIPVersionParamsQueryTypeIxfr, AS112TimeseriesGroupIPVersionParamsQueryTypeKey, AS112TimeseriesGroupIPVersionParamsQueryTypeKx, AS112TimeseriesGroupIPVersionParamsQueryTypeL32, AS112TimeseriesGroupIPVersionParamsQueryTypeL64, AS112TimeseriesGroupIPVersionParamsQueryTypeLOC, AS112TimeseriesGroupIPVersionParamsQueryTypeLp, AS112TimeseriesGroupIPVersionParamsQueryTypeMaila, AS112TimeseriesGroupIPVersionParamsQueryTypeMailb, AS112TimeseriesGroupIPVersionParamsQueryTypeMB, AS112TimeseriesGroupIPVersionParamsQueryTypeMd, AS112TimeseriesGroupIPVersionParamsQueryTypeMf, AS112TimeseriesGroupIPVersionParamsQueryTypeMg, AS112TimeseriesGroupIPVersionParamsQueryTypeMinfo, AS112TimeseriesGroupIPVersionParamsQueryTypeMr, AS112TimeseriesGroupIPVersionParamsQueryTypeMX, AS112TimeseriesGroupIPVersionParamsQueryTypeNAPTR, AS112TimeseriesGroupIPVersionParamsQueryTypeNb, AS112TimeseriesGroupIPVersionParamsQueryTypeNbstat, AS112TimeseriesGroupIPVersionParamsQueryTypeNid, AS112TimeseriesGroupIPVersionParamsQueryTypeNimloc, AS112TimeseriesGroupIPVersionParamsQueryTypeNinfo, AS112TimeseriesGroupIPVersionParamsQueryTypeNS, AS112TimeseriesGroupIPVersionParamsQueryTypeNsap, AS112TimeseriesGroupIPVersionParamsQueryTypeNsec, AS112TimeseriesGroupIPVersionParamsQueryTypeNsec3, AS112TimeseriesGroupIPVersionParamsQueryTypeNsec3Param, AS112TimeseriesGroupIPVersionParamsQueryTypeNull, AS112TimeseriesGroupIPVersionParamsQueryTypeNxt, AS112TimeseriesGroupIPVersionParamsQueryTypeOpenpgpkey, AS112TimeseriesGroupIPVersionParamsQueryTypeOpt, AS112TimeseriesGroupIPVersionParamsQueryTypePTR, AS112TimeseriesGroupIPVersionParamsQueryTypePx, AS112TimeseriesGroupIPVersionParamsQueryTypeRkey, AS112TimeseriesGroupIPVersionParamsQueryTypeRp, AS112TimeseriesGroupIPVersionParamsQueryTypeRrsig, AS112TimeseriesGroupIPVersionParamsQueryTypeRt, AS112TimeseriesGroupIPVersionParamsQueryTypeSig, AS112TimeseriesGroupIPVersionParamsQueryTypeSink, AS112TimeseriesGroupIPVersionParamsQueryTypeSMIMEA, AS112TimeseriesGroupIPVersionParamsQueryTypeSOA, AS112TimeseriesGroupIPVersionParamsQueryTypeSPF, AS112TimeseriesGroupIPVersionParamsQueryTypeSRV, AS112TimeseriesGroupIPVersionParamsQueryTypeSSHFP, AS112TimeseriesGroupIPVersionParamsQueryTypeSVCB, AS112TimeseriesGroupIPVersionParamsQueryTypeTa, AS112TimeseriesGroupIPVersionParamsQueryTypeTalink, AS112TimeseriesGroupIPVersionParamsQueryTypeTkey, AS112TimeseriesGroupIPVersionParamsQueryTypeTLSA, AS112TimeseriesGroupIPVersionParamsQueryTypeTSIG, AS112TimeseriesGroupIPVersionParamsQueryTypeTXT, AS112TimeseriesGroupIPVersionParamsQueryTypeUinfo, AS112TimeseriesGroupIPVersionParamsQueryTypeUID, AS112TimeseriesGroupIPVersionParamsQueryTypeUnspec, AS112TimeseriesGroupIPVersionParamsQueryTypeURI, AS112TimeseriesGroupIPVersionParamsQueryTypeWks, AS112TimeseriesGroupIPVersionParamsQueryTypeX25, AS112TimeseriesGroupIPVersionParamsQueryTypeZonemd:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS response code.
+type AS112TimeseriesGroupIPVersionParamsResponseCode string
+
+const (
+	AS112TimeseriesGroupIPVersionParamsResponseCodeNoerror   AS112TimeseriesGroupIPVersionParamsResponseCode = "NOERROR"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeFormerr   AS112TimeseriesGroupIPVersionParamsResponseCode = "FORMERR"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeServfail  AS112TimeseriesGroupIPVersionParamsResponseCode = "SERVFAIL"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeNxdomain  AS112TimeseriesGroupIPVersionParamsResponseCode = "NXDOMAIN"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeNotimp    AS112TimeseriesGroupIPVersionParamsResponseCode = "NOTIMP"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeRefused   AS112TimeseriesGroupIPVersionParamsResponseCode = "REFUSED"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeYxdomain  AS112TimeseriesGroupIPVersionParamsResponseCode = "YXDOMAIN"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeYxrrset   AS112TimeseriesGroupIPVersionParamsResponseCode = "YXRRSET"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeNxrrset   AS112TimeseriesGroupIPVersionParamsResponseCode = "NXRRSET"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeNotauth   AS112TimeseriesGroupIPVersionParamsResponseCode = "NOTAUTH"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeNotzone   AS112TimeseriesGroupIPVersionParamsResponseCode = "NOTZONE"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeBadsig    AS112TimeseriesGroupIPVersionParamsResponseCode = "BADSIG"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeBadkey    AS112TimeseriesGroupIPVersionParamsResponseCode = "BADKEY"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeBadtime   AS112TimeseriesGroupIPVersionParamsResponseCode = "BADTIME"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeBadmode   AS112TimeseriesGroupIPVersionParamsResponseCode = "BADMODE"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeBadname   AS112TimeseriesGroupIPVersionParamsResponseCode = "BADNAME"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeBadalg    AS112TimeseriesGroupIPVersionParamsResponseCode = "BADALG"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeBadtrunc  AS112TimeseriesGroupIPVersionParamsResponseCode = "BADTRUNC"
+	AS112TimeseriesGroupIPVersionParamsResponseCodeBadcookie AS112TimeseriesGroupIPVersionParamsResponseCode = "BADCOOKIE"
+)
+
+func (r AS112TimeseriesGroupIPVersionParamsResponseCode) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupIPVersionParamsResponseCodeNoerror, AS112TimeseriesGroupIPVersionParamsResponseCodeFormerr, AS112TimeseriesGroupIPVersionParamsResponseCodeServfail, AS112TimeseriesGroupIPVersionParamsResponseCodeNxdomain, AS112TimeseriesGroupIPVersionParamsResponseCodeNotimp, AS112TimeseriesGroupIPVersionParamsResponseCodeRefused, AS112TimeseriesGroupIPVersionParamsResponseCodeYxdomain, AS112TimeseriesGroupIPVersionParamsResponseCodeYxrrset, AS112TimeseriesGroupIPVersionParamsResponseCodeNxrrset, AS112TimeseriesGroupIPVersionParamsResponseCodeNotauth, AS112TimeseriesGroupIPVersionParamsResponseCodeNotzone, AS112TimeseriesGroupIPVersionParamsResponseCodeBadsig, AS112TimeseriesGroupIPVersionParamsResponseCodeBadkey, AS112TimeseriesGroupIPVersionParamsResponseCodeBadtime, AS112TimeseriesGroupIPVersionParamsResponseCodeBadmode, AS112TimeseriesGroupIPVersionParamsResponseCodeBadname, AS112TimeseriesGroupIPVersionParamsResponseCodeBadalg, AS112TimeseriesGroupIPVersionParamsResponseCodeBadtrunc, AS112TimeseriesGroupIPVersionParamsResponseCodeBadcookie:
 		return true
 	}
 	return false
@@ -724,6 +1197,10 @@ type AS112TimeseriesGroupProtocolParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by DNS query type.
+	QueryType param.Field[AS112TimeseriesGroupProtocolParamsQueryType] `query:"queryType"`
+	// Filters results by DNS response code.
+	ResponseCode param.Field[AS112TimeseriesGroupProtocolParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112TimeseriesGroupProtocolParams]'s query parameters as
@@ -766,6 +1243,141 @@ const (
 func (r AS112TimeseriesGroupProtocolParamsFormat) IsKnown() bool {
 	switch r {
 	case AS112TimeseriesGroupProtocolParamsFormatJson, AS112TimeseriesGroupProtocolParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS query type.
+type AS112TimeseriesGroupProtocolParamsQueryType string
+
+const (
+	AS112TimeseriesGroupProtocolParamsQueryTypeA          AS112TimeseriesGroupProtocolParamsQueryType = "A"
+	AS112TimeseriesGroupProtocolParamsQueryTypeAAAA       AS112TimeseriesGroupProtocolParamsQueryType = "AAAA"
+	AS112TimeseriesGroupProtocolParamsQueryTypeA6         AS112TimeseriesGroupProtocolParamsQueryType = "A6"
+	AS112TimeseriesGroupProtocolParamsQueryTypeAfsdb      AS112TimeseriesGroupProtocolParamsQueryType = "AFSDB"
+	AS112TimeseriesGroupProtocolParamsQueryTypeAny        AS112TimeseriesGroupProtocolParamsQueryType = "ANY"
+	AS112TimeseriesGroupProtocolParamsQueryTypeApl        AS112TimeseriesGroupProtocolParamsQueryType = "APL"
+	AS112TimeseriesGroupProtocolParamsQueryTypeAtma       AS112TimeseriesGroupProtocolParamsQueryType = "ATMA"
+	AS112TimeseriesGroupProtocolParamsQueryTypeAXFR       AS112TimeseriesGroupProtocolParamsQueryType = "AXFR"
+	AS112TimeseriesGroupProtocolParamsQueryTypeCAA        AS112TimeseriesGroupProtocolParamsQueryType = "CAA"
+	AS112TimeseriesGroupProtocolParamsQueryTypeCdnskey    AS112TimeseriesGroupProtocolParamsQueryType = "CDNSKEY"
+	AS112TimeseriesGroupProtocolParamsQueryTypeCds        AS112TimeseriesGroupProtocolParamsQueryType = "CDS"
+	AS112TimeseriesGroupProtocolParamsQueryTypeCERT       AS112TimeseriesGroupProtocolParamsQueryType = "CERT"
+	AS112TimeseriesGroupProtocolParamsQueryTypeCNAME      AS112TimeseriesGroupProtocolParamsQueryType = "CNAME"
+	AS112TimeseriesGroupProtocolParamsQueryTypeCsync      AS112TimeseriesGroupProtocolParamsQueryType = "CSYNC"
+	AS112TimeseriesGroupProtocolParamsQueryTypeDhcid      AS112TimeseriesGroupProtocolParamsQueryType = "DHCID"
+	AS112TimeseriesGroupProtocolParamsQueryTypeDlv        AS112TimeseriesGroupProtocolParamsQueryType = "DLV"
+	AS112TimeseriesGroupProtocolParamsQueryTypeDname      AS112TimeseriesGroupProtocolParamsQueryType = "DNAME"
+	AS112TimeseriesGroupProtocolParamsQueryTypeDNSKEY     AS112TimeseriesGroupProtocolParamsQueryType = "DNSKEY"
+	AS112TimeseriesGroupProtocolParamsQueryTypeDoa        AS112TimeseriesGroupProtocolParamsQueryType = "DOA"
+	AS112TimeseriesGroupProtocolParamsQueryTypeDS         AS112TimeseriesGroupProtocolParamsQueryType = "DS"
+	AS112TimeseriesGroupProtocolParamsQueryTypeEid        AS112TimeseriesGroupProtocolParamsQueryType = "EID"
+	AS112TimeseriesGroupProtocolParamsQueryTypeEui48      AS112TimeseriesGroupProtocolParamsQueryType = "EUI48"
+	AS112TimeseriesGroupProtocolParamsQueryTypeEui64      AS112TimeseriesGroupProtocolParamsQueryType = "EUI64"
+	AS112TimeseriesGroupProtocolParamsQueryTypeGpos       AS112TimeseriesGroupProtocolParamsQueryType = "GPOS"
+	AS112TimeseriesGroupProtocolParamsQueryTypeGid        AS112TimeseriesGroupProtocolParamsQueryType = "GID"
+	AS112TimeseriesGroupProtocolParamsQueryTypeHinfo      AS112TimeseriesGroupProtocolParamsQueryType = "HINFO"
+	AS112TimeseriesGroupProtocolParamsQueryTypeHip        AS112TimeseriesGroupProtocolParamsQueryType = "HIP"
+	AS112TimeseriesGroupProtocolParamsQueryTypeHTTPS      AS112TimeseriesGroupProtocolParamsQueryType = "HTTPS"
+	AS112TimeseriesGroupProtocolParamsQueryTypeIpseckey   AS112TimeseriesGroupProtocolParamsQueryType = "IPSECKEY"
+	AS112TimeseriesGroupProtocolParamsQueryTypeIsdn       AS112TimeseriesGroupProtocolParamsQueryType = "ISDN"
+	AS112TimeseriesGroupProtocolParamsQueryTypeIxfr       AS112TimeseriesGroupProtocolParamsQueryType = "IXFR"
+	AS112TimeseriesGroupProtocolParamsQueryTypeKey        AS112TimeseriesGroupProtocolParamsQueryType = "KEY"
+	AS112TimeseriesGroupProtocolParamsQueryTypeKx         AS112TimeseriesGroupProtocolParamsQueryType = "KX"
+	AS112TimeseriesGroupProtocolParamsQueryTypeL32        AS112TimeseriesGroupProtocolParamsQueryType = "L32"
+	AS112TimeseriesGroupProtocolParamsQueryTypeL64        AS112TimeseriesGroupProtocolParamsQueryType = "L64"
+	AS112TimeseriesGroupProtocolParamsQueryTypeLOC        AS112TimeseriesGroupProtocolParamsQueryType = "LOC"
+	AS112TimeseriesGroupProtocolParamsQueryTypeLp         AS112TimeseriesGroupProtocolParamsQueryType = "LP"
+	AS112TimeseriesGroupProtocolParamsQueryTypeMaila      AS112TimeseriesGroupProtocolParamsQueryType = "MAILA"
+	AS112TimeseriesGroupProtocolParamsQueryTypeMailb      AS112TimeseriesGroupProtocolParamsQueryType = "MAILB"
+	AS112TimeseriesGroupProtocolParamsQueryTypeMB         AS112TimeseriesGroupProtocolParamsQueryType = "MB"
+	AS112TimeseriesGroupProtocolParamsQueryTypeMd         AS112TimeseriesGroupProtocolParamsQueryType = "MD"
+	AS112TimeseriesGroupProtocolParamsQueryTypeMf         AS112TimeseriesGroupProtocolParamsQueryType = "MF"
+	AS112TimeseriesGroupProtocolParamsQueryTypeMg         AS112TimeseriesGroupProtocolParamsQueryType = "MG"
+	AS112TimeseriesGroupProtocolParamsQueryTypeMinfo      AS112TimeseriesGroupProtocolParamsQueryType = "MINFO"
+	AS112TimeseriesGroupProtocolParamsQueryTypeMr         AS112TimeseriesGroupProtocolParamsQueryType = "MR"
+	AS112TimeseriesGroupProtocolParamsQueryTypeMX         AS112TimeseriesGroupProtocolParamsQueryType = "MX"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNAPTR      AS112TimeseriesGroupProtocolParamsQueryType = "NAPTR"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNb         AS112TimeseriesGroupProtocolParamsQueryType = "NB"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNbstat     AS112TimeseriesGroupProtocolParamsQueryType = "NBSTAT"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNid        AS112TimeseriesGroupProtocolParamsQueryType = "NID"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNimloc     AS112TimeseriesGroupProtocolParamsQueryType = "NIMLOC"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNinfo      AS112TimeseriesGroupProtocolParamsQueryType = "NINFO"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNS         AS112TimeseriesGroupProtocolParamsQueryType = "NS"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNsap       AS112TimeseriesGroupProtocolParamsQueryType = "NSAP"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNsec       AS112TimeseriesGroupProtocolParamsQueryType = "NSEC"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNsec3      AS112TimeseriesGroupProtocolParamsQueryType = "NSEC3"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNsec3Param AS112TimeseriesGroupProtocolParamsQueryType = "NSEC3PARAM"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNull       AS112TimeseriesGroupProtocolParamsQueryType = "NULL"
+	AS112TimeseriesGroupProtocolParamsQueryTypeNxt        AS112TimeseriesGroupProtocolParamsQueryType = "NXT"
+	AS112TimeseriesGroupProtocolParamsQueryTypeOpenpgpkey AS112TimeseriesGroupProtocolParamsQueryType = "OPENPGPKEY"
+	AS112TimeseriesGroupProtocolParamsQueryTypeOpt        AS112TimeseriesGroupProtocolParamsQueryType = "OPT"
+	AS112TimeseriesGroupProtocolParamsQueryTypePTR        AS112TimeseriesGroupProtocolParamsQueryType = "PTR"
+	AS112TimeseriesGroupProtocolParamsQueryTypePx         AS112TimeseriesGroupProtocolParamsQueryType = "PX"
+	AS112TimeseriesGroupProtocolParamsQueryTypeRkey       AS112TimeseriesGroupProtocolParamsQueryType = "RKEY"
+	AS112TimeseriesGroupProtocolParamsQueryTypeRp         AS112TimeseriesGroupProtocolParamsQueryType = "RP"
+	AS112TimeseriesGroupProtocolParamsQueryTypeRrsig      AS112TimeseriesGroupProtocolParamsQueryType = "RRSIG"
+	AS112TimeseriesGroupProtocolParamsQueryTypeRt         AS112TimeseriesGroupProtocolParamsQueryType = "RT"
+	AS112TimeseriesGroupProtocolParamsQueryTypeSig        AS112TimeseriesGroupProtocolParamsQueryType = "SIG"
+	AS112TimeseriesGroupProtocolParamsQueryTypeSink       AS112TimeseriesGroupProtocolParamsQueryType = "SINK"
+	AS112TimeseriesGroupProtocolParamsQueryTypeSMIMEA     AS112TimeseriesGroupProtocolParamsQueryType = "SMIMEA"
+	AS112TimeseriesGroupProtocolParamsQueryTypeSOA        AS112TimeseriesGroupProtocolParamsQueryType = "SOA"
+	AS112TimeseriesGroupProtocolParamsQueryTypeSPF        AS112TimeseriesGroupProtocolParamsQueryType = "SPF"
+	AS112TimeseriesGroupProtocolParamsQueryTypeSRV        AS112TimeseriesGroupProtocolParamsQueryType = "SRV"
+	AS112TimeseriesGroupProtocolParamsQueryTypeSSHFP      AS112TimeseriesGroupProtocolParamsQueryType = "SSHFP"
+	AS112TimeseriesGroupProtocolParamsQueryTypeSVCB       AS112TimeseriesGroupProtocolParamsQueryType = "SVCB"
+	AS112TimeseriesGroupProtocolParamsQueryTypeTa         AS112TimeseriesGroupProtocolParamsQueryType = "TA"
+	AS112TimeseriesGroupProtocolParamsQueryTypeTalink     AS112TimeseriesGroupProtocolParamsQueryType = "TALINK"
+	AS112TimeseriesGroupProtocolParamsQueryTypeTkey       AS112TimeseriesGroupProtocolParamsQueryType = "TKEY"
+	AS112TimeseriesGroupProtocolParamsQueryTypeTLSA       AS112TimeseriesGroupProtocolParamsQueryType = "TLSA"
+	AS112TimeseriesGroupProtocolParamsQueryTypeTSIG       AS112TimeseriesGroupProtocolParamsQueryType = "TSIG"
+	AS112TimeseriesGroupProtocolParamsQueryTypeTXT        AS112TimeseriesGroupProtocolParamsQueryType = "TXT"
+	AS112TimeseriesGroupProtocolParamsQueryTypeUinfo      AS112TimeseriesGroupProtocolParamsQueryType = "UINFO"
+	AS112TimeseriesGroupProtocolParamsQueryTypeUID        AS112TimeseriesGroupProtocolParamsQueryType = "UID"
+	AS112TimeseriesGroupProtocolParamsQueryTypeUnspec     AS112TimeseriesGroupProtocolParamsQueryType = "UNSPEC"
+	AS112TimeseriesGroupProtocolParamsQueryTypeURI        AS112TimeseriesGroupProtocolParamsQueryType = "URI"
+	AS112TimeseriesGroupProtocolParamsQueryTypeWks        AS112TimeseriesGroupProtocolParamsQueryType = "WKS"
+	AS112TimeseriesGroupProtocolParamsQueryTypeX25        AS112TimeseriesGroupProtocolParamsQueryType = "X25"
+	AS112TimeseriesGroupProtocolParamsQueryTypeZonemd     AS112TimeseriesGroupProtocolParamsQueryType = "ZONEMD"
+)
+
+func (r AS112TimeseriesGroupProtocolParamsQueryType) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupProtocolParamsQueryTypeA, AS112TimeseriesGroupProtocolParamsQueryTypeAAAA, AS112TimeseriesGroupProtocolParamsQueryTypeA6, AS112TimeseriesGroupProtocolParamsQueryTypeAfsdb, AS112TimeseriesGroupProtocolParamsQueryTypeAny, AS112TimeseriesGroupProtocolParamsQueryTypeApl, AS112TimeseriesGroupProtocolParamsQueryTypeAtma, AS112TimeseriesGroupProtocolParamsQueryTypeAXFR, AS112TimeseriesGroupProtocolParamsQueryTypeCAA, AS112TimeseriesGroupProtocolParamsQueryTypeCdnskey, AS112TimeseriesGroupProtocolParamsQueryTypeCds, AS112TimeseriesGroupProtocolParamsQueryTypeCERT, AS112TimeseriesGroupProtocolParamsQueryTypeCNAME, AS112TimeseriesGroupProtocolParamsQueryTypeCsync, AS112TimeseriesGroupProtocolParamsQueryTypeDhcid, AS112TimeseriesGroupProtocolParamsQueryTypeDlv, AS112TimeseriesGroupProtocolParamsQueryTypeDname, AS112TimeseriesGroupProtocolParamsQueryTypeDNSKEY, AS112TimeseriesGroupProtocolParamsQueryTypeDoa, AS112TimeseriesGroupProtocolParamsQueryTypeDS, AS112TimeseriesGroupProtocolParamsQueryTypeEid, AS112TimeseriesGroupProtocolParamsQueryTypeEui48, AS112TimeseriesGroupProtocolParamsQueryTypeEui64, AS112TimeseriesGroupProtocolParamsQueryTypeGpos, AS112TimeseriesGroupProtocolParamsQueryTypeGid, AS112TimeseriesGroupProtocolParamsQueryTypeHinfo, AS112TimeseriesGroupProtocolParamsQueryTypeHip, AS112TimeseriesGroupProtocolParamsQueryTypeHTTPS, AS112TimeseriesGroupProtocolParamsQueryTypeIpseckey, AS112TimeseriesGroupProtocolParamsQueryTypeIsdn, AS112TimeseriesGroupProtocolParamsQueryTypeIxfr, AS112TimeseriesGroupProtocolParamsQueryTypeKey, AS112TimeseriesGroupProtocolParamsQueryTypeKx, AS112TimeseriesGroupProtocolParamsQueryTypeL32, AS112TimeseriesGroupProtocolParamsQueryTypeL64, AS112TimeseriesGroupProtocolParamsQueryTypeLOC, AS112TimeseriesGroupProtocolParamsQueryTypeLp, AS112TimeseriesGroupProtocolParamsQueryTypeMaila, AS112TimeseriesGroupProtocolParamsQueryTypeMailb, AS112TimeseriesGroupProtocolParamsQueryTypeMB, AS112TimeseriesGroupProtocolParamsQueryTypeMd, AS112TimeseriesGroupProtocolParamsQueryTypeMf, AS112TimeseriesGroupProtocolParamsQueryTypeMg, AS112TimeseriesGroupProtocolParamsQueryTypeMinfo, AS112TimeseriesGroupProtocolParamsQueryTypeMr, AS112TimeseriesGroupProtocolParamsQueryTypeMX, AS112TimeseriesGroupProtocolParamsQueryTypeNAPTR, AS112TimeseriesGroupProtocolParamsQueryTypeNb, AS112TimeseriesGroupProtocolParamsQueryTypeNbstat, AS112TimeseriesGroupProtocolParamsQueryTypeNid, AS112TimeseriesGroupProtocolParamsQueryTypeNimloc, AS112TimeseriesGroupProtocolParamsQueryTypeNinfo, AS112TimeseriesGroupProtocolParamsQueryTypeNS, AS112TimeseriesGroupProtocolParamsQueryTypeNsap, AS112TimeseriesGroupProtocolParamsQueryTypeNsec, AS112TimeseriesGroupProtocolParamsQueryTypeNsec3, AS112TimeseriesGroupProtocolParamsQueryTypeNsec3Param, AS112TimeseriesGroupProtocolParamsQueryTypeNull, AS112TimeseriesGroupProtocolParamsQueryTypeNxt, AS112TimeseriesGroupProtocolParamsQueryTypeOpenpgpkey, AS112TimeseriesGroupProtocolParamsQueryTypeOpt, AS112TimeseriesGroupProtocolParamsQueryTypePTR, AS112TimeseriesGroupProtocolParamsQueryTypePx, AS112TimeseriesGroupProtocolParamsQueryTypeRkey, AS112TimeseriesGroupProtocolParamsQueryTypeRp, AS112TimeseriesGroupProtocolParamsQueryTypeRrsig, AS112TimeseriesGroupProtocolParamsQueryTypeRt, AS112TimeseriesGroupProtocolParamsQueryTypeSig, AS112TimeseriesGroupProtocolParamsQueryTypeSink, AS112TimeseriesGroupProtocolParamsQueryTypeSMIMEA, AS112TimeseriesGroupProtocolParamsQueryTypeSOA, AS112TimeseriesGroupProtocolParamsQueryTypeSPF, AS112TimeseriesGroupProtocolParamsQueryTypeSRV, AS112TimeseriesGroupProtocolParamsQueryTypeSSHFP, AS112TimeseriesGroupProtocolParamsQueryTypeSVCB, AS112TimeseriesGroupProtocolParamsQueryTypeTa, AS112TimeseriesGroupProtocolParamsQueryTypeTalink, AS112TimeseriesGroupProtocolParamsQueryTypeTkey, AS112TimeseriesGroupProtocolParamsQueryTypeTLSA, AS112TimeseriesGroupProtocolParamsQueryTypeTSIG, AS112TimeseriesGroupProtocolParamsQueryTypeTXT, AS112TimeseriesGroupProtocolParamsQueryTypeUinfo, AS112TimeseriesGroupProtocolParamsQueryTypeUID, AS112TimeseriesGroupProtocolParamsQueryTypeUnspec, AS112TimeseriesGroupProtocolParamsQueryTypeURI, AS112TimeseriesGroupProtocolParamsQueryTypeWks, AS112TimeseriesGroupProtocolParamsQueryTypeX25, AS112TimeseriesGroupProtocolParamsQueryTypeZonemd:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS response code.
+type AS112TimeseriesGroupProtocolParamsResponseCode string
+
+const (
+	AS112TimeseriesGroupProtocolParamsResponseCodeNoerror   AS112TimeseriesGroupProtocolParamsResponseCode = "NOERROR"
+	AS112TimeseriesGroupProtocolParamsResponseCodeFormerr   AS112TimeseriesGroupProtocolParamsResponseCode = "FORMERR"
+	AS112TimeseriesGroupProtocolParamsResponseCodeServfail  AS112TimeseriesGroupProtocolParamsResponseCode = "SERVFAIL"
+	AS112TimeseriesGroupProtocolParamsResponseCodeNxdomain  AS112TimeseriesGroupProtocolParamsResponseCode = "NXDOMAIN"
+	AS112TimeseriesGroupProtocolParamsResponseCodeNotimp    AS112TimeseriesGroupProtocolParamsResponseCode = "NOTIMP"
+	AS112TimeseriesGroupProtocolParamsResponseCodeRefused   AS112TimeseriesGroupProtocolParamsResponseCode = "REFUSED"
+	AS112TimeseriesGroupProtocolParamsResponseCodeYxdomain  AS112TimeseriesGroupProtocolParamsResponseCode = "YXDOMAIN"
+	AS112TimeseriesGroupProtocolParamsResponseCodeYxrrset   AS112TimeseriesGroupProtocolParamsResponseCode = "YXRRSET"
+	AS112TimeseriesGroupProtocolParamsResponseCodeNxrrset   AS112TimeseriesGroupProtocolParamsResponseCode = "NXRRSET"
+	AS112TimeseriesGroupProtocolParamsResponseCodeNotauth   AS112TimeseriesGroupProtocolParamsResponseCode = "NOTAUTH"
+	AS112TimeseriesGroupProtocolParamsResponseCodeNotzone   AS112TimeseriesGroupProtocolParamsResponseCode = "NOTZONE"
+	AS112TimeseriesGroupProtocolParamsResponseCodeBadsig    AS112TimeseriesGroupProtocolParamsResponseCode = "BADSIG"
+	AS112TimeseriesGroupProtocolParamsResponseCodeBadkey    AS112TimeseriesGroupProtocolParamsResponseCode = "BADKEY"
+	AS112TimeseriesGroupProtocolParamsResponseCodeBadtime   AS112TimeseriesGroupProtocolParamsResponseCode = "BADTIME"
+	AS112TimeseriesGroupProtocolParamsResponseCodeBadmode   AS112TimeseriesGroupProtocolParamsResponseCode = "BADMODE"
+	AS112TimeseriesGroupProtocolParamsResponseCodeBadname   AS112TimeseriesGroupProtocolParamsResponseCode = "BADNAME"
+	AS112TimeseriesGroupProtocolParamsResponseCodeBadalg    AS112TimeseriesGroupProtocolParamsResponseCode = "BADALG"
+	AS112TimeseriesGroupProtocolParamsResponseCodeBadtrunc  AS112TimeseriesGroupProtocolParamsResponseCode = "BADTRUNC"
+	AS112TimeseriesGroupProtocolParamsResponseCodeBadcookie AS112TimeseriesGroupProtocolParamsResponseCode = "BADCOOKIE"
+)
+
+func (r AS112TimeseriesGroupProtocolParamsResponseCode) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupProtocolParamsResponseCodeNoerror, AS112TimeseriesGroupProtocolParamsResponseCodeFormerr, AS112TimeseriesGroupProtocolParamsResponseCodeServfail, AS112TimeseriesGroupProtocolParamsResponseCodeNxdomain, AS112TimeseriesGroupProtocolParamsResponseCodeNotimp, AS112TimeseriesGroupProtocolParamsResponseCodeRefused, AS112TimeseriesGroupProtocolParamsResponseCodeYxdomain, AS112TimeseriesGroupProtocolParamsResponseCodeYxrrset, AS112TimeseriesGroupProtocolParamsResponseCodeNxrrset, AS112TimeseriesGroupProtocolParamsResponseCodeNotauth, AS112TimeseriesGroupProtocolParamsResponseCodeNotzone, AS112TimeseriesGroupProtocolParamsResponseCodeBadsig, AS112TimeseriesGroupProtocolParamsResponseCodeBadkey, AS112TimeseriesGroupProtocolParamsResponseCodeBadtime, AS112TimeseriesGroupProtocolParamsResponseCodeBadmode, AS112TimeseriesGroupProtocolParamsResponseCodeBadname, AS112TimeseriesGroupProtocolParamsResponseCodeBadalg, AS112TimeseriesGroupProtocolParamsResponseCodeBadtrunc, AS112TimeseriesGroupProtocolParamsResponseCodeBadcookie:
 		return true
 	}
 	return false
@@ -828,6 +1440,10 @@ type AS112TimeseriesGroupQueryTypeParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by DNS transport protocol.
+	Protocol param.Field[AS112TimeseriesGroupQueryTypeParamsProtocol] `query:"protocol"`
+	// Filters results by DNS response code.
+	ResponseCode param.Field[AS112TimeseriesGroupQueryTypeParamsResponseCode] `query:"responseCode"`
 }
 
 // URLQuery serializes [AS112TimeseriesGroupQueryTypeParams]'s query parameters as
@@ -870,6 +1486,57 @@ const (
 func (r AS112TimeseriesGroupQueryTypeParamsFormat) IsKnown() bool {
 	switch r {
 	case AS112TimeseriesGroupQueryTypeParamsFormatJson, AS112TimeseriesGroupQueryTypeParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS transport protocol.
+type AS112TimeseriesGroupQueryTypeParamsProtocol string
+
+const (
+	AS112TimeseriesGroupQueryTypeParamsProtocolUdp   AS112TimeseriesGroupQueryTypeParamsProtocol = "UDP"
+	AS112TimeseriesGroupQueryTypeParamsProtocolTCP   AS112TimeseriesGroupQueryTypeParamsProtocol = "TCP"
+	AS112TimeseriesGroupQueryTypeParamsProtocolHTTPS AS112TimeseriesGroupQueryTypeParamsProtocol = "HTTPS"
+	AS112TimeseriesGroupQueryTypeParamsProtocolTLS   AS112TimeseriesGroupQueryTypeParamsProtocol = "TLS"
+)
+
+func (r AS112TimeseriesGroupQueryTypeParamsProtocol) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupQueryTypeParamsProtocolUdp, AS112TimeseriesGroupQueryTypeParamsProtocolTCP, AS112TimeseriesGroupQueryTypeParamsProtocolHTTPS, AS112TimeseriesGroupQueryTypeParamsProtocolTLS:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS response code.
+type AS112TimeseriesGroupQueryTypeParamsResponseCode string
+
+const (
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeNoerror   AS112TimeseriesGroupQueryTypeParamsResponseCode = "NOERROR"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeFormerr   AS112TimeseriesGroupQueryTypeParamsResponseCode = "FORMERR"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeServfail  AS112TimeseriesGroupQueryTypeParamsResponseCode = "SERVFAIL"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeNxdomain  AS112TimeseriesGroupQueryTypeParamsResponseCode = "NXDOMAIN"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeNotimp    AS112TimeseriesGroupQueryTypeParamsResponseCode = "NOTIMP"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeRefused   AS112TimeseriesGroupQueryTypeParamsResponseCode = "REFUSED"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeYxdomain  AS112TimeseriesGroupQueryTypeParamsResponseCode = "YXDOMAIN"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeYxrrset   AS112TimeseriesGroupQueryTypeParamsResponseCode = "YXRRSET"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeNxrrset   AS112TimeseriesGroupQueryTypeParamsResponseCode = "NXRRSET"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeNotauth   AS112TimeseriesGroupQueryTypeParamsResponseCode = "NOTAUTH"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeNotzone   AS112TimeseriesGroupQueryTypeParamsResponseCode = "NOTZONE"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeBadsig    AS112TimeseriesGroupQueryTypeParamsResponseCode = "BADSIG"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeBadkey    AS112TimeseriesGroupQueryTypeParamsResponseCode = "BADKEY"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeBadtime   AS112TimeseriesGroupQueryTypeParamsResponseCode = "BADTIME"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeBadmode   AS112TimeseriesGroupQueryTypeParamsResponseCode = "BADMODE"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeBadname   AS112TimeseriesGroupQueryTypeParamsResponseCode = "BADNAME"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeBadalg    AS112TimeseriesGroupQueryTypeParamsResponseCode = "BADALG"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeBadtrunc  AS112TimeseriesGroupQueryTypeParamsResponseCode = "BADTRUNC"
+	AS112TimeseriesGroupQueryTypeParamsResponseCodeBadcookie AS112TimeseriesGroupQueryTypeParamsResponseCode = "BADCOOKIE"
+)
+
+func (r AS112TimeseriesGroupQueryTypeParamsResponseCode) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupQueryTypeParamsResponseCodeNoerror, AS112TimeseriesGroupQueryTypeParamsResponseCodeFormerr, AS112TimeseriesGroupQueryTypeParamsResponseCodeServfail, AS112TimeseriesGroupQueryTypeParamsResponseCodeNxdomain, AS112TimeseriesGroupQueryTypeParamsResponseCodeNotimp, AS112TimeseriesGroupQueryTypeParamsResponseCodeRefused, AS112TimeseriesGroupQueryTypeParamsResponseCodeYxdomain, AS112TimeseriesGroupQueryTypeParamsResponseCodeYxrrset, AS112TimeseriesGroupQueryTypeParamsResponseCodeNxrrset, AS112TimeseriesGroupQueryTypeParamsResponseCodeNotauth, AS112TimeseriesGroupQueryTypeParamsResponseCodeNotzone, AS112TimeseriesGroupQueryTypeParamsResponseCodeBadsig, AS112TimeseriesGroupQueryTypeParamsResponseCodeBadkey, AS112TimeseriesGroupQueryTypeParamsResponseCodeBadtime, AS112TimeseriesGroupQueryTypeParamsResponseCodeBadmode, AS112TimeseriesGroupQueryTypeParamsResponseCodeBadname, AS112TimeseriesGroupQueryTypeParamsResponseCodeBadalg, AS112TimeseriesGroupQueryTypeParamsResponseCodeBadtrunc, AS112TimeseriesGroupQueryTypeParamsResponseCodeBadcookie:
 		return true
 	}
 	return false
@@ -932,6 +1599,10 @@ type AS112TimeseriesGroupResponseCodesParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by DNS transport protocol.
+	Protocol param.Field[AS112TimeseriesGroupResponseCodesParamsProtocol] `query:"protocol"`
+	// Filters results by DNS query type.
+	QueryType param.Field[AS112TimeseriesGroupResponseCodesParamsQueryType] `query:"queryType"`
 }
 
 // URLQuery serializes [AS112TimeseriesGroupResponseCodesParams]'s query parameters
@@ -974,6 +1645,126 @@ const (
 func (r AS112TimeseriesGroupResponseCodesParamsFormat) IsKnown() bool {
 	switch r {
 	case AS112TimeseriesGroupResponseCodesParamsFormatJson, AS112TimeseriesGroupResponseCodesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS transport protocol.
+type AS112TimeseriesGroupResponseCodesParamsProtocol string
+
+const (
+	AS112TimeseriesGroupResponseCodesParamsProtocolUdp   AS112TimeseriesGroupResponseCodesParamsProtocol = "UDP"
+	AS112TimeseriesGroupResponseCodesParamsProtocolTCP   AS112TimeseriesGroupResponseCodesParamsProtocol = "TCP"
+	AS112TimeseriesGroupResponseCodesParamsProtocolHTTPS AS112TimeseriesGroupResponseCodesParamsProtocol = "HTTPS"
+	AS112TimeseriesGroupResponseCodesParamsProtocolTLS   AS112TimeseriesGroupResponseCodesParamsProtocol = "TLS"
+)
+
+func (r AS112TimeseriesGroupResponseCodesParamsProtocol) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupResponseCodesParamsProtocolUdp, AS112TimeseriesGroupResponseCodesParamsProtocolTCP, AS112TimeseriesGroupResponseCodesParamsProtocolHTTPS, AS112TimeseriesGroupResponseCodesParamsProtocolTLS:
+		return true
+	}
+	return false
+}
+
+// Filters results by DNS query type.
+type AS112TimeseriesGroupResponseCodesParamsQueryType string
+
+const (
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeA          AS112TimeseriesGroupResponseCodesParamsQueryType = "A"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeAAAA       AS112TimeseriesGroupResponseCodesParamsQueryType = "AAAA"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeA6         AS112TimeseriesGroupResponseCodesParamsQueryType = "A6"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeAfsdb      AS112TimeseriesGroupResponseCodesParamsQueryType = "AFSDB"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeAny        AS112TimeseriesGroupResponseCodesParamsQueryType = "ANY"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeApl        AS112TimeseriesGroupResponseCodesParamsQueryType = "APL"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeAtma       AS112TimeseriesGroupResponseCodesParamsQueryType = "ATMA"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeAXFR       AS112TimeseriesGroupResponseCodesParamsQueryType = "AXFR"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeCAA        AS112TimeseriesGroupResponseCodesParamsQueryType = "CAA"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeCdnskey    AS112TimeseriesGroupResponseCodesParamsQueryType = "CDNSKEY"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeCds        AS112TimeseriesGroupResponseCodesParamsQueryType = "CDS"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeCERT       AS112TimeseriesGroupResponseCodesParamsQueryType = "CERT"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeCNAME      AS112TimeseriesGroupResponseCodesParamsQueryType = "CNAME"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeCsync      AS112TimeseriesGroupResponseCodesParamsQueryType = "CSYNC"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeDhcid      AS112TimeseriesGroupResponseCodesParamsQueryType = "DHCID"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeDlv        AS112TimeseriesGroupResponseCodesParamsQueryType = "DLV"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeDname      AS112TimeseriesGroupResponseCodesParamsQueryType = "DNAME"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeDNSKEY     AS112TimeseriesGroupResponseCodesParamsQueryType = "DNSKEY"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeDoa        AS112TimeseriesGroupResponseCodesParamsQueryType = "DOA"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeDS         AS112TimeseriesGroupResponseCodesParamsQueryType = "DS"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeEid        AS112TimeseriesGroupResponseCodesParamsQueryType = "EID"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeEui48      AS112TimeseriesGroupResponseCodesParamsQueryType = "EUI48"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeEui64      AS112TimeseriesGroupResponseCodesParamsQueryType = "EUI64"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeGpos       AS112TimeseriesGroupResponseCodesParamsQueryType = "GPOS"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeGid        AS112TimeseriesGroupResponseCodesParamsQueryType = "GID"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeHinfo      AS112TimeseriesGroupResponseCodesParamsQueryType = "HINFO"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeHip        AS112TimeseriesGroupResponseCodesParamsQueryType = "HIP"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeHTTPS      AS112TimeseriesGroupResponseCodesParamsQueryType = "HTTPS"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeIpseckey   AS112TimeseriesGroupResponseCodesParamsQueryType = "IPSECKEY"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeIsdn       AS112TimeseriesGroupResponseCodesParamsQueryType = "ISDN"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeIxfr       AS112TimeseriesGroupResponseCodesParamsQueryType = "IXFR"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeKey        AS112TimeseriesGroupResponseCodesParamsQueryType = "KEY"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeKx         AS112TimeseriesGroupResponseCodesParamsQueryType = "KX"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeL32        AS112TimeseriesGroupResponseCodesParamsQueryType = "L32"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeL64        AS112TimeseriesGroupResponseCodesParamsQueryType = "L64"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeLOC        AS112TimeseriesGroupResponseCodesParamsQueryType = "LOC"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeLp         AS112TimeseriesGroupResponseCodesParamsQueryType = "LP"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeMaila      AS112TimeseriesGroupResponseCodesParamsQueryType = "MAILA"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeMailb      AS112TimeseriesGroupResponseCodesParamsQueryType = "MAILB"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeMB         AS112TimeseriesGroupResponseCodesParamsQueryType = "MB"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeMd         AS112TimeseriesGroupResponseCodesParamsQueryType = "MD"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeMf         AS112TimeseriesGroupResponseCodesParamsQueryType = "MF"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeMg         AS112TimeseriesGroupResponseCodesParamsQueryType = "MG"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeMinfo      AS112TimeseriesGroupResponseCodesParamsQueryType = "MINFO"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeMr         AS112TimeseriesGroupResponseCodesParamsQueryType = "MR"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeMX         AS112TimeseriesGroupResponseCodesParamsQueryType = "MX"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNAPTR      AS112TimeseriesGroupResponseCodesParamsQueryType = "NAPTR"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNb         AS112TimeseriesGroupResponseCodesParamsQueryType = "NB"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNbstat     AS112TimeseriesGroupResponseCodesParamsQueryType = "NBSTAT"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNid        AS112TimeseriesGroupResponseCodesParamsQueryType = "NID"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNimloc     AS112TimeseriesGroupResponseCodesParamsQueryType = "NIMLOC"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNinfo      AS112TimeseriesGroupResponseCodesParamsQueryType = "NINFO"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNS         AS112TimeseriesGroupResponseCodesParamsQueryType = "NS"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNsap       AS112TimeseriesGroupResponseCodesParamsQueryType = "NSAP"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNsec       AS112TimeseriesGroupResponseCodesParamsQueryType = "NSEC"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNsec3      AS112TimeseriesGroupResponseCodesParamsQueryType = "NSEC3"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNsec3Param AS112TimeseriesGroupResponseCodesParamsQueryType = "NSEC3PARAM"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNull       AS112TimeseriesGroupResponseCodesParamsQueryType = "NULL"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeNxt        AS112TimeseriesGroupResponseCodesParamsQueryType = "NXT"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeOpenpgpkey AS112TimeseriesGroupResponseCodesParamsQueryType = "OPENPGPKEY"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeOpt        AS112TimeseriesGroupResponseCodesParamsQueryType = "OPT"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypePTR        AS112TimeseriesGroupResponseCodesParamsQueryType = "PTR"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypePx         AS112TimeseriesGroupResponseCodesParamsQueryType = "PX"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeRkey       AS112TimeseriesGroupResponseCodesParamsQueryType = "RKEY"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeRp         AS112TimeseriesGroupResponseCodesParamsQueryType = "RP"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeRrsig      AS112TimeseriesGroupResponseCodesParamsQueryType = "RRSIG"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeRt         AS112TimeseriesGroupResponseCodesParamsQueryType = "RT"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeSig        AS112TimeseriesGroupResponseCodesParamsQueryType = "SIG"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeSink       AS112TimeseriesGroupResponseCodesParamsQueryType = "SINK"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeSMIMEA     AS112TimeseriesGroupResponseCodesParamsQueryType = "SMIMEA"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeSOA        AS112TimeseriesGroupResponseCodesParamsQueryType = "SOA"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeSPF        AS112TimeseriesGroupResponseCodesParamsQueryType = "SPF"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeSRV        AS112TimeseriesGroupResponseCodesParamsQueryType = "SRV"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeSSHFP      AS112TimeseriesGroupResponseCodesParamsQueryType = "SSHFP"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeSVCB       AS112TimeseriesGroupResponseCodesParamsQueryType = "SVCB"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeTa         AS112TimeseriesGroupResponseCodesParamsQueryType = "TA"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeTalink     AS112TimeseriesGroupResponseCodesParamsQueryType = "TALINK"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeTkey       AS112TimeseriesGroupResponseCodesParamsQueryType = "TKEY"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeTLSA       AS112TimeseriesGroupResponseCodesParamsQueryType = "TLSA"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeTSIG       AS112TimeseriesGroupResponseCodesParamsQueryType = "TSIG"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeTXT        AS112TimeseriesGroupResponseCodesParamsQueryType = "TXT"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeUinfo      AS112TimeseriesGroupResponseCodesParamsQueryType = "UINFO"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeUID        AS112TimeseriesGroupResponseCodesParamsQueryType = "UID"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeUnspec     AS112TimeseriesGroupResponseCodesParamsQueryType = "UNSPEC"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeURI        AS112TimeseriesGroupResponseCodesParamsQueryType = "URI"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeWks        AS112TimeseriesGroupResponseCodesParamsQueryType = "WKS"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeX25        AS112TimeseriesGroupResponseCodesParamsQueryType = "X25"
+	AS112TimeseriesGroupResponseCodesParamsQueryTypeZonemd     AS112TimeseriesGroupResponseCodesParamsQueryType = "ZONEMD"
+)
+
+func (r AS112TimeseriesGroupResponseCodesParamsQueryType) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupResponseCodesParamsQueryTypeA, AS112TimeseriesGroupResponseCodesParamsQueryTypeAAAA, AS112TimeseriesGroupResponseCodesParamsQueryTypeA6, AS112TimeseriesGroupResponseCodesParamsQueryTypeAfsdb, AS112TimeseriesGroupResponseCodesParamsQueryTypeAny, AS112TimeseriesGroupResponseCodesParamsQueryTypeApl, AS112TimeseriesGroupResponseCodesParamsQueryTypeAtma, AS112TimeseriesGroupResponseCodesParamsQueryTypeAXFR, AS112TimeseriesGroupResponseCodesParamsQueryTypeCAA, AS112TimeseriesGroupResponseCodesParamsQueryTypeCdnskey, AS112TimeseriesGroupResponseCodesParamsQueryTypeCds, AS112TimeseriesGroupResponseCodesParamsQueryTypeCERT, AS112TimeseriesGroupResponseCodesParamsQueryTypeCNAME, AS112TimeseriesGroupResponseCodesParamsQueryTypeCsync, AS112TimeseriesGroupResponseCodesParamsQueryTypeDhcid, AS112TimeseriesGroupResponseCodesParamsQueryTypeDlv, AS112TimeseriesGroupResponseCodesParamsQueryTypeDname, AS112TimeseriesGroupResponseCodesParamsQueryTypeDNSKEY, AS112TimeseriesGroupResponseCodesParamsQueryTypeDoa, AS112TimeseriesGroupResponseCodesParamsQueryTypeDS, AS112TimeseriesGroupResponseCodesParamsQueryTypeEid, AS112TimeseriesGroupResponseCodesParamsQueryTypeEui48, AS112TimeseriesGroupResponseCodesParamsQueryTypeEui64, AS112TimeseriesGroupResponseCodesParamsQueryTypeGpos, AS112TimeseriesGroupResponseCodesParamsQueryTypeGid, AS112TimeseriesGroupResponseCodesParamsQueryTypeHinfo, AS112TimeseriesGroupResponseCodesParamsQueryTypeHip, AS112TimeseriesGroupResponseCodesParamsQueryTypeHTTPS, AS112TimeseriesGroupResponseCodesParamsQueryTypeIpseckey, AS112TimeseriesGroupResponseCodesParamsQueryTypeIsdn, AS112TimeseriesGroupResponseCodesParamsQueryTypeIxfr, AS112TimeseriesGroupResponseCodesParamsQueryTypeKey, AS112TimeseriesGroupResponseCodesParamsQueryTypeKx, AS112TimeseriesGroupResponseCodesParamsQueryTypeL32, AS112TimeseriesGroupResponseCodesParamsQueryTypeL64, AS112TimeseriesGroupResponseCodesParamsQueryTypeLOC, AS112TimeseriesGroupResponseCodesParamsQueryTypeLp, AS112TimeseriesGroupResponseCodesParamsQueryTypeMaila, AS112TimeseriesGroupResponseCodesParamsQueryTypeMailb, AS112TimeseriesGroupResponseCodesParamsQueryTypeMB, AS112TimeseriesGroupResponseCodesParamsQueryTypeMd, AS112TimeseriesGroupResponseCodesParamsQueryTypeMf, AS112TimeseriesGroupResponseCodesParamsQueryTypeMg, AS112TimeseriesGroupResponseCodesParamsQueryTypeMinfo, AS112TimeseriesGroupResponseCodesParamsQueryTypeMr, AS112TimeseriesGroupResponseCodesParamsQueryTypeMX, AS112TimeseriesGroupResponseCodesParamsQueryTypeNAPTR, AS112TimeseriesGroupResponseCodesParamsQueryTypeNb, AS112TimeseriesGroupResponseCodesParamsQueryTypeNbstat, AS112TimeseriesGroupResponseCodesParamsQueryTypeNid, AS112TimeseriesGroupResponseCodesParamsQueryTypeNimloc, AS112TimeseriesGroupResponseCodesParamsQueryTypeNinfo, AS112TimeseriesGroupResponseCodesParamsQueryTypeNS, AS112TimeseriesGroupResponseCodesParamsQueryTypeNsap, AS112TimeseriesGroupResponseCodesParamsQueryTypeNsec, AS112TimeseriesGroupResponseCodesParamsQueryTypeNsec3, AS112TimeseriesGroupResponseCodesParamsQueryTypeNsec3Param, AS112TimeseriesGroupResponseCodesParamsQueryTypeNull, AS112TimeseriesGroupResponseCodesParamsQueryTypeNxt, AS112TimeseriesGroupResponseCodesParamsQueryTypeOpenpgpkey, AS112TimeseriesGroupResponseCodesParamsQueryTypeOpt, AS112TimeseriesGroupResponseCodesParamsQueryTypePTR, AS112TimeseriesGroupResponseCodesParamsQueryTypePx, AS112TimeseriesGroupResponseCodesParamsQueryTypeRkey, AS112TimeseriesGroupResponseCodesParamsQueryTypeRp, AS112TimeseriesGroupResponseCodesParamsQueryTypeRrsig, AS112TimeseriesGroupResponseCodesParamsQueryTypeRt, AS112TimeseriesGroupResponseCodesParamsQueryTypeSig, AS112TimeseriesGroupResponseCodesParamsQueryTypeSink, AS112TimeseriesGroupResponseCodesParamsQueryTypeSMIMEA, AS112TimeseriesGroupResponseCodesParamsQueryTypeSOA, AS112TimeseriesGroupResponseCodesParamsQueryTypeSPF, AS112TimeseriesGroupResponseCodesParamsQueryTypeSRV, AS112TimeseriesGroupResponseCodesParamsQueryTypeSSHFP, AS112TimeseriesGroupResponseCodesParamsQueryTypeSVCB, AS112TimeseriesGroupResponseCodesParamsQueryTypeTa, AS112TimeseriesGroupResponseCodesParamsQueryTypeTalink, AS112TimeseriesGroupResponseCodesParamsQueryTypeTkey, AS112TimeseriesGroupResponseCodesParamsQueryTypeTLSA, AS112TimeseriesGroupResponseCodesParamsQueryTypeTSIG, AS112TimeseriesGroupResponseCodesParamsQueryTypeTXT, AS112TimeseriesGroupResponseCodesParamsQueryTypeUinfo, AS112TimeseriesGroupResponseCodesParamsQueryTypeUID, AS112TimeseriesGroupResponseCodesParamsQueryTypeUnspec, AS112TimeseriesGroupResponseCodesParamsQueryTypeURI, AS112TimeseriesGroupResponseCodesParamsQueryTypeWks, AS112TimeseriesGroupResponseCodesParamsQueryTypeX25, AS112TimeseriesGroupResponseCodesParamsQueryTypeZonemd:
 		return true
 	}
 	return false
