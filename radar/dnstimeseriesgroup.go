@@ -521,22 +521,15 @@ func (r dnsTimeseriesGroupQueryTypeResponseJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupQueryTypeResponseSerie0 struct {
-	A     []string                                      `json:"A,required"`
-	AAAA  []string                                      `json:"AAAA,required"`
-	HTTPS []string                                      `json:"HTTPS,required"`
-	NS    []string                                      `json:"NS,required"`
-	PTR   []string                                      `json:"PTR,required"`
-	JSON  dnsTimeseriesGroupQueryTypeResponseSerie0JSON `json:"-"`
+	Timestamps  []string                                      `json:"timestamps,required"`
+	ExtraFields map[string][]string                           `json:"-,extras"`
+	JSON        dnsTimeseriesGroupQueryTypeResponseSerie0JSON `json:"-"`
 }
 
 // dnsTimeseriesGroupQueryTypeResponseSerie0JSON contains the JSON metadata for the
 // struct [DNSTimeseriesGroupQueryTypeResponseSerie0]
 type dnsTimeseriesGroupQueryTypeResponseSerie0JSON struct {
-	A           apijson.Field
-	AAAA        apijson.Field
-	HTTPS       apijson.Field
-	NS          apijson.Field
-	PTR         apijson.Field
+	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -573,22 +566,15 @@ func (r dnsTimeseriesGroupResponseCodeResponseJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupResponseCodeResponseSerie0 struct {
-	Noerror  []string                                         `json:"NOERROR,required"`
-	Notimp   []string                                         `json:"NOTIMP,required"`
-	Nxdomain []string                                         `json:"NXDOMAIN,required"`
-	Refused  []string                                         `json:"REFUSED,required"`
-	Servfail []string                                         `json:"SERVFAIL,required"`
-	JSON     dnsTimeseriesGroupResponseCodeResponseSerie0JSON `json:"-"`
+	Timestamps  []string                                         `json:"timestamps,required"`
+	ExtraFields map[string][]string                              `json:"-,extras"`
+	JSON        dnsTimeseriesGroupResponseCodeResponseSerie0JSON `json:"-"`
 }
 
 // dnsTimeseriesGroupResponseCodeResponseSerie0JSON contains the JSON metadata for
 // the struct [DNSTimeseriesGroupResponseCodeResponseSerie0]
 type dnsTimeseriesGroupResponseCodeResponseSerie0JSON struct {
-	Noerror     apijson.Field
-	Notimp      apijson.Field
-	Nxdomain    apijson.Field
-	Refused     apijson.Field
-	Servfail    apijson.Field
+	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
