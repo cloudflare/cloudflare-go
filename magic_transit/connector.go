@@ -377,7 +377,6 @@ func (r connectorGetResponseDeviceJSON) RawJSON() string {
 }
 
 type ConnectorUpdateParams struct {
-	// Account identifier
 	AccountID                    param.Field[string]  `path:"account_id,required"`
 	Activated                    param.Field[bool]    `json:"activated"`
 	InterruptWindowDurationHours param.Field[float64] `json:"interrupt_window_duration_hours"`
@@ -464,12 +463,10 @@ func (r connectorUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type ConnectorListParams struct {
-	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConnectorEditParams struct {
-	// Account identifier
 	AccountID                    param.Field[string]  `path:"account_id,required"`
 	Activated                    param.Field[bool]    `json:"activated"`
 	InterruptWindowDurationHours param.Field[float64] `json:"interrupt_window_duration_hours"`
@@ -556,7 +553,6 @@ func (r connectorEditResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type ConnectorGetParams struct {
-	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
