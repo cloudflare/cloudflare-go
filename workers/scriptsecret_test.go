@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workers_for_platforms_test
+package workers_test
 
 import (
 	"context"
@@ -11,10 +11,11 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
 	"github.com/cloudflare/cloudflare-go/v4/workers_for_platforms"
 )
 
-func TestDispatchNamespaceScriptSecretUpdateWithOptionalParams(t *testing.T) {
+func TestScriptSecretUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,11 +28,10 @@ func TestDispatchNamespaceScriptSecretUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Secrets.Update(
+	_, err := client.Workers.Scripts.Secrets.Update(
 		context.TODO(),
-		"my-dispatch-namespace",
 		"this-is_my_script-01",
-		workers_for_platforms.DispatchNamespaceScriptSecretUpdateParams{
+		workers.ScriptSecretUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			WorkersSecretModel: workers_for_platforms.WorkersSecretModelParam{
 				Name: cloudflare.F("MY_SECRET"),
@@ -49,7 +49,7 @@ func TestDispatchNamespaceScriptSecretUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDispatchNamespaceScriptSecretList(t *testing.T) {
+func TestScriptSecretList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -62,11 +62,10 @@ func TestDispatchNamespaceScriptSecretList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Secrets.List(
+	_, err := client.Workers.Scripts.Secrets.List(
 		context.TODO(),
-		"my-dispatch-namespace",
 		"this-is_my_script-01",
-		workers_for_platforms.DispatchNamespaceScriptSecretListParams{
+		workers.ScriptSecretListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -79,7 +78,7 @@ func TestDispatchNamespaceScriptSecretList(t *testing.T) {
 	}
 }
 
-func TestDispatchNamespaceScriptSecretDelete(t *testing.T) {
+func TestScriptSecretDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -92,12 +91,11 @@ func TestDispatchNamespaceScriptSecretDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Secrets.Delete(
+	_, err := client.Workers.Scripts.Secrets.Delete(
 		context.TODO(),
-		"my-dispatch-namespace",
 		"this-is_my_script-01",
 		"mySecret",
-		workers_for_platforms.DispatchNamespaceScriptSecretDeleteParams{
+		workers.ScriptSecretDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -110,7 +108,7 @@ func TestDispatchNamespaceScriptSecretDelete(t *testing.T) {
 	}
 }
 
-func TestDispatchNamespaceScriptSecretGet(t *testing.T) {
+func TestScriptSecretGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -123,12 +121,11 @@ func TestDispatchNamespaceScriptSecretGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Secrets.Get(
+	_, err := client.Workers.Scripts.Secrets.Get(
 		context.TODO(),
-		"my-dispatch-namespace",
 		"this-is_my_script-01",
 		"mySecret",
-		workers_for_platforms.DispatchNamespaceScriptSecretGetParams{
+		workers.ScriptSecretGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

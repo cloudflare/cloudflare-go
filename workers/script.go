@@ -35,6 +35,7 @@ type ScriptService struct {
 	Settings    *ScriptSettingService
 	Deployments *ScriptDeploymentService
 	Versions    *ScriptVersionService
+	Secrets     *ScriptSecretService
 }
 
 // NewScriptService generates a new service that applies the given options to each
@@ -51,6 +52,7 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 	r.Settings = NewScriptSettingService(opts...)
 	r.Deployments = NewScriptDeploymentService(opts...)
 	r.Versions = NewScriptVersionService(opts...)
+	r.Secrets = NewScriptSecretService(opts...)
 	return
 }
 
