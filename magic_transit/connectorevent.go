@@ -198,36 +198,36 @@ func (r *ConnectorEventGetResponseE) UnmarshalJSON(data []byte) (err error) {
 // to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEObject],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK].
+// [magic_transit.ConnectorEventGetResponseEInit],
+// [magic_transit.ConnectorEventGetResponseELeave],
+// [magic_transit.ConnectorEventGetResponseEStartAttestation],
+// [magic_transit.ConnectorEventGetResponseEFinishAttestationSuccess],
+// [magic_transit.ConnectorEventGetResponseEFinishAttestationFailure],
+// [magic_transit.ConnectorEventGetResponseEStartRotateCryptKey],
+// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeySuccess],
+// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeyFailure],
+// [magic_transit.ConnectorEventGetResponseEStartUpgrade],
+// [magic_transit.ConnectorEventGetResponseEFinishUpgradeSuccess],
+// [magic_transit.ConnectorEventGetResponseEFinishUpgradeFailure],
+// [magic_transit.ConnectorEventGetResponseEReconcile],
+// [magic_transit.ConnectorEventGetResponseEConfigureCloudflaredTunnel].
 func (r ConnectorEventGetResponseE) AsUnion() ConnectorEventGetResponseEUnion {
 	return r.union
 }
 
-// Union satisfied by [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEObject],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK],
-// [magic_transit.ConnectorEventGetResponseEK] or
-// [magic_transit.ConnectorEventGetResponseEK].
+// Union satisfied by [magic_transit.ConnectorEventGetResponseEInit],
+// [magic_transit.ConnectorEventGetResponseELeave],
+// [magic_transit.ConnectorEventGetResponseEStartAttestation],
+// [magic_transit.ConnectorEventGetResponseEFinishAttestationSuccess],
+// [magic_transit.ConnectorEventGetResponseEFinishAttestationFailure],
+// [magic_transit.ConnectorEventGetResponseEStartRotateCryptKey],
+// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeySuccess],
+// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeyFailure],
+// [magic_transit.ConnectorEventGetResponseEStartUpgrade],
+// [magic_transit.ConnectorEventGetResponseEFinishUpgradeSuccess],
+// [magic_transit.ConnectorEventGetResponseEFinishUpgradeFailure],
+// [magic_transit.ConnectorEventGetResponseEReconcile] or
+// [magic_transit.ConnectorEventGetResponseEConfigureCloudflaredTunnel].
 type ConnectorEventGetResponseEUnion interface {
 	implementsConnectorEventGetResponseE()
 }
@@ -235,138 +235,610 @@ type ConnectorEventGetResponseEUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*ConnectorEventGetResponseEUnion)(nil)).Elem(),
-		"",
+		"k",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEInit{}),
+			DiscriminatorValue: "Init",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseELeave{}),
+			DiscriminatorValue: "Leave",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEStartAttestation{}),
+			DiscriminatorValue: "StartAttestation",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEFinishAttestationSuccess{}),
+			DiscriminatorValue: "FinishAttestationSuccess",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEFinishAttestationFailure{}),
+			DiscriminatorValue: "FinishAttestationFailure",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEStartRotateCryptKey{}),
+			DiscriminatorValue: "StartRotateCryptKey",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEFinishRotateCryptKeySuccess{}),
+			DiscriminatorValue: "FinishRotateCryptKeySuccess",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEFinishRotateCryptKeyFailure{}),
+			DiscriminatorValue: "FinishRotateCryptKeyFailure",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEObject{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEStartUpgrade{}),
+			DiscriminatorValue: "StartUpgrade",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEFinishUpgradeSuccess{}),
+			DiscriminatorValue: "FinishUpgradeSuccess",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEFinishUpgradeFailure{}),
+			DiscriminatorValue: "FinishUpgradeFailure",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEReconcile{}),
+			DiscriminatorValue: "Reconcile",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConnectorEventGetResponseEK{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConnectorEventGetResponseEConfigureCloudflaredTunnel{}),
+			DiscriminatorValue: "ConfigureCloudflaredTunnel",
 		},
 	)
 }
 
-type ConnectorEventGetResponseEK struct {
+type ConnectorEventGetResponseEInit struct {
 	// Initialized process
-	K    ConnectorEventGetResponseEKK    `json:"k,required"`
-	JSON connectorEventGetResponseEkJSON `json:"-"`
+	K    ConnectorEventGetResponseEInitK    `json:"k,required"`
+	JSON connectorEventGetResponseEInitJSON `json:"-"`
 }
 
-// connectorEventGetResponseEkJSON contains the JSON metadata for the struct
-// [ConnectorEventGetResponseEK]
-type connectorEventGetResponseEkJSON struct {
+// connectorEventGetResponseEInitJSON contains the JSON metadata for the struct
+// [ConnectorEventGetResponseEInit]
+type connectorEventGetResponseEInitJSON struct {
 	K           apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ConnectorEventGetResponseEK) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorEventGetResponseEInit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorEventGetResponseEkJSON) RawJSON() string {
+func (r connectorEventGetResponseEInitJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ConnectorEventGetResponseEK) implementsConnectorEventGetResponseE() {}
+func (r ConnectorEventGetResponseEInit) implementsConnectorEventGetResponseE() {}
 
 // Initialized process
-type ConnectorEventGetResponseEKK string
+type ConnectorEventGetResponseEInitK string
 
 const (
-	ConnectorEventGetResponseEKKInit ConnectorEventGetResponseEKK = "Init"
+	ConnectorEventGetResponseEInitKInit ConnectorEventGetResponseEInitK = "Init"
 )
 
-func (r ConnectorEventGetResponseEKK) IsKnown() bool {
+func (r ConnectorEventGetResponseEInitK) IsKnown() bool {
 	switch r {
-	case ConnectorEventGetResponseEKKInit:
+	case ConnectorEventGetResponseEInitKInit:
 		return true
 	}
 	return false
 }
 
-type ConnectorEventGetResponseEObject struct {
-	// Started upgrade
-	K ConnectorEventGetResponseEObjectK `json:"k,required"`
-	// Location of upgrade bundle
-	URL  string                               `json:"url,required"`
-	JSON connectorEventGetResponseEObjectJSON `json:"-"`
+type ConnectorEventGetResponseELeave struct {
+	// Stopped process
+	K    ConnectorEventGetResponseELeaveK    `json:"k,required"`
+	JSON connectorEventGetResponseELeaveJSON `json:"-"`
 }
 
-// connectorEventGetResponseEObjectJSON contains the JSON metadata for the struct
-// [ConnectorEventGetResponseEObject]
-type connectorEventGetResponseEObjectJSON struct {
+// connectorEventGetResponseELeaveJSON contains the JSON metadata for the struct
+// [ConnectorEventGetResponseELeave]
+type connectorEventGetResponseELeaveJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseELeave) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseELeaveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseELeave) implementsConnectorEventGetResponseE() {}
+
+// Stopped process
+type ConnectorEventGetResponseELeaveK string
+
+const (
+	ConnectorEventGetResponseELeaveKLeave ConnectorEventGetResponseELeaveK = "Leave"
+)
+
+func (r ConnectorEventGetResponseELeaveK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseELeaveKLeave:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEStartAttestation struct {
+	// Started attestation
+	K    ConnectorEventGetResponseEStartAttestationK    `json:"k,required"`
+	JSON connectorEventGetResponseEStartAttestationJSON `json:"-"`
+}
+
+// connectorEventGetResponseEStartAttestationJSON contains the JSON metadata for
+// the struct [ConnectorEventGetResponseEStartAttestation]
+type connectorEventGetResponseEStartAttestationJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEStartAttestation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEStartAttestationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEStartAttestation) implementsConnectorEventGetResponseE() {}
+
+// Started attestation
+type ConnectorEventGetResponseEStartAttestationK string
+
+const (
+	ConnectorEventGetResponseEStartAttestationKStartAttestation ConnectorEventGetResponseEStartAttestationK = "StartAttestation"
+)
+
+func (r ConnectorEventGetResponseEStartAttestationK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEStartAttestationKStartAttestation:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEFinishAttestationSuccess struct {
+	// Finished attestation
+	K    ConnectorEventGetResponseEFinishAttestationSuccessK    `json:"k,required"`
+	JSON connectorEventGetResponseEFinishAttestationSuccessJSON `json:"-"`
+}
+
+// connectorEventGetResponseEFinishAttestationSuccessJSON contains the JSON
+// metadata for the struct [ConnectorEventGetResponseEFinishAttestationSuccess]
+type connectorEventGetResponseEFinishAttestationSuccessJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEFinishAttestationSuccess) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEFinishAttestationSuccessJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEFinishAttestationSuccess) implementsConnectorEventGetResponseE() {}
+
+// Finished attestation
+type ConnectorEventGetResponseEFinishAttestationSuccessK string
+
+const (
+	ConnectorEventGetResponseEFinishAttestationSuccessKFinishAttestationSuccess ConnectorEventGetResponseEFinishAttestationSuccessK = "FinishAttestationSuccess"
+)
+
+func (r ConnectorEventGetResponseEFinishAttestationSuccessK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEFinishAttestationSuccessKFinishAttestationSuccess:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEFinishAttestationFailure struct {
+	// Failed attestation
+	K    ConnectorEventGetResponseEFinishAttestationFailureK    `json:"k,required"`
+	JSON connectorEventGetResponseEFinishAttestationFailureJSON `json:"-"`
+}
+
+// connectorEventGetResponseEFinishAttestationFailureJSON contains the JSON
+// metadata for the struct [ConnectorEventGetResponseEFinishAttestationFailure]
+type connectorEventGetResponseEFinishAttestationFailureJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEFinishAttestationFailure) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEFinishAttestationFailureJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEFinishAttestationFailure) implementsConnectorEventGetResponseE() {}
+
+// Failed attestation
+type ConnectorEventGetResponseEFinishAttestationFailureK string
+
+const (
+	ConnectorEventGetResponseEFinishAttestationFailureKFinishAttestationFailure ConnectorEventGetResponseEFinishAttestationFailureK = "FinishAttestationFailure"
+)
+
+func (r ConnectorEventGetResponseEFinishAttestationFailureK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEFinishAttestationFailureKFinishAttestationFailure:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEStartRotateCryptKey struct {
+	// Started crypt key rotation
+	K    ConnectorEventGetResponseEStartRotateCryptKeyK    `json:"k,required"`
+	JSON connectorEventGetResponseEStartRotateCryptKeyJSON `json:"-"`
+}
+
+// connectorEventGetResponseEStartRotateCryptKeyJSON contains the JSON metadata for
+// the struct [ConnectorEventGetResponseEStartRotateCryptKey]
+type connectorEventGetResponseEStartRotateCryptKeyJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEStartRotateCryptKey) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEStartRotateCryptKeyJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEStartRotateCryptKey) implementsConnectorEventGetResponseE() {}
+
+// Started crypt key rotation
+type ConnectorEventGetResponseEStartRotateCryptKeyK string
+
+const (
+	ConnectorEventGetResponseEStartRotateCryptKeyKStartRotateCryptKey ConnectorEventGetResponseEStartRotateCryptKeyK = "StartRotateCryptKey"
+)
+
+func (r ConnectorEventGetResponseEStartRotateCryptKeyK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEStartRotateCryptKeyKStartRotateCryptKey:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEFinishRotateCryptKeySuccess struct {
+	// Finished crypt key rotation
+	K    ConnectorEventGetResponseEFinishRotateCryptKeySuccessK    `json:"k,required"`
+	JSON connectorEventGetResponseEFinishRotateCryptKeySuccessJSON `json:"-"`
+}
+
+// connectorEventGetResponseEFinishRotateCryptKeySuccessJSON contains the JSON
+// metadata for the struct [ConnectorEventGetResponseEFinishRotateCryptKeySuccess]
+type connectorEventGetResponseEFinishRotateCryptKeySuccessJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEFinishRotateCryptKeySuccess) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEFinishRotateCryptKeySuccessJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEFinishRotateCryptKeySuccess) implementsConnectorEventGetResponseE() {
+}
+
+// Finished crypt key rotation
+type ConnectorEventGetResponseEFinishRotateCryptKeySuccessK string
+
+const (
+	ConnectorEventGetResponseEFinishRotateCryptKeySuccessKFinishRotateCryptKeySuccess ConnectorEventGetResponseEFinishRotateCryptKeySuccessK = "FinishRotateCryptKeySuccess"
+)
+
+func (r ConnectorEventGetResponseEFinishRotateCryptKeySuccessK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEFinishRotateCryptKeySuccessKFinishRotateCryptKeySuccess:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEFinishRotateCryptKeyFailure struct {
+	// Failed crypt key rotation
+	K    ConnectorEventGetResponseEFinishRotateCryptKeyFailureK    `json:"k,required"`
+	JSON connectorEventGetResponseEFinishRotateCryptKeyFailureJSON `json:"-"`
+}
+
+// connectorEventGetResponseEFinishRotateCryptKeyFailureJSON contains the JSON
+// metadata for the struct [ConnectorEventGetResponseEFinishRotateCryptKeyFailure]
+type connectorEventGetResponseEFinishRotateCryptKeyFailureJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEFinishRotateCryptKeyFailure) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEFinishRotateCryptKeyFailureJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEFinishRotateCryptKeyFailure) implementsConnectorEventGetResponseE() {
+}
+
+// Failed crypt key rotation
+type ConnectorEventGetResponseEFinishRotateCryptKeyFailureK string
+
+const (
+	ConnectorEventGetResponseEFinishRotateCryptKeyFailureKFinishRotateCryptKeyFailure ConnectorEventGetResponseEFinishRotateCryptKeyFailureK = "FinishRotateCryptKeyFailure"
+)
+
+func (r ConnectorEventGetResponseEFinishRotateCryptKeyFailureK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEFinishRotateCryptKeyFailureKFinishRotateCryptKeyFailure:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEStartUpgrade struct {
+	// Started upgrade
+	K ConnectorEventGetResponseEStartUpgradeK `json:"k,required"`
+	// Location of upgrade bundle
+	URL  string                                     `json:"url,required"`
+	JSON connectorEventGetResponseEStartUpgradeJSON `json:"-"`
+}
+
+// connectorEventGetResponseEStartUpgradeJSON contains the JSON metadata for the
+// struct [ConnectorEventGetResponseEStartUpgrade]
+type connectorEventGetResponseEStartUpgradeJSON struct {
 	K           apijson.Field
 	URL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ConnectorEventGetResponseEObject) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorEventGetResponseEStartUpgrade) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorEventGetResponseEObjectJSON) RawJSON() string {
+func (r connectorEventGetResponseEStartUpgradeJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ConnectorEventGetResponseEObject) implementsConnectorEventGetResponseE() {}
+func (r ConnectorEventGetResponseEStartUpgrade) implementsConnectorEventGetResponseE() {}
 
 // Started upgrade
-type ConnectorEventGetResponseEObjectK string
+type ConnectorEventGetResponseEStartUpgradeK string
 
 const (
-	ConnectorEventGetResponseEObjectKStartUpgrade ConnectorEventGetResponseEObjectK = "StartUpgrade"
+	ConnectorEventGetResponseEStartUpgradeKStartUpgrade ConnectorEventGetResponseEStartUpgradeK = "StartUpgrade"
 )
 
-func (r ConnectorEventGetResponseEObjectK) IsKnown() bool {
+func (r ConnectorEventGetResponseEStartUpgradeK) IsKnown() bool {
 	switch r {
-	case ConnectorEventGetResponseEObjectKStartUpgrade:
+	case ConnectorEventGetResponseEStartUpgradeKStartUpgrade:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEFinishUpgradeSuccess struct {
+	// Finished upgrade
+	K    ConnectorEventGetResponseEFinishUpgradeSuccessK    `json:"k,required"`
+	JSON connectorEventGetResponseEFinishUpgradeSuccessJSON `json:"-"`
+}
+
+// connectorEventGetResponseEFinishUpgradeSuccessJSON contains the JSON metadata
+// for the struct [ConnectorEventGetResponseEFinishUpgradeSuccess]
+type connectorEventGetResponseEFinishUpgradeSuccessJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEFinishUpgradeSuccess) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEFinishUpgradeSuccessJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEFinishUpgradeSuccess) implementsConnectorEventGetResponseE() {}
+
+// Finished upgrade
+type ConnectorEventGetResponseEFinishUpgradeSuccessK string
+
+const (
+	ConnectorEventGetResponseEFinishUpgradeSuccessKFinishUpgradeSuccess ConnectorEventGetResponseEFinishUpgradeSuccessK = "FinishUpgradeSuccess"
+)
+
+func (r ConnectorEventGetResponseEFinishUpgradeSuccessK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEFinishUpgradeSuccessKFinishUpgradeSuccess:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEFinishUpgradeFailure struct {
+	// Failed upgrade
+	K    ConnectorEventGetResponseEFinishUpgradeFailureK    `json:"k,required"`
+	JSON connectorEventGetResponseEFinishUpgradeFailureJSON `json:"-"`
+}
+
+// connectorEventGetResponseEFinishUpgradeFailureJSON contains the JSON metadata
+// for the struct [ConnectorEventGetResponseEFinishUpgradeFailure]
+type connectorEventGetResponseEFinishUpgradeFailureJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEFinishUpgradeFailure) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEFinishUpgradeFailureJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEFinishUpgradeFailure) implementsConnectorEventGetResponseE() {}
+
+// Failed upgrade
+type ConnectorEventGetResponseEFinishUpgradeFailureK string
+
+const (
+	ConnectorEventGetResponseEFinishUpgradeFailureKFinishUpgradeFailure ConnectorEventGetResponseEFinishUpgradeFailureK = "FinishUpgradeFailure"
+)
+
+func (r ConnectorEventGetResponseEFinishUpgradeFailureK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEFinishUpgradeFailureKFinishUpgradeFailure:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEReconcile struct {
+	// Reconciled
+	K    ConnectorEventGetResponseEReconcileK    `json:"k,required"`
+	JSON connectorEventGetResponseEReconcileJSON `json:"-"`
+}
+
+// connectorEventGetResponseEReconcileJSON contains the JSON metadata for the
+// struct [ConnectorEventGetResponseEReconcile]
+type connectorEventGetResponseEReconcileJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEReconcile) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEReconcileJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEReconcile) implementsConnectorEventGetResponseE() {}
+
+// Reconciled
+type ConnectorEventGetResponseEReconcileK string
+
+const (
+	ConnectorEventGetResponseEReconcileKReconcile ConnectorEventGetResponseEReconcileK = "Reconcile"
+)
+
+func (r ConnectorEventGetResponseEReconcileK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEReconcileKReconcile:
+		return true
+	}
+	return false
+}
+
+type ConnectorEventGetResponseEConfigureCloudflaredTunnel struct {
+	// Configured Cloudflared tunnel
+	K    ConnectorEventGetResponseEConfigureCloudflaredTunnelK    `json:"k,required"`
+	JSON connectorEventGetResponseEConfigureCloudflaredTunnelJSON `json:"-"`
+}
+
+// connectorEventGetResponseEConfigureCloudflaredTunnelJSON contains the JSON
+// metadata for the struct [ConnectorEventGetResponseEConfigureCloudflaredTunnel]
+type connectorEventGetResponseEConfigureCloudflaredTunnelJSON struct {
+	K           apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorEventGetResponseEConfigureCloudflaredTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorEventGetResponseEConfigureCloudflaredTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConnectorEventGetResponseEConfigureCloudflaredTunnel) implementsConnectorEventGetResponseE() {
+}
+
+// Configured Cloudflared tunnel
+type ConnectorEventGetResponseEConfigureCloudflaredTunnelK string
+
+const (
+	ConnectorEventGetResponseEConfigureCloudflaredTunnelKConfigureCloudflaredTunnel ConnectorEventGetResponseEConfigureCloudflaredTunnelK = "ConfigureCloudflaredTunnel"
+)
+
+func (r ConnectorEventGetResponseEConfigureCloudflaredTunnelK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEConfigureCloudflaredTunnelKConfigureCloudflaredTunnel:
+		return true
+	}
+	return false
+}
+
+// Initialized process
+type ConnectorEventGetResponseEK string
+
+const (
+	ConnectorEventGetResponseEKInit                        ConnectorEventGetResponseEK = "Init"
+	ConnectorEventGetResponseEKLeave                       ConnectorEventGetResponseEK = "Leave"
+	ConnectorEventGetResponseEKStartAttestation            ConnectorEventGetResponseEK = "StartAttestation"
+	ConnectorEventGetResponseEKFinishAttestationSuccess    ConnectorEventGetResponseEK = "FinishAttestationSuccess"
+	ConnectorEventGetResponseEKFinishAttestationFailure    ConnectorEventGetResponseEK = "FinishAttestationFailure"
+	ConnectorEventGetResponseEKStartRotateCryptKey         ConnectorEventGetResponseEK = "StartRotateCryptKey"
+	ConnectorEventGetResponseEKFinishRotateCryptKeySuccess ConnectorEventGetResponseEK = "FinishRotateCryptKeySuccess"
+	ConnectorEventGetResponseEKFinishRotateCryptKeyFailure ConnectorEventGetResponseEK = "FinishRotateCryptKeyFailure"
+	ConnectorEventGetResponseEKStartUpgrade                ConnectorEventGetResponseEK = "StartUpgrade"
+	ConnectorEventGetResponseEKFinishUpgradeSuccess        ConnectorEventGetResponseEK = "FinishUpgradeSuccess"
+	ConnectorEventGetResponseEKFinishUpgradeFailure        ConnectorEventGetResponseEK = "FinishUpgradeFailure"
+	ConnectorEventGetResponseEKReconcile                   ConnectorEventGetResponseEK = "Reconcile"
+	ConnectorEventGetResponseEKConfigureCloudflaredTunnel  ConnectorEventGetResponseEK = "ConfigureCloudflaredTunnel"
+)
+
+func (r ConnectorEventGetResponseEK) IsKnown() bool {
+	switch r {
+	case ConnectorEventGetResponseEKInit, ConnectorEventGetResponseEKLeave, ConnectorEventGetResponseEKStartAttestation, ConnectorEventGetResponseEKFinishAttestationSuccess, ConnectorEventGetResponseEKFinishAttestationFailure, ConnectorEventGetResponseEKStartRotateCryptKey, ConnectorEventGetResponseEKFinishRotateCryptKeySuccess, ConnectorEventGetResponseEKFinishRotateCryptKeyFailure, ConnectorEventGetResponseEKStartUpgrade, ConnectorEventGetResponseEKFinishUpgradeSuccess, ConnectorEventGetResponseEKFinishUpgradeFailure, ConnectorEventGetResponseEKReconcile, ConnectorEventGetResponseEKConfigureCloudflaredTunnel:
 		return true
 	}
 	return false
