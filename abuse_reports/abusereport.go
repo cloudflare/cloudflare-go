@@ -34,7 +34,7 @@ func NewAbuseReportService(opts ...option.RequestOption) (r *AbuseReportService)
 }
 
 // Submit the Abuse Report of a particular type
-func (r *AbuseReportService) New(ctx context.Context, reportType AbuseReportNewParamsAbuseReportsDmcaReportReportType, params AbuseReportNewParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *AbuseReportService) New(ctx context.Context, reportType AbuseReportNewParamsReportType, params AbuseReportNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env AbuseReportNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
