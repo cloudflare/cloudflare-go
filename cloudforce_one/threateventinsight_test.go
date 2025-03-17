@@ -14,6 +14,36 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
+func TestThreatEventInsightNew(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.CloudforceOne.ThreatEvents.Insights.New(
+		context.TODO(),
+		"event_id",
+		cloudforce_one.ThreatEventInsightNewParams{
+			AccountID: cloudflare.F(0.000000),
+			Content:   cloudflare.F("Here is some additional context _in markdown_"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestThreatEventInsightDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -33,36 +63,6 @@ func TestThreatEventInsightDelete(t *testing.T) {
 		"insight_id",
 		cloudforce_one.ThreatEventInsightDeleteParams{
 			AccountID: cloudflare.F(0.000000),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestThreatEventInsightCreat(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.CloudforceOne.ThreatEvents.Insights.Creat(
-		context.TODO(),
-		"event_id",
-		cloudforce_one.ThreatEventInsightCreatParams{
-			AccountID: cloudflare.F(0.000000),
-			Content:   cloudflare.F("Here is some additional context _in markdown_"),
 		},
 	)
 	if err != nil {
