@@ -29,14 +29,17 @@ func TestAS112SummaryDNSSECWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.DNSSEC(context.TODO(), radar.AS112SummaryDNSSECParams{
-		ASN:       cloudflare.F([]string{"string"}),
-		Continent: cloudflare.F([]string{"string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
-		DateRange: cloudflare.F([]string{"7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.AS112SummaryDNSSECParamsFormatJson),
-		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"main_series"}),
+		ASN:          cloudflare.F([]string{"string"}),
+		Continent:    cloudflare.F([]string{"string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
+		DateRange:    cloudflare.F([]string{"7d"}),
+		DateStart:    cloudflare.F([]time.Time{time.Now()}),
+		Format:       cloudflare.F(radar.AS112SummaryDNSSECParamsFormatJson),
+		Location:     cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
+		Protocol:     cloudflare.F(radar.AS112SummaryDNSSECParamsProtocolUdp),
+		QueryType:    cloudflare.F(radar.AS112SummaryDNSSECParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112SummaryDNSSECParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,14 +64,17 @@ func TestAS112SummaryEdnsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.Edns(context.TODO(), radar.AS112SummaryEdnsParams{
-		ASN:       cloudflare.F([]string{"string"}),
-		Continent: cloudflare.F([]string{"string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
-		DateRange: cloudflare.F([]string{"7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.AS112SummaryEdnsParamsFormatJson),
-		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"main_series"}),
+		ASN:          cloudflare.F([]string{"string"}),
+		Continent:    cloudflare.F([]string{"string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
+		DateRange:    cloudflare.F([]string{"7d"}),
+		DateStart:    cloudflare.F([]time.Time{time.Now()}),
+		Format:       cloudflare.F(radar.AS112SummaryEdnsParamsFormatJson),
+		Location:     cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
+		Protocol:     cloudflare.F(radar.AS112SummaryEdnsParamsProtocolUdp),
+		QueryType:    cloudflare.F(radar.AS112SummaryEdnsParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112SummaryEdnsParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -93,14 +99,17 @@ func TestAS112SummaryIPVersionWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.IPVersion(context.TODO(), radar.AS112SummaryIPVersionParams{
-		ASN:       cloudflare.F([]string{"string"}),
-		Continent: cloudflare.F([]string{"string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
-		DateRange: cloudflare.F([]string{"7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.AS112SummaryIPVersionParamsFormatJson),
-		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"main_series"}),
+		ASN:          cloudflare.F([]string{"string"}),
+		Continent:    cloudflare.F([]string{"string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
+		DateRange:    cloudflare.F([]string{"7d"}),
+		DateStart:    cloudflare.F([]time.Time{time.Now()}),
+		Format:       cloudflare.F(radar.AS112SummaryIPVersionParamsFormatJson),
+		Location:     cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
+		Protocol:     cloudflare.F(radar.AS112SummaryIPVersionParamsProtocolUdp),
+		QueryType:    cloudflare.F(radar.AS112SummaryIPVersionParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112SummaryIPVersionParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -125,14 +134,16 @@ func TestAS112SummaryProtocolWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.Protocol(context.TODO(), radar.AS112SummaryProtocolParams{
-		ASN:       cloudflare.F([]string{"string"}),
-		Continent: cloudflare.F([]string{"string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
-		DateRange: cloudflare.F([]string{"7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.AS112SummaryProtocolParamsFormatJson),
-		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"main_series"}),
+		ASN:          cloudflare.F([]string{"string"}),
+		Continent:    cloudflare.F([]string{"string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
+		DateRange:    cloudflare.F([]string{"7d"}),
+		DateStart:    cloudflare.F([]time.Time{time.Now()}),
+		Format:       cloudflare.F(radar.AS112SummaryProtocolParamsFormatJson),
+		Location:     cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
+		QueryType:    cloudflare.F(radar.AS112SummaryProtocolParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112SummaryProtocolParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -166,6 +177,8 @@ func TestAS112SummaryQueryTypeWithOptionalParams(t *testing.T) {
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
+		Protocol:      cloudflare.F(radar.AS112SummaryQueryTypeParamsProtocolUdp),
+		ResponseCode:  cloudflare.F(radar.AS112SummaryQueryTypeParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -199,6 +212,8 @@ func TestAS112SummaryResponseCodesWithOptionalParams(t *testing.T) {
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
+		Protocol:      cloudflare.F(radar.AS112SummaryResponseCodesParamsProtocolUdp),
+		QueryType:     cloudflare.F(radar.AS112SummaryResponseCodesParamsQueryTypeA),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

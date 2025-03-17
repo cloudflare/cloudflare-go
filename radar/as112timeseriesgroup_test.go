@@ -29,15 +29,18 @@ func TestAS112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.DNSSEC(context.TODO(), radar.AS112TimeseriesGroupDNSSECParams{
-		AggInterval: cloudflare.F(radar.AS112TimeseriesGroupDNSSECParamsAggInterval15m),
-		ASN:         cloudflare.F([]string{"string"}),
-		Continent:   cloudflare.F([]string{"string"}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.AS112TimeseriesGroupDNSSECParamsFormatJson),
-		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"main_series"}),
+		AggInterval:  cloudflare.F(radar.AS112TimeseriesGroupDNSSECParamsAggInterval15m),
+		ASN:          cloudflare.F([]string{"string"}),
+		Continent:    cloudflare.F([]string{"string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
+		DateRange:    cloudflare.F([]string{"7d"}),
+		DateStart:    cloudflare.F([]time.Time{time.Now()}),
+		Format:       cloudflare.F(radar.AS112TimeseriesGroupDNSSECParamsFormatJson),
+		Location:     cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
+		Protocol:     cloudflare.F(radar.AS112TimeseriesGroupDNSSECParamsProtocolUdp),
+		QueryType:    cloudflare.F(radar.AS112TimeseriesGroupDNSSECParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112TimeseriesGroupDNSSECParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -62,15 +65,18 @@ func TestAS112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.Edns(context.TODO(), radar.AS112TimeseriesGroupEdnsParams{
-		AggInterval: cloudflare.F(radar.AS112TimeseriesGroupEdnsParamsAggInterval15m),
-		ASN:         cloudflare.F([]string{"string"}),
-		Continent:   cloudflare.F([]string{"string"}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.AS112TimeseriesGroupEdnsParamsFormatJson),
-		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"main_series"}),
+		AggInterval:  cloudflare.F(radar.AS112TimeseriesGroupEdnsParamsAggInterval15m),
+		ASN:          cloudflare.F([]string{"string"}),
+		Continent:    cloudflare.F([]string{"string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
+		DateRange:    cloudflare.F([]string{"7d"}),
+		DateStart:    cloudflare.F([]time.Time{time.Now()}),
+		Format:       cloudflare.F(radar.AS112TimeseriesGroupEdnsParamsFormatJson),
+		Location:     cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
+		Protocol:     cloudflare.F(radar.AS112TimeseriesGroupEdnsParamsProtocolUdp),
+		QueryType:    cloudflare.F(radar.AS112TimeseriesGroupEdnsParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112TimeseriesGroupEdnsParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -95,15 +101,18 @@ func TestAS112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.IPVersion(context.TODO(), radar.AS112TimeseriesGroupIPVersionParams{
-		AggInterval: cloudflare.F(radar.AS112TimeseriesGroupIPVersionParamsAggInterval15m),
-		ASN:         cloudflare.F([]string{"string"}),
-		Continent:   cloudflare.F([]string{"string"}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.AS112TimeseriesGroupIPVersionParamsFormatJson),
-		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"main_series"}),
+		AggInterval:  cloudflare.F(radar.AS112TimeseriesGroupIPVersionParamsAggInterval15m),
+		ASN:          cloudflare.F([]string{"string"}),
+		Continent:    cloudflare.F([]string{"string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
+		DateRange:    cloudflare.F([]string{"7d"}),
+		DateStart:    cloudflare.F([]time.Time{time.Now()}),
+		Format:       cloudflare.F(radar.AS112TimeseriesGroupIPVersionParamsFormatJson),
+		Location:     cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
+		Protocol:     cloudflare.F(radar.AS112TimeseriesGroupIPVersionParamsProtocolUdp),
+		QueryType:    cloudflare.F(radar.AS112TimeseriesGroupIPVersionParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112TimeseriesGroupIPVersionParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -128,15 +137,17 @@ func TestAS112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.Protocol(context.TODO(), radar.AS112TimeseriesGroupProtocolParams{
-		AggInterval: cloudflare.F(radar.AS112TimeseriesGroupProtocolParamsAggInterval15m),
-		ASN:         cloudflare.F([]string{"string"}),
-		Continent:   cloudflare.F([]string{"string"}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.AS112TimeseriesGroupProtocolParamsFormatJson),
-		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"main_series"}),
+		AggInterval:  cloudflare.F(radar.AS112TimeseriesGroupProtocolParamsAggInterval15m),
+		ASN:          cloudflare.F([]string{"string"}),
+		Continent:    cloudflare.F([]string{"string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
+		DateRange:    cloudflare.F([]string{"7d"}),
+		DateStart:    cloudflare.F([]time.Time{time.Now()}),
+		Format:       cloudflare.F(radar.AS112TimeseriesGroupProtocolParamsFormatJson),
+		Location:     cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
+		QueryType:    cloudflare.F(radar.AS112TimeseriesGroupProtocolParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112TimeseriesGroupProtocolParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -171,6 +182,8 @@ func TestAS112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
+		Protocol:      cloudflare.F(radar.AS112TimeseriesGroupQueryTypeParamsProtocolUdp),
+		ResponseCode:  cloudflare.F(radar.AS112TimeseriesGroupQueryTypeParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -205,6 +218,8 @@ func TestAS112TimeseriesGroupResponseCodesWithOptionalParams(t *testing.T) {
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
+		Protocol:      cloudflare.F(radar.AS112TimeseriesGroupResponseCodesParamsProtocolUdp),
+		QueryType:     cloudflare.F(radar.AS112TimeseriesGroupResponseCodesParamsQueryTypeA),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
