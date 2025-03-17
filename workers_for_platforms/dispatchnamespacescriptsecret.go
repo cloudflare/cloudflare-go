@@ -154,35 +154,6 @@ func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatch
 	return
 }
 
-type WorkersSecretModelParam struct {
-	// The name of this secret, this is what will be used to access it inside the
-	// Worker.
-	Name param.Field[string] `json:"name"`
-	// The value of the secret.
-	Text param.Field[string] `json:"text"`
-	// The type of secret to put.
-	Type param.Field[WorkersSecretModelType] `json:"type"`
-}
-
-func (r WorkersSecretModelParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of secret to put.
-type WorkersSecretModelType string
-
-const (
-	WorkersSecretModelTypeSecretText WorkersSecretModelType = "secret_text"
-)
-
-func (r WorkersSecretModelType) IsKnown() bool {
-	switch r {
-	case WorkersSecretModelTypeSecretText:
-		return true
-	}
-	return false
-}
-
 type DispatchNamespaceScriptSecretUpdateResponse struct {
 	// The name of this secret, this is what will be used to access it inside the
 	// Worker.
@@ -310,12 +281,33 @@ func (r DispatchNamespaceScriptSecretGetResponseType) IsKnown() bool {
 
 type DispatchNamespaceScriptSecretUpdateParams struct {
 	// Identifier
-	AccountID          param.Field[string]     `path:"account_id,required"`
-	WorkersSecretModel WorkersSecretModelParam `json:"workers_secret_model,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The name of this secret, this is what will be used to access it inside the
+	// Worker.
+	Name param.Field[string] `json:"name"`
+	// The value of the secret.
+	Text param.Field[string] `json:"text"`
+	// The type of secret to put.
+	Type param.Field[DispatchNamespaceScriptSecretUpdateParamsType] `json:"type"`
 }
 
 func (r DispatchNamespaceScriptSecretUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.WorkersSecretModel)
+	return apijson.MarshalRoot(r)
+}
+
+// The type of secret to put.
+type DispatchNamespaceScriptSecretUpdateParamsType string
+
+const (
+	DispatchNamespaceScriptSecretUpdateParamsTypeSecretText DispatchNamespaceScriptSecretUpdateParamsType = "secret_text"
+)
+
+func (r DispatchNamespaceScriptSecretUpdateParamsType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSecretUpdateParamsTypeSecretText:
+		return true
+	}
+	return false
 }
 
 type DispatchNamespaceScriptSecretUpdateResponseEnvelope struct {

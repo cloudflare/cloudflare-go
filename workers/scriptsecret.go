@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
-	"github.com/cloudflare/cloudflare-go/v4/workers_for_platforms"
 )
 
 // ScriptSecretService contains methods and other services that help with
@@ -265,12 +264,33 @@ func (r ScriptSecretGetResponseType) IsKnown() bool {
 
 type ScriptSecretUpdateParams struct {
 	// Identifier
-	AccountID          param.Field[string]                           `path:"account_id,required"`
-	WorkersSecretModel workers_for_platforms.WorkersSecretModelParam `json:"workers_secret_model,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The name of this secret, this is what will be used to access it inside the
+	// Worker.
+	Name param.Field[string] `json:"name"`
+	// The value of the secret.
+	Text param.Field[string] `json:"text"`
+	// The type of secret to put.
+	Type param.Field[ScriptSecretUpdateParamsType] `json:"type"`
 }
 
 func (r ScriptSecretUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.WorkersSecretModel)
+	return apijson.MarshalRoot(r)
+}
+
+// The type of secret to put.
+type ScriptSecretUpdateParamsType string
+
+const (
+	ScriptSecretUpdateParamsTypeSecretText ScriptSecretUpdateParamsType = "secret_text"
+)
+
+func (r ScriptSecretUpdateParamsType) IsKnown() bool {
+	switch r {
+	case ScriptSecretUpdateParamsTypeSecretText:
+		return true
+	}
+	return false
 }
 
 type ScriptSecretUpdateResponseEnvelope struct {
