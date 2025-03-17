@@ -54,9 +54,33 @@ func (r *ScanResultService) Get(ctx context.Context, configID string, query Scan
 	return
 }
 
+type ScanResult struct {
+	Number float64        `json:"number"`
+	Proto  string         `json:"proto"`
+	Status string         `json:"status"`
+	JSON   scanResultJSON `json:"-"`
+}
+
+// scanResultJSON contains the JSON metadata for the struct [ScanResult]
+type scanResultJSON struct {
+	Number      apijson.Field
+	Proto       apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanResultJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScanResultGetResponse struct {
-	OneOneOneOne []ScanResultGetResponse1_1_1_1 `json:"1.1.1.1,required"`
-	JSON         scanResultGetResponseJSON      `json:"-"`
+	OneOneOneOne []ScanResult              `json:"1.1.1.1,required"`
+	JSON         scanResultGetResponseJSON `json:"-"`
 }
 
 // scanResultGetResponseJSON contains the JSON metadata for the struct
@@ -72,31 +96,6 @@ func (r *ScanResultGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scanResultGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScanResultGetResponse1_1_1_1 struct {
-	Number float64                          `json:"number"`
-	Proto  string                           `json:"proto"`
-	Status string                           `json:"status"`
-	JSON   scanResultGetResponse1_1_1_1JSON `json:"-"`
-}
-
-// scanResultGetResponse1_1_1_1JSON contains the JSON metadata for the struct
-// [ScanResultGetResponse1_1_1_1]
-type scanResultGetResponse1_1_1_1JSON struct {
-	Number      apijson.Field
-	Proto       apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanResultGetResponse1_1_1_1) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanResultGetResponse1_1_1_1JSON) RawJSON() string {
 	return r.raw
 }
 

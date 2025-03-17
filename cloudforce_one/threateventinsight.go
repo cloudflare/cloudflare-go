@@ -33,6 +33,27 @@ func NewThreatEventInsightService(opts ...option.RequestOption) (r *ThreatEventI
 	return
 }
 
+// Adds an insight to an event
+func (r *ThreatEventInsightService) New(ctx context.Context, eventID string, params ThreatEventInsightNewParams, opts ...option.RequestOption) (res *ThreatEventInsightNewResponse, err error) {
+	var env ThreatEventInsightNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if !params.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if eventID == "" {
+		err = errors.New("missing required event_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/%s/insight/create", params.AccountID, eventID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Deletes an event insight
 func (r *ThreatEventInsightService) Delete(ctx context.Context, eventID string, insightID string, body ThreatEventInsightDeleteParams, opts ...option.RequestOption) (res *ThreatEventInsightDeleteResponse, err error) {
 	var env ThreatEventInsightDeleteResponseEnvelope
@@ -51,27 +72,6 @@ func (r *ThreatEventInsightService) Delete(ctx context.Context, eventID string, 
 	}
 	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/%s/insight/%s", body.AccountID, eventID, insightID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Adds an insight to an event
-func (r *ThreatEventInsightService) Creat(ctx context.Context, eventID string, params ThreatEventInsightCreatParams, opts ...option.RequestOption) (res *ThreatEventInsightCreatResponse, err error) {
-	var env ThreatEventInsightCreatResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if eventID == "" {
-		err = errors.New("missing required event_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%v/cloudforce-one/events/%s/insight/create", params.AccountID, eventID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -129,6 +129,29 @@ func (r *ThreatEventInsightService) Get(ctx context.Context, eventID string, ins
 	return
 }
 
+type ThreatEventInsightNewResponse struct {
+	Content string                            `json:"content,required"`
+	UUID    string                            `json:"uuid,required"`
+	JSON    threatEventInsightNewResponseJSON `json:"-"`
+}
+
+// threatEventInsightNewResponseJSON contains the JSON metadata for the struct
+// [ThreatEventInsightNewResponse]
+type threatEventInsightNewResponseJSON struct {
+	Content     apijson.Field
+	UUID        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventInsightNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventInsightNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ThreatEventInsightDeleteResponse struct {
 	Success bool                                 `json:"success,required"`
 	JSON    threatEventInsightDeleteResponseJSON `json:"-"`
@@ -147,29 +170,6 @@ func (r *ThreatEventInsightDeleteResponse) UnmarshalJSON(data []byte) (err error
 }
 
 func (r threatEventInsightDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ThreatEventInsightCreatResponse struct {
-	Content string                              `json:"content,required"`
-	UUID    string                              `json:"uuid,required"`
-	JSON    threatEventInsightCreatResponseJSON `json:"-"`
-}
-
-// threatEventInsightCreatResponseJSON contains the JSON metadata for the struct
-// [ThreatEventInsightCreatResponse]
-type threatEventInsightCreatResponseJSON struct {
-	Content     apijson.Field
-	UUID        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ThreatEventInsightCreatResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r threatEventInsightCreatResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -219,6 +219,39 @@ func (r threatEventInsightGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type ThreatEventInsightNewParams struct {
+	// Account ID
+	AccountID param.Field[float64] `path:"account_id,required"`
+	Content   param.Field[string]  `json:"content,required"`
+}
+
+func (r ThreatEventInsightNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ThreatEventInsightNewResponseEnvelope struct {
+	Result  ThreatEventInsightNewResponse             `json:"result,required"`
+	Success bool                                      `json:"success,required"`
+	JSON    threatEventInsightNewResponseEnvelopeJSON `json:"-"`
+}
+
+// threatEventInsightNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ThreatEventInsightNewResponseEnvelope]
+type threatEventInsightNewResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventInsightNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventInsightNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ThreatEventInsightDeleteParams struct {
 	// Account ID
 	AccountID param.Field[float64] `path:"account_id,required"`
@@ -244,39 +277,6 @@ func (r *ThreatEventInsightDeleteResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r threatEventInsightDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ThreatEventInsightCreatParams struct {
-	// Account ID
-	AccountID param.Field[float64] `path:"account_id,required"`
-	Content   param.Field[string]  `json:"content,required"`
-}
-
-func (r ThreatEventInsightCreatParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ThreatEventInsightCreatResponseEnvelope struct {
-	Result  ThreatEventInsightCreatResponse             `json:"result,required"`
-	Success bool                                        `json:"success,required"`
-	JSON    threatEventInsightCreatResponseEnvelopeJSON `json:"-"`
-}
-
-// threatEventInsightCreatResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ThreatEventInsightCreatResponseEnvelope]
-type threatEventInsightCreatResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ThreatEventInsightCreatResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r threatEventInsightCreatResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 

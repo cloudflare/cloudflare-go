@@ -31,8 +31,8 @@ type ThreatEventService struct {
 	IndicatorTypes   *ThreatEventIndicatorTypeService
 	Raw              *ThreatEventRawService
 	Relate           *ThreatEventRelateService
-	EventTags        *ThreatEventEventTagService
 	Tags             *ThreatEventTagService
+	EventTags        *ThreatEventEventTagService
 	TargetIndustries *ThreatEventTargetIndustryService
 	Insights         *ThreatEventInsightService
 }
@@ -51,8 +51,8 @@ func NewThreatEventService(opts ...option.RequestOption) (r *ThreatEventService)
 	r.IndicatorTypes = NewThreatEventIndicatorTypeService(opts...)
 	r.Raw = NewThreatEventRawService(opts...)
 	r.Relate = NewThreatEventRelateService(opts...)
-	r.EventTags = NewThreatEventEventTagService(opts...)
 	r.Tags = NewThreatEventTagService(opts...)
+	r.EventTags = NewThreatEventEventTagService(opts...)
 	r.TargetIndustries = NewThreatEventTargetIndustryService(opts...)
 	r.Insights = NewThreatEventInsightService(opts...)
 	return
