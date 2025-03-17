@@ -4570,10 +4570,6 @@ Methods:
 
 ##### Secrets
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers_for_platforms">workers_for_platforms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers_for_platforms#WorkersSecretModelParam">WorkersSecretModelParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers_for_platforms">workers_for_platforms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers_for_platforms#DispatchNamespaceScriptSecretUpdateResponse">DispatchNamespaceScriptSecretUpdateResponse</a>
