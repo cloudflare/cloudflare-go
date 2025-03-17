@@ -27,10 +27,10 @@ type RequestOption = requestconfig.RequestOption
 // to use. While any value can be set here, invalid values are ignored and will recieve the
 // default value of today.
 func WithAPIVersion(value string) RequestOption {
-	return func(r *requestconfig.RequestConfig) error {
+	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
 		r.Request.Header.Set("api-version", value)
 		return nil
-	}
+	})
 }
 
 // WithBaseURL returns a RequestOption that sets the BaseURL for the client.
