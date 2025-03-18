@@ -94,6 +94,37 @@ func (r *InstanceService) ListAutoPaging(ctx context.Context, workflowName strin
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, workflowName, params, opts...))
 }
 
+// Batch create new Workflow instances
+func (r *InstanceService) Bulk(ctx context.Context, workflowName string, params InstanceBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InstanceBulkResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if workflowName == "" {
+		err = errors.New("missing required workflow_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/workflows/%s/instances/batch", params.AccountID, workflowName)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Batch create new Workflow instances
+func (r *InstanceService) BulkAutoPaging(ctx context.Context, workflowName string, params InstanceBulkParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InstanceBulkResponse] {
+	return pagination.NewSinglePageAutoPager(r.Bulk(ctx, workflowName, params, opts...))
+}
+
 // Get logs and status from instance
 func (r *InstanceService) Get(ctx context.Context, workflowName string, instanceID string, query InstanceGetParams, opts ...option.RequestOption) (res *InstanceGetResponse, err error) {
 	var env InstanceGetResponseEnvelope
@@ -220,6 +251,55 @@ const (
 func (r InstanceListResponseStatus) IsKnown() bool {
 	switch r {
 	case InstanceListResponseStatusQueued, InstanceListResponseStatusRunning, InstanceListResponseStatusPaused, InstanceListResponseStatusErrored, InstanceListResponseStatusTerminated, InstanceListResponseStatusComplete, InstanceListResponseStatusWaitingForPause, InstanceListResponseStatusWaiting, InstanceListResponseStatusUnknown:
+		return true
+	}
+	return false
+}
+
+type InstanceBulkResponse struct {
+	ID         string                     `json:"id,required"`
+	Status     InstanceBulkResponseStatus `json:"status,required"`
+	VersionID  string                     `json:"version_id,required" format:"uuid"`
+	WorkflowID string                     `json:"workflow_id,required" format:"uuid"`
+	JSON       instanceBulkResponseJSON   `json:"-"`
+}
+
+// instanceBulkResponseJSON contains the JSON metadata for the struct
+// [InstanceBulkResponse]
+type instanceBulkResponseJSON struct {
+	ID          apijson.Field
+	Status      apijson.Field
+	VersionID   apijson.Field
+	WorkflowID  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceBulkResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceBulkResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceBulkResponseStatus string
+
+const (
+	InstanceBulkResponseStatusQueued          InstanceBulkResponseStatus = "queued"
+	InstanceBulkResponseStatusRunning         InstanceBulkResponseStatus = "running"
+	InstanceBulkResponseStatusPaused          InstanceBulkResponseStatus = "paused"
+	InstanceBulkResponseStatusErrored         InstanceBulkResponseStatus = "errored"
+	InstanceBulkResponseStatusTerminated      InstanceBulkResponseStatus = "terminated"
+	InstanceBulkResponseStatusComplete        InstanceBulkResponseStatus = "complete"
+	InstanceBulkResponseStatusWaitingForPause InstanceBulkResponseStatus = "waitingForPause"
+	InstanceBulkResponseStatusWaiting         InstanceBulkResponseStatus = "waiting"
+	InstanceBulkResponseStatusUnknown         InstanceBulkResponseStatus = "unknown"
+)
+
+func (r InstanceBulkResponseStatus) IsKnown() bool {
+	switch r {
+	case InstanceBulkResponseStatusQueued, InstanceBulkResponseStatusRunning, InstanceBulkResponseStatusPaused, InstanceBulkResponseStatusErrored, InstanceBulkResponseStatusTerminated, InstanceBulkResponseStatusComplete, InstanceBulkResponseStatusWaitingForPause, InstanceBulkResponseStatusWaiting, InstanceBulkResponseStatusUnknown:
 		return true
 	}
 	return false
@@ -846,6 +926,24 @@ func (r InstanceListParamsStatus) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type InstanceBulkParams struct {
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      []InstanceBulkParamsBody `json:"body"`
+}
+
+func (r InstanceBulkParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type InstanceBulkParamsBody struct {
+	InstanceID param.Field[string]      `json:"instance_id"`
+	Params     param.Field[interface{}] `json:"params"`
+}
+
+func (r InstanceBulkParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type InstanceGetParams struct {
