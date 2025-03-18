@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
@@ -87,9 +88,95 @@ func (r *TokenPermissionGroupService) GetAutoPaging(ctx context.Context, query T
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }
 
-type TokenPermissionGroupListResponse = interface{}
+type TokenPermissionGroupListResponse struct {
+	// Public ID.
+	ID string `json:"id"`
+	// Permission Group Name
+	Name string `json:"name"`
+	// Resources to which the Permission Group is scoped
+	Scopes []TokenPermissionGroupListResponseScope `json:"scopes"`
+	JSON   tokenPermissionGroupListResponseJSON    `json:"-"`
+}
 
-type TokenPermissionGroupGetResponse = interface{}
+// tokenPermissionGroupListResponseJSON contains the JSON metadata for the struct
+// [TokenPermissionGroupListResponse]
+type tokenPermissionGroupListResponseJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	Scopes      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TokenPermissionGroupListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tokenPermissionGroupListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type TokenPermissionGroupListResponseScope string
+
+const (
+	TokenPermissionGroupListResponseScopeComCloudflareAPIAccount     TokenPermissionGroupListResponseScope = "com.cloudflare.api.account"
+	TokenPermissionGroupListResponseScopeComCloudflareAPIAccountZone TokenPermissionGroupListResponseScope = "com.cloudflare.api.account.zone"
+	TokenPermissionGroupListResponseScopeComCloudflareAPIUser        TokenPermissionGroupListResponseScope = "com.cloudflare.api.user"
+	TokenPermissionGroupListResponseScopeComCloudflareEdgeR2Bucket   TokenPermissionGroupListResponseScope = "com.cloudflare.edge.r2.bucket"
+)
+
+func (r TokenPermissionGroupListResponseScope) IsKnown() bool {
+	switch r {
+	case TokenPermissionGroupListResponseScopeComCloudflareAPIAccount, TokenPermissionGroupListResponseScopeComCloudflareAPIAccountZone, TokenPermissionGroupListResponseScopeComCloudflareAPIUser, TokenPermissionGroupListResponseScopeComCloudflareEdgeR2Bucket:
+		return true
+	}
+	return false
+}
+
+type TokenPermissionGroupGetResponse struct {
+	// Public ID.
+	ID string `json:"id"`
+	// Permission Group Name
+	Name string `json:"name"`
+	// Resources to which the Permission Group is scoped
+	Scopes []TokenPermissionGroupGetResponseScope `json:"scopes"`
+	JSON   tokenPermissionGroupGetResponseJSON    `json:"-"`
+}
+
+// tokenPermissionGroupGetResponseJSON contains the JSON metadata for the struct
+// [TokenPermissionGroupGetResponse]
+type tokenPermissionGroupGetResponseJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	Scopes      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TokenPermissionGroupGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tokenPermissionGroupGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type TokenPermissionGroupGetResponseScope string
+
+const (
+	TokenPermissionGroupGetResponseScopeComCloudflareAPIAccount     TokenPermissionGroupGetResponseScope = "com.cloudflare.api.account"
+	TokenPermissionGroupGetResponseScopeComCloudflareAPIAccountZone TokenPermissionGroupGetResponseScope = "com.cloudflare.api.account.zone"
+	TokenPermissionGroupGetResponseScopeComCloudflareAPIUser        TokenPermissionGroupGetResponseScope = "com.cloudflare.api.user"
+	TokenPermissionGroupGetResponseScopeComCloudflareEdgeR2Bucket   TokenPermissionGroupGetResponseScope = "com.cloudflare.edge.r2.bucket"
+)
+
+func (r TokenPermissionGroupGetResponseScope) IsKnown() bool {
+	switch r {
+	case TokenPermissionGroupGetResponseScopeComCloudflareAPIAccount, TokenPermissionGroupGetResponseScopeComCloudflareAPIAccountZone, TokenPermissionGroupGetResponseScopeComCloudflareAPIUser, TokenPermissionGroupGetResponseScopeComCloudflareEdgeR2Bucket:
+		return true
+	}
+	return false
+}
 
 type TokenPermissionGroupListParams struct {
 	// Account identifier tag.

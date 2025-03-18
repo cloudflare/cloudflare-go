@@ -102,13 +102,15 @@ type SettingsPolicy struct {
 	// option is set to `true`.
 	DisableAutoFallback bool `json:"disable_auto_fallback"`
 	// Whether the policy will be applied to matching devices.
-	Enabled bool                 `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// List of routes excluded in the WARP client's tunnel.
 	Exclude []SplitTunnelExclude `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs bool                 `json:"exclude_office_ips"`
-	FallbackDomains  []FallbackDomain     `json:"fallback_domains"`
-	GatewayUniqueID  string               `json:"gateway_unique_id"`
-	Include          []SplitTunnelInclude `json:"include"`
+	ExcludeOfficeIPs bool             `json:"exclude_office_ips"`
+	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
+	GatewayUniqueID  string           `json:"gateway_unique_id"`
+	// List of routes included in the WARP client's tunnel.
+	Include []SplitTunnelInclude `json:"include"`
 	// The amount of time in minutes a user is allowed access to their LAN. A value of
 	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
 	// laptop waking from sleep. Note that this field is omitted from the response if
@@ -125,8 +127,11 @@ type SettingsPolicy struct {
 	PolicyID string `json:"policy_id"`
 	// The precedence of the policy. Lower values indicate higher precedence. Policies
 	// will be evaluated in ascending order of this field.
-	Precedence    float64                     `json:"precedence"`
-	ServiceModeV2 SettingsPolicyServiceModeV2 `json:"service_mode_v2"`
+	Precedence float64 `json:"precedence"`
+	// Determines if the operating system will register WARP's local interface IP with
+	// your on-premises DNS server.
+	RegisterInterfaceIPWithDNS bool                        `json:"register_interface_ip_with_dns"`
+	ServiceModeV2              SettingsPolicyServiceModeV2 `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL string `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
@@ -139,33 +144,34 @@ type SettingsPolicy struct {
 
 // settingsPolicyJSON contains the JSON metadata for the struct [SettingsPolicy]
 type settingsPolicyJSON struct {
-	AllowModeSwitch     apijson.Field
-	AllowUpdates        apijson.Field
-	AllowedToLeave      apijson.Field
-	AutoConnect         apijson.Field
-	CaptivePortal       apijson.Field
-	Default             apijson.Field
-	Description         apijson.Field
-	DisableAutoFallback apijson.Field
-	Enabled             apijson.Field
-	Exclude             apijson.Field
-	ExcludeOfficeIPs    apijson.Field
-	FallbackDomains     apijson.Field
-	GatewayUniqueID     apijson.Field
-	Include             apijson.Field
-	LANAllowMinutes     apijson.Field
-	LANAllowSubnetSize  apijson.Field
-	Match               apijson.Field
-	Name                apijson.Field
-	PolicyID            apijson.Field
-	Precedence          apijson.Field
-	ServiceModeV2       apijson.Field
-	SupportURL          apijson.Field
-	SwitchLocked        apijson.Field
-	TargetTests         apijson.Field
-	TunnelProtocol      apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
+	AllowModeSwitch            apijson.Field
+	AllowUpdates               apijson.Field
+	AllowedToLeave             apijson.Field
+	AutoConnect                apijson.Field
+	CaptivePortal              apijson.Field
+	Default                    apijson.Field
+	Description                apijson.Field
+	DisableAutoFallback        apijson.Field
+	Enabled                    apijson.Field
+	Exclude                    apijson.Field
+	ExcludeOfficeIPs           apijson.Field
+	FallbackDomains            apijson.Field
+	GatewayUniqueID            apijson.Field
+	Include                    apijson.Field
+	LANAllowMinutes            apijson.Field
+	LANAllowSubnetSize         apijson.Field
+	Match                      apijson.Field
+	Name                       apijson.Field
+	PolicyID                   apijson.Field
+	Precedence                 apijson.Field
+	RegisterInterfaceIPWithDNS apijson.Field
+	ServiceModeV2              apijson.Field
+	SupportURL                 apijson.Field
+	SwitchLocked               apijson.Field
+	TargetTests                apijson.Field
+	TunnelProtocol             apijson.Field
+	raw                        string
+	ExtraFields                map[string]apijson.Field
 }
 
 func (r *SettingsPolicy) UnmarshalJSON(data []byte) (err error) {

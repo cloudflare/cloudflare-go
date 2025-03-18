@@ -34,7 +34,7 @@ func NewAttackLayer3TimeseriesGroupService(opts ...option.RequestOption) (r *Att
 	return
 }
 
-// Percentage distribution of attacks by bitrate over time.
+// Retrieves the distribution of layer 3 attacks by bitrate over time.
 func (r *AttackLayer3TimeseriesGroupService) Bitrate(ctx context.Context, query AttackLayer3TimeseriesGroupBitrateParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupBitrateResponse, err error) {
 	var env AttackLayer3TimeseriesGroupBitrateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +47,7 @@ func (r *AttackLayer3TimeseriesGroupService) Bitrate(ctx context.Context, query 
 	return
 }
 
-// Percentage distribution of attacks by duration over time.
+// Retrieves the distribution of layer 3 attacks by duration over time.
 func (r *AttackLayer3TimeseriesGroupService) Duration(ctx context.Context, query AttackLayer3TimeseriesGroupDurationParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupDurationResponse, err error) {
 	var env AttackLayer3TimeseriesGroupDurationResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +60,7 @@ func (r *AttackLayer3TimeseriesGroupService) Duration(ctx context.Context, query
 	return
 }
 
-// Percentage distribution of attacks by industry targeted over time.
+// Retrieves the distribution of layer 3 attacks by targeted industry over time.
 func (r *AttackLayer3TimeseriesGroupService) Industry(ctx context.Context, query AttackLayer3TimeseriesGroupIndustryParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupIndustryResponse, err error) {
 	var env AttackLayer3TimeseriesGroupIndustryResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -73,7 +73,7 @@ func (r *AttackLayer3TimeseriesGroupService) Industry(ctx context.Context, query
 	return
 }
 
-// Percentage distribution of attacks by ip version used over time.
+// Retrieves the distribution of layer 3 attacks by IP version over time.
 func (r *AttackLayer3TimeseriesGroupService) IPVersion(ctx context.Context, query AttackLayer3TimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupIPVersionResponse, err error) {
 	var env AttackLayer3TimeseriesGroupIPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -86,7 +86,7 @@ func (r *AttackLayer3TimeseriesGroupService) IPVersion(ctx context.Context, quer
 	return
 }
 
-// Percentage distribution of attacks by protocol used over time.
+// Retrieves the distribution of layer 3 attacks by protocol over time.
 func (r *AttackLayer3TimeseriesGroupService) Protocol(ctx context.Context, query AttackLayer3TimeseriesGroupProtocolParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupProtocolResponse, err error) {
 	var env AttackLayer3TimeseriesGroupProtocolResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +99,7 @@ func (r *AttackLayer3TimeseriesGroupService) Protocol(ctx context.Context, query
 	return
 }
 
-// Percentage distribution of attacks by vector used over time.
+// Retrieves the distribution of layer 3 attacks by vector over time.
 func (r *AttackLayer3TimeseriesGroupService) Vector(ctx context.Context, query AttackLayer3TimeseriesGroupVectorParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupVectorResponse, err error) {
 	var env AttackLayer3TimeseriesGroupVectorResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -112,7 +112,7 @@ func (r *AttackLayer3TimeseriesGroupService) Vector(ctx context.Context, query A
 	return
 }
 
-// Percentage distribution of attacks by vertical targeted over time.
+// Retrieves the distribution of layer 3 attacks by targeted vertical over time.
 func (r *AttackLayer3TimeseriesGroupService) Vertical(ctx context.Context, query AttackLayer3TimeseriesGroupVerticalParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupVerticalResponse, err error) {
 	var env AttackLayer3TimeseriesGroupVerticalResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -203,28 +203,28 @@ func (r attackLayer3TimeseriesGroupDurationResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3TimeseriesGroupDurationResponseSerie0 struct {
-	OneHourToThreeHours     []string                                              `json:"_1_HOUR_TO_3_HOURS,required"`
-	TenMinsToTwentyMinds    []string                                              `json:"_10_MINS_TO_20_MINS,required"`
-	TwentyMindsToFortyMinds []string                                              `json:"_20_MINS_TO_40_MINS,required"`
-	FortyMinsToOneHour      []string                                              `json:"_40_MINS_TO_1_HOUR,required"`
-	Over3Hours              []string                                              `json:"OVER_3_HOURS,required"`
-	Timestamps              []string                                              `json:"timestamps,required"`
-	Under10Mins             []string                                              `json:"UNDER_10_MINS,required"`
-	JSON                    attackLayer3TimeseriesGroupDurationResponseSerie0JSON `json:"-"`
+	OneHourToThreeHours   []string                                              `json:"_1_HOUR_TO_3_HOURS,required"`
+	TenMinsToTwentyMins   []string                                              `json:"_10_MINS_TO_20_MINS,required"`
+	TwentyMinsToFortyMins []string                                              `json:"_20_MINS_TO_40_MINS,required"`
+	FortyMinsToOneHour    []string                                              `json:"_40_MINS_TO_1_HOUR,required"`
+	Over3Hours            []string                                              `json:"OVER_3_HOURS,required"`
+	Timestamps            []string                                              `json:"timestamps,required"`
+	Under10Mins           []string                                              `json:"UNDER_10_MINS,required"`
+	JSON                  attackLayer3TimeseriesGroupDurationResponseSerie0JSON `json:"-"`
 }
 
 // attackLayer3TimeseriesGroupDurationResponseSerie0JSON contains the JSON metadata
 // for the struct [AttackLayer3TimeseriesGroupDurationResponseSerie0]
 type attackLayer3TimeseriesGroupDurationResponseSerie0JSON struct {
-	OneHourToThreeHours     apijson.Field
-	TenMinsToTwentyMinds    apijson.Field
-	TwentyMindsToFortyMinds apijson.Field
-	FortyMinsToOneHour      apijson.Field
-	Over3Hours              apijson.Field
-	Timestamps              apijson.Field
-	Under10Mins             apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
+	OneHourToThreeHours   apijson.Field
+	TenMinsToTwentyMins   apijson.Field
+	TwentyMinsToFortyMins apijson.Field
+	FortyMinsToOneHour    apijson.Field
+	Over3Hours            apijson.Field
+	Timestamps            apijson.Field
+	Under10Mins           apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *AttackLayer3TimeseriesGroupDurationResponseSerie0) UnmarshalJSON(data []byte) (err error) {
@@ -475,30 +475,30 @@ type AttackLayer3TimeseriesGroupBitrateParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[AttackLayer3TimeseriesGroupBitrateParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3TimeseriesGroupBitrateParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3TimeseriesGroupBitrateParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3TimeseriesGroupBitrateParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -553,7 +553,7 @@ func (r AttackLayer3TimeseriesGroupBitrateParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3TimeseriesGroupBitrateParamsFormat string
 
 const (
@@ -646,30 +646,30 @@ type AttackLayer3TimeseriesGroupDurationParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[AttackLayer3TimeseriesGroupDurationParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3TimeseriesGroupDurationParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3TimeseriesGroupDurationParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3TimeseriesGroupDurationParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -724,7 +724,7 @@ func (r AttackLayer3TimeseriesGroupDurationParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3TimeseriesGroupDurationParamsFormat string
 
 const (
@@ -817,33 +817,35 @@ type AttackLayer3TimeseriesGroupIndustryParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[AttackLayer3TimeseriesGroupIndustryParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3TimeseriesGroupIndustryParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3TimeseriesGroupIndustryParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3TimeseriesGroupIndustryParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limits the number of objects per group to the top items within the specified
+	// time range. If there are more items than the limit, the response will include
+	// the count of items, with any remaining items grouped together under an "other"
+	// category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -898,7 +900,7 @@ func (r AttackLayer3TimeseriesGroupIndustryParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3TimeseriesGroupIndustryParamsFormat string
 
 const (
@@ -991,28 +993,28 @@ type AttackLayer3TimeseriesGroupIPVersionParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[AttackLayer3TimeseriesGroupIPVersionParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3TimeseriesGroupIPVersionParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3TimeseriesGroupIPVersionParamsFormat] `query:"format"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -1067,7 +1069,7 @@ func (r AttackLayer3TimeseriesGroupIPVersionParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3TimeseriesGroupIPVersionParamsFormat string
 
 const (
@@ -1145,30 +1147,30 @@ type AttackLayer3TimeseriesGroupProtocolParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[AttackLayer3TimeseriesGroupProtocolParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3TimeseriesGroupProtocolParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3TimeseriesGroupProtocolParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3TimeseriesGroupProtocolParamsIPVersion] `query:"ipVersion"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -1221,7 +1223,7 @@ func (r AttackLayer3TimeseriesGroupProtocolParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3TimeseriesGroupProtocolParamsFormat string
 
 const (
@@ -1297,33 +1299,35 @@ type AttackLayer3TimeseriesGroupVectorParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[AttackLayer3TimeseriesGroupVectorParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3TimeseriesGroupVectorParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3TimeseriesGroupVectorParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3TimeseriesGroupVectorParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limits the number of objects per group to the top items within the specified
+	// time range. If there are more items than the limit, the response will include
+	// the count of items, with any remaining items grouped together under an "other"
+	// category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -1378,7 +1382,7 @@ func (r AttackLayer3TimeseriesGroupVectorParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3TimeseriesGroupVectorParamsFormat string
 
 const (
@@ -1471,33 +1475,35 @@ type AttackLayer3TimeseriesGroupVerticalParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[AttackLayer3TimeseriesGroupVerticalParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
+	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
+	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
+	// but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Together with the `location` parameter, will apply the filter to origin or
 	// target location.
 	Direction param.Field[AttackLayer3TimeseriesGroupVerticalParamsDirection] `query:"direction"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AttackLayer3TimeseriesGroupVerticalParamsFormat] `query:"format"`
-	// Filter for ip version.
+	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3TimeseriesGroupVerticalParamsIPVersion] `query:"ipVersion"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limits the number of objects per group to the top items within the specified
+	// time range. If there are more items than the limit, the response will include
+	// the count of items, with any remaining items grouped together under an "other"
+	// category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
+	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
+	// locations from results. For example, `-US,PT` excludes results from the US, but
+	// includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -1552,7 +1558,7 @@ func (r AttackLayer3TimeseriesGroupVerticalParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AttackLayer3TimeseriesGroupVerticalParamsFormat string
 
 const (

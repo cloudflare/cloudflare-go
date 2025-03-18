@@ -36,8 +36,7 @@ func NewBGPTopService(opts ...option.RequestOption) (r *BGPTopService) {
 	return
 }
 
-// Get the top network prefixes by BGP updates. Values are a percentage out of the
-// total BGP updates.
+// Retrieves the top network prefixes by BGP updates.
 func (r *BGPTopService) Prefixes(ctx context.Context, query BGPTopPrefixesParams, opts ...option.RequestOption) (res *BGPTopPrefixesResponse, err error) {
 	var env BGPTopPrefixesResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -143,23 +142,23 @@ func (r bgpTopPrefixesResponseTop0JSON) RawJSON() string {
 }
 
 type BGPTopPrefixesParams struct {
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[BGPTopPrefixesParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Array of BGP update types.
 	UpdateType param.Field[[]BGPTopPrefixesParamsUpdateType] `query:"updateType"`
@@ -173,7 +172,7 @@ func (r BGPTopPrefixesParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type BGPTopPrefixesParamsFormat string
 
 const (

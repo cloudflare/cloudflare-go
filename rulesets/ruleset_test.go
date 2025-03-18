@@ -29,9 +29,11 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Rulesets.New(context.TODO(), rulesets.RulesetNewParams{
-		Kind:  cloudflare.F(rulesets.KindManaged),
-		Name:  cloudflare.F("My ruleset"),
-		Phase: cloudflare.F(rulesets.PhaseDDoSL4),
+		Kind:        cloudflare.F(rulesets.KindManaged),
+		Name:        cloudflare.F("My ruleset"),
+		Phase:       cloudflare.F(rulesets.PhaseDDoSL4),
+		AccountID:   cloudflare.F("account_id"),
+		Description: cloudflare.F("My ruleset to execute managed rulesets"),
 		Rules: cloudflare.F([]rulesets.RulesetNewParamsRuleUnion{rulesets.BlockRuleParam{
 			ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 			Action: cloudflare.F(rulesets.BlockRuleActionBlock),
@@ -45,8 +47,8 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 			Enabled:     cloudflare.F(true),
 			ExposedCredentialCheck: cloudflare.F(rulesets.BlockRuleExposedCredentialCheckParam{
-				PasswordExpression: cloudflare.F("url_decode(http.request.body.form[\\\"password\\\"][0])"),
-				UsernameExpression: cloudflare.F("url_decode(http.request.body.form[\\\"username\\\"][0])"),
+				PasswordExpression: cloudflare.F(`url_decode(http.request.body.form[\"password\"][0])`),
+				UsernameExpression: cloudflare.F(`url_decode(http.request.body.form[\"username\"][0])`),
 			}),
 			Expression: cloudflare.F("ip.src ne 1.1.1.1"),
 			Logging: cloudflare.F(rulesets.LoggingParam{
@@ -55,7 +57,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
 				Characteristics:         cloudflare.F([]string{"ip.src"}),
 				Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod10),
-				CountingExpression:      cloudflare.F("http.request.body.raw eq \"abcd\""),
+				CountingExpression:      cloudflare.F(`http.request.body.raw eq "abcd"`),
 				MitigationTimeout:       cloudflare.F(int64(600)),
 				RequestsPerPeriod:       cloudflare.F(int64(1000)),
 				RequestsToOrigin:        cloudflare.F(true),
@@ -64,8 +66,6 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			}),
 			Ref: cloudflare.F("my_ref"),
 		}}),
-		AccountID:   cloudflare.F("account_id"),
-		Description: cloudflare.F("My ruleset to execute managed rulesets"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -94,6 +94,11 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RulesetUpdateParams{
+			AccountID:   cloudflare.F("account_id"),
+			Description: cloudflare.F("My ruleset to execute managed rulesets"),
+			Kind:        cloudflare.F(rulesets.KindManaged),
+			Name:        cloudflare.F("My ruleset"),
+			Phase:       cloudflare.F(rulesets.PhaseDDoSL4),
 			Rules: cloudflare.F([]rulesets.RulesetUpdateParamsRuleUnion{rulesets.BlockRuleParam{
 				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
@@ -107,8 +112,8 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 				Enabled:     cloudflare.F(true),
 				ExposedCredentialCheck: cloudflare.F(rulesets.BlockRuleExposedCredentialCheckParam{
-					PasswordExpression: cloudflare.F("url_decode(http.request.body.form[\\\"password\\\"][0])"),
-					UsernameExpression: cloudflare.F("url_decode(http.request.body.form[\\\"username\\\"][0])"),
+					PasswordExpression: cloudflare.F(`url_decode(http.request.body.form[\"password\"][0])`),
+					UsernameExpression: cloudflare.F(`url_decode(http.request.body.form[\"username\"][0])`),
 				}),
 				Expression: cloudflare.F("ip.src ne 1.1.1.1"),
 				Logging: cloudflare.F(rulesets.LoggingParam{
@@ -117,7 +122,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
 					Characteristics:         cloudflare.F([]string{"ip.src"}),
 					Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod10),
-					CountingExpression:      cloudflare.F("http.request.body.raw eq \"abcd\""),
+					CountingExpression:      cloudflare.F(`http.request.body.raw eq "abcd"`),
 					MitigationTimeout:       cloudflare.F(int64(600)),
 					RequestsPerPeriod:       cloudflare.F(int64(1000)),
 					RequestsToOrigin:        cloudflare.F(true),
@@ -126,11 +131,6 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Ref: cloudflare.F("my_ref"),
 			}}),
-			AccountID:   cloudflare.F("account_id"),
-			Description: cloudflare.F("My ruleset to execute managed rulesets"),
-			Kind:        cloudflare.F(rulesets.KindManaged),
-			Name:        cloudflare.F("My ruleset"),
-			Phase:       cloudflare.F(rulesets.PhaseDDoSL4),
 		},
 	)
 	if err != nil {

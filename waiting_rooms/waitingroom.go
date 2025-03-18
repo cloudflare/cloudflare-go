@@ -85,16 +85,30 @@ func (r *WaitingRoomService) Update(ctx context.Context, waitingRoomID string, p
 	return
 }
 
-// Lists waiting rooms.
+// Lists waiting rooms for account or zone.
 func (r *WaitingRoomService) List(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WaitingRoom], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if params.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/waiting_rooms", params.ZoneID)
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	}
+	if params.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
+	path := fmt.Sprintf("%s/%s/waiting_rooms", accountOrZone, accountOrZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -107,7 +121,7 @@ func (r *WaitingRoomService) List(ctx context.Context, params WaitingRoomListPar
 	return res, nil
 }
 
-// Lists waiting rooms.
+// Lists waiting rooms for account or zone.
 func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WaitingRoom] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -1336,8 +1350,10 @@ func (r waitingRoomUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WaitingRoomListParams struct {
-	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page. Must be a multiple of 5.

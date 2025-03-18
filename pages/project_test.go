@@ -65,10 +65,10 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
 						},
 					}),
-					EnvVars: cloudflare.F(map[string]pages.ProjectDeploymentConfigsPreviewEnvVarParam{
-						"foo": {
+					EnvVars: cloudflare.F(map[string]pages.ProjectDeploymentConfigsPreviewEnvVarsUnionParam{
+						"foo": pages.ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarParam{
+							Type:  cloudflare.F(pages.ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarTypePlainText),
 							Value: cloudflare.F("hello world"),
-							Type:  cloudflare.F(pages.ProjectDeploymentConfigsPreviewEnvVarsTypePlainText),
 						},
 					}),
 					HyperdriveBindings: cloudflare.F(map[string]pages.ProjectDeploymentConfigsPreviewHyperdriveBindingParam{
@@ -139,10 +139,10 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
 						},
 					}),
-					EnvVars: cloudflare.F(map[string]pages.ProjectDeploymentConfigsProductionEnvVarParam{
-						"foo": {
+					EnvVars: cloudflare.F(map[string]pages.ProjectDeploymentConfigsProductionEnvVarsUnionParam{
+						"foo": pages.ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarParam{
+							Type:  cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarTypePlainText),
 							Value: cloudflare.F("hello world"),
-							Type:  cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsTypePlainText),
 						},
 					}),
 					HyperdriveBindings: cloudflare.F(map[string]pages.ProjectDeploymentConfigsProductionHyperdriveBindingParam{
@@ -309,10 +309,10 @@ func TestProjectEditWithOptionalParams(t *testing.T) {
 								NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
 							},
 						}),
-						EnvVars: cloudflare.F(map[string]pages.ProjectDeploymentConfigsPreviewEnvVarParam{
-							"foo": {
+						EnvVars: cloudflare.F(map[string]pages.ProjectDeploymentConfigsPreviewEnvVarsUnionParam{
+							"foo": pages.ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarParam{
+								Type:  cloudflare.F(pages.ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarTypePlainText),
 								Value: cloudflare.F("hello world"),
-								Type:  cloudflare.F(pages.ProjectDeploymentConfigsPreviewEnvVarsTypePlainText),
 							},
 						}),
 						HyperdriveBindings: cloudflare.F(map[string]pages.ProjectDeploymentConfigsPreviewHyperdriveBindingParam{
@@ -383,10 +383,10 @@ func TestProjectEditWithOptionalParams(t *testing.T) {
 								NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
 							},
 						}),
-						EnvVars: cloudflare.F(map[string]pages.ProjectDeploymentConfigsProductionEnvVarParam{
-							"foo": {
+						EnvVars: cloudflare.F(map[string]pages.ProjectDeploymentConfigsProductionEnvVarsUnionParam{
+							"foo": pages.ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarParam{
+								Type:  cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarTypePlainText),
 								Value: cloudflare.F("hello world"),
-								Type:  cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsTypePlainText),
 							},
 						}),
 						HyperdriveBindings: cloudflare.F(map[string]pages.ProjectDeploymentConfigsProductionHyperdriveBindingParam{

@@ -40,7 +40,7 @@ func TestAttackLayer7TopAseOriginWithOptionalParams(t *testing.T) {
 		Limit:             cloudflare.F(int64(5)),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopAseOriginParamsMitigationProduct{radar.AttackLayer7TopAseOriginParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

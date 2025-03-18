@@ -511,7 +511,7 @@ func (r ConsumerDeleteResponseSuccess) IsKnown() bool {
 type ConsumerNewParams struct {
 	// A Resource identifier.
 	AccountID param.Field[string]        `path:"account_id,required"`
-	Body      ConsumerNewParamsBodyUnion `json:"body,required"`
+	Body      ConsumerNewParamsBodyUnion `json:"body"`
 }
 
 func (r ConsumerNewParams) MarshalJSON() (data []byte, err error) {

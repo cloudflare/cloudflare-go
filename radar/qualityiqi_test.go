@@ -37,7 +37,7 @@ func TestQualityIQISummaryWithOptionalParams(t *testing.T) {
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.QualityIQISummaryParamsFormatJson),
 		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -72,7 +72,7 @@ func TestQualityIQITimeseriesGroupsWithOptionalParams(t *testing.T) {
 		Format:        cloudflare.F(radar.QualityIQITimeseriesGroupsParamsFormatJson),
 		Interpolation: cloudflare.F(true),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

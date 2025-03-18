@@ -21,6 +21,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/bot_management"
 	"github.com/cloudflare/cloudflare-go/v4/botnet_feed"
 	"github.com/cloudflare/cloudflare-go/v4/brand_protection"
+	"github.com/cloudflare/cloudflare-go/v4/browser_rendering"
 	"github.com/cloudflare/cloudflare-go/v4/cache"
 	"github.com/cloudflare/cloudflare-go/v4/calls"
 	"github.com/cloudflare/cloudflare-go/v4/certificate_authorities"
@@ -31,6 +32,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/custom_certificates"
 	"github.com/cloudflare/cloudflare-go/v4/custom_hostnames"
 	"github.com/cloudflare/cloudflare-go/v4/custom_nameservers"
+	"github.com/cloudflare/cloudflare-go/v4/custom_pages"
 	"github.com/cloudflare/cloudflare-go/v4/d1"
 	"github.com/cloudflare/cloudflare-go/v4/dcv_delegation"
 	"github.com/cloudflare/cloudflare-go/v4/diagnostics"
@@ -55,6 +57,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/load_balancers"
 	"github.com/cloudflare/cloudflare-go/v4/logpush"
 	"github.com/cloudflare/cloudflare-go/v4/logs"
+	"github.com/cloudflare/cloudflare-go/v4/magic_cloud_networking"
 	"github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring"
 	"github.com/cloudflare/cloudflare-go/v4/magic_transit"
 	"github.com/cloudflare/cloudflare-go/v4/managed_transforms"
@@ -95,6 +98,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/workers"
 	"github.com/cloudflare/cloudflare-go/v4/workers_for_platforms"
 	"github.com/cloudflare/cloudflare-go/v4/workflows"
+	"github.com/cloudflare/cloudflare-go/v4/zaraz"
 	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 	"github.com/cloudflare/cloudflare-go/v4/zones"
 )
@@ -162,6 +166,7 @@ type Client struct {
 	Intel                       *intel.IntelService
 	MagicTransit                *magic_transit.MagicTransitService
 	MagicNetworkMonitoring      *magic_network_monitoring.MagicNetworkMonitoringService
+	MagicCloudNetworking        *magic_cloud_networking.MagicCloudNetworkingService
 	NetworkInterconnects        *network_interconnects.NetworkInterconnectService
 	MTLSCertificates            *mtls_certificates.MTLSCertificateService
 	Pages                       *pages.PageService
@@ -182,6 +187,7 @@ type Client struct {
 	Radar                       *radar.RadarService
 	BotManagement               *bot_management.BotManagementService
 	OriginPostQuantumEncryption *origin_post_quantum_encryption.OriginPostQuantumEncryptionService
+	Zaraz                       *zaraz.ZarazService
 	Speed                       *speed.SpeedService
 	DCVDelegation               *dcv_delegation.DCVDelegationService
 	Hostnames                   *hostnames.HostnameService
@@ -200,14 +206,14 @@ type Client struct {
 	AbuseReports                *abuse_reports.AbuseReportService
 	AI                          *ai.AIService
 	SecurityCenter              *security_center.SecurityCenterService
+	BrowserRendering            *browser_rendering.BrowserRenderingService
+	CustomPages                 *custom_pages.CustomPageService
 }
 
-// NewClient generates a new client with the default option read from the
-// environment (CLOUDFLARE_API_TOKEN, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL,
-// CLOUDFLARE_API_USER_SERVICE_KEY). The option passed in as arguments are applied
-// after these default arguments, and all option will be passed down to the
-// services and requests that this client makes.
-func NewClient(opts ...option.RequestOption) (r *Client) {
+// DefaultClientOptions read from the environment (CLOUDFLARE_API_TOKEN,
+// CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL, CLOUDFLARE_API_USER_SERVICE_KEY). This
+// should be used to initialize new clients.
+func DefaultClientOptions() []option.RequestOption {
 	defaults := []option.RequestOption{option.WithEnvironmentProduction()}
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_TOKEN"); ok {
 		defaults = append(defaults, option.WithAPIToken(o))
@@ -221,7 +227,16 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_USER_SERVICE_KEY"); ok {
 		defaults = append(defaults, option.WithUserServiceKey(o))
 	}
-	opts = append(defaults, opts...)
+	return defaults
+}
+
+// NewClient generates a new client with the default option read from the
+// environment (CLOUDFLARE_API_TOKEN, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL,
+// CLOUDFLARE_API_USER_SERVICE_KEY). The option passed in as arguments are applied
+// after these default arguments, and all option will be passed down to the
+// services and requests that this client makes.
+func NewClient(opts ...option.RequestOption) (r *Client) {
+	opts = append(DefaultClientOptions(), opts...)
 
 	r = &Client{Options: opts}
 
@@ -275,6 +290,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Intel = intel.NewIntelService(opts...)
 	r.MagicTransit = magic_transit.NewMagicTransitService(opts...)
 	r.MagicNetworkMonitoring = magic_network_monitoring.NewMagicNetworkMonitoringService(opts...)
+	r.MagicCloudNetworking = magic_cloud_networking.NewMagicCloudNetworkingService(opts...)
 	r.NetworkInterconnects = network_interconnects.NewNetworkInterconnectService(opts...)
 	r.MTLSCertificates = mtls_certificates.NewMTLSCertificateService(opts...)
 	r.Pages = pages.NewPageService(opts...)
@@ -295,6 +311,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Radar = radar.NewRadarService(opts...)
 	r.BotManagement = bot_management.NewBotManagementService(opts...)
 	r.OriginPostQuantumEncryption = origin_post_quantum_encryption.NewOriginPostQuantumEncryptionService(opts...)
+	r.Zaraz = zaraz.NewZarazService(opts...)
 	r.Speed = speed.NewSpeedService(opts...)
 	r.DCVDelegation = dcv_delegation.NewDCVDelegationService(opts...)
 	r.Hostnames = hostnames.NewHostnameService(opts...)
@@ -313,6 +330,8 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
 	r.AI = ai.NewAIService(opts...)
 	r.SecurityCenter = security_center.NewSecurityCenterService(opts...)
+	r.BrowserRendering = browser_rendering.NewBrowserRenderingService(opts...)
+	r.CustomPages = custom_pages.NewCustomPageService(opts...)
 
 	return
 }

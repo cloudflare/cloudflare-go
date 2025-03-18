@@ -362,9 +362,10 @@ func (r dlpEntryUpdateResponsePredefinedEntryJSON) RawJSON() string {
 func (r DLPEntryUpdateResponsePredefinedEntry) implementsDLPEntryUpdateResponse() {}
 
 type DLPEntryUpdateResponsePredefinedEntryConfidence struct {
-	// Indicates whether this entry can be made more or less sensitive by setting a
-	// confidence threshold. Profiles that use an entry with `available` set to true
-	// can use confidence thresholds
+	// Indicates whether this entry has AI remote service validation
+	AIContextAvailable bool `json:"ai_context_available,required"`
+	// Indicates whether this entry has any form of validation that is not an AI remote
+	// service
 	Available bool                                                `json:"available,required"`
 	JSON      dlpEntryUpdateResponsePredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -372,9 +373,10 @@ type DLPEntryUpdateResponsePredefinedEntryConfidence struct {
 // dlpEntryUpdateResponsePredefinedEntryConfidenceJSON contains the JSON metadata
 // for the struct [DLPEntryUpdateResponsePredefinedEntryConfidence]
 type dlpEntryUpdateResponsePredefinedEntryConfidenceJSON struct {
-	Available   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AIContextAvailable apijson.Field
+	Available          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *DLPEntryUpdateResponsePredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
@@ -750,9 +752,10 @@ func (r dlpEntryListResponsePredefinedEntryJSON) RawJSON() string {
 func (r DLPEntryListResponsePredefinedEntry) implementsDLPEntryListResponse() {}
 
 type DLPEntryListResponsePredefinedEntryConfidence struct {
-	// Indicates whether this entry can be made more or less sensitive by setting a
-	// confidence threshold. Profiles that use an entry with `available` set to true
-	// can use confidence thresholds
+	// Indicates whether this entry has AI remote service validation
+	AIContextAvailable bool `json:"ai_context_available,required"`
+	// Indicates whether this entry has any form of validation that is not an AI remote
+	// service
 	Available bool                                              `json:"available,required"`
 	JSON      dlpEntryListResponsePredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -760,9 +763,10 @@ type DLPEntryListResponsePredefinedEntryConfidence struct {
 // dlpEntryListResponsePredefinedEntryConfidenceJSON contains the JSON metadata for
 // the struct [DLPEntryListResponsePredefinedEntryConfidence]
 type dlpEntryListResponsePredefinedEntryConfidenceJSON struct {
-	Available   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AIContextAvailable apijson.Field
+	Available          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *DLPEntryListResponsePredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
@@ -1140,9 +1144,10 @@ func (r dlpEntryGetResponsePredefinedEntryJSON) RawJSON() string {
 func (r DLPEntryGetResponsePredefinedEntry) implementsDLPEntryGetResponse() {}
 
 type DLPEntryGetResponsePredefinedEntryConfidence struct {
-	// Indicates whether this entry can be made more or less sensitive by setting a
-	// confidence threshold. Profiles that use an entry with `available` set to true
-	// can use confidence thresholds
+	// Indicates whether this entry has AI remote service validation
+	AIContextAvailable bool `json:"ai_context_available,required"`
+	// Indicates whether this entry has any form of validation that is not an AI remote
+	// service
 	Available bool                                             `json:"available,required"`
 	JSON      dlpEntryGetResponsePredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -1150,9 +1155,10 @@ type DLPEntryGetResponsePredefinedEntryConfidence struct {
 // dlpEntryGetResponsePredefinedEntryConfidenceJSON contains the JSON metadata for
 // the struct [DLPEntryGetResponsePredefinedEntryConfidence]
 type dlpEntryGetResponsePredefinedEntryConfidenceJSON struct {
-	Available   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AIContextAvailable apijson.Field
+	Available          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *DLPEntryGetResponsePredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {

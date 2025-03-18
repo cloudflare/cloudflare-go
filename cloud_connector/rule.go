@@ -240,7 +240,7 @@ type RuleUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// List of Cloud Connector rules
-	Rules []RuleUpdateParamsRule `json:"rules,required"`
+	Rules []RuleUpdateParamsRule `json:"rules"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {

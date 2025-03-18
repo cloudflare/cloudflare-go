@@ -35,7 +35,7 @@ func TestAIInferenceTimeseriesGroupSummaryModelWithOptionalParams(t *testing.T) 
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
 		Format:        cloudflare.F(radar.AIInferenceTimeseriesGroupSummaryModelParamsFormatJson),
 		LimitPerGroup: cloudflare.F(int64(10)),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -66,7 +66,7 @@ func TestAIInferenceTimeseriesGroupSummaryTaskWithOptionalParams(t *testing.T) {
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
 		Format:        cloudflare.F(radar.AIInferenceTimeseriesGroupSummaryTaskParamsFormatJson),
 		LimitPerGroup: cloudflare.F(int64(10)),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

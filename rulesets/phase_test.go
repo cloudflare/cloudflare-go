@@ -32,6 +32,9 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		rulesets.PhaseDDoSL4,
 		rulesets.PhaseUpdateParams{
+			AccountID:   cloudflare.F("account_id"),
+			Description: cloudflare.F("My ruleset to execute managed rulesets"),
+			Name:        cloudflare.F("My ruleset"),
 			Rules: cloudflare.F([]rulesets.PhaseUpdateParamsRuleUnion{rulesets.BlockRuleParam{
 				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
@@ -45,8 +48,8 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 				Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 				Enabled:     cloudflare.F(true),
 				ExposedCredentialCheck: cloudflare.F(rulesets.BlockRuleExposedCredentialCheckParam{
-					PasswordExpression: cloudflare.F("url_decode(http.request.body.form[\\\"password\\\"][0])"),
-					UsernameExpression: cloudflare.F("url_decode(http.request.body.form[\\\"username\\\"][0])"),
+					PasswordExpression: cloudflare.F(`url_decode(http.request.body.form[\"password\"][0])`),
+					UsernameExpression: cloudflare.F(`url_decode(http.request.body.form[\"username\"][0])`),
 				}),
 				Expression: cloudflare.F("ip.src ne 1.1.1.1"),
 				Logging: cloudflare.F(rulesets.LoggingParam{
@@ -55,7 +58,7 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 				Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
 					Characteristics:         cloudflare.F([]string{"ip.src"}),
 					Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod10),
-					CountingExpression:      cloudflare.F("http.request.body.raw eq \"abcd\""),
+					CountingExpression:      cloudflare.F(`http.request.body.raw eq "abcd"`),
 					MitigationTimeout:       cloudflare.F(int64(600)),
 					RequestsPerPeriod:       cloudflare.F(int64(1000)),
 					RequestsToOrigin:        cloudflare.F(true),
@@ -64,9 +67,6 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Ref: cloudflare.F("my_ref"),
 			}}),
-			AccountID:   cloudflare.F("account_id"),
-			Description: cloudflare.F("My ruleset to execute managed rulesets"),
-			Name:        cloudflare.F("My ruleset"),
 		},
 	)
 	if err != nil {

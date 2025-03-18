@@ -266,7 +266,7 @@ type ScriptVersionNewParamsMetadataBinding struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[ScriptVersionNewParamsMetadataBindingsType] `json:"type,required"`
 	// Identifier of the D1 database to bind to.
 	ID param.Field[string] `json:"id"`
 	// R2 bucket to bind to.
@@ -275,7 +275,7 @@ type ScriptVersionNewParamsMetadataBinding struct {
 	CertificateID param.Field[string] `json:"certificate_id"`
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name"`
-	// The dataset name to bind to.
+	// The name of the dataset to bind to.
 	Dataset param.Field[string] `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
@@ -309,22 +309,21 @@ func (r ScriptVersionNewParamsMetadataBinding) implementsScriptVersionNewParamsM
 // A binding to allow the Worker to communicate with resources
 //
 // Satisfied by
-// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngine],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssets],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRendering],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespace],
-// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace],
-// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificate],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue],
-// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2],
-// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecret],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Bucket],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretText],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindService],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumer],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorize],
@@ -332,21 +331,6 @@ func (r ScriptVersionNewParamsMetadataBinding) implementsScriptVersionNewParamsM
 // [ScriptVersionNewParamsMetadataBinding].
 type ScriptVersionNewParamsMetadataBindingUnion interface {
 	implementsScriptVersionNewParamsMetadataBindingUnion()
-}
-
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny struct {
-	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
-	// The kind of resource that the binding provides.
-	Type        param.Field[string]    `json:"type,required"`
-	ExtraFields map[string]interface{} `json:"-,extras"`
-}
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI struct {
@@ -367,19 +351,37 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI) implementsSc
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAI ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAI:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeVersionMetadata:
 		return true
 	}
 	return false
 }
 
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngine struct {
-	// The dataset name to bind to.
+	// The name of the dataset to bind to.
 	Dataset param.Field[string] `json:"dataset,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -398,12 +400,30 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngine)
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -427,12 +447,30 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssets) implemen
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAssetsTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -456,12 +494,30 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRendering
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -487,12 +543,30 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1) implementsSc
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeD1 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1Type) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeD1:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindD1TypeVersionMetadata:
 		return true
 	}
 	return false
@@ -520,12 +594,30 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespac
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -556,13 +648,13 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespac
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo struct {
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace struct {
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoType] `json:"type,required"`
+	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
@@ -572,23 +664,41 @@ type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo struct {
 	ScriptName param.Field[string] `json:"script_name"`
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo) MarshalJSON() (data []byte, err error) {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo) implementsScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoType string
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "version_metadata"
 )
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoType) IsKnown() bool {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDoTypeDurableObjectNamespace:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -614,12 +724,30 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive) impl
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -645,12 +773,30 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson) implements
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeJson ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeJson:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -676,43 +822,79 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace) imp
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeVersionMetadata:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT struct {
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificate struct {
 	// Identifier of the certificate to bind to.
 	CertificateID param.Field[string] `json:"certificate_id,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTType] `json:"type,required"`
+	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType] `json:"type,required"`
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT) MarshalJSON() (data []byte, err error) {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT) implementsScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificate) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTType string
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTTypeMTLSCertificate ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "version_metadata"
 )
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTType) IsKnown() bool {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERTTypeMTLSCertificate:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -738,12 +920,30 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText) imple
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -769,74 +969,128 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue) implement
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeQueue ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeQueue:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueueTypeVersionMetadata:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2 struct {
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
 	BucketName param.Field[string] `json:"bucket_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Type] `json:"type,required"`
+	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType] `json:"type,required"`
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2) MarshalJSON() (data []byte, err error) {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Bucket) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2) implementsScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Bucket) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Type string
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2TypeR2Bucket ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Type = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType = "version_metadata"
 )
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Type) IsKnown() bool {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2TypeR2Bucket:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2BucketTypeVersionMetadata:
 		return true
 	}
 	return false
 }
 
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecret struct {
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The secret value to use.
 	Text param.Field[string] `json:"text,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretType] `json:"type,required"`
+	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType] `json:"type,required"`
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecret) MarshalJSON() (data []byte, err error) {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretText) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecret) implementsScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretText) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretType string
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTypeSecretText ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType = "version_metadata"
 )
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretType) IsKnown() bool {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTypeSecretText:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretTextTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -864,12 +1118,30 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindService) impleme
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeService ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeService:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindServiceTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -895,12 +1167,30 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumer) im
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindTailConsumerTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -926,12 +1216,30 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorize) imple
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVectorizeTypeVersionMetadata:
 		return true
 	}
 	return false
@@ -955,12 +1263,63 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadata)
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAI                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "ai"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAssets                 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "assets"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeD1                     ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "d1"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeJson                   ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypePlainText              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeQueue                  ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "queue"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeSecretText             ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeService                ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "service"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVectorize              ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
 )
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAI, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAssets, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeD1, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeJson, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypePlainText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeQueue, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeSecretText, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeService, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVectorize, ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+		return true
+	}
+	return false
+}
+
+// The kind of resource that the binding provides.
+type ScriptVersionNewParamsMetadataBindingsType string
+
+const (
+	ScriptVersionNewParamsMetadataBindingsTypeAI                     ScriptVersionNewParamsMetadataBindingsType = "ai"
+	ScriptVersionNewParamsMetadataBindingsTypeAnalyticsEngine        ScriptVersionNewParamsMetadataBindingsType = "analytics_engine"
+	ScriptVersionNewParamsMetadataBindingsTypeAssets                 ScriptVersionNewParamsMetadataBindingsType = "assets"
+	ScriptVersionNewParamsMetadataBindingsTypeBrowserRendering       ScriptVersionNewParamsMetadataBindingsType = "browser_rendering"
+	ScriptVersionNewParamsMetadataBindingsTypeD1                     ScriptVersionNewParamsMetadataBindingsType = "d1"
+	ScriptVersionNewParamsMetadataBindingsTypeDispatchNamespace      ScriptVersionNewParamsMetadataBindingsType = "dispatch_namespace"
+	ScriptVersionNewParamsMetadataBindingsTypeDurableObjectNamespace ScriptVersionNewParamsMetadataBindingsType = "durable_object_namespace"
+	ScriptVersionNewParamsMetadataBindingsTypeHyperdrive             ScriptVersionNewParamsMetadataBindingsType = "hyperdrive"
+	ScriptVersionNewParamsMetadataBindingsTypeJson                   ScriptVersionNewParamsMetadataBindingsType = "json"
+	ScriptVersionNewParamsMetadataBindingsTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsType = "kv_namespace"
+	ScriptVersionNewParamsMetadataBindingsTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsType = "mtls_certificate"
+	ScriptVersionNewParamsMetadataBindingsTypePlainText              ScriptVersionNewParamsMetadataBindingsType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsTypeQueue                  ScriptVersionNewParamsMetadataBindingsType = "queue"
+	ScriptVersionNewParamsMetadataBindingsTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsType = "r2_bucket"
+	ScriptVersionNewParamsMetadataBindingsTypeSecretText             ScriptVersionNewParamsMetadataBindingsType = "secret_text"
+	ScriptVersionNewParamsMetadataBindingsTypeService                ScriptVersionNewParamsMetadataBindingsType = "service"
+	ScriptVersionNewParamsMetadataBindingsTypeTailConsumer           ScriptVersionNewParamsMetadataBindingsType = "tail_consumer"
+	ScriptVersionNewParamsMetadataBindingsTypeVectorize              ScriptVersionNewParamsMetadataBindingsType = "vectorize"
+	ScriptVersionNewParamsMetadataBindingsTypeVersionMetadata        ScriptVersionNewParamsMetadataBindingsType = "version_metadata"
+)
+
+func (r ScriptVersionNewParamsMetadataBindingsType) IsKnown() bool {
+	switch r {
+	case ScriptVersionNewParamsMetadataBindingsTypeAI, ScriptVersionNewParamsMetadataBindingsTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsTypeAssets, ScriptVersionNewParamsMetadataBindingsTypeBrowserRendering, ScriptVersionNewParamsMetadataBindingsTypeD1, ScriptVersionNewParamsMetadataBindingsTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsTypeJson, ScriptVersionNewParamsMetadataBindingsTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsTypePlainText, ScriptVersionNewParamsMetadataBindingsTypeQueue, ScriptVersionNewParamsMetadataBindingsTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsTypeSecretText, ScriptVersionNewParamsMetadataBindingsTypeService, ScriptVersionNewParamsMetadataBindingsTypeTailConsumer, ScriptVersionNewParamsMetadataBindingsTypeVectorize, ScriptVersionNewParamsMetadataBindingsTypeVersionMetadata:
 		return true
 	}
 	return false

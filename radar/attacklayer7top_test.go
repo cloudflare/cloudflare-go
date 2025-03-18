@@ -35,16 +35,13 @@ func TestAttackLayer7TopAttacksWithOptionalParams(t *testing.T) {
 		DateRange:         cloudflare.F([]string{"7d"}),
 		DateStart:         cloudflare.F([]time.Time{time.Now()}),
 		Format:            cloudflare.F(radar.AttackLayer7TopAttacksParamsFormatJson),
-		HTTPMethod:        cloudflare.F([]radar.AttackLayer7TopAttacksParamsHTTPMethod{radar.AttackLayer7TopAttacksParamsHTTPMethodGet}),
-		HTTPVersion:       cloudflare.F([]radar.AttackLayer7TopAttacksParamsHTTPVersion{radar.AttackLayer7TopAttacksParamsHTTPVersionHttPv1}),
-		IPVersion:         cloudflare.F([]radar.AttackLayer7TopAttacksParamsIPVersion{radar.AttackLayer7TopAttacksParamsIPVersionIPv4}),
 		Limit:             cloudflare.F(int64(5)),
 		LimitDirection:    cloudflare.F(radar.AttackLayer7TopAttacksParamsLimitDirectionOrigin),
 		LimitPerLocation:  cloudflare.F(int64(10)),
 		Location:          cloudflare.F([]string{"string"}),
 		Magnitude:         cloudflare.F(radar.AttackLayer7TopAttacksParamsMagnitudeAffectedZones),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopAttacksParamsMitigationProduct{radar.AttackLayer7TopAttacksParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TopAttacksParamsNormalizationPercentage),
 	})
 	if err != nil {
@@ -82,7 +79,7 @@ func TestAttackLayer7TopIndustryWithOptionalParams(t *testing.T) {
 		Limit:             cloudflare.F(int64(5)),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopIndustryParamsMitigationProduct{radar.AttackLayer7TopIndustryParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -119,7 +116,7 @@ func TestAttackLayer7TopVerticalWithOptionalParams(t *testing.T) {
 		Limit:             cloudflare.F(int64(5)),
 		Location:          cloudflare.F([]string{"string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopVerticalParamsMitigationProduct{radar.AttackLayer7TopVerticalParamsMitigationProductDDoS}),
-		Name:              cloudflare.F([]string{"string"}),
+		Name:              cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

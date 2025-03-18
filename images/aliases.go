@@ -116,6 +116,12 @@ const CloudflareTunnelTunTypeCfdTunnel = shared.CloudflareTunnelTunTypeCfdTunnel
 const CloudflareTunnelTunTypeWARPConnector = shared.CloudflareTunnelTunTypeWARPConnector
 
 // This is an alias to an internal value.
+const CloudflareTunnelTunTypeWARP = shared.CloudflareTunnelTunTypeWARP
+
+// This is an alias to an internal value.
+const CloudflareTunnelTunTypeMagic = shared.CloudflareTunnelTunTypeMagic
+
+// This is an alias to an internal value.
 const CloudflareTunnelTunTypeIPSec = shared.CloudflareTunnelTunTypeIPSec
 
 // This is an alias to an internal value.
@@ -126,6 +132,9 @@ const CloudflareTunnelTunTypeCNI = shared.CloudflareTunnelTunTypeCNI
 
 // This is an alias to an internal type.
 type ErrorData = shared.ErrorData
+
+// This is an alias to an internal type.
+type ErrorDataSource = shared.ErrorDataSource
 
 // This is an alias to an internal type.
 type Member = shared.Member

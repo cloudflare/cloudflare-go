@@ -59,7 +59,7 @@ func (r *BucketDomainCustomService) New(ctx context.Context, bucketName string, 
 }
 
 // Edit the configuration for a custom domain on an existing R2 bucket.
-func (r *BucketDomainCustomService) Update(ctx context.Context, bucketName string, domainName string, params BucketDomainCustomUpdateParams, opts ...option.RequestOption) (res *BucketDomainCustomUpdateResponse, err error) {
+func (r *BucketDomainCustomService) Update(ctx context.Context, bucketName string, domain string, params BucketDomainCustomUpdateParams, opts ...option.RequestOption) (res *BucketDomainCustomUpdateResponse, err error) {
 	var env BucketDomainCustomUpdateResponseEnvelope
 	if params.Jurisdiction.Present {
 		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
@@ -73,11 +73,11 @@ func (r *BucketDomainCustomService) Update(ctx context.Context, bucketName strin
 		err = errors.New("missing required bucket_name parameter")
 		return
 	}
-	if domainName == "" {
-		err = errors.New("missing required domain_name parameter")
+	if domain == "" {
+		err = errors.New("missing required domain parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", params.AccountID, bucketName, domainName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", params.AccountID, bucketName, domain)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -111,7 +111,7 @@ func (r *BucketDomainCustomService) List(ctx context.Context, bucketName string,
 }
 
 // Remove custom domain registration from an existing R2 bucket
-func (r *BucketDomainCustomService) Delete(ctx context.Context, bucketName string, domainName string, params BucketDomainCustomDeleteParams, opts ...option.RequestOption) (res *BucketDomainCustomDeleteResponse, err error) {
+func (r *BucketDomainCustomService) Delete(ctx context.Context, bucketName string, domain string, params BucketDomainCustomDeleteParams, opts ...option.RequestOption) (res *BucketDomainCustomDeleteResponse, err error) {
 	var env BucketDomainCustomDeleteResponseEnvelope
 	if params.Jurisdiction.Present {
 		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
@@ -125,11 +125,11 @@ func (r *BucketDomainCustomService) Delete(ctx context.Context, bucketName strin
 		err = errors.New("missing required bucket_name parameter")
 		return
 	}
-	if domainName == "" {
-		err = errors.New("missing required domain_name parameter")
+	if domain == "" {
+		err = errors.New("missing required domain parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", params.AccountID, bucketName, domainName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", params.AccountID, bucketName, domain)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -139,7 +139,7 @@ func (r *BucketDomainCustomService) Delete(ctx context.Context, bucketName strin
 }
 
 // Get the configuration for a custom domain on an existing R2 bucket.
-func (r *BucketDomainCustomService) Get(ctx context.Context, bucketName string, domainName string, params BucketDomainCustomGetParams, opts ...option.RequestOption) (res *BucketDomainCustomGetResponse, err error) {
+func (r *BucketDomainCustomService) Get(ctx context.Context, bucketName string, domain string, params BucketDomainCustomGetParams, opts ...option.RequestOption) (res *BucketDomainCustomGetResponse, err error) {
 	var env BucketDomainCustomGetResponseEnvelope
 	if params.Jurisdiction.Present {
 		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
@@ -153,11 +153,11 @@ func (r *BucketDomainCustomService) Get(ctx context.Context, bucketName string, 
 		err = errors.New("missing required bucket_name parameter")
 		return
 	}
-	if domainName == "" {
-		err = errors.New("missing required domain_name parameter")
+	if domain == "" {
+		err = errors.New("missing required domain parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", params.AccountID, bucketName, domainName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", params.AccountID, bucketName, domain)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

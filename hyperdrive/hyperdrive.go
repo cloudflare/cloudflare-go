@@ -4,6 +4,7 @@ package hyperdrive
 
 import (
 	"reflect"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
@@ -38,7 +39,11 @@ type Hyperdrive struct {
 	Name    string            `json:"name,required"`
 	Origin  HyperdriveOrigin  `json:"origin,required"`
 	Caching HyperdriveCaching `json:"caching"`
-	JSON    hyperdriveJSON    `json:"-"`
+	// When the Hyperdrive configuration was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// When the Hyperdrive configuration was last modified.
+	ModifiedOn time.Time      `json:"modified_on" format:"date-time"`
+	JSON       hyperdriveJSON `json:"-"`
 }
 
 // hyperdriveJSON contains the JSON metadata for the struct [Hyperdrive]
@@ -47,6 +52,8 @@ type hyperdriveJSON struct {
 	Name        apijson.Field
 	Origin      apijson.Field
 	Caching     apijson.Field
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

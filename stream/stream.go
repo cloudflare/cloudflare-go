@@ -408,6 +408,9 @@ type StreamNewParams struct {
 	// Indicates the size of the entire upload in bytes. The value must be a
 	// non-negative integer.
 	UploadLength param.Field[int64] `header:"Upload-Length,required"`
+	// Provisions a URL to let your end users upload videos directly to Cloudflare
+	// Stream without exposing your API token to clients.
+	DirectUser param.Field[bool] `query:"direct_user"`
 	// A user-defined identifier for the media creator.
 	UploadCreator param.Field[string] `header:"Upload-Creator"`
 	// Comma-separated key-value pairs following the TUS protocol specification. Values
@@ -418,6 +421,14 @@ type StreamNewParams struct {
 
 func (r StreamNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
+}
+
+// URLQuery serializes [StreamNewParams]'s query parameters as `url.Values`.
+func (r StreamNewParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 // Specifies the TUS protocol version. This value must be included in every upload

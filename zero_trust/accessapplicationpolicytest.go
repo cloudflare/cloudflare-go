@@ -181,15 +181,23 @@ func (r AccessApplicationPolicyTestGetResponseStatus) IsKnown() bool {
 
 type AccessApplicationPolicyTestNewParams struct {
 	// Identifier
-	AccountID param.Field[string]                                       `path:"account_id,required"`
-	Policies  param.Field[[]AccessApplicationPolicyTestNewParamsPolicy] `json:"policies"`
+	AccountID param.Field[string]                                            `path:"account_id,required"`
+	Policies  param.Field[[]AccessApplicationPolicyTestNewParamsPolicyUnion] `json:"policies"`
 }
 
 func (r AccessApplicationPolicyTestNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessApplicationPolicyTestNewParamsPolicy struct {
+// The UUID of the reusable policy you wish to test
+//
+// Satisfied by [zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObject],
+// [shared.UnionString].
+type AccessApplicationPolicyTestNewParamsPolicyUnion interface {
+	ImplementsAccessApplicationPolicyTestNewParamsPolicyUnion()
+}
+
+type AccessApplicationPolicyTestNewParamsPoliciesObject struct {
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision param.Field[Decision] `json:"decision,required"`
@@ -223,8 +231,11 @@ type AccessApplicationPolicyTestNewParamsPolicy struct {
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
-func (r AccessApplicationPolicyTestNewParamsPolicy) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyTestNewParamsPoliciesObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationPolicyTestNewParamsPoliciesObject) ImplementsAccessApplicationPolicyTestNewParamsPolicyUnion() {
 }
 
 type AccessApplicationPolicyTestNewResponseEnvelope struct {

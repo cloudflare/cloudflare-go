@@ -35,7 +35,7 @@ func NewDispatchNamespaceScriptSecretService(opts ...option.RequestOption) (r *D
 	return
 }
 
-// Put secrets to a script uploaded to a Workers for Platforms namespace.
+// Add a secret to a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSecretUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretUpdateResponse, err error) {
 	var env DispatchNamespaceScriptSecretUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +60,7 @@ func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispa
 	return
 }
 
-// List secrets from a script uploaded to a Workers for Platforms namespace.
+// List secrets bound to a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) List(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSecretListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DispatchNamespaceScriptSecretListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -90,12 +90,42 @@ func (r *DispatchNamespaceScriptSecretService) List(ctx context.Context, dispatc
 	return res, nil
 }
 
-// List secrets from a script uploaded to a Workers for Platforms namespace.
+// List secrets bound to a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) ListAutoPaging(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSecretListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DispatchNamespaceScriptSecretListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, dispatchNamespace, scriptName, query, opts...))
 }
 
-// Get secret from a script uploaded to a Workers for Platforms namespace.
+// Remove a secret from a script uploaded to a Workers for Platforms namespace.
+func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, body DispatchNamespaceScriptSecretDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretDeleteResponse, err error) {
+	var env DispatchNamespaceScriptSecretDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
+	if secretName == "" {
+		err = errors.New("missing required secret_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/secrets/%s", body.AccountID, dispatchNamespace, scriptName, secretName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get a given secret binding (value omitted) on a script uploaded to a Workers for
+// Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, query DispatchNamespaceScriptSecretGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretGetResponse, err error) {
 	var env DispatchNamespaceScriptSecretGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -122,35 +152,6 @@ func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatch
 	}
 	res = &env.Result
 	return
-}
-
-type WorkersSecretModelParam struct {
-	// The name of this secret, this is what will be used to access it inside the
-	// Worker.
-	Name param.Field[string] `json:"name"`
-	// The value of the secret.
-	Text param.Field[string] `json:"text"`
-	// The type of secret to put.
-	Type param.Field[WorkersSecretModelType] `json:"type"`
-}
-
-func (r WorkersSecretModelParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of secret to put.
-type WorkersSecretModelType string
-
-const (
-	WorkersSecretModelTypeSecretText WorkersSecretModelType = "secret_text"
-)
-
-func (r WorkersSecretModelType) IsKnown() bool {
-	switch r {
-	case WorkersSecretModelTypeSecretText:
-		return true
-	}
-	return false
 }
 
 type DispatchNamespaceScriptSecretUpdateResponse struct {
@@ -235,6 +236,8 @@ func (r DispatchNamespaceScriptSecretListResponseType) IsKnown() bool {
 	return false
 }
 
+type DispatchNamespaceScriptSecretDeleteResponse = interface{}
+
 type DispatchNamespaceScriptSecretGetResponse struct {
 	// The name of this secret, this is what will be used to access it inside the
 	// Worker.
@@ -278,12 +281,33 @@ func (r DispatchNamespaceScriptSecretGetResponseType) IsKnown() bool {
 
 type DispatchNamespaceScriptSecretUpdateParams struct {
 	// Identifier
-	AccountID          param.Field[string]     `path:"account_id,required"`
-	WorkersSecretModel WorkersSecretModelParam `json:"workers_secret_model,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The name of this secret, this is what will be used to access it inside the
+	// Worker.
+	Name param.Field[string] `json:"name"`
+	// The value of the secret.
+	Text param.Field[string] `json:"text"`
+	// The type of secret to put.
+	Type param.Field[DispatchNamespaceScriptSecretUpdateParamsType] `json:"type"`
 }
 
 func (r DispatchNamespaceScriptSecretUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.WorkersSecretModel)
+	return apijson.MarshalRoot(r)
+}
+
+// The type of secret to put.
+type DispatchNamespaceScriptSecretUpdateParamsType string
+
+const (
+	DispatchNamespaceScriptSecretUpdateParamsTypeSecretText DispatchNamespaceScriptSecretUpdateParamsType = "secret_text"
+)
+
+func (r DispatchNamespaceScriptSecretUpdateParamsType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSecretUpdateParamsTypeSecretText:
+		return true
+	}
+	return false
 }
 
 type DispatchNamespaceScriptSecretUpdateResponseEnvelope struct {
@@ -332,6 +356,54 @@ func (r DispatchNamespaceScriptSecretUpdateResponseEnvelopeSuccess) IsKnown() bo
 type DispatchNamespaceScriptSecretListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type DispatchNamespaceScriptSecretDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type DispatchNamespaceScriptSecretDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  DispatchNamespaceScriptSecretDeleteResponse                `json:"result,nullable"`
+	JSON    dispatchNamespaceScriptSecretDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretDeleteResponseEnvelopeJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptSecretDeleteResponseEnvelope]
+type dispatchNamespaceScriptSecretDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccess bool
+
+const (
+	DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccessTrue DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccess = true
+)
+
+func (r DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type DispatchNamespaceScriptSecretGetParams struct {

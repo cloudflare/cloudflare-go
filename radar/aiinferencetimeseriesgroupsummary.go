@@ -34,7 +34,7 @@ func NewAIInferenceTimeseriesGroupSummaryService(opts ...option.RequestOption) (
 	return
 }
 
-// Percentage distribution of unique accounts by model over time.
+// Retrieves the distribution of unique accounts by model over time.
 func (r *AIInferenceTimeseriesGroupSummaryService) Model(ctx context.Context, query AIInferenceTimeseriesGroupSummaryModelParams, opts ...option.RequestOption) (res *AIInferenceTimeseriesGroupSummaryModelResponse, err error) {
 	var env AIInferenceTimeseriesGroupSummaryModelResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +47,7 @@ func (r *AIInferenceTimeseriesGroupSummaryService) Model(ctx context.Context, qu
 	return
 }
 
-// Percentage distribution of unique accounts by task over time.
+// Retrieves the distribution of unique accounts by task over time.
 func (r *AIInferenceTimeseriesGroupSummaryService) Task(ctx context.Context, query AIInferenceTimeseriesGroupSummaryTaskParams, opts ...option.RequestOption) (res *AIInferenceTimeseriesGroupSummaryTaskResponse, err error) {
 	var env AIInferenceTimeseriesGroupSummaryTaskResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -157,18 +157,20 @@ type AIInferenceTimeseriesGroupSummaryModelParams struct {
 	AggInterval param.Field[AIInferenceTimeseriesGroupSummaryModelParamsAggInterval] `query:"aggInterval"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AIInferenceTimeseriesGroupSummaryModelParamsFormat] `query:"format"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limits the number of objects per group to the top items within the specified
+	// time range. If there are more items than the limit, the response will include
+	// the count of items, with any remaining items grouped together under an "other"
+	// category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -201,7 +203,7 @@ func (r AIInferenceTimeseriesGroupSummaryModelParamsAggInterval) IsKnown() bool 
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AIInferenceTimeseriesGroupSummaryModelParamsFormat string
 
 const (
@@ -247,18 +249,20 @@ type AIInferenceTimeseriesGroupSummaryTaskParams struct {
 	AggInterval param.Field[AIInferenceTimeseriesGroupSummaryTaskParamsAggInterval] `query:"aggInterval"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AIInferenceTimeseriesGroupSummaryTaskParamsFormat] `query:"format"`
-	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
-	// the time range.
+	// Limits the number of objects per group to the top items within the specified
+	// time range. If there are more items than the limit, the response will include
+	// the count of items, with any remaining items grouped together under an "other"
+	// category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 }
 
@@ -291,7 +295,7 @@ func (r AIInferenceTimeseriesGroupSummaryTaskParamsAggInterval) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AIInferenceTimeseriesGroupSummaryTaskParamsFormat string
 
 const (

@@ -34,7 +34,7 @@ func NewRobotsTXTTopUserAgentService(opts ...option.RequestOption) (r *RobotsTXT
 	return
 }
 
-// Get the top user agents on robots.txt files by directive.
+// Retrieves the top user agents on robots.txt files.
 func (r *RobotsTXTTopUserAgentService) Directive(ctx context.Context, query RobotsTXTTopUserAgentDirectiveParams, opts ...option.RequestOption) (res *RobotsTXTTopUserAgentDirectiveResponse, err error) {
 	var env RobotsTXTTopUserAgentDirectiveResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -233,19 +233,19 @@ func (r robotsTXTTopUserAgentDirectiveResponseTop0JSON) RawJSON() string {
 }
 
 type RobotsTXTTopUserAgentDirectiveParams struct {
-	// Array of dates to filter the ranking.
+	// Array of dates to filter the results.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
-	// Filter by directive.
+	// Filters results by robots.txt directive.
 	Directive param.Field[RobotsTXTTopUserAgentDirectiveParamsDirective] `query:"directive"`
-	// Filter by domain category.
+	// Filters results by domain category.
 	DomainCategory param.Field[[]string] `query:"domainCategory"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[RobotsTXTTopUserAgentDirectiveParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Filter by user agent category.
+	// Filters results by user agent category.
 	UserAgentCategory param.Field[RobotsTXTTopUserAgentDirectiveParamsUserAgentCategory] `query:"userAgentCategory"`
 }
 
@@ -258,7 +258,7 @@ func (r RobotsTXTTopUserAgentDirectiveParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Filter by directive.
+// Filters results by robots.txt directive.
 type RobotsTXTTopUserAgentDirectiveParamsDirective string
 
 const (
@@ -274,7 +274,7 @@ func (r RobotsTXTTopUserAgentDirectiveParamsDirective) IsKnown() bool {
 	return false
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type RobotsTXTTopUserAgentDirectiveParamsFormat string
 
 const (
@@ -290,7 +290,7 @@ func (r RobotsTXTTopUserAgentDirectiveParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Filter by user agent category.
+// Filters results by user agent category.
 type RobotsTXTTopUserAgentDirectiveParamsUserAgentCategory string
 
 const (

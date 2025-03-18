@@ -45,7 +45,7 @@ func TestHTTPLocationBrowserFamilyGetWithOptionalParams(t *testing.T) {
 			IPVersion:    cloudflare.F([]radar.HTTPLocationBrowserFamilyGetParamsIPVersion{radar.HTTPLocationBrowserFamilyGetParamsIPVersionIPv4}),
 			Limit:        cloudflare.F(int64(5)),
 			Location:     cloudflare.F([]string{"string"}),
-			Name:         cloudflare.F([]string{"string"}),
+			Name:         cloudflare.F([]string{"main_series"}),
 			OS:           cloudflare.F([]radar.HTTPLocationBrowserFamilyGetParamsOS{radar.HTTPLocationBrowserFamilyGetParamsOSWindows}),
 			TLSVersion:   cloudflare.F([]radar.HTTPLocationBrowserFamilyGetParamsTLSVersion{radar.HTTPLocationBrowserFamilyGetParamsTLSVersionTlSv1_0}),
 		},

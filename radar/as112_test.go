@@ -29,15 +29,18 @@ func TestAS112TimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Timeseries(context.TODO(), radar.AS112TimeseriesParams{
-		AggInterval: cloudflare.F(radar.AS112TimeseriesParamsAggInterval15m),
-		ASN:         cloudflare.F([]string{"string"}),
-		Continent:   cloudflare.F([]string{"string"}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.AS112TimeseriesParamsFormatJson),
-		Location:    cloudflare.F([]string{"string"}),
-		Name:        cloudflare.F([]string{"string"}),
+		AggInterval:  cloudflare.F(radar.AS112TimeseriesParamsAggInterval15m),
+		ASN:          cloudflare.F([]string{"string"}),
+		Continent:    cloudflare.F([]string{"string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
+		DateRange:    cloudflare.F([]string{"7d"}),
+		DateStart:    cloudflare.F([]time.Time{time.Now()}),
+		Format:       cloudflare.F(radar.AS112TimeseriesParamsFormatJson),
+		Location:     cloudflare.F([]string{"string"}),
+		Name:         cloudflare.F([]string{"main_series"}),
+		Protocol:     cloudflare.F(radar.AS112TimeseriesParamsProtocolUdp),
+		QueryType:    cloudflare.F(radar.AS112TimeseriesParamsQueryTypeA),
+		ResponseCode: cloudflare.F(radar.AS112TimeseriesParamsResponseCodeNoerror),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

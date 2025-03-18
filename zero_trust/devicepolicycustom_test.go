@@ -30,7 +30,7 @@ func TestDevicePolicyCustomNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.Policies.Custom.New(context.TODO(), zero_trust.DevicePolicyCustomNewParams{
 		AccountID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Match:               cloudflare.F("user.identity == \"test@cloudflare.com\""),
+		Match:               cloudflare.F(`user.identity == "test@cloudflare.com"`),
 		Name:                cloudflare.F("Allow Developers"),
 		Precedence:          cloudflare.F(100.000000),
 		AllowModeSwitch:     cloudflare.F(true),
@@ -41,9 +41,20 @@ func TestDevicePolicyCustomNewWithOptionalParams(t *testing.T) {
 		Description:         cloudflare.F("Policy for test teams."),
 		DisableAutoFallback: cloudflare.F(true),
 		Enabled:             cloudflare.F(true),
-		ExcludeOfficeIPs:    cloudflare.F(true),
-		LANAllowMinutes:     cloudflare.F(30.000000),
-		LANAllowSubnetSize:  cloudflare.F(24.000000),
+		Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+			Address:     cloudflare.F("192.0.2.0/24"),
+			Description: cloudflare.F("Exclude testing domains from the tunnel"),
+			Host:        cloudflare.F("*.example.com"),
+		}}),
+		ExcludeOfficeIPs: cloudflare.F(true),
+		Include: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+			Address:     cloudflare.F("192.0.2.0/24"),
+			Description: cloudflare.F("Exclude testing domains from the tunnel"),
+			Host:        cloudflare.F("*.example.com"),
+		}}),
+		LANAllowMinutes:            cloudflare.F(30.000000),
+		LANAllowSubnetSize:         cloudflare.F(24.000000),
+		RegisterInterfaceIPWithDNS: cloudflare.F(true),
 		ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyCustomNewParamsServiceModeV2{
 			Mode: cloudflare.F("proxy"),
 			Port: cloudflare.F(3000.000000),
@@ -142,10 +153,21 @@ func TestDevicePolicyCustomEditWithOptionalParams(t *testing.T) {
 			Description:         cloudflare.F("Policy for test teams."),
 			DisableAutoFallback: cloudflare.F(true),
 			Enabled:             cloudflare.F(true),
-			ExcludeOfficeIPs:    cloudflare.F(true),
-			Match:               cloudflare.F("user.identity == \"test@cloudflare.com\""),
-			Name:                cloudflare.F("Allow Developers"),
-			Precedence:          cloudflare.F(100.000000),
+			Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+				Address:     cloudflare.F("192.0.2.0/24"),
+				Description: cloudflare.F("Exclude testing domains from the tunnel"),
+				Host:        cloudflare.F("*.example.com"),
+			}}),
+			ExcludeOfficeIPs: cloudflare.F(true),
+			Include: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+				Address:     cloudflare.F("192.0.2.0/24"),
+				Description: cloudflare.F("Exclude testing domains from the tunnel"),
+				Host:        cloudflare.F("*.example.com"),
+			}}),
+			Match:                      cloudflare.F(`user.identity == "test@cloudflare.com"`),
+			Name:                       cloudflare.F("Allow Developers"),
+			Precedence:                 cloudflare.F(100.000000),
+			RegisterInterfaceIPWithDNS: cloudflare.F(true),
 			ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyCustomEditParamsServiceModeV2{
 				Mode: cloudflare.F("proxy"),
 				Port: cloudflare.F(3000.000000),

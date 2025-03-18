@@ -22,7 +22,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go/v4@v4.1.0'
+go get -u 'github.com/cloudflare/cloudflare-go/v4@v4.2.0'
 ```
 
 <!-- x-release-please-end -->
@@ -254,6 +254,30 @@ file returned by `os.Open` will be sent with the file name on disk.
 
 We also provide a helper `cloudflare.FileParam(reader io.Reader, filename string, contentType string)`
 which can be used to wrap any `io.Reader` with the appropriate file name and content type.
+
+```go
+// A file from the file system
+file, err := os.Open("/path/to/file")
+api_gateway.UserSchemaNewParams{
+	ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	File:   cloudflare.F[io.Reader](file),
+	Kind:   cloudflare.F(api_gateway.UserSchemaNewParamsKindOpenAPIV3),
+}
+
+// A file from a string
+api_gateway.UserSchemaNewParams{
+	ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	File:   cloudflare.F[io.Reader](strings.NewReader("my file contents")),
+	Kind:   cloudflare.F(api_gateway.UserSchemaNewParamsKindOpenAPIV3),
+}
+
+// With a custom filename and contentType
+api_gateway.UserSchemaNewParams{
+	ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	File:   cloudflare.FileParam(strings.NewReader(`{"hello": "foo"}`), "file.go", "application/json"),
+	Kind:   cloudflare.F(api_gateway.UserSchemaNewParamsKindOpenAPIV3),
+}
+```
 
 ### Retries
 

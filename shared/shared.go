@@ -275,15 +275,17 @@ func (r cloudflareTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CloudflareTunnel) ImplementsTunnelNewResponse() {}
-
 func (r CloudflareTunnel) ImplementsTunnelListResponse() {}
 
-func (r CloudflareTunnel) ImplementsTunnelDeleteResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredNewResponse() {}
 
-func (r CloudflareTunnel) ImplementsTunnelEditResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredListResponse() {}
 
-func (r CloudflareTunnel) ImplementsTunnelGetResponse() {}
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredDeleteResponse() {}
+
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredEditResponse() {}
+
+func (r CloudflareTunnel) ImplementsTunnelCloudflaredGetResponse() {}
 
 func (r CloudflareTunnel) ImplementsTunnelWARPConnectorNewResponse() {}
 
@@ -368,6 +370,8 @@ type CloudflareTunnelTunType string
 const (
 	CloudflareTunnelTunTypeCfdTunnel     CloudflareTunnelTunType = "cfd_tunnel"
 	CloudflareTunnelTunTypeWARPConnector CloudflareTunnelTunType = "warp_connector"
+	CloudflareTunnelTunTypeWARP          CloudflareTunnelTunType = "warp"
+	CloudflareTunnelTunTypeMagic         CloudflareTunnelTunType = "magic"
 	CloudflareTunnelTunTypeIPSec         CloudflareTunnelTunType = "ip_sec"
 	CloudflareTunnelTunTypeGRE           CloudflareTunnelTunType = "gre"
 	CloudflareTunnelTunTypeCNI           CloudflareTunnelTunType = "cni"
@@ -375,24 +379,28 @@ const (
 
 func (r CloudflareTunnelTunType) IsKnown() bool {
 	switch r {
-	case CloudflareTunnelTunTypeCfdTunnel, CloudflareTunnelTunTypeWARPConnector, CloudflareTunnelTunTypeIPSec, CloudflareTunnelTunTypeGRE, CloudflareTunnelTunTypeCNI:
+	case CloudflareTunnelTunTypeCfdTunnel, CloudflareTunnelTunTypeWARPConnector, CloudflareTunnelTunTypeWARP, CloudflareTunnelTunTypeMagic, CloudflareTunnelTunTypeIPSec, CloudflareTunnelTunTypeGRE, CloudflareTunnelTunTypeCNI:
 		return true
 	}
 	return false
 }
 
 type ErrorData struct {
-	Code    int64         `json:"code"`
-	Message string        `json:"message"`
-	JSON    errorDataJSON `json:"-"`
+	Code             int64           `json:"code"`
+	DocumentationURL string          `json:"documentation_url"`
+	Message          string          `json:"message"`
+	Source           ErrorDataSource `json:"source"`
+	JSON             errorDataJSON   `json:"-"`
 }
 
 // errorDataJSON contains the JSON metadata for the struct [ErrorData]
 type errorDataJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Code             apijson.Field
+	DocumentationURL apijson.Field
+	Message          apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *ErrorData) UnmarshalJSON(data []byte) (err error) {
@@ -400,6 +408,26 @@ func (r *ErrorData) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r errorDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type ErrorDataSource struct {
+	Pointer string              `json:"pointer"`
+	JSON    errorDataSourceJSON `json:"-"`
+}
+
+// errorDataSourceJSON contains the JSON metadata for the struct [ErrorDataSource]
+type errorDataSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ErrorDataSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r errorDataSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1316,6 +1344,8 @@ func (r TokenPolicyParam) MarshalJSON() (data []byte, err error) {
 // A named group of permissions that map to a group of operations against
 // resources.
 type TokenPolicyPermissionGroupParam struct {
+	// Identifier of the group.
+	ID param.Field[string] `json:"id,required"`
 	// Attributes associated to the permission group.
 	Meta param.Field[TokenPolicyPermissionGroupsMetaParam] `json:"meta"`
 }

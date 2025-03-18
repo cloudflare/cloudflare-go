@@ -46,8 +46,8 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 					Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 					Enabled:     cloudflare.F(true),
 					ExposedCredentialCheck: cloudflare.F(rulesets.BlockRuleExposedCredentialCheckParam{
-						PasswordExpression: cloudflare.F("url_decode(http.request.body.form[\\\"password\\\"][0])"),
-						UsernameExpression: cloudflare.F("url_decode(http.request.body.form[\\\"username\\\"][0])"),
+						PasswordExpression: cloudflare.F(`url_decode(http.request.body.form[\"password\"][0])`),
+						UsernameExpression: cloudflare.F(`url_decode(http.request.body.form[\"username\"][0])`),
 					}),
 					Expression: cloudflare.F("ip.src ne 1.1.1.1"),
 					Logging: cloudflare.F(rulesets.LoggingParam{
@@ -56,7 +56,7 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 					Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
 						Characteristics:         cloudflare.F([]string{"ip.src"}),
 						Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod10),
-						CountingExpression:      cloudflare.F("http.request.body.raw eq \"abcd\""),
+						CountingExpression:      cloudflare.F(`http.request.body.raw eq "abcd"`),
 						MitigationTimeout:       cloudflare.F(int64(600)),
 						RequestsPerPeriod:       cloudflare.F(int64(1000)),
 						RequestsToOrigin:        cloudflare.F(true),
@@ -145,8 +145,8 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 					Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 					Enabled:     cloudflare.F(true),
 					ExposedCredentialCheck: cloudflare.F(rulesets.BlockRuleExposedCredentialCheckParam{
-						PasswordExpression: cloudflare.F("url_decode(http.request.body.form[\\\"password\\\"][0])"),
-						UsernameExpression: cloudflare.F("url_decode(http.request.body.form[\\\"username\\\"][0])"),
+						PasswordExpression: cloudflare.F(`url_decode(http.request.body.form[\"password\"][0])`),
+						UsernameExpression: cloudflare.F(`url_decode(http.request.body.form[\"username\"][0])`),
 					}),
 					Expression: cloudflare.F("ip.src ne 1.1.1.1"),
 					Logging: cloudflare.F(rulesets.LoggingParam{
@@ -155,7 +155,7 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 					Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
 						Characteristics:         cloudflare.F([]string{"ip.src"}),
 						Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod10),
-						CountingExpression:      cloudflare.F("http.request.body.raw eq \"abcd\""),
+						CountingExpression:      cloudflare.F(`http.request.body.raw eq "abcd"`),
 						MitigationTimeout:       cloudflare.F(int64(600)),
 						RequestsPerPeriod:       cloudflare.F(int64(1000)),
 						RequestsToOrigin:        cloudflare.F(true),

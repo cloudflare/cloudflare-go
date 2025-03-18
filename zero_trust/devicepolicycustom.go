@@ -189,8 +189,14 @@ type DevicePolicyCustomNewParams struct {
 	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
 	// Whether the policy will be applied to matching devices.
 	Enabled param.Field[bool] `json:"enabled"`
+	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
+	// 'include' cannot be set in the same request.
+	Exclude param.Field[[]SplitTunnelExcludeParam] `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
 	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
+	// List of routes included in the WARP client's tunnel. Both 'exclude' and
+	// 'include' cannot be set in the same request.
+	Include param.Field[[]SplitTunnelExcludeParam] `json:"include"`
 	// The amount of time in minutes a user is allowed access to their LAN. A value of
 	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
 	// laptop waking from sleep. Note that this field is omitted from the response if
@@ -198,8 +204,11 @@ type DevicePolicyCustomNewParams struct {
 	LANAllowMinutes param.Field[float64] `json:"lan_allow_minutes"`
 	// The size of the subnet for the local access network. Note that this field is
 	// omitted from the response if null or unset.
-	LANAllowSubnetSize param.Field[float64]                                  `json:"lan_allow_subnet_size"`
-	ServiceModeV2      param.Field[DevicePolicyCustomNewParamsServiceModeV2] `json:"service_mode_v2"`
+	LANAllowSubnetSize param.Field[float64] `json:"lan_allow_subnet_size"`
+	// Determines if the operating system will register WARP's local interface IP with
+	// your on-premises DNS server.
+	RegisterInterfaceIPWithDNS param.Field[bool]                                     `json:"register_interface_ip_with_dns"`
+	ServiceModeV2              param.Field[DevicePolicyCustomNewParamsServiceModeV2] `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL param.Field[string] `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
@@ -295,16 +304,25 @@ type DevicePolicyCustomEditParams struct {
 	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
 	// Whether the policy will be applied to matching devices.
 	Enabled param.Field[bool] `json:"enabled"`
+	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
+	// 'include' cannot be set in the same request.
+	Exclude param.Field[[]SplitTunnelExcludeParam] `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
 	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
+	// List of routes included in the WARP client's tunnel. Both 'exclude' and
+	// 'include' cannot be set in the same request.
+	Include param.Field[[]SplitTunnelExcludeParam] `json:"include"`
 	// The wirefilter expression to match devices.
 	Match param.Field[string] `json:"match"`
 	// The name of the device settings profile.
 	Name param.Field[string] `json:"name"`
 	// The precedence of the policy. Lower values indicate higher precedence. Policies
 	// will be evaluated in ascending order of this field.
-	Precedence    param.Field[float64]                                   `json:"precedence"`
-	ServiceModeV2 param.Field[DevicePolicyCustomEditParamsServiceModeV2] `json:"service_mode_v2"`
+	Precedence param.Field[float64] `json:"precedence"`
+	// Determines if the operating system will register WARP's local interface IP with
+	// your on-premises DNS server.
+	RegisterInterfaceIPWithDNS param.Field[bool]                                      `json:"register_interface_ip_with_dns"`
+	ServiceModeV2              param.Field[DevicePolicyCustomEditParamsServiceModeV2] `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL param.Field[string] `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.

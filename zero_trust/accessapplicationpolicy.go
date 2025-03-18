@@ -351,6 +351,9 @@ type AccessRule struct {
 	IP interface{} `json:"ip"`
 	// This field can have the runtime type of [IPListRuleIPList].
 	IPList interface{} `json:"ip_list"`
+	// This field can have the runtime type of
+	// [AccessRuleAccessLoginMethodRuleLoginMethod].
+	LoginMethod interface{} `json:"login_method"`
 	// This field can have the runtime type of [OktaGroupRuleOkta].
 	Okta interface{} `json:"okta"`
 	// This field can have the runtime type of [SAMLGroupRuleSAML].
@@ -381,6 +384,7 @@ type accessRuleJSON struct {
 	GSuite               apijson.Field
 	IP                   apijson.Field
 	IPList               apijson.Field
+	LoginMethod          apijson.Field
 	Okta                 apijson.Field
 	SAML                 apijson.Field
 	ServiceToken         apijson.Field
@@ -413,8 +417,9 @@ func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.DomainRule], [zero_trust.EmailListRule], [zero_trust.EmailRule],
 // [zero_trust.EveryoneRule], [zero_trust.ExternalEvaluationRule],
 // [zero_trust.GitHubOrganizationRule], [zero_trust.GSuiteGroupRule],
-// [zero_trust.IPListRule], [zero_trust.IPRule], [zero_trust.OktaGroupRule],
-// [zero_trust.SAMLGroupRule], [zero_trust.ServiceTokenRule].
+// [zero_trust.AccessRuleAccessLoginMethodRule], [zero_trust.IPListRule],
+// [zero_trust.IPRule], [zero_trust.OktaGroupRule], [zero_trust.SAMLGroupRule],
+// [zero_trust.ServiceTokenRule].
 func (r AccessRule) AsUnion() AccessRuleUnion {
 	return r.union
 }
@@ -430,8 +435,9 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [zero_trust.DomainRule], [zero_trust.EmailListRule], [zero_trust.EmailRule],
 // [zero_trust.EveryoneRule], [zero_trust.ExternalEvaluationRule],
 // [zero_trust.GitHubOrganizationRule], [zero_trust.GSuiteGroupRule],
-// [zero_trust.IPListRule], [zero_trust.IPRule], [zero_trust.OktaGroupRule],
-// [zero_trust.SAMLGroupRule] or [zero_trust.ServiceTokenRule].
+// [zero_trust.AccessRuleAccessLoginMethodRule], [zero_trust.IPListRule],
+// [zero_trust.IPRule], [zero_trust.OktaGroupRule], [zero_trust.SAMLGroupRule] or
+// [zero_trust.ServiceTokenRule].
 type AccessRuleUnion interface {
 	implementsAccessRule()
 }
@@ -503,6 +509,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(GSuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessRuleAccessLoginMethodRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -625,6 +635,52 @@ func (r accessRuleAccessCommonNameRuleCommonNameJSON) RawJSON() string {
 	return r.raw
 }
 
+// Matches a specific identity provider id.
+type AccessRuleAccessLoginMethodRule struct {
+	LoginMethod AccessRuleAccessLoginMethodRuleLoginMethod `json:"login_method,required"`
+	JSON        accessRuleAccessLoginMethodRuleJSON        `json:"-"`
+}
+
+// accessRuleAccessLoginMethodRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessLoginMethodRule]
+type accessRuleAccessLoginMethodRuleJSON struct {
+	LoginMethod apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessLoginMethodRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessLoginMethodRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessLoginMethodRule) implementsAccessRule() {}
+
+type AccessRuleAccessLoginMethodRuleLoginMethod struct {
+	// The ID of an identity provider.
+	ID   string                                         `json:"id,required"`
+	JSON accessRuleAccessLoginMethodRuleLoginMethodJSON `json:"-"`
+}
+
+// accessRuleAccessLoginMethodRuleLoginMethodJSON contains the JSON metadata for
+// the struct [AccessRuleAccessLoginMethodRuleLoginMethod]
+type accessRuleAccessLoginMethodRuleLoginMethodJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessLoginMethodRuleLoginMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessLoginMethodRuleLoginMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Access group.
 type AccessRuleParam struct {
 	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token"`
@@ -645,6 +701,7 @@ type AccessRuleParam struct {
 	GSuite               param.Field[interface{}] `json:"gsuite"`
 	IP                   param.Field[interface{}] `json:"ip"`
 	IPList               param.Field[interface{}] `json:"ip_list"`
+	LoginMethod          param.Field[interface{}] `json:"login_method"`
 	Okta                 param.Field[interface{}] `json:"okta"`
 	SAML                 param.Field[interface{}] `json:"saml"`
 	ServiceToken         param.Field[interface{}] `json:"service_token"`
@@ -668,9 +725,10 @@ func (r AccessRuleParam) implementsAccessRuleUnionParam() {}
 // [zero_trust.EmailListRuleParam], [zero_trust.EmailRuleParam],
 // [zero_trust.EveryoneRuleParam], [zero_trust.ExternalEvaluationRuleParam],
 // [zero_trust.GitHubOrganizationRuleParam], [zero_trust.GSuiteGroupRuleParam],
-// [zero_trust.IPListRuleParam], [zero_trust.IPRuleParam],
-// [zero_trust.OktaGroupRuleParam], [zero_trust.SAMLGroupRuleParam],
-// [zero_trust.ServiceTokenRuleParam], [AccessRuleParam].
+// [zero_trust.AccessRuleAccessLoginMethodRuleParam], [zero_trust.IPListRuleParam],
+// [zero_trust.IPRuleParam], [zero_trust.OktaGroupRuleParam],
+// [zero_trust.SAMLGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
+// [AccessRuleParam].
 type AccessRuleUnionParam interface {
 	implementsAccessRuleUnionParam()
 }
@@ -716,6 +774,26 @@ type AccessRuleAccessCommonNameRuleCommonNameParam struct {
 }
 
 func (r AccessRuleAccessCommonNameRuleCommonNameParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches a specific identity provider id.
+type AccessRuleAccessLoginMethodRuleParam struct {
+	LoginMethod param.Field[AccessRuleAccessLoginMethodRuleLoginMethodParam] `json:"login_method,required"`
+}
+
+func (r AccessRuleAccessLoginMethodRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessLoginMethodRuleParam) implementsAccessRuleUnionParam() {}
+
+type AccessRuleAccessLoginMethodRuleLoginMethodParam struct {
+	// The ID of an identity provider.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r AccessRuleAccessLoginMethodRuleLoginMethodParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

@@ -36,11 +36,13 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 		Policies: cloudflare.F([]shared.TokenPolicyParam{{
 			Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
 			PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
+				ID: cloudflare.F("c8fed203ed3043cba015a93ad1616f1f"),
 				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 					Key:   cloudflare.F("key"),
 					Value: cloudflare.F("value"),
 				}),
 			}, {
+				ID: cloudflare.F("82e64a83756745bbbb1c9c2701bf816b"),
 				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 					Key:   cloudflare.F("key"),
 					Value: cloudflare.F("value"),
@@ -101,11 +103,13 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 				Policies: cloudflare.F([]shared.TokenPolicyParam{{
 					Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
 					PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
+						ID: cloudflare.F("c8fed203ed3043cba015a93ad1616f1f"),
 						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 							Key:   cloudflare.F("key"),
 							Value: cloudflare.F("value"),
 						}),
 					}, {
+						ID: cloudflare.F("82e64a83756745bbbb1c9c2701bf816b"),
 						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 							Key:   cloudflare.F("key"),
 							Value: cloudflare.F("value"),

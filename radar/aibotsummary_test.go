@@ -37,7 +37,7 @@ func TestAIBotSummaryUserAgentWithOptionalParams(t *testing.T) {
 		Format:        cloudflare.F(radar.AIBotSummaryUserAgentParamsFormatJson),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
-		Name:          cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

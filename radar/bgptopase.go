@@ -34,8 +34,7 @@ func NewBGPTopAseService(opts ...option.RequestOption) (r *BGPTopAseService) {
 	return
 }
 
-// Get the top autonomous systems (ASes) by BGP updates (announcements only).
-// Values are a percentage out of the total updates.
+// Retrieves the top autonomous systems by BGP updates (announcements only).
 func (r *BGPTopAseService) Get(ctx context.Context, query BGPTopAseGetParams, opts ...option.RequestOption) (res *BGPTopAseGetResponse, err error) {
 	var env BGPTopAseGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -48,9 +47,9 @@ func (r *BGPTopAseService) Get(ctx context.Context, query BGPTopAseGetParams, op
 	return
 }
 
-// Get the full list of autonomous systems on the global routing table ordered by
-// announced prefixes count. The data comes from public BGP MRT data archives and
-// updates every 2 hours.
+// Retrieves the full list of autonomous systems on the global routing table
+// ordered by announced prefixes count. The data comes from public BGP MRT data
+// archives and updates every 2 hours.
 func (r *BGPTopAseService) Prefixes(ctx context.Context, query BGPTopAsePrefixesParams, opts ...option.RequestOption) (res *BGPTopAsePrefixesResponse, err error) {
 	var env BGPTopAsePrefixesResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -235,23 +234,23 @@ func (r bgpTopAsePrefixesResponseMetaJSON) RawJSON() string {
 }
 
 type BGPTopAseGetParams struct {
-	// Array of comma separated list of ASNs, start with `-` to exclude from results.
-	// For example, `-174, 3356` excludes results from AS174, but includes results from
-	// AS3356.
+	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
+	// exclude ASNs from results. For example, `-174, 3356` excludes results from
+	// AS174, but includes results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// For example, use `7d` and `7dControl` to compare this week with the previous
-	// week. Use this parameter or set specific start and end dates (`dateStart` and
-	// `dateEnd` parameters).
+	// Filters results by the specified date range. For example, use `7d` and
+	// `7dcontrol` to compare this week with the previous week. Use this parameter or
+	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Array of datetimes to filter the start of a series.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[BGPTopAseGetParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of names that will be used to name the series in responses.
+	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Array of BGP network prefixes.
 	Prefix param.Field[[]string] `query:"prefix"`
@@ -267,7 +266,7 @@ func (r BGPTopAseGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type BGPTopAseGetParamsFormat string
 
 const (
@@ -324,9 +323,9 @@ func (r bgpTopAseGetResponseEnvelopeJSON) RawJSON() string {
 type BGPTopAsePrefixesParams struct {
 	// Alpha-2 country code.
 	Country param.Field[string] `query:"country"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[BGPTopAsePrefixesParamsFormat] `query:"format"`
-	// Maximum number of ASes to return
+	// Maximum number of ASes to return.
 	Limit param.Field[int64] `query:"limit"`
 }
 
@@ -339,7 +338,7 @@ func (r BGPTopAsePrefixesParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type BGPTopAsePrefixesParamsFormat string
 
 const (

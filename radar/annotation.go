@@ -36,7 +36,7 @@ func NewAnnotationService(opts ...option.RequestOption) (r *AnnotationService) {
 	return
 }
 
-// Get the latest annotations.
+// Retrieves the latest annotations.
 func (r *AnnotationService) List(ctx context.Context, query AnnotationListParams, opts ...option.RequestOption) (res *AnnotationListResponse, err error) {
 	var env AnnotationListResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -210,7 +210,7 @@ func (r annotationListResponseAnnotationsOutageJSON) RawJSON() string {
 }
 
 type AnnotationListParams struct {
-	// Single ASN as integer.
+	// Single Autonomous System Number (ASN) as integer.
 	ASN param.Field[int64] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
@@ -219,13 +219,13 @@ type AnnotationListParams struct {
 	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
-	// Format results are returned in.
+	// Format in which results will be returned.
 	Format param.Field[AnnotationListParamsFormat] `query:"format"`
-	// Limit the number of objects in the response.
+	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Location Alpha2 code.
+	// Location alpha-2 code.
 	Location param.Field[string] `query:"location"`
-	// Number of objects to skip before grabbing results.
+	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`
 }
 
@@ -237,7 +237,7 @@ func (r AnnotationListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Format results are returned in.
+// Format in which results will be returned.
 type AnnotationListParamsFormat string
 
 const (

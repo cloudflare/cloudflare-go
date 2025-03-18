@@ -30,6 +30,7 @@ type AIGatewayService struct {
 	Logs            *LogService
 	Datasets        *DatasetService
 	Evaluations     *EvaluationService
+	URLs            *URLService
 }
 
 // NewAIGatewayService generates a new service that applies the given options to
@@ -42,6 +43,7 @@ func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 	r.Logs = NewLogService(opts...)
 	r.Datasets = NewDatasetService(opts...)
 	r.Evaluations = NewEvaluationService(opts...)
+	r.URLs = NewURLService(opts...)
 	return
 }
 
@@ -168,6 +170,7 @@ type AIGatewayNewResponse struct {
 	RateLimitingTechnique   AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                      `json:"authentication"`
 	LogManagement           int64                                     `json:"log_management,nullable"`
+	LogManagementStrategy   AIGatewayNewResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayNewResponseJSON                  `json:"-"`
@@ -190,6 +193,7 @@ type aiGatewayNewResponseJSON struct {
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	LogManagement           apijson.Field
+	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	raw                     string
@@ -219,6 +223,21 @@ func (r AIGatewayNewResponseRateLimitingTechnique) IsKnown() bool {
 	return false
 }
 
+type AIGatewayNewResponseLogManagementStrategy string
+
+const (
+	AIGatewayNewResponseLogManagementStrategyStopInserting AIGatewayNewResponseLogManagementStrategy = "STOP_INSERTING"
+	AIGatewayNewResponseLogManagementStrategyDeleteOldest  AIGatewayNewResponseLogManagementStrategy = "DELETE_OLDEST"
+)
+
+func (r AIGatewayNewResponseLogManagementStrategy) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseLogManagementStrategyStopInserting, AIGatewayNewResponseLogManagementStrategyDeleteOldest:
+		return true
+	}
+	return false
+}
+
 type AIGatewayUpdateResponse struct {
 	// gateway id
 	ID                      string                                       `json:"id,required"`
@@ -235,6 +254,7 @@ type AIGatewayUpdateResponse struct {
 	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                         `json:"authentication"`
 	LogManagement           int64                                        `json:"log_management,nullable"`
+	LogManagementStrategy   AIGatewayUpdateResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayUpdateResponseJSON                  `json:"-"`
@@ -257,6 +277,7 @@ type aiGatewayUpdateResponseJSON struct {
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	LogManagement           apijson.Field
+	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	raw                     string
@@ -286,6 +307,21 @@ func (r AIGatewayUpdateResponseRateLimitingTechnique) IsKnown() bool {
 	return false
 }
 
+type AIGatewayUpdateResponseLogManagementStrategy string
+
+const (
+	AIGatewayUpdateResponseLogManagementStrategyStopInserting AIGatewayUpdateResponseLogManagementStrategy = "STOP_INSERTING"
+	AIGatewayUpdateResponseLogManagementStrategyDeleteOldest  AIGatewayUpdateResponseLogManagementStrategy = "DELETE_OLDEST"
+)
+
+func (r AIGatewayUpdateResponseLogManagementStrategy) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseLogManagementStrategyStopInserting, AIGatewayUpdateResponseLogManagementStrategyDeleteOldest:
+		return true
+	}
+	return false
+}
+
 type AIGatewayListResponse struct {
 	// gateway id
 	ID                      string                                     `json:"id,required"`
@@ -302,6 +338,7 @@ type AIGatewayListResponse struct {
 	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                       `json:"authentication"`
 	LogManagement           int64                                      `json:"log_management,nullable"`
+	LogManagementStrategy   AIGatewayListResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                       `json:"logpush"`
 	LogpushPublicKey        string                                     `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayListResponseJSON                  `json:"-"`
@@ -324,6 +361,7 @@ type aiGatewayListResponseJSON struct {
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	LogManagement           apijson.Field
+	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	raw                     string
@@ -353,6 +391,21 @@ func (r AIGatewayListResponseRateLimitingTechnique) IsKnown() bool {
 	return false
 }
 
+type AIGatewayListResponseLogManagementStrategy string
+
+const (
+	AIGatewayListResponseLogManagementStrategyStopInserting AIGatewayListResponseLogManagementStrategy = "STOP_INSERTING"
+	AIGatewayListResponseLogManagementStrategyDeleteOldest  AIGatewayListResponseLogManagementStrategy = "DELETE_OLDEST"
+)
+
+func (r AIGatewayListResponseLogManagementStrategy) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseLogManagementStrategyStopInserting, AIGatewayListResponseLogManagementStrategyDeleteOldest:
+		return true
+	}
+	return false
+}
+
 type AIGatewayDeleteResponse struct {
 	// gateway id
 	ID                      string                                       `json:"id,required"`
@@ -369,6 +422,7 @@ type AIGatewayDeleteResponse struct {
 	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                         `json:"authentication"`
 	LogManagement           int64                                        `json:"log_management,nullable"`
+	LogManagementStrategy   AIGatewayDeleteResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayDeleteResponseJSON                  `json:"-"`
@@ -391,6 +445,7 @@ type aiGatewayDeleteResponseJSON struct {
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	LogManagement           apijson.Field
+	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	raw                     string
@@ -420,6 +475,21 @@ func (r AIGatewayDeleteResponseRateLimitingTechnique) IsKnown() bool {
 	return false
 }
 
+type AIGatewayDeleteResponseLogManagementStrategy string
+
+const (
+	AIGatewayDeleteResponseLogManagementStrategyStopInserting AIGatewayDeleteResponseLogManagementStrategy = "STOP_INSERTING"
+	AIGatewayDeleteResponseLogManagementStrategyDeleteOldest  AIGatewayDeleteResponseLogManagementStrategy = "DELETE_OLDEST"
+)
+
+func (r AIGatewayDeleteResponseLogManagementStrategy) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseLogManagementStrategyStopInserting, AIGatewayDeleteResponseLogManagementStrategyDeleteOldest:
+		return true
+	}
+	return false
+}
+
 type AIGatewayGetResponse struct {
 	// gateway id
 	ID                      string                                    `json:"id,required"`
@@ -436,6 +506,7 @@ type AIGatewayGetResponse struct {
 	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                      `json:"authentication"`
 	LogManagement           int64                                     `json:"log_management,nullable"`
+	LogManagementStrategy   AIGatewayGetResponseLogManagementStrategy `json:"log_management_strategy,nullable"`
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayGetResponseJSON                  `json:"-"`
@@ -458,6 +529,7 @@ type aiGatewayGetResponseJSON struct {
 	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	LogManagement           apijson.Field
+	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	raw                     string
@@ -487,6 +559,21 @@ func (r AIGatewayGetResponseRateLimitingTechnique) IsKnown() bool {
 	return false
 }
 
+type AIGatewayGetResponseLogManagementStrategy string
+
+const (
+	AIGatewayGetResponseLogManagementStrategyStopInserting AIGatewayGetResponseLogManagementStrategy = "STOP_INSERTING"
+	AIGatewayGetResponseLogManagementStrategyDeleteOldest  AIGatewayGetResponseLogManagementStrategy = "DELETE_OLDEST"
+)
+
+func (r AIGatewayGetResponseLogManagementStrategy) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseLogManagementStrategyStopInserting, AIGatewayGetResponseLogManagementStrategyDeleteOldest:
+		return true
+	}
+	return false
+}
+
 type AIGatewayNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// gateway id
@@ -499,6 +586,7 @@ type AIGatewayNewParams struct {
 	RateLimitingTechnique   param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 	Authentication          param.Field[bool]                                    `json:"authentication"`
 	LogManagement           param.Field[int64]                                   `json:"log_management"`
+	LogManagementStrategy   param.Field[AIGatewayNewParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                    `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                  `json:"logpush_public_key"`
 }
@@ -517,6 +605,21 @@ const (
 func (r AIGatewayNewParamsRateLimitingTechnique) IsKnown() bool {
 	switch r {
 	case AIGatewayNewParamsRateLimitingTechniqueFixed, AIGatewayNewParamsRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsLogManagementStrategy string
+
+const (
+	AIGatewayNewParamsLogManagementStrategyStopInserting AIGatewayNewParamsLogManagementStrategy = "STOP_INSERTING"
+	AIGatewayNewParamsLogManagementStrategyDeleteOldest  AIGatewayNewParamsLogManagementStrategy = "DELETE_OLDEST"
+)
+
+func (r AIGatewayNewParamsLogManagementStrategy) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsLogManagementStrategyStopInserting, AIGatewayNewParamsLogManagementStrategyDeleteOldest:
 		return true
 	}
 	return false
@@ -555,6 +658,7 @@ type AIGatewayUpdateParams struct {
 	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 	Authentication          param.Field[bool]                                       `json:"authentication"`
 	LogManagement           param.Field[int64]                                      `json:"log_management"`
+	LogManagementStrategy   param.Field[AIGatewayUpdateParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                       `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                     `json:"logpush_public_key"`
 }
@@ -573,6 +677,21 @@ const (
 func (r AIGatewayUpdateParamsRateLimitingTechnique) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateParamsRateLimitingTechniqueFixed, AIGatewayUpdateParamsRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateParamsLogManagementStrategy string
+
+const (
+	AIGatewayUpdateParamsLogManagementStrategyStopInserting AIGatewayUpdateParamsLogManagementStrategy = "STOP_INSERTING"
+	AIGatewayUpdateParamsLogManagementStrategyDeleteOldest  AIGatewayUpdateParamsLogManagementStrategy = "DELETE_OLDEST"
+)
+
+func (r AIGatewayUpdateParamsLogManagementStrategy) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsLogManagementStrategyStopInserting, AIGatewayUpdateParamsLogManagementStrategyDeleteOldest:
 		return true
 	}
 	return false

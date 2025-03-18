@@ -118,7 +118,8 @@ func (r *DLPProfileCustomService) Get(ctx context.Context, profileID string, que
 }
 
 type Pattern struct {
-	Regex      string            `json:"regex,required"`
+	Regex string `json:"regex,required"`
+	// Deprecated: deprecated
 	Validation PatternValidation `json:"validation"`
 	JSON       patternJSON       `json:"-"`
 }
@@ -154,7 +155,8 @@ func (r PatternValidation) IsKnown() bool {
 }
 
 type PatternParam struct {
-	Regex      param.Field[string]            `json:"regex,required"`
+	Regex param.Field[string] `json:"regex,required"`
+	// Deprecated: deprecated
 	Validation param.Field[PatternValidation] `json:"validation"`
 }
 
@@ -210,6 +212,7 @@ type DLPProfileCustomNewResponseCustomProfile struct {
 	Type       DLPProfileCustomNewResponseCustomProfileType `json:"type,required"`
 	// When the profile was lasted updated
 	UpdatedAt           time.Time                                                   `json:"updated_at,required" format:"date-time"`
+	AIContextEnabled    bool                                                        `json:"ai_context_enabled"`
 	ConfidenceThreshold DLPProfileCustomNewResponseCustomProfileConfidenceThreshold `json:"confidence_threshold"`
 	// The description of the profile
 	Description string                                       `json:"description,nullable"`
@@ -228,6 +231,7 @@ type dlpProfileCustomNewResponseCustomProfileJSON struct {
 	OCREnabled          apijson.Field
 	Type                apijson.Field
 	UpdatedAt           apijson.Field
+	AIContextEnabled    apijson.Field
 	ConfidenceThreshold apijson.Field
 	Description         apijson.Field
 	raw                 string
@@ -433,9 +437,10 @@ func (r DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntry) implemen
 }
 
 type DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry can be made more or less sensitive by setting a
-	// confidence threshold. Profiles that use an entry with `available` set to true
-	// can use confidence thresholds
+	// Indicates whether this entry has AI remote service validation
+	AIContextAvailable bool `json:"ai_context_available,required"`
+	// Indicates whether this entry has any form of validation that is not an AI remote
+	// service
 	Available bool                                                                         `json:"available,required"`
 	JSON      dlpProfileCustomNewResponseCustomProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -444,9 +449,10 @@ type DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntryConfidence st
 // contains the JSON metadata for the struct
 // [DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntryConfidence]
 type dlpProfileCustomNewResponseCustomProfileEntriesPredefinedEntryConfidenceJSON struct {
-	Available   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AIContextAvailable apijson.Field
+	Available          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
@@ -683,6 +689,7 @@ type DLPProfileCustomNewResponsePredefinedProfile struct {
 	// The name of the predefined profile
 	Name                string                                                          `json:"name,required"`
 	Type                DLPProfileCustomNewResponsePredefinedProfileType                `json:"type,required"`
+	AIContextEnabled    bool                                                            `json:"ai_context_enabled"`
 	ConfidenceThreshold DLPProfileCustomNewResponsePredefinedProfileConfidenceThreshold `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
@@ -701,6 +708,7 @@ type dlpProfileCustomNewResponsePredefinedProfileJSON struct {
 	Entries             apijson.Field
 	Name                apijson.Field
 	Type                apijson.Field
+	AIContextEnabled    apijson.Field
 	ConfidenceThreshold apijson.Field
 	ContextAwareness    apijson.Field
 	OCREnabled          apijson.Field
@@ -909,9 +917,10 @@ func (r DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntry) impl
 }
 
 type DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry can be made more or less sensitive by setting a
-	// confidence threshold. Profiles that use an entry with `available` set to true
-	// can use confidence thresholds
+	// Indicates whether this entry has AI remote service validation
+	AIContextAvailable bool `json:"ai_context_available,required"`
+	// Indicates whether this entry has any form of validation that is not an AI remote
+	// service
 	Available bool                                                                             `json:"available,required"`
 	JSON      dlpProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -920,9 +929,10 @@ type DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntryConfidenc
 // contains the JSON metadata for the struct
 // [DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntryConfidence]
 type dlpProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntryConfidenceJSON struct {
-	Available   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AIContextAvailable apijson.Field
+	Available          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
@@ -1377,9 +1387,10 @@ func (r DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntry) imp
 }
 
 type DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry can be made more or less sensitive by setting a
-	// confidence threshold. Profiles that use an entry with `available` set to true
-	// can use confidence thresholds
+	// Indicates whether this entry has AI remote service validation
+	AIContextAvailable bool `json:"ai_context_available,required"`
+	// Indicates whether this entry has any form of validation that is not an AI remote
+	// service
 	Available bool                                                                              `json:"available,required"`
 	JSON      dlpProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -1388,9 +1399,10 @@ type DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntryConfiden
 // contains the JSON metadata for the struct
 // [DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntryConfidence]
 type dlpProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntryConfidenceJSON struct {
-	Available   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AIContextAvailable apijson.Field
+	Available          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
@@ -1618,6 +1630,7 @@ func (r DLPProfileCustomNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPProfileCustomNewParamsBody struct {
+	AIContextEnabled param.Field[bool] `json:"ai_context_enabled"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
 	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
@@ -1658,8 +1671,9 @@ func (r DLPProfileCustomNewParamsBodyProfiles) MarshalJSON() (data []byte, err e
 func (r DLPProfileCustomNewParamsBodyProfiles) implementsDLPProfileCustomNewParamsBodyUnion() {}
 
 type DLPProfileCustomNewParamsBodyProfilesProfile struct {
-	Entries param.Field[[]DLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion] `json:"entries,required"`
-	Name    param.Field[string]                                                    `json:"name,required"`
+	Entries          param.Field[[]DLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion] `json:"entries,required"`
+	Name             param.Field[string]                                                    `json:"name,required"`
+	AIContextEnabled param.Field[bool]                                                      `json:"ai_context_enabled"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
 	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
@@ -1794,8 +1808,9 @@ func (r DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesEntryType) IsK
 }
 
 type DLPProfileCustomNewParamsBodyDLPNewCustomProfile struct {
-	Entries param.Field[[]DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntryUnion] `json:"entries,required"`
-	Name    param.Field[string]                                                       `json:"name,required"`
+	Entries          param.Field[[]DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntryUnion] `json:"entries,required"`
+	Name             param.Field[string]                                                       `json:"name,required"`
+	AIContextEnabled param.Field[bool]                                                         `json:"ai_context_enabled"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
 	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
@@ -1978,6 +1993,7 @@ func (r DLPProfileCustomNewResponseEnvelopeSuccess) IsKnown() bool {
 type DLPProfileCustomUpdateParams struct {
 	AccountID           param.Field[string] `path:"account_id,required"`
 	Name                param.Field[string] `json:"name,required"`
+	AIContextEnabled    param.Field[bool]   `json:"ai_context_enabled"`
 	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
 	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
