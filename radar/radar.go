@@ -32,6 +32,7 @@ type RadarService struct {
 	TrafficAnomalies  *TrafficAnomalyService
 	TCPResetsTimeouts *TCPResetsTimeoutService
 	RobotsTXT         *RobotsTXTService
+	LeakedCredentials *LeakedCredentialService
 }
 
 // NewRadarService generates a new service that applies the given options to each
@@ -58,5 +59,6 @@ func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r.TrafficAnomalies = NewTrafficAnomalyService(opts...)
 	r.TCPResetsTimeouts = NewTCPResetsTimeoutService(opts...)
 	r.RobotsTXT = NewRobotsTXTService(opts...)
+	r.LeakedCredentials = NewLeakedCredentialService(opts...)
 	return
 }
