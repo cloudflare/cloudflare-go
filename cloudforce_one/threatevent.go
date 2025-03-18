@@ -58,7 +58,10 @@ func NewThreatEventService(opts ...option.RequestOption) (r *ThreatEventService)
 	return
 }
 
-// Creates a new event
+// Events must be created in a client-specific dataset, which means the `datasetId`
+// parameter must be defined. To create a dataset, see the
+// [`Create Dataset`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/create/)
+// endpoint.
 func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParams, opts ...option.RequestOption) (res *ThreatEventNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if !params.PathAccountID.Present {
@@ -70,7 +73,10 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 	return
 }
 
-// Deletes an event
+// The `datasetId` parameter must be defined. To list existing datasets (and their
+// IDs) in your account, use the
+// [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list)
+// endpoint.
 func (r *ThreatEventService) Delete(ctx context.Context, eventID string, body ThreatEventDeleteParams, opts ...option.RequestOption) (res *ThreatEventDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if !body.AccountID.Present {
@@ -86,7 +92,10 @@ func (r *ThreatEventService) Delete(ctx context.Context, eventID string, body Th
 	return
 }
 
-// Creates bulk events
+// The `datasetId` parameter must be defined. To list existing datasets (and their
+// IDs) in your account, use the
+// [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list)
+// endpoint.
 func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulkNewParams, opts ...option.RequestOption) (res *[]ThreatEventBulkNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if !params.AccountID.Present {
