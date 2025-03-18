@@ -57,6 +57,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/load_balancers"
 	"github.com/cloudflare/cloudflare-go/v4/logpush"
 	"github.com/cloudflare/cloudflare-go/v4/logs"
+	"github.com/cloudflare/cloudflare-go/v4/magic_cloud_networking"
 	"github.com/cloudflare/cloudflare-go/v4/magic_network_monitoring"
 	"github.com/cloudflare/cloudflare-go/v4/magic_transit"
 	"github.com/cloudflare/cloudflare-go/v4/managed_transforms"
@@ -165,6 +166,7 @@ type Client struct {
 	Intel                       *intel.IntelService
 	MagicTransit                *magic_transit.MagicTransitService
 	MagicNetworkMonitoring      *magic_network_monitoring.MagicNetworkMonitoringService
+	MagicCloudNetworking        *magic_cloud_networking.MagicCloudNetworkingService
 	NetworkInterconnects        *network_interconnects.NetworkInterconnectService
 	MTLSCertificates            *mtls_certificates.MTLSCertificateService
 	Pages                       *pages.PageService
@@ -288,6 +290,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Intel = intel.NewIntelService(opts...)
 	r.MagicTransit = magic_transit.NewMagicTransitService(opts...)
 	r.MagicNetworkMonitoring = magic_network_monitoring.NewMagicNetworkMonitoringService(opts...)
+	r.MagicCloudNetworking = magic_cloud_networking.NewMagicCloudNetworkingService(opts...)
 	r.NetworkInterconnects = network_interconnects.NewNetworkInterconnectService(opts...)
 	r.MTLSCertificates = mtls_certificates.NewMTLSCertificateService(opts...)
 	r.Pages = pages.NewPageService(opts...)
