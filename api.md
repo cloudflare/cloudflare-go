@@ -7506,6 +7506,32 @@ Methods:
 
 - <code title="get /radar/robots_txt/top/user_agents/directive">client.Radar.RobotsTXT.Top.UserAgents.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#RobotsTXTTopUserAgentService.Directive">Directive</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#RobotsTXTTopUserAgentDirectiveParams">RobotsTXTTopUserAgentDirectiveParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#RobotsTXTTopUserAgentDirectiveResponse">RobotsTXTTopUserAgentDirectiveResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## LeakedCredentials
+
+### Summary
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialSummaryBotClassResponse">LeakedCredentialSummaryBotClassResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialSummaryCompromisedResponse">LeakedCredentialSummaryCompromisedResponse</a>
+
+Methods:
+
+- <code title="get /radar/leaked_credential_checks/summary/bot_class">client.Radar.LeakedCredentials.Summary.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialSummaryService.BotClass">BotClass</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialSummaryBotClassParams">LeakedCredentialSummaryBotClassParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialSummaryBotClassResponse">LeakedCredentialSummaryBotClassResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /radar/leaked_credential_checks/summary/compromised">client.Radar.LeakedCredentials.Summary.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialSummaryService.Compromised">Compromised</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialSummaryCompromisedParams">LeakedCredentialSummaryCompromisedParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialSummaryCompromisedResponse">LeakedCredentialSummaryCompromisedResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### TimeseriesGroups
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialTimeseriesGroupBotClassResponse">LeakedCredentialTimeseriesGroupBotClassResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialTimeseriesGroupCompromisedResponse">LeakedCredentialTimeseriesGroupCompromisedResponse</a>
+
+Methods:
+
+- <code title="get /radar/leaked_credential_checks/timeseries_groups/bot_class">client.Radar.LeakedCredentials.TimeseriesGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialTimeseriesGroupService.BotClass">BotClass</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialTimeseriesGroupBotClassParams">LeakedCredentialTimeseriesGroupBotClassParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialTimeseriesGroupBotClassResponse">LeakedCredentialTimeseriesGroupBotClassResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /radar/leaked_credential_checks/timeseries_groups/compromised">client.Radar.LeakedCredentials.TimeseriesGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialTimeseriesGroupService.Compromised">Compromised</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialTimeseriesGroupCompromisedParams">LeakedCredentialTimeseriesGroupCompromisedParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/radar#LeakedCredentialTimeseriesGroupCompromisedResponse">LeakedCredentialTimeseriesGroupCompromisedResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # BotManagement
 
 Params Types:
