@@ -251,6 +251,8 @@ func (r MechanismEmailParam) MarshalJSON() (data []byte, err error) {
 }
 
 type MechanismPagerdutyParam struct {
+	// UUID
+	ID param.Field[string] `json:"id"`
 }
 
 func (r MechanismPagerdutyParam) MarshalJSON() (data []byte, err error) {
@@ -258,6 +260,8 @@ func (r MechanismPagerdutyParam) MarshalJSON() (data []byte, err error) {
 }
 
 type MechanismWebhookParam struct {
+	// UUID
+	ID param.Field[string] `json:"id"`
 }
 
 func (r MechanismWebhookParam) MarshalJSON() (data []byte, err error) {
