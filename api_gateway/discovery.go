@@ -125,21 +125,19 @@ func (r DiscoveryOperationMethod) IsKnown() bool {
 	return false
 }
 
-//   - `ML` - Discovered operation was sourced using ML API Discovery _
+//   - `ML` - Discovered operation was sourced using ML API Discovery \*
 //     `SessionIdentifier` - Discovered operation was sourced using Session
-//     Identifier API Discovery _ `LabelDiscovery` - Discovered operation was
-//     identified to have a specific label
+//     Identifier API Discovery
 type DiscoveryOperationOrigin string
 
 const (
 	DiscoveryOperationOriginMl                DiscoveryOperationOrigin = "ML"
 	DiscoveryOperationOriginSessionIdentifier DiscoveryOperationOrigin = "SessionIdentifier"
-	DiscoveryOperationOriginLabelDiscovery    DiscoveryOperationOrigin = "LabelDiscovery"
 )
 
 func (r DiscoveryOperationOrigin) IsKnown() bool {
 	switch r {
-	case DiscoveryOperationOriginMl, DiscoveryOperationOriginSessionIdentifier, DiscoveryOperationOriginLabelDiscovery:
+	case DiscoveryOperationOriginMl, DiscoveryOperationOriginSessionIdentifier:
 		return true
 	}
 	return false
