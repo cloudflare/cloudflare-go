@@ -288,11 +288,12 @@ type DiscoveryOperationListParamsOrigin string
 const (
 	DiscoveryOperationListParamsOriginMl                DiscoveryOperationListParamsOrigin = "ML"
 	DiscoveryOperationListParamsOriginSessionIdentifier DiscoveryOperationListParamsOrigin = "SessionIdentifier"
+	DiscoveryOperationListParamsOriginLabelDiscovery    DiscoveryOperationListParamsOrigin = "LabelDiscovery"
 )
 
 func (r DiscoveryOperationListParamsOrigin) IsKnown() bool {
 	switch r {
-	case DiscoveryOperationListParamsOriginMl, DiscoveryOperationListParamsOriginSessionIdentifier:
+	case DiscoveryOperationListParamsOriginMl, DiscoveryOperationListParamsOriginSessionIdentifier, DiscoveryOperationListParamsOriginLabelDiscovery:
 		return true
 	}
 	return false

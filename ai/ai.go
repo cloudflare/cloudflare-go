@@ -80,7 +80,8 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 // [ai.AIRunResponseAutomaticSpeechRecognition],
 // [ai.AIRunResponseImageClassification], [ai.AIRunResponseObjectDetection],
 // [ai.AIRunResponseObject], [ai.AIRunResponseTranslation],
-// [ai.AIRunResponseSummarization] or [ai.AIRunResponseImageToText].
+// [ai.AIRunResponseSummarization], [ai.AIRunResponseImageToText] or
+// [ai.AIRunResponseImageTextToText].
 type AIRunResponseUnion interface {
 	ImplementsAIRunResponseUnion()
 }
@@ -132,6 +133,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AIRunResponseImageToText{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIRunResponseImageTextToText{}),
 		},
 	)
 }
@@ -369,7 +374,7 @@ func (r aiRunResponseObjectDetectionBoxJSON) RawJSON() string {
 
 type AIRunResponseObject struct {
 	// The generated text response from the model
-	Response string `json:"response"`
+	Response string `json:"response,required"`
 	// An array of tool calls requests made during the response generation
 	ToolCalls []AIRunResponseObjectToolCall `json:"tool_calls"`
 	// Usage statistics for the inference request
@@ -522,6 +527,29 @@ func (r aiRunResponseImageToTextJSON) RawJSON() string {
 
 func (r AIRunResponseImageToText) ImplementsAIRunResponseUnion() {}
 
+type AIRunResponseImageTextToText struct {
+	Description string                           `json:"description"`
+	JSON        aiRunResponseImageTextToTextJSON `json:"-"`
+}
+
+// aiRunResponseImageTextToTextJSON contains the JSON metadata for the struct
+// [AIRunResponseImageTextToText]
+type aiRunResponseImageTextToTextJSON struct {
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIRunResponseImageTextToText) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseImageTextToTextJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIRunResponseImageTextToText) ImplementsAIRunResponseUnion() {}
+
 type AIRunParams struct {
 	AccountID param.Field[string]  `path:"account_id,required"`
 	Body      AIRunParamsBodyUnion `json:"body"`
@@ -540,8 +568,11 @@ type AIRunParamsBody struct {
 	// values make the image more aligned with the prompt
 	Guidance param.Field[float64] `json:"guidance"`
 	// The height of the generated image in pixels
-	Height param.Field[int64]       `json:"height"`
-	Image  param.Field[interface{}] `json:"image"`
+	Height param.Field[int64] `json:"height"`
+	// Whether to ignore the EOS token and continue generating tokens after the EOS
+	// token is generated.
+	IgnoreEos param.Field[bool]        `json:"ignore_eos"`
+	Image     param.Field[interface{}] `json:"image"`
 	// For use with img2img tasks. A base64-encoded string of the input image
 	ImageB64 param.Field[string] `json:"image_b64"`
 	// The text that you want the model to summarize
@@ -610,7 +641,8 @@ func (r AIRunParamsBody) implementsAIRunParamsBodyUnion() {}
 // [ai.AIRunParamsBodyImageClassification], [ai.AIRunParamsBodyObjectDetection],
 // [ai.AIRunParamsBodyPrompt], [ai.AIRunParamsBodyMessages],
 // [ai.AIRunParamsBodyTranslation], [ai.AIRunParamsBodySummarization],
-// [ai.AIRunParamsBodyImageToText], [AIRunParamsBody].
+// [ai.AIRunParamsBodyImageToText], [ai.AIRunParamsBodyObject],
+// [ai.AIRunParamsBodyObject], [AIRunParamsBody].
 type AIRunParamsBodyUnion interface {
 	implementsAIRunParamsBodyUnion()
 }
@@ -662,7 +694,7 @@ func (r AIRunParamsBodyTextToImage) MarshalJSON() (data []byte, err error) {
 func (r AIRunParamsBodyTextToImage) implementsAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTextToSpeech struct {
-	// A text description of the image you want to generate
+	// A text description of the audio you want to generate
 	Prompt param.Field[string] `json:"prompt,required"`
 	// The speech language (e.g., 'en' for English, 'fr' for French). Defaults to 'en'
 	// if not specified
@@ -813,12 +845,16 @@ type AIRunParamsBodyMessages struct {
 	MaxTokens param.Field[int64] `json:"max_tokens"`
 	// Increases the likelihood of the model introducing new topics.
 	PresencePenalty param.Field[float64] `json:"presence_penalty"`
+	// If true, a chat template is not applied and you must adhere to the specific
+	// model's expected formatting.
+	Raw param.Field[bool] `json:"raw"`
 	// Penalty for repeated tokens; higher values discourage repetition.
 	RepetitionPenalty param.Field[float64]                               `json:"repetition_penalty"`
 	ResponseFormat    param.Field[AIRunParamsBodyMessagesResponseFormat] `json:"response_format"`
 	// Random seed for reproducibility of the generation.
 	Seed param.Field[int64] `json:"seed"`
-	// If true, the response will be streamed back incrementally.
+	// If true, the response will be streamed back incrementally using SSE, Server Sent
+	// Events.
 	Stream param.Field[bool] `json:"stream"`
 	// Controls the randomness of the output; higher values produce more random
 	// results.
@@ -829,7 +865,7 @@ type AIRunParamsBodyMessages struct {
 	// responses more focused; higher values introduce more variety and potential
 	// surprises.
 	TopK param.Field[int64] `json:"top_k"`
-	// Controls the creativity of the AI's responses by adjusting how many possible
+	// Adjusts the creativity of the AI's responses by controlling how many possible
 	// words it considers. Lower values make outputs more predictable; higher values
 	// allow for more varied and creative responses.
 	TopP param.Field[float64] `json:"top_p"`
@@ -1014,6 +1050,43 @@ func (r AIRunParamsBodyImageToText) MarshalJSON() (data []byte, err error) {
 }
 
 func (r AIRunParamsBodyImageToText) implementsAIRunParamsBodyUnion() {}
+
+type AIRunParamsBodyObject struct {
+	// Image in base64 encoded format.
+	Image param.Field[string] `json:"image,required"`
+	// The input text prompt for the model to generate a response.
+	Prompt param.Field[string] `json:"prompt,required"`
+	// Decreases the likelihood of the model repeating the same lines verbatim.
+	FrequencyPenalty param.Field[float64] `json:"frequency_penalty"`
+	// Whether to ignore the EOS token and continue generating tokens after the EOS
+	// token is generated.
+	IgnoreEos param.Field[bool] `json:"ignore_eos"`
+	// The maximum number of tokens to generate in the response.
+	MaxTokens param.Field[int64] `json:"max_tokens"`
+	// Increases the likelihood of the model introducing new topics.
+	PresencePenalty param.Field[float64] `json:"presence_penalty"`
+	// Penalty for repeated tokens; higher values discourage repetition.
+	RepetitionPenalty param.Field[float64] `json:"repetition_penalty"`
+	// Random seed for reproducibility of the generation.
+	Seed param.Field[float64] `json:"seed"`
+	// Controls the randomness of the output; higher values produce more random
+	// results.
+	Temperature param.Field[float64] `json:"temperature"`
+	// Limits the AI to choose from the top 'k' most probable words. Lower values make
+	// responses more focused; higher values introduce more variety and potential
+	// surprises.
+	TopK param.Field[float64] `json:"top_k"`
+	// Controls the creativity of the AI's responses by adjusting how many possible
+	// words it considers. Lower values make outputs more predictable; higher values
+	// allow for more varied and creative responses.
+	TopP param.Field[float64] `json:"top_p"`
+}
+
+func (r AIRunParamsBodyObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsBodyObject) implementsAIRunParamsBodyUnion() {}
 
 type AIRunResponseEnvelope struct {
 	// An array of classification results for the input text

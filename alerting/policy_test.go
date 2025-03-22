@@ -36,8 +36,12 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 			Email: cloudflare.F([]alerting.MechanismEmailParam{{
 				ID: cloudflare.F("test@example.com"),
 			}}),
-			Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{}}),
-			Webhooks:  cloudflare.F([]alerting.MechanismWebhookParam{{}}),
+			Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{
+				ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
+			}}),
+			Webhooks: cloudflare.F([]alerting.MechanismWebhookParam{{
+				ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
+			}}),
 		}),
 		Name:          cloudflare.F("SSL Notification Event Policy"),
 		AlertInterval: cloudflare.F("30m"),
@@ -167,8 +171,12 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 				Email: cloudflare.F([]alerting.MechanismEmailParam{{
 					ID: cloudflare.F("test@example.com"),
 				}}),
-				Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{}}),
-				Webhooks:  cloudflare.F([]alerting.MechanismWebhookParam{{}}),
+				Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{
+					ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
+				}}),
+				Webhooks: cloudflare.F([]alerting.MechanismWebhookParam{{
+					ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
+				}}),
 			}),
 			Name: cloudflare.F("SSL Notification Event Policy"),
 		},

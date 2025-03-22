@@ -38,6 +38,8 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 			Metadata: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadata{
 				Assets: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssets{
 					Config: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig{
+						Headers:          cloudflare.F("/dashboard/*\nX-Frame-Options: DENY\n\n/static/*\nAccess-Control-Allow-Origin: *"),
+						Redirects:        cloudflare.F("/foo /bar 301\n/news/* /blog/:splat"),
 						HTMLHandling:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
 						NotFoundHandling: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingNone),
 						RunWorkerFirst:   cloudflare.F(false),

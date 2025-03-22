@@ -382,11 +382,12 @@ const (
 	GatewayRuleActionEgress       GatewayRuleAction = "egress"
 	GatewayRuleActionResolve      GatewayRuleAction = "resolve"
 	GatewayRuleActionQuarantine   GatewayRuleAction = "quarantine"
+	GatewayRuleActionRedirect     GatewayRuleAction = "redirect"
 )
 
 func (r GatewayRuleAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionResolve, GatewayRuleActionQuarantine:
+	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionResolve, GatewayRuleActionQuarantine, GatewayRuleActionRedirect:
 		return true
 	}
 	return false
@@ -487,6 +488,8 @@ type RuleSetting struct {
 	PayloadLog RuleSettingPayloadLog `json:"payload_log"`
 	// Settings that apply to quarantine rules
 	Quarantine RuleSettingQuarantine `json:"quarantine"`
+	// Settings that apply to redirect rules
+	Redirect RuleSettingRedirect `json:"redirect"`
 	// Configure to forward the query to the internal DNS service, passing the
 	// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
 	// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
@@ -524,6 +527,7 @@ type ruleSettingJSON struct {
 	OverrideIPs                     apijson.Field
 	PayloadLog                      apijson.Field
 	Quarantine                      apijson.Field
+	Redirect                        apijson.Field
 	ResolveDNSInternally            apijson.Field
 	ResolveDNSThroughCloudflare     apijson.Field
 	UntrustedCERT                   apijson.Field
@@ -963,6 +967,33 @@ func (r RuleSettingQuarantineFileType) IsKnown() bool {
 	return false
 }
 
+// Settings that apply to redirect rules
+type RuleSettingRedirect struct {
+	// URI to which the user will be redirected
+	TargetURI string `json:"target_uri,required" format:"uri"`
+	// If true, the path and query parameters from the original request will be
+	// appended to target_uri
+	PreservePathAndQuery bool                    `json:"preserve_path_and_query"`
+	JSON                 ruleSettingRedirectJSON `json:"-"`
+}
+
+// ruleSettingRedirectJSON contains the JSON metadata for the struct
+// [RuleSettingRedirect]
+type ruleSettingRedirectJSON struct {
+	TargetURI            apijson.Field
+	PreservePathAndQuery apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RuleSettingRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleSettingRedirectJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure to forward the query to the internal DNS service, passing the
 // specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
 // or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
@@ -1108,6 +1139,8 @@ type RuleSettingParam struct {
 	PayloadLog param.Field[RuleSettingPayloadLogParam] `json:"payload_log"`
 	// Settings that apply to quarantine rules
 	Quarantine param.Field[RuleSettingQuarantineParam] `json:"quarantine"`
+	// Settings that apply to redirect rules
+	Redirect param.Field[RuleSettingRedirectParam] `json:"redirect"`
 	// Configure to forward the query to the internal DNS service, passing the
 	// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
 	// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
@@ -1264,6 +1297,19 @@ type RuleSettingQuarantineParam struct {
 }
 
 func (r RuleSettingQuarantineParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Settings that apply to redirect rules
+type RuleSettingRedirectParam struct {
+	// URI to which the user will be redirected
+	TargetURI param.Field[string] `json:"target_uri,required" format:"uri"`
+	// If true, the path and query parameters from the original request will be
+	// appended to target_uri
+	PreservePathAndQuery param.Field[bool] `json:"preserve_path_and_query"`
+}
+
+func (r RuleSettingRedirectParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1466,11 +1512,12 @@ const (
 	GatewayRuleNewParamsActionEgress       GatewayRuleNewParamsAction = "egress"
 	GatewayRuleNewParamsActionResolve      GatewayRuleNewParamsAction = "resolve"
 	GatewayRuleNewParamsActionQuarantine   GatewayRuleNewParamsAction = "quarantine"
+	GatewayRuleNewParamsActionRedirect     GatewayRuleNewParamsAction = "redirect"
 )
 
 func (r GatewayRuleNewParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionResolve, GatewayRuleNewParamsActionQuarantine:
+	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionResolve, GatewayRuleNewParamsActionQuarantine, GatewayRuleNewParamsActionRedirect:
 		return true
 	}
 	return false
@@ -1605,11 +1652,12 @@ const (
 	GatewayRuleUpdateParamsActionEgress       GatewayRuleUpdateParamsAction = "egress"
 	GatewayRuleUpdateParamsActionResolve      GatewayRuleUpdateParamsAction = "resolve"
 	GatewayRuleUpdateParamsActionQuarantine   GatewayRuleUpdateParamsAction = "quarantine"
+	GatewayRuleUpdateParamsActionRedirect     GatewayRuleUpdateParamsAction = "redirect"
 )
 
 func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionResolve, GatewayRuleUpdateParamsActionQuarantine:
+	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionResolve, GatewayRuleUpdateParamsActionQuarantine, GatewayRuleUpdateParamsActionRedirect:
 		return true
 	}
 	return false

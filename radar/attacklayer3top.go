@@ -52,7 +52,8 @@ func (r *AttackLayer3TopService) Attacks(ctx context.Context, query AttackLayer3
 	return
 }
 
-// Retrieves the top industries targeted by layer 3 attacks.
+// This endpoint is deprecated. To continue getting this data, switch to the
+// summary by industry endpoint.
 func (r *AttackLayer3TopService) Industry(ctx context.Context, query AttackLayer3TopIndustryParams, opts ...option.RequestOption) (res *AttackLayer3TopIndustryResponse, err error) {
 	var env AttackLayer3TopIndustryResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -65,7 +66,8 @@ func (r *AttackLayer3TopService) Industry(ctx context.Context, query AttackLayer
 	return
 }
 
-// Retrieves the top verticals targeted by layer 3 attacks.
+// This endpoint is deprecated. To continue getting this data, switch to the
+// summary by vertical endpoint.
 func (r *AttackLayer3TopService) Vertical(ctx context.Context, query AttackLayer3TopVerticalParams, opts ...option.RequestOption) (res *AttackLayer3TopVerticalResponse, err error) {
 	var env AttackLayer3TopVerticalResponseEnvelope
 	opts = append(r.Options[:], opts...)

@@ -83,33 +83,6 @@ func (r *CustomNameserverService) DeleteAutoPaging(ctx context.Context, customNS
 	return pagination.NewSinglePageAutoPager(r.Delete(ctx, customNSID, body, opts...))
 }
 
-// Get Eligible Zones for Account Custom Nameservers
-func (r *CustomNameserverService) Availabilty(ctx context.Context, query CustomNameserverAvailabiltyParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
-	var raw *http.Response
-	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/custom_ns/availability", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Get Eligible Zones for Account Custom Nameservers
-func (r *CustomNameserverService) AvailabiltyAutoPaging(ctx context.Context, query CustomNameserverAvailabiltyParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
-	return pagination.NewSinglePageAutoPager(r.Availabilty(ctx, query, opts...))
-}
-
 // List an account's custom nameservers.
 func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[CustomNameserver], err error) {
 	var raw *http.Response
@@ -290,11 +263,6 @@ func (r CustomNameserverNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type CustomNameserverDeleteParams struct {
-	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type CustomNameserverAvailabiltyParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

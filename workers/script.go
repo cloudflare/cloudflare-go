@@ -574,6 +574,12 @@ func (r ScriptUpdateParamsMetadataAssets) MarshalJSON() (data []byte, err error)
 
 // Configuration for assets within a Worker.
 type ScriptUpdateParamsMetadataAssetsConfig struct {
+	// The contents of a \_headers file (used to attach custom headers on asset
+	// responses)
+	Headers param.Field[string] `json:"_headers"`
+	// The contents of a \_redirects file (used to apply redirects or proxy paths ahead
+	// of asset serving)
+	Redirects param.Field[string] `json:"_redirects"`
 	// Determines the redirects and rewrites of requests for HTML content.
 	HTMLHandling param.Field[ScriptUpdateParamsMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
 	// Determines the response when a request does not match a static asset, and there

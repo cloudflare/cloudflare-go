@@ -37,8 +37,9 @@ func NewPrefixServiceBindingService(opts ...option.RequestOption) (r *PrefixServ
 
 // Creates a new Service Binding, routing traffic to IPs within the given CIDR to a
 // service running on Cloudflare's network. **Note:** This API may only be used on
-// prefixes currently configured with a Magic Transit service binding, and only
-// allows creating service bindings for the Cloudflare CDN or Cloudflare Spectrum.
+// prefixes currently configured with a Magic Transit/Cloudflare CDN/Cloudflare
+// Spectrum service binding, and only allows creating upgrade service bindings for
+// the Cloudflare CDN or Cloudflare Spectrum.
 func (r *PrefixServiceBindingService) New(ctx context.Context, prefixID string, params PrefixServiceBindingNewParams, opts ...option.RequestOption) (res *ServiceBinding, err error) {
 	var env PrefixServiceBindingNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
