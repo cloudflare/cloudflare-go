@@ -207,6 +207,8 @@ type Namespace struct {
 	ID string `json:"id,required"`
 	// A human-readable string name for a Namespace.
 	Title string `json:"title,required"`
+	// True if new beta namespace, with additional preview features.
+	Beta bool `json:"beta"`
 	// True if keys written on the URL will be URL-decoded before storing. For example,
 	// if set to "true", a key written on the URL as "%3F" will be stored as "?".
 	SupportsURLEncoding bool          `json:"supports_url_encoding"`
@@ -217,6 +219,7 @@ type Namespace struct {
 type namespaceJSON struct {
 	ID                  apijson.Field
 	Title               apijson.Field
+	Beta                apijson.Field
 	SupportsURLEncoding apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
