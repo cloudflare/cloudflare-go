@@ -83,6 +83,41 @@ func TestAttackLayer3SummaryDurationWithOptionalParams(t *testing.T) {
 	}
 }
 
+func TestAttackLayer3SummaryIndustryWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Radar.Attacks.Layer3.Summary.Industry(context.TODO(), radar.AttackLayer3SummaryIndustryParams{
+		Continent:     cloudflare.F([]string{"string"}),
+		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+		DateRange:     cloudflare.F([]string{"7d"}),
+		DateStart:     cloudflare.F([]time.Time{time.Now()}),
+		Direction:     cloudflare.F(radar.AttackLayer3SummaryIndustryParamsDirectionOrigin),
+		Format:        cloudflare.F(radar.AttackLayer3SummaryIndustryParamsFormatJson),
+		IPVersion:     cloudflare.F([]radar.AttackLayer3SummaryIndustryParamsIPVersion{radar.AttackLayer3SummaryIndustryParamsIPVersionIPv4}),
+		LimitPerGroup: cloudflare.F(int64(10)),
+		Location:      cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
+		Protocol:      cloudflare.F([]radar.AttackLayer3SummaryIndustryParamsProtocol{radar.AttackLayer3SummaryIndustryParamsProtocolUdp}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestAttackLayer3SummaryIPVersionWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -174,6 +209,41 @@ func TestAttackLayer3SummaryVectorWithOptionalParams(t *testing.T) {
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
 		Protocol:      cloudflare.F([]radar.AttackLayer3SummaryVectorParamsProtocol{radar.AttackLayer3SummaryVectorParamsProtocolUdp}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAttackLayer3SummaryVerticalWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Radar.Attacks.Layer3.Summary.Vertical(context.TODO(), radar.AttackLayer3SummaryVerticalParams{
+		Continent:     cloudflare.F([]string{"string"}),
+		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+		DateRange:     cloudflare.F([]string{"7d"}),
+		DateStart:     cloudflare.F([]time.Time{time.Now()}),
+		Direction:     cloudflare.F(radar.AttackLayer3SummaryVerticalParamsDirectionOrigin),
+		Format:        cloudflare.F(radar.AttackLayer3SummaryVerticalParamsFormatJson),
+		IPVersion:     cloudflare.F([]radar.AttackLayer3SummaryVerticalParamsIPVersion{radar.AttackLayer3SummaryVerticalParamsIPVersionIPv4}),
+		LimitPerGroup: cloudflare.F(int64(10)),
+		Location:      cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"main_series"}),
+		Protocol:      cloudflare.F([]radar.AttackLayer3SummaryVerticalParamsProtocol{radar.AttackLayer3SummaryVerticalParamsProtocolUdp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
