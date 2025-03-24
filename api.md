@@ -2411,16 +2411,6 @@ Methods:
 
 ### Analytics
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv#Components">Components</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv#Schema">Schema</a>
-
-Methods:
-
-- <code title="get /accounts/{account_id}/storage/analytics">client.KV.Namespaces.Analytics.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv#NamespaceAnalyticsService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv#NamespaceAnalyticsListParams">NamespaceAnalyticsListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv#Schema">Schema</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_id}/storage/analytics/stored">client.KV.Namespaces.Analytics.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv#NamespaceAnalyticsService.Stored">Stored</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv#NamespaceAnalyticsStoredParams">NamespaceAnalyticsStoredParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv">kv</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/kv#Components">Components</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Keys
 
 Response Types:
