@@ -100,6 +100,32 @@ func TestBGPRoutePfx2asWithOptionalParams(t *testing.T) {
 	}
 }
 
+func TestBGPRouteRealtimeWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Radar.BGP.Routes.Realtime(context.TODO(), radar.BGPRouteRealtimeParams{
+		Format: cloudflare.F(radar.BGPRouteRealtimeParamsFormatJson),
+		Prefix: cloudflare.F("1.1.1.0/24"),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestBGPRouteStatsWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

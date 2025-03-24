@@ -72,6 +72,20 @@ func (r *BGPRouteService) Pfx2as(ctx context.Context, query BGPRoutePfx2asParams
 	return
 }
 
+// Retrieves realtime routes for prefixes using public realtime data collectors
+// (RouteViews and RIPE RIS).
+func (r *BGPRouteService) Realtime(ctx context.Context, query BGPRouteRealtimeParams, opts ...option.RequestOption) (res *BGPRouteRealtimeResponse, err error) {
+	var env BGPRouteRealtimeResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	path := "radar/bgp/routes/realtime"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Retrieves the BGP routing table stats.
 func (r *BGPRouteService) Stats(ctx context.Context, query BGPRouteStatsParams, opts ...option.RequestOption) (res *BGPRouteStatsResponse, err error) {
 	var env BGPRouteStatsResponseEnvelope
@@ -352,6 +366,115 @@ func (r *BGPRoutePfx2asResponsePrefixOrigin) UnmarshalJSON(data []byte) (err err
 }
 
 func (r bgpRoutePfx2asResponsePrefixOriginJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteRealtimeResponse struct {
+	Meta   BGPRouteRealtimeResponseMeta    `json:"meta,required"`
+	Routes []BGPRouteRealtimeResponseRoute `json:"routes,required"`
+	JSON   bgpRouteRealtimeResponseJSON    `json:"-"`
+}
+
+// bgpRouteRealtimeResponseJSON contains the JSON metadata for the struct
+// [BGPRouteRealtimeResponse]
+type bgpRouteRealtimeResponseJSON struct {
+	Meta        apijson.Field
+	Routes      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteRealtimeResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteRealtimeResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteRealtimeResponseMeta struct {
+	Collectors []BGPRouteRealtimeResponseMetaCollector `json:"collectors,required"`
+	JSON       bgpRouteRealtimeResponseMetaJSON        `json:"-"`
+}
+
+// bgpRouteRealtimeResponseMetaJSON contains the JSON metadata for the struct
+// [BGPRouteRealtimeResponseMeta]
+type bgpRouteRealtimeResponseMetaJSON struct {
+	Collectors  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteRealtimeResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteRealtimeResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteRealtimeResponseMetaCollector struct {
+	// public route collector ID
+	Collector string `json:"collector,required"`
+	// latest realtime stream timestamp for this collector
+	LatestRealtimeTs string `json:"latest_realtime_ts,required"`
+	// latest RIB dump MRT file timestamp for this collector
+	LatestRibTs string `json:"latest_rib_ts,required"`
+	// latest BGP updates MRT file timestamp for this collector
+	LatestUpdatesTs string                                    `json:"latest_updates_ts,required"`
+	JSON            bgpRouteRealtimeResponseMetaCollectorJSON `json:"-"`
+}
+
+// bgpRouteRealtimeResponseMetaCollectorJSON contains the JSON metadata for the
+// struct [BGPRouteRealtimeResponseMetaCollector]
+type bgpRouteRealtimeResponseMetaCollectorJSON struct {
+	Collector        apijson.Field
+	LatestRealtimeTs apijson.Field
+	LatestRibTs      apijson.Field
+	LatestUpdatesTs  apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BGPRouteRealtimeResponseMetaCollector) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteRealtimeResponseMetaCollectorJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteRealtimeResponseRoute struct {
+	// AS-level path for this route, from collector to origin
+	AsPath []int64 `json:"as_path,required"`
+	// public collector ID for this route
+	Collector string `json:"collector,required"`
+	// BGP community values
+	Communities []string `json:"communities,required"`
+	// IP prefix of this query
+	Prefix string `json:"prefix,required"`
+	// latest timestamp of change for this route
+	Timestamp string                            `json:"timestamp,required"`
+	JSON      bgpRouteRealtimeResponseRouteJSON `json:"-"`
+}
+
+// bgpRouteRealtimeResponseRouteJSON contains the JSON metadata for the struct
+// [BGPRouteRealtimeResponseRoute]
+type bgpRouteRealtimeResponseRouteJSON struct {
+	AsPath      apijson.Field
+	Collector   apijson.Field
+	Communities apijson.Field
+	Prefix      apijson.Field
+	Timestamp   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteRealtimeResponseRoute) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteRealtimeResponseRouteJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -688,6 +811,60 @@ func (r *BGPRoutePfx2asResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r bgpRoutePfx2asResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteRealtimeParams struct {
+	// Format in which results will be returned.
+	Format param.Field[BGPRouteRealtimeParamsFormat] `query:"format"`
+	// Network prefix, IPv4 or IPv6.
+	Prefix param.Field[string] `query:"prefix"`
+}
+
+// URLQuery serializes [BGPRouteRealtimeParams]'s query parameters as `url.Values`.
+func (r BGPRouteRealtimeParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Format in which results will be returned.
+type BGPRouteRealtimeParamsFormat string
+
+const (
+	BGPRouteRealtimeParamsFormatJson BGPRouteRealtimeParamsFormat = "JSON"
+	BGPRouteRealtimeParamsFormatCsv  BGPRouteRealtimeParamsFormat = "CSV"
+)
+
+func (r BGPRouteRealtimeParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPRouteRealtimeParamsFormatJson, BGPRouteRealtimeParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type BGPRouteRealtimeResponseEnvelope struct {
+	Result  BGPRouteRealtimeResponse             `json:"result,required"`
+	Success bool                                 `json:"success,required"`
+	JSON    bgpRouteRealtimeResponseEnvelopeJSON `json:"-"`
+}
+
+// bgpRouteRealtimeResponseEnvelopeJSON contains the JSON metadata for the struct
+// [BGPRouteRealtimeResponseEnvelope]
+type bgpRouteRealtimeResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteRealtimeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteRealtimeResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
