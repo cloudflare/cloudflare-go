@@ -34,6 +34,8 @@ func WithAPIVersion(value string) RequestOption {
 }
 
 // WithBaseURL returns a RequestOption that sets the BaseURL for the client.
+//
+// For security reasons, ensure that the base URL is trusted.
 func WithBaseURL(base string) RequestOption {
 	u, err := url.Parse(base)
 	if err != nil {
