@@ -62,6 +62,7 @@ func TestQueueUpdateWithOptionalParams(t *testing.T) {
 				QueueName: cloudflare.F("example-queue"),
 				Settings: cloudflare.F(queues.QueueSettingsParam{
 					DeliveryDelay:          cloudflare.F(5.000000),
+					DeliveryPaused:         cloudflare.F(true),
 					MessageRetentionPeriod: cloudflare.F(345600.000000),
 				}),
 			},
