@@ -337,6 +337,8 @@ func (r QueueProducersType) IsKnown() bool {
 type QueueSettings struct {
 	// Number of seconds to delay delivery of all messages to consumers.
 	DeliveryDelay float64 `json:"delivery_delay"`
+	// Indicates if message delivery to consumers is currently paused.
+	DeliveryPaused bool `json:"delivery_paused"`
 	// Number of seconds after which an unconsumed message will be delayed.
 	MessageRetentionPeriod float64           `json:"message_retention_period"`
 	JSON                   queueSettingsJSON `json:"-"`
@@ -345,6 +347,7 @@ type QueueSettings struct {
 // queueSettingsJSON contains the JSON metadata for the struct [QueueSettings]
 type queueSettingsJSON struct {
 	DeliveryDelay          apijson.Field
+	DeliveryPaused         apijson.Field
 	MessageRetentionPeriod apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
@@ -410,6 +413,8 @@ func (r QueueProducersMqR2ProducerParam) implementsQueueProducersUnionParam() {}
 type QueueSettingsParam struct {
 	// Number of seconds to delay delivery of all messages to consumers.
 	DeliveryDelay param.Field[float64] `json:"delivery_delay"`
+	// Indicates if message delivery to consumers is currently paused.
+	DeliveryPaused param.Field[bool] `json:"delivery_paused"`
 	// Number of seconds after which an unconsumed message will be delayed.
 	MessageRetentionPeriod param.Field[float64] `json:"message_retention_period"`
 }
