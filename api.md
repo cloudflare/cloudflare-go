@@ -8436,7 +8436,7 @@ Methods:
 
 Methods:
 
-- <code title="post /accounts/{account_id}/abuse-reports/{report_type}">client.AbuseReports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/abuse_reports#AbuseReportService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, reportType abuse_reports.AbuseReportNewParamsAbuseReportsDmcaReportReportType, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/abuse_reports#AbuseReportNewParams">AbuseReportNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/abuse-reports/{report_type}">client.AbuseReports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/abuse_reports#AbuseReportService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, reportType <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/abuse_reports#AbuseReportNewParamsReportType">AbuseReportNewParamsReportType</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/abuse_reports#AbuseReportNewParams">AbuseReportNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # AI
 
