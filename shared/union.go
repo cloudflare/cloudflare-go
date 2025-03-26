@@ -13,8 +13,11 @@ func (UnionTime) ImplementsAuditLogListParamsSinceUnion()  {}
 
 type UnionString string
 
-func (UnionString) ImplementsReceivedGetParamsEndUnion()                                           {}
-func (UnionString) ImplementsReceivedGetParamsStartUnion()                                         {}
+func (UnionString) ImplementsReceivedGetParamsEndUnion()                                 {}
+func (UnionString) ImplementsReceivedGetParamsStartUnion()                               {}
+func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
+func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
+}
 func (UnionString) ImplementsOriginPortUnionParam()                                                {}
 func (UnionString) ImplementsOriginPortUnion()                                                     {}
 func (UnionString) ImplementsHealthCheckTargetUnionParam()                                         {}
@@ -98,6 +101,9 @@ func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()           
 
 type UnionBool bool
 
+func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
+func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
+}
 func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()      {}
 func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentSettingsUnion()           {}
 func (UnionBool) ImplementsConfigurationToolsWorkerDefaultFieldsUnion()                     {}
@@ -136,6 +142,9 @@ type UnionFloat float64
 
 func (UnionFloat) ImplementsTTLParam()                                                  {}
 func (UnionFloat) ImplementsTTL()                                                       {}
+func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
+func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
+}
 func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                {}
 func (UnionFloat) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union() {}
 func (UnionFloat) ImplementsSettingValueUnionParam()                                    {}

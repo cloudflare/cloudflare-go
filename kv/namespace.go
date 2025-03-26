@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
@@ -16,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/tidwall/gjson"
 )
 
 // NamespaceService contains methods and other services that help with interacting
@@ -25,11 +27,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewNamespaceService] method instead.
 type NamespaceService struct {
-	Options   []option.RequestOption
-	Analytics *NamespaceAnalyticsService
-	Keys      *NamespaceKeyService
-	Metadata  *NamespaceMetadataService
-	Values    *NamespaceValueService
+	Options  []option.RequestOption
+	Keys     *NamespaceKeyService
+	Metadata *NamespaceMetadataService
+	Values   *NamespaceValueService
 }
 
 // NewNamespaceService generates a new service that applies the given options to
@@ -38,7 +39,6 @@ type NamespaceService struct {
 func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 	r = &NamespaceService{}
 	r.Options = opts
-	r.Analytics = NewNamespaceAnalyticsService(opts...)
 	r.Keys = NewNamespaceKeyService(opts...)
 	r.Metadata = NewNamespaceMetadataService(opts...)
 	r.Values = NewNamespaceValueService(opts...)
@@ -147,6 +147,30 @@ func (r *NamespaceService) BulkDelete(ctx context.Context, namespaceID string, p
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk/delete", params.AccountID, namespaceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get multiple KV pairs from the namespace. Body should contain keys to retrieve
+// at most 100. Keys must contain text-based values. If value is json, it can be
+// requested to return in JSON, instead of string. Metadata can be return if
+// withMetadata is true.
+func (r *NamespaceService) BulkGet(ctx context.Context, namespaceID string, params NamespaceBulkGetParams, opts ...option.RequestOption) (res *NamespaceBulkGetResponse, err error) {
+	var env NamespaceBulkGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if namespaceID == "" {
+		err = errors.New("missing required namespace_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk/get", params.AccountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -294,6 +318,220 @@ func (r *NamespaceBulkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r namespaceBulkDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type NamespaceBulkGetResponse struct {
+	// This field can have the runtime type of
+	// [map[string]NamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion],
+	// [map[string]NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValue].
+	Values interface{}                  `json:"values"`
+	JSON   namespaceBulkGetResponseJSON `json:"-"`
+	union  NamespaceBulkGetResponseUnion
+}
+
+// namespaceBulkGetResponseJSON contains the JSON metadata for the struct
+// [NamespaceBulkGetResponse]
+type namespaceBulkGetResponseJSON struct {
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r namespaceBulkGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *NamespaceBulkGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = NamespaceBulkGetResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [NamespaceBulkGetResponseUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [kv.NamespaceBulkGetResponseWorkersKVBulkGetResult],
+// [kv.NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadata].
+func (r NamespaceBulkGetResponse) AsUnion() NamespaceBulkGetResponseUnion {
+	return r.union
+}
+
+// Union satisfied by [kv.NamespaceBulkGetResponseWorkersKVBulkGetResult] or
+// [kv.NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadata].
+type NamespaceBulkGetResponseUnion interface {
+	implementsNamespaceBulkGetResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*NamespaceBulkGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NamespaceBulkGetResponseWorkersKVBulkGetResult{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadata{}),
+		},
+	)
+}
+
+type NamespaceBulkGetResponseWorkersKVBulkGetResult struct {
+	// Requested keys are paired with their values in an object
+	Values map[string]NamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion `json:"values"`
+	JSON   namespaceBulkGetResponseWorkersKVBulkGetResultJSON                   `json:"-"`
+}
+
+// namespaceBulkGetResponseWorkersKVBulkGetResultJSON contains the JSON metadata
+// for the struct [NamespaceBulkGetResponseWorkersKVBulkGetResult]
+type namespaceBulkGetResponseWorkersKVBulkGetResultJSON struct {
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceBulkGetResponseWorkersKVBulkGetResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceBulkGetResponseWorkersKVBulkGetResultJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r NamespaceBulkGetResponseWorkersKVBulkGetResult) implementsNamespaceBulkGetResponse() {}
+
+// The value associated with the key
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [kv.NamespaceBulkGetResponseWorkersKVBulkGetResultValuesMap].
+type NamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion interface {
+	ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*NamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+	)
+}
+
+type NamespaceBulkGetResponseWorkersKVBulkGetResultValuesMap map[string]interface{}
+
+func (r NamespaceBulkGetResponseWorkersKVBulkGetResultValuesMap) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion() {
+}
+
+type NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadata struct {
+	// Requested keys are paired with their values and metadata in an object
+	Values map[string]NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValue `json:"values"`
+	JSON   namespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataJSON             `json:"-"`
+}
+
+// namespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataJSON contains the JSON
+// metadata for the struct
+// [NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadata]
+type namespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataJSON struct {
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadata) implementsNamespaceBulkGetResponse() {
+}
+
+type NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValue struct {
+	// The metadata associated with the key
+	Metadata map[string]interface{} `json:"metadata,required,nullable"`
+	// The value associated with the key
+	Value NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion `json:"value,required"`
+	// The time, measured in number of seconds since the UNIX epoch, at which the key
+	// should expire.
+	Expiration float64                                                             `json:"expiration"`
+	JSON       namespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValueJSON `json:"-"`
+}
+
+// namespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValueJSON contains the
+// JSON metadata for the struct
+// [NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValue]
+type namespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValueJSON struct {
+	Metadata    apijson.Field
+	Value       apijson.Field
+	Expiration  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValueJSON) RawJSON() string {
+	return r.raw
+}
+
+// The value associated with the key
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or
+// [kv.NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap].
+type NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion interface {
+	ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+	)
+}
+
+type NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap map[string]interface{}
+
+func (r NamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
 }
 
 type NamespaceBulkUpdateResponse struct {
@@ -578,6 +816,80 @@ const (
 func (r NamespaceBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case NamespaceBulkDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type NamespaceBulkGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Array of keys to retrieve (maximum 100)
+	Keys param.Field[[]string] `json:"keys,required"`
+	// Whether to parse JSON values in the response
+	Type param.Field[NamespaceBulkGetParamsType] `json:"type"`
+	// Whether to include metadata in the response
+	WithMetadata param.Field[bool] `json:"withMetadata"`
+}
+
+func (r NamespaceBulkGetParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether to parse JSON values in the response
+type NamespaceBulkGetParamsType string
+
+const (
+	NamespaceBulkGetParamsTypeText NamespaceBulkGetParamsType = "text"
+	NamespaceBulkGetParamsTypeJson NamespaceBulkGetParamsType = "json"
+)
+
+func (r NamespaceBulkGetParamsType) IsKnown() bool {
+	switch r {
+	case NamespaceBulkGetParamsTypeText, NamespaceBulkGetParamsTypeJson:
+		return true
+	}
+	return false
+}
+
+type NamespaceBulkGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success NamespaceBulkGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  NamespaceBulkGetResponse                `json:"result,nullable"`
+	JSON    namespaceBulkGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// namespaceBulkGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [NamespaceBulkGetResponseEnvelope]
+type namespaceBulkGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceBulkGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceBulkGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type NamespaceBulkGetResponseEnvelopeSuccess bool
+
+const (
+	NamespaceBulkGetResponseEnvelopeSuccessTrue NamespaceBulkGetResponseEnvelopeSuccess = true
+)
+
+func (r NamespaceBulkGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceBulkGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
