@@ -364,10 +364,10 @@ type OutputOptions struct {
 	RecordPrefix string `json:"record_prefix,nullable"`
 	// String to be appended after each record.
 	RecordSuffix string `json:"record_suffix,nullable"`
-	// String to use as template for each record instead of the default comma-separated
-	// list. All fields used in the template must be present in `field_names` as well,
-	// otherwise they will end up as null. Format as a Go `text/template` without any
-	// standard functions, like conditionals, loops, sub-templates, etc.
+	// String to use as template for each record instead of the default json key value
+	// mapping. All fields used in the template must be present in `field_names` as
+	// well, otherwise they will end up as null. Format as a Go `text/template` without
+	// any standard functions, like conditionals, loops, sub-templates, etc.
 	RecordTemplate string `json:"record_template,nullable"`
 	// Floating number to specify sampling rate. Sampling is applied on top of
 	// filtering, and regardless of the current `sample_interval` of the data.
@@ -466,10 +466,10 @@ type OutputOptionsParam struct {
 	RecordPrefix param.Field[string] `json:"record_prefix"`
 	// String to be appended after each record.
 	RecordSuffix param.Field[string] `json:"record_suffix"`
-	// String to use as template for each record instead of the default comma-separated
-	// list. All fields used in the template must be present in `field_names` as well,
-	// otherwise they will end up as null. Format as a Go `text/template` without any
-	// standard functions, like conditionals, loops, sub-templates, etc.
+	// String to use as template for each record instead of the default json key value
+	// mapping. All fields used in the template must be present in `field_names` as
+	// well, otherwise they will end up as null. Format as a Go `text/template` without
+	// any standard functions, like conditionals, loops, sub-templates, etc.
 	RecordTemplate param.Field[string] `json:"record_template"`
 	// Floating number to specify sampling rate. Sampling is applied on top of
 	// filtering, and regardless of the current `sample_interval` of the data.
