@@ -13,10 +13,10 @@ func (UnionTime) ImplementsAuditLogListParamsSinceUnion()  {}
 
 type UnionString string
 
-func (UnionString) ImplementsReceivedGetParamsEndUnion()                                 {}
-func (UnionString) ImplementsReceivedGetParamsStartUnion()                               {}
-func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
-func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
+func (UnionString) ImplementsReceivedGetParamsEndUnion()                                    {}
+func (UnionString) ImplementsReceivedGetParamsStartUnion()                                  {}
+func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
+func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
 }
 func (UnionString) ImplementsOriginPortUnionParam()                                                {}
 func (UnionString) ImplementsOriginPortUnion()                                                     {}
@@ -101,8 +101,8 @@ func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()           
 
 type UnionBool bool
 
-func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
-func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
+func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
+func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
 }
 func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()      {}
 func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentSettingsUnion()           {}
@@ -140,10 +140,10 @@ func (UnionInt) ImplementsOriginPortUnion()                                     
 
 type UnionFloat float64
 
-func (UnionFloat) ImplementsTTLParam()                                                  {}
-func (UnionFloat) ImplementsTTL()                                                       {}
-func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
-func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
+func (UnionFloat) ImplementsTTLParam()                                                     {}
+func (UnionFloat) ImplementsTTL()                                                          {}
+func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
+func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
 }
 func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                {}
 func (UnionFloat) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union() {}
