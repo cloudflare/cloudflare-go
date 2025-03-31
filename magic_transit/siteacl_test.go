@@ -49,7 +49,7 @@ func TestSiteACLNewWithOptionalParams(t *testing.T) {
 			Name:           cloudflare.F("PIN Pad - Cash Register"),
 			Description:    cloudflare.F("Allows local traffic between PIN pads and cash register."),
 			ForwardLocally: cloudflare.F(true),
-			Protocols:      cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP}),
+			Protocols:      cloudflare.F([]interface{}{map[string]interface{}{}}),
 			Unidirectional: cloudflare.F(true),
 		},
 	)
@@ -98,7 +98,7 @@ func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
 				Subnets:    cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1"}),
 			}),
 			Name:           cloudflare.F("PIN Pad - Cash Register"),
-			Protocols:      cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP}),
+			Protocols:      cloudflare.F([]interface{}{map[string]interface{}{}}),
 			Unidirectional: cloudflare.F(true),
 		},
 	)
@@ -206,7 +206,7 @@ func TestSiteACLEditWithOptionalParams(t *testing.T) {
 				Subnets:    cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1"}),
 			}),
 			Name:           cloudflare.F("PIN Pad - Cash Register"),
-			Protocols:      cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP}),
+			Protocols:      cloudflare.F([]interface{}{map[string]interface{}{}}),
 			Unidirectional: cloudflare.F(true),
 		},
 	)

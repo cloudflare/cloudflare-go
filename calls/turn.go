@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TURNService contains methods and other services that help with interacting with
@@ -317,8 +316,8 @@ func (r TURNUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TURNUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success TURNUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  TURNUpdateResponse                `json:"result"`
@@ -370,8 +369,8 @@ type TURNDeleteParams struct {
 }
 
 type TURNDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success TURNDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  TURNDeleteResponse                `json:"result"`
@@ -418,8 +417,8 @@ type TURNGetParams struct {
 }
 
 type TURNGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success TURNGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  TURNGetResponse                `json:"result"`

@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AttackSurfaceReportIssueService contains methods and other services that help
@@ -277,8 +276,8 @@ func (r attackSurfaceReportIssueClassResponseJSON) RawJSON() string {
 }
 
 type AttackSurfaceReportIssueDismissResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueDismissResponseSuccess `json:"success,required"`
 	JSON    attackSurfaceReportIssueDismissResponseJSON    `json:"-"`
@@ -418,8 +417,8 @@ func (r AttackSurfaceReportIssueClassParams) URLQuery() (v url.Values) {
 }
 
 type AttackSurfaceReportIssueClassResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueClassResponseEnvelopeSuccess `json:"success,required"`
 	Result  []AttackSurfaceReportIssueClassResponse              `json:"result"`
@@ -496,8 +495,8 @@ func (r AttackSurfaceReportIssueSeverityParams) URLQuery() (v url.Values) {
 }
 
 type AttackSurfaceReportIssueSeverityResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess `json:"success,required"`
 	Result  []AttackSurfaceReportIssueSeverityResponse              `json:"result"`
@@ -564,8 +563,8 @@ func (r AttackSurfaceReportIssueTypeParams) URLQuery() (v url.Values) {
 }
 
 type AttackSurfaceReportIssueTypeResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueTypeResponseEnvelopeSuccess `json:"success,required"`
 	Result  []AttackSurfaceReportIssueTypeResponse              `json:"result"`

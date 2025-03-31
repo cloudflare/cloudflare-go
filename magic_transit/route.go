@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RouteService contains methods and other services that help with interacting with
@@ -695,9 +694,9 @@ func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteNewResponse      `json:"result,required"`
+	Errors   []interface{}    `json:"errors,required"`
+	Messages []interface{}    `json:"messages,required"`
+	Result   RouteNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
@@ -759,9 +758,9 @@ func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteUpdateResponse   `json:"result,required"`
+	Errors   []interface{}       `json:"errors,required"`
+	Messages []interface{}       `json:"messages,required"`
+	Result   RouteUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeUpdateResponseEnvelopeJSON    `json:"-"`
@@ -807,9 +806,9 @@ type RouteListParams struct {
 }
 
 type RouteListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteListResponse     `json:"result,required"`
+	Errors   []interface{}     `json:"errors,required"`
+	Messages []interface{}     `json:"messages,required"`
+	Result   RouteListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeListResponseEnvelopeJSON    `json:"-"`
@@ -855,9 +854,9 @@ type RouteDeleteParams struct {
 }
 
 type RouteDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteDeleteResponse   `json:"result,required"`
+	Errors   []interface{}       `json:"errors,required"`
+	Messages []interface{}       `json:"messages,required"`
+	Result   RouteDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeDeleteResponseEnvelopeJSON    `json:"-"`
@@ -929,8 +928,8 @@ func (r RouteBulkUpdateParamsRoute) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Errors   []interface{}           `json:"errors,required"`
+	Messages []interface{}           `json:"messages,required"`
 	Result   RouteBulkUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -977,9 +976,9 @@ type RouteEmptyParams struct {
 }
 
 type RouteEmptyResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteEmptyResponse    `json:"result,required"`
+	Errors   []interface{}      `json:"errors,required"`
+	Messages []interface{}      `json:"messages,required"`
+	Result   RouteEmptyResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteEmptyResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeEmptyResponseEnvelopeJSON    `json:"-"`
@@ -1025,9 +1024,9 @@ type RouteGetParams struct {
 }
 
 type RouteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteGetResponse      `json:"result,required"`
+	Errors   []interface{}    `json:"errors,required"`
+	Messages []interface{}    `json:"messages,required"`
+	Result   RouteGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeGetResponseEnvelopeJSON    `json:"-"`

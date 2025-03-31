@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DatabaseService contains methods and other services that help with interacting
@@ -672,9 +671,9 @@ func (r DatabaseNewParamsPrimaryLocationHint) IsKnown() bool {
 }
 
 type DatabaseNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   D1                    `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   D1            `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseNewResponseEnvelopeJSON    `json:"-"`
@@ -739,8 +738,8 @@ type DatabaseDeleteParams struct {
 }
 
 type DatabaseDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Errors   []interface{}          `json:"errors,required"`
+	Messages []interface{}          `json:"messages,required"`
 	Result   DatabaseDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DatabaseDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -826,8 +825,8 @@ func (r DatabaseExportParamsDumpOptions) MarshalJSON() (data []byte, err error) 
 }
 
 type DatabaseExportResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Errors   []interface{}          `json:"errors,required"`
+	Messages []interface{}          `json:"messages,required"`
 	Result   DatabaseExportResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseExportResponseEnvelopeSuccess `json:"success,required"`
@@ -874,9 +873,9 @@ type DatabaseGetParams struct {
 }
 
 type DatabaseGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   D1                    `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   D1            `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseGetResponseEnvelopeJSON    `json:"-"`
@@ -1000,8 +999,8 @@ func (r DatabaseImportParamsBodyAction) IsKnown() bool {
 }
 
 type DatabaseImportResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Errors   []interface{}          `json:"errors,required"`
+	Messages []interface{}          `json:"messages,required"`
 	Result   DatabaseImportResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseImportResponseEnvelopeSuccess `json:"success,required"`

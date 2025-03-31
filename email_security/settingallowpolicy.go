@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingAllowPolicyService contains methods and other services that help with
@@ -500,8 +499,8 @@ func (r SettingAllowPolicyNewParamsPatternType) IsKnown() bool {
 }
 
 type SettingAllowPolicyNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
+	Errors   []interface{}                             `json:"errors,required"`
+	Messages []interface{}                             `json:"messages,required"`
 	Result   SettingAllowPolicyNewResponse             `json:"result,required"`
 	Success  bool                                      `json:"success,required"`
 	JSON     settingAllowPolicyNewResponseEnvelopeJSON `json:"-"`
@@ -615,8 +614,8 @@ type SettingAllowPolicyDeleteParams struct {
 }
 
 type SettingAllowPolicyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                        `json:"messages,required"`
+	Errors   []interface{}                                `json:"errors,required"`
+	Messages []interface{}                                `json:"messages,required"`
 	Result   SettingAllowPolicyDeleteResponse             `json:"result,required"`
 	Success  bool                                         `json:"success,required"`
 	JSON     settingAllowPolicyDeleteResponseEnvelopeJSON `json:"-"`
@@ -683,8 +682,8 @@ func (r SettingAllowPolicyEditParamsPatternType) IsKnown() bool {
 }
 
 type SettingAllowPolicyEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                      `json:"errors,required"`
-	Messages []shared.ResponseInfo                      `json:"messages,required"`
+	Errors   []interface{}                              `json:"errors,required"`
+	Messages []interface{}                              `json:"messages,required"`
 	Result   SettingAllowPolicyEditResponse             `json:"result,required"`
 	Success  bool                                       `json:"success,required"`
 	JSON     settingAllowPolicyEditResponseEnvelopeJSON `json:"-"`
@@ -715,8 +714,8 @@ type SettingAllowPolicyGetParams struct {
 }
 
 type SettingAllowPolicyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
+	Errors   []interface{}                             `json:"errors,required"`
+	Messages []interface{}                             `json:"messages,required"`
 	Result   SettingAllowPolicyGetResponse             `json:"result,required"`
 	Success  bool                                      `json:"success,required"`
 	JSON     settingAllowPolicyGetResponseEnvelopeJSON `json:"-"`

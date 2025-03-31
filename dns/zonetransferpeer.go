@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZoneTransferPeerService contains methods and other services that help with
@@ -238,8 +237,8 @@ func (r ZoneTransferPeerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferPeerNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferPeerNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Peer                                       `json:"result"`
@@ -290,8 +289,8 @@ func (r ZoneTransferPeerUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferPeerUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferPeerUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Peer                                          `json:"result"`
@@ -341,8 +340,8 @@ type ZoneTransferPeerDeleteParams struct {
 }
 
 type ZoneTransferPeerDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferPeerDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferPeerDeleteResponse                `json:"result"`
@@ -388,8 +387,8 @@ type ZoneTransferPeerGetParams struct {
 }
 
 type ZoneTransferPeerGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferPeerGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Peer                                       `json:"result"`

@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // NetworkVirtualNetworkService contains methods and other services that help with
@@ -198,9 +197,9 @@ func (r NetworkVirtualNetworkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkVirtualNetworkNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   VirtualNetwork        `json:"result,required"`
+	Errors   []interface{}  `json:"errors,required"`
+	Messages []interface{}  `json:"messages,required"`
+	Result   VirtualNetwork `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkVirtualNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -270,9 +269,9 @@ type NetworkVirtualNetworkDeleteParams struct {
 }
 
 type NetworkVirtualNetworkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   VirtualNetwork        `json:"result,required"`
+	Errors   []interface{}  `json:"errors,required"`
+	Messages []interface{}  `json:"messages,required"`
+	Result   VirtualNetwork `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkVirtualNetworkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -328,9 +327,9 @@ func (r NetworkVirtualNetworkEditParams) MarshalJSON() (data []byte, err error) 
 }
 
 type NetworkVirtualNetworkEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   VirtualNetwork        `json:"result,required"`
+	Errors   []interface{}  `json:"errors,required"`
+	Messages []interface{}  `json:"messages,required"`
+	Result   VirtualNetwork `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkVirtualNetworkEditResponseEnvelopeJSON    `json:"-"`
@@ -376,9 +375,9 @@ type NetworkVirtualNetworkGetParams struct {
 }
 
 type NetworkVirtualNetworkGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   VirtualNetwork        `json:"result,required"`
+	Errors   []interface{}  `json:"errors,required"`
+	Messages []interface{}  `json:"messages,required"`
+	Result   VirtualNetwork `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkVirtualNetworkGetResponseEnvelopeJSON    `json:"-"`

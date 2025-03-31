@@ -87,7 +87,7 @@ func (r netflowSummaryResponseJSON) RawJSON() string {
 }
 
 type NetflowSummaryResponseMeta struct {
-	DateRange      []NetflowSummaryResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []interface{}                            `json:"dateRange,required"`
 	ConfidenceInfo NetflowSummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           netflowSummaryResponseMetaJSON           `json:"-"`
 }
@@ -109,35 +109,10 @@ func (r netflowSummaryResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type NetflowSummaryResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                               `json:"startTime,required" format:"date-time"`
-	JSON      netflowSummaryResponseMetaDateRangeJSON `json:"-"`
-}
-
-// netflowSummaryResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [NetflowSummaryResponseMetaDateRange]
-type netflowSummaryResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetflowSummaryResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r netflowSummaryResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type NetflowSummaryResponseMetaConfidenceInfo struct {
-	Annotations []NetflowSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                `json:"level"`
-	JSON        netflowSummaryResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []interface{}                                `json:"annotations"`
+	Level       int64                                        `json:"level"`
+	JSON        netflowSummaryResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // netflowSummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -154,39 +129,6 @@ func (r *NetflowSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (e
 }
 
 func (r netflowSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetflowSummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                 `json:"dataSource,required"`
-	Description     string                                                 `json:"description,required"`
-	EventType       string                                                 `json:"eventType,required"`
-	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
-	EndTime         time.Time                                              `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                 `json:"linkedUrl"`
-	StartTime       time.Time                                              `json:"startTime" format:"date-time"`
-	JSON            netflowSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// netflowSummaryResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [NetflowSummaryResponseMetaConfidenceInfoAnnotation]
-type netflowSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *NetflowSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r netflowSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -214,9 +156,9 @@ func (r netflowSummaryResponseSummary0JSON) RawJSON() string {
 }
 
 type NetflowTimeseriesResponse struct {
-	Meta   NetflowTimeseriesResponseMeta   `json:"meta,required"`
-	Serie0 NetflowTimeseriesResponseSerie0 `json:"serie_0,required"`
-	JSON   netflowTimeseriesResponseJSON   `json:"-"`
+	Meta   NetflowTimeseriesResponseMeta `json:"meta,required"`
+	Serie0 interface{}                   `json:"serie_0,required"`
+	JSON   netflowTimeseriesResponseJSON `json:"-"`
 }
 
 // netflowTimeseriesResponseJSON contains the JSON metadata for the struct
@@ -238,7 +180,7 @@ func (r netflowTimeseriesResponseJSON) RawJSON() string {
 
 type NetflowTimeseriesResponseMeta struct {
 	AggInterval    string                                      `json:"aggInterval,required"`
-	DateRange      []NetflowTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []interface{}                               `json:"dateRange,required"`
 	LastUpdated    time.Time                                   `json:"lastUpdated,required" format:"date-time"`
 	ConfidenceInfo NetflowTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           netflowTimeseriesResponseMetaJSON           `json:"-"`
@@ -263,35 +205,10 @@ func (r netflowTimeseriesResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type NetflowTimeseriesResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                  `json:"startTime,required" format:"date-time"`
-	JSON      netflowTimeseriesResponseMetaDateRangeJSON `json:"-"`
-}
-
-// netflowTimeseriesResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [NetflowTimeseriesResponseMetaDateRange]
-type netflowTimeseriesResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetflowTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r netflowTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type NetflowTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []NetflowTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                   `json:"level"`
-	JSON        netflowTimeseriesResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []interface{}                                   `json:"annotations"`
+	Level       int64                                           `json:"level"`
+	JSON        netflowTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // netflowTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -308,62 +225,6 @@ func (r *NetflowTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte)
 }
 
 func (r netflowTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetflowTimeseriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                    `json:"dataSource,required"`
-	Description     string                                                    `json:"description,required"`
-	EventType       string                                                    `json:"eventType,required"`
-	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                    `json:"linkedUrl"`
-	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
-	JSON            netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [NetflowTimeseriesResponseMetaConfidenceInfoAnnotation]
-type netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *NetflowTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r netflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetflowTimeseriesResponseSerie0 struct {
-	Timestamps []time.Time                         `json:"timestamps,required" format:"date-time"`
-	Values     []string                            `json:"values,required"`
-	JSON       netflowTimeseriesResponseSerie0JSON `json:"-"`
-}
-
-// netflowTimeseriesResponseSerie0JSON contains the JSON metadata for the struct
-// [NetflowTimeseriesResponseSerie0]
-type netflowTimeseriesResponseSerie0JSON struct {
-	Timestamps  apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetflowTimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r netflowTimeseriesResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 

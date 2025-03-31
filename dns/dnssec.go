@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DNSSECService contains methods and other services that help with interacting
@@ -181,8 +180,8 @@ type DNSSECDeleteParams struct {
 }
 
 type DNSSECDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSSECDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  string                              `json:"result"`
@@ -268,8 +267,8 @@ func (r DNSSECEditParamsStatus) IsKnown() bool {
 }
 
 type DNSSECEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSSECEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSSEC                            `json:"result"`
@@ -316,8 +315,8 @@ type DNSSECGetParams struct {
 }
 
 type DNSSECGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSSECGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSSEC                           `json:"result"`

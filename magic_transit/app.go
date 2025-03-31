@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -395,8 +394,8 @@ func (r AppNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AppNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Custom app defined for an account.
 	Result AppNewResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
@@ -456,8 +455,8 @@ func (r AppUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AppUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Custom app defined for an account.
 	Result AppUpdateResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
@@ -510,8 +509,8 @@ type AppDeleteParams struct {
 }
 
 type AppDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Custom app defined for an account.
 	Result AppDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful

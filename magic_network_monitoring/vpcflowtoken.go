@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // VPCFlowTokenService contains methods and other services that help with
@@ -56,8 +55,8 @@ type VPCFlowTokenNewParams struct {
 }
 
 type VPCFlowTokenNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Authentication token to be used for VPC Flows export authentication.
 	Result string `json:"result,required"`
 	// Whether the API call was successful

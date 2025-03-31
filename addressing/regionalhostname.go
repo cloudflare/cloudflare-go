@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RegionalHostnameService contains methods and other services that help with
@@ -203,8 +202,8 @@ func (r regionalHostnameListResponseJSON) RawJSON() string {
 }
 
 type RegionalHostnameDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success RegionalHostnameDeleteResponseSuccess `json:"success,required"`
 	JSON    regionalHostnameDeleteResponseJSON    `json:"-"`
@@ -316,8 +315,8 @@ func (r RegionalHostnameNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RegionalHostnameNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success RegionalHostnameNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  RegionalHostnameNewResponse                `json:"result"`
@@ -380,8 +379,8 @@ func (r RegionalHostnameEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RegionalHostnameEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success RegionalHostnameEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  RegionalHostnameEditResponse                `json:"result"`
@@ -428,8 +427,8 @@ type RegionalHostnameGetParams struct {
 }
 
 type RegionalHostnameGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success RegionalHostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RegionalHostnameGetResponse                `json:"result"`

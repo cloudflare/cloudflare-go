@@ -256,9 +256,8 @@ type GRETunnelNewResponseGRETunnelsHealthCheck struct {
 	// via the tunnel.
 	Direction GRETunnelNewResponseGRETunnelsHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -267,9 +266,8 @@ type GRETunnelNewResponseGRETunnelsHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target GRETunnelNewResponseGRETunnelsHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                               `json:"type"`
-	JSON greTunnelNewResponseGRETunnelsHealthCheckJSON `json:"-"`
+	Type   interface{}                                          `json:"type"`
+	JSON   greTunnelNewResponseGRETunnelsHealthCheckJSON        `json:"-"`
 }
 
 // greTunnelNewResponseGRETunnelsHealthCheckJSON contains the JSON metadata for the
@@ -463,9 +461,8 @@ type GRETunnelUpdateResponseModifiedGRETunnelHealthCheck struct {
 	// via the tunnel.
 	Direction GRETunnelUpdateResponseModifiedGRETunnelHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -474,9 +471,8 @@ type GRETunnelUpdateResponseModifiedGRETunnelHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                         `json:"type"`
-	JSON greTunnelUpdateResponseModifiedGRETunnelHealthCheckJSON `json:"-"`
+	Type   interface{}                                                    `json:"type"`
+	JSON   greTunnelUpdateResponseModifiedGRETunnelHealthCheckJSON        `json:"-"`
 }
 
 // greTunnelUpdateResponseModifiedGRETunnelHealthCheckJSON contains the JSON
@@ -668,9 +664,8 @@ type GRETunnelListResponseGRETunnelsHealthCheck struct {
 	// via the tunnel.
 	Direction GRETunnelListResponseGRETunnelsHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -679,9 +674,8 @@ type GRETunnelListResponseGRETunnelsHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target GRETunnelListResponseGRETunnelsHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                `json:"type"`
-	JSON greTunnelListResponseGRETunnelsHealthCheckJSON `json:"-"`
+	Type   interface{}                                           `json:"type"`
+	JSON   greTunnelListResponseGRETunnelsHealthCheckJSON        `json:"-"`
 }
 
 // greTunnelListResponseGRETunnelsHealthCheckJSON contains the JSON metadata for
@@ -875,9 +869,8 @@ type GRETunnelDeleteResponseDeletedGRETunnelHealthCheck struct {
 	// via the tunnel.
 	Direction GRETunnelDeleteResponseDeletedGRETunnelHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -886,9 +879,8 @@ type GRETunnelDeleteResponseDeletedGRETunnelHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                        `json:"type"`
-	JSON greTunnelDeleteResponseDeletedGRETunnelHealthCheckJSON `json:"-"`
+	Type   interface{}                                                   `json:"type"`
+	JSON   greTunnelDeleteResponseDeletedGRETunnelHealthCheckJSON        `json:"-"`
 }
 
 // greTunnelDeleteResponseDeletedGRETunnelHealthCheckJSON contains the JSON
@@ -1082,9 +1074,8 @@ type GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheck struct {
 	// via the tunnel.
 	Direction GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -1093,9 +1084,8 @@ type GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                              `json:"type"`
-	JSON greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckJSON `json:"-"`
+	Type   interface{}                                                         `json:"type"`
+	JSON   greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckJSON        `json:"-"`
 }
 
 // greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckJSON contains the JSON
@@ -1288,9 +1278,8 @@ type GRETunnelGetResponseGRETunnelHealthCheck struct {
 	// via the tunnel.
 	Direction GRETunnelGetResponseGRETunnelHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -1299,9 +1288,8 @@ type GRETunnelGetResponseGRETunnelHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target GRETunnelGetResponseGRETunnelHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                              `json:"type"`
-	JSON greTunnelGetResponseGRETunnelHealthCheckJSON `json:"-"`
+	Type   interface{}                                         `json:"type"`
+	JSON   greTunnelGetResponseGRETunnelHealthCheckJSON        `json:"-"`
 }
 
 // greTunnelGetResponseGRETunnelHealthCheckJSON contains the JSON metadata for the
@@ -1422,9 +1410,9 @@ func (r GRETunnelNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GRETunnelNewResponse  `json:"result,required"`
+	Errors   []interface{}        `json:"errors,required"`
+	Messages []interface{}        `json:"messages,required"`
+	Result   GRETunnelNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -1500,9 +1488,8 @@ type GRETunnelUpdateParamsHealthCheck struct {
 	// via the tunnel.
 	Direction param.Field[GRETunnelUpdateParamsHealthCheckDirection] `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled param.Field[bool] `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[HealthCheckRate] `json:"rate"`
+	Enabled param.Field[bool]        `json:"enabled"`
+	Rate    param.Field[interface{}] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -1511,8 +1498,7 @@ type GRETunnelUpdateParamsHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target param.Field[GRETunnelUpdateParamsHealthCheckTargetUnion] `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[HealthCheckType] `json:"type"`
+	Type   param.Field[interface{}]                                 `json:"type"`
 }
 
 func (r GRETunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -1572,8 +1558,8 @@ func (r GRETunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) Implements
 }
 
 type GRETunnelUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Errors   []interface{}           `json:"errors,required"`
+	Messages []interface{}           `json:"messages,required"`
 	Result   GRETunnelUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -1621,8 +1607,8 @@ type GRETunnelListParams struct {
 }
 
 type GRETunnelListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{}         `json:"errors,required"`
+	Messages []interface{}         `json:"messages,required"`
 	Result   GRETunnelListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelListResponseEnvelopeSuccess `json:"success,required"`
@@ -1670,8 +1656,8 @@ type GRETunnelDeleteParams struct {
 }
 
 type GRETunnelDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Errors   []interface{}           `json:"errors,required"`
+	Messages []interface{}           `json:"messages,required"`
 	Result   GRETunnelDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -1724,8 +1710,8 @@ func (r GRETunnelBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Errors   []interface{}               `json:"errors,required"`
+	Messages []interface{}               `json:"messages,required"`
 	Result   GRETunnelBulkUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -1773,9 +1759,9 @@ type GRETunnelGetParams struct {
 }
 
 type GRETunnelGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GRETunnelGetResponse  `json:"result,required"`
+	Errors   []interface{}        `json:"errors,required"`
+	Messages []interface{}        `json:"messages,required"`
+	Result   GRETunnelGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelGetResponseEnvelopeJSON    `json:"-"`

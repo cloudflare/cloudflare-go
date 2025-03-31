@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HostnameIPFSUniversalPathContentListEntryService contains methods and other
@@ -440,8 +439,8 @@ func (r HostnameIPFSUniversalPathContentListEntryNewParamsType) IsKnown() bool {
 }
 
 type HostnameIPFSUniversalPathContentListEntryNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Content list entry to be blocked.
 	Result HostnameIPFSUniversalPathContentListEntryNewResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -516,8 +515,8 @@ func (r HostnameIPFSUniversalPathContentListEntryUpdateParamsType) IsKnown() boo
 }
 
 type HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Content list entry to be blocked.
 	Result HostnameIPFSUniversalPathContentListEntryUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -566,8 +565,8 @@ type HostnameIPFSUniversalPathContentListEntryListParams struct {
 }
 
 type HostnameIPFSUniversalPathContentListEntryListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                                 `json:"messages,required"`
+	Errors   []interface{}                                         `json:"errors,required"`
+	Messages []interface{}                                         `json:"messages,required"`
 	Result   HostnameIPFSUniversalPathContentListEntryListResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeSuccess    `json:"success,required"`
@@ -649,8 +648,8 @@ type HostnameIPFSUniversalPathContentListEntryDeleteParams struct {
 }
 
 type HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                                   `json:"messages,required"`
+	Errors   []interface{}                                           `json:"errors,required"`
+	Messages []interface{}                                           `json:"messages,required"`
 	Result   HostnameIPFSUniversalPathContentListEntryDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -698,8 +697,8 @@ type HostnameIPFSUniversalPathContentListEntryGetParams struct {
 }
 
 type HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Content list entry to be blocked.
 	Result HostnameIPFSUniversalPathContentListEntryGetResponse `json:"result,required"`
 	// Whether the API call was successful

@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -98,9 +97,9 @@ func (r *WAFPackageService) Get(ctx context.Context, packageID string, query WAF
 type WAFPackageListResponse = interface{}
 
 type WAFPackageGetResponse struct {
-	// This field can have the runtime type of [[]shared.ResponseInfo].
+	// This field can have the runtime type of [[]interface{}].
 	Errors interface{} `json:"errors"`
-	// This field can have the runtime type of [[]shared.ResponseInfo].
+	// This field can have the runtime type of [[]interface{}].
 	Messages interface{} `json:"messages"`
 	// This field can have the runtime type of [interface{}].
 	Result interface{} `json:"result"`
@@ -166,9 +165,9 @@ func init() {
 }
 
 type WAFPackageGetResponseFirewallAPIResponseSingle struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   interface{}   `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGetResponseFirewallAPIResponseSingleSuccess `json:"success,required"`
 	JSON    wafPackageGetResponseFirewallAPIResponseSingleJSON    `json:"-"`

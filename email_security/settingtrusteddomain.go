@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -444,8 +443,8 @@ func (r SettingTrustedDomainNewParamsBodyArrayItem) MarshalJSON() (data []byte, 
 }
 
 type SettingTrustedDomainNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors,required"`
-	Messages []shared.ResponseInfo                       `json:"messages,required"`
+	Errors   []interface{}                               `json:"errors,required"`
+	Messages []interface{}                               `json:"messages,required"`
 	Result   SettingTrustedDomainNewResponseUnion        `json:"result,required"`
 	Success  bool                                        `json:"success,required"`
 	JSON     settingTrustedDomainNewResponseEnvelopeJSON `json:"-"`
@@ -536,8 +535,8 @@ type SettingTrustedDomainDeleteParams struct {
 }
 
 type SettingTrustedDomainDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                          `json:"errors,required"`
-	Messages []shared.ResponseInfo                          `json:"messages,required"`
+	Errors   []interface{}                                  `json:"errors,required"`
+	Messages []interface{}                                  `json:"messages,required"`
 	Result   SettingTrustedDomainDeleteResponse             `json:"result,required"`
 	Success  bool                                           `json:"success,required"`
 	JSON     settingTrustedDomainDeleteResponseEnvelopeJSON `json:"-"`
@@ -581,8 +580,8 @@ func (r SettingTrustedDomainEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingTrustedDomainEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                        `json:"messages,required"`
+	Errors   []interface{}                                `json:"errors,required"`
+	Messages []interface{}                                `json:"messages,required"`
 	Result   SettingTrustedDomainEditResponse             `json:"result,required"`
 	Success  bool                                         `json:"success,required"`
 	JSON     settingTrustedDomainEditResponseEnvelopeJSON `json:"-"`
@@ -613,8 +612,8 @@ type SettingTrustedDomainGetParams struct {
 }
 
 type SettingTrustedDomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors,required"`
-	Messages []shared.ResponseInfo                       `json:"messages,required"`
+	Errors   []interface{}                               `json:"errors,required"`
+	Messages []interface{}                               `json:"messages,required"`
 	Result   SettingTrustedDomainGetResponse             `json:"result,required"`
 	Success  bool                                        `json:"success,required"`
 	JSON     settingTrustedDomainGetResponseEnvelopeJSON `json:"-"`

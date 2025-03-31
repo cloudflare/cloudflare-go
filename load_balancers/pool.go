@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PoolService contains methods and other services that help with interacting with
@@ -359,9 +358,9 @@ func (r PoolNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PoolNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Pool          `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolNewResponseEnvelopeJSON    `json:"-"`
@@ -453,9 +452,9 @@ func (r PoolUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PoolUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Pool          `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolUpdateResponseEnvelopeJSON    `json:"-"`
@@ -517,9 +516,9 @@ type PoolDeleteParams struct {
 }
 
 type PoolDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PoolDeleteResponse    `json:"result,required"`
+	Errors   []interface{}      `json:"errors,required"`
+	Messages []interface{}      `json:"messages,required"`
+	Result   PoolDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolDeleteResponseEnvelopeJSON    `json:"-"`
@@ -641,9 +640,9 @@ func (r PoolEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PoolEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Pool          `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolEditResponseEnvelopeJSON    `json:"-"`
@@ -689,9 +688,9 @@ type PoolGetParams struct {
 }
 
 type PoolGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Pool          `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolGetResponseEnvelopeJSON    `json:"-"`

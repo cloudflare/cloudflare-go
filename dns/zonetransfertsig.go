@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZoneTransferTSIGService contains methods and other services that help with
@@ -215,8 +214,8 @@ func (r ZoneTransferTSIGNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferTSIGNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferTSIGNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  TSIG                                       `json:"result"`
@@ -267,8 +266,8 @@ func (r ZoneTransferTSIGUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferTSIGUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferTSIGUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  TSIG                                          `json:"result"`
@@ -318,8 +317,8 @@ type ZoneTransferTSIGDeleteParams struct {
 }
 
 type ZoneTransferTSIGDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferTSIGDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferTSIGDeleteResponse                `json:"result"`
@@ -365,8 +364,8 @@ type ZoneTransferTSIGGetParams struct {
 }
 
 type ZoneTransferTSIGGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferTSIGGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  TSIG                                       `json:"result"`

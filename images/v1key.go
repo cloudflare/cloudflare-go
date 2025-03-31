@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // V1KeyService contains methods and other services that help with interacting with
@@ -187,9 +186,9 @@ type V1KeyUpdateParams struct {
 }
 
 type V1KeyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1KeyUpdateResponse   `json:"result,required"`
+	Errors   []interface{}       `json:"errors,required"`
+	Messages []interface{}       `json:"messages,required"`
+	Result   V1KeyUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success V1KeyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1KeyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -235,9 +234,9 @@ type V1KeyListParams struct {
 }
 
 type V1KeyListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1KeyListResponse     `json:"result,required"`
+	Errors   []interface{}     `json:"errors,required"`
+	Messages []interface{}     `json:"messages,required"`
+	Result   V1KeyListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success V1KeyListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1KeyListResponseEnvelopeJSON    `json:"-"`
@@ -283,9 +282,9 @@ type V1KeyDeleteParams struct {
 }
 
 type V1KeyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1KeyDeleteResponse   `json:"result,required"`
+	Errors   []interface{}       `json:"errors,required"`
+	Messages []interface{}       `json:"messages,required"`
+	Result   V1KeyDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success V1KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1KeyDeleteResponseEnvelopeJSON    `json:"-"`

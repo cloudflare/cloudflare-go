@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DEXHTTPTestService contains methods and other services that help with
@@ -71,10 +70,10 @@ type HTTPDetails struct {
 	// The HTTP method to use when running the test
 	Method string `json:"method"`
 	// The name of the HTTP synthetic application test
-	Name           string                     `json:"name"`
-	TargetPolicies []DigitalExperienceMonitor `json:"target_policies,nullable"`
-	Targeted       bool                       `json:"targeted"`
-	JSON           httpDetailsJSON            `json:"-"`
+	Name           string          `json:"name"`
+	TargetPolicies []interface{}   `json:"target_policies,nullable"`
+	Targeted       bool            `json:"targeted"`
+	JSON           httpDetailsJSON `json:"-"`
 }
 
 // httpDetailsJSON contains the JSON metadata for the struct [HTTPDetails]
@@ -385,8 +384,8 @@ func (r DexhttpTestGetParamsInterval) IsKnown() bool {
 }
 
 type DexhttpTestGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DexhttpTestGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  HTTPDetails                           `json:"result"`

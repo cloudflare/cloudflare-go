@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SecurityTXTService contains methods and other services that help with
@@ -77,8 +76,8 @@ func (r *SecurityTXTService) Get(ctx context.Context, query SecurityTXTGetParams
 }
 
 type SecurityTXTUpdateResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SecurityTXTUpdateResponseSuccess `json:"success,required"`
 	JSON    securityTXTUpdateResponseJSON    `json:"-"`
@@ -118,8 +117,8 @@ func (r SecurityTXTUpdateResponseSuccess) IsKnown() bool {
 }
 
 type SecurityTXTDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SecurityTXTDeleteResponseSuccess `json:"success,required"`
 	JSON    securityTXTDeleteResponseJSON    `json:"-"`
@@ -224,8 +223,8 @@ type SecurityTXTGetParams struct {
 }
 
 type SecurityTXTGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SecurityTXTGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  SecurityTXTGetResponse                `json:"result"`

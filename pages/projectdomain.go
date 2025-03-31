@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ProjectDomainService contains methods and other services that help with
@@ -871,8 +870,8 @@ func (r ProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDomainNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Errors   []interface{}            `json:"errors,required"`
+	Messages []interface{}            `json:"messages,required"`
 	Result   ProjectDomainNewResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainNewResponseEnvelopeSuccess `json:"success,required"`
@@ -925,8 +924,8 @@ type ProjectDomainDeleteParams struct {
 }
 
 type ProjectDomainDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Errors   []interface{}               `json:"errors,required"`
+	Messages []interface{}               `json:"messages,required"`
 	Result   ProjectDomainDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -979,8 +978,8 @@ func (r ProjectDomainEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDomainEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Errors   []interface{}             `json:"errors,required"`
+	Messages []interface{}             `json:"messages,required"`
 	Result   ProjectDomainEditResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainEditResponseEnvelopeSuccess `json:"success,required"`
@@ -1028,8 +1027,8 @@ type ProjectDomainGetParams struct {
 }
 
 type ProjectDomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Errors   []interface{}            `json:"errors,required"`
+	Messages []interface{}            `json:"messages,required"`
 	Result   ProjectDomainGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainGetResponseEnvelopeSuccess `json:"success,required"`

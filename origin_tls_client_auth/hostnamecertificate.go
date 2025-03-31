@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HostnameCertificateService contains methods and other services that help with
@@ -369,8 +368,8 @@ func (r HostnameCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  HostnameCertificateNewResponse                `json:"result"`
@@ -422,8 +421,8 @@ type HostnameCertificateDeleteParams struct {
 }
 
 type HostnameCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  HostnameCertificateDeleteResponse                `json:"result"`
@@ -470,8 +469,8 @@ type HostnameCertificateGetParams struct {
 }
 
 type HostnameCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  HostnameCertificateGetResponse                `json:"result"`

@@ -10,7 +10,6 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/custom_hostnames"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
@@ -18,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/keyless_certificates"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CustomCertificateService contains methods and other services that help with
@@ -157,12 +155,8 @@ func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID 
 
 type CustomCertificate struct {
 	// Identifier
-	ID string `json:"id,required"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod custom_hostnames.BundleMethod `json:"bundle_method,required"`
+	ID           string      `json:"id,required"`
+	BundleMethod interface{} `json:"bundle_method,required"`
 	// When the certificate from the authority expires.
 	ExpiresOn time.Time `json:"expires_on,required" format:"date-time"`
 	Hosts     []string  `json:"hosts,required"`
@@ -358,12 +352,8 @@ type CustomCertificateNewParams struct {
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate,required"`
 	// The zone's private key.
-	PrivateKey param.Field[string] `json:"private_key,required"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
+	PrivateKey   param.Field[string]      `json:"private_key,required"`
+	BundleMethod param.Field[interface{}] `json:"bundle_method"`
 	// Specify the region where your private key can be held locally for optimal TLS
 	// performance. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -409,8 +399,8 @@ func (r CustomCertificateNewParamsType) IsKnown() bool {
 }
 
 type CustomCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  CustomCertificate                           `json:"result"`
@@ -514,8 +504,8 @@ type CustomCertificateDeleteParams struct {
 }
 
 type CustomCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  CustomCertificateDeleteResponse                `json:"result"`
@@ -558,12 +548,8 @@ func (r CustomCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomCertificateEditParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
+	ZoneID       param.Field[string]      `path:"zone_id,required"`
+	BundleMethod param.Field[interface{}] `json:"bundle_method"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate"`
 	// Specify the region where your private key can be held locally for optimal TLS
@@ -593,8 +579,8 @@ func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomCertificateEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  CustomCertificate                            `json:"result"`
@@ -641,8 +627,8 @@ type CustomCertificateGetParams struct {
 }
 
 type CustomCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  CustomCertificate                           `json:"result"`

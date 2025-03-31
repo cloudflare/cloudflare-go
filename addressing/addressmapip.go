@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AddressMapIPService contains methods and other services that help with
@@ -75,8 +74,8 @@ func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, i
 }
 
 type AddressMapIPUpdateResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapIPUpdateResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapIPUpdateResponseResultInfo `json:"result_info"`
@@ -149,8 +148,8 @@ func (r addressMapIPUpdateResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapIPDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapIPDeleteResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapIPDeleteResponseResultInfo `json:"result_info"`

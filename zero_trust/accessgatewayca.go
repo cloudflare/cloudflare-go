@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessGatewayCAService contains methods and other services that help with
@@ -178,8 +177,8 @@ type AccessGatewayCANewParams struct {
 }
 
 type AccessGatewayCANewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessGatewayCANewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessGatewayCANewResponse                `json:"result"`
@@ -231,8 +230,8 @@ type AccessGatewayCADeleteParams struct {
 }
 
 type AccessGatewayCADeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessGatewayCADeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessGatewayCADeleteResponse                `json:"result"`

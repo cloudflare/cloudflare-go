@@ -1641,8 +1641,8 @@ func (r TunnelWARPConnectorNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelWARPConnectorNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelWARPConnectorNewResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -1748,8 +1748,8 @@ type TunnelWARPConnectorDeleteParams struct {
 }
 
 type TunnelWARPConnectorDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelWARPConnectorDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -1806,8 +1806,8 @@ func (r TunnelWARPConnectorEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelWARPConnectorEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelWARPConnectorEditResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -1855,8 +1855,8 @@ type TunnelWARPConnectorGetParams struct {
 }
 
 type TunnelWARPConnectorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelWARPConnectorGetResponse `json:"result,required"`
 	// Whether the API call was successful

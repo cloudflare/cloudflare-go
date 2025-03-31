@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // V1VariantService contains methods and other services that help with interacting
@@ -696,9 +695,9 @@ func (r V1VariantNewParamsOptionsMetadata) IsKnown() bool {
 }
 
 type V1VariantNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1VariantNewResponse  `json:"result,required"`
+	Errors   []interface{}        `json:"errors,required"`
+	Messages []interface{}        `json:"messages,required"`
+	Result   V1VariantNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantNewResponseEnvelopeJSON    `json:"-"`
@@ -744,9 +743,9 @@ type V1VariantListParams struct {
 }
 
 type V1VariantListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Variant               `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Variant       `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantListResponseEnvelopeJSON    `json:"-"`
@@ -792,9 +791,9 @@ type V1VariantDeleteParams struct {
 }
 
 type V1VariantDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   interface{}   `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantDeleteResponseEnvelopeJSON    `json:"-"`
@@ -903,8 +902,8 @@ func (r V1VariantEditParamsOptionsMetadata) IsKnown() bool {
 }
 
 type V1VariantEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{}         `json:"errors,required"`
+	Messages []interface{}         `json:"messages,required"`
 	Result   V1VariantEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantEditResponseEnvelopeSuccess `json:"success,required"`
@@ -951,9 +950,9 @@ type V1VariantGetParams struct {
 }
 
 type V1VariantGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1VariantGetResponse  `json:"result,required"`
+	Errors   []interface{}        `json:"errors,required"`
+	Messages []interface{}        `json:"messages,required"`
+	Result   V1VariantGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantGetResponseEnvelopeJSON    `json:"-"`

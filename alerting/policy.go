@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PolicyService contains methods and other services that help with interacting
@@ -718,8 +717,8 @@ func (r policyUpdateResponseJSON) RawJSON() string {
 }
 
 type PolicyDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success    PolicyDeleteResponseSuccess    `json:"success,required"`
 	ResultInfo PolicyDeleteResponseResultInfo `json:"result_info"`
@@ -902,8 +901,8 @@ func (r PolicyNewParamsAlertType) IsKnown() bool {
 }
 
 type PolicyNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success PolicyNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  PolicyNewResponse                `json:"result"`
@@ -1055,8 +1054,8 @@ func (r PolicyUpdateParamsAlertType) IsKnown() bool {
 }
 
 type PolicyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success PolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  PolicyUpdateResponse                `json:"result"`
@@ -1113,8 +1112,8 @@ type PolicyGetParams struct {
 }
 
 type PolicyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success PolicyGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Policy                           `json:"result"`

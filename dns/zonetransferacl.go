@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZoneTransferACLService contains methods and other services that help with
@@ -225,8 +224,8 @@ func (r ZoneTransferACLNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferACLNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferACLNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ACL                                       `json:"result"`
@@ -277,8 +276,8 @@ func (r ZoneTransferACLUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferACLUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferACLUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  ACL                                          `json:"result"`
@@ -328,8 +327,8 @@ type ZoneTransferACLDeleteParams struct {
 }
 
 type ZoneTransferACLDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferACLDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferACLDeleteResponse                `json:"result"`
@@ -375,8 +374,8 @@ type ZoneTransferACLGetParams struct {
 }
 
 type ZoneTransferACLGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferACLGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ACL                                       `json:"result"`

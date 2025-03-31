@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InvestigateReclassifyService contains methods and other services that help with
@@ -89,8 +88,8 @@ func (r InvestigateReclassifyNewParamsExpectedDisposition) IsKnown() bool {
 }
 
 type InvestigateReclassifyNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                        `json:"messages,required"`
+	Errors   []interface{}                                `json:"errors,required"`
+	Messages []interface{}                                `json:"messages,required"`
 	Result   InvestigateReclassifyNewResponse             `json:"result,required"`
 	Success  bool                                         `json:"success,required"`
 	JSON     investigateReclassifyNewResponseEnvelopeJSON `json:"-"`

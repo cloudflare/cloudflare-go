@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InvestigateRawService contains methods and other services that help with
@@ -83,8 +82,8 @@ type InvestigateRawGetParams struct {
 }
 
 type InvestigateRawGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
+	Errors   []interface{}                         `json:"errors,required"`
+	Messages []interface{}                         `json:"messages,required"`
 	Result   InvestigateRawGetResponse             `json:"result,required"`
 	Success  bool                                  `json:"success,required"`
 	JSON     investigateRawGetResponseEnvelopeJSON `json:"-"`

@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -965,7 +964,7 @@ func (r BucketLifecycleUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketLifecycleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Errors   []interface{}                 `json:"errors,required"`
 	Messages []string                      `json:"messages,required"`
 	Result   BucketLifecycleUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -1032,7 +1031,7 @@ func (r BucketLifecycleGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketLifecycleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Errors   []interface{}              `json:"errors,required"`
 	Messages []string                   `json:"messages,required"`
 	Result   BucketLifecycleGetResponse `json:"result,required"`
 	// Whether the API call was successful

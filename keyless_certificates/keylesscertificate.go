@@ -9,13 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v4/custom_hostnames"
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // KeylessCertificateService contains methods and other services that help with
@@ -280,12 +278,8 @@ type KeylessCertificateNewParams struct {
 	Host param.Field[string] `json:"host,required" format:"hostname"`
 	// The keyless SSL port used to communicate between Cloudflare and the client's
 	// Keyless SSL server.
-	Port param.Field[float64] `json:"port,required"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
+	Port         param.Field[float64]     `json:"port,required"`
+	BundleMethod param.Field[interface{}] `json:"bundle_method"`
 	// The keyless SSL name.
 	Name param.Field[string] `json:"name"`
 	// Configuration for using Keyless SSL through a Cloudflare Tunnel
@@ -297,8 +291,8 @@ func (r KeylessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeylessCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  KeylessCertificate                           `json:"result"`
@@ -350,8 +344,8 @@ type KeylessCertificateDeleteParams struct {
 }
 
 type KeylessCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  KeylessCertificateDeleteResponse                `json:"result"`
@@ -413,8 +407,8 @@ func (r KeylessCertificateEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeylessCertificateEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  KeylessCertificate                            `json:"result"`
@@ -461,8 +455,8 @@ type KeylessCertificateGetParams struct {
 }
 
 type KeylessCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  KeylessCertificate                           `json:"result"`

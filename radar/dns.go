@@ -54,9 +54,9 @@ func (r *DNSService) Timeseries(ctx context.Context, query DNSTimeseriesParams, 
 }
 
 type DNSTimeseriesResponse struct {
-	Meta   DNSTimeseriesResponseMeta   `json:"meta,required"`
-	Serie0 DNSTimeseriesResponseSerie0 `json:"serie_0,required"`
-	JSON   dnsTimeseriesResponseJSON   `json:"-"`
+	Meta   DNSTimeseriesResponseMeta `json:"meta,required"`
+	Serie0 interface{}               `json:"serie_0,required"`
+	JSON   dnsTimeseriesResponseJSON `json:"-"`
 }
 
 // dnsTimeseriesResponseJSON contains the JSON metadata for the struct
@@ -78,7 +78,7 @@ func (r dnsTimeseriesResponseJSON) RawJSON() string {
 
 type DNSTimeseriesResponseMeta struct {
 	AggInterval    string                                  `json:"aggInterval,required"`
-	DateRange      []DNSTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []interface{}                           `json:"dateRange,required"`
 	LastUpdated    time.Time                               `json:"lastUpdated,required" format:"date-time"`
 	ConfidenceInfo DNSTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           dnsTimeseriesResponseMetaJSON           `json:"-"`
@@ -103,35 +103,10 @@ func (r dnsTimeseriesResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSTimeseriesResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                              `json:"startTime,required" format:"date-time"`
-	JSON      dnsTimeseriesResponseMetaDateRangeJSON `json:"-"`
-}
-
-// dnsTimeseriesResponseMetaDateRangeJSON contains the JSON metadata for the struct
-// [DNSTimeseriesResponseMetaDateRange]
-type dnsTimeseriesResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type DNSTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []DNSTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                               `json:"level"`
-	JSON        dnsTimeseriesResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []interface{}                               `json:"annotations"`
+	Level       int64                                       `json:"level"`
+	JSON        dnsTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // dnsTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -148,62 +123,6 @@ func (r *DNSTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (er
 }
 
 func (r dnsTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSTimeseriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                `json:"dataSource,required"`
-	Description     string                                                `json:"description,required"`
-	EventType       string                                                `json:"eventType,required"`
-	IsInstantaneous bool                                                  `json:"isInstantaneous,required"`
-	EndTime         time.Time                                             `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                `json:"linkedUrl"`
-	StartTime       time.Time                                             `json:"startTime" format:"date-time"`
-	JSON            dnsTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// dnsTimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata
-// for the struct [DNSTimeseriesResponseMetaConfidenceInfoAnnotation]
-type dnsTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DNSTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSTimeseriesResponseSerie0 struct {
-	Timestamps []time.Time                     `json:"timestamps,required" format:"date-time"`
-	Values     []string                        `json:"values,required"`
-	JSON       dnsTimeseriesResponseSerie0JSON `json:"-"`
-}
-
-// dnsTimeseriesResponseSerie0JSON contains the JSON metadata for the struct
-// [DNSTimeseriesResponseSerie0]
-type dnsTimeseriesResponseSerie0JSON struct {
-	Timestamps  apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSTimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsTimeseriesResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 

@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // GatewayRuleService contains methods and other services that help with
@@ -1550,8 +1549,8 @@ func (r GatewayRuleNewParamsExpiration) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayRuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                           `json:"result"`
@@ -1690,8 +1689,8 @@ func (r GatewayRuleUpdateParamsExpiration) MarshalJSON() (data []byte, err error
 }
 
 type GatewayRuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                              `json:"result"`
@@ -1741,8 +1740,8 @@ type GatewayRuleDeleteParams struct {
 }
 
 type GatewayRuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRuleDeleteResponse                `json:"result"`
@@ -1788,8 +1787,8 @@ type GatewayRuleGetParams struct {
 }
 
 type GatewayRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                           `json:"result"`
@@ -1835,8 +1834,8 @@ type GatewayRuleResetExpirationParams struct {
 }
 
 type GatewayRuleResetExpirationResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayRuleResetExpirationResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayRule                                       `json:"result"`

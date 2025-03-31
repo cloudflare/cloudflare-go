@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // LeakedCredentialCheckService contains methods and other services that help with
@@ -128,8 +127,8 @@ func (r LeakedCredentialCheckNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LeakedCredentialCheckNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// The overall status for Leaked Credential Checks
 	Result LeakedCredentialCheckNewResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -177,8 +176,8 @@ type LeakedCredentialCheckGetParams struct {
 }
 
 type LeakedCredentialCheckGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// The overall status for Leaked Credential Checks
 	Result LeakedCredentialCheckGetResponse `json:"result,required"`
 	// Whether the API call was successful

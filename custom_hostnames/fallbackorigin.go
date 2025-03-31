@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // FallbackOriginService contains methods and other services that help with
@@ -263,8 +262,8 @@ func (r FallbackOriginUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FallbackOriginUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  FallbackOriginUpdateResponse                `json:"result"`
@@ -311,8 +310,8 @@ type FallbackOriginDeleteParams struct {
 }
 
 type FallbackOriginDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  FallbackOriginDeleteResponse                `json:"result"`
@@ -359,8 +358,8 @@ type FallbackOriginGetParams struct {
 }
 
 type FallbackOriginGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  FallbackOriginGetResponse                `json:"result"`

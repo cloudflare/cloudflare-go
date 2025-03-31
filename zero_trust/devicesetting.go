@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DeviceSettingService contains methods and other services that help with
@@ -147,9 +146,9 @@ func (r DeviceSettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceSettingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceSettings        `json:"result,required,nullable"`
+	Errors   []interface{}  `json:"errors,required"`
+	Messages []interface{}  `json:"messages,required"`
+	Result   DeviceSettings `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceSettingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -194,9 +193,9 @@ type DeviceSettingListParams struct {
 }
 
 type DeviceSettingListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceSettings        `json:"result,required,nullable"`
+	Errors   []interface{}  `json:"errors,required"`
+	Messages []interface{}  `json:"messages,required"`
+	Result   DeviceSettings `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceSettingListResponseEnvelopeJSON    `json:"-"`
@@ -246,9 +245,9 @@ func (r DeviceSettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceSettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceSettings        `json:"result,required,nullable"`
+	Errors   []interface{}  `json:"errors,required"`
+	Messages []interface{}  `json:"messages,required"`
+	Result   DeviceSettings `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceSettingEditResponseEnvelopeJSON    `json:"-"`

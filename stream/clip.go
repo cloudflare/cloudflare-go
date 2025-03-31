@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ClipService contains methods and other services that help with interacting with
@@ -233,8 +232,8 @@ func (r ClipNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 }
 
 type ClipNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ClipNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Clip                           `json:"result"`

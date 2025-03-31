@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptDeploymentService contains methods and other services that help with
@@ -82,41 +81,11 @@ func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, qu
 	return
 }
 
-type Deployment struct {
-	// Human-readable message about the deployment. Truncated to 100 bytes.
-	WorkersMessage string         `json:"workers/message"`
-	JSON           deploymentJSON `json:"-"`
-}
-
-// deploymentJSON contains the JSON metadata for the struct [Deployment]
-type deploymentJSON struct {
-	WorkersMessage apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *Deployment) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deploymentJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeploymentParam struct {
-	// Human-readable message about the deployment. Truncated to 100 bytes.
-	WorkersMessage param.Field[string] `json:"workers/message"`
-}
-
-func (r DeploymentParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ScriptDeploymentNewResponse struct {
 	Strategy    ScriptDeploymentNewResponseStrategy  `json:"strategy,required"`
 	Versions    []ScriptDeploymentNewResponseVersion `json:"versions,required"`
 	ID          string                               `json:"id"`
-	Annotations Deployment                           `json:"annotations"`
+	Annotations interface{}                          `json:"annotations"`
 	AuthorEmail string                               `json:"author_email"`
 	CreatedOn   string                               `json:"created_on"`
 	Source      string                               `json:"source"`
@@ -207,7 +176,7 @@ type ScriptDeploymentGetResponseDeployment struct {
 	Strategy    ScriptDeploymentGetResponseDeploymentsStrategy  `json:"strategy,required"`
 	Versions    []ScriptDeploymentGetResponseDeploymentsVersion `json:"versions,required"`
 	ID          string                                          `json:"id"`
-	Annotations Deployment                                      `json:"annotations"`
+	Annotations interface{}                                     `json:"annotations"`
 	AuthorEmail string                                          `json:"author_email"`
 	CreatedOn   string                                          `json:"created_on"`
 	Source      string                                          `json:"source"`
@@ -280,8 +249,8 @@ type ScriptDeploymentNewParams struct {
 	Versions  param.Field[[]ScriptDeploymentNewParamsVersion] `json:"versions,required"`
 	// If set to true, the deployment will be created even if normally blocked by
 	// something such rolling back to an older version when a secret has changed.
-	Force       param.Field[bool]            `query:"force"`
-	Annotations param.Field[DeploymentParam] `json:"annotations"`
+	Force       param.Field[bool]        `query:"force"`
+	Annotations param.Field[interface{}] `json:"annotations"`
 }
 
 func (r ScriptDeploymentNewParams) MarshalJSON() (data []byte, err error) {
@@ -321,8 +290,8 @@ func (r ScriptDeploymentNewParamsVersion) MarshalJSON() (data []byte, err error)
 }
 
 type ScriptDeploymentNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptDeploymentNewResponse                `json:"result"`
@@ -369,8 +338,8 @@ type ScriptDeploymentGetParams struct {
 }
 
 type ScriptDeploymentGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptDeploymentGetResponse                `json:"result"`

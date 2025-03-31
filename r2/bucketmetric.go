@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketMetricService contains methods and other services that help with
@@ -252,8 +251,8 @@ type BucketMetricListParams struct {
 }
 
 type BucketMetricListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []string      `json:"messages,required"`
 	// Metrics based on the class they belong to
 	Result BucketMetricListResponse `json:"result,required"`
 	// Whether the API call was successful

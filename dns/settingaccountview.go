@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingAccountViewService contains methods and other services that help with
@@ -317,8 +316,8 @@ func (r SettingAccountViewNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingAccountViewNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SettingAccountViewNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  SettingAccountViewNewResponse                `json:"result"`
@@ -501,8 +500,8 @@ func (r SettingAccountViewEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingAccountViewEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SettingAccountViewEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  SettingAccountViewEditResponse                `json:"result"`
@@ -549,8 +548,8 @@ type SettingAccountViewGetParams struct {
 }
 
 type SettingAccountViewGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SettingAccountViewGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  SettingAccountViewGetResponse                `json:"result"`

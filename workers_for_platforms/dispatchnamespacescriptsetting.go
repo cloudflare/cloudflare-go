@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/cloudflare/cloudflare-go/v4/workers"
 	"github.com/tidwall/gjson"
 )
@@ -8434,8 +8433,8 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsUsageModel) IsKnown() bo
 }
 
 type DispatchNamespaceScriptSettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptSettingEditResponse                `json:"result"`
@@ -8482,8 +8481,8 @@ type DispatchNamespaceScriptSettingGetParams struct {
 }
 
 type DispatchNamespaceScriptSettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptSettingGetResponse                `json:"result"`

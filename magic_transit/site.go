@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SiteService contains methods and other services that help with interacting with
@@ -276,9 +275,9 @@ func (r SiteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Site                  `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Site          `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteNewResponseEnvelopeJSON    `json:"-"`
@@ -337,9 +336,9 @@ func (r SiteUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Site                  `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Site          `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteUpdateResponseEnvelopeJSON    `json:"-"`
@@ -400,9 +399,9 @@ type SiteDeleteParams struct {
 }
 
 type SiteDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Site                  `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Site          `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteDeleteResponseEnvelopeJSON    `json:"-"`
@@ -461,9 +460,9 @@ func (r SiteEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Site                  `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Site          `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteEditResponseEnvelopeJSON    `json:"-"`
@@ -510,9 +509,9 @@ type SiteGetParams struct {
 }
 
 type SiteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Site                  `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Site          `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteGetResponseEnvelopeJSON    `json:"-"`
