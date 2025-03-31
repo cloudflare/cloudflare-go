@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // WatermarkService contains methods and other services that help with interacting
@@ -229,8 +228,8 @@ func (r WatermarkNewParams) MarshalMultipart() (data []byte, contentType string,
 }
 
 type WatermarkNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Watermark                           `json:"result"`
@@ -282,8 +281,8 @@ type WatermarkDeleteParams struct {
 }
 
 type WatermarkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  string                                 `json:"result"`
@@ -330,8 +329,8 @@ type WatermarkGetParams struct {
 }
 
 type WatermarkGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Watermark                           `json:"result"`

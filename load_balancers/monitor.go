@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // MonitorService contains methods and other services that help with interacting
@@ -378,9 +377,9 @@ func (r MonitorNewParamsType) IsKnown() bool {
 }
 
 type MonitorNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Monitor       `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorNewResponseEnvelopeJSON    `json:"-"`
@@ -500,9 +499,9 @@ func (r MonitorUpdateParamsType) IsKnown() bool {
 }
 
 type MonitorUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Monitor       `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorUpdateResponseEnvelopeJSON    `json:"-"`
@@ -553,8 +552,8 @@ type MonitorDeleteParams struct {
 }
 
 type MonitorDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{}         `json:"errors,required"`
+	Messages []interface{}         `json:"messages,required"`
 	Result   MonitorDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -675,9 +674,9 @@ func (r MonitorEditParamsType) IsKnown() bool {
 }
 
 type MonitorEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Monitor       `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorEditResponseEnvelopeJSON    `json:"-"`
@@ -723,9 +722,9 @@ type MonitorGetParams struct {
 }
 
 type MonitorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Monitor       `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorGetResponseEnvelopeJSON    `json:"-"`

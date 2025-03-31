@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DispatchNamespaceScriptSecretService contains methods and other services that
@@ -311,8 +310,8 @@ func (r DispatchNamespaceScriptSecretUpdateParamsType) IsKnown() bool {
 }
 
 type DispatchNamespaceScriptSecretUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSecretUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptSecretUpdateResponse                `json:"result"`
@@ -364,8 +363,8 @@ type DispatchNamespaceScriptSecretDeleteParams struct {
 }
 
 type DispatchNamespaceScriptSecretDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptSecretDeleteResponse                `json:"result,nullable"`
@@ -412,8 +411,8 @@ type DispatchNamespaceScriptSecretGetParams struct {
 }
 
 type DispatchNamespaceScriptSecretGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSecretGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptSecretGetResponse                `json:"result"`

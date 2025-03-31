@@ -311,9 +311,8 @@ type IPSECTunnelNewResponseIPSECTunnelsHealthCheck struct {
 	// via the tunnel.
 	Direction IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -322,9 +321,8 @@ type IPSECTunnelNewResponseIPSECTunnelsHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                   `json:"type"`
-	JSON ipsecTunnelNewResponseIPSECTunnelsHealthCheckJSON `json:"-"`
+	Type   interface{}                                              `json:"type"`
+	JSON   ipsecTunnelNewResponseIPSECTunnelsHealthCheckJSON        `json:"-"`
 }
 
 // ipsecTunnelNewResponseIPSECTunnelsHealthCheckJSON contains the JSON metadata for
@@ -522,9 +520,8 @@ type IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheck struct {
 	// via the tunnel.
 	Direction IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -533,9 +530,8 @@ type IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                             `json:"type"`
-	JSON ipsecTunnelUpdateResponseModifiedIPSECTunnelHealthCheckJSON `json:"-"`
+	Type   interface{}                                                        `json:"type"`
+	JSON   ipsecTunnelUpdateResponseModifiedIPSECTunnelHealthCheckJSON        `json:"-"`
 }
 
 // ipsecTunnelUpdateResponseModifiedIPSECTunnelHealthCheckJSON contains the JSON
@@ -732,9 +728,8 @@ type IPSECTunnelListResponseIPSECTunnelsHealthCheck struct {
 	// via the tunnel.
 	Direction IPSECTunnelListResponseIPSECTunnelsHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -743,9 +738,8 @@ type IPSECTunnelListResponseIPSECTunnelsHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target IPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                    `json:"type"`
-	JSON ipsecTunnelListResponseIPSECTunnelsHealthCheckJSON `json:"-"`
+	Type   interface{}                                               `json:"type"`
+	JSON   ipsecTunnelListResponseIPSECTunnelsHealthCheckJSON        `json:"-"`
 }
 
 // ipsecTunnelListResponseIPSECTunnelsHealthCheckJSON contains the JSON metadata
@@ -943,9 +937,8 @@ type IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheck struct {
 	// via the tunnel.
 	Direction IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -954,9 +947,8 @@ type IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                            `json:"type"`
-	JSON ipsecTunnelDeleteResponseDeletedIPSECTunnelHealthCheckJSON `json:"-"`
+	Type   interface{}                                                       `json:"type"`
+	JSON   ipsecTunnelDeleteResponseDeletedIPSECTunnelHealthCheckJSON        `json:"-"`
 }
 
 // ipsecTunnelDeleteResponseDeletedIPSECTunnelHealthCheckJSON contains the JSON
@@ -1154,9 +1146,8 @@ type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheck struct {
 	// via the tunnel.
 	Direction IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -1165,9 +1156,8 @@ type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                                  `json:"type"`
-	JSON ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckJSON `json:"-"`
+	Type   interface{}                                                             `json:"type"`
+	JSON   ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckJSON        `json:"-"`
 }
 
 // ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckJSON contains the
@@ -1364,9 +1354,8 @@ type IPSECTunnelGetResponseIPSECTunnelHealthCheck struct {
 	// via the tunnel.
 	Direction IPSECTunnelGetResponseIPSECTunnelHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate HealthCheckRate `json:"rate"`
+	Enabled bool        `json:"enabled"`
+	Rate    interface{} `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -1375,9 +1364,8 @@ type IPSECTunnelGetResponseIPSECTunnelHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target IPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                  `json:"type"`
-	JSON ipsecTunnelGetResponseIPSECTunnelHealthCheckJSON `json:"-"`
+	Type   interface{}                                             `json:"type"`
+	JSON   ipsecTunnelGetResponseIPSECTunnelHealthCheckJSON        `json:"-"`
 }
 
 // ipsecTunnelGetResponseIPSECTunnelHealthCheckJSON contains the JSON metadata for
@@ -1550,9 +1538,8 @@ type IPSECTunnelNewParamsHealthCheck struct {
 	// via the tunnel.
 	Direction param.Field[IPSECTunnelNewParamsHealthCheckDirection] `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled param.Field[bool] `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[HealthCheckRate] `json:"rate"`
+	Enabled param.Field[bool]        `json:"enabled"`
+	Rate    param.Field[interface{}] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -1561,8 +1548,7 @@ type IPSECTunnelNewParamsHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target param.Field[IPSECTunnelNewParamsHealthCheckTargetUnion] `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[HealthCheckType] `json:"type"`
+	Type   param.Field[interface{}]                                `json:"type"`
 }
 
 func (r IPSECTunnelNewParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -1622,8 +1608,8 @@ func (r IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsI
 }
 
 type IPSECTunnelNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Errors   []interface{}          `json:"errors,required"`
+	Messages []interface{}          `json:"messages,required"`
 	Result   IPSECTunnelNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelNewResponseEnvelopeSuccess `json:"success,required"`
@@ -1700,9 +1686,8 @@ type IPSECTunnelUpdateParamsHealthCheck struct {
 	// via the tunnel.
 	Direction param.Field[IPSECTunnelUpdateParamsHealthCheckDirection] `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled param.Field[bool] `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[HealthCheckRate] `json:"rate"`
+	Enabled param.Field[bool]        `json:"enabled"`
+	Rate    param.Field[interface{}] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -1711,8 +1696,7 @@ type IPSECTunnelUpdateParamsHealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target param.Field[IPSECTunnelUpdateParamsHealthCheckTargetUnion] `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[HealthCheckType] `json:"type"`
+	Type   param.Field[interface{}]                                   `json:"type"`
 }
 
 func (r IPSECTunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -1772,8 +1756,8 @@ func (r IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) Implemen
 }
 
 type IPSECTunnelUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Errors   []interface{}             `json:"errors,required"`
+	Messages []interface{}             `json:"messages,required"`
 	Result   IPSECTunnelUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -1821,8 +1805,8 @@ type IPSECTunnelListParams struct {
 }
 
 type IPSECTunnelListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Errors   []interface{}           `json:"errors,required"`
+	Messages []interface{}           `json:"messages,required"`
 	Result   IPSECTunnelListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelListResponseEnvelopeSuccess `json:"success,required"`
@@ -1870,8 +1854,8 @@ type IPSECTunnelDeleteParams struct {
 }
 
 type IPSECTunnelDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Errors   []interface{}             `json:"errors,required"`
+	Messages []interface{}             `json:"messages,required"`
 	Result   IPSECTunnelDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -1924,8 +1908,8 @@ func (r IPSECTunnelBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IPSECTunnelBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Errors   []interface{}                 `json:"errors,required"`
+	Messages []interface{}                 `json:"messages,required"`
 	Result   IPSECTunnelBulkUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -1973,8 +1957,8 @@ type IPSECTunnelGetParams struct {
 }
 
 type IPSECTunnelGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Errors   []interface{}          `json:"errors,required"`
+	Messages []interface{}          `json:"messages,required"`
 	Result   IPSECTunnelGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelGetResponseEnvelopeSuccess `json:"success,required"`
@@ -2026,8 +2010,8 @@ func (r IPSECTunnelPSKGenerateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IPSECTunnelPSKGenerateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Errors   []interface{}                  `json:"errors,required"`
+	Messages []interface{}                  `json:"messages,required"`
 	Result   IPSECTunnelPSKGenerateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelPSKGenerateResponseEnvelopeSuccess `json:"success,required"`

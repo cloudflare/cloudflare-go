@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RecipientService contains methods and other services that help with interacting
@@ -375,7 +374,7 @@ func (r RecipientNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecipientNewResponseEnvelope struct {
-	Errors []shared.ResponseInfo `json:"errors,required"`
+	Errors []interface{} `json:"errors,required"`
 	// Whether the API call was successful.
 	Success bool                             `json:"success,required"`
 	Result  RecipientNewResponse             `json:"result"`
@@ -423,7 +422,7 @@ type RecipientDeleteParams struct {
 }
 
 type RecipientDeleteResponseEnvelope struct {
-	Errors []shared.ResponseInfo `json:"errors,required"`
+	Errors []interface{} `json:"errors,required"`
 	// Whether the API call was successful.
 	Success bool                                `json:"success,required"`
 	Result  RecipientDeleteResponse             `json:"result"`
@@ -454,7 +453,7 @@ type RecipientGetParams struct {
 }
 
 type RecipientGetResponseEnvelope struct {
-	Errors []shared.ResponseInfo `json:"errors,required"`
+	Errors []interface{} `json:"errors,required"`
 	// Whether the API call was successful.
 	Success bool                             `json:"success,required"`
 	Result  RecipientGetResponse             `json:"result"`

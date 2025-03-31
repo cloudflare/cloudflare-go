@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ReverseDNSService contains methods and other services that help with interacting
@@ -132,8 +131,8 @@ func (r ReverseDNSEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ReverseDNSEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ReverseDNSEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  ReverseDNSEditResponse                `json:"result"`
@@ -180,8 +179,8 @@ type ReverseDNSGetParams struct {
 }
 
 type ReverseDNSGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ReverseDNSGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ReverseDNSGetResponse                `json:"result"`

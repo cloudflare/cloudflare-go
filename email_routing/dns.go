@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -199,9 +198,9 @@ func (r DNSRecordType) IsKnown() bool {
 }
 
 type DNSGetResponse struct {
-	// This field can have the runtime type of [[]shared.ResponseInfo].
+	// This field can have the runtime type of [[]interface{}].
 	Errors interface{} `json:"errors,required"`
-	// This field can have the runtime type of [[]shared.ResponseInfo].
+	// This field can have the runtime type of [[]interface{}].
 	Messages interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSGetResponseSuccess `json:"success,required"`
@@ -273,8 +272,8 @@ func init() {
 }
 
 type DNSGetResponseEmailEmailRoutingDNSQueryResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success    DNSGetResponseEmailEmailRoutingDNSQueryResponseSuccess    `json:"success,required"`
 	Result     DNSGetResponseEmailEmailRoutingDNSQueryResponseResult     `json:"result"`
@@ -400,8 +399,8 @@ func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseResultInfoJSON) RawJSON()
 }
 
 type DNSGetResponseEmailDNSSettingsResponseCollection struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success    DNSGetResponseEmailDNSSettingsResponseCollectionSuccess    `json:"success,required"`
 	Result     []DNSRecord                                                `json:"result"`
@@ -505,8 +504,8 @@ func (r DNSNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Settings                      `json:"result"`
@@ -564,8 +563,8 @@ func (r DNSEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  Settings                       `json:"result"`

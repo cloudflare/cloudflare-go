@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RequestMessageService contains methods and other services that help with
@@ -162,8 +161,8 @@ func (r messageJSON) RawJSON() string {
 }
 
 type RequestMessageDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestMessageDeleteResponseSuccess `json:"success,required"`
 	JSON    requestMessageDeleteResponseJSON    `json:"-"`
@@ -212,8 +211,8 @@ func (r RequestMessageNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestMessageNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestMessageNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Message                                  `json:"result"`
@@ -264,8 +263,8 @@ func (r RequestMessageUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestMessageUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestMessageUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Message                                     `json:"result"`

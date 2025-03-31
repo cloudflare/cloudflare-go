@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AnalyticsReportService contains methods and other services that help with
@@ -62,7 +61,7 @@ func (r *AnalyticsReportService) Get(ctx context.Context, params AnalyticsReport
 
 type Report struct {
 	// Array with one row per combination of dimension values.
-	Data []ReportData `json:"data,required"`
+	Data []interface{} `json:"data,required"`
 	// Number of seconds between current time and last processed event, in another
 	// words how many seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -99,31 +98,6 @@ func (r *Report) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r reportJSON) RawJSON() string {
-	return r.raw
-}
-
-type ReportData struct {
-	// Array of dimension values, representing the combination of dimension values
-	// corresponding to this row.
-	Dimensions []string `json:"dimensions,required"`
-	// Array with one item per requested metric. Each item is a single value.
-	Metrics []float64      `json:"metrics,required"`
-	JSON    reportDataJSON `json:"-"`
-}
-
-// reportDataJSON contains the JSON metadata for the struct [ReportData]
-type reportDataJSON struct {
-	Dimensions  apijson.Field
-	Metrics     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ReportData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r reportDataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -197,8 +171,8 @@ func (r AnalyticsReportGetParams) URLQuery() (v url.Values) {
 }
 
 type AnalyticsReportGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Report                                    `json:"result"`

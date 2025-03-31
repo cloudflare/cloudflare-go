@@ -18,7 +18,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptVersionService contains methods and other services that help with
@@ -1341,8 +1340,8 @@ func (r ScriptVersionNewParamsMetadataUsageModel) IsKnown() bool {
 }
 
 type ScriptVersionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptVersionNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptVersionNewResponse                `json:"result"`
@@ -1409,8 +1408,8 @@ type ScriptVersionGetParams struct {
 }
 
 type ScriptVersionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptVersionGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptVersionGetResponse                `json:"result"`

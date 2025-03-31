@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HostnameService contains methods and other services that help with interacting
@@ -277,9 +276,9 @@ func (r HostnameNewParamsTarget) IsKnown() bool {
 }
 
 type HostnameNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Hostname      `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameNewResponseEnvelopeJSON    `json:"-"`
@@ -330,8 +329,8 @@ type HostnameDeleteParams struct {
 }
 
 type HostnameDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Errors   []interface{}          `json:"errors,required"`
+	Messages []interface{}          `json:"messages,required"`
 	Result   HostnameDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success HostnameDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -386,9 +385,9 @@ func (r HostnameEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Hostname      `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameEditResponseEnvelopeJSON    `json:"-"`
@@ -434,9 +433,9 @@ type HostnameGetParams struct {
 }
 
 type HostnameGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Hostname      `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameGetResponseEnvelopeJSON    `json:"-"`

@@ -395,8 +395,8 @@ func (r TokenNewParamsConditionRequestIP) MarshalJSON() (data []byte, err error)
 }
 
 type TokenNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  TokenNewResponse                `json:"result"`
@@ -448,8 +448,8 @@ func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.Token                       `json:"result"`
@@ -531,8 +531,8 @@ type TokenDeleteParams struct {
 }
 
 type TokenDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  TokenDeleteResponse                `json:"result,nullable"`
@@ -579,8 +579,8 @@ type TokenGetParams struct {
 }
 
 type TokenGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.Token                    `json:"result"`
@@ -627,8 +627,8 @@ type TokenVerifyParams struct {
 }
 
 type TokenVerifyResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenVerifyResponseEnvelopeSuccess `json:"success,required"`
 	Result  TokenVerifyResponse                `json:"result"`

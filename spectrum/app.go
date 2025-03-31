@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -1627,8 +1626,8 @@ func (r AppNewParamsBodyTrafficType) IsKnown() bool {
 }
 
 type AppNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AppNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AppNewResponse                `json:"result"`
@@ -1914,8 +1913,8 @@ func (r AppUpdateParamsBodyTrafficType) IsKnown() bool {
 }
 
 type AppUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AppUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AppUpdateResponse                `json:"result"`
@@ -2020,8 +2019,8 @@ type AppDeleteParams struct {
 }
 
 type AppDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AppDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AppDeleteResponse                `json:"result,nullable"`
@@ -2068,8 +2067,8 @@ type AppGetParams struct {
 }
 
 type AppGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AppGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AppGetResponse                `json:"result"`

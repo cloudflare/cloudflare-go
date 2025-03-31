@@ -36,7 +36,7 @@ func TestBucketSippyUpdateWithOptionalParams(t *testing.T) {
 			Body: r2.BucketSippyUpdateParamsBodyR2EnableSippyAws{
 				Destination: cloudflare.F(r2.BucketSippyUpdateParamsBodyR2EnableSippyAwsDestination{
 					AccessKeyID:     cloudflare.F("accessKeyId"),
-					Provider:        cloudflare.F(r2.ProviderR2),
+					Provider:        cloudflare.F[any](map[string]interface{}{}),
 					SecretAccessKey: cloudflare.F("secretAccessKey"),
 				}),
 				Source: cloudflare.F(r2.BucketSippyUpdateParamsBodyR2EnableSippyAwsSource{

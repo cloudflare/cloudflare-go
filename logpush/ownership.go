@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // OwnershipService contains methods and other services that help with interacting
@@ -66,7 +65,7 @@ func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, o
 }
 
 // Validates ownership challenge of the destination.
-func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *OwnershipValidation, err error) {
+func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *OwnershipValidateResponse, err error) {
 	var env OwnershipValidateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -96,27 +95,6 @@ func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidat
 	return
 }
 
-type OwnershipValidation struct {
-	Valid bool                    `json:"valid"`
-	JSON  ownershipValidationJSON `json:"-"`
-}
-
-// ownershipValidationJSON contains the JSON metadata for the struct
-// [OwnershipValidation]
-type ownershipValidationJSON struct {
-	Valid       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OwnershipValidation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ownershipValidationJSON) RawJSON() string {
-	return r.raw
-}
-
 type OwnershipNewResponse struct {
 	Filename string                   `json:"filename"`
 	Message  string                   `json:"message"`
@@ -142,6 +120,8 @@ func (r ownershipNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type OwnershipValidateResponse = interface{}
+
 type OwnershipNewParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
@@ -158,8 +138,8 @@ func (r OwnershipNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success OwnershipNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  OwnershipNewResponse                `json:"result,nullable"`
@@ -218,11 +198,11 @@ func (r OwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipValidateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success OwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
-	Result  OwnershipValidation                      `json:"result,nullable"`
+	Result  OwnershipValidateResponse                `json:"result"`
 	JSON    ownershipValidateResponseEnvelopeJSON    `json:"-"`
 }
 

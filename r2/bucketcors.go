@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketCORSService contains methods and other services that help with interacting
@@ -306,7 +305,7 @@ func (r BucketCORSUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketCORSUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Errors   []interface{}            `json:"errors,required"`
 	Messages []string                 `json:"messages,required"`
 	Result   BucketCORSUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -373,7 +372,7 @@ func (r BucketCORSDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketCORSDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Errors   []interface{}            `json:"errors,required"`
 	Messages []string                 `json:"messages,required"`
 	Result   BucketCORSDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -440,7 +439,7 @@ func (r BucketCORSGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketCORSGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Errors   []interface{}         `json:"errors,required"`
 	Messages []string              `json:"messages,required"`
 	Result   BucketCORSGetResponse `json:"result,required"`
 	// Whether the API call was successful

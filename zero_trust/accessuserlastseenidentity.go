@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessUserLastSeenIdentityService contains methods and other services that help
@@ -63,7 +62,7 @@ type Identity struct {
 	DeviceSessions     map[string]IdentityDeviceSession `json:"device_sessions"`
 	DevicePosture      map[string]IdentityDevicePosture `json:"devicePosture"`
 	Email              string                           `json:"email"`
-	Geo                UserPolicyCheckGeo               `json:"geo"`
+	Geo                interface{}                      `json:"geo"`
 	Iat                float64                          `json:"iat"`
 	IdP                IdentityIdP                      `json:"idp"`
 	IP                 string                           `json:"ip"`
@@ -247,8 +246,8 @@ type AccessUserLastSeenIdentityGetParams struct {
 }
 
 type AccessUserLastSeenIdentityGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessUserLastSeenIdentityGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Identity                                             `json:"result"`

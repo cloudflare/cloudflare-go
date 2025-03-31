@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -809,22 +808,6 @@ func (r OIDCSaaSAppRefreshTokenOptionsParam) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-// The format of the name identifier sent to the SaaS application.
-type SaaSAppNameIDFormat string
-
-const (
-	SaaSAppNameIDFormatID    SaaSAppNameIDFormat = "id"
-	SaaSAppNameIDFormatEmail SaaSAppNameIDFormat = "email"
-)
-
-func (r SaaSAppNameIDFormat) IsKnown() bool {
-	switch r {
-	case SaaSAppNameIDFormatID, SaaSAppNameIDFormatEmail:
-		return true
-	}
-	return false
-}
-
 type SAMLSaaSApp struct {
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
@@ -838,9 +821,8 @@ type SAMLSaaSApp struct {
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
 	// The unique identifier for your SaaS application.
-	IdPEntityID string `json:"idp_entity_id"`
-	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat SaaSAppNameIDFormat `json:"name_id_format"`
+	IdPEntityID  string      `json:"idp_entity_id"`
+	NameIDFormat interface{} `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -1026,9 +1008,8 @@ type SAMLSaaSAppParam struct {
 	// initiated logins.
 	DefaultRelayState param.Field[string] `json:"default_relay_state"`
 	// The unique identifier for your SaaS application.
-	IdPEntityID param.Field[string] `json:"idp_entity_id"`
-	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[SaaSAppNameIDFormat] `json:"name_id_format"`
+	IdPEntityID  param.Field[string]      `json:"idp_entity_id"`
+	NameIDFormat param.Field[interface{}] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -3572,8 +3553,8 @@ type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
 	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID string `json:"idp_entity_id"`
-	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat SaaSAppNameIDFormat `json:"name_id_format"`
+	// This field can have the runtime type of [interface{}].
+	NameIDFormat interface{} `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -9619,8 +9600,8 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
 	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID string `json:"idp_entity_id"`
-	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat SaaSAppNameIDFormat `json:"name_id_format"`
+	// This field can have the runtime type of [interface{}].
+	NameIDFormat interface{} `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -15672,8 +15653,8 @@ type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
 	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID string `json:"idp_entity_id"`
-	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat SaaSAppNameIDFormat `json:"name_id_format"`
+	// This field can have the runtime type of [interface{}].
+	NameIDFormat interface{} `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -21743,8 +21724,8 @@ type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
 	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID string `json:"idp_entity_id"`
-	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat SaaSAppNameIDFormat `json:"name_id_format"`
+	// This field can have the runtime type of [interface{}].
+	NameIDFormat interface{} `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -27106,6 +27087,8 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPoli
 func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -27460,6 +27443,8 @@ func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink
 func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -27521,9 +27506,8 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
 	GroupFilterRegex         param.Field[string]      `json:"group_filter_regex"`
 	HybridAndImplicitOptions param.Field[interface{}] `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
-	IdPEntityID param.Field[string] `json:"idp_entity_id"`
-	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[SaaSAppNameIDFormat] `json:"name_id_format"`
+	IdPEntityID  param.Field[string]      `json:"idp_entity_id"`
+	NameIDFormat param.Field[interface{}] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -28107,6 +28091,8 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPoli
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -28670,6 +28656,8 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPoli
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -29057,6 +29045,8 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPol
 func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -29444,6 +29434,8 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -29831,6 +29823,8 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -30772,6 +30766,8 @@ func (r AccessApplicationNewParamsBodyBrowserRdpApplicationPoliciesAccessAppPoli
 func (r AccessApplicationNewParamsBodyBrowserRdpApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationNewParamsBodyBrowserRdpApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationNewParamsBodyBrowserRdpApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -31031,8 +31027,8 @@ func (r AccessApplicationNewParamsBodyBrowserRdpApplicationSCIMConfigAuthenticat
 }
 
 type AccessApplicationNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationNewResponse                `json:"result"`
@@ -31490,6 +31486,8 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppP
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -31844,6 +31842,8 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyL
 func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -31905,9 +31905,8 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
 	GroupFilterRegex         param.Field[string]      `json:"group_filter_regex"`
 	HybridAndImplicitOptions param.Field[interface{}] `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
-	IdPEntityID param.Field[string] `json:"idp_entity_id"`
-	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[SaaSAppNameIDFormat] `json:"name_id_format"`
+	IdPEntityID  param.Field[string]      `json:"idp_entity_id"`
+	NameIDFormat param.Field[interface{}] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -32491,6 +32490,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppP
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -33054,6 +33055,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppP
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -33441,6 +33444,8 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessApp
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -33828,6 +33833,8 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -34215,6 +34222,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -35156,6 +35165,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationPoliciesAccessAppP
 func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationPoliciesAccessAppPolicyLink) ImplementsAccessApplicationUpdateParamsBodyBrowserRdpApplicationPolicyUnion() {
 }
 
+// An application-scoped policy JSON. If the policy does not yet exist, it will be
+// created.
 type AccessApplicationUpdateParamsBodyBrowserRdpApplicationPoliciesObject struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -35415,8 +35426,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationSCIMConfigAuthenti
 }
 
 type AccessApplicationUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationUpdateResponse                `json:"result"`
@@ -35489,8 +35500,8 @@ type AccessApplicationDeleteParams struct {
 }
 
 type AccessApplicationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationDeleteResponse                `json:"result"`
@@ -35539,8 +35550,8 @@ type AccessApplicationGetParams struct {
 }
 
 type AccessApplicationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationGetResponse                `json:"result"`

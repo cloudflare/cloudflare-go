@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // V2DirectUploadService contains methods and other services that help with
@@ -120,8 +119,8 @@ func (r V2DirectUploadNewParams) MarshalMultipart() (data []byte, contentType st
 }
 
 type V2DirectUploadNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Errors   []interface{}             `json:"errors,required"`
+	Messages []interface{}             `json:"messages,required"`
 	Result   V2DirectUploadNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success V2DirectUploadNewResponseEnvelopeSuccess `json:"success,required"`

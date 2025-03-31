@@ -142,8 +142,8 @@ func (r rankingInternetServiceTimeseriesGroupsResponseJSON) RawJSON() string {
 }
 
 type RankingInternetServiceTimeseriesGroupsResponseMeta struct {
-	DateRange []RankingInternetServiceTimeseriesGroupsResponseMetaDateRange `json:"dateRange,required"`
-	JSON      rankingInternetServiceTimeseriesGroupsResponseMetaJSON        `json:"-"`
+	DateRange []interface{}                                          `json:"dateRange,required"`
+	JSON      rankingInternetServiceTimeseriesGroupsResponseMetaJSON `json:"-"`
 }
 
 // rankingInternetServiceTimeseriesGroupsResponseMetaJSON contains the JSON
@@ -159,32 +159,6 @@ func (r *RankingInternetServiceTimeseriesGroupsResponseMeta) UnmarshalJSON(data 
 }
 
 func (r rankingInternetServiceTimeseriesGroupsResponseMetaJSON) RawJSON() string {
-	return r.raw
-}
-
-type RankingInternetServiceTimeseriesGroupsResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                                       `json:"startTime,required" format:"date-time"`
-	JSON      rankingInternetServiceTimeseriesGroupsResponseMetaDateRangeJSON `json:"-"`
-}
-
-// rankingInternetServiceTimeseriesGroupsResponseMetaDateRangeJSON contains the
-// JSON metadata for the struct
-// [RankingInternetServiceTimeseriesGroupsResponseMetaDateRange]
-type rankingInternetServiceTimeseriesGroupsResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RankingInternetServiceTimeseriesGroupsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rankingInternetServiceTimeseriesGroupsResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 

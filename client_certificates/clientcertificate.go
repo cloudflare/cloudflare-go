@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ClientCertificateService contains methods and other services that help with
@@ -261,8 +260,8 @@ func (r ClientCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ClientCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ClientCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ClientCertificate                           `json:"result"`
@@ -352,8 +351,8 @@ type ClientCertificateDeleteParams struct {
 }
 
 type ClientCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ClientCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  ClientCertificate                              `json:"result"`
@@ -400,8 +399,8 @@ type ClientCertificateEditParams struct {
 }
 
 type ClientCertificateEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ClientCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  ClientCertificate                            `json:"result"`
@@ -448,8 +447,8 @@ type ClientCertificateGetParams struct {
 }
 
 type ClientCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ClientCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ClientCertificate                           `json:"result"`

@@ -50,9 +50,9 @@ func (r *HTTPAseOSService) Get(ctx context.Context, os HTTPAseOSGetParamsOS, que
 }
 
 type HTTPAseOSGetResponse struct {
-	Meta HTTPAseOSGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPAseOSGetResponseTop0 `json:"top_0,required"`
-	JSON httpAseOSGetResponseJSON   `json:"-"`
+	Meta HTTPAseOSGetResponseMeta `json:"meta,required"`
+	Top0 []interface{}            `json:"top_0,required"`
+	JSON httpAseOSGetResponseJSON `json:"-"`
 }
 
 // httpAseOSGetResponseJSON contains the JSON metadata for the struct
@@ -73,7 +73,7 @@ func (r httpAseOSGetResponseJSON) RawJSON() string {
 }
 
 type HTTPAseOSGetResponseMeta struct {
-	DateRange      []HTTPAseOSGetResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []interface{}                          `json:"dateRange,required"`
 	LastUpdated    string                                 `json:"lastUpdated,required"`
 	ConfidenceInfo HTTPAseOSGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           httpAseOSGetResponseMetaJSON           `json:"-"`
@@ -97,35 +97,10 @@ func (r httpAseOSGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type HTTPAseOSGetResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                             `json:"startTime,required" format:"date-time"`
-	JSON      httpAseOSGetResponseMetaDateRangeJSON `json:"-"`
-}
-
-// httpAseOSGetResponseMetaDateRangeJSON contains the JSON metadata for the struct
-// [HTTPAseOSGetResponseMetaDateRange]
-type httpAseOSGetResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPAseOSGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpAseOSGetResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type HTTPAseOSGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPAseOSGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                              `json:"level"`
-	JSON        httpAseOSGetResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []interface{}                              `json:"annotations"`
+	Level       int64                                      `json:"level"`
+	JSON        httpAseOSGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // httpAseOSGetResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -142,64 +117,6 @@ func (r *HTTPAseOSGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err
 }
 
 func (r httpAseOSGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPAseOSGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                               `json:"dataSource,required"`
-	Description     string                                               `json:"description,required"`
-	EventType       string                                               `json:"eventType,required"`
-	IsInstantaneous bool                                                 `json:"isInstantaneous,required"`
-	EndTime         time.Time                                            `json:"endTime" format:"date-time"`
-	LinkedURL       string                                               `json:"linkedUrl"`
-	StartTime       time.Time                                            `json:"startTime" format:"date-time"`
-	JSON            httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata
-// for the struct [HTTPAseOSGetResponseMetaConfidenceInfoAnnotation]
-type httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *HTTPAseOSGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpAseOSGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPAseOSGetResponseTop0 struct {
-	ClientASN    int64                        `json:"clientASN,required"`
-	ClientAsName string                       `json:"clientASName,required"`
-	Value        string                       `json:"value,required"`
-	JSON         httpAseOSGetResponseTop0JSON `json:"-"`
-}
-
-// httpAseOSGetResponseTop0JSON contains the JSON metadata for the struct
-// [HTTPAseOSGetResponseTop0]
-type httpAseOSGetResponseTop0JSON struct {
-	ClientASN    apijson.Field
-	ClientAsName apijson.Field
-	Value        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *HTTPAseOSGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpAseOSGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

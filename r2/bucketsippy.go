@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketSippyService contains methods and other services that help with
@@ -106,20 +105,6 @@ func (r *BucketSippyService) Get(ctx context.Context, bucketName string, params 
 	return
 }
 
-type Provider string
-
-const (
-	ProviderR2 Provider = "r2"
-)
-
-func (r Provider) IsKnown() bool {
-	switch r {
-	case ProviderR2:
-		return true
-	}
-	return false
-}
-
 type Sippy struct {
 	// Details about the configured destination bucket
 	Destination SippyDestination `json:"destination"`
@@ -154,7 +139,7 @@ type SippyDestination struct {
 	Account     string `json:"account"`
 	// Name of the bucket on the provider
 	Bucket   string               `json:"bucket"`
-	Provider Provider             `json:"provider"`
+	Provider interface{}          `json:"provider"`
 	JSON     sippyDestinationJSON `json:"-"`
 }
 
@@ -304,8 +289,8 @@ type BucketSippyUpdateParamsBodyR2EnableSippyAwsDestination struct {
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
 	// this token to the bucket you're enabling Sippy for.
-	AccessKeyID param.Field[string]   `json:"accessKeyId"`
-	Provider    param.Field[Provider] `json:"provider"`
+	AccessKeyID param.Field[string]      `json:"accessKeyId"`
+	Provider    param.Field[interface{}] `json:"provider"`
 	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
 	// when creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
@@ -371,8 +356,8 @@ type BucketSippyUpdateParamsBodyR2EnableSippyGcsDestination struct {
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
 	// this token to the bucket you're enabling Sippy for.
-	AccessKeyID param.Field[string]   `json:"accessKeyId"`
-	Provider    param.Field[Provider] `json:"provider"`
+	AccessKeyID param.Field[string]      `json:"accessKeyId"`
+	Provider    param.Field[interface{}] `json:"provider"`
 	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
 	// when creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
@@ -433,9 +418,9 @@ func (r BucketSippyUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketSippyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
-	Result   Sippy                 `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []string      `json:"messages,required"`
+	Result   Sippy         `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketSippyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketSippyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -500,7 +485,7 @@ func (r BucketSippyDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketSippyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Errors   []interface{}             `json:"errors,required"`
 	Messages []string                  `json:"messages,required"`
 	Result   BucketSippyDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -567,9 +552,9 @@ func (r BucketSippyGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketSippyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
-	Result   Sippy                 `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []string      `json:"messages,required"`
+	Result   Sippy         `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketSippyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketSippyGetResponseEnvelopeJSON    `json:"-"`

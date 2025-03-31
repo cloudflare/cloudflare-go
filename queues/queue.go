@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -447,8 +446,8 @@ func (r QueueSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
+	Errors   []interface{} `json:"errors"`
+	Messages []string      `json:"messages"`
 	// Indicates if the API call was successful or not.
 	Success QueueDeleteResponseSuccess `json:"success"`
 	JSON    queueDeleteResponseJSON    `json:"-"`
@@ -498,9 +497,9 @@ func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   Queue                 `json:"result"`
+	Errors   []interface{} `json:"errors"`
+	Messages []string      `json:"messages"`
+	Result   Queue         `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success QueueNewResponseEnvelopeSuccess `json:"success"`
 	JSON    queueNewResponseEnvelopeJSON    `json:"-"`
@@ -551,9 +550,9 @@ func (r QueueUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   Queue                 `json:"result"`
+	Errors   []interface{} `json:"errors"`
+	Messages []string      `json:"messages"`
+	Result   Queue         `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success QueueUpdateResponseEnvelopeSuccess `json:"success"`
 	JSON    queueUpdateResponseEnvelopeJSON    `json:"-"`
@@ -614,9 +613,9 @@ func (r QueueEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   Queue                 `json:"result"`
+	Errors   []interface{} `json:"errors"`
+	Messages []string      `json:"messages"`
+	Result   Queue         `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success QueueEditResponseEnvelopeSuccess `json:"success"`
 	JSON    queueEditResponseEnvelopeJSON    `json:"-"`
@@ -662,9 +661,9 @@ type QueueGetParams struct {
 }
 
 type QueueGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   Queue                 `json:"result"`
+	Errors   []interface{} `json:"errors"`
+	Messages []string      `json:"messages"`
+	Result   Queue         `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success QueueGetResponseEnvelopeSuccess `json:"success"`
 	JSON    queueGetResponseEnvelopeJSON    `json:"-"`

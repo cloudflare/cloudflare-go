@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketDomainManagedService contains methods and other services that help with
@@ -169,7 +168,7 @@ func (r BucketDomainManagedUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainManagedUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Errors   []interface{}                     `json:"errors,required"`
 	Messages []string                          `json:"messages,required"`
 	Result   BucketDomainManagedUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -236,7 +235,7 @@ func (r BucketDomainManagedListParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainManagedListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Errors   []interface{}                   `json:"errors,required"`
 	Messages []string                        `json:"messages,required"`
 	Result   BucketDomainManagedListResponse `json:"result,required"`
 	// Whether the API call was successful

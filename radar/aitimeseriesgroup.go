@@ -48,9 +48,9 @@ func (r *AITimeseriesGroupService) UserAgent(ctx context.Context, query AITimese
 }
 
 type AITimeseriesGroupUserAgentResponse struct {
-	Meta   interface{}                              `json:"meta,required"`
-	Serie0 AITimeseriesGroupUserAgentResponseSerie0 `json:"serie_0,required"`
-	JSON   aiTimeseriesGroupUserAgentResponseJSON   `json:"-"`
+	Meta   interface{}                            `json:"meta,required"`
+	Serie0 interface{}                            `json:"serie_0,required"`
+	JSON   aiTimeseriesGroupUserAgentResponseJSON `json:"-"`
 }
 
 // aiTimeseriesGroupUserAgentResponseJSON contains the JSON metadata for the struct
@@ -67,28 +67,6 @@ func (r *AITimeseriesGroupUserAgentResponse) UnmarshalJSON(data []byte) (err err
 }
 
 func (r aiTimeseriesGroupUserAgentResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AITimeseriesGroupUserAgentResponseSerie0 struct {
-	Timestamps  []string                                     `json:"timestamps,required"`
-	ExtraFields map[string][]string                          `json:"-,extras"`
-	JSON        aiTimeseriesGroupUserAgentResponseSerie0JSON `json:"-"`
-}
-
-// aiTimeseriesGroupUserAgentResponseSerie0JSON contains the JSON metadata for the
-// struct [AITimeseriesGroupUserAgentResponseSerie0]
-type aiTimeseriesGroupUserAgentResponseSerie0JSON struct {
-	Timestamps  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AITimeseriesGroupUserAgentResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aiTimeseriesGroupUserAgentResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 

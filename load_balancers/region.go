@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RegionService contains methods and other services that help with interacting
@@ -90,9 +89,9 @@ func (r RegionListParams) URLQuery() (v url.Values) {
 }
 
 type RegionListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   interface{}   `json:"result,required"`
 	// Whether the API call was successful
 	Success RegionListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    regionListResponseEnvelopeJSON    `json:"-"`
@@ -169,8 +168,8 @@ func (r RegionGetParamsRegionID) IsKnown() bool {
 }
 
 type RegionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// A list of countries and subdivisions mapped to a region.
 	Result interface{} `json:"result,required"`
 	// Whether the API call was successful

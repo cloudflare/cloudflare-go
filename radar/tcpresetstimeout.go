@@ -86,7 +86,7 @@ func (r tcpResetsTimeoutSummaryResponseJSON) RawJSON() string {
 }
 
 type TCPResetsTimeoutSummaryResponseMeta struct {
-	DateRange      []TCPResetsTimeoutSummaryResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []interface{}                                     `json:"dateRange,required"`
 	ConfidenceInfo TCPResetsTimeoutSummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           tcpResetsTimeoutSummaryResponseMetaJSON           `json:"-"`
 }
@@ -108,35 +108,10 @@ func (r tcpResetsTimeoutSummaryResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type TCPResetsTimeoutSummaryResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                        `json:"startTime,required" format:"date-time"`
-	JSON      tcpResetsTimeoutSummaryResponseMetaDateRangeJSON `json:"-"`
-}
-
-// tcpResetsTimeoutSummaryResponseMetaDateRangeJSON contains the JSON metadata for
-// the struct [TCPResetsTimeoutSummaryResponseMetaDateRange]
-type tcpResetsTimeoutSummaryResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TCPResetsTimeoutSummaryResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tcpResetsTimeoutSummaryResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type TCPResetsTimeoutSummaryResponseMetaConfidenceInfo struct {
-	Annotations []TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                         `json:"level"`
-	JSON        tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []interface{}                                         `json:"annotations"`
+	Level       int64                                                 `json:"level"`
+	JSON        tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON contains the JSON metadata
@@ -153,40 +128,6 @@ func (r *TCPResetsTimeoutSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data [
 }
 
 func (r tcpResetsTimeoutSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                          `json:"dataSource,required"`
-	Description     string                                                          `json:"description,required"`
-	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                          `json:"linkedUrl"`
-	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
-	JSON            tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation]
-type tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *TCPResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tcpResetsTimeoutSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -253,7 +194,7 @@ func (r tcpResetsTimeoutTimeseriesGroupsResponseJSON) RawJSON() string {
 
 type TCPResetsTimeoutTimeseriesGroupsResponseMeta struct {
 	AggInterval    string                                                     `json:"aggInterval,required"`
-	DateRange      []TCPResetsTimeoutTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []interface{}                                              `json:"dateRange,required"`
 	LastUpdated    time.Time                                                  `json:"lastUpdated,required" format:"date-time"`
 	ConfidenceInfo TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           tcpResetsTimeoutTimeseriesGroupsResponseMetaJSON           `json:"-"`
@@ -278,35 +219,10 @@ func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type TCPResetsTimeoutTimeseriesGroupsResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                                 `json:"startTime,required" format:"date-time"`
-	JSON      tcpResetsTimeoutTimeseriesGroupsResponseMetaDateRangeJSON `json:"-"`
-}
-
-// tcpResetsTimeoutTimeseriesGroupsResponseMetaDateRangeJSON contains the JSON
-// metadata for the struct [TCPResetsTimeoutTimeseriesGroupsResponseMetaDateRange]
-type tcpResetsTimeoutTimeseriesGroupsResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TCPResetsTimeoutTimeseriesGroupsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                                  `json:"level"`
-	JSON        tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []interface{}                                                  `json:"annotations"`
+	Level       int64                                                          `json:"level"`
+	JSON        tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON contains the JSON
@@ -324,40 +240,6 @@ func (r *TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfo) UnmarshalJS
 }
 
 func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                   `json:"dataSource,required"`
-	Description     string                                                                   `json:"description,required"`
-	EventType       string                                                                   `json:"eventType,required"`
-	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                                `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                   `json:"linkedUrl"`
-	StartTime       time.Time                                                                `json:"startTime" format:"date-time"`
-	JSON            tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON
-// contains the JSON metadata for the struct
-// [TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation]
-type tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *TCPResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tcpResetsTimeoutTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

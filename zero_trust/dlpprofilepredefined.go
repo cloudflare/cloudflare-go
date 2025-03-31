@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DLPProfilePredefinedService contains methods and other services that help with
@@ -102,8 +101,8 @@ func (r DLPProfilePredefinedUpdateParamsEntry) MarshalJSON() (data []byte, err e
 }
 
 type DLPProfilePredefinedUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPProfilePredefinedUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Profile                                           `json:"result"`
@@ -149,8 +148,8 @@ type DLPProfilePredefinedGetParams struct {
 }
 
 type DLPProfilePredefinedGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPProfilePredefinedGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Profile                                        `json:"result"`

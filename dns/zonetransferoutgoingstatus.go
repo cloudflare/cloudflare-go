@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZoneTransferOutgoingStatusService contains methods and other services that help
@@ -56,8 +55,8 @@ type ZoneTransferOutgoingStatusGetParams struct {
 }
 
 type ZoneTransferOutgoingStatusGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferOutgoingStatusGetResponseEnvelopeSuccess `json:"success,required"`
 	// The zone transfer status of a primary zone

@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SnippetService contains methods and other services that help with interacting
@@ -156,8 +155,8 @@ func (r snippetJSON) RawJSON() string {
 }
 
 type SnippetDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SnippetDeleteResponseSuccess `json:"success,required"`
 	JSON    snippetDeleteResponseJSON    `json:"-"`
@@ -229,8 +228,8 @@ func (r SnippetUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 }
 
 type SnippetUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SnippetUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// Snippet Information
@@ -288,8 +287,8 @@ type SnippetGetParams struct {
 }
 
 type SnippetGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SnippetGetResponseEnvelopeSuccess `json:"success,required"`
 	// Snippet Information

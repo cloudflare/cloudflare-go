@@ -71,7 +71,7 @@ func (r aiBotSummaryUserAgentResponseJSON) RawJSON() string {
 }
 
 type AIBotSummaryUserAgentResponseMeta struct {
-	DateRange      []AIBotSummaryUserAgentResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []interface{}                                   `json:"dateRange,required"`
 	LastUpdated    string                                          `json:"lastUpdated,required"`
 	Normalization  string                                          `json:"normalization,required"`
 	ConfidenceInfo AIBotSummaryUserAgentResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -97,35 +97,10 @@ func (r aiBotSummaryUserAgentResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AIBotSummaryUserAgentResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                      `json:"startTime,required" format:"date-time"`
-	JSON      aiBotSummaryUserAgentResponseMetaDateRangeJSON `json:"-"`
-}
-
-// aiBotSummaryUserAgentResponseMetaDateRangeJSON contains the JSON metadata for
-// the struct [AIBotSummaryUserAgentResponseMetaDateRange]
-type aiBotSummaryUserAgentResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AIBotSummaryUserAgentResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aiBotSummaryUserAgentResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AIBotSummaryUserAgentResponseMetaConfidenceInfo struct {
-	Annotations []AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                       `json:"level"`
-	JSON        aiBotSummaryUserAgentResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []interface{}                                       `json:"annotations"`
+	Level       int64                                               `json:"level"`
+	JSON        aiBotSummaryUserAgentResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // aiBotSummaryUserAgentResponseMetaConfidenceInfoJSON contains the JSON metadata
@@ -142,40 +117,6 @@ func (r *AIBotSummaryUserAgentResponseMetaConfidenceInfo) UnmarshalJSON(data []b
 }
 
 func (r aiBotSummaryUserAgentResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                        `json:"dataSource,required"`
-	Description     string                                                        `json:"description,required"`
-	EventType       string                                                        `json:"eventType,required"`
-	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                     `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                        `json:"linkedUrl"`
-	StartTime       time.Time                                                     `json:"startTime" format:"date-time"`
-	JSON            aiBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// aiBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct
-// [AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotation]
-type aiBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AIBotSummaryUserAgentResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aiBotSummaryUserAgentResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

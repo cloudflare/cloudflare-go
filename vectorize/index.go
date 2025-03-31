@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // IndexService contains methods and other services that help with interacting with
@@ -603,9 +602,9 @@ func (r IndexNewParamsConfigPreset) IsKnown() bool {
 }
 
 type IndexNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CreateIndex           `json:"result,required,nullable"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   CreateIndex   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexNewResponseEnvelopeJSON    `json:"-"`
@@ -656,9 +655,9 @@ type IndexDeleteParams struct {
 }
 
 type IndexDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   interface{}   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexDeleteResponseEnvelopeJSON    `json:"-"`
@@ -710,8 +709,8 @@ func (r IndexDeleteByIDsParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexDeleteByIDsResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Errors   []interface{}            `json:"errors,required"`
+	Messages []interface{}            `json:"messages,required"`
 	Result   IndexDeleteByIDsResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexDeleteByIDsResponseEnvelopeSuccess `json:"success,required"`
@@ -758,9 +757,9 @@ type IndexGetParams struct {
 }
 
 type IndexGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CreateIndex           `json:"result,required,nullable"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   CreateIndex   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexGetResponseEnvelopeJSON    `json:"-"`
@@ -812,8 +811,8 @@ func (r IndexGetByIDsParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexGetByIDsResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Array of vectors with matching ids.
 	Result IndexGetByIDsResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
@@ -861,9 +860,9 @@ type IndexInfoParams struct {
 }
 
 type IndexInfoResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IndexInfoResponse     `json:"result,required,nullable"`
+	Errors   []interface{}     `json:"errors,required"`
+	Messages []interface{}     `json:"messages,required"`
+	Result   IndexInfoResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexInfoResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexInfoResponseEnvelopeJSON    `json:"-"`
@@ -941,9 +940,9 @@ func (r IndexInsertParamsUnparsableBehavior) IsKnown() bool {
 }
 
 type IndexInsertResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IndexInsertResponse   `json:"result,required,nullable"`
+	Errors   []interface{}       `json:"errors,required"`
+	Messages []interface{}       `json:"messages,required"`
+	Result   IndexInsertResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexInsertResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexInsertResponseEnvelopeJSON    `json:"-"`
@@ -1022,9 +1021,9 @@ func (r IndexQueryParamsReturnMetadata) IsKnown() bool {
 }
 
 type IndexQueryResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IndexQueryResponse    `json:"result,required,nullable"`
+	Errors   []interface{}      `json:"errors,required"`
+	Messages []interface{}      `json:"messages,required"`
+	Result   IndexQueryResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexQueryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexQueryResponseEnvelopeJSON    `json:"-"`
@@ -1102,9 +1101,9 @@ func (r IndexUpsertParamsUnparsableBehavior) IsKnown() bool {
 }
 
 type IndexUpsertResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IndexUpsertResponse   `json:"result,required,nullable"`
+	Errors   []interface{}       `json:"errors,required"`
+	Messages []interface{}       `json:"messages,required"`
+	Result   IndexUpsertResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexUpsertResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexUpsertResponseEnvelopeJSON    `json:"-"`

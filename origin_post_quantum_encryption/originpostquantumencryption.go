@@ -7,13 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // OriginPostQuantumEncryptionService contains methods and other services that help
@@ -79,131 +77,9 @@ func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query Orig
 	return
 }
 
-type OriginPostQuantumEncryptionUpdateResponse struct {
-	// Value of the zone setting.
-	ID OriginPostQuantumEncryptionUpdateResponseID `json:"id,required"`
-	// Whether the setting is editable
-	Editable bool `json:"editable,required"`
-	// The value of the feature
-	Value OriginPostQuantumEncryptionUpdateResponseValue `json:"value,required"`
-	// Last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       originPostQuantumEncryptionUpdateResponseJSON `json:"-"`
-}
+type OriginPostQuantumEncryptionUpdateResponse = interface{}
 
-// originPostQuantumEncryptionUpdateResponseJSON contains the JSON metadata for the
-// struct [OriginPostQuantumEncryptionUpdateResponse]
-type originPostQuantumEncryptionUpdateResponseJSON struct {
-	ID          apijson.Field
-	Editable    apijson.Field
-	Value       apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginPostQuantumEncryptionUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originPostQuantumEncryptionUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Value of the zone setting.
-type OriginPostQuantumEncryptionUpdateResponseID string
-
-const (
-	OriginPostQuantumEncryptionUpdateResponseIDOriginPqe OriginPostQuantumEncryptionUpdateResponseID = "origin_pqe"
-)
-
-func (r OriginPostQuantumEncryptionUpdateResponseID) IsKnown() bool {
-	switch r {
-	case OriginPostQuantumEncryptionUpdateResponseIDOriginPqe:
-		return true
-	}
-	return false
-}
-
-// The value of the feature
-type OriginPostQuantumEncryptionUpdateResponseValue string
-
-const (
-	OriginPostQuantumEncryptionUpdateResponseValuePreferred OriginPostQuantumEncryptionUpdateResponseValue = "preferred"
-	OriginPostQuantumEncryptionUpdateResponseValueSupported OriginPostQuantumEncryptionUpdateResponseValue = "supported"
-	OriginPostQuantumEncryptionUpdateResponseValueOff       OriginPostQuantumEncryptionUpdateResponseValue = "off"
-)
-
-func (r OriginPostQuantumEncryptionUpdateResponseValue) IsKnown() bool {
-	switch r {
-	case OriginPostQuantumEncryptionUpdateResponseValuePreferred, OriginPostQuantumEncryptionUpdateResponseValueSupported, OriginPostQuantumEncryptionUpdateResponseValueOff:
-		return true
-	}
-	return false
-}
-
-type OriginPostQuantumEncryptionGetResponse struct {
-	// Value of the zone setting.
-	ID OriginPostQuantumEncryptionGetResponseID `json:"id,required"`
-	// Whether the setting is editable
-	Editable bool `json:"editable,required"`
-	// The value of the feature
-	Value OriginPostQuantumEncryptionGetResponseValue `json:"value,required"`
-	// Last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       originPostQuantumEncryptionGetResponseJSON `json:"-"`
-}
-
-// originPostQuantumEncryptionGetResponseJSON contains the JSON metadata for the
-// struct [OriginPostQuantumEncryptionGetResponse]
-type originPostQuantumEncryptionGetResponseJSON struct {
-	ID          apijson.Field
-	Editable    apijson.Field
-	Value       apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginPostQuantumEncryptionGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originPostQuantumEncryptionGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Value of the zone setting.
-type OriginPostQuantumEncryptionGetResponseID string
-
-const (
-	OriginPostQuantumEncryptionGetResponseIDOriginPqe OriginPostQuantumEncryptionGetResponseID = "origin_pqe"
-)
-
-func (r OriginPostQuantumEncryptionGetResponseID) IsKnown() bool {
-	switch r {
-	case OriginPostQuantumEncryptionGetResponseIDOriginPqe:
-		return true
-	}
-	return false
-}
-
-// The value of the feature
-type OriginPostQuantumEncryptionGetResponseValue string
-
-const (
-	OriginPostQuantumEncryptionGetResponseValuePreferred OriginPostQuantumEncryptionGetResponseValue = "preferred"
-	OriginPostQuantumEncryptionGetResponseValueSupported OriginPostQuantumEncryptionGetResponseValue = "supported"
-	OriginPostQuantumEncryptionGetResponseValueOff       OriginPostQuantumEncryptionGetResponseValue = "off"
-)
-
-func (r OriginPostQuantumEncryptionGetResponseValue) IsKnown() bool {
-	switch r {
-	case OriginPostQuantumEncryptionGetResponseValuePreferred, OriginPostQuantumEncryptionGetResponseValueSupported, OriginPostQuantumEncryptionGetResponseValueOff:
-		return true
-	}
-	return false
-}
+type OriginPostQuantumEncryptionGetResponse = interface{}
 
 type OriginPostQuantumEncryptionUpdateParams struct {
 	// Identifier
@@ -234,8 +110,8 @@ func (r OriginPostQuantumEncryptionUpdateParamsValue) IsKnown() bool {
 }
 
 type OriginPostQuantumEncryptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  OriginPostQuantumEncryptionUpdateResponse                `json:"result"`
@@ -282,8 +158,8 @@ type OriginPostQuantumEncryptionGetParams struct {
 }
 
 type OriginPostQuantumEncryptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginPostQuantumEncryptionGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  OriginPostQuantumEncryptionGetResponse                `json:"result"`

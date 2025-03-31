@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptContentService contains methods and other services that help with
@@ -83,11 +82,10 @@ func (r *ScriptContentService) Get(ctx context.Context, scriptName string, query
 
 type ScriptContentUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata               param.Field[WorkerMetadataParam] `json:"metadata,required"`
-	CfWorkerBodyPart       param.Field[string]              `header:"CF-WORKER-BODY-PART"`
-	CfWorkerMainModulePart param.Field[string]              `header:"CF-WORKER-MAIN-MODULE-PART"`
+	AccountID              param.Field[string]      `path:"account_id,required"`
+	Metadata               param.Field[interface{}] `json:"metadata,required"`
+	CfWorkerBodyPart       param.Field[string]      `header:"CF-WORKER-BODY-PART"`
+	CfWorkerMainModulePart param.Field[string]      `header:"CF-WORKER-MAIN-MODULE-PART"`
 }
 
 func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -106,8 +104,8 @@ func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType 
 }
 
 type ScriptContentUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Script                                     `json:"result"`

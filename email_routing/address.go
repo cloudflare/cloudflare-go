@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AddressService contains methods and other services that help with interacting
@@ -177,8 +176,8 @@ func (r AddressNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AddressNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Address                           `json:"result"`
@@ -278,8 +277,8 @@ type AddressDeleteParams struct {
 }
 
 type AddressDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AddressDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  Address                              `json:"result"`
@@ -326,8 +325,8 @@ type AddressGetParams struct {
 }
 
 type AddressGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AddressGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Address                           `json:"result"`

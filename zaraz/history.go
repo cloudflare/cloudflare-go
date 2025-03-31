@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HistoryService contains methods and other services that help with interacting
@@ -130,8 +129,8 @@ func (r HistoryUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HistoryUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Zaraz configuration
 	Result Configuration `json:"result,required"`
 	// Whether the API call was successful

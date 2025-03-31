@@ -19,7 +19,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // V1Service contains methods and other services that help with interacting with
@@ -251,9 +250,9 @@ func (r V1NewParams) MarshalMultipart() (data []byte, contentType string, err er
 }
 
 type V1NewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Image                 `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Image         `json:"result,required"`
 	// Whether the API call was successful
 	Success V1NewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1NewResponseEnvelopeJSON    `json:"-"`
@@ -316,9 +315,9 @@ type V1DeleteParams struct {
 }
 
 type V1DeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   interface{}   `json:"result,required"`
 	// Whether the API call was successful
 	Success V1DeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1DeleteResponseEnvelopeJSON    `json:"-"`
@@ -375,9 +374,9 @@ func (r V1EditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V1EditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Image                 `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Image         `json:"result,required"`
 	// Whether the API call was successful
 	Success V1EditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1EditResponseEnvelopeJSON    `json:"-"`
@@ -423,9 +422,9 @@ type V1GetParams struct {
 }
 
 type V1GetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Image                 `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Image         `json:"result,required"`
 	// Whether the API call was successful
 	Success V1GetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1GetResponseEnvelopeJSON    `json:"-"`

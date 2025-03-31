@@ -184,8 +184,8 @@ type PhaseUpdateResponseRule struct {
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	// This field can have the runtime type of [interface{}].
+	Logging interface{} `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [PhaseUpdateResponseRulesRulesetsChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
@@ -381,9 +381,8 @@ type PhaseUpdateResponseRulesRulesetsChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck PhaseUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Expression string      `json:"expression"`
+	Logging    interface{} `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit PhaseUpdateResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -551,9 +550,8 @@ type PhaseUpdateResponseRulesRulesetsJSChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck PhaseUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Expression string      `json:"expression"`
+	Logging    interface{} `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit PhaseUpdateResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -817,8 +815,8 @@ type PhaseGetResponseRule struct {
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	// This field can have the runtime type of [interface{}].
+	Logging interface{} `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [PhaseGetResponseRulesRulesetsChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
@@ -1014,9 +1012,8 @@ type PhaseGetResponseRulesRulesetsChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck PhaseGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Expression string      `json:"expression"`
+	Logging    interface{} `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit PhaseGetResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -1184,9 +1181,8 @@ type PhaseGetResponseRulesRulesetsJSChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck PhaseGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Expression string      `json:"expression"`
+	Logging    interface{} `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit PhaseGetResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -1396,10 +1392,9 @@ type PhaseUpdateParamsRule struct {
 	Enabled                param.Field[bool]        `json:"enabled"`
 	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging   param.Field[LoggingParam] `json:"logging"`
-	Ratelimit param.Field[interface{}]  `json:"ratelimit"`
+	Expression param.Field[string]      `json:"expression"`
+	Logging    param.Field[interface{}] `json:"logging"`
+	Ratelimit  param.Field[interface{}] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -1439,9 +1434,8 @@ type PhaseUpdateParamsRulesRulesetsChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[PhaseUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
+	Expression param.Field[string]      `json:"expression"`
+	Logging    param.Field[interface{}] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[PhaseUpdateParamsRulesRulesetsChallengeRuleRatelimit] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -1543,9 +1537,8 @@ type PhaseUpdateParamsRulesRulesetsJSChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[PhaseUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
+	Expression param.Field[string]      `json:"expression"`
+	Logging    param.Field[interface{}] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[PhaseUpdateParamsRulesRulesetsJSChallengeRuleRatelimit] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).

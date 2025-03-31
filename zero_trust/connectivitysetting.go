@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ConnectivitySettingService contains methods and other services that help with
@@ -132,8 +131,8 @@ func (r ConnectivitySettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConnectivitySettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Errors   []interface{}                   `json:"errors,required"`
+	Messages []interface{}                   `json:"messages,required"`
 	Result   ConnectivitySettingEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ConnectivitySettingEditResponseEnvelopeSuccess `json:"success,required"`
@@ -180,8 +179,8 @@ type ConnectivitySettingGetParams struct {
 }
 
 type ConnectivitySettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Errors   []interface{}                  `json:"errors,required"`
+	Messages []interface{}                  `json:"messages,required"`
 	Result   ConnectivitySettingGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ConnectivitySettingGetResponseEnvelopeSuccess `json:"success,required"`

@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // NetworkSubnetCloudflareSourceService contains methods and other services that
@@ -144,8 +143,8 @@ func (r NetworkSubnetCloudflareSourceUpdateParamsAddressFamily) IsKnown() bool {
 }
 
 type NetworkSubnetCloudflareSourceUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors,required"`
-	Messages []shared.ResponseInfo                       `json:"messages,required"`
+	Errors   []interface{}                               `json:"errors,required"`
+	Messages []interface{}                               `json:"messages,required"`
 	Result   NetworkSubnetCloudflareSourceUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkSubnetCloudflareSourceUpdateResponseEnvelopeSuccess `json:"success,required"`

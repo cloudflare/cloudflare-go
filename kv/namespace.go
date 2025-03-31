@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // NamespaceService contains methods and other services that help with interacting
@@ -233,8 +232,8 @@ func (r NamespaceNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Namespace                           `json:"result"`
@@ -287,8 +286,8 @@ func (r NamespaceUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceUpdateResponse                `json:"result,nullable"`
@@ -388,8 +387,8 @@ type NamespaceDeleteParams struct {
 }
 
 type NamespaceDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceDeleteResponse                `json:"result,nullable"`
@@ -436,8 +435,8 @@ type NamespaceGetParams struct {
 }
 
 type NamespaceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Namespace                           `json:"result"`

@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // NetworkRouteService contains methods and other services that help with
@@ -278,9 +277,9 @@ func (r NetworkRouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkRouteNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Route                 `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Route         `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNewResponseEnvelopeJSON    `json:"-"`
@@ -384,9 +383,9 @@ type NetworkRouteDeleteParams struct {
 }
 
 type NetworkRouteDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Route                 `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Route         `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteDeleteResponseEnvelopeJSON    `json:"-"`
@@ -444,9 +443,9 @@ func (r NetworkRouteEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkRouteEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Route                 `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Route         `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteEditResponseEnvelopeJSON    `json:"-"`
@@ -492,9 +491,9 @@ type NetworkRouteGetParams struct {
 }
 
 type NetworkRouteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Route                 `json:"result,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
+	Result   Route         `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteGetResponseEnvelopeJSON    `json:"-"`
