@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessPolicyService contains methods and other services that help with
@@ -595,8 +596,8 @@ func (r AccessPolicyNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessPolicyNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessPolicyNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessPolicyNewResponse                `json:"result"`
@@ -678,8 +679,8 @@ func (r AccessPolicyUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessPolicyUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessPolicyUpdateResponse                `json:"result"`
@@ -731,8 +732,8 @@ type AccessPolicyDeleteParams struct {
 }
 
 type AccessPolicyDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessPolicyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessPolicyDeleteResponse                `json:"result"`
@@ -779,8 +780,8 @@ type AccessPolicyGetParams struct {
 }
 
 type AccessPolicyGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessPolicyGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessPolicyGetResponse                `json:"result"`

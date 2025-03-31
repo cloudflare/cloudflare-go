@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessCustomPageService contains methods and other services that help with
@@ -294,8 +295,8 @@ func (r AccessCustomPageNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCustomPageNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  CustomPageWithoutHTML                      `json:"result"`
@@ -347,8 +348,8 @@ func (r AccessCustomPageUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCustomPageUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  CustomPageWithoutHTML                         `json:"result"`
@@ -400,8 +401,8 @@ type AccessCustomPageDeleteParams struct {
 }
 
 type AccessCustomPageDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessCustomPageDeleteResponse                `json:"result"`
@@ -448,8 +449,8 @@ type AccessCustomPageGetParams struct {
 }
 
 type AccessCustomPageGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  CustomPage                                 `json:"result"`

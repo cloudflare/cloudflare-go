@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessServiceTokenService contains methods and other services that help with
@@ -401,8 +402,8 @@ func (r AccessServiceTokenNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessServiceTokenNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessServiceTokenNewResponse                `json:"result"`
@@ -461,8 +462,8 @@ func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessServiceTokenUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  ServiceToken                                    `json:"result"`
@@ -531,8 +532,8 @@ type AccessServiceTokenDeleteParams struct {
 }
 
 type AccessServiceTokenDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  ServiceToken                                    `json:"result"`
@@ -581,8 +582,8 @@ type AccessServiceTokenGetParams struct {
 }
 
 type AccessServiceTokenGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ServiceToken                                 `json:"result"`
@@ -629,8 +630,8 @@ type AccessServiceTokenRefreshParams struct {
 }
 
 type AccessServiceTokenRefreshResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenRefreshResponseEnvelopeSuccess `json:"success,required"`
 	Result  ServiceToken                                     `json:"result"`
@@ -677,8 +678,8 @@ type AccessServiceTokenRotateParams struct {
 }
 
 type AccessServiceTokenRotateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenRotateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessServiceTokenRotateResponse                `json:"result"`

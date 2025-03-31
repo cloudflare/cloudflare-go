@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SiteInfoService contains methods and other services that help with interacting
@@ -250,8 +251,8 @@ func (r SiteInfoNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteInfoNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                            `json:"success,required"`
 	Result  Site                            `json:"result"`
@@ -300,8 +301,8 @@ func (r SiteInfoUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteInfoUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                               `json:"success,required"`
 	Result  Site                               `json:"result"`
@@ -368,8 +369,8 @@ type SiteInfoDeleteParams struct {
 }
 
 type SiteInfoDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                               `json:"success,required"`
 	Result  SiteInfoDeleteResponse             `json:"result"`
@@ -401,8 +402,8 @@ type SiteInfoGetParams struct {
 }
 
 type SiteInfoGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                            `json:"success,required"`
 	Result  Site                            `json:"result"`

@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PrefixServiceBindingService contains methods and other services that help with
@@ -221,8 +222,8 @@ func (r ServiceBindingProvisioningState) IsKnown() bool {
 }
 
 type PrefixServiceBindingDeleteResponse struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixServiceBindingDeleteResponseSuccess `json:"success,required"`
 	JSON    prefixServiceBindingDeleteResponseJSON    `json:"-"`
@@ -276,8 +277,8 @@ func (r PrefixServiceBindingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixServiceBindingNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixServiceBindingNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ServiceBinding                                 `json:"result"`
@@ -334,8 +335,8 @@ type PrefixServiceBindingGetParams struct {
 }
 
 type PrefixServiceBindingGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixServiceBindingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ServiceBinding                                 `json:"result"`

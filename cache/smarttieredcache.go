@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SmartTieredCacheService contains methods and other services that help with
@@ -273,8 +274,8 @@ type SmartTieredCacheDeleteParams struct {
 }
 
 type SmartTieredCacheDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  SmartTieredCacheDeleteResponse                `json:"result"`
@@ -343,8 +344,8 @@ func (r SmartTieredCacheEditParamsValue) IsKnown() bool {
 }
 
 type SmartTieredCacheEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  SmartTieredCacheEditResponse                `json:"result"`
@@ -391,8 +392,8 @@ type SmartTieredCacheGetParams struct {
 }
 
 type SmartTieredCacheGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  SmartTieredCacheGetResponse                `json:"result"`

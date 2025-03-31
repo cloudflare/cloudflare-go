@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // UARuleService contains methods and other services that help with interacting
@@ -326,9 +327,9 @@ func (r UARuleNewParamsMode) IsKnown() bool {
 }
 
 type UARuleNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   interface{}   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success UARuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -447,9 +448,9 @@ func (r UARuleUpdateParamsMode) IsKnown() bool {
 }
 
 type UARuleUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   interface{}   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success UARuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -519,9 +520,9 @@ type UARuleDeleteParams struct {
 }
 
 type UARuleDeleteResponseEnvelope struct {
-	Errors   []interface{}        `json:"errors,required"`
-	Messages []interface{}        `json:"messages,required"`
-	Result   UARuleDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   UARuleDeleteResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success UARuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -567,9 +568,9 @@ type UARuleGetParams struct {
 }
 
 type UARuleGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   interface{}   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success UARuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleGetResponseEnvelopeJSON    `json:"-"`

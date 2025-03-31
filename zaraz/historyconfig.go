@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HistoryConfigService contains methods and other services that help with
@@ -105,8 +106,8 @@ func (r HistoryConfigGetParams) URLQuery() (v url.Values) {
 }
 
 type HistoryConfigGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Object where keys are numericc onfiguration IDs
 	Result HistoryConfigGetResponse `json:"result,required"`
 	// Whether the API call was successful

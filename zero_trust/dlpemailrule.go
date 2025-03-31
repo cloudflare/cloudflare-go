@@ -1208,8 +1208,8 @@ func (r DLPEmailRuleNewParamsConditionsValueArray) ImplementsDLPEmailRuleNewPara
 }
 
 type DLPEmailRuleNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEmailRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailRuleNewResponse                `json:"result"`
@@ -1342,8 +1342,8 @@ func (r DLPEmailRuleUpdateParamsConditionsValueArray) ImplementsDLPEmailRuleUpda
 }
 
 type DLPEmailRuleUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEmailRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailRuleUpdateResponse                `json:"result"`
@@ -1393,8 +1393,8 @@ type DLPEmailRuleDeleteParams struct {
 }
 
 type DLPEmailRuleDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEmailRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailRuleDeleteResponse                `json:"result"`
@@ -1445,8 +1445,8 @@ func (r DLPEmailRuleBulkEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPEmailRuleBulkEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEmailRuleBulkEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailRuleBulkEditResponse                `json:"result"`
@@ -1492,8 +1492,8 @@ type DLPEmailRuleGetParams struct {
 }
 
 type DLPEmailRuleGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEmailRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailRuleGetResponse                `json:"result"`

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PageShieldService contains methods and other services that help with interacting
@@ -157,8 +158,8 @@ func (r PageShieldUpdateParams) MarshalJSON() (data []byte, err error) {
 type PageShieldUpdateResponseEnvelope struct {
 	// Whether the API call was successful
 	Success  PageShieldUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []interface{}                           `json:"errors"`
-	Messages []interface{}                           `json:"messages"`
+	Errors   []shared.ResponseInfo                   `json:"errors"`
+	Messages []shared.ResponseInfo                   `json:"messages"`
 	Result   PageShieldUpdateResponse                `json:"result"`
 	JSON     pageShieldUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -205,8 +206,8 @@ type PageShieldGetParams struct {
 type PageShieldGetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success  PageShieldGetResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []interface{}                        `json:"errors"`
-	Messages []interface{}                        `json:"messages"`
+	Errors   []shared.ResponseInfo                `json:"errors"`
+	Messages []shared.ResponseInfo                `json:"messages"`
 	Result   Setting                              `json:"result,nullable"`
 	JSON     pageShieldGetResponseEnvelopeJSON    `json:"-"`
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // IndexMetadataIndexService contains methods and other services that help with
@@ -235,8 +236,8 @@ func (r IndexMetadataIndexNewParamsIndexType) IsKnown() bool {
 }
 
 type IndexMetadataIndexNewResponseEnvelope struct {
-	Errors   []interface{}                 `json:"errors,required"`
-	Messages []interface{}                 `json:"messages,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
 	Result   IndexMetadataIndexNewResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexMetadataIndexNewResponseEnvelopeSuccess `json:"success,required"`
@@ -283,8 +284,8 @@ type IndexMetadataIndexListParams struct {
 }
 
 type IndexMetadataIndexListResponseEnvelope struct {
-	Errors   []interface{}                  `json:"errors,required"`
-	Messages []interface{}                  `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   IndexMetadataIndexListResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexMetadataIndexListResponseEnvelopeSuccess `json:"success,required"`
@@ -337,8 +338,8 @@ func (r IndexMetadataIndexDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexMetadataIndexDeleteResponseEnvelope struct {
-	Errors   []interface{}                    `json:"errors,required"`
-	Messages []interface{}                    `json:"messages,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
 	Result   IndexMetadataIndexDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexMetadataIndexDeleteResponseEnvelopeSuccess `json:"success,required"`

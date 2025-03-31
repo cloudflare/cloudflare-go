@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PlanService contains methods and other services that help with interacting with
@@ -160,9 +161,9 @@ type PlanGetParams struct {
 }
 
 type PlanGetResponseEnvelope struct {
-	Errors   []interface{}     `json:"errors,required"`
-	Messages []interface{}     `json:"messages,required"`
-	Result   AvailableRatePlan `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AvailableRatePlan     `json:"result,required"`
 	// Whether the API call was successful
 	Success PlanGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    planGetResponseEnvelopeJSON    `json:"-"`

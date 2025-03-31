@@ -108,8 +108,8 @@ type RoleGetParams struct {
 }
 
 type RoleGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RoleGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.Role                    `json:"result"`

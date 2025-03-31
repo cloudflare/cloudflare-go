@@ -878,8 +878,8 @@ func (r MembershipUpdateParamsStatus) IsKnown() bool {
 }
 
 type MembershipUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success MembershipUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  MembershipUpdateResponse                `json:"result"`
@@ -1009,8 +1009,8 @@ func (r MembershipListParamsStatus) IsKnown() bool {
 }
 
 type MembershipDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success MembershipDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  MembershipDeleteResponse                `json:"result"`
@@ -1052,8 +1052,8 @@ func (r MembershipDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MembershipGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success MembershipGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  MembershipGetResponse                `json:"result"`

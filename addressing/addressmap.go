@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AddressMapService contains methods and other services that help with interacting
@@ -319,8 +320,8 @@ func (r addressMapNewResponseMembershipJSON) RawJSON() string {
 }
 
 type AddressMapDeleteResponse struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapDeleteResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapDeleteResponseResultInfo `json:"result_info"`
@@ -533,8 +534,8 @@ func (r AddressMapNewParamsMembership) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AddressMapNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AddressMapNewResponse                `json:"result"`
@@ -607,8 +608,8 @@ func (r AddressMapEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AddressMapEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  AddressMap                            `json:"result"`
@@ -655,8 +656,8 @@ type AddressMapGetParams struct {
 }
 
 type AddressMapGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AddressMapGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AddressMapGetResponse                `json:"result"`

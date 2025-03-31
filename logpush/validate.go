@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ValidateService contains methods and other services that help with interacting
@@ -209,8 +210,8 @@ func (r ValidateDestinationParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ValidateDestinationResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ValidateDestinationResponseEnvelopeSuccess `json:"success,required"`
 	Result  ValidateDestinationResponse                `json:"result,nullable"`
@@ -267,8 +268,8 @@ func (r ValidateDestinationExistsParams) MarshalJSON() (data []byte, err error) 
 }
 
 type ValidateDestinationExistsResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ValidateDestinationExistsResponseEnvelopeSuccess `json:"success,required"`
 	Result  ValidateDestinationExistsResponse                `json:"result,nullable"`
@@ -327,8 +328,8 @@ func (r ValidateOriginParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ValidateOriginResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ValidateOriginResponseEnvelopeSuccess `json:"success,required"`
 	Result  ValidateOriginResponse                `json:"result,nullable"`

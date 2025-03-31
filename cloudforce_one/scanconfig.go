@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScanConfigService contains methods and other services that help with interacting
@@ -249,8 +250,8 @@ func (r ScanConfigNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScanConfigNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScanConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScanConfigNewResponse                `json:"result"`
@@ -347,8 +348,8 @@ func (r ScanConfigEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScanConfigEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScanConfigEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScanConfigEditResponse                `json:"result"`

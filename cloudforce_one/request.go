@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RequestService contains methods and other services that help with interacting
@@ -521,8 +522,8 @@ func (r RequestConstantsTLP) IsKnown() bool {
 type RequestTypes []string
 
 type RequestDeleteResponse struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestDeleteResponseSuccess `json:"success,required"`
 	JSON    requestDeleteResponseJSON    `json:"-"`
@@ -598,8 +599,8 @@ func (r RequestNewParamsTLP) IsKnown() bool {
 }
 
 type RequestNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Item                              `json:"result"`
@@ -677,8 +678,8 @@ func (r RequestUpdateParamsTLP) IsKnown() bool {
 }
 
 type RequestUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Item                                 `json:"result"`
@@ -783,8 +784,8 @@ func (r RequestListParamsStatus) IsKnown() bool {
 }
 
 type RequestConstantsResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestConstantsResponseEnvelopeSuccess `json:"success,required"`
 	Result  RequestConstants                        `json:"result"`
@@ -826,8 +827,8 @@ func (r RequestConstantsResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Item                              `json:"result"`
@@ -869,8 +870,8 @@ func (r RequestGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestQuotaResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestQuotaResponseEnvelopeSuccess `json:"success,required"`
 	Result  Quota                               `json:"result"`

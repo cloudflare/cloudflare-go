@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // IndicatorFeedPermissionService contains methods and other services that help
@@ -179,8 +180,8 @@ func (r IndicatorFeedPermissionNewParams) MarshalJSON() (data []byte, err error)
 }
 
 type IndicatorFeedPermissionNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  IndicatorFeedPermissionNewResponse                `json:"result"`
@@ -227,8 +228,8 @@ type IndicatorFeedPermissionListParams struct {
 }
 
 type IndicatorFeedPermissionListResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionListResponseEnvelopeSuccess `json:"success,required"`
 	Result  []IndicatorFeedPermissionListResponse              `json:"result"`
@@ -283,8 +284,8 @@ func (r IndicatorFeedPermissionDeleteParams) MarshalJSON() (data []byte, err err
 }
 
 type IndicatorFeedPermissionDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  IndicatorFeedPermissionDeleteResponse                `json:"result"`

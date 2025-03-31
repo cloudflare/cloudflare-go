@@ -369,8 +369,8 @@ func (r TokenNewParamsConditionRequestIP) MarshalJSON() (data []byte, err error)
 }
 
 type TokenNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  TokenNewResponse                `json:"result"`
@@ -420,8 +420,8 @@ func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.Token                       `json:"result"`
@@ -496,8 +496,8 @@ func (r TokenListParamsDirection) IsKnown() bool {
 }
 
 type TokenDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  TokenDeleteResponse                `json:"result,nullable"`
@@ -539,8 +539,8 @@ func (r TokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TokenGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.Token                    `json:"result"`
@@ -582,8 +582,8 @@ func (r TokenGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TokenVerifyResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenVerifyResponseEnvelopeSuccess `json:"success,required"`
 	Result  TokenVerifyResponse                `json:"result"`

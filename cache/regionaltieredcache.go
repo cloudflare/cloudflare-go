@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RegionalTieredCacheService contains methods and other services that help with
@@ -72,8 +73,24 @@ func (r *RegionalTieredCacheService) Get(ctx context.Context, query RegionalTier
 	return
 }
 
+// ID of the zone setting.
+type RegionalTieredCache string
+
+const (
+	RegionalTieredCacheTcRegional RegionalTieredCache = "tc_regional"
+)
+
+func (r RegionalTieredCache) IsKnown() bool {
+	switch r {
+	case RegionalTieredCacheTcRegional:
+		return true
+	}
+	return false
+}
+
 type RegionalTieredCacheEditResponse struct {
-	ID interface{} `json:"id,required"`
+	// ID of the zone setting.
+	ID RegionalTieredCache `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
 	// The value of the feature
@@ -119,7 +136,8 @@ func (r RegionalTieredCacheEditResponseValue) IsKnown() bool {
 }
 
 type RegionalTieredCacheGetResponse struct {
-	ID interface{} `json:"id,required"`
+	// ID of the zone setting.
+	ID RegionalTieredCache `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
 	// The value of the feature
@@ -192,8 +210,8 @@ func (r RegionalTieredCacheEditParamsValue) IsKnown() bool {
 }
 
 type RegionalTieredCacheEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RegionalTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  RegionalTieredCacheEditResponse                `json:"result"`
@@ -240,8 +258,8 @@ type RegionalTieredCacheGetParams struct {
 }
 
 type RegionalTieredCacheGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RegionalTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RegionalTieredCacheGetResponse                `json:"result"`

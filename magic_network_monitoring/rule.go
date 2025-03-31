@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RuleService contains methods and other services that help with interacting with
@@ -365,8 +366,8 @@ func (r RuleNewParamsDuration) IsKnown() bool {
 }
 
 type RuleNewResponseEnvelope struct {
-	Errors   []interface{}              `json:"errors,required"`
-	Messages []interface{}              `json:"messages,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
 	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleNewResponseEnvelopeSuccess `json:"success,required"`
@@ -461,8 +462,8 @@ func (r RuleUpdateParamsDuration) IsKnown() bool {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []interface{}              `json:"errors,required"`
-	Messages []interface{}              `json:"messages,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
 	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -512,8 +513,8 @@ type RuleDeleteParams struct {
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   []interface{}              `json:"errors,required"`
-	Messages []interface{}              `json:"messages,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
 	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -606,8 +607,8 @@ func (r RuleEditParamsDuration) IsKnown() bool {
 }
 
 type RuleEditResponseEnvelope struct {
-	Errors   []interface{}              `json:"errors,required"`
-	Messages []interface{}              `json:"messages,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
 	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleEditResponseEnvelopeSuccess `json:"success,required"`
@@ -653,8 +654,8 @@ type RuleGetParams struct {
 }
 
 type RuleGetResponseEnvelope struct {
-	Errors   []interface{}              `json:"errors,required"`
-	Messages []interface{}              `json:"messages,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
 	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`

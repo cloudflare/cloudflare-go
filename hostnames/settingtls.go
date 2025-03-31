@@ -280,8 +280,8 @@ func (r SettingTLSUpdateParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SettingTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Setting                                 `json:"result"`
@@ -345,8 +345,8 @@ func (r SettingTLSDeleteParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SettingTLSDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  SettingTLSDeleteResponse                `json:"result"`

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // GatewayLoggingService contains methods and other services that help with
@@ -70,9 +71,10 @@ func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGet
 type LoggingSetting struct {
 	// Redact personally identifiable information from activity logging (PII fields
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
-	RedactPii          bool               `json:"redact_pii"`
-	SettingsByRuleType interface{}        `json:"settings_by_rule_type"`
-	JSON               loggingSettingJSON `json:"-"`
+	RedactPii bool `json:"redact_pii"`
+	// Logging settings by rule type.
+	SettingsByRuleType LoggingSettingSettingsByRuleType `json:"settings_by_rule_type"`
+	JSON               loggingSettingJSON               `json:"-"`
 }
 
 // loggingSettingJSON contains the JSON metadata for the struct [LoggingSetting]
@@ -91,14 +93,58 @@ func (r loggingSettingJSON) RawJSON() string {
 	return r.raw
 }
 
+// Logging settings by rule type.
+type LoggingSettingSettingsByRuleType struct {
+	// Logging settings for DNS firewall.
+	DNS interface{} `json:"dns"`
+	// Logging settings for HTTP/HTTPS firewall.
+	HTTP interface{} `json:"http"`
+	// Logging settings for Network firewall.
+	L4   interface{}                          `json:"l4"`
+	JSON loggingSettingSettingsByRuleTypeJSON `json:"-"`
+}
+
+// loggingSettingSettingsByRuleTypeJSON contains the JSON metadata for the struct
+// [LoggingSettingSettingsByRuleType]
+type loggingSettingSettingsByRuleTypeJSON struct {
+	DNS         apijson.Field
+	HTTP        apijson.Field
+	L4          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoggingSettingSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loggingSettingSettingsByRuleTypeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoggingSettingParam struct {
 	// Redact personally identifiable information from activity logging (PII fields
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
-	RedactPii          param.Field[bool]        `json:"redact_pii"`
-	SettingsByRuleType param.Field[interface{}] `json:"settings_by_rule_type"`
+	RedactPii param.Field[bool] `json:"redact_pii"`
+	// Logging settings by rule type.
+	SettingsByRuleType param.Field[LoggingSettingSettingsByRuleTypeParam] `json:"settings_by_rule_type"`
 }
 
 func (r LoggingSettingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Logging settings by rule type.
+type LoggingSettingSettingsByRuleTypeParam struct {
+	// Logging settings for DNS firewall.
+	DNS param.Field[interface{}] `json:"dns"`
+	// Logging settings for HTTP/HTTPS firewall.
+	HTTP param.Field[interface{}] `json:"http"`
+	// Logging settings for Network firewall.
+	L4 param.Field[interface{}] `json:"l4"`
+}
+
+func (r LoggingSettingSettingsByRuleTypeParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -112,8 +158,8 @@ func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLoggingUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  LoggingSetting                              `json:"result"`
@@ -159,8 +205,8 @@ type GatewayLoggingGetParams struct {
 }
 
 type GatewayLoggingGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  LoggingSetting                           `json:"result"`

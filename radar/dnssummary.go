@@ -191,7 +191,7 @@ func (r dnsSummaryCacheHitResponseJSON) RawJSON() string {
 }
 
 type DNSSummaryCacheHitResponseMeta struct {
-	DateRange      []interface{}                                `json:"dateRange,required"`
+	DateRange      []DNSSummaryCacheHitResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                       `json:"lastUpdated,required"`
 	Normalization  string                                       `json:"normalization,required"`
 	ConfidenceInfo DNSSummaryCacheHitResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -217,10 +217,35 @@ func (r dnsSummaryCacheHitResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSummaryCacheHitResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
+	JSON      dnsSummaryCacheHitResponseMetaDateRangeJSON `json:"-"`
+}
+
+// dnsSummaryCacheHitResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [DNSSummaryCacheHitResponseMetaDateRange]
+type dnsSummaryCacheHitResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSummaryCacheHitResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryCacheHitResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSummaryCacheHitResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                    `json:"annotations"`
-	Level       int64                                            `json:"level"`
-	JSON        dnsSummaryCacheHitResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                    `json:"level"`
+	JSON        dnsSummaryCacheHitResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // dnsSummaryCacheHitResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -237,6 +262,39 @@ func (r *DNSSummaryCacheHitResponseMetaConfidenceInfo) UnmarshalJSON(data []byte
 }
 
 func (r dnsSummaryCacheHitResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                     `json:"dataSource,required"`
+	Description     string                                                     `json:"description,required"`
+	EventType       string                                                     `json:"eventType,required"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                  `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                     `json:"linkedUrl"`
+	StartTime       time.Time                                                  `json:"startTime" format:"date-time"`
+	JSON            dnsSummaryCacheHitResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsSummaryCacheHitResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotation]
+type dnsSummaryCacheHitResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryCacheHitResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -287,7 +345,7 @@ func (r dnsSummaryDNSSECResponseJSON) RawJSON() string {
 }
 
 type DNSSummaryDNSSECResponseMeta struct {
-	DateRange      []interface{}                              `json:"dateRange,required"`
+	DateRange      []DNSSummaryDNSSECResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                     `json:"lastUpdated,required"`
 	Normalization  string                                     `json:"normalization,required"`
 	ConfidenceInfo DNSSummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -313,10 +371,35 @@ func (r dnsSummaryDNSSECResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSummaryDNSSECResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                 `json:"startTime,required" format:"date-time"`
+	JSON      dnsSummaryDNSSECResponseMetaDateRangeJSON `json:"-"`
+}
+
+// dnsSummaryDNSSECResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [DNSSummaryDNSSECResponseMetaDateRange]
+type dnsSummaryDNSSECResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSummaryDNSSECResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryDNSSECResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSummaryDNSSECResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                  `json:"annotations"`
-	Level       int64                                          `json:"level"`
-	JSON        dnsSummaryDNSSECResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                  `json:"level"`
+	JSON        dnsSummaryDNSSECResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // dnsSummaryDNSSECResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -333,6 +416,39 @@ func (r *DNSSummaryDNSSECResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) 
 }
 
 func (r dnsSummaryDNSSECResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                   `json:"dataSource,required"`
+	Description     string                                                   `json:"description,required"`
+	EventType       string                                                   `json:"eventType,required"`
+	IsInstantaneous bool                                                     `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                   `json:"linkedUrl"`
+	StartTime       time.Time                                                `json:"startTime" format:"date-time"`
+	JSON            dnsSummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsSummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotation]
+type dnsSummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -387,7 +503,7 @@ func (r dnsSummaryDNSSECAwareResponseJSON) RawJSON() string {
 }
 
 type DNSSummaryDNSSECAwareResponseMeta struct {
-	DateRange      []interface{}                                   `json:"dateRange,required"`
+	DateRange      []DNSSummaryDNSSECAwareResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                          `json:"lastUpdated,required"`
 	Normalization  string                                          `json:"normalization,required"`
 	ConfidenceInfo DNSSummaryDNSSECAwareResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -413,10 +529,35 @@ func (r dnsSummaryDNSSECAwareResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSummaryDNSSECAwareResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                      `json:"startTime,required" format:"date-time"`
+	JSON      dnsSummaryDNSSECAwareResponseMetaDateRangeJSON `json:"-"`
+}
+
+// dnsSummaryDNSSECAwareResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [DNSSummaryDNSSECAwareResponseMetaDateRange]
+type dnsSummaryDNSSECAwareResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSummaryDNSSECAwareResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryDNSSECAwareResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSummaryDNSSECAwareResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                       `json:"annotations"`
-	Level       int64                                               `json:"level"`
-	JSON        dnsSummaryDNSSECAwareResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                       `json:"level"`
+	JSON        dnsSummaryDNSSECAwareResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // dnsSummaryDNSSECAwareResponseMetaConfidenceInfoJSON contains the JSON metadata
@@ -433,6 +574,40 @@ func (r *DNSSummaryDNSSECAwareResponseMetaConfidenceInfo) UnmarshalJSON(data []b
 }
 
 func (r dnsSummaryDNSSECAwareResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                        `json:"dataSource,required"`
+	Description     string                                                        `json:"description,required"`
+	EventType       string                                                        `json:"eventType,required"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                     `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                        `json:"linkedUrl"`
+	StartTime       time.Time                                                     `json:"startTime" format:"date-time"`
+	JSON            dnsSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotation]
+type dnsSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -483,7 +658,7 @@ func (r dnsSummaryDnssece2EResponseJSON) RawJSON() string {
 }
 
 type DNSSummaryDnssece2EResponseMeta struct {
-	DateRange      []interface{}                                 `json:"dateRange,required"`
+	DateRange      []DNSSummaryDnssece2EResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                        `json:"lastUpdated,required"`
 	Normalization  string                                        `json:"normalization,required"`
 	ConfidenceInfo DNSSummaryDnssece2EResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -509,10 +684,35 @@ func (r dnsSummaryDnssece2EResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSummaryDnssece2EResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
+	JSON      dnsSummaryDnssece2EResponseMetaDateRangeJSON `json:"-"`
+}
+
+// dnsSummaryDnssece2EResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [DNSSummaryDnssece2EResponseMetaDateRange]
+type dnsSummaryDnssece2EResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSummaryDnssece2EResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryDnssece2EResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSummaryDnssece2EResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                     `json:"annotations"`
-	Level       int64                                             `json:"level"`
-	JSON        dnsSummaryDnssece2EResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                     `json:"level"`
+	JSON        dnsSummaryDnssece2EResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // dnsSummaryDnssece2EResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -529,6 +729,40 @@ func (r *DNSSummaryDnssece2EResponseMetaConfidenceInfo) UnmarshalJSON(data []byt
 }
 
 func (r dnsSummaryDnssece2EResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                      `json:"dataSource,required"`
+	Description     string                                                      `json:"description,required"`
+	EventType       string                                                      `json:"eventType,required"`
+	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                      `json:"linkedUrl"`
+	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
+	JSON            dnsSummaryDnssece2EResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsSummaryDnssece2EResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotation]
+type dnsSummaryDnssece2EResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryDnssece2EResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -556,9 +790,9 @@ func (r dnsSummaryDnssece2EResponseSummary0JSON) RawJSON() string {
 }
 
 type DNSSummaryIPVersionResponse struct {
-	Meta     DNSSummaryIPVersionResponseMeta `json:"meta,required"`
-	Summary0 interface{}                     `json:"summary_0,required"`
-	JSON     dnsSummaryIPVersionResponseJSON `json:"-"`
+	Meta     DNSSummaryIPVersionResponseMeta     `json:"meta,required"`
+	Summary0 DNSSummaryIPVersionResponseSummary0 `json:"summary_0,required"`
+	JSON     dnsSummaryIPVersionResponseJSON     `json:"-"`
 }
 
 // dnsSummaryIPVersionResponseJSON contains the JSON metadata for the struct
@@ -579,7 +813,7 @@ func (r dnsSummaryIPVersionResponseJSON) RawJSON() string {
 }
 
 type DNSSummaryIPVersionResponseMeta struct {
-	DateRange      []interface{}                                 `json:"dateRange,required"`
+	DateRange      []DNSSummaryIPVersionResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                        `json:"lastUpdated,required"`
 	Normalization  string                                        `json:"normalization,required"`
 	ConfidenceInfo DNSSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -605,10 +839,35 @@ func (r dnsSummaryIPVersionResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSummaryIPVersionResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
+	JSON      dnsSummaryIPVersionResponseMetaDateRangeJSON `json:"-"`
+}
+
+// dnsSummaryIPVersionResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [DNSSummaryIPVersionResponseMetaDateRange]
+type dnsSummaryIPVersionResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSummaryIPVersionResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryIPVersionResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                     `json:"annotations"`
-	Level       int64                                             `json:"level"`
-	JSON        dnsSummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                     `json:"level"`
+	JSON        dnsSummaryIPVersionResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // dnsSummaryIPVersionResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -625,6 +884,63 @@ func (r *DNSSummaryIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byt
 }
 
 func (r dnsSummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                      `json:"dataSource,required"`
+	Description     string                                                      `json:"description,required"`
+	EventType       string                                                      `json:"eventType,required"`
+	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                      `json:"linkedUrl"`
+	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
+	JSON            dnsSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotation]
+type dnsSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSummaryIPVersionResponseSummary0 struct {
+	IPv4 string                                  `json:"IPv4,required"`
+	IPv6 string                                  `json:"IPv6,required"`
+	JSON dnsSummaryIPVersionResponseSummary0JSON `json:"-"`
+}
+
+// dnsSummaryIPVersionResponseSummary0JSON contains the JSON metadata for the
+// struct [DNSSummaryIPVersionResponseSummary0]
+type dnsSummaryIPVersionResponseSummary0JSON struct {
+	IPv4        apijson.Field
+	IPv6        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSummaryIPVersionResponseSummary0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryIPVersionResponseSummary0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -652,7 +968,7 @@ func (r dnsSummaryMatchingAnswerResponseJSON) RawJSON() string {
 }
 
 type DNSSummaryMatchingAnswerResponseMeta struct {
-	DateRange      []interface{}                                      `json:"dateRange,required"`
+	DateRange      []DNSSummaryMatchingAnswerResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                             `json:"lastUpdated,required"`
 	Normalization  string                                             `json:"normalization,required"`
 	ConfidenceInfo DNSSummaryMatchingAnswerResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -678,10 +994,35 @@ func (r dnsSummaryMatchingAnswerResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSummaryMatchingAnswerResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
+	JSON      dnsSummaryMatchingAnswerResponseMetaDateRangeJSON `json:"-"`
+}
+
+// dnsSummaryMatchingAnswerResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [DNSSummaryMatchingAnswerResponseMetaDateRange]
+type dnsSummaryMatchingAnswerResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSummaryMatchingAnswerResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryMatchingAnswerResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSummaryMatchingAnswerResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                          `json:"annotations"`
-	Level       int64                                                  `json:"level"`
-	JSON        dnsSummaryMatchingAnswerResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                          `json:"level"`
+	JSON        dnsSummaryMatchingAnswerResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // dnsSummaryMatchingAnswerResponseMetaConfidenceInfoJSON contains the JSON
@@ -698,6 +1039,40 @@ func (r *DNSSummaryMatchingAnswerResponseMetaConfidenceInfo) UnmarshalJSON(data 
 }
 
 func (r dnsSummaryMatchingAnswerResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                           `json:"dataSource,required"`
+	Description     string                                                           `json:"description,required"`
+	EventType       string                                                           `json:"eventType,required"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                           `json:"linkedUrl"`
+	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
+	JSON            dnsSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotation]
+type dnsSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -748,7 +1123,7 @@ func (r dnsSummaryProtocolResponseJSON) RawJSON() string {
 }
 
 type DNSSummaryProtocolResponseMeta struct {
-	DateRange      []interface{}                                `json:"dateRange,required"`
+	DateRange      []DNSSummaryProtocolResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                       `json:"lastUpdated,required"`
 	Normalization  string                                       `json:"normalization,required"`
 	ConfidenceInfo DNSSummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -774,10 +1149,35 @@ func (r dnsSummaryProtocolResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSummaryProtocolResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
+	JSON      dnsSummaryProtocolResponseMetaDateRangeJSON `json:"-"`
+}
+
+// dnsSummaryProtocolResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [DNSSummaryProtocolResponseMetaDateRange]
+type dnsSummaryProtocolResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSummaryProtocolResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryProtocolResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSummaryProtocolResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                    `json:"annotations"`
-	Level       int64                                            `json:"level"`
-	JSON        dnsSummaryProtocolResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []DNSSummaryProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                    `json:"level"`
+	JSON        dnsSummaryProtocolResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // dnsSummaryProtocolResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -794,6 +1194,39 @@ func (r *DNSSummaryProtocolResponseMetaConfidenceInfo) UnmarshalJSON(data []byte
 }
 
 func (r dnsSummaryProtocolResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSummaryProtocolResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                     `json:"dataSource,required"`
+	Description     string                                                     `json:"description,required"`
+	EventType       string                                                     `json:"eventType,required"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                  `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                     `json:"linkedUrl"`
+	StartTime       time.Time                                                  `json:"startTime" format:"date-time"`
+	JSON            dnsSummaryProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsSummaryProtocolResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [DNSSummaryProtocolResponseMetaConfidenceInfoAnnotation]
+type dnsSummaryProtocolResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSSummaryProtocolResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryProtocolResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -848,7 +1281,7 @@ func (r dnsSummaryQueryTypeResponseJSON) RawJSON() string {
 }
 
 type DNSSummaryQueryTypeResponseMeta struct {
-	DateRange      []interface{}                                 `json:"dateRange,required"`
+	DateRange      []DNSSummaryQueryTypeResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                        `json:"lastUpdated,required"`
 	Normalization  string                                        `json:"normalization,required"`
 	ConfidenceInfo DNSSummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -874,10 +1307,35 @@ func (r dnsSummaryQueryTypeResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSummaryQueryTypeResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
+	JSON      dnsSummaryQueryTypeResponseMetaDateRangeJSON `json:"-"`
+}
+
+// dnsSummaryQueryTypeResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [DNSSummaryQueryTypeResponseMetaDateRange]
+type dnsSummaryQueryTypeResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSummaryQueryTypeResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryQueryTypeResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSummaryQueryTypeResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                     `json:"annotations"`
-	Level       int64                                             `json:"level"`
-	JSON        dnsSummaryQueryTypeResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                     `json:"level"`
+	JSON        dnsSummaryQueryTypeResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // dnsSummaryQueryTypeResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -894,6 +1352,40 @@ func (r *DNSSummaryQueryTypeResponseMetaConfidenceInfo) UnmarshalJSON(data []byt
 }
 
 func (r dnsSummaryQueryTypeResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                      `json:"dataSource,required"`
+	Description     string                                                      `json:"description,required"`
+	EventType       string                                                      `json:"eventType,required"`
+	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                      `json:"linkedUrl"`
+	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
+	JSON            dnsSummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsSummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotation]
+type dnsSummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -921,7 +1413,7 @@ func (r dnsSummaryResponseCodeResponseJSON) RawJSON() string {
 }
 
 type DNSSummaryResponseCodeResponseMeta struct {
-	DateRange      []interface{}                                    `json:"dateRange,required"`
+	DateRange      []DNSSummaryResponseCodeResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                           `json:"lastUpdated,required"`
 	Normalization  string                                           `json:"normalization,required"`
 	ConfidenceInfo DNSSummaryResponseCodeResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -947,10 +1439,35 @@ func (r dnsSummaryResponseCodeResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSummaryResponseCodeResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
+	JSON      dnsSummaryResponseCodeResponseMetaDateRangeJSON `json:"-"`
+}
+
+// dnsSummaryResponseCodeResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [DNSSummaryResponseCodeResponseMetaDateRange]
+type dnsSummaryResponseCodeResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSummaryResponseCodeResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryResponseCodeResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSummaryResponseCodeResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                        `json:"annotations"`
-	Level       int64                                                `json:"level"`
-	JSON        dnsSummaryResponseCodeResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                        `json:"level"`
+	JSON        dnsSummaryResponseCodeResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // dnsSummaryResponseCodeResponseMetaConfidenceInfoJSON contains the JSON metadata
@@ -967,6 +1484,40 @@ func (r *DNSSummaryResponseCodeResponseMetaConfidenceInfo) UnmarshalJSON(data []
 }
 
 func (r dnsSummaryResponseCodeResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                         `json:"dataSource,required"`
+	Description     string                                                         `json:"description,required"`
+	EventType       string                                                         `json:"eventType,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                         `json:"linkedUrl"`
+	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
+	JSON            dnsSummaryResponseCodeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsSummaryResponseCodeResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotation]
+type dnsSummaryResponseCodeResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryResponseCodeResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -994,7 +1545,7 @@ func (r dnsSummaryResponseTTLResponseJSON) RawJSON() string {
 }
 
 type DNSSummaryResponseTTLResponseMeta struct {
-	DateRange      []interface{}                                   `json:"dateRange,required"`
+	DateRange      []DNSSummaryResponseTTLResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                          `json:"lastUpdated,required"`
 	Normalization  string                                          `json:"normalization,required"`
 	ConfidenceInfo DNSSummaryResponseTTLResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -1020,10 +1571,35 @@ func (r dnsSummaryResponseTTLResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSummaryResponseTTLResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                      `json:"startTime,required" format:"date-time"`
+	JSON      dnsSummaryResponseTTLResponseMetaDateRangeJSON `json:"-"`
+}
+
+// dnsSummaryResponseTTLResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [DNSSummaryResponseTTLResponseMetaDateRange]
+type dnsSummaryResponseTTLResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSummaryResponseTTLResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryResponseTTLResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSummaryResponseTTLResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                       `json:"annotations"`
-	Level       int64                                               `json:"level"`
-	JSON        dnsSummaryResponseTTLResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                       `json:"level"`
+	JSON        dnsSummaryResponseTTLResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // dnsSummaryResponseTTLResponseMetaConfidenceInfoJSON contains the JSON metadata
@@ -1040,6 +1616,40 @@ func (r *DNSSummaryResponseTTLResponseMetaConfidenceInfo) UnmarshalJSON(data []b
 }
 
 func (r dnsSummaryResponseTTLResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                        `json:"dataSource,required"`
+	Description     string                                                        `json:"description,required"`
+	EventType       string                                                        `json:"eventType,required"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                     `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                        `json:"linkedUrl"`
+	StartTime       time.Time                                                     `json:"startTime" format:"date-time"`
+	JSON            dnsSummaryResponseTTLResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// dnsSummaryResponseTTLResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotation]
+type dnsSummaryResponseTTLResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsSummaryResponseTTLResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -117,9 +117,9 @@ func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   interface{}   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`

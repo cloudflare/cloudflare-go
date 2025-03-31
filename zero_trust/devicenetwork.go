@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DeviceNetworkService contains methods and other services that help with
@@ -276,9 +277,9 @@ func (r DeviceNetworkNewParamsType) IsKnown() bool {
 }
 
 type DeviceNetworkNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   DeviceNetwork `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DeviceNetwork         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -365,9 +366,9 @@ func (r DeviceNetworkUpdateParamsType) IsKnown() bool {
 }
 
 type DeviceNetworkUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   DeviceNetwork `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DeviceNetwork         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -420,9 +421,9 @@ type DeviceNetworkGetParams struct {
 }
 
 type DeviceNetworkGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   DeviceNetwork `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DeviceNetwork         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkGetResponseEnvelopeJSON    `json:"-"`

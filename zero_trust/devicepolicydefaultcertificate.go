@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DevicePolicyDefaultCertificateService contains methods and other services that
@@ -79,9 +80,9 @@ func (r DevicePolicyDefaultCertificateEditParams) MarshalJSON() (data []byte, er
 }
 
 type DevicePolicyDefaultCertificateEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   interface{}   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyDefaultCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyDefaultCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -126,9 +127,9 @@ type DevicePolicyDefaultCertificateGetParams struct {
 }
 
 type DevicePolicyDefaultCertificateGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   interface{}   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyDefaultCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyDefaultCertificateGetResponseEnvelopeJSON    `json:"-"`

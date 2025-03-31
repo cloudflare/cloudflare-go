@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptTailService contains methods and other services that help with interacting
@@ -163,8 +164,8 @@ func (r scriptTailNewResponseJSON) RawJSON() string {
 }
 
 type ScriptTailDeleteResponse struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptTailDeleteResponseSuccess `json:"success,required"`
 	JSON    scriptTailDeleteResponseJSON    `json:"-"`
@@ -239,8 +240,8 @@ func (r ScriptTailNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptTailNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptTailNewResponse                `json:"result"`
@@ -292,8 +293,8 @@ type ScriptTailGetParams struct {
 }
 
 type ScriptTailGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptTailGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptTailGetResponse                `json:"result"`

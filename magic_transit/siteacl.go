@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SiteACLService contains methods and other services that help with interacting
@@ -200,8 +201,8 @@ type ACL struct {
 	LAN1           ACLConfiguration `json:"lan_1"`
 	LAN2           ACLConfiguration `json:"lan_2"`
 	// The name of the ACL.
-	Name      string        `json:"name"`
-	Protocols []interface{} `json:"protocols"`
+	Name      string            `json:"name"`
+	Protocols []AllowedProtocol `json:"protocols"`
 	// The desired traffic direction for this ACL policy. If set to "false", the policy
 	// will allow bidirectional traffic. If set to "true", the policy will only allow
 	// traffic in one direction. If not included in request, will default to false.
@@ -290,6 +291,24 @@ func (r ACLConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Array of allowed communication protocols between configured LANs. If no
+// protocols are provided, all protocols are allowed.
+type AllowedProtocol string
+
+const (
+	AllowedProtocolTCP  AllowedProtocol = "tcp"
+	AllowedProtocolUdp  AllowedProtocol = "udp"
+	AllowedProtocolIcmp AllowedProtocol = "icmp"
+)
+
+func (r AllowedProtocol) IsKnown() bool {
+	switch r {
+	case AllowedProtocolTCP, AllowedProtocolUdp, AllowedProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 type Subnet = string
 
 type SubnetParam = string
@@ -307,8 +326,8 @@ type SiteACLNewParams struct {
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
 	// traffic locally on the Magic Connector. If not included in request, will default
 	// to false.
-	ForwardLocally param.Field[bool]          `json:"forward_locally"`
-	Protocols      param.Field[[]interface{}] `json:"protocols"`
+	ForwardLocally param.Field[bool]              `json:"forward_locally"`
+	Protocols      param.Field[[]AllowedProtocol] `json:"protocols"`
 	// The desired traffic direction for this ACL policy. If set to "false", the policy
 	// will allow bidirectional traffic. If set to "true", the policy will only allow
 	// traffic in one direction. If not included in request, will default to false.
@@ -320,8 +339,8 @@ func (r SiteACLNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Bidirectional ACL policy for network traffic within a site.
 	Result ACL `json:"result,required"`
 	// Whether the API call was successful
@@ -376,8 +395,8 @@ type SiteACLUpdateParams struct {
 	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
 	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
 	// The name of the ACL.
-	Name      param.Field[string]        `json:"name"`
-	Protocols param.Field[[]interface{}] `json:"protocols"`
+	Name      param.Field[string]            `json:"name"`
+	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
 	// The desired traffic direction for this ACL policy. If set to "false", the policy
 	// will allow bidirectional traffic. If set to "true", the policy will only allow
 	// traffic in one direction. If not included in request, will default to false.
@@ -389,8 +408,8 @@ func (r SiteACLUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Bidirectional ACL policy for network traffic within a site.
 	Result ACL `json:"result,required"`
 	// Whether the API call was successful
@@ -443,8 +462,8 @@ type SiteACLDeleteParams struct {
 }
 
 type SiteACLDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Bidirectional ACL policy for network traffic within a site.
 	Result ACL `json:"result,required"`
 	// Whether the API call was successful
@@ -499,8 +518,8 @@ type SiteACLEditParams struct {
 	LAN1           param.Field[ACLConfigurationParam] `json:"lan_1"`
 	LAN2           param.Field[ACLConfigurationParam] `json:"lan_2"`
 	// The name of the ACL.
-	Name      param.Field[string]        `json:"name"`
-	Protocols param.Field[[]interface{}] `json:"protocols"`
+	Name      param.Field[string]            `json:"name"`
+	Protocols param.Field[[]AllowedProtocol] `json:"protocols"`
 	// The desired traffic direction for this ACL policy. If set to "false", the policy
 	// will allow bidirectional traffic. If set to "true", the policy will only allow
 	// traffic in one direction. If not included in request, will default to false.
@@ -512,8 +531,8 @@ func (r SiteACLEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Bidirectional ACL policy for network traffic within a site.
 	Result ACL `json:"result,required"`
 	// Whether the API call was successful
@@ -561,8 +580,8 @@ type SiteACLGetParams struct {
 }
 
 type SiteACLGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Bidirectional ACL policy for network traffic within a site.
 	Result ACL `json:"result,required"`
 	// Whether the API call was successful

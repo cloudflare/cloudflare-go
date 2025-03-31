@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InsightSeverityService contains methods and other services that help with
@@ -118,8 +119,8 @@ func (r InsightSeverityGetParams) URLQuery() (v url.Values) {
 }
 
 type InsightSeverityGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success InsightSeverityGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  []InsightSeverityGetResponse              `json:"result"`

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PurgeService contains methods and other services that help with interacting with
@@ -112,9 +113,9 @@ func (r PurgeStartParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PurgeStartResponseEnvelope struct {
-	Errors   []interface{} `json:"errors"`
-	Messages []string      `json:"messages"`
-	Result   Queue         `json:"result"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   Queue                 `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success PurgeStartResponseEnvelopeSuccess `json:"success"`
 	JSON    purgeStartResponseEnvelopeJSON    `json:"-"`
@@ -160,9 +161,9 @@ type PurgeStatusParams struct {
 }
 
 type PurgeStatusResponseEnvelope struct {
-	Errors   []interface{}       `json:"errors"`
-	Messages []string            `json:"messages"`
-	Result   PurgeStatusResponse `json:"result"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   PurgeStatusResponse   `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success PurgeStatusResponseEnvelopeSuccess `json:"success"`
 	JSON    purgeStatusResponseEnvelopeJSON    `json:"-"`

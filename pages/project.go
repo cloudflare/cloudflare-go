@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -2607,9 +2608,9 @@ func (r ProjectNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Project       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Project               `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectNewResponseEnvelopeJSON    `json:"-"`
@@ -2661,8 +2662,8 @@ type ProjectDeleteParams struct {
 }
 
 type ProjectDeleteResponseEnvelope struct {
-	Errors   []interface{}         `json:"errors,required"`
-	Messages []interface{}         `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   ProjectDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -2715,9 +2716,9 @@ func (r ProjectEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Project       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Project               `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectEditResponseEnvelopeJSON    `json:"-"`
@@ -2764,9 +2765,9 @@ type ProjectGetParams struct {
 }
 
 type ProjectGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Project       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Project               `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectGetResponseEnvelopeJSON    `json:"-"`
@@ -2813,8 +2814,8 @@ type ProjectPurgeBuildCacheParams struct {
 }
 
 type ProjectPurgeBuildCacheResponseEnvelope struct {
-	Errors   []interface{}                  `json:"errors,required"`
-	Messages []interface{}                  `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   ProjectPurgeBuildCacheResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectPurgeBuildCacheResponseEnvelopeSuccess `json:"success,required"`

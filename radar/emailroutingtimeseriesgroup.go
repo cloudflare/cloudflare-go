@@ -119,7 +119,7 @@ func (r *EmailRoutingTimeseriesGroupService) SPF(ctx context.Context, query Emai
 
 type EmailRoutingTimeseriesGroupARCResponse struct {
 	Meta   interface{}                                `json:"meta,required"`
-	Serie0 interface{}                                `json:"serie_0,required"`
+	Serie0 RadarEmailSeries                           `json:"serie_0,required"`
 	JSON   emailRoutingTimeseriesGroupARCResponseJSON `json:"-"`
 }
 
@@ -142,7 +142,7 @@ func (r emailRoutingTimeseriesGroupARCResponseJSON) RawJSON() string {
 
 type EmailRoutingTimeseriesGroupDKIMResponse struct {
 	Meta   interface{}                                 `json:"meta,required"`
-	Serie0 interface{}                                 `json:"serie_0,required"`
+	Serie0 RadarEmailSeries                            `json:"serie_0,required"`
 	JSON   emailRoutingTimeseriesGroupDKIMResponseJSON `json:"-"`
 }
 
@@ -165,7 +165,7 @@ func (r emailRoutingTimeseriesGroupDKIMResponseJSON) RawJSON() string {
 
 type EmailRoutingTimeseriesGroupDMARCResponse struct {
 	Meta   interface{}                                  `json:"meta,required"`
-	Serie0 interface{}                                  `json:"serie_0,required"`
+	Serie0 RadarEmailSeries                             `json:"serie_0,required"`
 	JSON   emailRoutingTimeseriesGroupDMARCResponseJSON `json:"-"`
 }
 
@@ -280,7 +280,7 @@ func (r emailRoutingTimeseriesGroupIPVersionResponseSerie0JSON) RawJSON() string
 
 type EmailRoutingTimeseriesGroupSPFResponse struct {
 	Meta   interface{}                                `json:"meta,required"`
-	Serie0 interface{}                                `json:"serie_0,required"`
+	Serie0 RadarEmailSeries                           `json:"serie_0,required"`
 	JSON   emailRoutingTimeseriesGroupSPFResponseJSON `json:"-"`
 }
 

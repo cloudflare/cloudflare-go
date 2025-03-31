@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // WAFOverrideService contains methods and other services that help with
@@ -428,9 +429,9 @@ func (r WAFOverrideNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WAFOverrideNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Override      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Override              `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFOverrideNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideNewResponseEnvelopeJSON    `json:"-"`
@@ -495,9 +496,9 @@ func (r WAFOverrideUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WAFOverrideUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Override      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Override              `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFOverrideUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideUpdateResponseEnvelopeJSON    `json:"-"`
@@ -586,9 +587,9 @@ type WAFOverrideGetParams struct {
 }
 
 type WAFOverrideGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Override      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Override              `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFOverrideGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideGetResponseEnvelopeJSON    `json:"-"`

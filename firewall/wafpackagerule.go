@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -148,6 +149,31 @@ func (r AllowedModesAnomaly) IsKnown() bool {
 	return false
 }
 
+// The rule group to which the current WAF rule belongs.
+type WAFRuleGroup struct {
+	// The unique identifier of the rule group.
+	ID string `json:"id"`
+	// The name of the rule group.
+	Name string           `json:"name"`
+	JSON wafRuleGroupJSON `json:"-"`
+}
+
+// wafRuleGroupJSON contains the JSON metadata for the struct [WAFRuleGroup]
+type wafRuleGroupJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFRuleGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // When triggered, anomaly detection WAF rules contribute to an overall threat
 // score that will determine if a request is considered malicious. You can
 // configure the total scoring threshold through the 'sensitivity' property of the
@@ -161,8 +187,8 @@ type WAFPackageRuleListResponse struct {
 	AllowedModes interface{} `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
-	// This field can have the runtime type of [interface{}].
-	Group interface{} `json:"group,required"`
+	// The rule group to which the current WAF rule belongs.
+	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
 	Mode AllowedModesAnomaly `json:"mode,required"`
@@ -258,8 +284,9 @@ type WAFPackageRuleListResponseWAFManagedRulesAnomalyRule struct {
 	// detection WAF rules.
 	AllowedModes []AllowedModesAnomaly `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
-	Description string      `json:"description,required"`
-	Group       interface{} `json:"group,required"`
+	Description string `json:"description,required"`
+	// The rule group to which the current WAF rule belongs.
+	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
 	Mode AllowedModesAnomaly `json:"mode,required"`
@@ -307,8 +334,9 @@ type WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule struct {
 	// The default action/mode of a rule.
 	DefaultMode WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultMode `json:"default_mode,required"`
 	// The public description of the WAF rule.
-	Description string      `json:"description,required"`
-	Group       interface{} `json:"group,required"`
+	Description string `json:"description,required"`
+	// The rule group to which the current WAF rule belongs.
+	Group WAFRuleGroup `json:"group,required"`
 	// The action that the current WAF rule will perform when triggered. Applies to
 	// traditional (deny) WAF rules.
 	Mode WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode `json:"mode,required"`
@@ -413,8 +441,9 @@ type WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule struct {
 	// Defines the available modes for the current WAF rule.
 	AllowedModes []WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
-	Description string      `json:"description,required"`
-	Group       interface{} `json:"group,required"`
+	Description string `json:"description,required"`
+	// The rule group to which the current WAF rule belongs.
+	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current rule will be used when evaluating the request.
 	// Applies to traditional (allow) WAF rules.
 	Mode WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleMode `json:"mode,required"`
@@ -516,8 +545,8 @@ type WAFPackageRuleEditResponse struct {
 	AllowedModes interface{} `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
-	// This field can have the runtime type of [interface{}].
-	Group interface{} `json:"group,required"`
+	// The rule group to which the current WAF rule belongs.
+	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
 	Mode AllowedModesAnomaly `json:"mode,required"`
@@ -613,8 +642,9 @@ type WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule struct {
 	// detection WAF rules.
 	AllowedModes []AllowedModesAnomaly `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
-	Description string      `json:"description,required"`
-	Group       interface{} `json:"group,required"`
+	Description string `json:"description,required"`
+	// The rule group to which the current WAF rule belongs.
+	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
 	Mode AllowedModesAnomaly `json:"mode,required"`
@@ -662,8 +692,9 @@ type WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule struct {
 	// The default action/mode of a rule.
 	DefaultMode WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultMode `json:"default_mode,required"`
 	// The public description of the WAF rule.
-	Description string      `json:"description,required"`
-	Group       interface{} `json:"group,required"`
+	Description string `json:"description,required"`
+	// The rule group to which the current WAF rule belongs.
+	Group WAFRuleGroup `json:"group,required"`
 	// The action that the current WAF rule will perform when triggered. Applies to
 	// traditional (deny) WAF rules.
 	Mode WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleMode `json:"mode,required"`
@@ -768,8 +799,9 @@ type WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule struct {
 	// Defines the available modes for the current WAF rule.
 	AllowedModes []WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedMode `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
-	Description string      `json:"description,required"`
-	Group       interface{} `json:"group,required"`
+	Description string `json:"description,required"`
+	// The rule group to which the current WAF rule belongs.
+	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current rule will be used when evaluating the request.
 	// Applies to traditional (allow) WAF rules.
 	Mode WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode `json:"mode,required"`
@@ -994,8 +1026,8 @@ func (r WAFPackageRuleEditParamsMode) IsKnown() bool {
 }
 
 type WAFPackageRuleEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// When triggered, anomaly detection WAF rules contribute to an overall threat
 	// score that will determine if a request is considered malicious. You can
 	// configure the total scoring threshold through the 'sensitivity' property of the
@@ -1046,9 +1078,9 @@ type WAFPackageRuleGetParams struct {
 }
 
 type WAFPackageRuleGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   interface{}   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageRuleGetResponseEnvelopeJSON    `json:"-"`

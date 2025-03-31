@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // GatewayCertificateService contains methods and other services that help with
@@ -710,8 +711,8 @@ func (r GatewayCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayCertificateNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayCertificateNewResponse                `json:"result"`
@@ -761,8 +762,8 @@ type GatewayCertificateDeleteParams struct {
 }
 
 type GatewayCertificateDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayCertificateDeleteResponse                `json:"result"`
@@ -813,8 +814,8 @@ func (r GatewayCertificateActivateParams) MarshalJSON() (data []byte, err error)
 }
 
 type GatewayCertificateActivateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayCertificateActivateResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayCertificateActivateResponse                `json:"result"`
@@ -865,8 +866,8 @@ func (r GatewayCertificateDeactivateParams) MarshalJSON() (data []byte, err erro
 }
 
 type GatewayCertificateDeactivateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayCertificateDeactivateResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayCertificateDeactivateResponse                `json:"result"`
@@ -912,8 +913,8 @@ type GatewayCertificateGetParams struct {
 }
 
 type GatewayCertificateGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayCertificateGetResponse                `json:"result"`

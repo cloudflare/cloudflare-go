@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -2156,8 +2157,8 @@ func (r AccessApplicationPolicyNewParams) MarshalJSON() (data []byte, err error)
 }
 
 type AccessApplicationPolicyNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationPolicyNewResponse                `json:"result"`
@@ -2230,8 +2231,8 @@ func (r AccessApplicationPolicyUpdateParams) MarshalJSON() (data []byte, err err
 }
 
 type AccessApplicationPolicyUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationPolicyUpdateResponse                `json:"result"`
@@ -2287,8 +2288,8 @@ type AccessApplicationPolicyDeleteParams struct {
 }
 
 type AccessApplicationPolicyDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationPolicyDeleteResponse                `json:"result"`
@@ -2337,8 +2338,8 @@ type AccessApplicationPolicyGetParams struct {
 }
 
 type AccessApplicationPolicyGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationPolicyGetResponse                `json:"result"`

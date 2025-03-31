@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // GatewayAuditSSHSettingService contains methods and other services that help with
@@ -129,8 +130,8 @@ func (r GatewayAuditSSHSettingUpdateParams) MarshalJSON() (data []byte, err erro
 }
 
 type GatewayAuditSSHSettingUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewaySettings                                     `json:"result"`
@@ -176,8 +177,8 @@ type GatewayAuditSSHSettingGetParams struct {
 }
 
 type GatewayAuditSSHSettingGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayAuditSSHSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewaySettings                                  `json:"result"`
@@ -223,8 +224,8 @@ type GatewayAuditSSHSettingRotateSeedParams struct {
 }
 
 type GatewayAuditSSHSettingRotateSeedResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayAuditSSHSettingRotateSeedResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewaySettings                                         `json:"result"`

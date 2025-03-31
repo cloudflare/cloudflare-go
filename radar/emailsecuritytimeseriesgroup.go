@@ -159,7 +159,7 @@ func (r *EmailSecurityTimeseriesGroupService) TLSVersion(ctx context.Context, qu
 
 type EmailSecurityTimeseriesGroupARCResponse struct {
 	Meta   interface{}                                 `json:"meta,required"`
-	Serie0 interface{}                                 `json:"serie_0,required"`
+	Serie0 RadarEmailSeries                            `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupARCResponseJSON `json:"-"`
 }
 
@@ -182,7 +182,7 @@ func (r emailSecurityTimeseriesGroupARCResponseJSON) RawJSON() string {
 
 type EmailSecurityTimeseriesGroupDKIMResponse struct {
 	Meta   interface{}                                  `json:"meta,required"`
-	Serie0 interface{}                                  `json:"serie_0,required"`
+	Serie0 RadarEmailSeries                             `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupDKIMResponseJSON `json:"-"`
 }
 
@@ -205,7 +205,7 @@ func (r emailSecurityTimeseriesGroupDKIMResponseJSON) RawJSON() string {
 
 type EmailSecurityTimeseriesGroupDMARCResponse struct {
 	Meta   interface{}                                   `json:"meta,required"`
-	Serie0 interface{}                                   `json:"serie_0,required"`
+	Serie0 RadarEmailSeries                              `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupDMARCResponseJSON `json:"-"`
 }
 
@@ -320,7 +320,7 @@ func (r emailSecurityTimeseriesGroupSpamResponseSerie0JSON) RawJSON() string {
 
 type EmailSecurityTimeseriesGroupSPFResponse struct {
 	Meta   interface{}                                 `json:"meta,required"`
-	Serie0 interface{}                                 `json:"serie_0,required"`
+	Serie0 RadarEmailSeries                            `json:"serie_0,required"`
 	JSON   emailSecurityTimeseriesGroupSPFResponseJSON `json:"-"`
 }
 

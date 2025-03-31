@@ -52,7 +52,9 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 					UsernameExpression: cloudflare.F(`url_decode(http.request.body.form[\"username\"][0])`),
 				}),
 				Expression: cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging:    cloudflare.F[any](map[string]interface{}{}),
+				Logging: cloudflare.F(rulesets.LoggingParam{
+					Enabled: cloudflare.F(true),
+				}),
 				Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
 					Characteristics:         cloudflare.F([]string{"ip.src"}),
 					Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod10),

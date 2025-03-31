@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessUserActiveSessionService contains methods and other services that help
@@ -179,7 +180,7 @@ type AccessUserActiveSessionGetResponse struct {
 	DeviceSessions     map[string]AccessUserActiveSessionGetResponseDeviceSession `json:"device_sessions"`
 	DevicePosture      map[string]AccessUserActiveSessionGetResponseDevicePosture `json:"devicePosture"`
 	Email              string                                                     `json:"email"`
-	Geo                interface{}                                                `json:"geo"`
+	Geo                UserPolicyCheckGeo                                         `json:"geo"`
 	Iat                float64                                                    `json:"iat"`
 	IdP                AccessUserActiveSessionGetResponseIdP                      `json:"idp"`
 	IP                 string                                                     `json:"ip"`
@@ -372,8 +373,8 @@ type AccessUserActiveSessionGetParams struct {
 }
 
 type AccessUserActiveSessionGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessUserActiveSessionGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessUserActiveSessionGetResponse                `json:"result"`
