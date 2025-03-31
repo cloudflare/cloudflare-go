@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingDomainService contains methods and other services that help with
@@ -820,8 +819,8 @@ type SettingDomainDeleteParams struct {
 }
 
 type SettingDomainDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                   `json:"messages,required"`
+	Errors   []interface{}                           `json:"errors,required"`
+	Messages []interface{}                           `json:"messages,required"`
 	Result   SettingDomainDeleteResponse             `json:"result,required"`
 	Success  bool                                    `json:"success,required"`
 	JSON     settingDomainDeleteResponseEnvelopeJSON `json:"-"`
@@ -908,8 +907,8 @@ func (r SettingDomainEditParamsFolder) IsKnown() bool {
 }
 
 type SettingDomainEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
+	Errors   []interface{}                         `json:"errors,required"`
+	Messages []interface{}                         `json:"messages,required"`
 	Result   SettingDomainEditResponse             `json:"result,required"`
 	Success  bool                                  `json:"success,required"`
 	JSON     settingDomainEditResponseEnvelopeJSON `json:"-"`
@@ -940,8 +939,8 @@ type SettingDomainGetParams struct {
 }
 
 type SettingDomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                `json:"errors,required"`
-	Messages []shared.ResponseInfo                `json:"messages,required"`
+	Errors   []interface{}                        `json:"errors,required"`
+	Messages []interface{}                        `json:"messages,required"`
 	Result   SettingDomainGetResponse             `json:"result,required"`
 	Success  bool                                 `json:"success,required"`
 	JSON     settingDomainGetResponseEnvelopeJSON `json:"-"`

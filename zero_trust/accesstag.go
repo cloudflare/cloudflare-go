@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessTagService contains methods and other services that help with interacting
@@ -206,8 +205,8 @@ func (r AccessTagNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessTagNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessTagNewResponseEnvelopeSuccess `json:"success,required"`
 	// A tag
@@ -261,8 +260,8 @@ func (r AccessTagUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessTagUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessTagUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// A tag
@@ -315,8 +314,8 @@ type AccessTagDeleteParams struct {
 }
 
 type AccessTagDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessTagDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessTagDeleteResponse                `json:"result"`
@@ -363,8 +362,8 @@ type AccessTagGetParams struct {
 }
 
 type AccessTagGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessTagGetResponseEnvelopeSuccess `json:"success,required"`
 	// A tag

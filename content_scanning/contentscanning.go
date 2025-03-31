@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ContentScanningService contains methods and other services that help with
@@ -82,8 +81,8 @@ type ContentScanningDisableParams struct {
 }
 
 type ContentScanningDisableResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Errors   []interface{}                  `json:"errors,required"`
+	Messages []interface{}                  `json:"messages,required"`
 	Result   ContentScanningDisableResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ContentScanningDisableResponseEnvelopeSuccess `json:"success,required"`
@@ -130,8 +129,8 @@ type ContentScanningEnableParams struct {
 }
 
 type ContentScanningEnableResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Errors   []interface{}                 `json:"errors,required"`
+	Messages []interface{}                 `json:"messages,required"`
 	Result   ContentScanningEnableResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ContentScanningEnableResponseEnvelopeSuccess `json:"success,required"`

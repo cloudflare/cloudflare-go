@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingImpersonationRegistryService contains methods and other services that
@@ -335,8 +334,8 @@ func (r SettingImpersonationRegistryNewParams) MarshalJSON() (data []byte, err e
 }
 
 type SettingImpersonationRegistryNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                               `json:"errors,required"`
-	Messages []shared.ResponseInfo                               `json:"messages,required"`
+	Errors   []interface{}                                       `json:"errors,required"`
+	Messages []interface{}                                       `json:"messages,required"`
 	Result   SettingImpersonationRegistryNewResponse             `json:"result,required"`
 	Success  bool                                                `json:"success,required"`
 	JSON     settingImpersonationRegistryNewResponseEnvelopeJSON `json:"-"`
@@ -444,8 +443,8 @@ type SettingImpersonationRegistryDeleteParams struct {
 }
 
 type SettingImpersonationRegistryDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                                  `json:"messages,required"`
+	Errors   []interface{}                                          `json:"errors,required"`
+	Messages []interface{}                                          `json:"messages,required"`
 	Result   SettingImpersonationRegistryDeleteResponse             `json:"result,required"`
 	Success  bool                                                   `json:"success,required"`
 	JSON     settingImpersonationRegistryDeleteResponseEnvelopeJSON `json:"-"`
@@ -483,8 +482,8 @@ func (r SettingImpersonationRegistryEditParams) MarshalJSON() (data []byte, err 
 }
 
 type SettingImpersonationRegistryEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                `json:"errors,required"`
-	Messages []shared.ResponseInfo                                `json:"messages,required"`
+	Errors   []interface{}                                        `json:"errors,required"`
+	Messages []interface{}                                        `json:"messages,required"`
 	Result   SettingImpersonationRegistryEditResponse             `json:"result,required"`
 	Success  bool                                                 `json:"success,required"`
 	JSON     settingImpersonationRegistryEditResponseEnvelopeJSON `json:"-"`
@@ -515,8 +514,8 @@ type SettingImpersonationRegistryGetParams struct {
 }
 
 type SettingImpersonationRegistryGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                               `json:"errors,required"`
-	Messages []shared.ResponseInfo                               `json:"messages,required"`
+	Errors   []interface{}                                       `json:"errors,required"`
+	Messages []interface{}                                       `json:"messages,required"`
 	Result   SettingImpersonationRegistryGetResponse             `json:"result,required"`
 	Success  bool                                                `json:"success,required"`
 	JSON     settingImpersonationRegistryGetResponseEnvelopeJSON `json:"-"`

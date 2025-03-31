@@ -61,9 +61,9 @@ func (r *AIInferenceTimeseriesGroupSummaryService) Task(ctx context.Context, que
 }
 
 type AIInferenceTimeseriesGroupSummaryModelResponse struct {
-	Meta   interface{}                                          `json:"meta,required"`
-	Serie0 AIInferenceTimeseriesGroupSummaryModelResponseSerie0 `json:"serie_0,required"`
-	JSON   aiInferenceTimeseriesGroupSummaryModelResponseJSON   `json:"-"`
+	Meta   interface{}                                        `json:"meta,required"`
+	Serie0 interface{}                                        `json:"serie_0,required"`
+	JSON   aiInferenceTimeseriesGroupSummaryModelResponseJSON `json:"-"`
 }
 
 // aiInferenceTimeseriesGroupSummaryModelResponseJSON contains the JSON metadata
@@ -83,32 +83,10 @@ func (r aiInferenceTimeseriesGroupSummaryModelResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type AIInferenceTimeseriesGroupSummaryModelResponseSerie0 struct {
-	Timestamps  []string                                                 `json:"timestamps,required"`
-	ExtraFields map[string][]string                                      `json:"-,extras"`
-	JSON        aiInferenceTimeseriesGroupSummaryModelResponseSerie0JSON `json:"-"`
-}
-
-// aiInferenceTimeseriesGroupSummaryModelResponseSerie0JSON contains the JSON
-// metadata for the struct [AIInferenceTimeseriesGroupSummaryModelResponseSerie0]
-type aiInferenceTimeseriesGroupSummaryModelResponseSerie0JSON struct {
-	Timestamps  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AIInferenceTimeseriesGroupSummaryModelResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aiInferenceTimeseriesGroupSummaryModelResponseSerie0JSON) RawJSON() string {
-	return r.raw
-}
-
 type AIInferenceTimeseriesGroupSummaryTaskResponse struct {
-	Meta   interface{}                                         `json:"meta,required"`
-	Serie0 AIInferenceTimeseriesGroupSummaryTaskResponseSerie0 `json:"serie_0,required"`
-	JSON   aiInferenceTimeseriesGroupSummaryTaskResponseJSON   `json:"-"`
+	Meta   interface{}                                       `json:"meta,required"`
+	Serie0 interface{}                                       `json:"serie_0,required"`
+	JSON   aiInferenceTimeseriesGroupSummaryTaskResponseJSON `json:"-"`
 }
 
 // aiInferenceTimeseriesGroupSummaryTaskResponseJSON contains the JSON metadata for
@@ -125,28 +103,6 @@ func (r *AIInferenceTimeseriesGroupSummaryTaskResponse) UnmarshalJSON(data []byt
 }
 
 func (r aiInferenceTimeseriesGroupSummaryTaskResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AIInferenceTimeseriesGroupSummaryTaskResponseSerie0 struct {
-	Timestamps  []string                                                `json:"timestamps,required"`
-	ExtraFields map[string][]string                                     `json:"-,extras"`
-	JSON        aiInferenceTimeseriesGroupSummaryTaskResponseSerie0JSON `json:"-"`
-}
-
-// aiInferenceTimeseriesGroupSummaryTaskResponseSerie0JSON contains the JSON
-// metadata for the struct [AIInferenceTimeseriesGroupSummaryTaskResponseSerie0]
-type aiInferenceTimeseriesGroupSummaryTaskResponseSerie0JSON struct {
-	Timestamps  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AIInferenceTimeseriesGroupSummaryTaskResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aiInferenceTimeseriesGroupSummaryTaskResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 

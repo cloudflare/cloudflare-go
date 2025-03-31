@@ -49,9 +49,9 @@ func (r *HTTPLocationBrowserFamilyService) Get(ctx context.Context, browserFamil
 }
 
 type HTTPLocationBrowserFamilyGetResponse struct {
-	Meta HTTPLocationBrowserFamilyGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPLocationBrowserFamilyGetResponseTop0 `json:"top_0,required"`
-	JSON httpLocationBrowserFamilyGetResponseJSON   `json:"-"`
+	Meta HTTPLocationBrowserFamilyGetResponseMeta `json:"meta,required"`
+	Top0 []interface{}                            `json:"top_0,required"`
+	JSON httpLocationBrowserFamilyGetResponseJSON `json:"-"`
 }
 
 // httpLocationBrowserFamilyGetResponseJSON contains the JSON metadata for the
@@ -72,7 +72,7 @@ func (r httpLocationBrowserFamilyGetResponseJSON) RawJSON() string {
 }
 
 type HTTPLocationBrowserFamilyGetResponseMeta struct {
-	DateRange      []HTTPLocationBrowserFamilyGetResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []interface{}                                          `json:"dateRange,required"`
 	LastUpdated    string                                                 `json:"lastUpdated,required"`
 	ConfidenceInfo HTTPLocationBrowserFamilyGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           httpLocationBrowserFamilyGetResponseMetaJSON           `json:"-"`
@@ -96,35 +96,10 @@ func (r httpLocationBrowserFamilyGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type HTTPLocationBrowserFamilyGetResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                             `json:"startTime,required" format:"date-time"`
-	JSON      httpLocationBrowserFamilyGetResponseMetaDateRangeJSON `json:"-"`
-}
-
-// httpLocationBrowserFamilyGetResponseMetaDateRangeJSON contains the JSON metadata
-// for the struct [HTTPLocationBrowserFamilyGetResponseMetaDateRange]
-type httpLocationBrowserFamilyGetResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPLocationBrowserFamilyGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpLocationBrowserFamilyGetResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type HTTPLocationBrowserFamilyGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPLocationBrowserFamilyGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                              `json:"level"`
-	JSON        httpLocationBrowserFamilyGetResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []interface{}                                              `json:"annotations"`
+	Level       int64                                                      `json:"level"`
+	JSON        httpLocationBrowserFamilyGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // httpLocationBrowserFamilyGetResponseMetaConfidenceInfoJSON contains the JSON
@@ -141,65 +116,6 @@ func (r *HTTPLocationBrowserFamilyGetResponseMetaConfidenceInfo) UnmarshalJSON(d
 }
 
 func (r httpLocationBrowserFamilyGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPLocationBrowserFamilyGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                               `json:"dataSource,required"`
-	Description     string                                                               `json:"description,required"`
-	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                               `json:"linkedUrl"`
-	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
-	JSON            httpLocationBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// httpLocationBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON contains
-// the JSON metadata for the struct
-// [HTTPLocationBrowserFamilyGetResponseMetaConfidenceInfoAnnotation]
-type httpLocationBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *HTTPLocationBrowserFamilyGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpLocationBrowserFamilyGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPLocationBrowserFamilyGetResponseTop0 struct {
-	ClientCountryAlpha2 string                                       `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                       `json:"clientCountryName,required"`
-	Value               string                                       `json:"value,required"`
-	JSON                httpLocationBrowserFamilyGetResponseTop0JSON `json:"-"`
-}
-
-// httpLocationBrowserFamilyGetResponseTop0JSON contains the JSON metadata for the
-// struct [HTTPLocationBrowserFamilyGetResponseTop0]
-type httpLocationBrowserFamilyGetResponseTop0JSON struct {
-	ClientCountryAlpha2 apijson.Field
-	ClientCountryName   apijson.Field
-	Value               apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *HTTPLocationBrowserFamilyGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpLocationBrowserFamilyGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

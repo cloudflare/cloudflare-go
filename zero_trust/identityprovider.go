@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -224,17 +223,12 @@ type AzureAD struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config AzureADConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig `json:"scim_config"`
-	JSON       azureADJSON                `json:"-"`
+	ID         string      `json:"id"`
+	SCIMConfig interface{} `json:"scim_config"`
+	JSON       azureADJSON `json:"-"`
 }
 
 // azureADJSON contains the JSON metadata for the struct [AzureAD]
@@ -342,14 +336,9 @@ type AzureADParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[AzureADConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r AzureADParam) MarshalJSON() (data []byte, err error) {
@@ -437,16 +426,13 @@ type IdentityProvider struct {
 	Config interface{} `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	// This field can have the runtime type of [interface{}].
+	Type interface{} `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig `json:"scim_config"`
-	JSON       identityProviderJSON       `json:"-"`
+	// This field can have the runtime type of [interface{}].
+	SCIMConfig interface{}          `json:"scim_config"`
+	JSON       identityProviderJSON `json:"-"`
 	union      IdentityProviderUnion
 }
 
@@ -583,16 +569,11 @@ type IdentityProviderAccessCentrify struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderAccessCentrifyConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig         `json:"scim_config"`
+	ID         string                             `json:"id"`
+	SCIMConfig interface{}                        `json:"scim_config"`
 	JSON       identityProviderAccessCentrifyJSON `json:"-"`
 }
 
@@ -664,16 +645,11 @@ type IdentityProviderAccessFacebook struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig         `json:"scim_config"`
+	ID         string                             `json:"id"`
+	SCIMConfig interface{}                        `json:"scim_config"`
 	JSON       identityProviderAccessFacebookJSON `json:"-"`
 }
 
@@ -705,16 +681,11 @@ type IdentityProviderAccessGitHub struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig       `json:"scim_config"`
+	ID         string                           `json:"id"`
+	SCIMConfig interface{}                      `json:"scim_config"`
 	JSON       identityProviderAccessGitHubJSON `json:"-"`
 }
 
@@ -746,16 +717,11 @@ type IdentityProviderAccessGoogle struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderAccessGoogleConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig       `json:"scim_config"`
+	ID         string                           `json:"id"`
+	SCIMConfig interface{}                      `json:"scim_config"`
 	JSON       identityProviderAccessGoogleJSON `json:"-"`
 }
 
@@ -821,16 +787,11 @@ type IdentityProviderAccessGoogleApps struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderAccessGoogleAppsConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig           `json:"scim_config"`
+	ID         string                               `json:"id"`
+	SCIMConfig interface{}                          `json:"scim_config"`
 	JSON       identityProviderAccessGoogleAppsJSON `json:"-"`
 }
 
@@ -899,16 +860,11 @@ type IdentityProviderAccessLinkedin struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig         `json:"scim_config"`
+	ID         string                             `json:"id"`
+	SCIMConfig interface{}                        `json:"scim_config"`
 	JSON       identityProviderAccessLinkedinJSON `json:"-"`
 }
 
@@ -940,16 +896,11 @@ type IdentityProviderAccessOIDC struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderAccessOIDCConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig     `json:"scim_config"`
+	ID         string                         `json:"id"`
+	SCIMConfig interface{}                    `json:"scim_config"`
 	JSON       identityProviderAccessOIDCJSON `json:"-"`
 }
 
@@ -1030,16 +981,11 @@ type IdentityProviderAccessOkta struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderAccessOktaConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig     `json:"scim_config"`
+	ID         string                         `json:"id"`
+	SCIMConfig interface{}                    `json:"scim_config"`
 	JSON       identityProviderAccessOktaJSON `json:"-"`
 }
 
@@ -1111,16 +1057,11 @@ type IdentityProviderAccessOnelogin struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderAccessOneloginConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig         `json:"scim_config"`
+	ID         string                             `json:"id"`
+	SCIMConfig interface{}                        `json:"scim_config"`
 	JSON       identityProviderAccessOneloginJSON `json:"-"`
 }
 
@@ -1189,16 +1130,11 @@ type IdentityProviderAccessPingone struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderAccessPingoneConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig        `json:"scim_config"`
+	ID         string                            `json:"id"`
+	SCIMConfig interface{}                       `json:"scim_config"`
 	JSON       identityProviderAccessPingoneJSON `json:"-"`
 }
 
@@ -1267,16 +1203,11 @@ type IdentityProviderAccessSAML struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderAccessSAMLConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig     `json:"scim_config"`
+	ID         string                         `json:"id"`
+	SCIMConfig interface{}                    `json:"scim_config"`
 	JSON       identityProviderAccessSAMLJSON `json:"-"`
 }
 
@@ -1379,16 +1310,11 @@ type IdentityProviderAccessYandex struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig       `json:"scim_config"`
+	ID         string                           `json:"id"`
+	SCIMConfig interface{}                      `json:"scim_config"`
 	JSON       identityProviderAccessYandexJSON `json:"-"`
 }
 
@@ -1420,16 +1346,11 @@ type IdentityProviderAccessOnetimepin struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderAccessOnetimepinConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig           `json:"scim_config"`
+	ID         string                               `json:"id"`
+	SCIMConfig interface{}                          `json:"scim_config"`
 	JSON       identityProviderAccessOnetimepinJSON `json:"-"`
 }
 
@@ -1482,14 +1403,9 @@ func (r identityProviderAccessOnetimepinConfigJSON) RawJSON() string {
 type IdentityProviderParam struct {
 	Config param.Field[interface{}] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderParam) MarshalJSON() (data []byte, err error) {
@@ -1522,14 +1438,9 @@ type IdentityProviderAccessCentrifyParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[IdentityProviderAccessCentrifyConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessCentrifyParam) MarshalJSON() (data []byte, err error) {
@@ -1566,14 +1477,9 @@ type IdentityProviderAccessFacebookParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessFacebookParam) MarshalJSON() (data []byte, err error) {
@@ -1588,14 +1494,9 @@ type IdentityProviderAccessGitHubParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessGitHubParam) MarshalJSON() (data []byte, err error) {
@@ -1610,14 +1511,9 @@ type IdentityProviderAccessGoogleParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[IdentityProviderAccessGoogleConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessGoogleParam) MarshalJSON() (data []byte, err error) {
@@ -1650,14 +1546,9 @@ type IdentityProviderAccessGoogleAppsParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[IdentityProviderAccessGoogleAppsConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessGoogleAppsParam) MarshalJSON() (data []byte, err error) {
@@ -1692,14 +1583,9 @@ type IdentityProviderAccessLinkedinParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessLinkedinParam) MarshalJSON() (data []byte, err error) {
@@ -1714,14 +1600,9 @@ type IdentityProviderAccessOIDCParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[IdentityProviderAccessOIDCConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOIDCParam) MarshalJSON() (data []byte, err error) {
@@ -1764,14 +1645,9 @@ type IdentityProviderAccessOktaParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[IdentityProviderAccessOktaConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOktaParam) MarshalJSON() (data []byte, err error) {
@@ -1808,14 +1684,9 @@ type IdentityProviderAccessOneloginParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[IdentityProviderAccessOneloginConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOneloginParam) MarshalJSON() (data []byte, err error) {
@@ -1850,14 +1721,9 @@ type IdentityProviderAccessPingoneParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[IdentityProviderAccessPingoneConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessPingoneParam) MarshalJSON() (data []byte, err error) {
@@ -1892,14 +1758,9 @@ type IdentityProviderAccessSAMLParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[IdentityProviderAccessSAMLConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessSAMLParam) MarshalJSON() (data []byte, err error) {
@@ -1952,14 +1813,9 @@ type IdentityProviderAccessYandexParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessYandexParam) MarshalJSON() (data []byte, err error) {
@@ -1974,14 +1830,9 @@ type IdentityProviderAccessOnetimepinParam struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config param.Field[IdentityProviderAccessOnetimepinConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+	Name       param.Field[string]      `json:"name,required"`
+	Type       param.Field[interface{}] `json:"type,required"`
+	SCIMConfig param.Field[interface{}] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOnetimepinParam) MarshalJSON() (data []byte, err error) {
@@ -2000,135 +1851,6 @@ func (r IdentityProviderAccessOnetimepinConfigParam) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type IdentityProviderSCIMConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// Indicates how a SCIM event updates a user identity used for policy evaluation.
-	// Use "automatic" to automatically update a user's identity and augment it with
-	// fields from the SCIM user resource. Use "reauth" to force re-authentication on
-	// group membership updates, user identity update will only occur after successful
-	// re-authentication. With "reauth" identities will not contain fields from the
-	// SCIM user resource. With "no_action" identities will not be changed by SCIM
-	// updates in any way and users will not be prompted to reauthenticate.
-	IdentityUpdateBehavior IdentityProviderSCIMConfigIdentityUpdateBehavior `json:"identity_update_behavior"`
-	// The base URL of Cloudflare's SCIM V2.0 API endpoint.
-	SCIMBaseURL string `json:"scim_base_url"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                           `json:"user_deprovision"`
-	JSON            identityProviderSCIMConfigJSON `json:"-"`
-}
-
-// identityProviderSCIMConfigJSON contains the JSON metadata for the struct
-// [IdentityProviderSCIMConfig]
-type identityProviderSCIMConfigJSON struct {
-	Enabled                apijson.Field
-	IdentityUpdateBehavior apijson.Field
-	SCIMBaseURL            apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *IdentityProviderSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r identityProviderSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Indicates how a SCIM event updates a user identity used for policy evaluation.
-// Use "automatic" to automatically update a user's identity and augment it with
-// fields from the SCIM user resource. Use "reauth" to force re-authentication on
-// group membership updates, user identity update will only occur after successful
-// re-authentication. With "reauth" identities will not contain fields from the
-// SCIM user resource. With "no_action" identities will not be changed by SCIM
-// updates in any way and users will not be prompted to reauthenticate.
-type IdentityProviderSCIMConfigIdentityUpdateBehavior string
-
-const (
-	IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic IdentityProviderSCIMConfigIdentityUpdateBehavior = "automatic"
-	IdentityProviderSCIMConfigIdentityUpdateBehaviorReauth    IdentityProviderSCIMConfigIdentityUpdateBehavior = "reauth"
-	IdentityProviderSCIMConfigIdentityUpdateBehaviorNoAction  IdentityProviderSCIMConfigIdentityUpdateBehavior = "no_action"
-)
-
-func (r IdentityProviderSCIMConfigIdentityUpdateBehavior) IsKnown() bool {
-	switch r {
-	case IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic, IdentityProviderSCIMConfigIdentityUpdateBehaviorReauth, IdentityProviderSCIMConfigIdentityUpdateBehaviorNoAction:
-		return true
-	}
-	return false
-}
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type IdentityProviderSCIMConfigParam struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Indicates how a SCIM event updates a user identity used for policy evaluation.
-	// Use "automatic" to automatically update a user's identity and augment it with
-	// fields from the SCIM user resource. Use "reauth" to force re-authentication on
-	// group membership updates, user identity update will only occur after successful
-	// re-authentication. With "reauth" identities will not contain fields from the
-	// SCIM user resource. With "no_action" identities will not be changed by SCIM
-	// updates in any way and users will not be prompted to reauthenticate.
-	IdentityUpdateBehavior param.Field[IdentityProviderSCIMConfigIdentityUpdateBehavior] `json:"identity_update_behavior"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r IdentityProviderSCIMConfigParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderType string
-
-const (
-	IdentityProviderTypeOnetimepin IdentityProviderType = "onetimepin"
-	IdentityProviderTypeAzureAD    IdentityProviderType = "azureAD"
-	IdentityProviderTypeSAML       IdentityProviderType = "saml"
-	IdentityProviderTypeCentrify   IdentityProviderType = "centrify"
-	IdentityProviderTypeFacebook   IdentityProviderType = "facebook"
-	IdentityProviderTypeGitHub     IdentityProviderType = "github"
-	IdentityProviderTypeGoogleApps IdentityProviderType = "google-apps"
-	IdentityProviderTypeGoogle     IdentityProviderType = "google"
-	IdentityProviderTypeLinkedin   IdentityProviderType = "linkedin"
-	IdentityProviderTypeOIDC       IdentityProviderType = "oidc"
-	IdentityProviderTypeOkta       IdentityProviderType = "okta"
-	IdentityProviderTypeOnelogin   IdentityProviderType = "onelogin"
-	IdentityProviderTypePingone    IdentityProviderType = "pingone"
-	IdentityProviderTypeYandex     IdentityProviderType = "yandex"
-)
-
-func (r IdentityProviderType) IsKnown() bool {
-	switch r {
-	case IdentityProviderTypeOnetimepin, IdentityProviderTypeAzureAD, IdentityProviderTypeSAML, IdentityProviderTypeCentrify, IdentityProviderTypeFacebook, IdentityProviderTypeGitHub, IdentityProviderTypeGoogleApps, IdentityProviderTypeGoogle, IdentityProviderTypeLinkedin, IdentityProviderTypeOIDC, IdentityProviderTypeOkta, IdentityProviderTypeOnelogin, IdentityProviderTypePingone, IdentityProviderTypeYandex:
-		return true
-	}
-	return false
-}
-
 type IdentityProviderListResponse struct {
 	// This field can have the runtime type of [AzureADConfig],
 	// [IdentityProviderListResponseAccessCentrifyConfig], [GenericOAuthConfig],
@@ -2142,15 +1864,12 @@ type IdentityProviderListResponse struct {
 	Config interface{} `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	// This field can have the runtime type of [interface{}].
+	Type interface{} `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig       `json:"scim_config"`
+	// This field can have the runtime type of [interface{}].
+	SCIMConfig interface{}                      `json:"scim_config"`
 	JSON       identityProviderListResponseJSON `json:"-"`
 	union      IdentityProviderListResponseUnion
 }
@@ -2282,16 +2001,11 @@ type IdentityProviderListResponseAccessCentrify struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderListResponseAccessCentrifyConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                     `json:"scim_config"`
+	ID         string                                         `json:"id"`
+	SCIMConfig interface{}                                    `json:"scim_config"`
 	JSON       identityProviderListResponseAccessCentrifyJSON `json:"-"`
 }
 
@@ -2363,16 +2077,11 @@ type IdentityProviderListResponseAccessFacebook struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                     `json:"scim_config"`
+	ID         string                                         `json:"id"`
+	SCIMConfig interface{}                                    `json:"scim_config"`
 	JSON       identityProviderListResponseAccessFacebookJSON `json:"-"`
 }
 
@@ -2404,16 +2113,11 @@ type IdentityProviderListResponseAccessGitHub struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                   `json:"scim_config"`
+	ID         string                                       `json:"id"`
+	SCIMConfig interface{}                                  `json:"scim_config"`
 	JSON       identityProviderListResponseAccessGitHubJSON `json:"-"`
 }
 
@@ -2445,16 +2149,11 @@ type IdentityProviderListResponseAccessGoogle struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderListResponseAccessGoogleConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                   `json:"scim_config"`
+	ID         string                                       `json:"id"`
+	SCIMConfig interface{}                                  `json:"scim_config"`
 	JSON       identityProviderListResponseAccessGoogleJSON `json:"-"`
 }
 
@@ -2520,16 +2219,11 @@ type IdentityProviderListResponseAccessGoogleApps struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderListResponseAccessGoogleAppsConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                       `json:"scim_config"`
+	ID         string                                           `json:"id"`
+	SCIMConfig interface{}                                      `json:"scim_config"`
 	JSON       identityProviderListResponseAccessGoogleAppsJSON `json:"-"`
 }
 
@@ -2598,16 +2292,11 @@ type IdentityProviderListResponseAccessLinkedin struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                     `json:"scim_config"`
+	ID         string                                         `json:"id"`
+	SCIMConfig interface{}                                    `json:"scim_config"`
 	JSON       identityProviderListResponseAccessLinkedinJSON `json:"-"`
 }
 
@@ -2639,16 +2328,11 @@ type IdentityProviderListResponseAccessOIDC struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderListResponseAccessOIDCConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                 `json:"scim_config"`
+	ID         string                                     `json:"id"`
+	SCIMConfig interface{}                                `json:"scim_config"`
 	JSON       identityProviderListResponseAccessOIDCJSON `json:"-"`
 }
 
@@ -2729,16 +2413,11 @@ type IdentityProviderListResponseAccessOkta struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderListResponseAccessOktaConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                 `json:"scim_config"`
+	ID         string                                     `json:"id"`
+	SCIMConfig interface{}                                `json:"scim_config"`
 	JSON       identityProviderListResponseAccessOktaJSON `json:"-"`
 }
 
@@ -2810,16 +2489,11 @@ type IdentityProviderListResponseAccessOnelogin struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderListResponseAccessOneloginConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                     `json:"scim_config"`
+	ID         string                                         `json:"id"`
+	SCIMConfig interface{}                                    `json:"scim_config"`
 	JSON       identityProviderListResponseAccessOneloginJSON `json:"-"`
 }
 
@@ -2888,16 +2562,11 @@ type IdentityProviderListResponseAccessPingone struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderListResponseAccessPingoneConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                    `json:"scim_config"`
+	ID         string                                        `json:"id"`
+	SCIMConfig interface{}                                   `json:"scim_config"`
 	JSON       identityProviderListResponseAccessPingoneJSON `json:"-"`
 }
 
@@ -2966,16 +2635,11 @@ type IdentityProviderListResponseAccessSAML struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config IdentityProviderListResponseAccessSAMLConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                 `json:"scim_config"`
+	ID         string                                     `json:"id"`
+	SCIMConfig interface{}                                `json:"scim_config"`
 	JSON       identityProviderListResponseAccessSAMLJSON `json:"-"`
 }
 
@@ -3079,16 +2743,11 @@ type IdentityProviderListResponseAccessYandex struct {
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type IdentityProviderType `json:"type,required"`
+	Name string      `json:"name,required"`
+	Type interface{} `json:"type,required"`
 	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig                   `json:"scim_config"`
+	ID         string                                       `json:"id"`
+	SCIMConfig interface{}                                  `json:"scim_config"`
 	JSON       identityProviderListResponseAccessYandexJSON `json:"-"`
 }
 
@@ -3149,8 +2808,8 @@ func (r IdentityProviderNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IdentityProviderNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success IdentityProviderNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProvider                           `json:"result"`
@@ -3204,8 +2863,8 @@ func (r IdentityProviderUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IdentityProviderUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success IdentityProviderUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProvider                              `json:"result"`
@@ -3273,8 +2932,8 @@ type IdentityProviderDeleteParams struct {
 }
 
 type IdentityProviderDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success IdentityProviderDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProviderDeleteResponse                `json:"result"`
@@ -3323,8 +2982,8 @@ type IdentityProviderGetParams struct {
 }
 
 type IdentityProviderGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success IdentityProviderGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProvider                           `json:"result"`

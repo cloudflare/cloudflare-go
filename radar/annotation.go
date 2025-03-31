@@ -71,20 +71,20 @@ func (r annotationListResponseJSON) RawJSON() string {
 }
 
 type AnnotationListResponseAnnotation struct {
-	ID               string                                             `json:"id,required"`
-	ASNs             []int64                                            `json:"asns,required"`
-	ASNsDetails      []AnnotationListResponseAnnotationsASNsDetail      `json:"asnsDetails,required"`
-	DataSource       string                                             `json:"dataSource,required"`
-	EventType        string                                             `json:"eventType,required"`
-	Locations        []string                                           `json:"locations,required"`
-	LocationsDetails []AnnotationListResponseAnnotationsLocationsDetail `json:"locationsDetails,required"`
-	Outage           AnnotationListResponseAnnotationsOutage            `json:"outage,required"`
-	StartDate        string                                             `json:"startDate,required"`
-	Description      string                                             `json:"description"`
-	EndDate          string                                             `json:"endDate"`
-	LinkedURL        string                                             `json:"linkedUrl"`
-	Scope            string                                             `json:"scope"`
-	JSON             annotationListResponseAnnotationJSON               `json:"-"`
+	ID               string                                        `json:"id,required"`
+	ASNs             []int64                                       `json:"asns,required"`
+	ASNsDetails      []AnnotationListResponseAnnotationsASNsDetail `json:"asnsDetails,required"`
+	DataSource       string                                        `json:"dataSource,required"`
+	EventType        string                                        `json:"eventType,required"`
+	Locations        []string                                      `json:"locations,required"`
+	LocationsDetails []interface{}                                 `json:"locationsDetails,required"`
+	Outage           AnnotationListResponseAnnotationsOutage       `json:"outage,required"`
+	StartDate        string                                        `json:"startDate,required"`
+	Description      string                                        `json:"description"`
+	EndDate          string                                        `json:"endDate"`
+	LinkedURL        string                                        `json:"linkedUrl"`
+	Scope            string                                        `json:"scope"`
+	JSON             annotationListResponseAnnotationJSON          `json:"-"`
 }
 
 // annotationListResponseAnnotationJSON contains the JSON metadata for the struct
@@ -116,10 +116,10 @@ func (r annotationListResponseAnnotationJSON) RawJSON() string {
 }
 
 type AnnotationListResponseAnnotationsASNsDetail struct {
-	ASN       string                                                `json:"asn,required"`
-	Name      string                                                `json:"name,required"`
-	Locations AnnotationListResponseAnnotationsASNsDetailsLocations `json:"locations"`
-	JSON      annotationListResponseAnnotationsASNsDetailJSON       `json:"-"`
+	ASN       string                                          `json:"asn,required"`
+	Name      string                                          `json:"name,required"`
+	Locations interface{}                                     `json:"locations"`
+	JSON      annotationListResponseAnnotationsASNsDetailJSON `json:"-"`
 }
 
 // annotationListResponseAnnotationsASNsDetailJSON contains the JSON metadata for
@@ -137,52 +137,6 @@ func (r *AnnotationListResponseAnnotationsASNsDetail) UnmarshalJSON(data []byte)
 }
 
 func (r annotationListResponseAnnotationsASNsDetailJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnnotationListResponseAnnotationsASNsDetailsLocations struct {
-	Code string                                                    `json:"code,required"`
-	Name string                                                    `json:"name,required"`
-	JSON annotationListResponseAnnotationsASNsDetailsLocationsJSON `json:"-"`
-}
-
-// annotationListResponseAnnotationsASNsDetailsLocationsJSON contains the JSON
-// metadata for the struct [AnnotationListResponseAnnotationsASNsDetailsLocations]
-type annotationListResponseAnnotationsASNsDetailsLocationsJSON struct {
-	Code        apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnnotationListResponseAnnotationsASNsDetailsLocations) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r annotationListResponseAnnotationsASNsDetailsLocationsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnnotationListResponseAnnotationsLocationsDetail struct {
-	Code string                                               `json:"code,required"`
-	Name string                                               `json:"name,required"`
-	JSON annotationListResponseAnnotationsLocationsDetailJSON `json:"-"`
-}
-
-// annotationListResponseAnnotationsLocationsDetailJSON contains the JSON metadata
-// for the struct [AnnotationListResponseAnnotationsLocationsDetail]
-type annotationListResponseAnnotationsLocationsDetailJSON struct {
-	Code        apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnnotationListResponseAnnotationsLocationsDetail) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r annotationListResponseAnnotationsLocationsDetailJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -58,9 +58,9 @@ func (r *HTTPService) Timeseries(ctx context.Context, query HTTPTimeseriesParams
 }
 
 type HTTPTimeseriesResponse struct {
-	Meta   HTTPTimeseriesResponseMeta   `json:"meta,required"`
-	Serie0 HTTPTimeseriesResponseSerie0 `json:"serie_0,required"`
-	JSON   httpTimeseriesResponseJSON   `json:"-"`
+	Meta   HTTPTimeseriesResponseMeta `json:"meta,required"`
+	Serie0 interface{}                `json:"serie_0,required"`
+	JSON   httpTimeseriesResponseJSON `json:"-"`
 }
 
 // httpTimeseriesResponseJSON contains the JSON metadata for the struct
@@ -82,7 +82,7 @@ func (r httpTimeseriesResponseJSON) RawJSON() string {
 
 type HTTPTimeseriesResponseMeta struct {
 	AggInterval    string                                   `json:"aggInterval,required"`
-	DateRange      []HTTPTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []interface{}                            `json:"dateRange,required"`
 	LastUpdated    time.Time                                `json:"lastUpdated,required" format:"date-time"`
 	ConfidenceInfo HTTPTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           httpTimeseriesResponseMetaJSON           `json:"-"`
@@ -107,35 +107,10 @@ func (r httpTimeseriesResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type HTTPTimeseriesResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                               `json:"startTime,required" format:"date-time"`
-	JSON      httpTimeseriesResponseMetaDateRangeJSON `json:"-"`
-}
-
-// httpTimeseriesResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [HTTPTimeseriesResponseMetaDateRange]
-type httpTimeseriesResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type HTTPTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                `json:"level"`
-	JSON        httpTimeseriesResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []interface{}                                `json:"annotations"`
+	Level       int64                                        `json:"level"`
+	JSON        httpTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // httpTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -152,62 +127,6 @@ func (r *HTTPTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (e
 }
 
 func (r httpTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPTimeseriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                 `json:"dataSource,required"`
-	Description     string                                                 `json:"description,required"`
-	EventType       string                                                 `json:"eventType,required"`
-	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
-	EndTime         time.Time                                              `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                 `json:"linkedUrl"`
-	StartTime       time.Time                                              `json:"startTime" format:"date-time"`
-	JSON            httpTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// httpTimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [HTTPTimeseriesResponseMetaConfidenceInfoAnnotation]
-type httpTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *HTTPTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPTimeseriesResponseSerie0 struct {
-	Timestamps []time.Time                      `json:"timestamps,required" format:"date-time"`
-	Values     []string                         `json:"values,required"`
-	JSON       httpTimeseriesResponseSerie0JSON `json:"-"`
-}
-
-// httpTimeseriesResponseSerie0JSON contains the JSON metadata for the struct
-// [HTTPTimeseriesResponseSerie0]
-type httpTimeseriesResponseSerie0JSON struct {
-	Timestamps  apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPTimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpTimeseriesResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 

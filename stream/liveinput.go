@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // LiveInputService contains methods and other services that help with interacting
@@ -577,8 +576,8 @@ func (r LiveInputNewParamsRecordingMode) IsKnown() bool {
 }
 
 type LiveInputNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success LiveInputNewResponseEnvelopeSuccess `json:"success,required"`
 	// Details about a live input.
@@ -692,8 +691,8 @@ func (r LiveInputUpdateParamsRecordingMode) IsKnown() bool {
 }
 
 type LiveInputUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success LiveInputUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// Details about a live input.
@@ -752,8 +751,8 @@ func (r LiveInputListParams) URLQuery() (v url.Values) {
 }
 
 type LiveInputListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success LiveInputListResponseEnvelopeSuccess `json:"success,required"`
 	Result  LiveInputListResponse                `json:"result"`
@@ -805,8 +804,8 @@ type LiveInputGetParams struct {
 }
 
 type LiveInputGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success LiveInputGetResponseEnvelopeSuccess `json:"success,required"`
 	// Details about a live input.

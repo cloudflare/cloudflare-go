@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AddressMapAccountService contains methods and other services that help with
@@ -67,8 +66,8 @@ func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID stri
 }
 
 type AddressMapAccountUpdateResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapAccountUpdateResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapAccountUpdateResponseResultInfo `json:"result_info"`
@@ -141,8 +140,8 @@ func (r addressMapAccountUpdateResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapAccountDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapAccountDeleteResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapAccountDeleteResponseResultInfo `json:"result_info"`

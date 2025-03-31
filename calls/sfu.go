@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SFUService contains methods and other services that help with interacting with
@@ -311,8 +310,8 @@ func (r SFUNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SFUNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SFUNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  SFUNewResponse                `json:"result"`
@@ -365,8 +364,8 @@ func (r SFUUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SFUUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SFUUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  SFUUpdateResponse                `json:"result"`
@@ -418,8 +417,8 @@ type SFUDeleteParams struct {
 }
 
 type SFUDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SFUDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  SFUDeleteResponse                `json:"result"`
@@ -466,8 +465,8 @@ type SFUGetParams struct {
 }
 
 type SFUGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success SFUGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  SFUGetResponse                `json:"result"`

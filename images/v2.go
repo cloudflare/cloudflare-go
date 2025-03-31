@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // V2Service contains methods and other services that help with interacting with
@@ -117,9 +116,9 @@ func (r V2ListParamsSortOrder) IsKnown() bool {
 }
 
 type V2ListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V2ListResponse        `json:"result,required"`
+	Errors   []interface{}  `json:"errors,required"`
+	Messages []interface{}  `json:"messages,required"`
+	Result   V2ListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success V2ListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v2ListResponseEnvelopeJSON    `json:"-"`

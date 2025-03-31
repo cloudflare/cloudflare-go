@@ -199,7 +199,7 @@ func (r bgpRouteAsesResponseMetaJSON) RawJSON() string {
 }
 
 type BGPRouteMoasResponse struct {
-	Meta BGPRouteMoasResponseMeta  `json:"meta,required"`
+	Meta interface{}               `json:"meta,required"`
 	Moas []BGPRouteMoasResponseMoa `json:"moas,required"`
 	JSON bgpRouteMoasResponseJSON  `json:"-"`
 }
@@ -218,31 +218,6 @@ func (r *BGPRouteMoasResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bgpRouteMoasResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPRouteMoasResponseMeta struct {
-	DataTime   string                       `json:"data_time,required"`
-	QueryTime  string                       `json:"query_time,required"`
-	TotalPeers int64                        `json:"total_peers,required"`
-	JSON       bgpRouteMoasResponseMetaJSON `json:"-"`
-}
-
-// bgpRouteMoasResponseMetaJSON contains the JSON metadata for the struct
-// [BGPRouteMoasResponseMeta]
-type bgpRouteMoasResponseMetaJSON struct {
-	DataTime    apijson.Field
-	QueryTime   apijson.Field
-	TotalPeers  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPRouteMoasResponseMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpRouteMoasResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -295,7 +270,7 @@ func (r bgpRouteMoasResponseMoasOriginJSON) RawJSON() string {
 }
 
 type BGPRoutePfx2asResponse struct {
-	Meta          BGPRoutePfx2asResponseMeta           `json:"meta,required"`
+	Meta          interface{}                          `json:"meta,required"`
 	PrefixOrigins []BGPRoutePfx2asResponsePrefixOrigin `json:"prefix_origins,required"`
 	JSON          bgpRoutePfx2asResponseJSON           `json:"-"`
 }
@@ -314,31 +289,6 @@ func (r *BGPRoutePfx2asResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bgpRoutePfx2asResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPRoutePfx2asResponseMeta struct {
-	DataTime   string                         `json:"data_time,required"`
-	QueryTime  string                         `json:"query_time,required"`
-	TotalPeers int64                          `json:"total_peers,required"`
-	JSON       bgpRoutePfx2asResponseMetaJSON `json:"-"`
-}
-
-// bgpRoutePfx2asResponseMetaJSON contains the JSON metadata for the struct
-// [BGPRoutePfx2asResponseMeta]
-type bgpRoutePfx2asResponseMetaJSON struct {
-	DataTime    apijson.Field
-	QueryTime   apijson.Field
-	TotalPeers  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPRoutePfx2asResponseMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpRoutePfx2asResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -479,7 +429,7 @@ func (r bgpRouteRealtimeResponseRouteJSON) RawJSON() string {
 }
 
 type BGPRouteStatsResponse struct {
-	Meta  BGPRouteStatsResponseMeta  `json:"meta,required"`
+	Meta  interface{}                `json:"meta,required"`
 	Stats BGPRouteStatsResponseStats `json:"stats,required"`
 	JSON  bgpRouteStatsResponseJSON  `json:"-"`
 }
@@ -498,31 +448,6 @@ func (r *BGPRouteStatsResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bgpRouteStatsResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPRouteStatsResponseMeta struct {
-	DataTime   string                        `json:"data_time,required"`
-	QueryTime  string                        `json:"query_time,required"`
-	TotalPeers int64                         `json:"total_peers,required"`
-	JSON       bgpRouteStatsResponseMetaJSON `json:"-"`
-}
-
-// bgpRouteStatsResponseMetaJSON contains the JSON metadata for the struct
-// [BGPRouteStatsResponseMeta]
-type bgpRouteStatsResponseMetaJSON struct {
-	DataTime    apijson.Field
-	QueryTime   apijson.Field
-	TotalPeers  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPRouteStatsResponseMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpRouteStatsResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -64,22 +64,10 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 				Settings: cloudflare.F(map[string]zaraz.ConfigUpdateParamsToolsZarazManagedComponentSettingsUnion{
 					"foo": shared.UnionString("string"),
 				}),
-				Type: cloudflare.F(zaraz.ConfigUpdateParamsToolsZarazManagedComponentTypeComponent),
-				Actions: cloudflare.F(map[string]zaraz.NeoEventParam{
-					"foo": {
-						ActionType:       cloudflare.F("actionType"),
-						BlockingTriggers: cloudflare.F([]string{"string"}),
-						Data:             cloudflare.F[any](map[string]interface{}{}),
-						FiringTriggers:   cloudflare.F([]string{"string"}),
-					},
-				}),
-				DefaultPurpose: cloudflare.F("defaultPurpose"),
-				NeoEvents: cloudflare.F([]zaraz.NeoEventParam{{
-					ActionType:       cloudflare.F("actionType"),
-					BlockingTriggers: cloudflare.F([]string{"string"}),
-					Data:             cloudflare.F[any](map[string]interface{}{}),
-					FiringTriggers:   cloudflare.F([]string{"string"}),
-				}}),
+				Type:            cloudflare.F(zaraz.ConfigUpdateParamsToolsZarazManagedComponentTypeComponent),
+				Actions:         cloudflare.F[any](map[string]interface{}{}),
+				DefaultPurpose:  cloudflare.F("defaultPurpose"),
+				NeoEvents:       cloudflare.F([]interface{}{map[string]interface{}{}}),
 				VendorName:      cloudflare.F("vendorName"),
 				VendorPolicyURL: cloudflare.F("vendorPolicyUrl"),
 			},
@@ -117,22 +105,12 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 			SessionExpTime: cloudflare.F(int64(60)),
 		}),
 		Consent: cloudflare.F(zaraz.ConfigUpdateParamsConsent{
-			Enabled: cloudflare.F(true),
-			ButtonTextTranslations: cloudflare.F(zaraz.ButtonTextTranslationParam{
-				AcceptAll: cloudflare.F(map[string]string{
-					"foo": "string",
-				}),
-				ConfirmMyChoices: cloudflare.F(map[string]string{
-					"foo": "string",
-				}),
-				RejectAll: cloudflare.F(map[string]string{
-					"foo": "string",
-				}),
-			}),
-			CompanyEmail:          cloudflare.F("companyEmail"),
-			CompanyName:           cloudflare.F("companyName"),
-			CompanyStreetAddress:  cloudflare.F("companyStreetAddress"),
-			ConsentModalIntroHTML: cloudflare.F("consentModalIntroHTML"),
+			Enabled:                cloudflare.F(true),
+			ButtonTextTranslations: cloudflare.F[any](map[string]interface{}{}),
+			CompanyEmail:           cloudflare.F("companyEmail"),
+			CompanyName:            cloudflare.F("companyName"),
+			CompanyStreetAddress:   cloudflare.F("companyStreetAddress"),
+			ConsentModalIntroHTML:  cloudflare.F("consentModalIntroHTML"),
 			ConsentModalIntroHTMLWithTranslations: cloudflare.F(map[string]string{
 				"foo": "string",
 			}),

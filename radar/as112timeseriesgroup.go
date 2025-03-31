@@ -305,9 +305,9 @@ func (r as112TimeseriesGroupProtocolResponseSerie0JSON) RawJSON() string {
 }
 
 type AS112TimeseriesGroupQueryTypeResponse struct {
-	Meta   interface{}                                 `json:"meta,required"`
-	Serie0 AS112TimeseriesGroupQueryTypeResponseSerie0 `json:"serie_0,required"`
-	JSON   as112TimeseriesGroupQueryTypeResponseJSON   `json:"-"`
+	Meta   interface{}                               `json:"meta,required"`
+	Serie0 interface{}                               `json:"serie_0,required"`
+	JSON   as112TimeseriesGroupQueryTypeResponseJSON `json:"-"`
 }
 
 // as112TimeseriesGroupQueryTypeResponseJSON contains the JSON metadata for the
@@ -327,32 +327,10 @@ func (r as112TimeseriesGroupQueryTypeResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type AS112TimeseriesGroupQueryTypeResponseSerie0 struct {
-	Timestamps  []string                                        `json:"timestamps,required"`
-	ExtraFields map[string][]string                             `json:"-,extras"`
-	JSON        as112TimeseriesGroupQueryTypeResponseSerie0JSON `json:"-"`
-}
-
-// as112TimeseriesGroupQueryTypeResponseSerie0JSON contains the JSON metadata for
-// the struct [AS112TimeseriesGroupQueryTypeResponseSerie0]
-type as112TimeseriesGroupQueryTypeResponseSerie0JSON struct {
-	Timestamps  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AS112TimeseriesGroupQueryTypeResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112TimeseriesGroupQueryTypeResponseSerie0JSON) RawJSON() string {
-	return r.raw
-}
-
 type AS112TimeseriesGroupResponseCodesResponse struct {
-	Meta   interface{}                                     `json:"meta,required"`
-	Serie0 AS112TimeseriesGroupResponseCodesResponseSerie0 `json:"serie_0,required"`
-	JSON   as112TimeseriesGroupResponseCodesResponseJSON   `json:"-"`
+	Meta   interface{}                                   `json:"meta,required"`
+	Serie0 interface{}                                   `json:"serie_0,required"`
+	JSON   as112TimeseriesGroupResponseCodesResponseJSON `json:"-"`
 }
 
 // as112TimeseriesGroupResponseCodesResponseJSON contains the JSON metadata for the
@@ -369,28 +347,6 @@ func (r *AS112TimeseriesGroupResponseCodesResponse) UnmarshalJSON(data []byte) (
 }
 
 func (r as112TimeseriesGroupResponseCodesResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112TimeseriesGroupResponseCodesResponseSerie0 struct {
-	Timestamps  []string                                            `json:"timestamps,required"`
-	ExtraFields map[string][]string                                 `json:"-,extras"`
-	JSON        as112TimeseriesGroupResponseCodesResponseSerie0JSON `json:"-"`
-}
-
-// as112TimeseriesGroupResponseCodesResponseSerie0JSON contains the JSON metadata
-// for the struct [AS112TimeseriesGroupResponseCodesResponseSerie0]
-type as112TimeseriesGroupResponseCodesResponseSerie0JSON struct {
-	Timestamps  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AS112TimeseriesGroupResponseCodesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112TimeseriesGroupResponseCodesResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 

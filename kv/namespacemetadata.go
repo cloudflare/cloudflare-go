@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // NamespaceMetadataService contains methods and other services that help with
@@ -69,8 +68,8 @@ type NamespaceMetadataGetParams struct {
 }
 
 type NamespaceMetadataGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceMetadataGetResponseEnvelopeSuccess `json:"success,required"`
 	// Arbitrary JSON that is associated with a key.

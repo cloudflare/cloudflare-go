@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ControlRetentionService contains methods and other services that help with
@@ -124,8 +123,8 @@ func (r ControlRetentionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlRetentionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ControlRetentionNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ControlRetentionNewResponse                `json:"result,nullable"`
@@ -172,8 +171,8 @@ type ControlRetentionGetParams struct {
 }
 
 type ControlRetentionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ControlRetentionGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ControlRetentionGetResponse                `json:"result,nullable"`

@@ -20,7 +20,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // UserSchemaService contains methods and other services that help with interacting
@@ -148,7 +147,7 @@ func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params Use
 	return
 }
 
-type Message []shared.ResponseInfo
+type Message []interface{}
 
 type PublicSchema struct {
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`

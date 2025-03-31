@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZarazService contains methods and other services that help with interacting with
@@ -63,92 +62,6 @@ func (r *ZarazService) Update(ctx context.Context, params ZarazUpdateParams, opt
 	return
 }
 
-type ButtonTextTranslation struct {
-	// Object where keys are language codes
-	AcceptAll map[string]string `json:"accept_all,required"`
-	// Object where keys are language codes
-	ConfirmMyChoices map[string]string `json:"confirm_my_choices,required"`
-	// Object where keys are language codes
-	RejectAll map[string]string         `json:"reject_all,required"`
-	JSON      buttonTextTranslationJSON `json:"-"`
-}
-
-// buttonTextTranslationJSON contains the JSON metadata for the struct
-// [ButtonTextTranslation]
-type buttonTextTranslationJSON struct {
-	AcceptAll        apijson.Field
-	ConfirmMyChoices apijson.Field
-	RejectAll        apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ButtonTextTranslation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r buttonTextTranslationJSON) RawJSON() string {
-	return r.raw
-}
-
-type ButtonTextTranslationParam struct {
-	// Object where keys are language codes
-	AcceptAll param.Field[map[string]string] `json:"accept_all,required"`
-	// Object where keys are language codes
-	ConfirmMyChoices param.Field[map[string]string] `json:"confirm_my_choices,required"`
-	// Object where keys are language codes
-	RejectAll param.Field[map[string]string] `json:"reject_all,required"`
-}
-
-func (r ButtonTextTranslationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type NeoEvent struct {
-	// Tool event type
-	ActionType string `json:"actionType,required"`
-	// List of blocking triggers IDs
-	BlockingTriggers []string `json:"blockingTriggers,required"`
-	// Event payload
-	Data interface{} `json:"data,required"`
-	// List of firing triggers IDs
-	FiringTriggers []string     `json:"firingTriggers,required"`
-	JSON           neoEventJSON `json:"-"`
-}
-
-// neoEventJSON contains the JSON metadata for the struct [NeoEvent]
-type neoEventJSON struct {
-	ActionType       apijson.Field
-	BlockingTriggers apijson.Field
-	Data             apijson.Field
-	FiringTriggers   apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *NeoEvent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r neoEventJSON) RawJSON() string {
-	return r.raw
-}
-
-type NeoEventParam struct {
-	// Tool event type
-	ActionType param.Field[string] `json:"actionType,required"`
-	// List of blocking triggers IDs
-	BlockingTriggers param.Field[[]string] `json:"blockingTriggers,required"`
-	// Event payload
-	Data param.Field[interface{}] `json:"data,required"`
-	// List of firing triggers IDs
-	FiringTriggers param.Field[[]string] `json:"firingTriggers,required"`
-}
-
-func (r NeoEventParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ZarazUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -161,8 +74,8 @@ func (r ZarazUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZarazUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Zaraz workflow
 	Result Workflow `json:"result,required"`
 	// Whether the API call was successful

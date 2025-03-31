@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptService contains methods and other services that help with interacting
@@ -388,8 +387,8 @@ type ScriptGetResponseEnvelope struct {
 	Result ScriptGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success  ScriptGetResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []shared.ResponseInfo            `json:"errors"`
-	Messages []shared.ResponseInfo            `json:"messages"`
+	Errors   []interface{}                    `json:"errors"`
+	Messages []interface{}                    `json:"messages"`
 	JSON     scriptGetResponseEnvelopeJSON    `json:"-"`
 }
 

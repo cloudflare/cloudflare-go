@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PrefixDelegationService contains methods and other services that help with
@@ -183,8 +182,8 @@ func (r PrefixDelegationNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDelegationNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixDelegationNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Delegations                                `json:"result"`
@@ -236,8 +235,8 @@ type PrefixDelegationDeleteParams struct {
 }
 
 type PrefixDelegationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixDelegationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  PrefixDelegationDeleteResponse                `json:"result"`

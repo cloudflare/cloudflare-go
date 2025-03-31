@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DeviceResilienceGlobalWARPOverrideService contains methods and other services
@@ -134,8 +133,8 @@ func (r DeviceResilienceGlobalWARPOverrideNewParams) MarshalJSON() (data []byte,
 }
 
 type DeviceResilienceGlobalWARPOverrideNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                         `json:"errors,required"`
-	Messages []shared.ResponseInfo                         `json:"messages,required"`
+	Errors   []interface{}                                 `json:"errors,required"`
+	Messages []interface{}                                 `json:"messages,required"`
 	Result   DeviceResilienceGlobalWARPOverrideNewResponse `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeSuccess `json:"success,required"`
@@ -181,8 +180,8 @@ type DeviceResilienceGlobalWARPOverrideGetParams struct {
 }
 
 type DeviceResilienceGlobalWARPOverrideGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                         `json:"errors,required"`
-	Messages []shared.ResponseInfo                         `json:"messages,required"`
+	Errors   []interface{}                                 `json:"errors,required"`
+	Messages []interface{}                                 `json:"messages,required"`
 	Result   DeviceResilienceGlobalWARPOverrideGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeSuccess `json:"success,required"`

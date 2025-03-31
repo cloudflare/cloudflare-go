@@ -60,8 +60,8 @@ type ASNGetParams struct {
 }
 
 type ASNGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success ASNGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.ASN                    `json:"result"`

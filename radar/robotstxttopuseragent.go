@@ -71,7 +71,7 @@ func (r robotsTXTTopUserAgentDirectiveResponseJSON) RawJSON() string {
 }
 
 type RobotsTXTTopUserAgentDirectiveResponseMeta struct {
-	DateRange      []RobotsTXTTopUserAgentDirectiveResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []interface{}                                            `json:"dateRange,required"`
 	LastUpdated    string                                                   `json:"lastUpdated,required"`
 	Normalization  string                                                   `json:"normalization,required"`
 	ConfidenceInfo RobotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -99,35 +99,10 @@ func (r robotsTXTTopUserAgentDirectiveResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type RobotsTXTTopUserAgentDirectiveResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
-	JSON      robotsTXTTopUserAgentDirectiveResponseMetaDateRangeJSON `json:"-"`
-}
-
-// robotsTXTTopUserAgentDirectiveResponseMetaDateRangeJSON contains the JSON
-// metadata for the struct [RobotsTXTTopUserAgentDirectiveResponseMetaDateRange]
-type robotsTXTTopUserAgentDirectiveResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RobotsTXTTopUserAgentDirectiveResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r robotsTXTTopUserAgentDirectiveResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type RobotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfo struct {
-	Annotations []RobotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                                `json:"level"`
-	JSON        robotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []interface{}                                                `json:"annotations"`
+	Level       int64                                                        `json:"level"`
+	JSON        robotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // robotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoJSON contains the JSON
@@ -145,40 +120,6 @@ func (r *RobotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfo) UnmarshalJSON
 }
 
 func (r robotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type RobotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                 `json:"dataSource,required"`
-	Description     string                                                                 `json:"description,required"`
-	EventType       string                                                                 `json:"eventType,required"`
-	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                              `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                 `json:"linkedUrl"`
-	StartTime       time.Time                                                              `json:"startTime" format:"date-time"`
-	JSON            robotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// robotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoAnnotationJSON contains
-// the JSON metadata for the struct
-// [RobotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoAnnotation]
-type robotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *RobotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r robotsTXTTopUserAgentDirectiveResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

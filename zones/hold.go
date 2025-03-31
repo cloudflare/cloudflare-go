@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HoldService contains methods and other services that help with interacting with
@@ -38,7 +37,7 @@ func NewHoldService(opts ...option.RequestOption) (r *HoldService) {
 
 // Enforce a zone hold on the zone, blocking the creation and activation of zones
 // with this zone's hostname.
-func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
+func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...option.RequestOption) (res *HoldNewResponse, err error) {
 	var env HoldNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -56,7 +55,7 @@ func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...opt
 
 // Stop enforcement of a zone hold on the zone, permanently or temporarily,
 // allowing the creation and activation of zones with this zone's hostname.
-func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
+func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts ...option.RequestOption) (res *HoldDeleteResponse, err error) {
 	var env HoldDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -74,7 +73,7 @@ func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts 
 
 // Update the `hold_after` and/or `include_subdomains` values on an existing zone
 // hold. The hold is enabled if the `hold_after` date-time value is in the past.
-func (r *HoldService) Edit(ctx context.Context, params HoldEditParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
+func (r *HoldService) Edit(ctx context.Context, params HoldEditParams, opts ...option.RequestOption) (res *HoldEditResponse, err error) {
 	var env HoldEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -92,7 +91,7 @@ func (r *HoldService) Edit(ctx context.Context, params HoldEditParams, opts ...o
 
 // Retrieve whether the zone is subject to a zone hold, and metadata about the
 // hold.
-func (r *HoldService) Get(ctx context.Context, query HoldGetParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
+func (r *HoldService) Get(ctx context.Context, query HoldGetParams, opts ...option.RequestOption) (res *HoldGetResponse, err error) {
 	var env HoldGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
@@ -108,29 +107,13 @@ func (r *HoldService) Get(ctx context.Context, query HoldGetParams, opts ...opti
 	return
 }
 
-type ZoneHold struct {
-	Hold              bool         `json:"hold"`
-	HoldAfter         string       `json:"hold_after"`
-	IncludeSubdomains string       `json:"include_subdomains"`
-	JSON              zoneHoldJSON `json:"-"`
-}
+type HoldNewResponse = interface{}
 
-// zoneHoldJSON contains the JSON metadata for the struct [ZoneHold]
-type zoneHoldJSON struct {
-	Hold              apijson.Field
-	HoldAfter         apijson.Field
-	IncludeSubdomains apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
+type HoldDeleteResponse = interface{}
 
-func (r *ZoneHold) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
+type HoldEditResponse = interface{}
 
-func (r zoneHoldJSON) RawJSON() string {
-	return r.raw
-}
+type HoldGetResponse = interface{}
 
 type HoldNewParams struct {
 	// Identifier
@@ -151,9 +134,9 @@ func (r HoldNewParams) URLQuery() (v url.Values) {
 }
 
 type HoldNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZoneHold              `json:"result,required"`
+	Errors   []interface{}   `json:"errors,required"`
+	Messages []interface{}   `json:"messages,required"`
+	Result   HoldNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success HoldNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    holdNewResponseEnvelopeJSON    `json:"-"`
@@ -211,9 +194,9 @@ func (r HoldDeleteParams) URLQuery() (v url.Values) {
 }
 
 type HoldDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZoneHold              `json:"result,required"`
+	Errors   []interface{}      `json:"errors,required"`
+	Messages []interface{}      `json:"messages,required"`
+	Result   HoldDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success HoldDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    holdDeleteResponseEnvelopeJSON    `json:"-"`
@@ -274,9 +257,9 @@ func (r HoldEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HoldEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZoneHold              `json:"result,required"`
+	Errors   []interface{}    `json:"errors,required"`
+	Messages []interface{}    `json:"messages,required"`
+	Result   HoldEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success HoldEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    holdEditResponseEnvelopeJSON    `json:"-"`
@@ -322,9 +305,9 @@ type HoldGetParams struct {
 }
 
 type HoldGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZoneHold              `json:"result,required"`
+	Errors   []interface{}   `json:"errors,required"`
+	Messages []interface{}   `json:"messages,required"`
+	Result   HoldGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success HoldGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    holdGetResponseEnvelopeJSON    `json:"-"`

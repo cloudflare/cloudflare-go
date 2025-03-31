@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
@@ -93,11 +92,10 @@ func (r *DispatchNamespaceScriptContentService) Get(ctx context.Context, dispatc
 
 type DispatchNamespaceScriptContentUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata               param.Field[workers.WorkerMetadataParam] `json:"metadata,required"`
-	CfWorkerBodyPart       param.Field[string]                      `header:"CF-WORKER-BODY-PART"`
-	CfWorkerMainModulePart param.Field[string]                      `header:"CF-WORKER-MAIN-MODULE-PART"`
+	AccountID              param.Field[string]      `path:"account_id,required"`
+	Metadata               param.Field[interface{}] `json:"metadata,required"`
+	CfWorkerBodyPart       param.Field[string]      `header:"CF-WORKER-BODY-PART"`
+	CfWorkerMainModulePart param.Field[string]      `header:"CF-WORKER-MAIN-MODULE-PART"`
 }
 
 func (r DispatchNamespaceScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -116,8 +114,8 @@ func (r DispatchNamespaceScriptContentUpdateParams) MarshalMultipart() (data []b
 }
 
 type DispatchNamespaceScriptContentUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  workers.Script                                              `json:"result"`

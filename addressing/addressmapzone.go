@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AddressMapZoneService contains methods and other services that help with
@@ -75,8 +74,8 @@ func (r *AddressMapZoneService) Delete(ctx context.Context, addressMapID string,
 }
 
 type AddressMapZoneUpdateResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapZoneUpdateResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapZoneUpdateResponseResultInfo `json:"result_info"`
@@ -149,8 +148,8 @@ func (r addressMapZoneUpdateResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapZoneDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{} `json:"errors,required"`
+	Messages []interface{} `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapZoneDeleteResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapZoneDeleteResponseResultInfo `json:"result_info"`

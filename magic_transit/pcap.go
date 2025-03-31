@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -1252,9 +1251,9 @@ func (r PCAPNewParamsBodyType) IsKnown() bool {
 }
 
 type PCAPNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PCAPNewResponse       `json:"result,required"`
+	Errors   []interface{}   `json:"errors,required"`
+	Messages []interface{}   `json:"messages,required"`
+	Result   PCAPNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapNewResponseEnvelopeJSON    `json:"-"`
@@ -1305,9 +1304,9 @@ type PCAPGetParams struct {
 }
 
 type PCAPGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PCAPGetResponse       `json:"result,required"`
+	Errors   []interface{}   `json:"errors,required"`
+	Messages []interface{}   `json:"messages,required"`
+	Result   PCAPGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapGetResponseEnvelopeJSON    `json:"-"`
