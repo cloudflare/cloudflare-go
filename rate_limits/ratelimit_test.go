@@ -45,7 +45,7 @@ func TestRateLimitNewWithOptionalParams(t *testing.T) {
 				Value: cloudflare.F("HIT"),
 			}}),
 			Request: cloudflare.F(rate_limits.RateLimitNewParamsMatchRequest{
-				Methods: cloudflare.F([]rate_limits.Methods{rate_limits.MethodsGet, rate_limits.MethodsPost}),
+				Methods: cloudflare.F([]rate_limits.RateLimitNewParamsMatchRequestMethod{rate_limits.RateLimitNewParamsMatchRequestMethodGet, rate_limits.RateLimitNewParamsMatchRequestMethodPost}),
 				Schemes: cloudflare.F([]string{"HTTP", "HTTPS"}),
 				URL:     cloudflare.F("*.example.org/path*"),
 			}),
@@ -155,7 +155,7 @@ func TestRateLimitEditWithOptionalParams(t *testing.T) {
 					Value: cloudflare.F("HIT"),
 				}}),
 				Request: cloudflare.F(rate_limits.RateLimitEditParamsMatchRequest{
-					Methods: cloudflare.F([]rate_limits.Methods{rate_limits.MethodsGet, rate_limits.MethodsPost}),
+					Methods: cloudflare.F([]rate_limits.RateLimitEditParamsMatchRequestMethod{rate_limits.RateLimitEditParamsMatchRequestMethodGet, rate_limits.RateLimitEditParamsMatchRequestMethodPost}),
 					Schemes: cloudflare.F([]string{"HTTP", "HTTPS"}),
 					URL:     cloudflare.F("*.example.org/path*"),
 				}),
