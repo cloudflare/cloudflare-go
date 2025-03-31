@@ -202,27 +202,6 @@ func (r Action) IsKnown() bool {
 	return false
 }
 
-// An HTTP method or `_ALL_` to indicate all methods.
-type Methods string
-
-const (
-	MethodsGet    Methods = "GET"
-	MethodsPost   Methods = "POST"
-	MethodsPut    Methods = "PUT"
-	MethodsDelete Methods = "DELETE"
-	MethodsPatch  Methods = "PATCH"
-	MethodsHead   Methods = "HEAD"
-	Methods_All   Methods = "_ALL_"
-)
-
-func (r Methods) IsKnown() bool {
-	switch r {
-	case MethodsGet, MethodsPost, MethodsPut, MethodsDelete, MethodsPatch, MethodsHead, Methods_All:
-		return true
-	}
-	return false
-}
-
 type RateLimit struct {
 	// The unique identifier of the rate limit.
 	ID string `json:"id"`
@@ -470,7 +449,7 @@ type RateLimitMatchRequest struct {
 	// The HTTP methods to match. You can specify a subset (for example,
 	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
 	// creating a rate limit.
-	Methods []Methods `json:"methods"`
+	Methods []RateLimitMatchRequestMethod `json:"methods"`
 	// The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both
 	// schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is
 	// optional.
@@ -499,6 +478,27 @@ func (r *RateLimitMatchRequest) UnmarshalJSON(data []byte) (err error) {
 
 func (r rateLimitMatchRequestJSON) RawJSON() string {
 	return r.raw
+}
+
+// An HTTP method or `_ALL_` to indicate all methods.
+type RateLimitMatchRequestMethod string
+
+const (
+	RateLimitMatchRequestMethodGet    RateLimitMatchRequestMethod = "GET"
+	RateLimitMatchRequestMethodPost   RateLimitMatchRequestMethod = "POST"
+	RateLimitMatchRequestMethodPut    RateLimitMatchRequestMethod = "PUT"
+	RateLimitMatchRequestMethodDelete RateLimitMatchRequestMethod = "DELETE"
+	RateLimitMatchRequestMethodPatch  RateLimitMatchRequestMethod = "PATCH"
+	RateLimitMatchRequestMethodHead   RateLimitMatchRequestMethod = "HEAD"
+	RateLimitMatchRequestMethod_All   RateLimitMatchRequestMethod = "_ALL_"
+)
+
+func (r RateLimitMatchRequestMethod) IsKnown() bool {
+	switch r {
+	case RateLimitMatchRequestMethodGet, RateLimitMatchRequestMethodPost, RateLimitMatchRequestMethodPut, RateLimitMatchRequestMethodDelete, RateLimitMatchRequestMethodPatch, RateLimitMatchRequestMethodHead, RateLimitMatchRequestMethod_All:
+		return true
+	}
+	return false
 }
 
 type RateLimitMatchResponse struct {
@@ -778,7 +778,7 @@ type RateLimitDeleteResponseMatchRequest struct {
 	// The HTTP methods to match. You can specify a subset (for example,
 	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
 	// creating a rate limit.
-	Methods []Methods `json:"methods"`
+	Methods []RateLimitDeleteResponseMatchRequestMethod `json:"methods"`
 	// The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both
 	// schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is
 	// optional.
@@ -807,6 +807,27 @@ func (r *RateLimitDeleteResponseMatchRequest) UnmarshalJSON(data []byte) (err er
 
 func (r rateLimitDeleteResponseMatchRequestJSON) RawJSON() string {
 	return r.raw
+}
+
+// An HTTP method or `_ALL_` to indicate all methods.
+type RateLimitDeleteResponseMatchRequestMethod string
+
+const (
+	RateLimitDeleteResponseMatchRequestMethodGet    RateLimitDeleteResponseMatchRequestMethod = "GET"
+	RateLimitDeleteResponseMatchRequestMethodPost   RateLimitDeleteResponseMatchRequestMethod = "POST"
+	RateLimitDeleteResponseMatchRequestMethodPut    RateLimitDeleteResponseMatchRequestMethod = "PUT"
+	RateLimitDeleteResponseMatchRequestMethodDelete RateLimitDeleteResponseMatchRequestMethod = "DELETE"
+	RateLimitDeleteResponseMatchRequestMethodPatch  RateLimitDeleteResponseMatchRequestMethod = "PATCH"
+	RateLimitDeleteResponseMatchRequestMethodHead   RateLimitDeleteResponseMatchRequestMethod = "HEAD"
+	RateLimitDeleteResponseMatchRequestMethod_All   RateLimitDeleteResponseMatchRequestMethod = "_ALL_"
+)
+
+func (r RateLimitDeleteResponseMatchRequestMethod) IsKnown() bool {
+	switch r {
+	case RateLimitDeleteResponseMatchRequestMethodGet, RateLimitDeleteResponseMatchRequestMethodPost, RateLimitDeleteResponseMatchRequestMethodPut, RateLimitDeleteResponseMatchRequestMethodDelete, RateLimitDeleteResponseMatchRequestMethodPatch, RateLimitDeleteResponseMatchRequestMethodHead, RateLimitDeleteResponseMatchRequestMethod_All:
+		return true
+	}
+	return false
 }
 
 type RateLimitDeleteResponseMatchResponse struct {
@@ -961,7 +982,7 @@ type RateLimitNewParamsMatchRequest struct {
 	// The HTTP methods to match. You can specify a subset (for example,
 	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
 	// creating a rate limit.
-	Methods param.Field[[]Methods] `json:"methods"`
+	Methods param.Field[[]RateLimitNewParamsMatchRequestMethod] `json:"methods"`
 	// The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both
 	// schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is
 	// optional.
@@ -975,6 +996,27 @@ type RateLimitNewParamsMatchRequest struct {
 
 func (r RateLimitNewParamsMatchRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// An HTTP method or `_ALL_` to indicate all methods.
+type RateLimitNewParamsMatchRequestMethod string
+
+const (
+	RateLimitNewParamsMatchRequestMethodGet    RateLimitNewParamsMatchRequestMethod = "GET"
+	RateLimitNewParamsMatchRequestMethodPost   RateLimitNewParamsMatchRequestMethod = "POST"
+	RateLimitNewParamsMatchRequestMethodPut    RateLimitNewParamsMatchRequestMethod = "PUT"
+	RateLimitNewParamsMatchRequestMethodDelete RateLimitNewParamsMatchRequestMethod = "DELETE"
+	RateLimitNewParamsMatchRequestMethodPatch  RateLimitNewParamsMatchRequestMethod = "PATCH"
+	RateLimitNewParamsMatchRequestMethodHead   RateLimitNewParamsMatchRequestMethod = "HEAD"
+	RateLimitNewParamsMatchRequestMethod_All   RateLimitNewParamsMatchRequestMethod = "_ALL_"
+)
+
+func (r RateLimitNewParamsMatchRequestMethod) IsKnown() bool {
+	switch r {
+	case RateLimitNewParamsMatchRequestMethodGet, RateLimitNewParamsMatchRequestMethodPost, RateLimitNewParamsMatchRequestMethodPut, RateLimitNewParamsMatchRequestMethodDelete, RateLimitNewParamsMatchRequestMethodPatch, RateLimitNewParamsMatchRequestMethodHead, RateLimitNewParamsMatchRequestMethod_All:
+		return true
+	}
+	return false
 }
 
 type RateLimitNewParamsMatchResponse struct {
@@ -1225,7 +1267,7 @@ type RateLimitEditParamsMatchRequest struct {
 	// The HTTP methods to match. You can specify a subset (for example,
 	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
 	// creating a rate limit.
-	Methods param.Field[[]Methods] `json:"methods"`
+	Methods param.Field[[]RateLimitEditParamsMatchRequestMethod] `json:"methods"`
 	// The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both
 	// schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is
 	// optional.
@@ -1239,6 +1281,27 @@ type RateLimitEditParamsMatchRequest struct {
 
 func (r RateLimitEditParamsMatchRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// An HTTP method or `_ALL_` to indicate all methods.
+type RateLimitEditParamsMatchRequestMethod string
+
+const (
+	RateLimitEditParamsMatchRequestMethodGet    RateLimitEditParamsMatchRequestMethod = "GET"
+	RateLimitEditParamsMatchRequestMethodPost   RateLimitEditParamsMatchRequestMethod = "POST"
+	RateLimitEditParamsMatchRequestMethodPut    RateLimitEditParamsMatchRequestMethod = "PUT"
+	RateLimitEditParamsMatchRequestMethodDelete RateLimitEditParamsMatchRequestMethod = "DELETE"
+	RateLimitEditParamsMatchRequestMethodPatch  RateLimitEditParamsMatchRequestMethod = "PATCH"
+	RateLimitEditParamsMatchRequestMethodHead   RateLimitEditParamsMatchRequestMethod = "HEAD"
+	RateLimitEditParamsMatchRequestMethod_All   RateLimitEditParamsMatchRequestMethod = "_ALL_"
+)
+
+func (r RateLimitEditParamsMatchRequestMethod) IsKnown() bool {
+	switch r {
+	case RateLimitEditParamsMatchRequestMethodGet, RateLimitEditParamsMatchRequestMethodPost, RateLimitEditParamsMatchRequestMethodPut, RateLimitEditParamsMatchRequestMethodDelete, RateLimitEditParamsMatchRequestMethodPatch, RateLimitEditParamsMatchRequestMethodHead, RateLimitEditParamsMatchRequestMethod_All:
+		return true
+	}
+	return false
 }
 
 type RateLimitEditParamsMatchResponse struct {

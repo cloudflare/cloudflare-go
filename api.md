@@ -1998,14 +1998,9 @@ Methods:
 
 # RateLimits
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rate_limits">rate_limits</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rate_limits#Methods">Methods</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rate_limits">rate_limits</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rate_limits#Action">Action</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rate_limits">rate_limits</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rate_limits#Methods">Methods</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rate_limits">rate_limits</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rate_limits#RateLimit">RateLimit</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rate_limits">rate_limits</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/rate_limits#RateLimitDeleteResponse">RateLimitDeleteResponse</a>
 
