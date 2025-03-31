@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // FilterService contains methods and other services that help with interacting
@@ -344,9 +345,9 @@ func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FilterUpdateResponseEnvelope struct {
-	Errors   []interface{}  `json:"errors,required"`
-	Messages []interface{}  `json:"messages,required"`
-	Result   FirewallFilter `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   FirewallFilter        `json:"result,required"`
 	// Whether the API call was successful
 	Success FilterUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterUpdateResponseEnvelopeJSON    `json:"-"`
@@ -419,9 +420,9 @@ type FilterDeleteParams struct {
 }
 
 type FilterDeleteResponseEnvelope struct {
-	Errors   []interface{}  `json:"errors,required"`
-	Messages []interface{}  `json:"messages,required"`
-	Result   FirewallFilter `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   FirewallFilter        `json:"result,required"`
 	// Whether the API call was successful
 	Success FilterDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterDeleteResponseEnvelopeJSON    `json:"-"`
@@ -481,9 +482,9 @@ type FilterGetParams struct {
 }
 
 type FilterGetResponseEnvelope struct {
-	Errors   []interface{}  `json:"errors,required"`
-	Messages []interface{}  `json:"messages,required"`
-	Result   FirewallFilter `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   FirewallFilter        `json:"result,required"`
 	// Whether the API call was successful
 	Success FilterGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterGetResponseEnvelopeJSON    `json:"-"`

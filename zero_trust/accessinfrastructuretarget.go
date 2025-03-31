@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessInfrastructureTargetService contains methods and other services that help
@@ -791,8 +792,8 @@ func (r AccessInfrastructureTargetNewParamsIPIPV6) MarshalJSON() (data []byte, e
 }
 
 type AccessInfrastructureTargetNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessInfrastructureTargetNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessInfrastructureTargetNewResponse                `json:"result"`
@@ -887,8 +888,8 @@ func (r AccessInfrastructureTargetUpdateParamsIPIPV6) MarshalJSON() (data []byte
 }
 
 type AccessInfrastructureTargetUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessInfrastructureTargetUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessInfrastructureTargetUpdateResponse                `json:"result"`
@@ -1099,8 +1100,8 @@ type AccessInfrastructureTargetGetParams struct {
 }
 
 type AccessInfrastructureTargetGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessInfrastructureTargetGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessInfrastructureTargetGetResponse                `json:"result"`

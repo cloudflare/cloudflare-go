@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketDomainCustomService contains methods and other services that help with
@@ -604,7 +605,7 @@ func (r BucketDomainCustomNewParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomNewResponseEnvelope struct {
-	Errors   []interface{}                 `json:"errors,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
 	Messages []string                      `json:"messages,required"`
 	Result   BucketDomainCustomNewResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -699,7 +700,7 @@ func (r BucketDomainCustomUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomUpdateResponseEnvelope struct {
-	Errors   []interface{}                    `json:"errors,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
 	Messages []string                         `json:"messages,required"`
 	Result   BucketDomainCustomUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -766,7 +767,7 @@ func (r BucketDomainCustomListParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomListResponseEnvelope struct {
-	Errors   []interface{}                  `json:"errors,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
 	Messages []string                       `json:"messages,required"`
 	Result   BucketDomainCustomListResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -833,7 +834,7 @@ func (r BucketDomainCustomDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomDeleteResponseEnvelope struct {
-	Errors   []interface{}                    `json:"errors,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
 	Messages []string                         `json:"messages,required"`
 	Result   BucketDomainCustomDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -900,7 +901,7 @@ func (r BucketDomainCustomGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomGetResponseEnvelope struct {
-	Errors   []interface{}                 `json:"errors,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
 	Messages []string                      `json:"messages,required"`
 	Result   BucketDomainCustomGetResponse `json:"result,required"`
 	// Whether the API call was successful

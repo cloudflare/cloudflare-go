@@ -237,8 +237,8 @@ type PhaseVersionGetResponseRule struct {
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
-	// This field can have the runtime type of [interface{}].
-	Logging interface{} `json:"logging"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
@@ -434,8 +434,9 @@ type PhaseVersionGetResponseRulesRulesetsChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck PhaseVersionGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -604,8 +605,9 @@ type PhaseVersionGetResponseRulesRulesetsJSChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck PhaseVersionGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).

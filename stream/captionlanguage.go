@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CaptionLanguageService contains methods and other services that help with
@@ -145,8 +146,8 @@ type CaptionLanguageNewParams struct {
 }
 
 type CaptionLanguageNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CaptionLanguageNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Caption                                   `json:"result"`
@@ -210,8 +211,8 @@ func (r CaptionLanguageUpdateParams) MarshalMultipart() (data []byte, contentTyp
 }
 
 type CaptionLanguageUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CaptionLanguageUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Caption                                      `json:"result"`
@@ -258,8 +259,8 @@ type CaptionLanguageDeleteParams struct {
 }
 
 type CaptionLanguageDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CaptionLanguageDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  string                                       `json:"result"`
@@ -306,8 +307,8 @@ type CaptionLanguageGetParams struct {
 }
 
 type CaptionLanguageGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CaptionLanguageGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Caption                                   `json:"result"`

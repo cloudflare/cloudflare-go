@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
 	"github.com/cloudflare/cloudflare-go/v4/workers_for_platforms"
 )
 
@@ -37,8 +38,11 @@ func TestDispatchNamespaceScriptContentUpdateWithOptionalParams(t *testing.T) {
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
 		workers_for_platforms.DispatchNamespaceScriptContentUpdateParams{
-			AccountID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Metadata:               cloudflare.F[any](map[string]interface{}{}),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Metadata: cloudflare.F(workers.WorkerMetadataParam{
+				BodyPart:   cloudflare.F("worker.js"),
+				MainModule: cloudflare.F("worker.js"),
+			}),
 			CfWorkerBodyPart:       cloudflare.F("CF-WORKER-BODY-PART"),
 			CfWorkerMainModulePart: cloudflare.F("CF-WORKER-MAIN-MODULE-PART"),
 		},

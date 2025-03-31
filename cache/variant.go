@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // VariantService contains methods and other services that help with interacting
@@ -98,7 +99,8 @@ func (r *VariantService) Get(ctx context.Context, query VariantGetParams, opts .
 }
 
 type VariantDeleteResponse struct {
-	ID interface{} `json:"id,required"`
+	// ID of the zone setting.
+	ID VariantDeleteResponseID `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
 	// Last time this setting was modified.
@@ -124,8 +126,24 @@ func (r variantDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// ID of the zone setting.
+type VariantDeleteResponseID string
+
+const (
+	VariantDeleteResponseIDVariants VariantDeleteResponseID = "variants"
+)
+
+func (r VariantDeleteResponseID) IsKnown() bool {
+	switch r {
+	case VariantDeleteResponseIDVariants:
+		return true
+	}
+	return false
+}
+
 type VariantEditResponse struct {
-	ID interface{} `json:"id,required"`
+	// ID of the zone setting.
+	ID VariantEditResponseID `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
 	// The value of the feature
@@ -154,8 +172,24 @@ func (r variantEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// ID of the zone setting.
+type VariantEditResponseID string
+
+const (
+	VariantEditResponseIDVariants VariantEditResponseID = "variants"
+)
+
+func (r VariantEditResponseID) IsKnown() bool {
+	switch r {
+	case VariantEditResponseIDVariants:
+		return true
+	}
+	return false
+}
+
 type VariantGetResponse struct {
-	ID interface{} `json:"id,required"`
+	// ID of the zone setting.
+	ID VariantGetResponseID `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
 	// The value of the feature
@@ -184,14 +218,29 @@ func (r variantGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// ID of the zone setting.
+type VariantGetResponseID string
+
+const (
+	VariantGetResponseIDVariants VariantGetResponseID = "variants"
+)
+
+func (r VariantGetResponseID) IsKnown() bool {
+	switch r {
+	case VariantGetResponseIDVariants:
+		return true
+	}
+	return false
+}
+
 type VariantDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type VariantDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  VariantDeleteResponse                `json:"result"`
@@ -285,8 +334,8 @@ func (r VariantEditParamsValue) MarshalJSON() (data []byte, err error) {
 }
 
 type VariantEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success VariantEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  VariantEditResponse                `json:"result"`
@@ -333,8 +382,8 @@ type VariantGetParams struct {
 }
 
 type VariantGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success VariantGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  VariantGetResponse                `json:"result"`

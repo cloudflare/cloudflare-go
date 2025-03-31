@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -516,7 +517,7 @@ func (r BucketLockUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketLockUpdateResponseEnvelope struct {
-	Errors   []interface{}            `json:"errors,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
 	Messages []string                 `json:"messages,required"`
 	Result   BucketLockUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -583,7 +584,7 @@ func (r BucketLockGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketLockGetResponseEnvelope struct {
-	Errors   []interface{}         `json:"errors,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []string              `json:"messages,required"`
 	Result   BucketLockGetResponse `json:"result,required"`
 	// Whether the API call was successful

@@ -203,8 +203,8 @@ func (r OriginCACertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OriginCACertificateNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  OriginCACertificate                           `json:"result"`
@@ -281,8 +281,8 @@ func (r originCACertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OriginCACertificateGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  OriginCACertificate                           `json:"result"`

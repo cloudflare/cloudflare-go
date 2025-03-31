@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InvestigateTraceService contains methods and other services that help with
@@ -176,8 +177,8 @@ type InvestigateTraceGetParams struct {
 }
 
 type InvestigateTraceGetResponseEnvelope struct {
-	Errors   []interface{}                           `json:"errors,required"`
-	Messages []interface{}                           `json:"messages,required"`
+	Errors   []shared.ResponseInfo                   `json:"errors,required"`
+	Messages []shared.ResponseInfo                   `json:"messages,required"`
 	Result   InvestigateTraceGetResponse             `json:"result,required"`
 	Success  bool                                    `json:"success,required"`
 	JSON     investigateTraceGetResponseEnvelopeJSON `json:"-"`

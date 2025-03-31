@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AnalyticsReportBytimeService contains methods and other services that help with
@@ -68,8 +69,8 @@ type ByTime struct {
 	Max interface{} `json:"max,required"`
 	// Minimum results for each metric (object mapping metric names to values).
 	// Currently always an empty object.
-	Min   interface{} `json:"min,required"`
-	Query interface{} `json:"query,required"`
+	Min   interface{}       `json:"min,required"`
+	Query DNSAnalyticsQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Array of time intervals in the response data. Each interval is represented as an
@@ -109,8 +110,8 @@ type ByTimeData struct {
 	Dimensions []string `json:"dimensions,required"`
 	// Array with one item per requested metric. Each item is an array of values,
 	// broken down by time interval.
-	Metrics []interface{}  `json:"metrics,required"`
-	JSON    byTimeDataJSON `json:"-"`
+	Metrics []DNSAnalyticsNominalMetric `json:"metrics,required"`
+	JSON    byTimeDataJSON              `json:"-"`
 }
 
 // byTimeDataJSON contains the JSON metadata for the struct [ByTimeData]
@@ -185,8 +186,8 @@ func (r AnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
 }
 
 type AnalyticsReportBytimeGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ByTime                                          `json:"result"`

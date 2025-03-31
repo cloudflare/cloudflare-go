@@ -154,8 +154,12 @@ func (r certificatePackCertificateUpdateResponseJSON) RawJSON() string {
 
 type CertificatePackCertificateUpdateResponseSSL struct {
 	// Custom hostname SSL identifier tag.
-	ID           string      `json:"id"`
-	BundleMethod interface{} `json:"bundle_method"`
+	ID string `json:"id"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
@@ -169,8 +173,9 @@ type CertificatePackCertificateUpdateResponseSSL struct {
 	// A list of Hostnames on a custom uploaded certificate.
 	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
-	Issuer string      `json:"issuer"`
-	Method interface{} `json:"method"`
+	Issuer string `json:"issuer"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method DCVMethod `json:"method"`
 	// The serial number on a custom uploaded certificate.
 	SerialNumber string                                              `json:"serial_number"`
 	Settings     CertificatePackCertificateUpdateResponseSSLSettings `json:"settings"`
@@ -178,7 +183,9 @@ type CertificatePackCertificateUpdateResponseSSL struct {
 	Signature string `json:"signature"`
 	// Status of the hostname's SSL certificates.
 	Status CertificatePackCertificateUpdateResponseSSLStatus `json:"status"`
-	Type   interface{}                                       `json:"type"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type DomainValidationType `json:"type"`
 	// The time the custom certificate was uploaded.
 	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
 	// Domain validation errors that have been received by the certificate authority
@@ -562,8 +569,8 @@ func (r CertificatePackCertificateUpdateParams) MarshalJSON() (data []byte, err 
 }
 
 type CertificatePackCertificateUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CertificatePackCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  CertificatePackCertificateUpdateResponse                `json:"result"`

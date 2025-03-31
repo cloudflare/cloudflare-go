@@ -49,8 +49,9 @@ func NewMagicTransitService(opts ...option.RequestOption) (r *MagicTransitServic
 
 type HealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool        `json:"enabled"`
-	Rate    interface{} `json:"rate"`
+	Enabled bool `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate HealthCheckRate `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -59,8 +60,9 @@ type HealthCheck struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target HealthCheckTargetUnion `json:"target"`
-	Type   interface{}            `json:"type"`
-	JSON   healthCheckJSON        `json:"-"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type HealthCheckType `json:"type"`
+	JSON healthCheckJSON `json:"-"`
 }
 
 // healthCheckJSON contains the JSON metadata for the struct [HealthCheck]
@@ -147,8 +149,9 @@ func (r HealthCheckTargetMagicHealthCheckTarget) ImplementsHealthCheckTargetUnio
 
 type HealthCheckParam struct {
 	// Determines whether to run healthchecks for a tunnel.
-	Enabled param.Field[bool]        `json:"enabled"`
-	Rate    param.Field[interface{}] `json:"rate"`
+	Enabled param.Field[bool] `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate param.Field[HealthCheckRate] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -157,7 +160,8 @@ type HealthCheckParam struct {
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
 	Target param.Field[HealthCheckTargetUnionParam] `json:"target"`
-	Type   param.Field[interface{}]                 `json:"type"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type param.Field[HealthCheckType] `json:"type"`
 }
 
 func (r HealthCheckParam) MarshalJSON() (data []byte, err error) {
@@ -194,3 +198,36 @@ func (r HealthCheckTargetMagicHealthCheckTargetParam) MarshalJSON() (data []byte
 }
 
 func (r HealthCheckTargetMagicHealthCheckTargetParam) ImplementsHealthCheckTargetUnionParam() {}
+
+// How frequent the health check is run. The default value is `mid`.
+type HealthCheckRate string
+
+const (
+	HealthCheckRateLow  HealthCheckRate = "low"
+	HealthCheckRateMid  HealthCheckRate = "mid"
+	HealthCheckRateHigh HealthCheckRate = "high"
+)
+
+func (r HealthCheckRate) IsKnown() bool {
+	switch r {
+	case HealthCheckRateLow, HealthCheckRateMid, HealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
+// The type of healthcheck to run, reply or request. The default value is `reply`.
+type HealthCheckType string
+
+const (
+	HealthCheckTypeReply   HealthCheckType = "reply"
+	HealthCheckTypeRequest HealthCheckType = "request"
+)
+
+func (r HealthCheckType) IsKnown() bool {
+	switch r {
+	case HealthCheckTypeReply, HealthCheckTypeRequest:
+		return true
+	}
+	return false
+}

@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // NetworkRouteNetworkService contains methods and other services that help with
@@ -122,9 +123,9 @@ func (r NetworkRouteNetworkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkRouteNetworkNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Route         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Route                 `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -206,9 +207,9 @@ func (r NetworkRouteNetworkDeleteParamsTunType) IsKnown() bool {
 }
 
 type NetworkRouteNetworkDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Route         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Route                 `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -254,9 +255,9 @@ type NetworkRouteNetworkEditParams struct {
 }
 
 type NetworkRouteNetworkEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Route         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Route                 `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkEditResponseEnvelopeJSON    `json:"-"`

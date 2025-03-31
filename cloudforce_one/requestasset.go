@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RequestAssetService contains methods and other services that help with
@@ -215,8 +216,8 @@ func (r requestAssetUpdateResponseJSON) RawJSON() string {
 }
 
 type RequestAssetDeleteResponse struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestAssetDeleteResponseSuccess `json:"success,required"`
 	JSON    requestAssetDeleteResponseJSON    `json:"-"`
@@ -310,8 +311,8 @@ func (r RequestAssetUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestAssetUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestAssetUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  RequestAssetUpdateResponse                `json:"result"`

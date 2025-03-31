@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // MessageService contains methods and other services that help with interacting
@@ -181,9 +182,9 @@ func (r MessageAckParamsRetry) MarshalJSON() (data []byte, err error) {
 }
 
 type MessageAckResponseEnvelope struct {
-	Errors   []interface{}      `json:"errors"`
-	Messages []string           `json:"messages"`
-	Result   MessageAckResponse `json:"result"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   MessageAckResponse    `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success MessageAckResponseEnvelopeSuccess `json:"success"`
 	JSON    messageAckResponseEnvelopeJSON    `json:"-"`

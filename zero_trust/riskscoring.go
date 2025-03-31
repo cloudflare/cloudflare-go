@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RiskScoringService contains methods and other services that help with
@@ -179,8 +180,8 @@ type RiskScoringGetParams struct {
 }
 
 type RiskScoringGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    RiskScoringGetResponseEnvelopeSuccess    `json:"success,required"`
 	Result     RiskScoringGetResponse                   `json:"result"`
@@ -259,8 +260,8 @@ type RiskScoringResetParams struct {
 }
 
 type RiskScoringResetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RiskScoringResetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RiskScoringResetResponse                `json:"result,nullable"`

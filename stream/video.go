@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // VideoService contains methods and other services that help with interacting with
@@ -100,8 +101,8 @@ func (r VideoStorageUsageParams) URLQuery() (v url.Values) {
 }
 
 type VideoStorageUsageResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success VideoStorageUsageResponseEnvelopeSuccess `json:"success,required"`
 	Result  VideoStorageUsageResponse                `json:"result"`

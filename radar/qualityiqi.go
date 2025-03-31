@@ -86,7 +86,7 @@ func (r qualityIQISummaryResponseJSON) RawJSON() string {
 }
 
 type QualityIQISummaryResponseMeta struct {
-	DateRange      []interface{}                               `json:"dateRange,required"`
+	DateRange      []QualityIQISummaryResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                      `json:"lastUpdated,required"`
 	Normalization  string                                      `json:"normalization,required"`
 	ConfidenceInfo QualityIQISummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -112,10 +112,35 @@ func (r qualityIQISummaryResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type QualityIQISummaryResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                  `json:"startTime,required" format:"date-time"`
+	JSON      qualityIQISummaryResponseMetaDateRangeJSON `json:"-"`
+}
+
+// qualityIQISummaryResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [QualityIQISummaryResponseMetaDateRange]
+type qualityIQISummaryResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QualityIQISummaryResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualityIQISummaryResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type QualityIQISummaryResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                   `json:"annotations"`
-	Level       int64                                           `json:"level"`
-	JSON        qualityIQISummaryResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []QualityIQISummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                   `json:"level"`
+	JSON        qualityIQISummaryResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // qualityIQISummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -132,6 +157,39 @@ func (r *QualityIQISummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte)
 }
 
 func (r qualityIQISummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type QualityIQISummaryResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                    `json:"dataSource,required"`
+	Description     string                                                    `json:"description,required"`
+	EventType       string                                                    `json:"eventType,required"`
+	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                    `json:"linkedUrl"`
+	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
+	JSON            qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [QualityIQISummaryResponseMetaConfidenceInfoAnnotation]
+type qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *QualityIQISummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r qualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

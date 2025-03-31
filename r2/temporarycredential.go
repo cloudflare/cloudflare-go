@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TemporaryCredentialService contains methods and other services that help with
@@ -127,7 +128,7 @@ func (r TemporaryCredentialNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TemporaryCredentialNewResponseEnvelope struct {
-	Errors   []interface{}                  `json:"errors,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
 	Messages []string                       `json:"messages,required"`
 	Result   TemporaryCredentialNewResponse `json:"result,required"`
 	// Whether the API call was successful

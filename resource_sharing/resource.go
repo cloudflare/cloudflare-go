@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ResourceService contains methods and other services that help with interacting
@@ -595,7 +596,7 @@ func (r ResourceNewParamsResourceType) IsKnown() bool {
 }
 
 type ResourceNewResponseEnvelope struct {
-	Errors []interface{} `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors,required"`
 	// Whether the API call was successful.
 	Success bool                            `json:"success,required"`
 	Result  ResourceNewResponse             `json:"result"`
@@ -632,7 +633,7 @@ func (r ResourceUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ResourceUpdateResponseEnvelope struct {
-	Errors []interface{} `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors,required"`
 	// Whether the API call was successful.
 	Success bool                               `json:"success,required"`
 	Result  ResourceUpdateResponse             `json:"result"`
@@ -717,7 +718,7 @@ type ResourceDeleteParams struct {
 }
 
 type ResourceDeleteResponseEnvelope struct {
-	Errors []interface{} `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors,required"`
 	// Whether the API call was successful.
 	Success bool                               `json:"success,required"`
 	Result  ResourceDeleteResponse             `json:"result"`
@@ -748,7 +749,7 @@ type ResourceGetParams struct {
 }
 
 type ResourceGetResponseEnvelope struct {
-	Errors []interface{} `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors,required"`
 	// Whether the API call was successful.
 	Success bool                            `json:"success,required"`
 	Result  ResourceGetResponse             `json:"result"`

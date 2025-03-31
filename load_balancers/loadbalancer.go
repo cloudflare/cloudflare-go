@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // LoadBalancerService contains methods and other services that help with
@@ -1776,9 +1777,9 @@ func (r LoadBalancerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LoadBalancerNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   LoadBalancer  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LoadBalancer          `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerNewResponseEnvelopeJSON    `json:"-"`
@@ -1943,9 +1944,9 @@ func (r LoadBalancerUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LoadBalancerUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   LoadBalancer  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LoadBalancer          `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1994,8 +1995,8 @@ type LoadBalancerDeleteParams struct {
 }
 
 type LoadBalancerDeleteResponseEnvelope struct {
-	Errors   []interface{}              `json:"errors,required"`
-	Messages []interface{}              `json:"messages,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
 	Result   LoadBalancerDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -2159,9 +2160,9 @@ func (r LoadBalancerEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LoadBalancerEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   LoadBalancer  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LoadBalancer          `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerEditResponseEnvelopeJSON    `json:"-"`
@@ -2206,9 +2207,9 @@ type LoadBalancerGetParams struct {
 }
 
 type LoadBalancerGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   LoadBalancer  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LoadBalancer          `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerGetResponseEnvelopeJSON    `json:"-"`

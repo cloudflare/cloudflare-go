@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DispatchNamespaceScriptAssetUploadService contains methods and other services
@@ -110,8 +111,8 @@ func (r DispatchNamespaceScriptAssetUploadNewParamsManifest) MarshalJSON() (data
 }
 
 type DispatchNamespaceScriptAssetUploadNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptAssetUploadNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptAssetUploadNewResponse                `json:"result"`

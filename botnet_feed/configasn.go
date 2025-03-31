@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ConfigASNService contains methods and other services that help with interacting
@@ -115,8 +116,8 @@ type ConfigASNDeleteParams struct {
 }
 
 type ConfigASNDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ConfigASNDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  ConfigASNDeleteResponse                `json:"result"`
@@ -163,8 +164,8 @@ type ConfigASNGetParams struct {
 }
 
 type ConfigASNGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ConfigASNGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ConfigASNGetResponse                `json:"result"`

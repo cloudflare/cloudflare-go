@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DEXCommandQuotaService contains methods and other services that help with
@@ -85,8 +86,8 @@ type DEXCommandQuotaGetParams struct {
 }
 
 type DEXCommandQuotaGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    DEXCommandQuotaGetResponseEnvelopeSuccess    `json:"success,required"`
 	Result     DEXCommandQuotaGetResponse                   `json:"result"`

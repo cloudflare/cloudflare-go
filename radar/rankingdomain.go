@@ -158,8 +158,8 @@ func (r rankingDomainGetResponseDetails0TopLocationJSON) RawJSON() string {
 }
 
 type RankingDomainGetResponseMeta struct {
-	DateRange []interface{}                    `json:"dateRange,required"`
-	JSON      rankingDomainGetResponseMetaJSON `json:"-"`
+	DateRange []RankingDomainGetResponseMetaDateRange `json:"dateRange,required"`
+	JSON      rankingDomainGetResponseMetaJSON        `json:"-"`
 }
 
 // rankingDomainGetResponseMetaJSON contains the JSON metadata for the struct
@@ -175,6 +175,31 @@ func (r *RankingDomainGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r rankingDomainGetResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RankingDomainGetResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                 `json:"startTime,required" format:"date-time"`
+	JSON      rankingDomainGetResponseMetaDateRangeJSON `json:"-"`
+}
+
+// rankingDomainGetResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [RankingDomainGetResponseMetaDateRange]
+type rankingDomainGetResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RankingDomainGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rankingDomainGetResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 

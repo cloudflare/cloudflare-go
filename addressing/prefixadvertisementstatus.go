@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PrefixAdvertisementStatusService contains methods and other services that help
@@ -149,8 +150,8 @@ func (r PrefixAdvertisementStatusEditParams) MarshalJSON() (data []byte, err err
 }
 
 type PrefixAdvertisementStatusEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixAdvertisementStatusEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  PrefixAdvertisementStatusEditResponse                `json:"result"`
@@ -197,8 +198,8 @@ type PrefixAdvertisementStatusGetParams struct {
 }
 
 type PrefixAdvertisementStatusGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixAdvertisementStatusGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  PrefixAdvertisementStatusGetResponse                `json:"result"`

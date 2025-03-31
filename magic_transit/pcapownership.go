@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PCAPOwnershipService contains methods and other services that help with
@@ -177,9 +178,9 @@ func (r PCAPOwnershipNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PCAPOwnershipNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Ownership     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Ownership             `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPOwnershipNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapOwnershipNewResponseEnvelopeJSON    `json:"-"`
@@ -243,9 +244,9 @@ func (r PCAPOwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PCAPOwnershipValidateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Ownership     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Ownership             `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPOwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapOwnershipValidateResponseEnvelopeJSON    `json:"-"`

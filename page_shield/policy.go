@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PolicyService contains methods and other services that help with interacting
@@ -401,8 +402,8 @@ type PolicyNewResponseEnvelope struct {
 	Result PolicyNewResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success  PolicyNewResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []interface{}                    `json:"errors"`
-	Messages []interface{}                    `json:"messages"`
+	Errors   []shared.ResponseInfo            `json:"errors"`
+	Messages []shared.ResponseInfo            `json:"messages"`
 	JSON     policyNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -480,8 +481,8 @@ type PolicyUpdateResponseEnvelope struct {
 	Result PolicyUpdateResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success  PolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []interface{}                       `json:"errors"`
-	Messages []interface{}                       `json:"messages"`
+	Errors   []shared.ResponseInfo               `json:"errors"`
+	Messages []shared.ResponseInfo               `json:"messages"`
 	JSON     policyUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -538,8 +539,8 @@ type PolicyGetResponseEnvelope struct {
 	Result PolicyGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success  PolicyGetResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []interface{}                    `json:"errors"`
-	Messages []interface{}                    `json:"messages"`
+	Errors   []shared.ResponseInfo            `json:"errors"`
+	Messages []shared.ResponseInfo            `json:"messages"`
 	JSON     policyGetResponseEnvelopeJSON    `json:"-"`
 }
 

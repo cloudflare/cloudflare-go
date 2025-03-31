@@ -170,8 +170,9 @@ type BlockRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck BlockRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit BlockRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -401,8 +402,9 @@ type BlockRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[BlockRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[BlockRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -505,8 +507,9 @@ type CompressResponseRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck CompressResponseRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit CompressResponseRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -750,8 +753,9 @@ type CompressResponseRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[CompressResponseRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[CompressResponseRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -850,8 +854,9 @@ type DDoSDynamicRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck DDoSDynamicRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit DDoSDynamicRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -1029,8 +1034,9 @@ type DDoSDynamicRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[DDoSDynamicRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[DDoSDynamicRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -1109,8 +1115,9 @@ type ExecuteRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck ExecuteRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit ExecuteRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -1501,8 +1508,9 @@ type ExecuteRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[ExecuteRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[ExecuteRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -1661,8 +1669,9 @@ type ForceConnectionCloseRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck ForceConnectionCloseRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit ForceConnectionCloseRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -1841,8 +1850,9 @@ type ForceConnectionCloseRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[ForceConnectionCloseRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[ForceConnectionCloseRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -1921,8 +1931,9 @@ type LogCustomFieldRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck LogCustomFieldRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit LogCustomFieldRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -2258,8 +2269,9 @@ type LogCustomFieldRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[LogCustomFieldRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[LogCustomFieldRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -2410,8 +2422,9 @@ type LogRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck LogRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit LogRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -2589,8 +2602,9 @@ type LogRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[LogRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[LogRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -2649,6 +2663,38 @@ func (r LogRuleRatelimitParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// An object configuring the rule's logging behavior.
+type Logging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled bool        `json:"enabled,required"`
+	JSON    loggingJSON `json:"-"`
+}
+
+// loggingJSON contains the JSON metadata for the struct [Logging]
+type loggingJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Logging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loggingJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's logging behavior.
+type LoggingParam struct {
+	// Whether to generate a log when the rule matches.
+	Enabled param.Field[bool] `json:"enabled,required"`
+}
+
+func (r LoggingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ManagedChallengeRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
@@ -2669,8 +2715,9 @@ type ManagedChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck ManagedChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit ManagedChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -2849,8 +2896,9 @@ type ManagedChallengeRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[ManagedChallengeRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[ManagedChallengeRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -2929,8 +2977,9 @@ type RedirectRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck RedirectRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit RedirectRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -3326,8 +3375,9 @@ type RedirectRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[RedirectRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[RedirectRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -3493,8 +3543,9 @@ type RewriteRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck RewriteRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit RewriteRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -3935,8 +3986,9 @@ type RewriteRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[RewriteRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[RewriteRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -4254,8 +4306,9 @@ type RouteRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck RouteRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit RouteRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -4511,8 +4564,9 @@ type RouteRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[RouteRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[RouteRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -4627,8 +4681,9 @@ type ScoreRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck ScoreRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit ScoreRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -4830,8 +4885,9 @@ type ScoreRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[ScoreRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[ScoreRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -4921,8 +4977,9 @@ type ServeErrorRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck ServeErrorRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit ServeErrorRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -5147,8 +5204,9 @@ type ServeErrorRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[ServeErrorRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[ServeErrorRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -5241,8 +5299,9 @@ type SetCacheSettingsRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck SetCacheSettingsRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit SetCacheSettingsRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -6267,8 +6326,9 @@ type SetCacheSettingsRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[SetCacheSettingsRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[SetCacheSettingsRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -6732,8 +6792,9 @@ type SetConfigRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck SetConfigRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit SetConfigRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -7112,8 +7173,9 @@ type SetConfigRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[SetConfigRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[SetConfigRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -7248,8 +7310,9 @@ type SkipRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck SkipRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit SkipRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -7503,8 +7566,9 @@ type SkipRuleParam struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[SkipRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit param.Field[SkipRuleRatelimitParam] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -7667,8 +7731,8 @@ type RuleNewResponseRule struct {
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
-	// This field can have the runtime type of [interface{}].
-	Logging interface{} `json:"logging"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [RuleNewResponseRulesRulesetsChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
@@ -7864,8 +7928,9 @@ type RuleNewResponseRulesRulesetsChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck RuleNewResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit RuleNewResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -8033,8 +8098,9 @@ type RuleNewResponseRulesRulesetsJSChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck RuleNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit RuleNewResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -8297,8 +8363,8 @@ type RuleDeleteResponseRule struct {
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
-	// This field can have the runtime type of [interface{}].
-	Logging interface{} `json:"logging"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [RuleDeleteResponseRulesRulesetsChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
@@ -8494,8 +8560,9 @@ type RuleDeleteResponseRulesRulesetsChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck RuleDeleteResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit RuleDeleteResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -8663,8 +8730,9 @@ type RuleDeleteResponseRulesRulesetsJSChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck RuleDeleteResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit RuleDeleteResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -8928,8 +8996,8 @@ type RuleEditResponseRule struct {
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
-	// This field can have the runtime type of [interface{}].
-	Logging interface{} `json:"logging"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [RuleEditResponseRulesRulesetsChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
@@ -9125,8 +9193,9 @@ type RuleEditResponseRulesRulesetsChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck RuleEditResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit RuleEditResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -9294,8 +9363,9 @@ type RuleEditResponseRulesRulesetsJSChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck RuleEditResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression string      `json:"expression"`
-	Logging    interface{} `json:"logging"`
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// An object configuring the rule's ratelimit behavior.
 	Ratelimit RuleEditResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
@@ -9500,10 +9570,11 @@ type RuleNewParamsBody struct {
 	Enabled                param.Field[bool]        `json:"enabled"`
 	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
-	Position   param.Field[interface{}] `json:"position"`
-	Ratelimit  param.Field[interface{}] `json:"ratelimit"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging   param.Field[LoggingParam] `json:"logging"`
+	Position  param.Field[interface{}]  `json:"position"`
+	Ratelimit param.Field[interface{}]  `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -9629,8 +9700,9 @@ type RuleNewParamsBodyChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[RuleNewParamsBodyChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring where the rule will be placed.
 	Position param.Field[RuleNewParamsBodyChallengeRulePositionUnion] `json:"position"`
 	// An object configuring the rule's ratelimit behavior.
@@ -9967,8 +10039,9 @@ type RuleNewParamsBodyJavascriptChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[RuleNewParamsBodyJavascriptChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring where the rule will be placed.
 	Position param.Field[RuleNewParamsBodyJavascriptChallengeRulePositionUnion] `json:"position"`
 	// An object configuring the rule's ratelimit behavior.
@@ -11560,10 +11633,11 @@ type RuleEditParamsBody struct {
 	Enabled                param.Field[bool]        `json:"enabled"`
 	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
-	Position   param.Field[interface{}] `json:"position"`
-	Ratelimit  param.Field[interface{}] `json:"ratelimit"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging   param.Field[LoggingParam] `json:"logging"`
+	Position  param.Field[interface{}]  `json:"position"`
+	Ratelimit param.Field[interface{}]  `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -11690,8 +11764,9 @@ type RuleEditParamsBodyChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[RuleEditParamsBodyChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring where the rule will be placed.
 	Position param.Field[RuleEditParamsBodyChallengeRulePositionUnion] `json:"position"`
 	// An object configuring the rule's ratelimit behavior.
@@ -12029,8 +12104,9 @@ type RuleEditParamsBodyJavascriptChallengeRule struct {
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[RuleEditParamsBodyJavascriptChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
-	Expression param.Field[string]      `json:"expression"`
-	Logging    param.Field[interface{}] `json:"logging"`
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// An object configuring where the rule will be placed.
 	Position param.Field[RuleEditParamsBodyJavascriptChallengeRulePositionUnion] `json:"position"`
 	// An object configuring the rule's ratelimit behavior.

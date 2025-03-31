@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CacheReserveService contains methods and other services that help with
@@ -118,6 +119,36 @@ func (r *CacheReserveService) Status(ctx context.Context, query CacheReserveStat
 	return
 }
 
+// ID of the zone setting.
+type CacheReserve string
+
+const (
+	CacheReserveCacheReserve CacheReserve = "cache_reserve"
+)
+
+func (r CacheReserve) IsKnown() bool {
+	switch r {
+	case CacheReserveCacheReserve:
+		return true
+	}
+	return false
+}
+
+// ID of the zone setting.
+type CacheReserveClear string
+
+const (
+	CacheReserveClearCacheReserveClear CacheReserveClear = "cache_reserve_clear"
+)
+
+func (r CacheReserveClear) IsKnown() bool {
+	switch r {
+	case CacheReserveClearCacheReserveClear:
+		return true
+	}
+	return false
+}
+
 // The current state of the Cache Reserve Clear operation.
 type State string
 
@@ -139,7 +170,8 @@ func (r State) IsKnown() bool {
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 // that you cannot undo or cancel this operation.
 type CacheReserveClearResponse struct {
-	ID interface{} `json:"id,required"`
+	// ID of the zone setting.
+	ID CacheReserveClear `json:"id,required"`
 	// The time that the latest Cache Reserve Clear operation started.
 	StartTs time.Time `json:"start_ts,required" format:"date-time"`
 	// The current state of the Cache Reserve Clear operation.
@@ -172,7 +204,8 @@ func (r cacheReserveClearResponseJSON) RawJSON() string {
 }
 
 type CacheReserveEditResponse struct {
-	ID interface{} `json:"id,required"`
+	// ID of the zone setting.
+	ID CacheReserve `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
 	// The value of the feature
@@ -218,7 +251,8 @@ func (r CacheReserveEditResponseValue) IsKnown() bool {
 }
 
 type CacheReserveGetResponse struct {
-	ID interface{} `json:"id,required"`
+	// ID of the zone setting.
+	ID CacheReserve `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
 	// The value of the feature
@@ -268,7 +302,8 @@ func (r CacheReserveGetResponseValue) IsKnown() bool {
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 // that you cannot undo or cancel this operation.
 type CacheReserveStatusResponse struct {
-	ID interface{} `json:"id,required"`
+	// ID of the zone setting.
+	ID CacheReserveClear `json:"id,required"`
 	// The time that the latest Cache Reserve Clear operation started.
 	StartTs time.Time `json:"start_ts,required" format:"date-time"`
 	// The current state of the Cache Reserve Clear operation.
@@ -311,8 +346,8 @@ func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CacheReserveClearResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CacheReserveClearResponseEnvelopeSuccess `json:"success,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
@@ -385,8 +420,8 @@ func (r CacheReserveEditParamsValue) IsKnown() bool {
 }
 
 type CacheReserveEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CacheReserveEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  CacheReserveEditResponse                `json:"result"`
@@ -433,8 +468,8 @@ type CacheReserveGetParams struct {
 }
 
 type CacheReserveGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CacheReserveGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  CacheReserveGetResponse                `json:"result"`
@@ -481,8 +516,8 @@ type CacheReserveStatusParams struct {
 }
 
 type CacheReserveStatusResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CacheReserveStatusResponseEnvelopeSuccess `json:"success,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first

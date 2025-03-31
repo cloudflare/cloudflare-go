@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ListBulkOperationService contains methods and other services that help with
@@ -57,10 +58,29 @@ func (r *ListBulkOperationService) Get(ctx context.Context, accountIdentifier st
 	return
 }
 
+// The current status of the asynchronous operation.
+type OperationStatus string
+
+const (
+	OperationStatusPending   OperationStatus = "pending"
+	OperationStatusRunning   OperationStatus = "running"
+	OperationStatusCompleted OperationStatus = "completed"
+	OperationStatusFailed    OperationStatus = "failed"
+)
+
+func (r OperationStatus) IsKnown() bool {
+	switch r {
+	case OperationStatusPending, OperationStatusRunning, OperationStatusCompleted, OperationStatusFailed:
+		return true
+	}
+	return false
+}
+
 type ListBulkOperationGetResponse struct {
 	// The unique operation ID of the asynchronous action.
-	ID     string      `json:"id,required"`
-	Status interface{} `json:"status,required"`
+	ID string `json:"id,required"`
+	// The current status of the asynchronous operation.
+	Status OperationStatus `json:"status,required"`
 	// The RFC 3339 timestamp of when the operation was completed.
 	Completed string `json:"completed"`
 	// A message describing the error when the status is `failed`.
@@ -88,8 +108,8 @@ func (r listBulkOperationGetResponseJSON) RawJSON() string {
 }
 
 type ListBulkOperationGetResponseEnvelope struct {
-	Errors   []interface{}                `json:"errors,required"`
-	Messages []interface{}                `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   ListBulkOperationGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ListBulkOperationGetResponseEnvelopeSuccess `json:"success,required"`

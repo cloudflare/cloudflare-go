@@ -37,11 +37,11 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 		HealthCheck: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheck{
 			Direction: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckDirectionUnidirectional),
 			Enabled:   cloudflare.F(true),
-			Rate:      cloudflare.F[any](map[string]interface{}{}),
+			Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
 			Target: cloudflare.F[magic_transit.IPSECTunnelNewParamsHealthCheckTargetUnion](magic_transit.IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget{
 				Saved: cloudflare.F("203.0.113.1"),
 			}),
-			Type: cloudflare.F[any](map[string]interface{}{}),
+			Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
 		}),
 		PSK:               cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 		ReplayProtection:  cloudflare.F(false),
@@ -83,11 +83,11 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 			HealthCheck: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheck{
 				Direction: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckDirectionUnidirectional),
 				Enabled:   cloudflare.F(true),
-				Rate:      cloudflare.F[any](map[string]interface{}{}),
+				Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
 				Target: cloudflare.F[magic_transit.IPSECTunnelUpdateParamsHealthCheckTargetUnion](magic_transit.IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget{
 					Saved: cloudflare.F("203.0.113.1"),
 				}),
-				Type: cloudflare.F[any](map[string]interface{}{}),
+				Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
 			}),
 			PSK:               cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 			ReplayProtection:  cloudflare.F(false),

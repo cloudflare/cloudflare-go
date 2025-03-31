@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TunnelWARPConnectorTokenService contains methods and other services that help
@@ -61,8 +62,8 @@ type TunnelWARPConnectorTokenGetParams struct {
 }
 
 type TunnelWARPConnectorTokenGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// The Tunnel Token is used as a mechanism to authenticate the operation of a
 	// tunnel.
 	Result string `json:"result,required"`

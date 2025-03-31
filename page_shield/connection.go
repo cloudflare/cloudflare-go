@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ConnectionService contains methods and other services that help with interacting
@@ -243,8 +244,8 @@ type ConnectionGetResponseEnvelope struct {
 	Result Connection `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success  ConnectionGetResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []interface{}                        `json:"errors"`
-	Messages []interface{}                        `json:"messages"`
+	Errors   []shared.ResponseInfo                `json:"errors"`
+	Messages []shared.ResponseInfo                `json:"messages"`
 	JSON     connectionGetResponseEnvelopeJSON    `json:"-"`
 }
 
