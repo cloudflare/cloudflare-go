@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // GatewayService contains methods and other services that help with interacting
@@ -148,8 +149,8 @@ type GatewayNewParams struct {
 }
 
 type GatewayNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayNewResponse                `json:"result"`
@@ -195,8 +196,8 @@ type GatewayListParams struct {
 }
 
 type GatewayListResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayListResponseEnvelopeSuccess `json:"success,required"`
 	Result  GatewayListResponse                `json:"result"`

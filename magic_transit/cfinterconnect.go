@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CfInterconnectService contains methods and other services that help with
@@ -549,8 +550,8 @@ func (r CfInterconnectUpdateParamsGRE) MarshalJSON() (data []byte, err error) {
 }
 
 type CfInterconnectUpdateResponseEnvelope struct {
-	Errors   []interface{}                `json:"errors,required"`
-	Messages []interface{}                `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   CfInterconnectUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -598,8 +599,8 @@ type CfInterconnectListParams struct {
 }
 
 type CfInterconnectListResponseEnvelope struct {
-	Errors   []interface{}              `json:"errors,required"`
-	Messages []interface{}              `json:"messages,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
 	Result   CfInterconnectListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectListResponseEnvelopeSuccess `json:"success,required"`
@@ -652,8 +653,8 @@ func (r CfInterconnectBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CfInterconnectBulkUpdateResponseEnvelope struct {
-	Errors   []interface{}                    `json:"errors,required"`
-	Messages []interface{}                    `json:"messages,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
 	Result   CfInterconnectBulkUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -701,8 +702,8 @@ type CfInterconnectGetParams struct {
 }
 
 type CfInterconnectGetResponseEnvelope struct {
-	Errors   []interface{}             `json:"errors,required"`
-	Messages []interface{}             `json:"messages,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
 	Result   CfInterconnectGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectGetResponseEnvelopeSuccess `json:"success,required"`

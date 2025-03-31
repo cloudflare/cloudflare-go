@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -467,8 +468,8 @@ func (r ConsumerMqHTTPConsumerSettingsParam) MarshalJSON() (data []byte, err err
 }
 
 type ConsumerDeleteResponse struct {
-	Errors   []interface{} `json:"errors"`
-	Messages []string      `json:"messages"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
 	// Indicates if the API call was successful or not.
 	Success ConsumerDeleteResponseSuccess `json:"success"`
 	JSON    consumerDeleteResponseJSON    `json:"-"`
@@ -644,9 +645,9 @@ func (r ConsumerNewParamsBodyType) IsKnown() bool {
 }
 
 type ConsumerNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors"`
-	Messages []string      `json:"messages"`
-	Result   Consumer      `json:"result"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   Consumer              `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success ConsumerNewResponseEnvelopeSuccess `json:"success"`
 	JSON    consumerNewResponseEnvelopeJSON    `json:"-"`
@@ -823,9 +824,9 @@ func (r ConsumerUpdateParamsBodyType) IsKnown() bool {
 }
 
 type ConsumerUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors"`
-	Messages []string      `json:"messages"`
-	Result   Consumer      `json:"result"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   Consumer              `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success ConsumerUpdateResponseEnvelopeSuccess `json:"success"`
 	JSON    consumerUpdateResponseEnvelopeJSON    `json:"-"`

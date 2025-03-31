@@ -336,8 +336,8 @@ func (r MemberNewParamsBodyStatus) IsKnown() bool {
 }
 
 type MemberNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success MemberNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.Member                    `json:"result"`
@@ -525,8 +525,8 @@ func (r MemberUpdateParamsBodyStatus) IsKnown() bool {
 }
 
 type MemberUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success MemberUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.Member                       `json:"result"`
@@ -647,8 +647,8 @@ type MemberDeleteParams struct {
 }
 
 type MemberDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success MemberDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  MemberDeleteResponse                `json:"result,nullable"`
@@ -695,8 +695,8 @@ type MemberGetParams struct {
 }
 
 type MemberGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success MemberGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.Member                    `json:"result"`

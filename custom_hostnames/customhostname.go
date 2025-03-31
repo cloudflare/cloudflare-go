@@ -159,6 +159,59 @@ func (r *CustomHostnameService) Get(ctx context.Context, customHostnameID string
 	return
 }
 
+// A ubiquitous bundle has the highest probability of being verified everywhere,
+// even by clients using outdated or unusual trust stores. An optimal bundle uses
+// the shortest chain and newest intermediates. And the force bundle verifies the
+// chain, but does not otherwise modify it.
+type BundleMethod string
+
+const (
+	BundleMethodUbiquitous BundleMethod = "ubiquitous"
+	BundleMethodOptimal    BundleMethod = "optimal"
+	BundleMethodForce      BundleMethod = "force"
+)
+
+func (r BundleMethod) IsKnown() bool {
+	switch r {
+	case BundleMethodUbiquitous, BundleMethodOptimal, BundleMethodForce:
+		return true
+	}
+	return false
+}
+
+// Domain control validation (DCV) method used for this hostname.
+type DCVMethod string
+
+const (
+	DCVMethodHTTP  DCVMethod = "http"
+	DCVMethodTXT   DCVMethod = "txt"
+	DCVMethodEmail DCVMethod = "email"
+)
+
+func (r DCVMethod) IsKnown() bool {
+	switch r {
+	case DCVMethodHTTP, DCVMethodTXT, DCVMethodEmail:
+		return true
+	}
+	return false
+}
+
+// Level of validation to be used for this hostname. Domain validation (dv) must be
+// used.
+type DomainValidationType string
+
+const (
+	DomainValidationTypeDv DomainValidationType = "dv"
+)
+
+func (r DomainValidationType) IsKnown() bool {
+	switch r {
+	case DomainValidationTypeDv:
+		return true
+	}
+	return false
+}
+
 type CustomHostnameNewResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -219,8 +272,12 @@ func (r customHostnameNewResponseJSON) RawJSON() string {
 
 type CustomHostnameNewResponseSSL struct {
 	// Custom hostname SSL identifier tag.
-	ID           string      `json:"id"`
-	BundleMethod interface{} `json:"bundle_method"`
+	ID string `json:"id"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
@@ -234,8 +291,9 @@ type CustomHostnameNewResponseSSL struct {
 	// A list of Hostnames on a custom uploaded certificate.
 	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
-	Issuer string      `json:"issuer"`
-	Method interface{} `json:"method"`
+	Issuer string `json:"issuer"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method DCVMethod `json:"method"`
 	// The serial number on a custom uploaded certificate.
 	SerialNumber string                               `json:"serial_number"`
 	Settings     CustomHostnameNewResponseSSLSettings `json:"settings"`
@@ -243,7 +301,9 @@ type CustomHostnameNewResponseSSL struct {
 	Signature string `json:"signature"`
 	// Status of the hostname's SSL certificates.
 	Status CustomHostnameNewResponseSSLStatus `json:"status"`
-	Type   interface{}                        `json:"type"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type DomainValidationType `json:"type"`
 	// The time the custom certificate was uploaded.
 	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
 	// Domain validation errors that have been received by the certificate authority
@@ -647,8 +707,12 @@ func (r customHostnameListResponseJSON) RawJSON() string {
 
 type CustomHostnameListResponseSSL struct {
 	// Custom hostname SSL identifier tag.
-	ID           string      `json:"id"`
-	BundleMethod interface{} `json:"bundle_method"`
+	ID string `json:"id"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
@@ -662,8 +726,9 @@ type CustomHostnameListResponseSSL struct {
 	// A list of Hostnames on a custom uploaded certificate.
 	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
-	Issuer string      `json:"issuer"`
-	Method interface{} `json:"method"`
+	Issuer string `json:"issuer"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method DCVMethod `json:"method"`
 	// The serial number on a custom uploaded certificate.
 	SerialNumber string                                `json:"serial_number"`
 	Settings     CustomHostnameListResponseSSLSettings `json:"settings"`
@@ -671,7 +736,9 @@ type CustomHostnameListResponseSSL struct {
 	Signature string `json:"signature"`
 	// Status of the hostname's SSL certificates.
 	Status CustomHostnameListResponseSSLStatus `json:"status"`
-	Type   interface{}                         `json:"type"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type DomainValidationType `json:"type"`
 	// The time the custom certificate was uploaded.
 	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
 	// Domain validation errors that have been received by the certificate authority
@@ -1097,8 +1164,12 @@ func (r customHostnameEditResponseJSON) RawJSON() string {
 
 type CustomHostnameEditResponseSSL struct {
 	// Custom hostname SSL identifier tag.
-	ID           string      `json:"id"`
-	BundleMethod interface{} `json:"bundle_method"`
+	ID string `json:"id"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
@@ -1112,8 +1183,9 @@ type CustomHostnameEditResponseSSL struct {
 	// A list of Hostnames on a custom uploaded certificate.
 	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
-	Issuer string      `json:"issuer"`
-	Method interface{} `json:"method"`
+	Issuer string `json:"issuer"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method DCVMethod `json:"method"`
 	// The serial number on a custom uploaded certificate.
 	SerialNumber string                                `json:"serial_number"`
 	Settings     CustomHostnameEditResponseSSLSettings `json:"settings"`
@@ -1121,7 +1193,9 @@ type CustomHostnameEditResponseSSL struct {
 	Signature string `json:"signature"`
 	// Status of the hostname's SSL certificates.
 	Status CustomHostnameEditResponseSSLStatus `json:"status"`
-	Type   interface{}                         `json:"type"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type DomainValidationType `json:"type"`
 	// The time the custom certificate was uploaded.
 	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
 	// Domain validation errors that have been received by the certificate authority
@@ -1525,8 +1599,12 @@ func (r customHostnameGetResponseJSON) RawJSON() string {
 
 type CustomHostnameGetResponseSSL struct {
 	// Custom hostname SSL identifier tag.
-	ID           string      `json:"id"`
-	BundleMethod interface{} `json:"bundle_method"`
+	ID string `json:"id"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
@@ -1540,8 +1618,9 @@ type CustomHostnameGetResponseSSL struct {
 	// A list of Hostnames on a custom uploaded certificate.
 	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
-	Issuer string      `json:"issuer"`
-	Method interface{} `json:"method"`
+	Issuer string `json:"issuer"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method DCVMethod `json:"method"`
 	// The serial number on a custom uploaded certificate.
 	SerialNumber string                               `json:"serial_number"`
 	Settings     CustomHostnameGetResponseSSLSettings `json:"settings"`
@@ -1549,7 +1628,9 @@ type CustomHostnameGetResponseSSL struct {
 	Signature string `json:"signature"`
 	// Status of the hostname's SSL certificates.
 	Status CustomHostnameGetResponseSSLStatus `json:"status"`
-	Type   interface{}                        `json:"type"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type DomainValidationType `json:"type"`
 	// The time the custom certificate was uploaded.
 	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
 	// Domain validation errors that have been received by the certificate authority
@@ -1911,7 +1992,11 @@ func (r CustomHostnameNewParams) MarshalJSON() (data []byte, err error) {
 
 // SSL properties used when creating the custom hostname.
 type CustomHostnameNewParamsSSL struct {
-	BundleMethod param.Field[interface{}] `json:"bundle_method"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority param.Field[shared.CertificateCA] `json:"certificate_authority"`
 	// Whether or not to add Cloudflare Branding for the order. This will add a
@@ -1922,11 +2007,14 @@ type CustomHostnameNewParamsSSL struct {
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.
-	CustomKey param.Field[string]      `json:"custom_key"`
-	Method    param.Field[interface{}] `json:"method"`
+	CustomKey param.Field[string] `json:"custom_key"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method param.Field[DCVMethod] `json:"method"`
 	// SSL specific settings.
 	Settings param.Field[CustomHostnameNewParamsSSLSettings] `json:"settings"`
-	Type     param.Field[interface{}]                        `json:"type"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type param.Field[DomainValidationType] `json:"type"`
 	// Indicates whether the certificate covers a wildcard.
 	Wildcard param.Field[bool] `json:"wildcard"`
 }
@@ -2032,8 +2120,8 @@ func (r CustomHostnameNewParamsSSLSettingsTLS1_3) IsKnown() bool {
 }
 
 type CustomHostnameNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomHostnameNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  CustomHostnameNewResponse                `json:"result"`
@@ -2183,7 +2271,11 @@ func (r CustomHostnameEditParams) MarshalJSON() (data []byte, err error) {
 
 // SSL properties used when creating the custom hostname.
 type CustomHostnameEditParamsSSL struct {
-	BundleMethod param.Field[interface{}] `json:"bundle_method"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority param.Field[shared.CertificateCA] `json:"certificate_authority"`
 	// Whether or not to add Cloudflare Branding for the order. This will add a
@@ -2194,11 +2286,14 @@ type CustomHostnameEditParamsSSL struct {
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.
-	CustomKey param.Field[string]      `json:"custom_key"`
-	Method    param.Field[interface{}] `json:"method"`
+	CustomKey param.Field[string] `json:"custom_key"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method param.Field[DCVMethod] `json:"method"`
 	// SSL specific settings.
 	Settings param.Field[CustomHostnameEditParamsSSLSettings] `json:"settings"`
-	Type     param.Field[interface{}]                         `json:"type"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type param.Field[DomainValidationType] `json:"type"`
 	// Indicates whether the certificate covers a wildcard.
 	Wildcard param.Field[bool] `json:"wildcard"`
 }
@@ -2304,8 +2399,8 @@ func (r CustomHostnameEditParamsSSLSettingsTLS1_3) IsKnown() bool {
 }
 
 type CustomHostnameEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomHostnameEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  CustomHostnameEditResponse                `json:"result"`
@@ -2352,8 +2447,8 @@ type CustomHostnameGetParams struct {
 }
 
 type CustomHostnameGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomHostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  CustomHostnameGetResponse                `json:"result"`

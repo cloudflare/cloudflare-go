@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -1947,8 +1948,8 @@ func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileSharedEntriesEntryType) 
 }
 
 type DLPProfileCustomNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPProfileCustomNewResponseUnion           `json:"result"`
@@ -2125,8 +2126,8 @@ func (r DLPProfileCustomUpdateParamsSharedEntriesEntryType) IsKnown() bool {
 }
 
 type DLPProfileCustomUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Profile                                       `json:"result"`
@@ -2172,8 +2173,8 @@ type DLPProfileCustomDeleteParams struct {
 }
 
 type DLPProfileCustomDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPProfileCustomDeleteResponse                `json:"result,nullable"`
@@ -2219,8 +2220,8 @@ type DLPProfileCustomGetParams struct {
 }
 
 type DLPProfileCustomGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Profile                                    `json:"result"`

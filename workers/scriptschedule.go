@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptScheduleService contains methods and other services that help with
@@ -75,8 +76,40 @@ func (r *ScriptScheduleService) Get(ctx context.Context, scriptName string, quer
 	return
 }
 
+type Schedule struct {
+	CreatedOn  string       `json:"created_on"`
+	Cron       string       `json:"cron"`
+	ModifiedOn string       `json:"modified_on"`
+	JSON       scheduleJSON `json:"-"`
+}
+
+// scheduleJSON contains the JSON metadata for the struct [Schedule]
+type scheduleJSON struct {
+	CreatedOn   apijson.Field
+	Cron        apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Schedule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scheduleJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScheduleParam struct {
+	Cron param.Field[string] `json:"cron"`
+}
+
+func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ScriptScheduleUpdateResponse struct {
-	Schedules []interface{}                    `json:"schedules"`
+	Schedules []Schedule                       `json:"schedules"`
 	JSON      scriptScheduleUpdateResponseJSON `json:"-"`
 }
 
@@ -97,7 +130,7 @@ func (r scriptScheduleUpdateResponseJSON) RawJSON() string {
 }
 
 type ScriptScheduleGetResponse struct {
-	Schedules []interface{}                 `json:"schedules"`
+	Schedules []Schedule                    `json:"schedules"`
 	JSON      scriptScheduleGetResponseJSON `json:"-"`
 }
 
@@ -120,7 +153,7 @@ func (r scriptScheduleGetResponseJSON) RawJSON() string {
 type ScriptScheduleUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      []interface{}       `json:"body,required"`
+	Body      []ScheduleParam     `json:"body,required"`
 }
 
 func (r ScriptScheduleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -128,8 +161,8 @@ func (r ScriptScheduleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptScheduleUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptScheduleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptScheduleUpdateResponse                `json:"result"`
@@ -176,8 +209,8 @@ type ScriptScheduleGetParams struct {
 }
 
 type ScriptScheduleGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptScheduleGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptScheduleGetResponse                `json:"result"`

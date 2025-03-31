@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DNSFirewallService contains methods and other services that help with
@@ -504,8 +505,8 @@ func (r DNSFirewallNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSFirewallNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSFirewallNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSFirewallNewResponse                `json:"result"`
@@ -569,8 +570,8 @@ type DNSFirewallDeleteParams struct {
 }
 
 type DNSFirewallDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSFirewallDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSFirewallDeleteResponse                `json:"result"`
@@ -647,8 +648,8 @@ func (r DNSFirewallEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSFirewallEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSFirewallEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSFirewallEditResponse                `json:"result"`
@@ -695,8 +696,8 @@ type DNSFirewallGetParams struct {
 }
 
 type DNSFirewallGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSFirewallGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSFirewallGetResponse                `json:"result"`

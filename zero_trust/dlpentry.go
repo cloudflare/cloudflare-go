@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -1362,8 +1363,8 @@ func (r DLPEntryNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPEntryNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEntryNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEntryNewResponse                `json:"result"`
@@ -1477,8 +1478,8 @@ func (r DLPEntryUpdateParamsBodyType) IsKnown() bool {
 }
 
 type DLPEntryUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEntryUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEntryUpdateResponse                `json:"result"`
@@ -1528,8 +1529,8 @@ type DLPEntryDeleteParams struct {
 }
 
 type DLPEntryDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEntryDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEntryDeleteResponse                `json:"result,nullable"`
@@ -1575,8 +1576,8 @@ type DLPEntryGetParams struct {
 }
 
 type DLPEntryGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEntryGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEntryGetResponse                `json:"result"`

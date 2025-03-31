@@ -1670,8 +1670,8 @@ func (r TunnelCloudflaredNewParamsConfigSrc) IsKnown() bool {
 }
 
 type TunnelCloudflaredNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelCloudflaredNewResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -1777,8 +1777,8 @@ type TunnelCloudflaredDeleteParams struct {
 }
 
 type TunnelCloudflaredDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelCloudflaredDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -1835,8 +1835,8 @@ func (r TunnelCloudflaredEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelCloudflaredEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelCloudflaredEditResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -1884,8 +1884,8 @@ type TunnelCloudflaredGetParams struct {
 }
 
 type TunnelCloudflaredGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelCloudflaredGetResponse `json:"result,required"`
 	// Whether the API call was successful

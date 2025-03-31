@@ -842,6 +842,28 @@ func (r RatePlanParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type ResponseInfo struct {
+	Code    int64            `json:"code,required"`
+	Message string           `json:"message,required"`
+	JSON    responseInfoJSON `json:"-"`
+}
+
+// responseInfoJSON contains the JSON metadata for the struct [ResponseInfo]
+type responseInfoJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResponseInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r responseInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type Role struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`

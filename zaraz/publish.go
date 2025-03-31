@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PublishService contains methods and other services that help with interacting
@@ -62,9 +63,9 @@ func (r PublishNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PublishNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   string        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   string                `json:"result,required"`
 	// Whether the API call was successful
 	Success bool                           `json:"success,required"`
 	JSON    publishNewResponseEnvelopeJSON `json:"-"`

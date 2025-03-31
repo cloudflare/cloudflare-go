@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ResourceSharingService contains methods and other services that help with
@@ -667,7 +668,7 @@ func (r ResourceSharingNewParamsResourcesResourceType) IsKnown() bool {
 }
 
 type ResourceSharingNewResponseEnvelope struct {
-	Errors []interface{} `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors,required"`
 	// Whether the API call was successful.
 	Success bool                                   `json:"success,required"`
 	Result  ResourceSharingNewResponse             `json:"result"`
@@ -704,7 +705,7 @@ func (r ResourceSharingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ResourceSharingUpdateResponseEnvelope struct {
-	Errors []interface{} `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors,required"`
 	// Whether the API call was successful.
 	Success bool                                      `json:"success,required"`
 	Result  ResourceSharingUpdateResponse             `json:"result"`
@@ -844,7 +845,7 @@ type ResourceSharingDeleteParams struct {
 }
 
 type ResourceSharingDeleteResponseEnvelope struct {
-	Errors []interface{} `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors,required"`
 	// Whether the API call was successful.
 	Success bool                                      `json:"success,required"`
 	Result  ResourceSharingDeleteResponse             `json:"result"`
@@ -875,7 +876,7 @@ type ResourceSharingGetParams struct {
 }
 
 type ResourceSharingGetResponseEnvelope struct {
-	Errors []interface{} `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors,required"`
 	// Whether the API call was successful.
 	Success bool                                   `json:"success,required"`
 	Result  ResourceSharingGetResponse             `json:"result"`

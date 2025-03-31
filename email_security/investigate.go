@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InvestigateService contains methods and other services that help with
@@ -583,8 +584,8 @@ type InvestigateGetParams struct {
 }
 
 type InvestigateGetResponseEnvelope struct {
-	Errors   []interface{}                      `json:"errors,required"`
-	Messages []interface{}                      `json:"messages,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
 	Result   InvestigateGetResponse             `json:"result,required"`
 	Success  bool                               `json:"success,required"`
 	JSON     investigateGetResponseEnvelopeJSON `json:"-"`

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DevicePolicyDefaultService contains methods and other services that help with
@@ -326,8 +327,8 @@ func (r DevicePolicyDefaultEditParamsServiceModeV2) MarshalJSON() (data []byte, 
 }
 
 type DevicePolicyDefaultEditResponseEnvelope struct {
-	Errors   []interface{}                   `json:"errors,required"`
-	Messages []interface{}                   `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   DevicePolicyDefaultEditResponse `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyDefaultEditResponseEnvelopeSuccess `json:"success,required"`
@@ -373,8 +374,8 @@ type DevicePolicyDefaultGetParams struct {
 }
 
 type DevicePolicyDefaultGetResponseEnvelope struct {
-	Errors   []interface{}                  `json:"errors,required"`
-	Messages []interface{}                  `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   DevicePolicyDefaultGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyDefaultGetResponseEnvelopeSuccess `json:"success,required"`

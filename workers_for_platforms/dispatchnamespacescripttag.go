@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DispatchNamespaceScriptTagService contains methods and other services that help
@@ -157,8 +158,8 @@ type DispatchNamespaceScriptTagDeleteParams struct {
 }
 
 type DispatchNamespaceScriptTagDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptTagDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptTagDeleteResponse                `json:"result,nullable"`

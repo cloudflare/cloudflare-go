@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZoneTransferOutgoingService contains methods and other services that help with
@@ -310,8 +311,8 @@ func (r ZoneTransferOutgoingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferOutgoingNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferOutgoingNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferOutgoingNewResponse                `json:"result"`
@@ -365,8 +366,8 @@ func (r ZoneTransferOutgoingUpdateParams) MarshalJSON() (data []byte, err error)
 }
 
 type ZoneTransferOutgoingUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferOutgoingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferOutgoingUpdateResponse                `json:"result"`
@@ -412,8 +413,8 @@ type ZoneTransferOutgoingDeleteParams struct {
 }
 
 type ZoneTransferOutgoingDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferOutgoingDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferOutgoingDeleteResponse                `json:"result"`
@@ -464,8 +465,8 @@ func (r ZoneTransferOutgoingDisableParams) MarshalJSON() (data []byte, err error
 }
 
 type ZoneTransferOutgoingDisableResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferOutgoingDisableResponseEnvelopeSuccess `json:"success,required"`
 	// The zone transfer status of a primary zone
@@ -517,8 +518,8 @@ func (r ZoneTransferOutgoingEnableParams) MarshalJSON() (data []byte, err error)
 }
 
 type ZoneTransferOutgoingEnableResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferOutgoingEnableResponseEnvelopeSuccess `json:"success,required"`
 	// The zone transfer status of a primary zone
@@ -570,8 +571,8 @@ func (r ZoneTransferOutgoingForceNotifyParams) MarshalJSON() (data []byte, err e
 }
 
 type ZoneTransferOutgoingForceNotifyResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferOutgoingForceNotifyResponseEnvelopeSuccess `json:"success,required"`
 	// When force_notify query parameter is set to true, the response is a simple
@@ -619,8 +620,8 @@ type ZoneTransferOutgoingGetParams struct {
 }
 
 type ZoneTransferOutgoingGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferOutgoingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferOutgoingGetResponse                `json:"result"`

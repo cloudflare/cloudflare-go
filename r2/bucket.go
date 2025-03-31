@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketService contains methods and other services that help with interacting
@@ -298,8 +299,8 @@ func (r BucketNewParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []string      `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
 	// A single R2 bucket
 	Result Bucket `json:"result,required"`
 	// Whether the API call was successful
@@ -419,9 +420,9 @@ func (r BucketListParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketListResponseEnvelope struct {
-	Errors   []interface{}      `json:"errors,required"`
-	Messages []string           `json:"messages,required"`
-	Result   BucketListResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   BucketListResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success    BucketListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo BucketListResponseEnvelopeResultInfo `json:"result_info"`
@@ -513,9 +514,9 @@ func (r BucketDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDeleteResponseEnvelope struct {
-	Errors   []interface{}        `json:"errors,required"`
-	Messages []string             `json:"messages,required"`
-	Result   BucketDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   BucketDeleteResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDeleteResponseEnvelopeJSON    `json:"-"`
@@ -580,8 +581,8 @@ func (r BucketGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []string      `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
 	// A single R2 bucket
 	Result Bucket `json:"result,required"`
 	// Whether the API call was successful

@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessBookmarkService contains methods and other services that help with
@@ -215,8 +216,8 @@ func (r AccessBookmarkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessBookmarkNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Bookmark                                 `json:"result"`
@@ -267,8 +268,8 @@ func (r AccessBookmarkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessBookmarkUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Bookmark                                    `json:"result"`
@@ -318,8 +319,8 @@ type AccessBookmarkDeleteParams struct {
 }
 
 type AccessBookmarkDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessBookmarkDeleteResponse                `json:"result"`
@@ -365,8 +366,8 @@ type AccessBookmarkGetParams struct {
 }
 
 type AccessBookmarkGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Bookmark                                 `json:"result"`

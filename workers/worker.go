@@ -303,3 +303,18 @@ type SingleStepMigrationTransferredClassParam struct {
 func (r SingleStepMigrationTransferredClassParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// JSON encoded metadata about the uploaded parts and Worker configuration.
+type WorkerMetadataParam struct {
+	// Name of the part in the multipart request that contains the script (e.g. the
+	// file adding a listener to the `fetch` event). Indicates a
+	// `service worker syntax` Worker.
+	BodyPart param.Field[string] `json:"body_part"`
+	// Name of the part in the multipart request that contains the main module (e.g.
+	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker.
+	MainModule param.Field[string] `json:"main_module"`
+}
+
+func (r WorkerMetadataParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}

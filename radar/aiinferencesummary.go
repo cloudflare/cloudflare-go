@@ -84,7 +84,7 @@ func (r aiInferenceSummaryModelResponseJSON) RawJSON() string {
 }
 
 type AIInferenceSummaryModelResponseMeta struct {
-	DateRange      []interface{}                                     `json:"dateRange,required"`
+	DateRange      []AIInferenceSummaryModelResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                            `json:"lastUpdated,required"`
 	Normalization  string                                            `json:"normalization,required"`
 	ConfidenceInfo AIInferenceSummaryModelResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -110,10 +110,35 @@ func (r aiInferenceSummaryModelResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type AIInferenceSummaryModelResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                        `json:"startTime,required" format:"date-time"`
+	JSON      aiInferenceSummaryModelResponseMetaDateRangeJSON `json:"-"`
+}
+
+// aiInferenceSummaryModelResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [AIInferenceSummaryModelResponseMetaDateRange]
+type aiInferenceSummaryModelResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIInferenceSummaryModelResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceSummaryModelResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIInferenceSummaryModelResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                         `json:"annotations"`
-	Level       int64                                                 `json:"level"`
-	JSON        aiInferenceSummaryModelResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                         `json:"level"`
+	JSON        aiInferenceSummaryModelResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // aiInferenceSummaryModelResponseMetaConfidenceInfoJSON contains the JSON metadata
@@ -130,6 +155,40 @@ func (r *AIInferenceSummaryModelResponseMetaConfidenceInfo) UnmarshalJSON(data [
 }
 
 func (r aiInferenceSummaryModelResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                          `json:"dataSource,required"`
+	Description     string                                                          `json:"description,required"`
+	EventType       string                                                          `json:"eventType,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                          `json:"linkedUrl"`
+	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
+	JSON            aiInferenceSummaryModelResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// aiInferenceSummaryModelResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotation]
+type aiInferenceSummaryModelResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceSummaryModelResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -157,7 +216,7 @@ func (r aiInferenceSummaryTaskResponseJSON) RawJSON() string {
 }
 
 type AIInferenceSummaryTaskResponseMeta struct {
-	DateRange      []interface{}                                    `json:"dateRange,required"`
+	DateRange      []AIInferenceSummaryTaskResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                           `json:"lastUpdated,required"`
 	Normalization  string                                           `json:"normalization,required"`
 	ConfidenceInfo AIInferenceSummaryTaskResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -183,10 +242,35 @@ func (r aiInferenceSummaryTaskResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type AIInferenceSummaryTaskResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
+	JSON      aiInferenceSummaryTaskResponseMetaDateRangeJSON `json:"-"`
+}
+
+// aiInferenceSummaryTaskResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [AIInferenceSummaryTaskResponseMetaDateRange]
+type aiInferenceSummaryTaskResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIInferenceSummaryTaskResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceSummaryTaskResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIInferenceSummaryTaskResponseMetaConfidenceInfo struct {
-	Annotations []interface{}                                        `json:"annotations"`
-	Level       int64                                                `json:"level"`
-	JSON        aiInferenceSummaryTaskResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                        `json:"level"`
+	JSON        aiInferenceSummaryTaskResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // aiInferenceSummaryTaskResponseMetaConfidenceInfoJSON contains the JSON metadata
@@ -203,6 +287,40 @@ func (r *AIInferenceSummaryTaskResponseMetaConfidenceInfo) UnmarshalJSON(data []
 }
 
 func (r aiInferenceSummaryTaskResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                         `json:"dataSource,required"`
+	Description     string                                                         `json:"description,required"`
+	EventType       string                                                         `json:"eventType,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                         `json:"linkedUrl"`
+	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
+	JSON            aiInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// aiInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotation]
+type aiInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

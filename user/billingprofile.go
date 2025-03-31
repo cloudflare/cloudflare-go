@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BillingProfileService contains methods and other services that help with
@@ -143,8 +144,8 @@ func (r billingProfileGetResponseJSON) RawJSON() string {
 }
 
 type BillingProfileGetResponseEnvelope struct {
-	Errors   []interface{}             `json:"errors,required"`
-	Messages []interface{}             `json:"messages,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
 	Result   BillingProfileGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BillingProfileGetResponseEnvelopeSuccess `json:"success,required"`

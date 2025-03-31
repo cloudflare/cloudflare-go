@@ -231,11 +231,11 @@ type ConfigurationTool struct {
 	// [map[string]ConfigurationToolsWorkerSettingsUnion].
 	Settings interface{}            `json:"settings,required"`
 	Type     ConfigurationToolsType `json:"type,required"`
-	// This field can have the runtime type of [interface{}].
+	// This field can have the runtime type of [map[string]NeoEvent].
 	Actions interface{} `json:"actions"`
 	// Default consent purpose ID
 	DefaultPurpose string `json:"defaultPurpose"`
-	// This field can have the runtime type of [[]interface{}].
+	// This field can have the runtime type of [[]NeoEvent].
 	NeoEvents interface{} `json:"neoEvents"`
 	// Vendor name for TCF compliant consent modal, required for Custom Managed
 	// Components and Custom HTML tool with a defaultPurpose assigned
@@ -331,12 +331,12 @@ type ConfigurationToolsZarazManagedComponent struct {
 	Settings map[string]ConfigurationToolsZarazManagedComponentSettingsUnion `json:"settings,required"`
 	Type     ConfigurationToolsZarazManagedComponentType                     `json:"type,required"`
 	// Actions configured on a tool. Either this or neoEvents field is required.
-	Actions interface{} `json:"actions"`
+	Actions map[string]NeoEvent `json:"actions"`
 	// Default consent purpose ID
 	DefaultPurpose string `json:"defaultPurpose"`
 	// DEPRECATED - List of actions configured on a tool. Either this or actions field
 	// is required. If both are present, actions field will take precedence.
-	NeoEvents []interface{} `json:"neoEvents"`
+	NeoEvents []NeoEvent `json:"neoEvents"`
 	// Vendor name for TCF compliant consent modal, required for Custom Managed
 	// Components and Custom HTML tool with a defaultPurpose assigned
 	VendorName string `json:"vendorName"`
@@ -457,12 +457,12 @@ type ConfigurationToolsWorker struct {
 	// Cloudflare worker that acts as a managed component
 	Worker ConfigurationToolsWorkerWorker `json:"worker,required"`
 	// Actions configured on a tool. Either this or neoEvents field is required.
-	Actions interface{} `json:"actions"`
+	Actions map[string]NeoEvent `json:"actions"`
 	// Default consent purpose ID
 	DefaultPurpose string `json:"defaultPurpose"`
 	// DEPRECATED - List of actions configured on a tool. Either this or actions field
 	// is required. If both are present, actions field will take precedence.
-	NeoEvents []interface{} `json:"neoEvents"`
+	NeoEvents []NeoEvent `json:"neoEvents"`
 	// Vendor name for TCF compliant consent modal, required for Custom Managed
 	// Components and Custom HTML tool with a defaultPurpose assigned
 	VendorName string `json:"vendorName"`
@@ -2137,12 +2137,12 @@ func (r configurationAnalyticsJSON) RawJSON() string {
 
 // Consent management configuration.
 type ConfigurationConsent struct {
-	Enabled                bool        `json:"enabled,required"`
-	ButtonTextTranslations interface{} `json:"buttonTextTranslations"`
-	CompanyEmail           string      `json:"companyEmail"`
-	CompanyName            string      `json:"companyName"`
-	CompanyStreetAddress   string      `json:"companyStreetAddress"`
-	ConsentModalIntroHTML  string      `json:"consentModalIntroHTML"`
+	Enabled                bool                  `json:"enabled,required"`
+	ButtonTextTranslations ButtonTextTranslation `json:"buttonTextTranslations"`
+	CompanyEmail           string                `json:"companyEmail"`
+	CompanyName            string                `json:"companyName"`
+	CompanyStreetAddress   string                `json:"companyStreetAddress"`
+	ConsentModalIntroHTML  string                `json:"consentModalIntroHTML"`
 	// Object where keys are language codes
 	ConsentModalIntroHTMLWithTranslations map[string]string `json:"consentModalIntroHTMLWithTranslations"`
 	CookieName                            string            `json:"cookieName"`
@@ -2371,12 +2371,12 @@ type ConfigUpdateParamsToolsZarazManagedComponent struct {
 	Settings param.Field[map[string]ConfigUpdateParamsToolsZarazManagedComponentSettingsUnion] `json:"settings,required"`
 	Type     param.Field[ConfigUpdateParamsToolsZarazManagedComponentType]                     `json:"type,required"`
 	// Actions configured on a tool. Either this or neoEvents field is required.
-	Actions param.Field[interface{}] `json:"actions"`
+	Actions param.Field[map[string]NeoEventParam] `json:"actions"`
 	// Default consent purpose ID
 	DefaultPurpose param.Field[string] `json:"defaultPurpose"`
 	// DEPRECATED - List of actions configured on a tool. Either this or actions field
 	// is required. If both are present, actions field will take precedence.
-	NeoEvents param.Field[[]interface{}] `json:"neoEvents"`
+	NeoEvents param.Field[[]NeoEventParam] `json:"neoEvents"`
 	// Vendor name for TCF compliant consent modal, required for Custom Managed
 	// Components and Custom HTML tool with a defaultPurpose assigned
 	VendorName param.Field[string] `json:"vendorName"`
@@ -2434,12 +2434,12 @@ type ConfigUpdateParamsToolsWorker struct {
 	// Cloudflare worker that acts as a managed component
 	Worker param.Field[ConfigUpdateParamsToolsWorkerWorker] `json:"worker,required"`
 	// Actions configured on a tool. Either this or neoEvents field is required.
-	Actions param.Field[interface{}] `json:"actions"`
+	Actions param.Field[map[string]NeoEventParam] `json:"actions"`
 	// Default consent purpose ID
 	DefaultPurpose param.Field[string] `json:"defaultPurpose"`
 	// DEPRECATED - List of actions configured on a tool. Either this or actions field
 	// is required. If both are present, actions field will take precedence.
-	NeoEvents param.Field[[]interface{}] `json:"neoEvents"`
+	NeoEvents param.Field[[]NeoEventParam] `json:"neoEvents"`
 	// Vendor name for TCF compliant consent modal, required for Custom Managed
 	// Components and Custom HTML tool with a defaultPurpose assigned
 	VendorName param.Field[string] `json:"vendorName"`
@@ -3348,12 +3348,12 @@ func (r ConfigUpdateParamsAnalytics) MarshalJSON() (data []byte, err error) {
 
 // Consent management configuration.
 type ConfigUpdateParamsConsent struct {
-	Enabled                param.Field[bool]        `json:"enabled,required"`
-	ButtonTextTranslations param.Field[interface{}] `json:"buttonTextTranslations"`
-	CompanyEmail           param.Field[string]      `json:"companyEmail"`
-	CompanyName            param.Field[string]      `json:"companyName"`
-	CompanyStreetAddress   param.Field[string]      `json:"companyStreetAddress"`
-	ConsentModalIntroHTML  param.Field[string]      `json:"consentModalIntroHTML"`
+	Enabled                param.Field[bool]                       `json:"enabled,required"`
+	ButtonTextTranslations param.Field[ButtonTextTranslationParam] `json:"buttonTextTranslations"`
+	CompanyEmail           param.Field[string]                     `json:"companyEmail"`
+	CompanyName            param.Field[string]                     `json:"companyName"`
+	CompanyStreetAddress   param.Field[string]                     `json:"companyStreetAddress"`
+	ConsentModalIntroHTML  param.Field[string]                     `json:"consentModalIntroHTML"`
 	// Object where keys are language codes
 	ConsentModalIntroHTMLWithTranslations param.Field[map[string]string] `json:"consentModalIntroHTMLWithTranslations"`
 	CookieName                            param.Field[string]            `json:"cookieName"`
@@ -3394,8 +3394,8 @@ func (r ConfigUpdateParamsConsentPurposesWithTranslations) MarshalJSON() (data [
 }
 
 type ConfigUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Zaraz configuration
 	Result Configuration `json:"result,required"`
 	// Whether the API call was successful
@@ -3428,8 +3428,8 @@ type ConfigGetParams struct {
 }
 
 type ConfigGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Zaraz configuration
 	Result Configuration `json:"result,required"`
 	// Whether the API call was successful

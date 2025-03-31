@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZoneTransferIncomingService contains methods and other services that help with
@@ -267,8 +268,8 @@ func (r ZoneTransferIncomingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferIncomingNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferIncomingNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferIncomingNewResponse                `json:"result"`
@@ -325,8 +326,8 @@ func (r ZoneTransferIncomingUpdateParams) MarshalJSON() (data []byte, err error)
 }
 
 type ZoneTransferIncomingUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferIncomingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferIncomingUpdateResponse                `json:"result"`
@@ -372,8 +373,8 @@ type ZoneTransferIncomingDeleteParams struct {
 }
 
 type ZoneTransferIncomingDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferIncomingDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferIncomingDeleteResponse                `json:"result"`
@@ -419,8 +420,8 @@ type ZoneTransferIncomingGetParams struct {
 }
 
 type ZoneTransferIncomingGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferIncomingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferIncomingGetResponse                `json:"result"`

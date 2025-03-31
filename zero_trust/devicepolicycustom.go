@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DevicePolicyCustomService contains methods and other services that help with
@@ -232,9 +233,9 @@ func (r DevicePolicyCustomNewParamsServiceModeV2) MarshalJSON() (data []byte, er
 }
 
 type DevicePolicyCustomNewResponseEnvelope struct {
-	Errors   []interface{}  `json:"errors,required"`
-	Messages []interface{}  `json:"messages,required"`
-	Result   SettingsPolicy `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyCustomNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCustomNewResponseEnvelopeJSON    `json:"-"`
@@ -346,9 +347,9 @@ func (r DevicePolicyCustomEditParamsServiceModeV2) MarshalJSON() (data []byte, e
 }
 
 type DevicePolicyCustomEditResponseEnvelope struct {
-	Errors   []interface{}  `json:"errors,required"`
-	Messages []interface{}  `json:"messages,required"`
-	Result   SettingsPolicy `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyCustomEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCustomEditResponseEnvelopeJSON    `json:"-"`
@@ -393,9 +394,9 @@ type DevicePolicyCustomGetParams struct {
 }
 
 type DevicePolicyCustomGetResponseEnvelope struct {
-	Errors   []interface{}  `json:"errors,required"`
-	Messages []interface{}  `json:"messages,required"`
-	Result   SettingsPolicy `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyCustomGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCustomGetResponseEnvelopeJSON    `json:"-"`

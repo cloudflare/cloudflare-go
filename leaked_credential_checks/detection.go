@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DetectionService contains methods and other services that help with interacting
@@ -226,8 +227,8 @@ func (r DetectionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DetectionNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A custom set of username/password expressions to match Leaked Credential Checks
 	// on
 	Result DetectionNewResponse `json:"result,required"`
@@ -284,8 +285,8 @@ func (r DetectionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DetectionUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A custom set of username/password expressions to match Leaked Credential Checks
 	// on
 	Result DetectionUpdateResponse `json:"result,required"`
@@ -339,8 +340,8 @@ type DetectionDeleteParams struct {
 }
 
 type DetectionDeleteResponseEnvelope struct {
-	Errors   []interface{}           `json:"errors,required"`
-	Messages []interface{}           `json:"messages,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
 	Result   DetectionDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DetectionDeleteResponseEnvelopeSuccess `json:"success,required"`

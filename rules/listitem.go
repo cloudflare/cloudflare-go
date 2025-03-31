@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ListItemService contains methods and other services that help with interacting
@@ -166,6 +167,28 @@ func (r *ListItemService) Get(ctx context.Context, accountIdentifier string, lis
 	}
 	res = &env.Result
 	return
+}
+
+type ListCursor struct {
+	After  string         `json:"after"`
+	Before string         `json:"before"`
+	JSON   listCursorJSON `json:"-"`
+}
+
+// listCursorJSON contains the JSON metadata for the struct [ListCursor]
+type listCursorJSON struct {
+	After       apijson.Field
+	Before      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListCursor) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listCursorJSON) RawJSON() string {
+	return r.raw
 }
 
 type ListItemNewResponse struct {
@@ -354,9 +377,9 @@ func (r ListItemNewParamsBody) MarshalJSON() (data []byte, err error) {
 }
 
 type ListItemNewResponseEnvelope struct {
-	Errors   []interface{}       `json:"errors,required"`
-	Messages []interface{}       `json:"messages,required"`
-	Result   ListItemNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ListItemNewResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemNewResponseEnvelopeJSON    `json:"-"`
@@ -426,8 +449,8 @@ func (r ListItemUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 }
 
 type ListItemUpdateResponseEnvelope struct {
-	Errors   []interface{}          `json:"errors,required"`
-	Messages []interface{}          `json:"messages,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
 	Result   ListItemUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -499,8 +522,8 @@ type ListItemDeleteParams struct {
 }
 
 type ListItemDeleteResponseEnvelope struct {
-	Errors   []interface{}          `json:"errors,required"`
-	Messages []interface{}          `json:"messages,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
 	Result   ListItemDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -542,9 +565,9 @@ func (r ListItemDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ListItemGetResponseEnvelope struct {
-	Errors   []interface{}       `json:"errors,required"`
-	Messages []interface{}       `json:"messages,required"`
-	Result   ListItemGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ListItemGetResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemGetResponseEnvelopeJSON    `json:"-"`

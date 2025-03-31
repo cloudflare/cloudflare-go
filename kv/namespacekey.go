@@ -472,8 +472,8 @@ func (r NamespaceKeyBulkDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceKeyBulkDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceKeyBulkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceKeyBulkDeleteResponse                `json:"result,nullable"`
@@ -546,8 +546,8 @@ func (r NamespaceKeyBulkGetParamsType) IsKnown() bool {
 }
 
 type NamespaceKeyBulkGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceKeyBulkGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceKeyBulkGetResponse                `json:"result,nullable"`
@@ -623,8 +623,8 @@ func (r NamespaceKeyBulkUpdateParamsBody) MarshalJSON() (data []byte, err error)
 }
 
 type NamespaceKeyBulkUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceKeyBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  NamespaceKeyBulkUpdateResponse                `json:"result,nullable"`

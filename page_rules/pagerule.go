@@ -2731,8 +2731,8 @@ func (r PageRuleNewParamsStatus) IsKnown() bool {
 }
 
 type PageRuleNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                           `json:"result"`
@@ -3684,8 +3684,8 @@ func (r PageRuleUpdateParamsStatus) IsKnown() bool {
 }
 
 type PageRuleUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                              `json:"result"`
@@ -3814,8 +3814,8 @@ func (r PageRuleListParamsStatus) IsKnown() bool {
 }
 
 type PageRuleListResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleListResponseEnvelopeSuccess `json:"success,required"`
 	Result  []PageRule                          `json:"result"`
@@ -3862,8 +3862,8 @@ type PageRuleDeleteParams struct {
 }
 
 type PageRuleDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRuleDeleteResponse                `json:"result,nullable"`
@@ -4813,8 +4813,8 @@ func (r PageRuleEditParamsStatus) IsKnown() bool {
 }
 
 type PageRuleEditResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                            `json:"result"`
@@ -4861,8 +4861,8 @@ type PageRuleGetParams struct {
 }
 
 type PageRuleGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                           `json:"result"`

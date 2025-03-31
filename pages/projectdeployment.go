@@ -18,6 +18,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ProjectDeploymentService contains methods and other services that help with
@@ -221,9 +222,9 @@ func (r ProjectDeploymentNewParams) MarshalMultipart() (data []byte, contentType
 }
 
 type ProjectDeploymentNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Deployment    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentNewResponseEnvelopeJSON    `json:"-"`
@@ -302,8 +303,8 @@ type ProjectDeploymentDeleteParams struct {
 }
 
 type ProjectDeploymentDeleteResponseEnvelope struct {
-	Errors   []interface{}                   `json:"errors,required"`
-	Messages []interface{}                   `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   ProjectDeploymentDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDeploymentDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -351,9 +352,9 @@ type ProjectDeploymentGetParams struct {
 }
 
 type ProjectDeploymentGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Deployment    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentGetResponseEnvelopeJSON    `json:"-"`
@@ -405,9 +406,9 @@ func (r ProjectDeploymentRetryParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDeploymentRetryResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Deployment    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentRetryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentRetryResponseEnvelopeJSON    `json:"-"`
@@ -459,9 +460,9 @@ func (r ProjectDeploymentRollbackParams) MarshalJSON() (data []byte, err error) 
 }
 
 type ProjectDeploymentRollbackResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Deployment    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentRollbackResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentRollbackResponseEnvelopeJSON    `json:"-"`

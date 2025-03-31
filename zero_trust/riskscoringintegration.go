@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RiskScoringIntegrationService contains methods and other services that help with
@@ -416,8 +417,8 @@ func (r RiskScoringIntegrationNewParamsIntegrationType) IsKnown() bool {
 }
 
 type RiskScoringIntegrationNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RiskScoringIntegrationNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  RiskScoringIntegrationNewResponse                `json:"result"`
@@ -476,8 +477,8 @@ func (r RiskScoringIntegrationUpdateParams) MarshalJSON() (data []byte, err erro
 }
 
 type RiskScoringIntegrationUpdateResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RiskScoringIntegrationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  RiskScoringIntegrationUpdateResponse                `json:"result"`
@@ -527,8 +528,8 @@ type RiskScoringIntegrationDeleteParams struct {
 }
 
 type RiskScoringIntegrationDeleteResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RiskScoringIntegrationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  RiskScoringIntegrationDeleteResponse                `json:"result,nullable"`
@@ -574,8 +575,8 @@ type RiskScoringIntegrationGetParams struct {
 }
 
 type RiskScoringIntegrationGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RiskScoringIntegrationGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RiskScoringIntegrationGetResponse                `json:"result"`

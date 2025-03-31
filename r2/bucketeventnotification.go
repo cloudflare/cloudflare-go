@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketEventNotificationService contains methods and other services that help
@@ -291,7 +292,7 @@ func (r BucketEventNotificationUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketEventNotificationUpdateResponseEnvelope struct {
-	Errors   []interface{}                         `json:"errors,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
 	Messages []string                              `json:"messages,required"`
 	Result   BucketEventNotificationUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -358,7 +359,7 @@ func (r BucketEventNotificationDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketEventNotificationDeleteResponseEnvelope struct {
-	Errors   []interface{}                         `json:"errors,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
 	Messages []string                              `json:"messages,required"`
 	Result   BucketEventNotificationDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -425,7 +426,7 @@ func (r BucketEventNotificationGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketEventNotificationGetResponseEnvelope struct {
-	Errors   []interface{}                      `json:"errors,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
 	Messages []string                           `json:"messages,required"`
 	Result   BucketEventNotificationGetResponse `json:"result,required"`
 	// Whether the API call was successful

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PreviewService contains methods and other services that help with interacting
@@ -125,9 +126,9 @@ func (r PreviewNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PreviewNewResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Healthcheck   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Healthcheck           `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewNewResponseEnvelopeJSON    `json:"-"`
@@ -173,8 +174,8 @@ type PreviewDeleteParams struct {
 }
 
 type PreviewDeleteResponseEnvelope struct {
-	Errors   []interface{}         `json:"errors,required"`
-	Messages []interface{}         `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   PreviewDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -221,9 +222,9 @@ type PreviewGetParams struct {
 }
 
 type PreviewGetResponseEnvelope struct {
-	Errors   []interface{} `json:"errors,required"`
-	Messages []interface{} `json:"messages,required"`
-	Result   Healthcheck   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Healthcheck           `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`
