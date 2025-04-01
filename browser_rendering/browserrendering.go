@@ -19,6 +19,9 @@ type BrowserRenderingService struct {
 	Scrape     *ScrapeService
 	Screenshot *ScreenshotService
 	Snapshot   *SnapshotService
+	Json       *JsonService
+	Links      *LinkService
+	Markdown   *MarkdownService
 }
 
 // NewBrowserRenderingService generates a new service that applies the given
@@ -32,5 +35,8 @@ func NewBrowserRenderingService(opts ...option.RequestOption) (r *BrowserRenderi
 	r.Scrape = NewScrapeService(opts...)
 	r.Screenshot = NewScreenshotService(opts...)
 	r.Snapshot = NewSnapshotService(opts...)
+	r.Json = NewJsonService(opts...)
+	r.Links = NewLinkService(opts...)
+	r.Markdown = NewMarkdownService(opts...)
 	return
 }
