@@ -150,11 +150,12 @@ const (
 	TypeFull      Type = "full"
 	TypePartial   Type = "partial"
 	TypeSecondary Type = "secondary"
+	TypeInternal  Type = "internal"
 )
 
 func (r Type) IsKnown() bool {
 	switch r {
-	case TypeFull, TypePartial, TypeSecondary:
+	case TypeFull, TypePartial, TypeSecondary, TypeInternal:
 		return true
 	}
 	return false

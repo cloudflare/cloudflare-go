@@ -106,10 +106,52 @@ type EventQueryParam struct {
 	// while it is active. If null, the event will inherit it. This can only be set if
 	// the event's `new_users_per_minute` property is also set.
 	TotalActiveUsers param.Field[int64] `json:"total_active_users"`
+	// If set, the event will override the waiting room's `turnstile_action` property
+	// while it is active. If null, the event will inherit it.
+	TurnstileAction param.Field[EventQueryTurnstileAction] `json:"turnstile_action"`
+	// If set, the event will override the waiting room's `turnstile_mode` property
+	// while it is active. If null, the event will inherit it.
+	TurnstileMode param.Field[EventQueryTurnstileMode] `json:"turnstile_mode"`
 }
 
 func (r EventQueryParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// If set, the event will override the waiting room's `turnstile_action` property
+// while it is active. If null, the event will inherit it.
+type EventQueryTurnstileAction string
+
+const (
+	EventQueryTurnstileActionLog           EventQueryTurnstileAction = "log"
+	EventQueryTurnstileActionInfiniteQueue EventQueryTurnstileAction = "infinite_queue"
+)
+
+func (r EventQueryTurnstileAction) IsKnown() bool {
+	switch r {
+	case EventQueryTurnstileActionLog, EventQueryTurnstileActionInfiniteQueue:
+		return true
+	}
+	return false
+}
+
+// If set, the event will override the waiting room's `turnstile_mode` property
+// while it is active. If null, the event will inherit it.
+type EventQueryTurnstileMode string
+
+const (
+	EventQueryTurnstileModeOff                   EventQueryTurnstileMode = "off"
+	EventQueryTurnstileModeInvisible             EventQueryTurnstileMode = "invisible"
+	EventQueryTurnstileModeVisibleNonInteractive EventQueryTurnstileMode = "visible_non_interactive"
+	EventQueryTurnstileModeVisibleManaged        EventQueryTurnstileMode = "visible_managed"
+)
+
+func (r EventQueryTurnstileMode) IsKnown() bool {
+	switch r {
+	case EventQueryTurnstileModeOff, EventQueryTurnstileModeInvisible, EventQueryTurnstileModeVisibleNonInteractive, EventQueryTurnstileModeVisibleManaged:
+		return true
+	}
+	return false
 }
 
 type EventDetailGetResponse struct {
