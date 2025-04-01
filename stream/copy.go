@@ -41,9 +41,6 @@ func (r *CopyService) New(ctx context.Context, params CopyNewParams, opts ...opt
 	if params.UploadCreator.Present {
 		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%s", params.UploadCreator)))
 	}
-	if params.UploadMetadata.Present {
-		opts = append(opts, option.WithHeader("Upload-Metadata", fmt.Sprintf("%s", params.UploadMetadata)))
-	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -89,10 +86,6 @@ type CopyNewParams struct {
 	Watermark             param.Field[CopyNewParamsWatermark] `json:"watermark"`
 	// A user-defined identifier for the media creator.
 	UploadCreator param.Field[string] `header:"Upload-Creator"`
-	// Comma-separated key-value pairs following the TUS protocol specification. Values
-	// are Base-64 encoded. Supported keys: `name`, `requiresignedurls`,
-	// `allowedorigins`, `thumbnailtimestamppct`, `watermark`, `scheduleddeletion`.
-	UploadMetadata param.Field[string] `header:"Upload-Metadata"`
 }
 
 func (r CopyNewParams) MarshalJSON() (data []byte, err error) {
