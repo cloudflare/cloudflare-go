@@ -1,4 +1,4 @@
 configured_endpoints: 1664
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/cloudflare%2Fcloudflare-2dd56bdbc7a949dc3a775d5d8007304436551579b430c15b9b5593b8afba6b51.yml
-openapi_spec_hash: 2bbf03bf41a0053304815c2d9a30ffe3
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/cloudflare%2Fcloudflare-f13b8d8da4008e9091b8ded53a587d517f9a426a75e6b5e14a062aceaa8791a8.yml
+openapi_spec_hash: 41e60f8c9bdd42867030502d9369c3bd
 config_hash: af2dbb6a6332cef477c4697db6a78d79
