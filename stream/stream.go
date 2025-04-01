@@ -415,7 +415,8 @@ type StreamNewParams struct {
 	UploadCreator param.Field[string] `header:"Upload-Creator"`
 	// Comma-separated key-value pairs following the TUS protocol specification. Values
 	// are Base-64 encoded. Supported keys: `name`, `requiresignedurls`,
-	// `allowedorigins`, `thumbnailtimestamppct`, `watermark`, `scheduleddeletion`.
+	// `allowedorigins`, `thumbnailtimestamppct`, `watermark`, `scheduleddeletion`,
+	// `maxdurationseconds`.
 	UploadMetadata param.Field[string] `header:"Upload-Metadata"`
 }
 
