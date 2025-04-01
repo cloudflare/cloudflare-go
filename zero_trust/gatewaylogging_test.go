@@ -32,9 +32,18 @@ func TestGatewayLoggingUpdateWithOptionalParams(t *testing.T) {
 		LoggingSetting: zero_trust.LoggingSettingParam{
 			RedactPii: cloudflare.F(true),
 			SettingsByRuleType: cloudflare.F(zero_trust.LoggingSettingSettingsByRuleTypeParam{
-				DNS:  cloudflare.F[any](map[string]interface{}{}),
-				HTTP: cloudflare.F[any](map[string]interface{}{}),
-				L4:   cloudflare.F[any](map[string]interface{}{}),
+				DNS: cloudflare.F(zero_trust.LoggingSettingSettingsByRuleTypeDNSParam{
+					LogAll:    cloudflare.F(false),
+					LogBlocks: cloudflare.F(true),
+				}),
+				HTTP: cloudflare.F(zero_trust.LoggingSettingSettingsByRuleTypeHTTPParam{
+					LogAll:    cloudflare.F(false),
+					LogBlocks: cloudflare.F(true),
+				}),
+				L4: cloudflare.F(zero_trust.LoggingSettingSettingsByRuleTypeL4Param{
+					LogAll:    cloudflare.F(false),
+					LogBlocks: cloudflare.F(true),
+				}),
 			}),
 		},
 	})
