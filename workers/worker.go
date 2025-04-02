@@ -201,6 +201,10 @@ func (r singleStepMigrationJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r SingleStepMigration) implementsScriptScriptAndVersionSettingEditResponseMigrations() {}
+
+func (r SingleStepMigration) implementsScriptScriptAndVersionSettingGetResponseMigrations() {}
+
 func (r SingleStepMigration) ImplementsDispatchNamespaceScriptSettingEditResponseMigrations() {}
 
 func (r SingleStepMigration) ImplementsDispatchNamespaceScriptSettingGetResponseMigrations() {}
@@ -278,6 +282,9 @@ func (r SingleStepMigrationParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r SingleStepMigrationParam) implementsScriptUpdateParamsMetadataMigrationsUnion() {}
+
+func (r SingleStepMigrationParam) implementsScriptScriptAndVersionSettingEditParamsSettingsMigrationsUnion() {
+}
 
 func (r SingleStepMigrationParam) ImplementsDispatchNamespaceScriptUpdateParamsMetadataMigrationsUnion() {
 }
