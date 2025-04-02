@@ -139,6 +139,10 @@ type AbuseReportNewParamsBody struct {
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -252,6 +256,10 @@ type AbuseReportNewParamsBodyAbuseReportsDmcaReport struct {
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// A list of IP addresses separated by ‘ ’ (new line character). The list of source
 	// IPs should not exceed 30 IP addresses. Each one of the IP addresses ought to be
 	// unique
@@ -436,6 +444,10 @@ type AbuseReportNewParamsBodyAbuseReportsTrademarkReport struct {
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -616,6 +628,10 @@ type AbuseReportNewParamsBodyAbuseReportsGeneralReport struct {
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -802,6 +818,10 @@ type AbuseReportNewParamsBodyAbuseReportsPhishingReport struct {
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -988,6 +1008,10 @@ type AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReport struct {
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -1174,6 +1198,10 @@ type AbuseReportNewParamsBodyAbuseReportsThreatReport struct {
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -1359,6 +1387,10 @@ type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport struct {
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -1545,6 +1577,10 @@ type AbuseReportNewParamsBodyAbuseReportsNcseiReport struct {
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
