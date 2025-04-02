@@ -26,16 +26,17 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewScriptService] method instead.
 type ScriptService struct {
-	Options     []option.RequestOption
-	Assets      *ScriptAssetService
-	Subdomain   *ScriptSubdomainService
-	Schedules   *ScriptScheduleService
-	Tail        *ScriptTailService
-	Content     *ScriptContentService
-	Settings    *ScriptSettingService
-	Deployments *ScriptDeploymentService
-	Versions    *ScriptVersionService
-	Secrets     *ScriptSecretService
+	Options                  []option.RequestOption
+	Assets                   *ScriptAssetService
+	Subdomain                *ScriptSubdomainService
+	Schedules                *ScriptScheduleService
+	Tail                     *ScriptTailService
+	Content                  *ScriptContentService
+	Settings                 *ScriptSettingService
+	Deployments              *ScriptDeploymentService
+	Versions                 *ScriptVersionService
+	Secrets                  *ScriptSecretService
+	ScriptAndVersionSettings *ScriptScriptAndVersionSettingService
 }
 
 // NewScriptService generates a new service that applies the given options to each
@@ -53,6 +54,7 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 	r.Deployments = NewScriptDeploymentService(opts...)
 	r.Versions = NewScriptVersionService(opts...)
 	r.Secrets = NewScriptSecretService(opts...)
+	r.ScriptAndVersionSettings = NewScriptScriptAndVersionSettingService(opts...)
 	return
 }
 
