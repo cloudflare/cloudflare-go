@@ -55,6 +55,8 @@ func TestAbuseReportNewWithOptionalParams(t *testing.T) {
 				NcmecNotification:          cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportNcmecNotificationSend),
 				NcseiSubjectRepresentation: cloudflare.F(true),
 				PortsProtocols:             cloudflare.F("ports_protocols"),
+				ReportedCountry:            cloudflare.F("xx"),
+				ReportedUserAgent:          cloudflare.F("x"),
 				SourceIPs:                  cloudflare.F("source_ips"),
 				Tele:                       cloudflare.F("x"),
 				Title:                      cloudflare.F("x"),
