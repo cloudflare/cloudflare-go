@@ -103,7 +103,7 @@ type DevicePolicyDefaultEditResponse struct {
 	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
 	GatewayUniqueID  string           `json:"gateway_unique_id"`
 	// List of routes included in the WARP client's tunnel.
-	Include []SplitTunnelInclude `json:"include"`
+	Include []SplitTunnelExclude `json:"include"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool                                         `json:"register_interface_ip_with_dns"`
@@ -202,7 +202,7 @@ type DevicePolicyDefaultGetResponse struct {
 	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
 	GatewayUniqueID  string           `json:"gateway_unique_id"`
 	// List of routes included in the WARP client's tunnel.
-	Include []SplitTunnelInclude `json:"include"`
+	Include []SplitTunnelExclude `json:"include"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool                                        `json:"register_interface_ip_with_dns"`
@@ -293,12 +293,12 @@ type DevicePolicyDefaultEditParams struct {
 	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
-	Exclude param.Field[[]SplitTunnelExcludeParam] `json:"exclude"`
+	Exclude param.Field[[]SplitTunnelExcludeUnionParam] `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
 	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
 	// List of routes included in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
-	Include param.Field[[]SplitTunnelExcludeParam] `json:"include"`
+	Include param.Field[[]SplitTunnelExcludeUnionParam] `json:"include"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS param.Field[bool]                                       `json:"register_interface_ip_with_dns"`
