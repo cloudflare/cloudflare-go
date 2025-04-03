@@ -29,10 +29,9 @@ func TestDevicePolicyDefaultExcludeUpdate(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.Policies.Default.Excludes.Update(context.TODO(), zero_trust.DevicePolicyDefaultExcludeUpdateParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Body: []zero_trust.SplitTunnelExcludeParam{{
+		Body: []zero_trust.SplitTunnelExcludeUnionParam{zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam{
 			Address:     cloudflare.F("192.0.2.0/24"),
 			Description: cloudflare.F("Exclude testing domains from the tunnel"),
-			Host:        cloudflare.F("*.example.com"),
 		}},
 	})
 	if err != nil {

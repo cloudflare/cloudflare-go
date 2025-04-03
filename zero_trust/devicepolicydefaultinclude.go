@@ -89,8 +89,8 @@ func (r *DevicePolicyDefaultIncludeService) GetAutoPaging(ctx context.Context, q
 }
 
 type DevicePolicyDefaultIncludeUpdateParams struct {
-	AccountID param.Field[string]       `path:"account_id,required"`
-	Body      []SplitTunnelIncludeParam `json:"body,required"`
+	AccountID param.Field[string]            `path:"account_id,required"`
+	Body      []SplitTunnelIncludeUnionParam `json:"body,required"`
 }
 
 func (r DevicePolicyDefaultIncludeUpdateParams) MarshalJSON() (data []byte, err error) {

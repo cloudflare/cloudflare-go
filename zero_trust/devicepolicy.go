@@ -3,9 +3,12 @@
 package zero_trust
 
 import (
+	"reflect"
+
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/tidwall/gjson"
 )
 
 // DevicePolicyService contains methods and other services that help with
@@ -110,7 +113,7 @@ type SettingsPolicy struct {
 	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
 	GatewayUniqueID  string           `json:"gateway_unique_id"`
 	// List of routes included in the WARP client's tunnel.
-	Include []SplitTunnelInclude `json:"include"`
+	Include []SplitTunnelExclude `json:"include"`
 	// The amount of time in minutes a user is allowed access to their LAN. A value of
 	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
 	// laptop waking from sleep. Note that this field is omitted from the response if
@@ -235,13 +238,14 @@ func (r settingsPolicyTargetTestJSON) RawJSON() string {
 type SplitTunnelExclude struct {
 	// The address in CIDR format to exclude from the tunnel. If `address` is present,
 	// `host` must not be present.
-	Address string `json:"address,required"`
+	Address string `json:"address"`
 	// A description of the Split Tunnel item, displayed in the client UI.
-	Description string `json:"description,required"`
+	Description string `json:"description"`
 	// The domain name to exclude from the tunnel. If `host` is present, `address` must
 	// not be present.
-	Host string                 `json:"host"`
-	JSON splitTunnelExcludeJSON `json:"-"`
+	Host  string                 `json:"host"`
+	JSON  splitTunnelExcludeJSON `json:"-"`
+	union SplitTunnelExcludeUnion
 }
 
 // splitTunnelExcludeJSON contains the JSON metadata for the struct
@@ -254,20 +258,115 @@ type splitTunnelExcludeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SplitTunnelExclude) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 func (r splitTunnelExcludeJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r *SplitTunnelExclude) UnmarshalJSON(data []byte) (err error) {
+	*r = SplitTunnelExclude{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [SplitTunnelExcludeUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress],
+// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost].
+func (r SplitTunnelExclude) AsUnion() SplitTunnelExcludeUnion {
+	return r.union
+}
+
+// Union satisfied by
+// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress] or
+// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost].
+type SplitTunnelExcludeUnion interface {
+	implementsSplitTunnelExclude()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SplitTunnelExcludeUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost{}),
+		},
+	)
+}
+
+type SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress struct {
+	// The address in CIDR format to exclude from the tunnel. If `address` is present,
+	// `host` must not be present.
+	Address string `json:"address,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description string                                                          `json:"description"`
+	JSON        splitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressJSON `json:"-"`
+}
+
+// splitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressJSON contains the
+// JSON metadata for the struct
+// [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress]
+type splitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressJSON struct {
+	Address     apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r splitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress) implementsSplitTunnelExclude() {}
+
+type SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost struct {
+	// The domain name to exclude from the tunnel. If `host` is present, `address` must
+	// not be present.
+	Host string `json:"host,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description string                                                       `json:"description"`
+	JSON        splitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHostJSON `json:"-"`
+}
+
+// splitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHostJSON contains the JSON
+// metadata for the struct
+// [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost]
+type splitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHostJSON struct {
+	Host        apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r splitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHostJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost) implementsSplitTunnelExclude() {}
+
 type SplitTunnelExcludeParam struct {
 	// The address in CIDR format to exclude from the tunnel. If `address` is present,
 	// `host` must not be present.
-	Address param.Field[string] `json:"address,required"`
+	Address param.Field[string] `json:"address"`
 	// A description of the Split Tunnel item, displayed in the client UI.
-	Description param.Field[string] `json:"description,required"`
+	Description param.Field[string] `json:"description"`
 	// The domain name to exclude from the tunnel. If `host` is present, `address` must
 	// not be present.
 	Host param.Field[string] `json:"host"`
@@ -277,16 +376,57 @@ func (r SplitTunnelExcludeParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+func (r SplitTunnelExcludeParam) implementsSplitTunnelExcludeUnionParam() {}
+
+// Satisfied by
+// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam],
+// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHostParam],
+// [SplitTunnelExcludeParam].
+type SplitTunnelExcludeUnionParam interface {
+	implementsSplitTunnelExcludeUnionParam()
+}
+
+type SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam struct {
+	// The address in CIDR format to exclude from the tunnel. If `address` is present,
+	// `host` must not be present.
+	Address param.Field[string] `json:"address,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description param.Field[string] `json:"description"`
+}
+
+func (r SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam) implementsSplitTunnelExcludeUnionParam() {
+}
+
+type SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHostParam struct {
+	// The domain name to exclude from the tunnel. If `host` is present, `address` must
+	// not be present.
+	Host param.Field[string] `json:"host,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description param.Field[string] `json:"description"`
+}
+
+func (r SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHostParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHostParam) implementsSplitTunnelExcludeUnionParam() {
+}
+
 type SplitTunnelInclude struct {
-	// The address in CIDR format to include in the tunnel. If address is present, host
-	// must not be present.
-	Address string `json:"address,required"`
-	// A description of the split tunnel item, displayed in the client UI.
-	Description string `json:"description,required"`
-	// The domain name to include in the tunnel. If host is present, address must not
-	// be present.
-	Host string                 `json:"host"`
-	JSON splitTunnelIncludeJSON `json:"-"`
+	// The address in CIDR format to include in the tunnel. If `address` is present,
+	// `host` must not be present.
+	Address string `json:"address"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description string `json:"description"`
+	// The domain name to include in the tunnel. If `host` is present, `address` must
+	// not be present.
+	Host  string                 `json:"host"`
+	JSON  splitTunnelIncludeJSON `json:"-"`
+	union SplitTunnelIncludeUnion
 }
 
 // splitTunnelIncludeJSON contains the JSON metadata for the struct
@@ -299,25 +439,160 @@ type splitTunnelIncludeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SplitTunnelInclude) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 func (r splitTunnelIncludeJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r *SplitTunnelInclude) UnmarshalJSON(data []byte) (err error) {
+	*r = SplitTunnelInclude{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [SplitTunnelIncludeUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress],
+// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost].
+func (r SplitTunnelInclude) AsUnion() SplitTunnelIncludeUnion {
+	return r.union
+}
+
+// Union satisfied by
+// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress] or
+// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost].
+type SplitTunnelIncludeUnion interface {
+	implementsSplitTunnelInclude()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SplitTunnelIncludeUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost{}),
+		},
+	)
+}
+
+type SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress struct {
+	// The address in CIDR format to include in the tunnel. If `address` is present,
+	// `host` must not be present.
+	Address string `json:"address,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description string                                                          `json:"description"`
+	JSON        splitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressJSON `json:"-"`
+}
+
+// splitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressJSON contains the
+// JSON metadata for the struct
+// [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress]
+type splitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressJSON struct {
+	Address     apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r splitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress) implementsSplitTunnelInclude() {}
+
+type SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost struct {
+	// The domain name to include in the tunnel. If `host` is present, `address` must
+	// not be present.
+	Host string `json:"host,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description string                                                       `json:"description"`
+	JSON        splitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHostJSON `json:"-"`
+}
+
+// splitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHostJSON contains the JSON
+// metadata for the struct
+// [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost]
+type splitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHostJSON struct {
+	Host        apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r splitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHostJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost) implementsSplitTunnelInclude() {}
+
 type SplitTunnelIncludeParam struct {
-	// The address in CIDR format to include in the tunnel. If address is present, host
-	// must not be present.
-	Address param.Field[string] `json:"address,required"`
-	// A description of the split tunnel item, displayed in the client UI.
-	Description param.Field[string] `json:"description,required"`
-	// The domain name to include in the tunnel. If host is present, address must not
-	// be present.
+	// The address in CIDR format to include in the tunnel. If `address` is present,
+	// `host` must not be present.
+	Address param.Field[string] `json:"address"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description param.Field[string] `json:"description"`
+	// The domain name to include in the tunnel. If `host` is present, `address` must
+	// not be present.
 	Host param.Field[string] `json:"host"`
 }
 
 func (r SplitTunnelIncludeParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r SplitTunnelIncludeParam) implementsSplitTunnelIncludeUnionParam() {}
+
+// Satisfied by
+// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam],
+// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHostParam],
+// [SplitTunnelIncludeParam].
+type SplitTunnelIncludeUnionParam interface {
+	implementsSplitTunnelIncludeUnionParam()
+}
+
+type SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam struct {
+	// The address in CIDR format to include in the tunnel. If `address` is present,
+	// `host` must not be present.
+	Address param.Field[string] `json:"address,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description param.Field[string] `json:"description"`
+}
+
+func (r SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam) implementsSplitTunnelIncludeUnionParam() {
+}
+
+type SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHostParam struct {
+	// The domain name to include in the tunnel. If `host` is present, `address` must
+	// not be present.
+	Host param.Field[string] `json:"host,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description param.Field[string] `json:"description"`
+}
+
+func (r SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHostParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHostParam) implementsSplitTunnelIncludeUnionParam() {
 }
