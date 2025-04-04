@@ -92,6 +92,6 @@ func (r namespaceJSON) RawJSON() string {
 }
 
 type NamespaceListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

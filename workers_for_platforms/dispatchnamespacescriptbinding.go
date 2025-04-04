@@ -3346,6 +3346,6 @@ func (r DispatchNamespaceScriptBindingGetResponseType) IsKnown() bool {
 }
 
 type DispatchNamespaceScriptBindingGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
