@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketSippyService contains methods and other services that help with
@@ -432,9 +433,9 @@ func (r BucketSippyUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketSippyUpdateResponseEnvelope struct {
-	Errors   []BucketSippyUpdateResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                  `json:"messages,required"`
-	Result   Sippy                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   Sippy                 `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketSippyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketSippyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -456,29 +457,6 @@ func (r *BucketSippyUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r bucketSippyUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketSippyUpdateResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    bucketSippyUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketSippyUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [BucketSippyUpdateResponseEnvelopeErrors]
-type bucketSippyUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketSippyUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketSippyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -522,9 +500,9 @@ func (r BucketSippyDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketSippyDeleteResponseEnvelope struct {
-	Errors   []BucketSippyDeleteResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                  `json:"messages,required"`
-	Result   BucketSippyDeleteResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []string                  `json:"messages,required"`
+	Result   BucketSippyDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketSippyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketSippyDeleteResponseEnvelopeJSON    `json:"-"`
@@ -546,29 +524,6 @@ func (r *BucketSippyDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r bucketSippyDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketSippyDeleteResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    bucketSippyDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketSippyDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [BucketSippyDeleteResponseEnvelopeErrors]
-type bucketSippyDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketSippyDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketSippyDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -612,9 +567,9 @@ func (r BucketSippyGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketSippyGetResponseEnvelope struct {
-	Errors   []BucketSippyGetResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                               `json:"messages,required"`
-	Result   Sippy                                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   Sippy                 `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketSippyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketSippyGetResponseEnvelopeJSON    `json:"-"`
@@ -636,29 +591,6 @@ func (r *BucketSippyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r bucketSippyGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketSippyGetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    bucketSippyGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketSippyGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [BucketSippyGetResponseEnvelopeErrors]
-type bucketSippyGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketSippyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketSippyGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

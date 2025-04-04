@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PrefixBGPPrefixService contains methods and other services that help with
@@ -255,8 +256,8 @@ func (r PrefixBGPPrefixNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixBGPPrefixNewResponseEnvelope struct {
-	Errors   []PrefixBGPPrefixNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPPrefixNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixBGPPrefixNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  BGPPrefix                                 `json:"result"`
@@ -279,52 +280,6 @@ func (r *PrefixBGPPrefixNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r prefixBGPPrefixNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPPrefixNewResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    prefixBGPPrefixNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixBGPPrefixNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PrefixBGPPrefixNewResponseEnvelopeErrors]
-type prefixBGPPrefixNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPPrefixNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPPrefixNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPPrefixNewResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    prefixBGPPrefixNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixBGPPrefixNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PrefixBGPPrefixNewResponseEnvelopeMessages]
-type prefixBGPPrefixNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPPrefixNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPPrefixNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -367,8 +322,8 @@ func (r PrefixBGPPrefixEditParamsOnDemand) MarshalJSON() (data []byte, err error
 }
 
 type PrefixBGPPrefixEditResponseEnvelope struct {
-	Errors   []PrefixBGPPrefixEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPPrefixEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixBGPPrefixEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  BGPPrefix                                  `json:"result"`
@@ -394,52 +349,6 @@ func (r prefixBGPPrefixEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type PrefixBGPPrefixEditResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    prefixBGPPrefixEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixBGPPrefixEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PrefixBGPPrefixEditResponseEnvelopeErrors]
-type prefixBGPPrefixEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPPrefixEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPPrefixEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPPrefixEditResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    prefixBGPPrefixEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixBGPPrefixEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PrefixBGPPrefixEditResponseEnvelopeMessages]
-type prefixBGPPrefixEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPPrefixEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPPrefixEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type PrefixBGPPrefixEditResponseEnvelopeSuccess bool
 
@@ -461,8 +370,8 @@ type PrefixBGPPrefixGetParams struct {
 }
 
 type PrefixBGPPrefixGetResponseEnvelope struct {
-	Errors   []PrefixBGPPrefixGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPPrefixGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixBGPPrefixGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  BGPPrefix                                 `json:"result"`
@@ -485,52 +394,6 @@ func (r *PrefixBGPPrefixGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r prefixBGPPrefixGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPPrefixGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    prefixBGPPrefixGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixBGPPrefixGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PrefixBGPPrefixGetResponseEnvelopeErrors]
-type prefixBGPPrefixGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPPrefixGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPPrefixGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPPrefixGetResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    prefixBGPPrefixGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixBGPPrefixGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PrefixBGPPrefixGetResponseEnvelopeMessages]
-type prefixBGPPrefixGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPPrefixGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPPrefixGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

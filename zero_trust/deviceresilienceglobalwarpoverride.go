@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DeviceResilienceGlobalWARPOverrideService contains methods and other services
@@ -133,9 +134,9 @@ func (r DeviceResilienceGlobalWARPOverrideNewParams) MarshalJSON() (data []byte,
 }
 
 type DeviceResilienceGlobalWARPOverrideNewResponseEnvelope struct {
-	Errors   []DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceResilienceGlobalWARPOverrideNewResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                         `json:"errors,required"`
+	Messages []shared.ResponseInfo                         `json:"messages,required"`
+	Result   DeviceResilienceGlobalWARPOverrideNewResponse `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceResilienceGlobalWARPOverrideNewResponseEnvelopeJSON    `json:"-"`
@@ -160,54 +161,6 @@ func (r deviceResilienceGlobalWARPOverrideNewResponseEnvelopeJSON) RawJSON() str
 	return r.raw
 }
 
-type DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeErrors struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    deviceResilienceGlobalWARPOverrideNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceResilienceGlobalWARPOverrideNewResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeErrors]
-type deviceResilienceGlobalWARPOverrideNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceResilienceGlobalWARPOverrideNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeMessages struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    deviceResilienceGlobalWARPOverrideNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceResilienceGlobalWARPOverrideNewResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeMessages]
-type deviceResilienceGlobalWARPOverrideNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceResilienceGlobalWARPOverrideNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful.
 type DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeSuccess bool
 
@@ -228,9 +181,9 @@ type DeviceResilienceGlobalWARPOverrideGetParams struct {
 }
 
 type DeviceResilienceGlobalWARPOverrideGetResponseEnvelope struct {
-	Errors   []DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceResilienceGlobalWARPOverrideGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                         `json:"errors,required"`
+	Messages []shared.ResponseInfo                         `json:"messages,required"`
+	Result   DeviceResilienceGlobalWARPOverrideGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceResilienceGlobalWARPOverrideGetResponseEnvelopeJSON    `json:"-"`
@@ -252,54 +205,6 @@ func (r *DeviceResilienceGlobalWARPOverrideGetResponseEnvelope) UnmarshalJSON(da
 }
 
 func (r deviceResilienceGlobalWARPOverrideGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeErrors struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    deviceResilienceGlobalWARPOverrideGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceResilienceGlobalWARPOverrideGetResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeErrors]
-type deviceResilienceGlobalWARPOverrideGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceResilienceGlobalWARPOverrideGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeMessages struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    deviceResilienceGlobalWARPOverrideGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceResilienceGlobalWARPOverrideGetResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeMessages]
-type deviceResilienceGlobalWARPOverrideGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceResilienceGlobalWARPOverrideGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

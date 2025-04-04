@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -516,9 +517,9 @@ func (r BucketLockUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketLockUpdateResponseEnvelope struct {
-	Errors   []BucketLockUpdateResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                 `json:"messages,required"`
-	Result   BucketLockUpdateResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []string                 `json:"messages,required"`
+	Result   BucketLockUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketLockUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketLockUpdateResponseEnvelopeJSON    `json:"-"`
@@ -540,29 +541,6 @@ func (r *BucketLockUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r bucketLockUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketLockUpdateResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    bucketLockUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketLockUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [BucketLockUpdateResponseEnvelopeErrors]
-type bucketLockUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketLockUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketLockUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -606,9 +584,9 @@ func (r BucketLockGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketLockGetResponseEnvelope struct {
-	Errors   []BucketLockGetResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                              `json:"messages,required"`
-	Result   BucketLockGetResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   BucketLockGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketLockGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketLockGetResponseEnvelopeJSON    `json:"-"`
@@ -630,29 +608,6 @@ func (r *BucketLockGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bucketLockGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketLockGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    bucketLockGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketLockGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [BucketLockGetResponseEnvelopeErrors]
-type bucketLockGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketLockGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketLockGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

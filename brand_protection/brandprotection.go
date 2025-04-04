@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BrandProtectionService contains methods and other services that help with
@@ -332,8 +333,8 @@ func (r BrandProtectionSubmitParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BrandProtectionSubmitResponseEnvelope struct {
-	Errors   []BrandProtectionSubmitResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BrandProtectionSubmitResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success BrandProtectionSubmitResponseEnvelopeSuccess `json:"success,required"`
 	Result  Submit                                       `json:"result"`
@@ -356,52 +357,6 @@ func (r *BrandProtectionSubmitResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r brandProtectionSubmitResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BrandProtectionSubmitResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    brandProtectionSubmitResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// brandProtectionSubmitResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [BrandProtectionSubmitResponseEnvelopeErrors]
-type brandProtectionSubmitResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BrandProtectionSubmitResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r brandProtectionSubmitResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type BrandProtectionSubmitResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    brandProtectionSubmitResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// brandProtectionSubmitResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [BrandProtectionSubmitResponseEnvelopeMessages]
-type brandProtectionSubmitResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BrandProtectionSubmitResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r brandProtectionSubmitResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -439,8 +394,8 @@ func (r BrandProtectionURLInfoParams) URLQuery() (v url.Values) {
 }
 
 type BrandProtectionURLInfoResponseEnvelope struct {
-	Errors   []BrandProtectionURLInfoResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BrandProtectionURLInfoResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success BrandProtectionURLInfoResponseEnvelopeSuccess `json:"success,required"`
 	Result  Info                                          `json:"result"`
@@ -463,52 +418,6 @@ func (r *BrandProtectionURLInfoResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r brandProtectionURLInfoResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BrandProtectionURLInfoResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    brandProtectionURLInfoResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// brandProtectionURLInfoResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [BrandProtectionURLInfoResponseEnvelopeErrors]
-type brandProtectionURLInfoResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BrandProtectionURLInfoResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r brandProtectionURLInfoResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type BrandProtectionURLInfoResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    brandProtectionURLInfoResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// brandProtectionURLInfoResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [BrandProtectionURLInfoResponseEnvelopeMessages]
-type brandProtectionURLInfoResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BrandProtectionURLInfoResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r brandProtectionURLInfoResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PageTestService contains methods and other services that help with interacting
@@ -259,8 +260,8 @@ func (r PageTestNewParamsRegion) IsKnown() bool {
 }
 
 type PageTestNewResponseEnvelope struct {
-	Errors   []PageTestNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageTestNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                            `json:"success,required"`
 	Result  Test                            `json:"result"`
@@ -283,52 +284,6 @@ func (r *PageTestNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r pageTestNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PageTestNewResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    pageTestNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pageTestNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PageTestNewResponseEnvelopeErrors]
-type pageTestNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageTestNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageTestNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PageTestNewResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    pageTestNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pageTestNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PageTestNewResponseEnvelopeMessages]
-type pageTestNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageTestNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageTestNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -435,8 +390,8 @@ func (r PageTestDeleteParamsRegion) IsKnown() bool {
 }
 
 type PageTestDeleteResponseEnvelope struct {
-	Errors   []PageTestDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageTestDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                               `json:"success,required"`
 	Result  PageTestDeleteResponse             `json:"result"`
@@ -462,60 +417,14 @@ func (r pageTestDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type PageTestDeleteResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    pageTestDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pageTestDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PageTestDeleteResponseEnvelopeErrors]
-type pageTestDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageTestDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageTestDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PageTestDeleteResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    pageTestDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pageTestDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PageTestDeleteResponseEnvelopeMessages]
-type pageTestDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageTestDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageTestDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type PageTestGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type PageTestGetResponseEnvelope struct {
-	Errors   []PageTestGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageTestGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                            `json:"success,required"`
 	Result  Test                            `json:"result"`
@@ -538,51 +447,5 @@ func (r *PageTestGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r pageTestGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PageTestGetResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    pageTestGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pageTestGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PageTestGetResponseEnvelopeErrors]
-type pageTestGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageTestGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageTestGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PageTestGetResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    pageTestGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pageTestGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PageTestGetResponseEnvelopeMessages]
-type pageTestGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageTestGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageTestGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ControlRetentionService contains methods and other services that help with
@@ -123,8 +124,8 @@ func (r ControlRetentionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlRetentionNewResponseEnvelope struct {
-	Errors   []ControlRetentionNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ControlRetentionNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ControlRetentionNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ControlRetentionNewResponse                `json:"result,nullable"`
@@ -150,52 +151,6 @@ func (r controlRetentionNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ControlRetentionNewResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    controlRetentionNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// controlRetentionNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ControlRetentionNewResponseEnvelopeErrors]
-type controlRetentionNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ControlRetentionNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r controlRetentionNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ControlRetentionNewResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    controlRetentionNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// controlRetentionNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ControlRetentionNewResponseEnvelopeMessages]
-type controlRetentionNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ControlRetentionNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r controlRetentionNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ControlRetentionNewResponseEnvelopeSuccess bool
 
@@ -217,8 +172,8 @@ type ControlRetentionGetParams struct {
 }
 
 type ControlRetentionGetResponseEnvelope struct {
-	Errors   []ControlRetentionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ControlRetentionGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ControlRetentionGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ControlRetentionGetResponse                `json:"result,nullable"`
@@ -241,52 +196,6 @@ func (r *ControlRetentionGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r controlRetentionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ControlRetentionGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    controlRetentionGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// controlRetentionGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ControlRetentionGetResponseEnvelopeErrors]
-type controlRetentionGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ControlRetentionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r controlRetentionGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ControlRetentionGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    controlRetentionGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// controlRetentionGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ControlRetentionGetResponseEnvelopeMessages]
-type controlRetentionGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ControlRetentionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r controlRetentionGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

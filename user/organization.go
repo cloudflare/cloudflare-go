@@ -238,8 +238,8 @@ func (r OrganizationListParamsStatus) IsKnown() bool {
 }
 
 type OrganizationGetResponseEnvelope struct {
-	Errors   []OrganizationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OrganizationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OrganizationGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  OrganizationGetResponse                `json:"result"`
@@ -262,52 +262,6 @@ func (r *OrganizationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r organizationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationGetResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    organizationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// organizationGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [OrganizationGetResponseEnvelopeErrors]
-type organizationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationGetResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    organizationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// organizationGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [OrganizationGetResponseEnvelopeMessages]
-type organizationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

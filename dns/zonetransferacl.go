@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZoneTransferACLService contains methods and other services that help with
@@ -224,8 +225,8 @@ func (r ZoneTransferACLNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferACLNewResponseEnvelope struct {
-	Errors   []ZoneTransferACLNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferACLNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferACLNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ACL                                       `json:"result"`
@@ -248,52 +249,6 @@ func (r *ZoneTransferACLNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r zoneTransferACLNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneTransferACLNewResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    zoneTransferACLNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// zoneTransferACLNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ZoneTransferACLNewResponseEnvelopeErrors]
-type zoneTransferACLNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneTransferACLNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneTransferACLNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneTransferACLNewResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    zoneTransferACLNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// zoneTransferACLNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ZoneTransferACLNewResponseEnvelopeMessages]
-type zoneTransferACLNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneTransferACLNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneTransferACLNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -322,8 +277,8 @@ func (r ZoneTransferACLUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferACLUpdateResponseEnvelope struct {
-	Errors   []ZoneTransferACLUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferACLUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferACLUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  ACL                                          `json:"result"`
@@ -346,52 +301,6 @@ func (r *ZoneTransferACLUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r zoneTransferACLUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneTransferACLUpdateResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    zoneTransferACLUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// zoneTransferACLUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ZoneTransferACLUpdateResponseEnvelopeErrors]
-type zoneTransferACLUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneTransferACLUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneTransferACLUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneTransferACLUpdateResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    zoneTransferACLUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// zoneTransferACLUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ZoneTransferACLUpdateResponseEnvelopeMessages]
-type zoneTransferACLUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneTransferACLUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneTransferACLUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -419,8 +328,8 @@ type ZoneTransferACLDeleteParams struct {
 }
 
 type ZoneTransferACLDeleteResponseEnvelope struct {
-	Errors   []ZoneTransferACLDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferACLDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferACLDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  ZoneTransferACLDeleteResponse                `json:"result"`
@@ -446,52 +355,6 @@ func (r zoneTransferACLDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ZoneTransferACLDeleteResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    zoneTransferACLDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// zoneTransferACLDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ZoneTransferACLDeleteResponseEnvelopeErrors]
-type zoneTransferACLDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneTransferACLDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneTransferACLDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneTransferACLDeleteResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    zoneTransferACLDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// zoneTransferACLDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ZoneTransferACLDeleteResponseEnvelopeMessages]
-type zoneTransferACLDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneTransferACLDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneTransferACLDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ZoneTransferACLDeleteResponseEnvelopeSuccess bool
 
@@ -512,8 +375,8 @@ type ZoneTransferACLGetParams struct {
 }
 
 type ZoneTransferACLGetResponseEnvelope struct {
-	Errors   []ZoneTransferACLGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferACLGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferACLGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ACL                                       `json:"result"`
@@ -536,52 +399,6 @@ func (r *ZoneTransferACLGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r zoneTransferACLGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneTransferACLGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    zoneTransferACLGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// zoneTransferACLGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ZoneTransferACLGetResponseEnvelopeErrors]
-type zoneTransferACLGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneTransferACLGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneTransferACLGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneTransferACLGetResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    zoneTransferACLGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// zoneTransferACLGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ZoneTransferACLGetResponseEnvelopeMessages]
-type zoneTransferACLGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneTransferACLGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneTransferACLGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

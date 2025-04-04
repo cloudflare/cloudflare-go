@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -1025,8 +1026,8 @@ func (r WAFPackageRuleEditParamsMode) IsKnown() bool {
 }
 
 type WAFPackageRuleEditResponseEnvelope struct {
-	Errors   []WAFPackageRuleEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WAFPackageRuleEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// When triggered, anomaly detection WAF rules contribute to an overall threat
 	// score that will determine if a request is considered malicious. You can
 	// configure the total scoring threshold through the 'sensitivity' property of the
@@ -1056,52 +1057,6 @@ func (r wafPackageRuleEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type WAFPackageRuleEditResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    wafPackageRuleEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// wafPackageRuleEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WAFPackageRuleEditResponseEnvelopeErrors]
-type wafPackageRuleEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageRuleEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageRuleEditResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    wafPackageRuleEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// wafPackageRuleEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [WAFPackageRuleEditResponseEnvelopeMessages]
-type wafPackageRuleEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageRuleEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type WAFPackageRuleEditResponseEnvelopeSuccess bool
 
@@ -1123,9 +1078,9 @@ type WAFPackageRuleGetParams struct {
 }
 
 type WAFPackageRuleGetResponseEnvelope struct {
-	Errors   []WAFPackageRuleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WAFPackageRuleGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   interface{}                                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageRuleGetResponseEnvelopeJSON    `json:"-"`
@@ -1147,52 +1102,6 @@ func (r *WAFPackageRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r wafPackageRuleGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageRuleGetResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    wafPackageRuleGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// wafPackageRuleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WAFPackageRuleGetResponseEnvelopeErrors]
-type wafPackageRuleGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageRuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageRuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageRuleGetResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    wafPackageRuleGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// wafPackageRuleGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WAFPackageRuleGetResponseEnvelopeMessages]
-type wafPackageRuleGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageRuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RegionalTieredCacheService contains methods and other services that help with
@@ -209,8 +210,8 @@ func (r RegionalTieredCacheEditParamsValue) IsKnown() bool {
 }
 
 type RegionalTieredCacheEditResponseEnvelope struct {
-	Errors   []RegionalTieredCacheEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RegionalTieredCacheEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RegionalTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  RegionalTieredCacheEditResponse                `json:"result"`
@@ -236,52 +237,6 @@ func (r regionalTieredCacheEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RegionalTieredCacheEditResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    regionalTieredCacheEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// regionalTieredCacheEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [RegionalTieredCacheEditResponseEnvelopeErrors]
-type regionalTieredCacheEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionalTieredCacheEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionalTieredCacheEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionalTieredCacheEditResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    regionalTieredCacheEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// regionalTieredCacheEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [RegionalTieredCacheEditResponseEnvelopeMessages]
-type regionalTieredCacheEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionalTieredCacheEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionalTieredCacheEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RegionalTieredCacheEditResponseEnvelopeSuccess bool
 
@@ -303,8 +258,8 @@ type RegionalTieredCacheGetParams struct {
 }
 
 type RegionalTieredCacheGetResponseEnvelope struct {
-	Errors   []RegionalTieredCacheGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RegionalTieredCacheGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RegionalTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RegionalTieredCacheGetResponse                `json:"result"`
@@ -327,52 +282,6 @@ func (r *RegionalTieredCacheGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r regionalTieredCacheGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionalTieredCacheGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    regionalTieredCacheGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// regionalTieredCacheGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [RegionalTieredCacheGetResponseEnvelopeErrors]
-type regionalTieredCacheGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionalTieredCacheGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionalTieredCacheGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionalTieredCacheGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    regionalTieredCacheGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// regionalTieredCacheGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [RegionalTieredCacheGetResponseEnvelopeMessages]
-type regionalTieredCacheGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionalTieredCacheGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionalTieredCacheGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
