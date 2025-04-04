@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CustomNameserverService contains methods and other services that help with
@@ -105,8 +106,8 @@ func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserve
 }
 
 type CustomNameserverGetResponse struct {
-	Errors   []CustomNameserverGetResponseError   `json:"errors,required"`
-	Messages []CustomNameserverGetResponseMessage `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomNameserverGetResponseSuccess `json:"success,required"`
 	// Whether zone uses account-level custom nameservers.
@@ -135,52 +136,6 @@ func (r *CustomNameserverGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r customNameserverGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverGetResponseError struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    customNameserverGetResponseErrorJSON `json:"-"`
-}
-
-// customNameserverGetResponseErrorJSON contains the JSON metadata for the struct
-// [CustomNameserverGetResponseError]
-type customNameserverGetResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverGetResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverGetResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverGetResponseMessage struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    customNameserverGetResponseMessageJSON `json:"-"`
-}
-
-// customNameserverGetResponseMessageJSON contains the JSON metadata for the struct
-// [CustomNameserverGetResponseMessage]
-type customNameserverGetResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverGetResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SiteACLService contains methods and other services that help with interacting
@@ -338,8 +339,8 @@ func (r SiteACLNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLNewResponseEnvelope struct {
-	Errors   []SiteACLNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteACLNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Bidirectional ACL policy for network traffic within a site.
 	Result ACL `json:"result,required"`
 	// Whether the API call was successful
@@ -363,52 +364,6 @@ func (r *SiteACLNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteACLNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLNewResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    siteACLNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteACLNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteACLNewResponseEnvelopeErrors]
-type siteACLNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLNewResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    siteACLNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteACLNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SiteACLNewResponseEnvelopeMessages]
-type siteACLNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -453,8 +408,8 @@ func (r SiteACLUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLUpdateResponseEnvelope struct {
-	Errors   []SiteACLUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteACLUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Bidirectional ACL policy for network traffic within a site.
 	Result ACL `json:"result,required"`
 	// Whether the API call was successful
@@ -478,52 +433,6 @@ func (r *SiteACLUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteACLUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLUpdateResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    siteACLUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteACLUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SiteACLUpdateResponseEnvelopeErrors]
-type siteACLUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLUpdateResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    siteACLUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteACLUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteACLUpdateResponseEnvelopeMessages]
-type siteACLUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -553,8 +462,8 @@ type SiteACLDeleteParams struct {
 }
 
 type SiteACLDeleteResponseEnvelope struct {
-	Errors   []SiteACLDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteACLDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Bidirectional ACL policy for network traffic within a site.
 	Result ACL `json:"result,required"`
 	// Whether the API call was successful
@@ -578,52 +487,6 @@ func (r *SiteACLDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteACLDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLDeleteResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    siteACLDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteACLDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SiteACLDeleteResponseEnvelopeErrors]
-type siteACLDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLDeleteResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    siteACLDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteACLDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteACLDeleteResponseEnvelopeMessages]
-type siteACLDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -668,8 +531,8 @@ func (r SiteACLEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLEditResponseEnvelope struct {
-	Errors   []SiteACLEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteACLEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Bidirectional ACL policy for network traffic within a site.
 	Result ACL `json:"result,required"`
 	// Whether the API call was successful
@@ -696,52 +559,6 @@ func (r siteACLEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteACLEditResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    siteACLEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteACLEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteACLEditResponseEnvelopeErrors]
-type siteACLEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLEditResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    siteACLEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteACLEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteACLEditResponseEnvelopeMessages]
-type siteACLEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SiteACLEditResponseEnvelopeSuccess bool
 
@@ -763,8 +580,8 @@ type SiteACLGetParams struct {
 }
 
 type SiteACLGetResponseEnvelope struct {
-	Errors   []SiteACLGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteACLGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Bidirectional ACL policy for network traffic within a site.
 	Result ACL `json:"result,required"`
 	// Whether the API call was successful
@@ -788,52 +605,6 @@ func (r *SiteACLGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteACLGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLGetResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    siteACLGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteACLGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteACLGetResponseEnvelopeErrors]
-type siteACLGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLGetResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    siteACLGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteACLGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SiteACLGetResponseEnvelopeMessages]
-type siteACLGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

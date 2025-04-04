@@ -17,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -443,11 +444,11 @@ func (r SettingTrustedDomainNewParamsBodyArrayItem) MarshalJSON() (data []byte, 
 }
 
 type SettingTrustedDomainNewResponseEnvelope struct {
-	Errors   []SettingTrustedDomainNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTrustedDomainNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SettingTrustedDomainNewResponseUnion              `json:"result,required"`
-	Success  bool                                              `json:"success,required"`
-	JSON     settingTrustedDomainNewResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo                       `json:"errors,required"`
+	Messages []shared.ResponseInfo                       `json:"messages,required"`
+	Result   SettingTrustedDomainNewResponseUnion        `json:"result,required"`
+	Success  bool                                        `json:"success,required"`
+	JSON     settingTrustedDomainNewResponseEnvelopeJSON `json:"-"`
 }
 
 // settingTrustedDomainNewResponseEnvelopeJSON contains the JSON metadata for the
@@ -466,52 +467,6 @@ func (r *SettingTrustedDomainNewResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r settingTrustedDomainNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTrustedDomainNewResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingTrustedDomainNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTrustedDomainNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingTrustedDomainNewResponseEnvelopeErrors]
-type settingTrustedDomainNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrustedDomainNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrustedDomainNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTrustedDomainNewResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingTrustedDomainNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTrustedDomainNewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingTrustedDomainNewResponseEnvelopeMessages]
-type settingTrustedDomainNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrustedDomainNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrustedDomainNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -581,11 +536,11 @@ type SettingTrustedDomainDeleteParams struct {
 }
 
 type SettingTrustedDomainDeleteResponseEnvelope struct {
-	Errors   []SettingTrustedDomainDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTrustedDomainDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   SettingTrustedDomainDeleteResponse                   `json:"result,required"`
-	Success  bool                                                 `json:"success,required"`
-	JSON     settingTrustedDomainDeleteResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo                          `json:"errors,required"`
+	Messages []shared.ResponseInfo                          `json:"messages,required"`
+	Result   SettingTrustedDomainDeleteResponse             `json:"result,required"`
+	Success  bool                                           `json:"success,required"`
+	JSON     settingTrustedDomainDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // settingTrustedDomainDeleteResponseEnvelopeJSON contains the JSON metadata for
@@ -604,52 +559,6 @@ func (r *SettingTrustedDomainDeleteResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r settingTrustedDomainDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTrustedDomainDeleteResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingTrustedDomainDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTrustedDomainDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingTrustedDomainDeleteResponseEnvelopeErrors]
-type settingTrustedDomainDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrustedDomainDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrustedDomainDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTrustedDomainDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingTrustedDomainDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTrustedDomainDeleteResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingTrustedDomainDeleteResponseEnvelopeMessages]
-type settingTrustedDomainDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrustedDomainDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrustedDomainDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -672,11 +581,11 @@ func (r SettingTrustedDomainEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingTrustedDomainEditResponseEnvelope struct {
-	Errors   []SettingTrustedDomainEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTrustedDomainEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   SettingTrustedDomainEditResponse                   `json:"result,required"`
-	Success  bool                                               `json:"success,required"`
-	JSON     settingTrustedDomainEditResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                        `json:"messages,required"`
+	Result   SettingTrustedDomainEditResponse             `json:"result,required"`
+	Success  bool                                         `json:"success,required"`
+	JSON     settingTrustedDomainEditResponseEnvelopeJSON `json:"-"`
 }
 
 // settingTrustedDomainEditResponseEnvelopeJSON contains the JSON metadata for the
@@ -698,63 +607,17 @@ func (r settingTrustedDomainEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingTrustedDomainEditResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingTrustedDomainEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTrustedDomainEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingTrustedDomainEditResponseEnvelopeErrors]
-type settingTrustedDomainEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrustedDomainEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrustedDomainEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTrustedDomainEditResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingTrustedDomainEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTrustedDomainEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingTrustedDomainEditResponseEnvelopeMessages]
-type settingTrustedDomainEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrustedDomainEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrustedDomainEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingTrustedDomainGetParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type SettingTrustedDomainGetResponseEnvelope struct {
-	Errors   []SettingTrustedDomainGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTrustedDomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SettingTrustedDomainGetResponse                   `json:"result,required"`
-	Success  bool                                              `json:"success,required"`
-	JSON     settingTrustedDomainGetResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo                       `json:"errors,required"`
+	Messages []shared.ResponseInfo                       `json:"messages,required"`
+	Result   SettingTrustedDomainGetResponse             `json:"result,required"`
+	Success  bool                                        `json:"success,required"`
+	JSON     settingTrustedDomainGetResponseEnvelopeJSON `json:"-"`
 }
 
 // settingTrustedDomainGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -773,51 +636,5 @@ func (r *SettingTrustedDomainGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r settingTrustedDomainGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTrustedDomainGetResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingTrustedDomainGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTrustedDomainGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingTrustedDomainGetResponseEnvelopeErrors]
-type settingTrustedDomainGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrustedDomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrustedDomainGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTrustedDomainGetResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingTrustedDomainGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTrustedDomainGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingTrustedDomainGetResponseEnvelopeMessages]
-type settingTrustedDomainGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrustedDomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrustedDomainGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

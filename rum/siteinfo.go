@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SiteInfoService contains methods and other services that help with interacting
@@ -250,8 +251,8 @@ func (r SiteInfoNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteInfoNewResponseEnvelope struct {
-	Errors   []SiteInfoNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteInfoNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                            `json:"success,required"`
 	Result  Site                            `json:"result"`
@@ -274,52 +275,6 @@ func (r *SiteInfoNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteInfoNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteInfoNewResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    siteInfoNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteInfoNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteInfoNewResponseEnvelopeErrors]
-type siteInfoNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteInfoNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteInfoNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteInfoNewResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    siteInfoNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteInfoNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteInfoNewResponseEnvelopeMessages]
-type siteInfoNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteInfoNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteInfoNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -346,8 +301,8 @@ func (r SiteInfoUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteInfoUpdateResponseEnvelope struct {
-	Errors   []SiteInfoUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteInfoUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                               `json:"success,required"`
 	Result  Site                               `json:"result"`
@@ -370,52 +325,6 @@ func (r *SiteInfoUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r siteInfoUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteInfoUpdateResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    siteInfoUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteInfoUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SiteInfoUpdateResponseEnvelopeErrors]
-type siteInfoUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteInfoUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteInfoUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteInfoUpdateResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    siteInfoUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteInfoUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteInfoUpdateResponseEnvelopeMessages]
-type siteInfoUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteInfoUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteInfoUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -460,8 +369,8 @@ type SiteInfoDeleteParams struct {
 }
 
 type SiteInfoDeleteResponseEnvelope struct {
-	Errors   []SiteInfoDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteInfoDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                               `json:"success,required"`
 	Result  SiteInfoDeleteResponse             `json:"result"`
@@ -487,60 +396,14 @@ func (r siteInfoDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteInfoDeleteResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    siteInfoDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteInfoDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SiteInfoDeleteResponseEnvelopeErrors]
-type siteInfoDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteInfoDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteInfoDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteInfoDeleteResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    siteInfoDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteInfoDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteInfoDeleteResponseEnvelopeMessages]
-type siteInfoDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteInfoDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteInfoDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteInfoGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type SiteInfoGetResponseEnvelope struct {
-	Errors   []SiteInfoGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteInfoGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                            `json:"success,required"`
 	Result  Site                            `json:"result"`
@@ -563,51 +426,5 @@ func (r *SiteInfoGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteInfoGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteInfoGetResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    siteInfoGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteInfoGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteInfoGetResponseEnvelopeErrors]
-type siteInfoGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteInfoGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteInfoGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteInfoGetResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    siteInfoGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteInfoGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteInfoGetResponseEnvelopeMessages]
-type siteInfoGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteInfoGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteInfoGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

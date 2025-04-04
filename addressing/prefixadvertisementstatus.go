@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PrefixAdvertisementStatusService contains methods and other services that help
@@ -149,8 +150,8 @@ func (r PrefixAdvertisementStatusEditParams) MarshalJSON() (data []byte, err err
 }
 
 type PrefixAdvertisementStatusEditResponseEnvelope struct {
-	Errors   []PrefixAdvertisementStatusEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixAdvertisementStatusEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixAdvertisementStatusEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  PrefixAdvertisementStatusEditResponse                `json:"result"`
@@ -176,52 +177,6 @@ func (r prefixAdvertisementStatusEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type PrefixAdvertisementStatusEditResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    prefixAdvertisementStatusEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixAdvertisementStatusEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [PrefixAdvertisementStatusEditResponseEnvelopeErrors]
-type prefixAdvertisementStatusEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixAdvertisementStatusEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixAdvertisementStatusEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixAdvertisementStatusEditResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    prefixAdvertisementStatusEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixAdvertisementStatusEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [PrefixAdvertisementStatusEditResponseEnvelopeMessages]
-type prefixAdvertisementStatusEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixAdvertisementStatusEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixAdvertisementStatusEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type PrefixAdvertisementStatusEditResponseEnvelopeSuccess bool
 
@@ -243,8 +198,8 @@ type PrefixAdvertisementStatusGetParams struct {
 }
 
 type PrefixAdvertisementStatusGetResponseEnvelope struct {
-	Errors   []PrefixAdvertisementStatusGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixAdvertisementStatusGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixAdvertisementStatusGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  PrefixAdvertisementStatusGetResponse                `json:"result"`
@@ -267,52 +222,6 @@ func (r *PrefixAdvertisementStatusGetResponseEnvelope) UnmarshalJSON(data []byte
 }
 
 func (r prefixAdvertisementStatusGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixAdvertisementStatusGetResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    prefixAdvertisementStatusGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixAdvertisementStatusGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [PrefixAdvertisementStatusGetResponseEnvelopeErrors]
-type prefixAdvertisementStatusGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixAdvertisementStatusGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixAdvertisementStatusGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixAdvertisementStatusGetResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    prefixAdvertisementStatusGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixAdvertisementStatusGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [PrefixAdvertisementStatusGetResponseEnvelopeMessages]
-type prefixAdvertisementStatusGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixAdvertisementStatusGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixAdvertisementStatusGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

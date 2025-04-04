@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InvestigateReclassifyService contains methods and other services that help with
@@ -88,11 +89,11 @@ func (r InvestigateReclassifyNewParamsExpectedDisposition) IsKnown() bool {
 }
 
 type InvestigateReclassifyNewResponseEnvelope struct {
-	Errors   []InvestigateReclassifyNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []InvestigateReclassifyNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   InvestigateReclassifyNewResponse                   `json:"result,required"`
-	Success  bool                                               `json:"success,required"`
-	JSON     investigateReclassifyNewResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                        `json:"messages,required"`
+	Result   InvestigateReclassifyNewResponse             `json:"result,required"`
+	Success  bool                                         `json:"success,required"`
+	JSON     investigateReclassifyNewResponseEnvelopeJSON `json:"-"`
 }
 
 // investigateReclassifyNewResponseEnvelopeJSON contains the JSON metadata for the
@@ -111,51 +112,5 @@ func (r *InvestigateReclassifyNewResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r investigateReclassifyNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateReclassifyNewResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    investigateReclassifyNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// investigateReclassifyNewResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [InvestigateReclassifyNewResponseEnvelopeErrors]
-type investigateReclassifyNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateReclassifyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateReclassifyNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateReclassifyNewResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    investigateReclassifyNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// investigateReclassifyNewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [InvestigateReclassifyNewResponseEnvelopeMessages]
-type investigateReclassifyNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateReclassifyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateReclassifyNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

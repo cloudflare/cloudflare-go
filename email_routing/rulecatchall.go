@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RuleCatchAllService contains methods and other services that help with
@@ -311,8 +312,8 @@ func (r RuleCatchAllUpdateParamsEnabled) IsKnown() bool {
 }
 
 type RuleCatchAllUpdateResponseEnvelope struct {
-	Errors   []RuleCatchAllUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleCatchAllUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RuleCatchAllUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  RuleCatchAllUpdateResponse                `json:"result"`
@@ -338,52 +339,6 @@ func (r ruleCatchAllUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RuleCatchAllUpdateResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    ruleCatchAllUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleCatchAllUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RuleCatchAllUpdateResponseEnvelopeErrors]
-type ruleCatchAllUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleCatchAllUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleCatchAllUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleCatchAllUpdateResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    ruleCatchAllUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleCatchAllUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [RuleCatchAllUpdateResponseEnvelopeMessages]
-type ruleCatchAllUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleCatchAllUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleCatchAllUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RuleCatchAllUpdateResponseEnvelopeSuccess bool
 
@@ -405,8 +360,8 @@ type RuleCatchAllGetParams struct {
 }
 
 type RuleCatchAllGetResponseEnvelope struct {
-	Errors   []RuleCatchAllGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleCatchAllGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RuleCatchAllGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RuleCatchAllGetResponse                `json:"result"`
@@ -429,52 +384,6 @@ func (r *RuleCatchAllGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r ruleCatchAllGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleCatchAllGetResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    ruleCatchAllGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleCatchAllGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RuleCatchAllGetResponseEnvelopeErrors]
-type ruleCatchAllGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleCatchAllGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleCatchAllGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleCatchAllGetResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    ruleCatchAllGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleCatchAllGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RuleCatchAllGetResponseEnvelopeMessages]
-type ruleCatchAllGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleCatchAllGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleCatchAllGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

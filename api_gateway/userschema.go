@@ -20,6 +20,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // UserSchemaService contains methods and other services that help with interacting
@@ -147,29 +148,7 @@ func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params Use
 	return
 }
 
-type Message []MessageItem
-
-type MessageItem struct {
-	Code    int64           `json:"code,required"`
-	Message string          `json:"message,required"`
-	JSON    messageItemJSON `json:"-"`
-}
-
-// messageItemJSON contains the JSON metadata for the struct [MessageItem]
-type messageItemJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MessageItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r messageItemJSON) RawJSON() string {
-	return r.raw
-}
+type Message []shared.ResponseInfo
 
 type PublicSchema struct {
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`

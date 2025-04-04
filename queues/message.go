@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // MessageService contains methods and other services that help with interacting
@@ -181,9 +182,9 @@ func (r MessageAckParamsRetry) MarshalJSON() (data []byte, err error) {
 }
 
 type MessageAckResponseEnvelope struct {
-	Errors   []MessageAckResponseEnvelopeErrors `json:"errors"`
-	Messages []string                           `json:"messages"`
-	Result   MessageAckResponse                 `json:"result"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   MessageAckResponse    `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success MessageAckResponseEnvelopeSuccess `json:"success"`
 	JSON    messageAckResponseEnvelopeJSON    `json:"-"`
@@ -205,29 +206,6 @@ func (r *MessageAckResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r messageAckResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MessageAckResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    messageAckResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// messageAckResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [MessageAckResponseEnvelopeErrors]
-type messageAckResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MessageAckResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r messageAckResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptTailService contains methods and other services that help with interacting
@@ -163,8 +164,8 @@ func (r scriptTailNewResponseJSON) RawJSON() string {
 }
 
 type ScriptTailDeleteResponse struct {
-	Errors   []ScriptTailDeleteResponseError   `json:"errors,required"`
-	Messages []ScriptTailDeleteResponseMessage `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptTailDeleteResponseSuccess `json:"success,required"`
 	JSON    scriptTailDeleteResponseJSON    `json:"-"`
@@ -185,52 +186,6 @@ func (r *ScriptTailDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptTailDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptTailDeleteResponseError struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    scriptTailDeleteResponseErrorJSON `json:"-"`
-}
-
-// scriptTailDeleteResponseErrorJSON contains the JSON metadata for the struct
-// [ScriptTailDeleteResponseError]
-type scriptTailDeleteResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptTailDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptTailDeleteResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptTailDeleteResponseMessage struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    scriptTailDeleteResponseMessageJSON `json:"-"`
-}
-
-// scriptTailDeleteResponseMessageJSON contains the JSON metadata for the struct
-// [ScriptTailDeleteResponseMessage]
-type scriptTailDeleteResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptTailDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptTailDeleteResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -285,8 +240,8 @@ func (r ScriptTailNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailNewResponseEnvelope struct {
-	Errors   []ScriptTailNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptTailNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptTailNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptTailNewResponse                `json:"result"`
@@ -309,52 +264,6 @@ func (r *ScriptTailNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptTailNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptTailNewResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    scriptTailNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// scriptTailNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ScriptTailNewResponseEnvelopeErrors]
-type scriptTailNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptTailNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptTailNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptTailNewResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    scriptTailNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// scriptTailNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ScriptTailNewResponseEnvelopeMessages]
-type scriptTailNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptTailNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptTailNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -384,8 +293,8 @@ type ScriptTailGetParams struct {
 }
 
 type ScriptTailGetResponseEnvelope struct {
-	Errors   []ScriptTailGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptTailGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptTailGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptTailGetResponse                `json:"result"`
@@ -408,52 +317,6 @@ func (r *ScriptTailGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptTailGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptTailGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    scriptTailGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// scriptTailGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ScriptTailGetResponseEnvelopeErrors]
-type scriptTailGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptTailGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptTailGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptTailGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    scriptTailGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// scriptTailGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ScriptTailGetResponseEnvelopeMessages]
-type scriptTailGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptTailGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptTailGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

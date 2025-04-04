@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PageService contains methods and other services that help with interacting with
@@ -213,8 +214,8 @@ func (r PageTrendParamsRegion) IsKnown() bool {
 }
 
 type PageTrendResponseEnvelope struct {
-	Errors   []PageTrendResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageTrendResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                          `json:"success,required"`
 	Result  Trend                         `json:"result"`
@@ -237,51 +238,5 @@ func (r *PageTrendResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r pageTrendResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PageTrendResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    pageTrendResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pageTrendResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PageTrendResponseEnvelopeErrors]
-type pageTrendResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageTrendResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageTrendResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PageTrendResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    pageTrendResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pageTrendResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PageTrendResponseEnvelopeMessages]
-type pageTrendResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageTrendResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageTrendResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DEXFleetStatusService contains methods and other services that help with
@@ -159,8 +160,8 @@ func (r DEXFleetStatusLiveParams) URLQuery() (v url.Values) {
 }
 
 type DEXFleetStatusLiveResponseEnvelope struct {
-	Errors   []DEXFleetStatusLiveResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXFleetStatusLiveResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DEXFleetStatusLiveResponseEnvelopeSuccess `json:"success,required"`
 	Result  DEXFleetStatusLiveResponse                `json:"result"`
@@ -183,52 +184,6 @@ func (r *DEXFleetStatusLiveResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r dexFleetStatusLiveResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXFleetStatusLiveResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    dexFleetStatusLiveResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dexFleetStatusLiveResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DEXFleetStatusLiveResponseEnvelopeErrors]
-type dexFleetStatusLiveResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXFleetStatusLiveResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexFleetStatusLiveResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXFleetStatusLiveResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    dexFleetStatusLiveResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dexFleetStatusLiveResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DEXFleetStatusLiveResponseEnvelopeMessages]
-type dexFleetStatusLiveResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXFleetStatusLiveResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexFleetStatusLiveResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

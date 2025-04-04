@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PCAPOwnershipService contains methods and other services that help with
@@ -177,9 +178,9 @@ func (r PCAPOwnershipNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PCAPOwnershipNewResponseEnvelope struct {
-	Errors   []PCAPOwnershipNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PCAPOwnershipNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   Ownership                                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Ownership             `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPOwnershipNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapOwnershipNewResponseEnvelopeJSON    `json:"-"`
@@ -201,52 +202,6 @@ func (r *PCAPOwnershipNewResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r pcapOwnershipNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PCAPOwnershipNewResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    pcapOwnershipNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pcapOwnershipNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PCAPOwnershipNewResponseEnvelopeErrors]
-type pcapOwnershipNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPOwnershipNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapOwnershipNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PCAPOwnershipNewResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    pcapOwnershipNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pcapOwnershipNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PCAPOwnershipNewResponseEnvelopeMessages]
-type pcapOwnershipNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPOwnershipNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapOwnershipNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -289,9 +244,9 @@ func (r PCAPOwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PCAPOwnershipValidateResponseEnvelope struct {
-	Errors   []PCAPOwnershipValidateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PCAPOwnershipValidateResponseEnvelopeMessages `json:"messages,required"`
-	Result   Ownership                                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Ownership             `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPOwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapOwnershipValidateResponseEnvelopeJSON    `json:"-"`
@@ -313,52 +268,6 @@ func (r *PCAPOwnershipValidateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r pcapOwnershipValidateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PCAPOwnershipValidateResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    pcapOwnershipValidateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pcapOwnershipValidateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [PCAPOwnershipValidateResponseEnvelopeErrors]
-type pcapOwnershipValidateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPOwnershipValidateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapOwnershipValidateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PCAPOwnershipValidateResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    pcapOwnershipValidateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pcapOwnershipValidateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PCAPOwnershipValidateResponseEnvelopeMessages]
-type pcapOwnershipValidateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPOwnershipValidateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapOwnershipValidateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

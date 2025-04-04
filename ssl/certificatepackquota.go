@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CertificatePackQuotaService contains methods and other services that help with
@@ -102,8 +103,8 @@ type CertificatePackQuotaGetParams struct {
 }
 
 type CertificatePackQuotaGetResponseEnvelope struct {
-	Errors   []CertificatePackQuotaGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackQuotaGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CertificatePackQuotaGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  CertificatePackQuotaGetResponse                `json:"result"`
@@ -126,52 +127,6 @@ func (r *CertificatePackQuotaGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r certificatePackQuotaGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackQuotaGetResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    certificatePackQuotaGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// certificatePackQuotaGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CertificatePackQuotaGetResponseEnvelopeErrors]
-type certificatePackQuotaGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackQuotaGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackQuotaGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackQuotaGetResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    certificatePackQuotaGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// certificatePackQuotaGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [CertificatePackQuotaGetResponseEnvelopeMessages]
-type certificatePackQuotaGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackQuotaGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackQuotaGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
