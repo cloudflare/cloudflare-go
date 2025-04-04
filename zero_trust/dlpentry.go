@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -1363,8 +1362,8 @@ func (r DLPEntryNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPEntryNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DLPEntryNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPEntryNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEntryNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEntryNewResponse                `json:"result"`
@@ -1387,6 +1386,52 @@ func (r *DLPEntryNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dlpEntryNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEntryNewResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    dlpEntryNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dlpEntryNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DLPEntryNewResponseEnvelopeErrors]
+type dlpEntryNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEntryNewResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    dlpEntryNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dlpEntryNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DLPEntryNewResponseEnvelopeMessages]
+type dlpEntryNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1478,8 +1523,8 @@ func (r DLPEntryUpdateParamsBodyType) IsKnown() bool {
 }
 
 type DLPEntryUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DLPEntryUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPEntryUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEntryUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEntryUpdateResponse                `json:"result"`
@@ -1502,6 +1547,52 @@ func (r *DLPEntryUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r dlpEntryUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEntryUpdateResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    dlpEntryUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dlpEntryUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPEntryUpdateResponseEnvelopeErrors]
+type dlpEntryUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEntryUpdateResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    dlpEntryUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dlpEntryUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DLPEntryUpdateResponseEnvelopeMessages]
+type dlpEntryUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1529,8 +1620,8 @@ type DLPEntryDeleteParams struct {
 }
 
 type DLPEntryDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DLPEntryDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPEntryDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEntryDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEntryDeleteResponse                `json:"result,nullable"`
@@ -1556,6 +1647,52 @@ func (r dlpEntryDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type DLPEntryDeleteResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    dlpEntryDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dlpEntryDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPEntryDeleteResponseEnvelopeErrors]
+type dlpEntryDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEntryDeleteResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    dlpEntryDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dlpEntryDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DLPEntryDeleteResponseEnvelopeMessages]
+type dlpEntryDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type DLPEntryDeleteResponseEnvelopeSuccess bool
 
@@ -1576,8 +1713,8 @@ type DLPEntryGetParams struct {
 }
 
 type DLPEntryGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DLPEntryGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPEntryGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPEntryGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEntryGetResponse                `json:"result"`
@@ -1600,6 +1737,52 @@ func (r *DLPEntryGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dlpEntryGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEntryGetResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    dlpEntryGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dlpEntryGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DLPEntryGetResponseEnvelopeErrors]
+type dlpEntryGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEntryGetResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    dlpEntryGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dlpEntryGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DLPEntryGetResponseEnvelopeMessages]
+type dlpEntryGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEntryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEntryGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

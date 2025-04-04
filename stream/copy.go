@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CopyService contains methods and other services that help with interacting with
@@ -102,8 +101,8 @@ func (r CopyNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 }
 
 type CopyNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []CopyNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CopyNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success CopyNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Video                          `json:"result"`
@@ -126,6 +125,52 @@ func (r *CopyNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r copyNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CopyNewResponseEnvelopeErrors struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    copyNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// copyNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [CopyNewResponseEnvelopeErrors]
+type copyNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CopyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r copyNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CopyNewResponseEnvelopeMessages struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    copyNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// copyNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [CopyNewResponseEnvelopeMessages]
+type copyNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CopyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r copyNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

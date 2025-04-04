@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptService contains methods and other services that help with interacting
@@ -387,10 +386,10 @@ type ScriptGetParams struct {
 type ScriptGetResponseEnvelope struct {
 	Result ScriptGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success  ScriptGetResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []shared.ResponseInfo            `json:"errors"`
-	Messages []shared.ResponseInfo            `json:"messages"`
-	JSON     scriptGetResponseEnvelopeJSON    `json:"-"`
+	Success  ScriptGetResponseEnvelopeSuccess    `json:"success,required"`
+	Errors   []ScriptGetResponseEnvelopeErrors   `json:"errors"`
+	Messages []ScriptGetResponseEnvelopeMessages `json:"messages"`
+	JSON     scriptGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // scriptGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -425,4 +424,50 @@ func (r ScriptGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type ScriptGetResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    scriptGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// scriptGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ScriptGetResponseEnvelopeErrors]
+type scriptGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptGetResponseEnvelopeMessages struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    scriptGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// scriptGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [ScriptGetResponseEnvelopeMessages]
+type scriptGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

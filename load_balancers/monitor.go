@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // MonitorService contains methods and other services that help with interacting
@@ -378,9 +377,9 @@ func (r MonitorNewParamsType) IsKnown() bool {
 }
 
 type MonitorNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []MonitorNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MonitorNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   Monitor                              `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorNewResponseEnvelopeJSON    `json:"-"`
@@ -402,6 +401,52 @@ func (r *MonitorNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r monitorNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type MonitorNewResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    monitorNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// monitorNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [MonitorNewResponseEnvelopeErrors]
+type monitorNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MonitorNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type MonitorNewResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    monitorNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// monitorNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [MonitorNewResponseEnvelopeMessages]
+type monitorNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MonitorNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -500,9 +545,9 @@ func (r MonitorUpdateParamsType) IsKnown() bool {
 }
 
 type MonitorUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []MonitorUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MonitorUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   Monitor                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorUpdateResponseEnvelopeJSON    `json:"-"`
@@ -524,6 +569,52 @@ func (r *MonitorUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r monitorUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type MonitorUpdateResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    monitorUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// monitorUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [MonitorUpdateResponseEnvelopeErrors]
+type monitorUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MonitorUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type MonitorUpdateResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    monitorUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// monitorUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MonitorUpdateResponseEnvelopeMessages]
+type monitorUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MonitorUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -553,9 +644,9 @@ type MonitorDeleteParams struct {
 }
 
 type MonitorDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MonitorDeleteResponse `json:"result,required"`
+	Errors   []MonitorDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MonitorDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   MonitorDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorDeleteResponseEnvelopeJSON    `json:"-"`
@@ -577,6 +668,52 @@ func (r *MonitorDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r monitorDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type MonitorDeleteResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    monitorDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// monitorDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [MonitorDeleteResponseEnvelopeErrors]
+type monitorDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MonitorDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type MonitorDeleteResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    monitorDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// monitorDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MonitorDeleteResponseEnvelopeMessages]
+type monitorDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MonitorDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -675,9 +812,9 @@ func (r MonitorEditParamsType) IsKnown() bool {
 }
 
 type MonitorEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []MonitorEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MonitorEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   Monitor                               `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorEditResponseEnvelopeJSON    `json:"-"`
@@ -702,6 +839,52 @@ func (r monitorEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type MonitorEditResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    monitorEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// monitorEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [MonitorEditResponseEnvelopeErrors]
+type monitorEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MonitorEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type MonitorEditResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    monitorEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// monitorEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MonitorEditResponseEnvelopeMessages]
+type monitorEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MonitorEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type MonitorEditResponseEnvelopeSuccess bool
 
@@ -723,9 +906,9 @@ type MonitorGetParams struct {
 }
 
 type MonitorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []MonitorGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MonitorGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   Monitor                              `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorGetResponseEnvelopeJSON    `json:"-"`
@@ -747,6 +930,52 @@ func (r *MonitorGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r monitorGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type MonitorGetResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    monitorGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// monitorGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [MonitorGetResponseEnvelopeErrors]
+type monitorGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MonitorGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type MonitorGetResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    monitorGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// monitorGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [MonitorGetResponseEnvelopeMessages]
+type monitorGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MonitorGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r monitorGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingService contains methods and other services that help with interacting
@@ -83,8 +82,8 @@ type SettingGetParams struct {
 }
 
 type SettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []SettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingGetResponseEnvelopeMessages `json:"messages,required"`
 	// The status for Content Scanning
 	Result SettingGetResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -108,6 +107,52 @@ func (r *SettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r settingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingGetResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    settingGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SettingGetResponseEnvelopeErrors]
+type settingGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingGetResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    settingGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// settingGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [SettingGetResponseEnvelopeMessages]
+type settingGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

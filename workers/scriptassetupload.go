@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptAssetUploadService contains methods and other services that help with
@@ -106,8 +105,8 @@ func (r ScriptAssetUploadNewParamsManifest) MarshalJSON() (data []byte, err erro
 }
 
 type ScriptAssetUploadNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []ScriptAssetUploadNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScriptAssetUploadNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptAssetUploadNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptAssetUploadNewResponse                `json:"result"`
@@ -130,6 +129,52 @@ func (r *ScriptAssetUploadNewResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r scriptAssetUploadNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptAssetUploadNewResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    scriptAssetUploadNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// scriptAssetUploadNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ScriptAssetUploadNewResponseEnvelopeErrors]
+type scriptAssetUploadNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptAssetUploadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptAssetUploadNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptAssetUploadNewResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    scriptAssetUploadNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// scriptAssetUploadNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ScriptAssetUploadNewResponseEnvelopeMessages]
+type scriptAssetUploadNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptAssetUploadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptAssetUploadNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

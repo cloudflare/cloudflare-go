@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DLPDatasetUploadService contains methods and other services that help with
@@ -161,8 +160,8 @@ type DLPDatasetUploadNewParams struct {
 }
 
 type DLPDatasetUploadNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DLPDatasetUploadNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPDatasetUploadNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPDatasetUploadNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  NewVersion                                 `json:"result"`
@@ -185,6 +184,52 @@ func (r *DLPDatasetUploadNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r dlpDatasetUploadNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPDatasetUploadNewResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    dlpDatasetUploadNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dlpDatasetUploadNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPDatasetUploadNewResponseEnvelopeErrors]
+type dlpDatasetUploadNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPDatasetUploadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpDatasetUploadNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPDatasetUploadNewResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    dlpDatasetUploadNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dlpDatasetUploadNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DLPDatasetUploadNewResponseEnvelopeMessages]
+type dlpDatasetUploadNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPDatasetUploadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpDatasetUploadNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -224,8 +269,8 @@ func (r DLPDatasetUploadEditParams) MarshalMultipart() (data []byte, contentType
 }
 
 type DLPDatasetUploadEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DLPDatasetUploadEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPDatasetUploadEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPDatasetUploadEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  Dataset                                     `json:"result"`
@@ -248,6 +293,52 @@ func (r *DLPDatasetUploadEditResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r dlpDatasetUploadEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPDatasetUploadEditResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    dlpDatasetUploadEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dlpDatasetUploadEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DLPDatasetUploadEditResponseEnvelopeErrors]
+type dlpDatasetUploadEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPDatasetUploadEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpDatasetUploadEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPDatasetUploadEditResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    dlpDatasetUploadEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dlpDatasetUploadEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DLPDatasetUploadEditResponseEnvelopeMessages]
+type dlpDatasetUploadEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPDatasetUploadEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpDatasetUploadEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

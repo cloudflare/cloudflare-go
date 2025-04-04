@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DeviceDEXTestService contains methods and other services that help with
@@ -322,9 +321,9 @@ func (r DeviceDEXTestNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceDEXTestNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SchemaHTTP            `json:"result,required,nullable"`
+	Errors   []DeviceDEXTestNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceDEXTestNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   SchemaHTTP                                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestNewResponseEnvelopeJSON    `json:"-"`
@@ -346,6 +345,52 @@ func (r *DeviceDEXTestNewResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r deviceDEXTestNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceDEXTestNewResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    deviceDEXTestNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// deviceDEXTestNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceDEXTestNewResponseEnvelopeErrors]
+type deviceDEXTestNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceDEXTestNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceDEXTestNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceDEXTestNewResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    deviceDEXTestNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// deviceDEXTestNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DeviceDEXTestNewResponseEnvelopeMessages]
+type deviceDEXTestNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceDEXTestNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceDEXTestNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -374,9 +419,9 @@ func (r DeviceDEXTestUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceDEXTestUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SchemaHTTP            `json:"result,required,nullable"`
+	Errors   []DeviceDEXTestUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceDEXTestUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   SchemaHTTP                                    `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestUpdateResponseEnvelopeJSON    `json:"-"`
@@ -398,6 +443,52 @@ func (r *DeviceDEXTestUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r deviceDEXTestUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceDEXTestUpdateResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    deviceDEXTestUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// deviceDEXTestUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceDEXTestUpdateResponseEnvelopeErrors]
+type deviceDEXTestUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceDEXTestUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceDEXTestUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceDEXTestUpdateResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    deviceDEXTestUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// deviceDEXTestUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DeviceDEXTestUpdateResponseEnvelopeMessages]
+type deviceDEXTestUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceDEXTestUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceDEXTestUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -425,9 +516,9 @@ type DeviceDEXTestDeleteParams struct {
 }
 
 type DeviceDEXTestDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   DeviceDEXTestDeleteResponse `json:"result,required"`
+	Errors   []DeviceDEXTestDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceDEXTestDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   DeviceDEXTestDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestDeleteResponseEnvelopeJSON    `json:"-"`
@@ -452,6 +543,52 @@ func (r deviceDEXTestDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type DeviceDEXTestDeleteResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    deviceDEXTestDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// deviceDEXTestDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceDEXTestDeleteResponseEnvelopeErrors]
+type deviceDEXTestDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceDEXTestDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceDEXTestDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceDEXTestDeleteResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    deviceDEXTestDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// deviceDEXTestDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DeviceDEXTestDeleteResponseEnvelopeMessages]
+type deviceDEXTestDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceDEXTestDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceDEXTestDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful.
 type DeviceDEXTestDeleteResponseEnvelopeSuccess bool
 
@@ -472,9 +609,9 @@ type DeviceDEXTestGetParams struct {
 }
 
 type DeviceDEXTestGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SchemaHTTP            `json:"result,required,nullable"`
+	Errors   []DeviceDEXTestGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceDEXTestGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   SchemaHTTP                                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestGetResponseEnvelopeJSON    `json:"-"`
@@ -496,6 +633,52 @@ func (r *DeviceDEXTestGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r deviceDEXTestGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceDEXTestGetResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    deviceDEXTestGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// deviceDEXTestGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceDEXTestGetResponseEnvelopeErrors]
+type deviceDEXTestGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceDEXTestGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceDEXTestGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceDEXTestGetResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    deviceDEXTestGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// deviceDEXTestGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DeviceDEXTestGetResponseEnvelopeMessages]
+type deviceDEXTestGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceDEXTestGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceDEXTestGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

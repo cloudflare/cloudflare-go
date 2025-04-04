@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DetectionService contains methods and other services that help with interacting
@@ -227,8 +226,8 @@ func (r DetectionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DetectionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DetectionNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DetectionNewResponseEnvelopeMessages `json:"messages,required"`
 	// A custom set of username/password expressions to match Leaked Credential Checks
 	// on
 	Result DetectionNewResponse `json:"result,required"`
@@ -253,6 +252,52 @@ func (r *DetectionNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r detectionNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DetectionNewResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    detectionNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// detectionNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DetectionNewResponseEnvelopeErrors]
+type detectionNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DetectionNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r detectionNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DetectionNewResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    detectionNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// detectionNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DetectionNewResponseEnvelopeMessages]
+type detectionNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DetectionNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r detectionNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -285,8 +330,8 @@ func (r DetectionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DetectionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DetectionUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DetectionUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// A custom set of username/password expressions to match Leaked Credential Checks
 	// on
 	Result DetectionUpdateResponse `json:"result,required"`
@@ -311,6 +356,52 @@ func (r *DetectionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r detectionUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DetectionUpdateResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    detectionUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// detectionUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DetectionUpdateResponseEnvelopeErrors]
+type detectionUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DetectionUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r detectionUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DetectionUpdateResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    detectionUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// detectionUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DetectionUpdateResponseEnvelopeMessages]
+type detectionUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DetectionUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r detectionUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -340,9 +431,9 @@ type DetectionDeleteParams struct {
 }
 
 type DetectionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   DetectionDeleteResponse `json:"result,required"`
+	Errors   []DetectionDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DetectionDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   DetectionDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success DetectionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    detectionDeleteResponseEnvelopeJSON    `json:"-"`
@@ -364,6 +455,52 @@ func (r *DetectionDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r detectionDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DetectionDeleteResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    detectionDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// detectionDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DetectionDeleteResponseEnvelopeErrors]
+type detectionDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DetectionDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r detectionDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DetectionDeleteResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    detectionDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// detectionDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DetectionDeleteResponseEnvelopeMessages]
+type detectionDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DetectionDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r detectionDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

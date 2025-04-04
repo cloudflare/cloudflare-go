@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AnalyticsReportService contains methods and other services that help with
@@ -197,8 +196,8 @@ func (r AnalyticsReportGetParams) URLQuery() (v url.Values) {
 }
 
 type AnalyticsReportGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []AnalyticsReportGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AnalyticsReportGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Report                                    `json:"result"`
@@ -221,6 +220,52 @@ func (r *AnalyticsReportGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r analyticsReportGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AnalyticsReportGetResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    analyticsReportGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// analyticsReportGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AnalyticsReportGetResponseEnvelopeErrors]
+type analyticsReportGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnalyticsReportGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyticsReportGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AnalyticsReportGetResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    analyticsReportGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// analyticsReportGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [AnalyticsReportGetResponseEnvelopeMessages]
+type analyticsReportGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnalyticsReportGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyticsReportGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

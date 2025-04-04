@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SFUService contains methods and other services that help with interacting with
@@ -311,8 +310,8 @@ func (r SFUNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SFUNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []SFUNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SFUNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success SFUNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  SFUNewResponse                `json:"result"`
@@ -335,6 +334,52 @@ func (r *SFUNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r sfuNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SFUNewResponseEnvelopeErrors struct {
+	Code    int64                            `json:"code,required"`
+	Message string                           `json:"message,required"`
+	JSON    sfuNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// sfuNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SFUNewResponseEnvelopeErrors]
+type sfuNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SFUNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sfuNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SFUNewResponseEnvelopeMessages struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    sfuNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// sfuNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [SFUNewResponseEnvelopeMessages]
+type sfuNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SFUNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sfuNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -365,8 +410,8 @@ func (r SFUUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SFUUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []SFUUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SFUUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success SFUUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  SFUUpdateResponse                `json:"result"`
@@ -389,6 +434,52 @@ func (r *SFUUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r sfuUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SFUUpdateResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    sfuUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// sfuUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SFUUpdateResponseEnvelopeErrors]
+type sfuUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SFUUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sfuUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SFUUpdateResponseEnvelopeMessages struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    sfuUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// sfuUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [SFUUpdateResponseEnvelopeMessages]
+type sfuUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SFUUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sfuUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -418,8 +509,8 @@ type SFUDeleteParams struct {
 }
 
 type SFUDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []SFUDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SFUDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success SFUDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  SFUDeleteResponse                `json:"result"`
@@ -445,6 +536,52 @@ func (r sfuDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type SFUDeleteResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    sfuDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// sfuDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SFUDeleteResponseEnvelopeErrors]
+type sfuDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SFUDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sfuDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SFUDeleteResponseEnvelopeMessages struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    sfuDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// sfuDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [SFUDeleteResponseEnvelopeMessages]
+type sfuDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SFUDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sfuDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type SFUDeleteResponseEnvelopeSuccess bool
 
@@ -466,8 +603,8 @@ type SFUGetParams struct {
 }
 
 type SFUGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []SFUGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SFUGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success SFUGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  SFUGetResponse                `json:"result"`
@@ -490,6 +627,52 @@ func (r *SFUGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r sfuGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SFUGetResponseEnvelopeErrors struct {
+	Code    int64                            `json:"code,required"`
+	Message string                           `json:"message,required"`
+	JSON    sfuGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// sfuGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SFUGetResponseEnvelopeErrors]
+type sfuGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SFUGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sfuGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SFUGetResponseEnvelopeMessages struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    sfuGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// sfuGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [SFUGetResponseEnvelopeMessages]
+type sfuGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SFUGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sfuGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

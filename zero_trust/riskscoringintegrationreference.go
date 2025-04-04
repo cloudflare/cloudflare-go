@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RiskScoringIntegrationReferenceService contains methods and other services that
@@ -121,8 +120,8 @@ type RiskScoringIntegrationReferenceGetParams struct {
 }
 
 type RiskScoringIntegrationReferenceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []RiskScoringIntegrationReferenceGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RiskScoringIntegrationReferenceGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success RiskScoringIntegrationReferenceGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RiskScoringIntegrationReferenceGetResponse                `json:"result"`
@@ -145,6 +144,54 @@ func (r *RiskScoringIntegrationReferenceGetResponseEnvelope) UnmarshalJSON(data 
 }
 
 func (r riskScoringIntegrationReferenceGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RiskScoringIntegrationReferenceGetResponseEnvelopeErrors struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    riskScoringIntegrationReferenceGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// riskScoringIntegrationReferenceGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [RiskScoringIntegrationReferenceGetResponseEnvelopeErrors]
+type riskScoringIntegrationReferenceGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringIntegrationReferenceGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringIntegrationReferenceGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RiskScoringIntegrationReferenceGetResponseEnvelopeMessages struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    riskScoringIntegrationReferenceGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// riskScoringIntegrationReferenceGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [RiskScoringIntegrationReferenceGetResponseEnvelopeMessages]
+type riskScoringIntegrationReferenceGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringIntegrationReferenceGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringIntegrationReferenceGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

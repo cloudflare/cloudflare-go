@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InvestigateDetectionService contains methods and other services that help with
@@ -355,11 +354,11 @@ type InvestigateDetectionGetParams struct {
 }
 
 type InvestigateDetectionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors,required"`
-	Messages []shared.ResponseInfo                       `json:"messages,required"`
-	Result   InvestigateDetectionGetResponse             `json:"result,required"`
-	Success  bool                                        `json:"success,required"`
-	JSON     investigateDetectionGetResponseEnvelopeJSON `json:"-"`
+	Errors   []InvestigateDetectionGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []InvestigateDetectionGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   InvestigateDetectionGetResponse                   `json:"result,required"`
+	Success  bool                                              `json:"success,required"`
+	JSON     investigateDetectionGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // investigateDetectionGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -378,5 +377,51 @@ func (r *InvestigateDetectionGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r investigateDetectionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateDetectionGetResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    investigateDetectionGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// investigateDetectionGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [InvestigateDetectionGetResponseEnvelopeErrors]
+type investigateDetectionGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateDetectionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateDetectionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateDetectionGetResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    investigateDetectionGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// investigateDetectionGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [InvestigateDetectionGetResponseEnvelopeMessages]
+type investigateDetectionGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateDetectionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateDetectionGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

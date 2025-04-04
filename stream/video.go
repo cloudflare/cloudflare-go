@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // VideoService contains methods and other services that help with interacting with
@@ -101,8 +100,8 @@ func (r VideoStorageUsageParams) URLQuery() (v url.Values) {
 }
 
 type VideoStorageUsageResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []VideoStorageUsageResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []VideoStorageUsageResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success VideoStorageUsageResponseEnvelopeSuccess `json:"success,required"`
 	Result  VideoStorageUsageResponse                `json:"result"`
@@ -125,6 +124,52 @@ func (r *VideoStorageUsageResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r videoStorageUsageResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type VideoStorageUsageResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    videoStorageUsageResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// videoStorageUsageResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [VideoStorageUsageResponseEnvelopeErrors]
+type videoStorageUsageResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VideoStorageUsageResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r videoStorageUsageResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type VideoStorageUsageResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    videoStorageUsageResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// videoStorageUsageResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [VideoStorageUsageResponseEnvelopeMessages]
+type videoStorageUsageResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VideoStorageUsageResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r videoStorageUsageResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

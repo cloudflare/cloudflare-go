@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TunnelCloudflaredTokenService contains methods and other services that help with
@@ -61,8 +60,8 @@ type TunnelCloudflaredTokenGetParams struct {
 }
 
 type TunnelCloudflaredTokenGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []TunnelCloudflaredTokenGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TunnelCloudflaredTokenGetResponseEnvelopeMessages `json:"messages,required"`
 	// The Tunnel Token is used as a mechanism to authenticate the operation of a
 	// tunnel.
 	Result string `json:"result,required"`
@@ -87,6 +86,52 @@ func (r *TunnelCloudflaredTokenGetResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r tunnelCloudflaredTokenGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredTokenGetResponseEnvelopeErrors struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    tunnelCloudflaredTokenGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tunnelCloudflaredTokenGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [TunnelCloudflaredTokenGetResponseEnvelopeErrors]
+type tunnelCloudflaredTokenGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredTokenGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredTokenGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredTokenGetResponseEnvelopeMessages struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    tunnelCloudflaredTokenGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tunnelCloudflaredTokenGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [TunnelCloudflaredTokenGetResponseEnvelopeMessages]
+type tunnelCloudflaredTokenGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredTokenGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredTokenGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

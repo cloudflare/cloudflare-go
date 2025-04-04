@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // WAFOverrideService contains methods and other services that help with
@@ -429,9 +428,9 @@ func (r WAFOverrideNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WAFOverrideNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Override              `json:"result,required"`
+	Errors   []WAFOverrideNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WAFOverrideNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   Override                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFOverrideNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideNewResponseEnvelopeJSON    `json:"-"`
@@ -453,6 +452,52 @@ func (r *WAFOverrideNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r wafOverrideNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type WAFOverrideNewResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    wafOverrideNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// wafOverrideNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WAFOverrideNewResponseEnvelopeErrors]
+type wafOverrideNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFOverrideNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafOverrideNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type WAFOverrideNewResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    wafOverrideNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// wafOverrideNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WAFOverrideNewResponseEnvelopeMessages]
+type wafOverrideNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFOverrideNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafOverrideNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -496,9 +541,9 @@ func (r WAFOverrideUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WAFOverrideUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Override              `json:"result,required"`
+	Errors   []WAFOverrideUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WAFOverrideUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   Override                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFOverrideUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideUpdateResponseEnvelopeJSON    `json:"-"`
@@ -520,6 +565,52 @@ func (r *WAFOverrideUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r wafOverrideUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type WAFOverrideUpdateResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    wafOverrideUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// wafOverrideUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WAFOverrideUpdateResponseEnvelopeErrors]
+type wafOverrideUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFOverrideUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafOverrideUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type WAFOverrideUpdateResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    wafOverrideUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// wafOverrideUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WAFOverrideUpdateResponseEnvelopeMessages]
+type wafOverrideUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFOverrideUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafOverrideUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -587,9 +678,9 @@ type WAFOverrideGetParams struct {
 }
 
 type WAFOverrideGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Override              `json:"result,required"`
+	Errors   []WAFOverrideGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WAFOverrideGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   Override                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFOverrideGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideGetResponseEnvelopeJSON    `json:"-"`
@@ -611,6 +702,52 @@ func (r *WAFOverrideGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r wafOverrideGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type WAFOverrideGetResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    wafOverrideGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// wafOverrideGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WAFOverrideGetResponseEnvelopeErrors]
+type wafOverrideGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFOverrideGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafOverrideGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type WAFOverrideGetResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    wafOverrideGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// wafOverrideGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WAFOverrideGetResponseEnvelopeMessages]
+type wafOverrideGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFOverrideGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafOverrideGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

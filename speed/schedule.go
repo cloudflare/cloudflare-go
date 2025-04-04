@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScheduleService contains methods and other services that help with interacting
@@ -275,8 +274,8 @@ func (r ScheduleNewParamsRegion) IsKnown() bool {
 }
 
 type ScheduleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []ScheduleNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScheduleNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                            `json:"success,required"`
 	Result  ScheduleNewResponse             `json:"result"`
@@ -299,6 +298,52 @@ func (r *ScheduleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scheduleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScheduleNewResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    scheduleNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// scheduleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ScheduleNewResponseEnvelopeErrors]
+type scheduleNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScheduleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scheduleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScheduleNewResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    scheduleNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// scheduleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ScheduleNewResponseEnvelopeMessages]
+type scheduleNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScheduleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scheduleNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -353,8 +398,8 @@ func (r ScheduleDeleteParamsRegion) IsKnown() bool {
 }
 
 type ScheduleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []ScheduleDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScheduleDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                               `json:"success,required"`
 	Result  ScheduleDeleteResponse             `json:"result"`
@@ -377,6 +422,52 @@ func (r *ScheduleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r scheduleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScheduleDeleteResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    scheduleDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// scheduleDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ScheduleDeleteResponseEnvelopeErrors]
+type scheduleDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScheduleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scheduleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScheduleDeleteResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    scheduleDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// scheduleDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ScheduleDeleteResponseEnvelopeMessages]
+type scheduleDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScheduleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scheduleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -431,8 +522,8 @@ func (r ScheduleGetParamsRegion) IsKnown() bool {
 }
 
 type ScheduleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []ScheduleGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScheduleGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool `json:"success,required"`
 	// The test schedule.
@@ -456,5 +547,51 @@ func (r *ScheduleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scheduleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScheduleGetResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    scheduleGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// scheduleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ScheduleGetResponseEnvelopeErrors]
+type scheduleGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScheduleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scheduleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScheduleGetResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    scheduleGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// scheduleGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ScheduleGetResponseEnvelopeMessages]
+type scheduleGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScheduleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scheduleGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TunnelWARPConnectorTokenService contains methods and other services that help
@@ -62,8 +61,8 @@ type TunnelWARPConnectorTokenGetParams struct {
 }
 
 type TunnelWARPConnectorTokenGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []TunnelWARPConnectorTokenGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TunnelWARPConnectorTokenGetResponseEnvelopeMessages `json:"messages,required"`
 	// The Tunnel Token is used as a mechanism to authenticate the operation of a
 	// tunnel.
 	Result string `json:"result,required"`
@@ -88,6 +87,52 @@ func (r *TunnelWARPConnectorTokenGetResponseEnvelope) UnmarshalJSON(data []byte)
 }
 
 func (r tunnelWARPConnectorTokenGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelWARPConnectorTokenGetResponseEnvelopeErrors struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    tunnelWARPConnectorTokenGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tunnelWARPConnectorTokenGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [TunnelWARPConnectorTokenGetResponseEnvelopeErrors]
+type tunnelWARPConnectorTokenGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelWARPConnectorTokenGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelWARPConnectorTokenGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelWARPConnectorTokenGetResponseEnvelopeMessages struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    tunnelWARPConnectorTokenGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tunnelWARPConnectorTokenGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [TunnelWARPConnectorTokenGetResponseEnvelopeMessages]
+type tunnelWARPConnectorTokenGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelWARPConnectorTokenGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelWARPConnectorTokenGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

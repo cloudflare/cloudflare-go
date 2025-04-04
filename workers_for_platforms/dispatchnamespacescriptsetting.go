@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/cloudflare/cloudflare-go/v4/workers"
 	"github.com/tidwall/gjson"
 )
@@ -8434,8 +8433,8 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsUsageModel) IsKnown() bo
 }
 
 type DispatchNamespaceScriptSettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DispatchNamespaceScriptSettingEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatchNamespaceScriptSettingEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptSettingEditResponse                `json:"result"`
@@ -8461,6 +8460,54 @@ func (r dispatchNamespaceScriptSettingEditResponseEnvelopeJSON) RawJSON() string
 	return r.raw
 }
 
+type DispatchNamespaceScriptSettingEditResponseEnvelopeErrors struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    dispatchNamespaceScriptSettingEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseEnvelopeErrors]
+type dispatchNamespaceScriptSettingEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSettingEditResponseEnvelopeMessages struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    dispatchNamespaceScriptSettingEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseEnvelopeMessages]
+type dispatchNamespaceScriptSettingEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type DispatchNamespaceScriptSettingEditResponseEnvelopeSuccess bool
 
@@ -8482,8 +8529,8 @@ type DispatchNamespaceScriptSettingGetParams struct {
 }
 
 type DispatchNamespaceScriptSettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DispatchNamespaceScriptSettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatchNamespaceScriptSettingGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptSettingGetResponse                `json:"result"`
@@ -8506,6 +8553,54 @@ func (r *DispatchNamespaceScriptSettingGetResponseEnvelope) UnmarshalJSON(data [
 }
 
 func (r dispatchNamespaceScriptSettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSettingGetResponseEnvelopeErrors struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    dispatchNamespaceScriptSettingGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseEnvelopeErrors]
+type dispatchNamespaceScriptSettingGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSettingGetResponseEnvelopeMessages struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    dispatchNamespaceScriptSettingGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseEnvelopeMessages]
+type dispatchNamespaceScriptSettingGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

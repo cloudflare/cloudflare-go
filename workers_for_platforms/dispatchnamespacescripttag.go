@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DispatchNamespaceScriptTagService contains methods and other services that help
@@ -158,8 +157,8 @@ type DispatchNamespaceScriptTagDeleteParams struct {
 }
 
 type DispatchNamespaceScriptTagDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DispatchNamespaceScriptTagDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatchNamespaceScriptTagDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptTagDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptTagDeleteResponse                `json:"result,nullable"`
@@ -182,6 +181,53 @@ func (r *DispatchNamespaceScriptTagDeleteResponseEnvelope) UnmarshalJSON(data []
 }
 
 func (r dispatchNamespaceScriptTagDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptTagDeleteResponseEnvelopeErrors struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    dispatchNamespaceScriptTagDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptTagDeleteResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptTagDeleteResponseEnvelopeErrors]
+type dispatchNamespaceScriptTagDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptTagDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptTagDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptTagDeleteResponseEnvelopeMessages struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    dispatchNamespaceScriptTagDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptTagDeleteResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptTagDeleteResponseEnvelopeMessages]
+type dispatchNamespaceScriptTagDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptTagDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptTagDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
