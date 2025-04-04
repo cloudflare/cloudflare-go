@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ResourceGroupService contains methods and other services that help with
@@ -663,9 +662,9 @@ type ResourceGroupDeleteParams struct {
 }
 
 type ResourceGroupDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ResourceGroupDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ResourceGroupDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ResourceGroupDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  ResourceGroupDeleteResponse                `json:"result,nullable"`
 	JSON    resourceGroupDeleteResponseEnvelopeJSON    `json:"-"`
@@ -690,7 +689,103 @@ func (r resourceGroupDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ResourceGroupDeleteResponseEnvelopeErrors struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           ResourceGroupDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             resourceGroupDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// resourceGroupDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ResourceGroupDeleteResponseEnvelopeErrors]
+type resourceGroupDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ResourceGroupDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    resourceGroupDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// resourceGroupDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [ResourceGroupDeleteResponseEnvelopeErrorsSource]
+type resourceGroupDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupDeleteResponseEnvelopeMessages struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           ResourceGroupDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             resourceGroupDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// resourceGroupDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ResourceGroupDeleteResponseEnvelopeMessages]
+type resourceGroupDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ResourceGroupDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceGroupDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    resourceGroupDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// resourceGroupDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ResourceGroupDeleteResponseEnvelopeMessagesSource]
+type resourceGroupDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ResourceGroupDeleteResponseEnvelopeSuccess bool
 
 const (
