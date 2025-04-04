@@ -8380,6 +8380,16 @@ Methods:
 
 - <code title="patch /accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/status">client.Workflows.Instances.Status.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows#InstanceStatusService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, workflowName <a href="https://pkg.go.dev/builtin#string">string</a>, instanceID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows">workflows</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows#InstanceStatusEditParams">InstanceStatusEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows">workflows</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows#InstanceStatusEditResponse">InstanceStatusEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+### Events
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows">workflows</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows#InstanceEventNewResponse">InstanceEventNewResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/events/{event_type}">client.Workflows.Instances.Events.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows#InstanceEventService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, workflowName <a href="https://pkg.go.dev/builtin#string">string</a>, instanceID <a href="https://pkg.go.dev/builtin#string">string</a>, eventType <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows">workflows</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows#InstanceEventNewParams">InstanceEventNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows">workflows</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workflows#InstanceEventNewResponse">InstanceEventNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Versions
 
 Response Types:

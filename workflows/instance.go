@@ -30,6 +30,7 @@ import (
 type InstanceService struct {
 	Options []option.RequestOption
 	Status  *InstanceStatusService
+	Events  *InstanceEventService
 }
 
 // NewInstanceService generates a new service that applies the given options to
@@ -39,6 +40,7 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 	r = &InstanceService{}
 	r.Options = opts
 	r.Status = NewInstanceStatusService(opts...)
+	r.Events = NewInstanceEventService(opts...)
 	return
 }
 
