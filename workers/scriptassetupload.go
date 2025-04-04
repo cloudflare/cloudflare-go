@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptAssetUploadService contains methods and other services that help with
@@ -82,7 +83,7 @@ func (r scriptAssetUploadNewResponseJSON) RawJSON() string {
 }
 
 type ScriptAssetUploadNewParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A manifest ([path]: {hash, size}) map of files to upload. As an example,
 	// `/blog/hello-world.html` would be a valid path key.
@@ -105,9 +106,9 @@ func (r ScriptAssetUploadNewParamsManifest) MarshalJSON() (data []byte, err erro
 }
 
 type ScriptAssetUploadNewResponseEnvelope struct {
-	Errors   []ScriptAssetUploadNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptAssetUploadNewResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful.
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
 	Success ScriptAssetUploadNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptAssetUploadNewResponse                `json:"result"`
 	JSON    scriptAssetUploadNewResponseEnvelopeJSON    `json:"-"`
@@ -132,103 +133,7 @@ func (r scriptAssetUploadNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptAssetUploadNewResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
-	DocumentationURL string                                           `json:"documentation_url"`
-	Source           ScriptAssetUploadNewResponseEnvelopeErrorsSource `json:"source"`
-	JSON             scriptAssetUploadNewResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// scriptAssetUploadNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ScriptAssetUploadNewResponseEnvelopeErrors]
-type scriptAssetUploadNewResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptAssetUploadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptAssetUploadNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptAssetUploadNewResponseEnvelopeErrorsSource struct {
-	Pointer string                                               `json:"pointer"`
-	JSON    scriptAssetUploadNewResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// scriptAssetUploadNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
-// for the struct [ScriptAssetUploadNewResponseEnvelopeErrorsSource]
-type scriptAssetUploadNewResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptAssetUploadNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptAssetUploadNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptAssetUploadNewResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
-	DocumentationURL string                                             `json:"documentation_url"`
-	Source           ScriptAssetUploadNewResponseEnvelopeMessagesSource `json:"source"`
-	JSON             scriptAssetUploadNewResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// scriptAssetUploadNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ScriptAssetUploadNewResponseEnvelopeMessages]
-type scriptAssetUploadNewResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptAssetUploadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptAssetUploadNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptAssetUploadNewResponseEnvelopeMessagesSource struct {
-	Pointer string                                                 `json:"pointer"`
-	JSON    scriptAssetUploadNewResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// scriptAssetUploadNewResponseEnvelopeMessagesSourceJSON contains the JSON
-// metadata for the struct [ScriptAssetUploadNewResponseEnvelopeMessagesSource]
-type scriptAssetUploadNewResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptAssetUploadNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptAssetUploadNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
+// Whether the API call was successful
 type ScriptAssetUploadNewResponseEnvelopeSuccess bool
 
 const (
