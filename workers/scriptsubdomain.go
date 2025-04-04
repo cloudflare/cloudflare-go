@@ -118,7 +118,7 @@ func (r scriptSubdomainGetResponseJSON) RawJSON() string {
 }
 
 type ScriptSubdomainNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Whether the Worker should be available on the workers.dev subdomain.
 	Enabled param.Field[bool] `json:"enabled,required"`
@@ -132,6 +132,6 @@ func (r ScriptSubdomainNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptSubdomainGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

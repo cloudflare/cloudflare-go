@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DispatchNamespaceScriptSecretService contains methods and other services that
@@ -280,7 +279,7 @@ func (r DispatchNamespaceScriptSecretGetResponseType) IsKnown() bool {
 }
 
 type DispatchNamespaceScriptSecretUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of this secret, this is what will be used to access it inside the
 	// Worker.
@@ -311,9 +310,9 @@ func (r DispatchNamespaceScriptSecretUpdateParamsType) IsKnown() bool {
 }
 
 type DispatchNamespaceScriptSecretUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DispatchNamespaceScriptSecretUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatchNamespaceScriptSecretUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DispatchNamespaceScriptSecretUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptSecretUpdateResponse                `json:"result"`
 	JSON    dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON    `json:"-"`
@@ -338,7 +337,107 @@ func (r dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON) RawJSON() strin
 	return r.raw
 }
 
-// Whether the API call was successful
+type DispatchNamespaceScriptSecretUpdateResponseEnvelopeErrors struct {
+	Code             int64                                                           `json:"code,required"`
+	Message          string                                                          `json:"message,required"`
+	DocumentationURL string                                                          `json:"documentation_url"`
+	Source           DispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptSecretUpdateResponseEnvelopeErrors]
+type dispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                                              `json:"pointer"`
+	JSON    dispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsSourceJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsSource]
+type dispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSecretUpdateResponseEnvelopeMessages struct {
+	Code             int64                                                             `json:"code,required"`
+	Message          string                                                            `json:"message,required"`
+	DocumentationURL string                                                            `json:"documentation_url"`
+	Source           DispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSecretUpdateResponseEnvelopeMessages]
+type dispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                                `json:"pointer"`
+	JSON    dispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesSourceJSON contains
+// the JSON metadata for the struct
+// [DispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesSource]
+type dispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DispatchNamespaceScriptSecretUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -354,19 +453,19 @@ func (r DispatchNamespaceScriptSecretUpdateResponseEnvelopeSuccess) IsKnown() bo
 }
 
 type DispatchNamespaceScriptSecretListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DispatchNamespaceScriptSecretDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DispatchNamespaceScriptSecretDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DispatchNamespaceScriptSecretDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatchNamespaceScriptSecretDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptSecretDeleteResponse                `json:"result,nullable"`
 	JSON    dispatchNamespaceScriptSecretDeleteResponseEnvelopeJSON    `json:"-"`
@@ -391,7 +490,107 @@ func (r dispatchNamespaceScriptSecretDeleteResponseEnvelopeJSON) RawJSON() strin
 	return r.raw
 }
 
-// Whether the API call was successful
+type DispatchNamespaceScriptSecretDeleteResponseEnvelopeErrors struct {
+	Code             int64                                                           `json:"code,required"`
+	Message          string                                                          `json:"message,required"`
+	DocumentationURL string                                                          `json:"documentation_url"`
+	Source           DispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptSecretDeleteResponseEnvelopeErrors]
+type dispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                                              `json:"pointer"`
+	JSON    dispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsSourceJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsSource]
+type dispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSecretDeleteResponseEnvelopeMessages struct {
+	Code             int64                                                             `json:"code,required"`
+	Message          string                                                            `json:"message,required"`
+	DocumentationURL string                                                            `json:"documentation_url"`
+	Source           DispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSecretDeleteResponseEnvelopeMessages]
+type dispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                                `json:"pointer"`
+	JSON    dispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesSourceJSON contains
+// the JSON metadata for the struct
+// [DispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesSource]
+type dispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -407,14 +606,14 @@ func (r DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccess) IsKnown() bo
 }
 
 type DispatchNamespaceScriptSecretGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DispatchNamespaceScriptSecretGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DispatchNamespaceScriptSecretGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatchNamespaceScriptSecretGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DispatchNamespaceScriptSecretGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptSecretGetResponse                `json:"result"`
 	JSON    dispatchNamespaceScriptSecretGetResponseEnvelopeJSON    `json:"-"`
@@ -439,7 +638,106 @@ func (r dispatchNamespaceScriptSecretGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DispatchNamespaceScriptSecretGetResponseEnvelopeErrors struct {
+	Code             int64                                                        `json:"code,required"`
+	Message          string                                                       `json:"message,required"`
+	DocumentationURL string                                                       `json:"documentation_url"`
+	Source           DispatchNamespaceScriptSecretGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dispatchNamespaceScriptSecretGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptSecretGetResponseEnvelopeErrors]
+type dispatchNamespaceScriptSecretGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSecretGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                           `json:"pointer"`
+	JSON    dispatchNamespaceScriptSecretGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretGetResponseEnvelopeErrorsSourceJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSecretGetResponseEnvelopeErrorsSource]
+type dispatchNamespaceScriptSecretGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSecretGetResponseEnvelopeMessages struct {
+	Code             int64                                                          `json:"code,required"`
+	Message          string                                                         `json:"message,required"`
+	DocumentationURL string                                                         `json:"documentation_url"`
+	Source           DispatchNamespaceScriptSecretGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dispatchNamespaceScriptSecretGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptSecretGetResponseEnvelopeMessages]
+type dispatchNamespaceScriptSecretGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptSecretGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                             `json:"pointer"`
+	JSON    dispatchNamespaceScriptSecretGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretGetResponseEnvelopeMessagesSourceJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSecretGetResponseEnvelopeMessagesSource]
+type dispatchNamespaceScriptSecretGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DispatchNamespaceScriptSecretGetResponseEnvelopeSuccess bool
 
 const (
