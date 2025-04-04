@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DLPDatasetVersionEntryService contains methods and other services that help with
@@ -130,8 +129,8 @@ func (r DLPDatasetVersionEntryNewParams) MarshalMultipart() (data []byte, conten
 }
 
 type DLPDatasetVersionEntryNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DLPDatasetVersionEntryNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPDatasetVersionEntryNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPDatasetVersionEntryNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPDatasetVersionEntryNewResponse                `json:"result"`
@@ -154,6 +153,52 @@ func (r *DLPDatasetVersionEntryNewResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r dlpDatasetVersionEntryNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPDatasetVersionEntryNewResponseEnvelopeErrors struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    dlpDatasetVersionEntryNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dlpDatasetVersionEntryNewResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [DLPDatasetVersionEntryNewResponseEnvelopeErrors]
+type dlpDatasetVersionEntryNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPDatasetVersionEntryNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpDatasetVersionEntryNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPDatasetVersionEntryNewResponseEnvelopeMessages struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    dlpDatasetVersionEntryNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dlpDatasetVersionEntryNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DLPDatasetVersionEntryNewResponseEnvelopeMessages]
+type dlpDatasetVersionEntryNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPDatasetVersionEntryNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpDatasetVersionEntryNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

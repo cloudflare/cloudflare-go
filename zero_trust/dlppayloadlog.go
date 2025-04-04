@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DLPPayloadLogService contains methods and other services that help with
@@ -125,8 +124,8 @@ func (r DLPPayloadLogUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPPayloadLogUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DLPPayloadLogUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPPayloadLogUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPPayloadLogUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPPayloadLogUpdateResponse                `json:"result"`
@@ -152,6 +151,52 @@ func (r dlpPayloadLogUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type DLPPayloadLogUpdateResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    dlpPayloadLogUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dlpPayloadLogUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPPayloadLogUpdateResponseEnvelopeErrors]
+type dlpPayloadLogUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPPayloadLogUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpPayloadLogUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPPayloadLogUpdateResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    dlpPayloadLogUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dlpPayloadLogUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DLPPayloadLogUpdateResponseEnvelopeMessages]
+type dlpPayloadLogUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPPayloadLogUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpPayloadLogUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type DLPPayloadLogUpdateResponseEnvelopeSuccess bool
 
@@ -172,8 +217,8 @@ type DLPPayloadLogGetParams struct {
 }
 
 type DLPPayloadLogGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DLPPayloadLogGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPPayloadLogGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPPayloadLogGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPPayloadLogGetResponse                `json:"result"`
@@ -196,6 +241,52 @@ func (r *DLPPayloadLogGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r dlpPayloadLogGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPPayloadLogGetResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    dlpPayloadLogGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dlpPayloadLogGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPPayloadLogGetResponseEnvelopeErrors]
+type dlpPayloadLogGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPPayloadLogGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpPayloadLogGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPPayloadLogGetResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    dlpPayloadLogGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dlpPayloadLogGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DLPPayloadLogGetResponseEnvelopeMessages]
+type dlpPayloadLogGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPPayloadLogGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpPayloadLogGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

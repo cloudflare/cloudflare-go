@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InvestigateRawService contains methods and other services that help with
@@ -83,11 +82,11 @@ type InvestigateRawGetParams struct {
 }
 
 type InvestigateRawGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   InvestigateRawGetResponse             `json:"result,required"`
-	Success  bool                                  `json:"success,required"`
-	JSON     investigateRawGetResponseEnvelopeJSON `json:"-"`
+	Errors   []InvestigateRawGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []InvestigateRawGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   InvestigateRawGetResponse                   `json:"result,required"`
+	Success  bool                                        `json:"success,required"`
+	JSON     investigateRawGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // investigateRawGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -106,5 +105,51 @@ func (r *InvestigateRawGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r investigateRawGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateRawGetResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    investigateRawGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// investigateRawGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [InvestigateRawGetResponseEnvelopeErrors]
+type investigateRawGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateRawGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateRawGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateRawGetResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    investigateRawGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// investigateRawGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [InvestigateRawGetResponseEnvelopeMessages]
+type investigateRawGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateRawGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateRawGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

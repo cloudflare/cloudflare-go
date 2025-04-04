@@ -2731,8 +2731,8 @@ func (r PageRuleNewParamsStatus) IsKnown() bool {
 }
 
 type PageRuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []PageRuleNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageRuleNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                           `json:"result"`
@@ -2755,6 +2755,52 @@ func (r *PageRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r pageRuleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PageRuleNewResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    pageRuleNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageRuleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PageRuleNewResponseEnvelopeErrors]
+type pageRuleNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PageRuleNewResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    pageRuleNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageRuleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PageRuleNewResponseEnvelopeMessages]
+type pageRuleNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3684,8 +3730,8 @@ func (r PageRuleUpdateParamsStatus) IsKnown() bool {
 }
 
 type PageRuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []PageRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                              `json:"result"`
@@ -3708,6 +3754,52 @@ func (r *PageRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r pageRuleUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PageRuleUpdateResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    pageRuleUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageRuleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [PageRuleUpdateResponseEnvelopeErrors]
+type pageRuleUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PageRuleUpdateResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    pageRuleUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageRuleUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PageRuleUpdateResponseEnvelopeMessages]
+type pageRuleUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3814,8 +3906,8 @@ func (r PageRuleListParamsStatus) IsKnown() bool {
 }
 
 type PageRuleListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []PageRuleListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageRuleListResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleListResponseEnvelopeSuccess `json:"success,required"`
 	Result  []PageRule                          `json:"result"`
@@ -3841,6 +3933,52 @@ func (r pageRuleListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type PageRuleListResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    pageRuleListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageRuleListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PageRuleListResponseEnvelopeErrors]
+type pageRuleListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PageRuleListResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    pageRuleListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageRuleListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PageRuleListResponseEnvelopeMessages]
+type pageRuleListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type PageRuleListResponseEnvelopeSuccess bool
 
@@ -3862,8 +4000,8 @@ type PageRuleDeleteParams struct {
 }
 
 type PageRuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []PageRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageRuleDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRuleDeleteResponse                `json:"result,nullable"`
@@ -3886,6 +4024,52 @@ func (r *PageRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r pageRuleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PageRuleDeleteResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    pageRuleDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageRuleDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [PageRuleDeleteResponseEnvelopeErrors]
+type pageRuleDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PageRuleDeleteResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    pageRuleDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageRuleDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PageRuleDeleteResponseEnvelopeMessages]
+type pageRuleDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -4813,8 +4997,8 @@ func (r PageRuleEditParamsStatus) IsKnown() bool {
 }
 
 type PageRuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []PageRuleEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageRuleEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                            `json:"result"`
@@ -4840,6 +5024,52 @@ func (r pageRuleEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type PageRuleEditResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    pageRuleEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageRuleEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PageRuleEditResponseEnvelopeErrors]
+type pageRuleEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PageRuleEditResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    pageRuleEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageRuleEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PageRuleEditResponseEnvelopeMessages]
+type pageRuleEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type PageRuleEditResponseEnvelopeSuccess bool
 
@@ -4861,8 +5091,8 @@ type PageRuleGetParams struct {
 }
 
 type PageRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []PageRuleGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageRuleGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success PageRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                           `json:"result"`
@@ -4885,6 +5115,52 @@ func (r *PageRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r pageRuleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PageRuleGetResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    pageRuleGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageRuleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PageRuleGetResponseEnvelopeErrors]
+type pageRuleGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PageRuleGetResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    pageRuleGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageRuleGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PageRuleGetResponseEnvelopeMessages]
+type pageRuleGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

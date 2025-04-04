@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // NamespaceMetadataService contains methods and other services that help with
@@ -69,8 +68,8 @@ type NamespaceMetadataGetParams struct {
 }
 
 type NamespaceMetadataGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []NamespaceMetadataGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []NamespaceMetadataGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceMetadataGetResponseEnvelopeSuccess `json:"success,required"`
 	// Arbitrary JSON that is associated with a key.
@@ -94,6 +93,52 @@ func (r *NamespaceMetadataGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r namespaceMetadataGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceMetadataGetResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    namespaceMetadataGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// namespaceMetadataGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [NamespaceMetadataGetResponseEnvelopeErrors]
+type namespaceMetadataGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceMetadataGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceMetadataGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceMetadataGetResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    namespaceMetadataGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// namespaceMetadataGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [NamespaceMetadataGetResponseEnvelopeMessages]
+type namespaceMetadataGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceMetadataGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceMetadataGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

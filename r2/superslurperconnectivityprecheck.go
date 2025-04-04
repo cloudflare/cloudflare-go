@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SuperSlurperConnectivityPrecheckService contains methods and other services that
@@ -318,9 +317,9 @@ func (r SuperSlurperConnectivityPrecheckSourceParamsBodyVendor) IsKnown() bool {
 }
 
 type SuperSlurperConnectivityPrecheckSourceResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                          `json:"errors"`
-	Messages []string                                       `json:"messages"`
-	Result   SuperSlurperConnectivityPrecheckSourceResponse `json:"result"`
+	Errors   []SuperSlurperConnectivityPrecheckSourceResponseEnvelopeErrors `json:"errors"`
+	Messages []string                                                       `json:"messages"`
+	Result   SuperSlurperConnectivityPrecheckSourceResponse                 `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success SuperSlurperConnectivityPrecheckSourceResponseEnvelopeSuccess `json:"success"`
 	JSON    superSlurperConnectivityPrecheckSourceResponseEnvelopeJSON    `json:"-"`
@@ -342,6 +341,30 @@ func (r *SuperSlurperConnectivityPrecheckSourceResponseEnvelope) UnmarshalJSON(d
 }
 
 func (r superSlurperConnectivityPrecheckSourceResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SuperSlurperConnectivityPrecheckSourceResponseEnvelopeErrors struct {
+	Code    int64                                                            `json:"code,required"`
+	Message string                                                           `json:"message,required"`
+	JSON    superSlurperConnectivityPrecheckSourceResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// superSlurperConnectivityPrecheckSourceResponseEnvelopeErrorsJSON contains the
+// JSON metadata for the struct
+// [SuperSlurperConnectivityPrecheckSourceResponseEnvelopeErrors]
+type superSlurperConnectivityPrecheckSourceResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SuperSlurperConnectivityPrecheckSourceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r superSlurperConnectivityPrecheckSourceResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -398,9 +421,9 @@ func (r SuperSlurperConnectivityPrecheckTargetParamsSecret) MarshalJSON() (data 
 }
 
 type SuperSlurperConnectivityPrecheckTargetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                          `json:"errors"`
-	Messages []string                                       `json:"messages"`
-	Result   SuperSlurperConnectivityPrecheckTargetResponse `json:"result"`
+	Errors   []SuperSlurperConnectivityPrecheckTargetResponseEnvelopeErrors `json:"errors"`
+	Messages []string                                                       `json:"messages"`
+	Result   SuperSlurperConnectivityPrecheckTargetResponse                 `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success SuperSlurperConnectivityPrecheckTargetResponseEnvelopeSuccess `json:"success"`
 	JSON    superSlurperConnectivityPrecheckTargetResponseEnvelopeJSON    `json:"-"`
@@ -422,6 +445,30 @@ func (r *SuperSlurperConnectivityPrecheckTargetResponseEnvelope) UnmarshalJSON(d
 }
 
 func (r superSlurperConnectivityPrecheckTargetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SuperSlurperConnectivityPrecheckTargetResponseEnvelopeErrors struct {
+	Code    int64                                                            `json:"code,required"`
+	Message string                                                           `json:"message,required"`
+	JSON    superSlurperConnectivityPrecheckTargetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// superSlurperConnectivityPrecheckTargetResponseEnvelopeErrorsJSON contains the
+// JSON metadata for the struct
+// [SuperSlurperConnectivityPrecheckTargetResponseEnvelopeErrors]
+type superSlurperConnectivityPrecheckTargetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SuperSlurperConnectivityPrecheckTargetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r superSlurperConnectivityPrecheckTargetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

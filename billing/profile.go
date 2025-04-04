@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ProfileService contains methods and other services that help with interacting
@@ -156,9 +155,9 @@ type ProfileGetParams struct {
 }
 
 type ProfileGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ProfileGetResponse    `json:"result,required"`
+	Errors   []ProfileGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ProfileGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ProfileGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ProfileGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    profileGetResponseEnvelopeJSON    `json:"-"`
@@ -180,6 +179,52 @@ func (r *ProfileGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r profileGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProfileGetResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    profileGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// profileGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ProfileGetResponseEnvelopeErrors]
+type profileGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProfileGetResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    profileGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// profileGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [ProfileGetResponseEnvelopeMessages]
+type profileGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

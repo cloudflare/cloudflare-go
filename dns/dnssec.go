@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DNSSECService contains methods and other services that help with interacting
@@ -181,8 +180,8 @@ type DNSSECDeleteParams struct {
 }
 
 type DNSSECDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DNSSECDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSSECDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSSECDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  string                              `json:"result"`
@@ -205,6 +204,52 @@ func (r *DNSSECDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dnssecDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSECDeleteResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    dnssecDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dnssecDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DNSSECDeleteResponseEnvelopeErrors]
+type dnssecDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnssecDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSECDeleteResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    dnssecDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dnssecDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DNSSECDeleteResponseEnvelopeMessages]
+type dnssecDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnssecDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -268,8 +313,8 @@ func (r DNSSECEditParamsStatus) IsKnown() bool {
 }
 
 type DNSSECEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DNSSECEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSSECEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSSECEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSSEC                            `json:"result"`
@@ -295,6 +340,52 @@ func (r dnssecEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSSECEditResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    dnssecEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dnssecEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DNSSECEditResponseEnvelopeErrors]
+type dnssecEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnssecEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSECEditResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    dnssecEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dnssecEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [DNSSECEditResponseEnvelopeMessages]
+type dnssecEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnssecEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type DNSSECEditResponseEnvelopeSuccess bool
 
@@ -316,8 +407,8 @@ type DNSSECGetParams struct {
 }
 
 type DNSSECGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DNSSECGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSSECGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSSECGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSSEC                           `json:"result"`
@@ -340,6 +431,52 @@ func (r *DNSSECGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dnssecGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSECGetResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    dnssecGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dnssecGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DNSSECGetResponseEnvelopeErrors]
+type dnssecGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnssecGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSSECGetResponseEnvelopeMessages struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    dnssecGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dnssecGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [DNSSECGetResponseEnvelopeMessages]
+type dnssecGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnssecGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

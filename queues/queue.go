@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -447,8 +446,8 @@ func (r QueueSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
+	Errors   []QueueDeleteResponseError `json:"errors"`
+	Messages []string                   `json:"messages"`
 	// Indicates if the API call was successful or not.
 	Success QueueDeleteResponseSuccess `json:"success"`
 	JSON    queueDeleteResponseJSON    `json:"-"`
@@ -469,6 +468,29 @@ func (r *QueueDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r queueDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type QueueDeleteResponseError struct {
+	Code    int64                        `json:"code,required"`
+	Message string                       `json:"message,required"`
+	JSON    queueDeleteResponseErrorJSON `json:"-"`
+}
+
+// queueDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [QueueDeleteResponseError]
+type queueDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueDeleteResponseErrorJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -498,9 +520,9 @@ func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   Queue                 `json:"result"`
+	Errors   []QueueNewResponseEnvelopeErrors `json:"errors"`
+	Messages []string                         `json:"messages"`
+	Result   Queue                            `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success QueueNewResponseEnvelopeSuccess `json:"success"`
 	JSON    queueNewResponseEnvelopeJSON    `json:"-"`
@@ -522,6 +544,29 @@ func (r *QueueNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r queueNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type QueueNewResponseEnvelopeErrors struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    queueNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// queueNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [QueueNewResponseEnvelopeErrors]
+type queueNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueNewResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -551,9 +596,9 @@ func (r QueueUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   Queue                 `json:"result"`
+	Errors   []QueueUpdateResponseEnvelopeErrors `json:"errors"`
+	Messages []string                            `json:"messages"`
+	Result   Queue                               `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success QueueUpdateResponseEnvelopeSuccess `json:"success"`
 	JSON    queueUpdateResponseEnvelopeJSON    `json:"-"`
@@ -575,6 +620,29 @@ func (r *QueueUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r queueUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type QueueUpdateResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    queueUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// queueUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [QueueUpdateResponseEnvelopeErrors]
+type queueUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -614,9 +682,9 @@ func (r QueueEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   Queue                 `json:"result"`
+	Errors   []QueueEditResponseEnvelopeErrors `json:"errors"`
+	Messages []string                          `json:"messages"`
+	Result   Queue                             `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success QueueEditResponseEnvelopeSuccess `json:"success"`
 	JSON    queueEditResponseEnvelopeJSON    `json:"-"`
@@ -641,6 +709,29 @@ func (r queueEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type QueueEditResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    queueEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// queueEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [QueueEditResponseEnvelopeErrors]
+type queueEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Indicates if the API call was successful or not.
 type QueueEditResponseEnvelopeSuccess bool
 
@@ -662,9 +753,9 @@ type QueueGetParams struct {
 }
 
 type QueueGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   Queue                 `json:"result"`
+	Errors   []QueueGetResponseEnvelopeErrors `json:"errors"`
+	Messages []string                         `json:"messages"`
+	Result   Queue                            `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success QueueGetResponseEnvelopeSuccess `json:"success"`
 	JSON    queueGetResponseEnvelopeJSON    `json:"-"`
@@ -686,6 +777,29 @@ func (r *QueueGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r queueGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type QueueGetResponseEnvelopeErrors struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    queueGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// queueGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [QueueGetResponseEnvelopeErrors]
+type queueGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

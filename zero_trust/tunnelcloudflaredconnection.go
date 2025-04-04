@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TunnelCloudflaredConnectionService contains methods and other services that help
@@ -199,9 +198,9 @@ func (r TunnelCloudflaredConnectionDeleteParams) URLQuery() (v url.Values) {
 }
 
 type TunnelCloudflaredConnectionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   TunnelCloudflaredConnectionDeleteResponse `json:"result,required,nullable"`
+	Errors   []TunnelCloudflaredConnectionDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TunnelCloudflaredConnectionDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   TunnelCloudflaredConnectionDeleteResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelCloudflaredConnectionDeleteResponseEnvelopeJSON    `json:"-"`
@@ -223,6 +222,54 @@ func (r *TunnelCloudflaredConnectionDeleteResponseEnvelope) UnmarshalJSON(data [
 }
 
 func (r tunnelCloudflaredConnectionDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredConnectionDeleteResponseEnvelopeErrors struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    tunnelCloudflaredConnectionDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tunnelCloudflaredConnectionDeleteResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [TunnelCloudflaredConnectionDeleteResponseEnvelopeErrors]
+type tunnelCloudflaredConnectionDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConnectionDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConnectionDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredConnectionDeleteResponseEnvelopeMessages struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    tunnelCloudflaredConnectionDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tunnelCloudflaredConnectionDeleteResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [TunnelCloudflaredConnectionDeleteResponseEnvelopeMessages]
+type tunnelCloudflaredConnectionDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConnectionDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConnectionDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

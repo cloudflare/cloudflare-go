@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InsightService contains methods and other services that help with interacting
@@ -204,8 +203,8 @@ func (r InsightListResponseIssuesSeverity) IsKnown() bool {
 }
 
 type InsightDismissResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []InsightDismissResponseError   `json:"errors,required"`
+	Messages []InsightDismissResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
 	Success InsightDismissResponseSuccess `json:"success,required"`
 	JSON    insightDismissResponseJSON    `json:"-"`
@@ -226,6 +225,52 @@ func (r *InsightDismissResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r insightDismissResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightDismissResponseError struct {
+	Code    int64                           `json:"code,required"`
+	Message string                          `json:"message,required"`
+	JSON    insightDismissResponseErrorJSON `json:"-"`
+}
+
+// insightDismissResponseErrorJSON contains the JSON metadata for the struct
+// [InsightDismissResponseError]
+type insightDismissResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightDismissResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightDismissResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightDismissResponseMessage struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    insightDismissResponseMessageJSON `json:"-"`
+}
+
+// insightDismissResponseMessageJSON contains the JSON metadata for the struct
+// [InsightDismissResponseMessage]
+type insightDismissResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightDismissResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightDismissResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 

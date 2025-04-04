@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptContentService contains methods and other services that help with
@@ -106,8 +105,8 @@ func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType 
 }
 
 type ScriptContentUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []ScriptContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScriptContentUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Script                                     `json:"result"`
@@ -130,6 +129,52 @@ func (r *ScriptContentUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r scriptContentUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptContentUpdateResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    scriptContentUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// scriptContentUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ScriptContentUpdateResponseEnvelopeErrors]
+type scriptContentUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptContentUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptContentUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptContentUpdateResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    scriptContentUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// scriptContentUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ScriptContentUpdateResponseEnvelopeMessages]
+type scriptContentUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptContentUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptContentUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
