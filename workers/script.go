@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptService contains methods and other services that help with interacting
@@ -503,7 +504,7 @@ func (r ScriptUpdateResponseUsageModel) IsKnown() bool {
 }
 
 type ScriptUpdateParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptUpdateParamsMetadata] `json:"metadata,required"`
@@ -1821,9 +1822,9 @@ func (r ScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
 }
 
 type ScriptUpdateResponseEnvelope struct {
-	Errors   []ScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptUpdateResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful.
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
 	Success ScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptUpdateResponse                `json:"result"`
 	JSON    scriptUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1848,103 +1849,7 @@ func (r scriptUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptUpdateResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
-	DocumentationURL string                                   `json:"documentation_url"`
-	Source           ScriptUpdateResponseEnvelopeErrorsSource `json:"source"`
-	JSON             scriptUpdateResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// scriptUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ScriptUpdateResponseEnvelopeErrors]
-type scriptUpdateResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptUpdateResponseEnvelopeErrorsSource struct {
-	Pointer string                                       `json:"pointer"`
-	JSON    scriptUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// scriptUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [ScriptUpdateResponseEnvelopeErrorsSource]
-type scriptUpdateResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptUpdateResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
-	DocumentationURL string                                     `json:"documentation_url"`
-	Source           ScriptUpdateResponseEnvelopeMessagesSource `json:"source"`
-	JSON             scriptUpdateResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// scriptUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ScriptUpdateResponseEnvelopeMessages]
-type scriptUpdateResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptUpdateResponseEnvelopeMessagesSource struct {
-	Pointer string                                         `json:"pointer"`
-	JSON    scriptUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// scriptUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
-// the struct [ScriptUpdateResponseEnvelopeMessagesSource]
-type scriptUpdateResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
+// Whether the API call was successful
 type ScriptUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1960,12 +1865,12 @@ func (r ScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ScriptListParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ScriptDeleteParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// If set to true, delete will not be stopped by associated service binding,
 	// durable object, or other binding. Any of these associated bindings/durable
@@ -1982,6 +1887,6 @@ func (r ScriptDeleteParams) URLQuery() (v url.Values) {
 }
 
 type ScriptGetParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }

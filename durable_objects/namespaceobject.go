@@ -92,7 +92,7 @@ func (r durableObjectJSON) RawJSON() string {
 }
 
 type NamespaceObjectListParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Opaque token indicating the position from which to continue when requesting the
 	// next set of records. A valid value for the cursor can be obtained from the

@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptContentService contains methods and other services that help with
@@ -81,7 +82,7 @@ func (r *ScriptContentService) Get(ctx context.Context, scriptName string, query
 }
 
 type ScriptContentUpdateParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
 	Metadata               param.Field[WorkerMetadataParam] `json:"metadata,required"`
@@ -105,9 +106,9 @@ func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType 
 }
 
 type ScriptContentUpdateResponseEnvelope struct {
-	Errors   []ScriptContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptContentUpdateResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful.
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
 	Success ScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Script                                     `json:"result"`
 	JSON    scriptContentUpdateResponseEnvelopeJSON    `json:"-"`
@@ -132,103 +133,7 @@ func (r scriptContentUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptContentUpdateResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
-	DocumentationURL string                                          `json:"documentation_url"`
-	Source           ScriptContentUpdateResponseEnvelopeErrorsSource `json:"source"`
-	JSON             scriptContentUpdateResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// scriptContentUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ScriptContentUpdateResponseEnvelopeErrors]
-type scriptContentUpdateResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptContentUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptContentUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptContentUpdateResponseEnvelopeErrorsSource struct {
-	Pointer string                                              `json:"pointer"`
-	JSON    scriptContentUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// scriptContentUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata
-// for the struct [ScriptContentUpdateResponseEnvelopeErrorsSource]
-type scriptContentUpdateResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptContentUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptContentUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptContentUpdateResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
-	DocumentationURL string                                            `json:"documentation_url"`
-	Source           ScriptContentUpdateResponseEnvelopeMessagesSource `json:"source"`
-	JSON             scriptContentUpdateResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// scriptContentUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ScriptContentUpdateResponseEnvelopeMessages]
-type scriptContentUpdateResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptContentUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptContentUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptContentUpdateResponseEnvelopeMessagesSource struct {
-	Pointer string                                                `json:"pointer"`
-	JSON    scriptContentUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// scriptContentUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata
-// for the struct [ScriptContentUpdateResponseEnvelopeMessagesSource]
-type scriptContentUpdateResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptContentUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptContentUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
+// Whether the API call was successful
 type ScriptContentUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -244,6 +149,6 @@ func (r ScriptContentUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ScriptContentGetParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
