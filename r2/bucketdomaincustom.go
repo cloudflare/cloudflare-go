@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketDomainCustomService contains methods and other services that help with
@@ -604,9 +605,9 @@ func (r BucketDomainCustomNewParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomNewResponseEnvelope struct {
-	Errors   []BucketDomainCustomNewResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                      `json:"messages,required"`
-	Result   BucketDomainCustomNewResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []string                      `json:"messages,required"`
+	Result   BucketDomainCustomNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketDomainCustomNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainCustomNewResponseEnvelopeJSON    `json:"-"`
@@ -628,29 +629,6 @@ func (r *BucketDomainCustomNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r bucketDomainCustomNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketDomainCustomNewResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    bucketDomainCustomNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketDomainCustomNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [BucketDomainCustomNewResponseEnvelopeErrors]
-type bucketDomainCustomNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketDomainCustomNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketDomainCustomNewResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -722,9 +700,9 @@ func (r BucketDomainCustomUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomUpdateResponseEnvelope struct {
-	Errors   []BucketDomainCustomUpdateResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                         `json:"messages,required"`
-	Result   BucketDomainCustomUpdateResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []string                         `json:"messages,required"`
+	Result   BucketDomainCustomUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketDomainCustomUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainCustomUpdateResponseEnvelopeJSON    `json:"-"`
@@ -746,29 +724,6 @@ func (r *BucketDomainCustomUpdateResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r bucketDomainCustomUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketDomainCustomUpdateResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    bucketDomainCustomUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketDomainCustomUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [BucketDomainCustomUpdateResponseEnvelopeErrors]
-type bucketDomainCustomUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketDomainCustomUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketDomainCustomUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -812,9 +767,9 @@ func (r BucketDomainCustomListParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomListResponseEnvelope struct {
-	Errors   []BucketDomainCustomListResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                       `json:"messages,required"`
-	Result   BucketDomainCustomListResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []string                       `json:"messages,required"`
+	Result   BucketDomainCustomListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketDomainCustomListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainCustomListResponseEnvelopeJSON    `json:"-"`
@@ -836,29 +791,6 @@ func (r *BucketDomainCustomListResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r bucketDomainCustomListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketDomainCustomListResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    bucketDomainCustomListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketDomainCustomListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [BucketDomainCustomListResponseEnvelopeErrors]
-type bucketDomainCustomListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketDomainCustomListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketDomainCustomListResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -902,9 +834,9 @@ func (r BucketDomainCustomDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomDeleteResponseEnvelope struct {
-	Errors   []BucketDomainCustomDeleteResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                         `json:"messages,required"`
-	Result   BucketDomainCustomDeleteResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []string                         `json:"messages,required"`
+	Result   BucketDomainCustomDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketDomainCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainCustomDeleteResponseEnvelopeJSON    `json:"-"`
@@ -926,29 +858,6 @@ func (r *BucketDomainCustomDeleteResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r bucketDomainCustomDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketDomainCustomDeleteResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    bucketDomainCustomDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketDomainCustomDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [BucketDomainCustomDeleteResponseEnvelopeErrors]
-type bucketDomainCustomDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketDomainCustomDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketDomainCustomDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -992,9 +901,9 @@ func (r BucketDomainCustomGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomGetResponseEnvelope struct {
-	Errors   []BucketDomainCustomGetResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                      `json:"messages,required"`
-	Result   BucketDomainCustomGetResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []string                      `json:"messages,required"`
+	Result   BucketDomainCustomGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketDomainCustomGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainCustomGetResponseEnvelopeJSON    `json:"-"`
@@ -1016,29 +925,6 @@ func (r *BucketDomainCustomGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r bucketDomainCustomGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketDomainCustomGetResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    bucketDomainCustomGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketDomainCustomGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [BucketDomainCustomGetResponseEnvelopeErrors]
-type bucketDomainCustomGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketDomainCustomGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketDomainCustomGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

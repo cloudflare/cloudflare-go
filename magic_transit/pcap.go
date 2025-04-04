@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -1251,9 +1252,9 @@ func (r PCAPNewParamsBodyType) IsKnown() bool {
 }
 
 type PCAPNewResponseEnvelope struct {
-	Errors   []PCAPNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PCAPNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   PCAPNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PCAPNewResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapNewResponseEnvelopeJSON    `json:"-"`
@@ -1275,52 +1276,6 @@ func (r *PCAPNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r pcapNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PCAPNewResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    pcapNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pcapNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PCAPNewResponseEnvelopeErrors]
-type pcapNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PCAPNewResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    pcapNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pcapNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PCAPNewResponseEnvelopeMessages]
-type pcapNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1350,9 +1305,9 @@ type PCAPGetParams struct {
 }
 
 type PCAPGetResponseEnvelope struct {
-	Errors   []PCAPGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PCAPGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   PCAPGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PCAPGetResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapGetResponseEnvelopeJSON    `json:"-"`
@@ -1374,52 +1329,6 @@ func (r *PCAPGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r pcapGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PCAPGetResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    pcapGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pcapGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PCAPGetResponseEnvelopeErrors]
-type pcapGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PCAPGetResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    pcapGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pcapGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PCAPGetResponseEnvelopeMessages]
-type pcapGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

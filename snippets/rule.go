@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RuleService contains methods and other services that help with interacting with
@@ -157,8 +158,8 @@ func (r ruleListResponseJSON) RawJSON() string {
 }
 
 type RuleDeleteResponse struct {
-	Errors   []RuleDeleteResponseError   `json:"errors,required"`
-	Messages []RuleDeleteResponseMessage `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RuleDeleteResponseSuccess `json:"success,required"`
 	JSON    ruleDeleteResponseJSON    `json:"-"`
@@ -179,52 +180,6 @@ func (r *RuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleDeleteResponseError struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    ruleDeleteResponseErrorJSON `json:"-"`
-}
-
-// ruleDeleteResponseErrorJSON contains the JSON metadata for the struct
-// [RuleDeleteResponseError]
-type ruleDeleteResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleDeleteResponseMessage struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    ruleDeleteResponseMessageJSON `json:"-"`
-}
-
-// ruleDeleteResponseMessageJSON contains the JSON metadata for the struct
-// [RuleDeleteResponseMessage]
-type ruleDeleteResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 

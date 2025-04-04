@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DevicePolicyCustomService contains methods and other services that help with
@@ -232,9 +233,9 @@ func (r DevicePolicyCustomNewParamsServiceModeV2) MarshalJSON() (data []byte, er
 }
 
 type DevicePolicyCustomNewResponseEnvelope struct {
-	Errors   []DevicePolicyCustomNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyCustomNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SettingsPolicy                                  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyCustomNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCustomNewResponseEnvelopeJSON    `json:"-"`
@@ -256,52 +257,6 @@ func (r *DevicePolicyCustomNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r devicePolicyCustomNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyCustomNewResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    devicePolicyCustomNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyCustomNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DevicePolicyCustomNewResponseEnvelopeErrors]
-type devicePolicyCustomNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyCustomNewResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    devicePolicyCustomNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyCustomNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DevicePolicyCustomNewResponseEnvelopeMessages]
-type devicePolicyCustomNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -392,9 +347,9 @@ func (r DevicePolicyCustomEditParamsServiceModeV2) MarshalJSON() (data []byte, e
 }
 
 type DevicePolicyCustomEditResponseEnvelope struct {
-	Errors   []DevicePolicyCustomEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyCustomEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   SettingsPolicy                                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyCustomEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCustomEditResponseEnvelopeJSON    `json:"-"`
@@ -419,52 +374,6 @@ func (r devicePolicyCustomEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DevicePolicyCustomEditResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    devicePolicyCustomEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyCustomEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DevicePolicyCustomEditResponseEnvelopeErrors]
-type devicePolicyCustomEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyCustomEditResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    devicePolicyCustomEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyCustomEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DevicePolicyCustomEditResponseEnvelopeMessages]
-type devicePolicyCustomEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful.
 type DevicePolicyCustomEditResponseEnvelopeSuccess bool
 
@@ -485,9 +394,9 @@ type DevicePolicyCustomGetParams struct {
 }
 
 type DevicePolicyCustomGetResponseEnvelope struct {
-	Errors   []DevicePolicyCustomGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyCustomGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SettingsPolicy                                  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyCustomGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCustomGetResponseEnvelopeJSON    `json:"-"`
@@ -509,52 +418,6 @@ func (r *DevicePolicyCustomGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r devicePolicyCustomGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyCustomGetResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    devicePolicyCustomGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyCustomGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DevicePolicyCustomGetResponseEnvelopeErrors]
-type devicePolicyCustomGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyCustomGetResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    devicePolicyCustomGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyCustomGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DevicePolicyCustomGetResponseEnvelopeMessages]
-type devicePolicyCustomGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyCustomGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyCustomGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

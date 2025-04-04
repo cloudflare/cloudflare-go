@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SecurityTXTService contains methods and other services that help with
@@ -76,8 +77,8 @@ func (r *SecurityTXTService) Get(ctx context.Context, query SecurityTXTGetParams
 }
 
 type SecurityTXTUpdateResponse struct {
-	Errors   []SecurityTXTUpdateResponseError   `json:"errors,required"`
-	Messages []SecurityTXTUpdateResponseMessage `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SecurityTXTUpdateResponseSuccess `json:"success,required"`
 	JSON    securityTXTUpdateResponseJSON    `json:"-"`
@@ -101,52 +102,6 @@ func (r securityTXTUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SecurityTXTUpdateResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    securityTXTUpdateResponseErrorJSON `json:"-"`
-}
-
-// securityTXTUpdateResponseErrorJSON contains the JSON metadata for the struct
-// [SecurityTXTUpdateResponseError]
-type securityTXTUpdateResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecurityTXTUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r securityTXTUpdateResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type SecurityTXTUpdateResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    securityTXTUpdateResponseMessageJSON `json:"-"`
-}
-
-// securityTXTUpdateResponseMessageJSON contains the JSON metadata for the struct
-// [SecurityTXTUpdateResponseMessage]
-type securityTXTUpdateResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecurityTXTUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r securityTXTUpdateResponseMessageJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SecurityTXTUpdateResponseSuccess bool
 
@@ -163,8 +118,8 @@ func (r SecurityTXTUpdateResponseSuccess) IsKnown() bool {
 }
 
 type SecurityTXTDeleteResponse struct {
-	Errors   []SecurityTXTDeleteResponseError   `json:"errors,required"`
-	Messages []SecurityTXTDeleteResponseMessage `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SecurityTXTDeleteResponseSuccess `json:"success,required"`
 	JSON    securityTXTDeleteResponseJSON    `json:"-"`
@@ -185,52 +140,6 @@ func (r *SecurityTXTDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r securityTXTDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SecurityTXTDeleteResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    securityTXTDeleteResponseErrorJSON `json:"-"`
-}
-
-// securityTXTDeleteResponseErrorJSON contains the JSON metadata for the struct
-// [SecurityTXTDeleteResponseError]
-type securityTXTDeleteResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecurityTXTDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r securityTXTDeleteResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type SecurityTXTDeleteResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    securityTXTDeleteResponseMessageJSON `json:"-"`
-}
-
-// securityTXTDeleteResponseMessageJSON contains the JSON metadata for the struct
-// [SecurityTXTDeleteResponseMessage]
-type securityTXTDeleteResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecurityTXTDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r securityTXTDeleteResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -315,8 +224,8 @@ type SecurityTXTGetParams struct {
 }
 
 type SecurityTXTGetResponseEnvelope struct {
-	Errors   []SecurityTXTGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SecurityTXTGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SecurityTXTGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  SecurityTXTGetResponse                `json:"result"`
@@ -339,52 +248,6 @@ func (r *SecurityTXTGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r securityTXTGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SecurityTXTGetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    securityTXTGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// securityTXTGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SecurityTXTGetResponseEnvelopeErrors]
-type securityTXTGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecurityTXTGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r securityTXTGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SecurityTXTGetResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    securityTXTGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// securityTXTGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SecurityTXTGetResponseEnvelopeMessages]
-type securityTXTGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecurityTXTGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r securityTXTGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

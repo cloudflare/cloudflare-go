@@ -17,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -1698,8 +1699,8 @@ type DLPProfileGetParams struct {
 }
 
 type DLPProfileGetResponseEnvelope struct {
-	Errors   []DLPProfileGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPProfileGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Profile                              `json:"result"`
@@ -1722,52 +1723,6 @@ func (r *DLPProfileGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dlpProfileGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    dlpProfileGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dlpProfileGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DLPProfileGetResponseEnvelopeErrors]
-type dlpProfileGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    dlpProfileGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dlpProfileGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DLPProfileGetResponseEnvelopeMessages]
-type dlpProfileGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

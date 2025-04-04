@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // FallbackOriginService contains methods and other services that help with
@@ -262,8 +263,8 @@ func (r FallbackOriginUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FallbackOriginUpdateResponseEnvelope struct {
-	Errors   []FallbackOriginUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FallbackOriginUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  FallbackOriginUpdateResponse                `json:"result"`
@@ -289,52 +290,6 @@ func (r fallbackOriginUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type FallbackOriginUpdateResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    fallbackOriginUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// fallbackOriginUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [FallbackOriginUpdateResponseEnvelopeErrors]
-type fallbackOriginUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type FallbackOriginUpdateResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    fallbackOriginUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// fallbackOriginUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [FallbackOriginUpdateResponseEnvelopeMessages]
-type fallbackOriginUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type FallbackOriginUpdateResponseEnvelopeSuccess bool
 
@@ -356,8 +311,8 @@ type FallbackOriginDeleteParams struct {
 }
 
 type FallbackOriginDeleteResponseEnvelope struct {
-	Errors   []FallbackOriginDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FallbackOriginDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  FallbackOriginDeleteResponse                `json:"result"`
@@ -383,52 +338,6 @@ func (r fallbackOriginDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type FallbackOriginDeleteResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    fallbackOriginDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// fallbackOriginDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [FallbackOriginDeleteResponseEnvelopeErrors]
-type fallbackOriginDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type FallbackOriginDeleteResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    fallbackOriginDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// fallbackOriginDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [FallbackOriginDeleteResponseEnvelopeMessages]
-type fallbackOriginDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type FallbackOriginDeleteResponseEnvelopeSuccess bool
 
@@ -450,8 +359,8 @@ type FallbackOriginGetParams struct {
 }
 
 type FallbackOriginGetResponseEnvelope struct {
-	Errors   []FallbackOriginGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FallbackOriginGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  FallbackOriginGetResponse                `json:"result"`
@@ -474,52 +383,6 @@ func (r *FallbackOriginGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r fallbackOriginGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type FallbackOriginGetResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    fallbackOriginGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// fallbackOriginGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [FallbackOriginGetResponseEnvelopeErrors]
-type fallbackOriginGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type FallbackOriginGetResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    fallbackOriginGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// fallbackOriginGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [FallbackOriginGetResponseEnvelopeMessages]
-type fallbackOriginGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FallbackOriginGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r fallbackOriginGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

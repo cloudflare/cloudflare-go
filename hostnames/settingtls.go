@@ -280,8 +280,8 @@ func (r SettingTLSUpdateParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSUpdateResponseEnvelope struct {
-	Errors   []SettingTLSUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTLSUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SettingTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Setting                                 `json:"result"`
@@ -304,52 +304,6 @@ func (r *SettingTLSUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r settingTLSUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTLSUpdateResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingTLSUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTLSUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingTLSUpdateResponseEnvelopeErrors]
-type settingTLSUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTLSUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTLSUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTLSUpdateResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingTLSUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTLSUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingTLSUpdateResponseEnvelopeMessages]
-type settingTLSUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTLSUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTLSUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -391,8 +345,8 @@ func (r SettingTLSDeleteParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSDeleteResponseEnvelope struct {
-	Errors   []SettingTLSDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTLSDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success SettingTLSDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  SettingTLSDeleteResponse                `json:"result"`
@@ -415,52 +369,6 @@ func (r *SettingTLSDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r settingTLSDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTLSDeleteResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingTLSDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTLSDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingTLSDeleteResponseEnvelopeErrors]
-type settingTLSDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTLSDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTLSDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTLSDeleteResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingTLSDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTLSDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingTLSDeleteResponseEnvelopeMessages]
-type settingTLSDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTLSDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTLSDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

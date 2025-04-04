@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HostnameAssociationService contains methods and other services that help with
@@ -138,8 +139,8 @@ func (r HostnameAssociationUpdateParams) MarshalJSON() (data []byte, err error) 
 }
 
 type HostnameAssociationUpdateResponseEnvelope struct {
-	Errors   []HostnameAssociationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameAssociationUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success HostnameAssociationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  HostnameAssociationUpdateResponse                `json:"result"`
@@ -162,52 +163,6 @@ func (r *HostnameAssociationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r hostnameAssociationUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameAssociationUpdateResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    hostnameAssociationUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameAssociationUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [HostnameAssociationUpdateResponseEnvelopeErrors]
-type hostnameAssociationUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameAssociationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameAssociationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameAssociationUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    hostnameAssociationUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameAssociationUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [HostnameAssociationUpdateResponseEnvelopeMessages]
-type hostnameAssociationUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameAssociationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameAssociationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -245,8 +200,8 @@ func (r HostnameAssociationGetParams) URLQuery() (v url.Values) {
 }
 
 type HostnameAssociationGetResponseEnvelope struct {
-	Errors   []HostnameAssociationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameAssociationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success HostnameAssociationGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  HostnameAssociationGetResponse                `json:"result"`
@@ -269,52 +224,6 @@ func (r *HostnameAssociationGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r hostnameAssociationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameAssociationGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    hostnameAssociationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameAssociationGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [HostnameAssociationGetResponseEnvelopeErrors]
-type hostnameAssociationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameAssociationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameAssociationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameAssociationGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    hostnameAssociationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameAssociationGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [HostnameAssociationGetResponseEnvelopeMessages]
-type hostnameAssociationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameAssociationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameAssociationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

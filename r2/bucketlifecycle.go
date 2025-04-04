@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -964,9 +965,9 @@ func (r BucketLifecycleUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketLifecycleUpdateResponseEnvelope struct {
-	Errors   []BucketLifecycleUpdateResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                      `json:"messages,required"`
-	Result   BucketLifecycleUpdateResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []string                      `json:"messages,required"`
+	Result   BucketLifecycleUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketLifecycleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketLifecycleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -988,29 +989,6 @@ func (r *BucketLifecycleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r bucketLifecycleUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketLifecycleUpdateResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    bucketLifecycleUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketLifecycleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [BucketLifecycleUpdateResponseEnvelopeErrors]
-type bucketLifecycleUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketLifecycleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketLifecycleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1054,9 +1032,9 @@ func (r BucketLifecycleGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketLifecycleGetResponseEnvelope struct {
-	Errors   []BucketLifecycleGetResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                   `json:"messages,required"`
-	Result   BucketLifecycleGetResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []string                   `json:"messages,required"`
+	Result   BucketLifecycleGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketLifecycleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketLifecycleGetResponseEnvelopeJSON    `json:"-"`
@@ -1078,29 +1056,6 @@ func (r *BucketLifecycleGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r bucketLifecycleGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketLifecycleGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    bucketLifecycleGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketLifecycleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [BucketLifecycleGetResponseEnvelopeErrors]
-type bucketLifecycleGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketLifecycleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketLifecycleGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

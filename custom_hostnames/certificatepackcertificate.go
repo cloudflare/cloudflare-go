@@ -569,8 +569,8 @@ func (r CertificatePackCertificateUpdateParams) MarshalJSON() (data []byte, err 
 }
 
 type CertificatePackCertificateUpdateResponseEnvelope struct {
-	Errors   []CertificatePackCertificateUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackCertificateUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CertificatePackCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  CertificatePackCertificateUpdateResponse                `json:"result"`
@@ -593,53 +593,6 @@ func (r *CertificatePackCertificateUpdateResponseEnvelope) UnmarshalJSON(data []
 }
 
 func (r certificatePackCertificateUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackCertificateUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    certificatePackCertificateUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// certificatePackCertificateUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [CertificatePackCertificateUpdateResponseEnvelopeErrors]
-type certificatePackCertificateUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackCertificateUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackCertificateUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackCertificateUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    certificatePackCertificateUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// certificatePackCertificateUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [CertificatePackCertificateUpdateResponseEnvelopeMessages]
-type certificatePackCertificateUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackCertificateUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackCertificateUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

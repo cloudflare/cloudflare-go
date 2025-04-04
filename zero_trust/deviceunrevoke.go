@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DeviceUnrevokeService contains methods and other services that help with
@@ -61,9 +62,9 @@ func (r DeviceUnrevokeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceUnrevokeNewResponseEnvelope struct {
-	Errors   []DeviceUnrevokeNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceUnrevokeNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   interface{}                                 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceUnrevokeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceUnrevokeNewResponseEnvelopeJSON    `json:"-"`
@@ -85,52 +86,6 @@ func (r *DeviceUnrevokeNewResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r deviceUnrevokeNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceUnrevokeNewResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    deviceUnrevokeNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceUnrevokeNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceUnrevokeNewResponseEnvelopeErrors]
-type deviceUnrevokeNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceUnrevokeNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceUnrevokeNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceUnrevokeNewResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    deviceUnrevokeNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceUnrevokeNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DeviceUnrevokeNewResponseEnvelopeMessages]
-type deviceUnrevokeNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceUnrevokeNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceUnrevokeNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

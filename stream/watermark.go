@@ -17,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // WatermarkService contains methods and other services that help with interacting
@@ -228,8 +229,8 @@ func (r WatermarkNewParams) MarshalMultipart() (data []byte, contentType string,
 }
 
 type WatermarkNewResponseEnvelope struct {
-	Errors   []WatermarkNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WatermarkNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Watermark                           `json:"result"`
@@ -252,52 +253,6 @@ func (r *WatermarkNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r watermarkNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkNewResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    watermarkNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// watermarkNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [WatermarkNewResponseEnvelopeErrors]
-type watermarkNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkNewResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    watermarkNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// watermarkNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WatermarkNewResponseEnvelopeMessages]
-type watermarkNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -327,8 +282,8 @@ type WatermarkDeleteParams struct {
 }
 
 type WatermarkDeleteResponseEnvelope struct {
-	Errors   []WatermarkDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WatermarkDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  string                                 `json:"result"`
@@ -354,52 +309,6 @@ func (r watermarkDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type WatermarkDeleteResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    watermarkDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// watermarkDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WatermarkDeleteResponseEnvelopeErrors]
-type watermarkDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkDeleteResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    watermarkDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// watermarkDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WatermarkDeleteResponseEnvelopeMessages]
-type watermarkDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type WatermarkDeleteResponseEnvelopeSuccess bool
 
@@ -421,8 +330,8 @@ type WatermarkGetParams struct {
 }
 
 type WatermarkGetResponseEnvelope struct {
-	Errors   []WatermarkGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WatermarkGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Watermark                           `json:"result"`
@@ -445,52 +354,6 @@ func (r *WatermarkGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r watermarkGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkGetResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    watermarkGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// watermarkGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [WatermarkGetResponseEnvelopeErrors]
-type watermarkGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkGetResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    watermarkGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// watermarkGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WatermarkGetResponseEnvelopeMessages]
-type watermarkGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
