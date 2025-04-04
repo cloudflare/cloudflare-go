@@ -18,7 +18,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptVersionService contains methods and other services that help with
@@ -201,7 +200,7 @@ func (r scriptVersionGetResponseJSON) RawJSON() string {
 }
 
 type ScriptVersionNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptVersionNewParamsMetadata] `json:"metadata,required"`
@@ -1341,9 +1340,9 @@ func (r ScriptVersionNewParamsMetadataUsageModel) IsKnown() bool {
 }
 
 type ScriptVersionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ScriptVersionNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScriptVersionNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ScriptVersionNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptVersionNewResponse                `json:"result"`
 	JSON    scriptVersionNewResponseEnvelopeJSON    `json:"-"`
@@ -1368,7 +1367,103 @@ func (r scriptVersionNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ScriptVersionNewResponseEnvelopeErrors struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           ScriptVersionNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scriptVersionNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scriptVersionNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ScriptVersionNewResponseEnvelopeErrors]
+type scriptVersionNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptVersionNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptVersionNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptVersionNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    scriptVersionNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scriptVersionNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [ScriptVersionNewResponseEnvelopeErrorsSource]
+type scriptVersionNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptVersionNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptVersionNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptVersionNewResponseEnvelopeMessages struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           ScriptVersionNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scriptVersionNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scriptVersionNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ScriptVersionNewResponseEnvelopeMessages]
+type scriptVersionNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptVersionNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptVersionNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptVersionNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    scriptVersionNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scriptVersionNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ScriptVersionNewResponseEnvelopeMessagesSource]
+type scriptVersionNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptVersionNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptVersionNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ScriptVersionNewResponseEnvelopeSuccess bool
 
 const (
@@ -1384,7 +1479,7 @@ func (r ScriptVersionNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ScriptVersionListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Only return versions that can be used in a deployment. Ignores pagination.
 	Deployable param.Field[bool] `query:"deployable"`
@@ -1404,14 +1499,14 @@ func (r ScriptVersionListParams) URLQuery() (v url.Values) {
 }
 
 type ScriptVersionGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ScriptVersionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ScriptVersionGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScriptVersionGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ScriptVersionGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptVersionGetResponse                `json:"result"`
 	JSON    scriptVersionGetResponseEnvelopeJSON    `json:"-"`
@@ -1436,7 +1531,103 @@ func (r scriptVersionGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ScriptVersionGetResponseEnvelopeErrors struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           ScriptVersionGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scriptVersionGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scriptVersionGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ScriptVersionGetResponseEnvelopeErrors]
+type scriptVersionGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptVersionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptVersionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptVersionGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    scriptVersionGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scriptVersionGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [ScriptVersionGetResponseEnvelopeErrorsSource]
+type scriptVersionGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptVersionGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptVersionGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptVersionGetResponseEnvelopeMessages struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           ScriptVersionGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scriptVersionGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scriptVersionGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ScriptVersionGetResponseEnvelopeMessages]
+type scriptVersionGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptVersionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptVersionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptVersionGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    scriptVersionGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scriptVersionGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ScriptVersionGetResponseEnvelopeMessagesSource]
+type scriptVersionGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptVersionGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptVersionGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ScriptVersionGetResponseEnvelopeSuccess bool
 
 const (

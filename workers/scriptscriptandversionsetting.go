@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -7186,7 +7185,7 @@ func (r ScriptScriptAndVersionSettingGetResponseUsageModel) IsKnown() bool {
 }
 
 type ScriptScriptAndVersionSettingEditParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string]                                          `path:"account_id,required"`
 	Settings  param.Field[ScriptScriptAndVersionSettingEditParamsSettings] `json:"settings"`
 }
@@ -8420,9 +8419,9 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsUsageModel) IsKnown() boo
 }
 
 type ScriptScriptAndVersionSettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ScriptScriptAndVersionSettingEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScriptScriptAndVersionSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ScriptScriptAndVersionSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptScriptAndVersionSettingEditResponse                `json:"result"`
 	JSON    scriptScriptAndVersionSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -8447,7 +8446,107 @@ func (r scriptScriptAndVersionSettingEditResponseEnvelopeJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful
+type ScriptScriptAndVersionSettingEditResponseEnvelopeErrors struct {
+	Code             int64                                                         `json:"code,required"`
+	Message          string                                                        `json:"message,required"`
+	DocumentationURL string                                                        `json:"documentation_url"`
+	Source           ScriptScriptAndVersionSettingEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scriptScriptAndVersionSettingEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseEnvelopeErrors]
+type scriptScriptAndVersionSettingEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptScriptAndVersionSettingEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                                            `json:"pointer"`
+	JSON    scriptScriptAndVersionSettingEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseEnvelopeErrorsSourceJSON contains the
+// JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseEnvelopeErrorsSource]
+type scriptScriptAndVersionSettingEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptScriptAndVersionSettingEditResponseEnvelopeMessages struct {
+	Code             int64                                                           `json:"code,required"`
+	Message          string                                                          `json:"message,required"`
+	DocumentationURL string                                                          `json:"documentation_url"`
+	Source           ScriptScriptAndVersionSettingEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scriptScriptAndVersionSettingEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseEnvelopeMessages]
+type scriptScriptAndVersionSettingEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptScriptAndVersionSettingEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                                              `json:"pointer"`
+	JSON    scriptScriptAndVersionSettingEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseEnvelopeMessagesSourceJSON contains the
+// JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseEnvelopeMessagesSource]
+type scriptScriptAndVersionSettingEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ScriptScriptAndVersionSettingEditResponseEnvelopeSuccess bool
 
 const (
@@ -8463,14 +8562,14 @@ func (r ScriptScriptAndVersionSettingEditResponseEnvelopeSuccess) IsKnown() bool
 }
 
 type ScriptScriptAndVersionSettingGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ScriptScriptAndVersionSettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ScriptScriptAndVersionSettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScriptScriptAndVersionSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ScriptScriptAndVersionSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptScriptAndVersionSettingGetResponse                `json:"result"`
 	JSON    scriptScriptAndVersionSettingGetResponseEnvelopeJSON    `json:"-"`
@@ -8495,7 +8594,106 @@ func (r scriptScriptAndVersionSettingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ScriptScriptAndVersionSettingGetResponseEnvelopeErrors struct {
+	Code             int64                                                        `json:"code,required"`
+	Message          string                                                       `json:"message,required"`
+	DocumentationURL string                                                       `json:"documentation_url"`
+	Source           ScriptScriptAndVersionSettingGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scriptScriptAndVersionSettingGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [ScriptScriptAndVersionSettingGetResponseEnvelopeErrors]
+type scriptScriptAndVersionSettingGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptScriptAndVersionSettingGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                           `json:"pointer"`
+	JSON    scriptScriptAndVersionSettingGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseEnvelopeErrorsSourceJSON contains the
+// JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseEnvelopeErrorsSource]
+type scriptScriptAndVersionSettingGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptScriptAndVersionSettingGetResponseEnvelopeMessages struct {
+	Code             int64                                                          `json:"code,required"`
+	Message          string                                                         `json:"message,required"`
+	DocumentationURL string                                                         `json:"documentation_url"`
+	Source           ScriptScriptAndVersionSettingGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scriptScriptAndVersionSettingGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseEnvelopeMessages]
+type scriptScriptAndVersionSettingGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptScriptAndVersionSettingGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                             `json:"pointer"`
+	JSON    scriptScriptAndVersionSettingGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseEnvelopeMessagesSourceJSON contains the
+// JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseEnvelopeMessagesSource]
+type scriptScriptAndVersionSettingGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ScriptScriptAndVersionSettingGetResponseEnvelopeSuccess bool
 
 const (
