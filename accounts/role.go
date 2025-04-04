@@ -108,9 +108,9 @@ type RoleGetParams struct {
 }
 
 type RoleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RoleGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RoleGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RoleGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.Role                    `json:"result"`
 	JSON    roleGetResponseEnvelopeJSON    `json:"-"`
@@ -135,7 +135,103 @@ func (r roleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RoleGetResponseEnvelopeErrors struct {
+	Code             int64                               `json:"code,required"`
+	Message          string                              `json:"message,required"`
+	DocumentationURL string                              `json:"documentation_url"`
+	Source           RoleGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             roleGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// roleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RoleGetResponseEnvelopeErrors]
+type roleGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RoleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r roleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RoleGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                  `json:"pointer"`
+	JSON    roleGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// roleGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RoleGetResponseEnvelopeErrorsSource]
+type roleGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RoleGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r roleGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RoleGetResponseEnvelopeMessages struct {
+	Code             int64                                 `json:"code,required"`
+	Message          string                                `json:"message,required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           RoleGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             roleGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// roleGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [RoleGetResponseEnvelopeMessages]
+type roleGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RoleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r roleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RoleGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    roleGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// roleGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RoleGetResponseEnvelopeMessagesSource]
+type roleGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RoleGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r roleGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RoleGetResponseEnvelopeSuccess bool
 
 const (
