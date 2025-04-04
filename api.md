@@ -24,7 +24,6 @@
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared#Permission">Permission</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared#PermissionGrant">PermissionGrant</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared#RatePlan">RatePlan</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared#ResponseInfo">ResponseInfo</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared#Role">Role</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared#Subscription">Subscription</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/shared#Token">Token</a>
