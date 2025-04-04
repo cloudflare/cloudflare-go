@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ReverseDNSService contains methods and other services that help with interacting
@@ -121,7 +120,7 @@ func (r reverseDNSGetResponseJSON) RawJSON() string {
 }
 
 type ReverseDNSEditParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Map of cluster IP addresses to PTR record contents
 	PTR param.Field[map[string]string] `json:"ptr"`
@@ -132,9 +131,9 @@ func (r ReverseDNSEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ReverseDNSEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ReverseDNSEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ReverseDNSEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ReverseDNSEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  ReverseDNSEditResponse                `json:"result"`
 	JSON    reverseDNSEditResponseEnvelopeJSON    `json:"-"`
@@ -159,7 +158,103 @@ func (r reverseDNSEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ReverseDNSEditResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           ReverseDNSEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             reverseDNSEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// reverseDNSEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ReverseDNSEditResponseEnvelopeErrors]
+type reverseDNSEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ReverseDNSEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r reverseDNSEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ReverseDNSEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    reverseDNSEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// reverseDNSEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [ReverseDNSEditResponseEnvelopeErrorsSource]
+type reverseDNSEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ReverseDNSEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r reverseDNSEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ReverseDNSEditResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           ReverseDNSEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             reverseDNSEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// reverseDNSEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ReverseDNSEditResponseEnvelopeMessages]
+type reverseDNSEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ReverseDNSEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r reverseDNSEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ReverseDNSEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    reverseDNSEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// reverseDNSEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [ReverseDNSEditResponseEnvelopeMessagesSource]
+type reverseDNSEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ReverseDNSEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r reverseDNSEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ReverseDNSEditResponseEnvelopeSuccess bool
 
 const (
@@ -175,14 +270,14 @@ func (r ReverseDNSEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ReverseDNSGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ReverseDNSGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ReverseDNSGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ReverseDNSGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ReverseDNSGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ReverseDNSGetResponse                `json:"result"`
 	JSON    reverseDNSGetResponseEnvelopeJSON    `json:"-"`
@@ -207,7 +302,103 @@ func (r reverseDNSGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ReverseDNSGetResponseEnvelopeErrors struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           ReverseDNSGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             reverseDNSGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// reverseDNSGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ReverseDNSGetResponseEnvelopeErrors]
+type reverseDNSGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ReverseDNSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r reverseDNSGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ReverseDNSGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    reverseDNSGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// reverseDNSGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [ReverseDNSGetResponseEnvelopeErrorsSource]
+type reverseDNSGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ReverseDNSGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r reverseDNSGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ReverseDNSGetResponseEnvelopeMessages struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           ReverseDNSGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             reverseDNSGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// reverseDNSGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ReverseDNSGetResponseEnvelopeMessages]
+type reverseDNSGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ReverseDNSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r reverseDNSGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ReverseDNSGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    reverseDNSGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// reverseDNSGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [ReverseDNSGetResponseEnvelopeMessagesSource]
+type reverseDNSGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ReverseDNSGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r reverseDNSGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ReverseDNSGetResponseEnvelopeSuccess bool
 
 const (
