@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PublishService contains methods and other services that help with interacting
@@ -63,9 +62,9 @@ func (r PublishNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PublishNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   string                `json:"result,required"`
+	Errors   []PublishNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PublishNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   string                               `json:"result,required"`
 	// Whether the API call was successful
 	Success bool                           `json:"success,required"`
 	JSON    publishNewResponseEnvelopeJSON `json:"-"`
@@ -87,5 +86,51 @@ func (r *PublishNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r publishNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PublishNewResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    publishNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// publishNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PublishNewResponseEnvelopeErrors]
+type publishNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PublishNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r publishNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PublishNewResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    publishNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// publishNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [PublishNewResponseEnvelopeMessages]
+type publishNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PublishNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r publishNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

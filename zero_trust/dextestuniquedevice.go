@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DEXTestUniqueDeviceService contains methods and other services that help with
@@ -94,8 +93,8 @@ func (r DEXTestUniqueDeviceListParams) URLQuery() (v url.Values) {
 }
 
 type DEXTestUniqueDeviceListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DEXTestUniqueDeviceListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DEXTestUniqueDeviceListResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DEXTestUniqueDeviceListResponseEnvelopeSuccess `json:"success,required"`
 	Result  UniqueDevices                                  `json:"result"`
@@ -118,6 +117,52 @@ func (r *DEXTestUniqueDeviceListResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r dexTestUniqueDeviceListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXTestUniqueDeviceListResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    dexTestUniqueDeviceListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dexTestUniqueDeviceListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DEXTestUniqueDeviceListResponseEnvelopeErrors]
+type dexTestUniqueDeviceListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXTestUniqueDeviceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexTestUniqueDeviceListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXTestUniqueDeviceListResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    dexTestUniqueDeviceListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dexTestUniqueDeviceListResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DEXTestUniqueDeviceListResponseEnvelopeMessages]
+type dexTestUniqueDeviceListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXTestUniqueDeviceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexTestUniqueDeviceListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

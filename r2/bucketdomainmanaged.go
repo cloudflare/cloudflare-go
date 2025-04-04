@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketDomainManagedService contains methods and other services that help with
@@ -169,9 +168,9 @@ func (r BucketDomainManagedUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainManagedUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []string                          `json:"messages,required"`
-	Result   BucketDomainManagedUpdateResponse `json:"result,required"`
+	Errors   []BucketDomainManagedUpdateResponseEnvelopeErrors `json:"errors,required"`
+	Messages []string                                          `json:"messages,required"`
+	Result   BucketDomainManagedUpdateResponse                 `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketDomainManagedUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainManagedUpdateResponseEnvelopeJSON    `json:"-"`
@@ -193,6 +192,29 @@ func (r *BucketDomainManagedUpdateResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r bucketDomainManagedUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type BucketDomainManagedUpdateResponseEnvelopeErrors struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    bucketDomainManagedUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// bucketDomainManagedUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [BucketDomainManagedUpdateResponseEnvelopeErrors]
+type bucketDomainManagedUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BucketDomainManagedUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bucketDomainManagedUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -236,9 +258,9 @@ func (r BucketDomainManagedListParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainManagedListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []string                        `json:"messages,required"`
-	Result   BucketDomainManagedListResponse `json:"result,required"`
+	Errors   []BucketDomainManagedListResponseEnvelopeErrors `json:"errors,required"`
+	Messages []string                                        `json:"messages,required"`
+	Result   BucketDomainManagedListResponse                 `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketDomainManagedListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainManagedListResponseEnvelopeJSON    `json:"-"`
@@ -260,6 +282,29 @@ func (r *BucketDomainManagedListResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r bucketDomainManagedListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type BucketDomainManagedListResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    bucketDomainManagedListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// bucketDomainManagedListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [BucketDomainManagedListResponseEnvelopeErrors]
+type bucketDomainManagedListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BucketDomainManagedListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bucketDomainManagedListResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

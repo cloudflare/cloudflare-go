@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DLPLimitService contains methods and other services that help with interacting
@@ -77,8 +76,8 @@ type DLPLimitListParams struct {
 }
 
 type DLPLimitListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DLPLimitListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPLimitListResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPLimitListResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPLimitListResponse                `json:"result"`
@@ -101,6 +100,52 @@ func (r *DLPLimitListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dlpLimitListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPLimitListResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    dlpLimitListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dlpLimitListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DLPLimitListResponseEnvelopeErrors]
+type dlpLimitListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPLimitListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpLimitListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPLimitListResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    dlpLimitListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dlpLimitListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DLPLimitListResponseEnvelopeMessages]
+type dlpLimitListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPLimitListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpLimitListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

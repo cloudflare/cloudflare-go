@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TokenService contains methods and other services that help with interacting with
@@ -168,8 +167,8 @@ func (r TokenNewParamsAccessRulesType) IsKnown() bool {
 }
 
 type TokenNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []TokenNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TokenNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  TokenNewResponse                `json:"result"`
@@ -192,6 +191,52 @@ func (r *TokenNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r tokenNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type TokenNewResponseEnvelopeErrors struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    tokenNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tokenNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [TokenNewResponseEnvelopeErrors]
+type tokenNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TokenNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tokenNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TokenNewResponseEnvelopeMessages struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    tokenNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tokenNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [TokenNewResponseEnvelopeMessages]
+type tokenNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TokenNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tokenNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DispatchNamespaceScriptAssetUploadService contains methods and other services
@@ -111,8 +110,8 @@ func (r DispatchNamespaceScriptAssetUploadNewParamsManifest) MarshalJSON() (data
 }
 
 type DispatchNamespaceScriptAssetUploadNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptAssetUploadNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptAssetUploadNewResponse                `json:"result"`
@@ -135,6 +134,54 @@ func (r *DispatchNamespaceScriptAssetUploadNewResponseEnvelope) UnmarshalJSON(da
 }
 
 func (r dispatchNamespaceScriptAssetUploadNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrors struct {
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    dispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrorsJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrors]
+type dispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessages struct {
+	Code    int64                                                             `json:"code,required"`
+	Message string                                                            `json:"message,required"`
+	JSON    dispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessagesJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessages]
+type dispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

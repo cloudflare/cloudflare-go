@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -2298,9 +2297,9 @@ func (r DevicePostureNewParamsType) IsKnown() bool {
 }
 
 type DevicePostureNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DevicePostureRule     `json:"result,required,nullable"`
+	Errors   []DevicePostureNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePostureNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   DevicePostureRule                          `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureNewResponseEnvelopeJSON    `json:"-"`
@@ -2322,6 +2321,52 @@ func (r *DevicePostureNewResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r devicePostureNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DevicePostureNewResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    devicePostureNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// devicePostureNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DevicePostureNewResponseEnvelopeErrors]
+type devicePostureNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePostureNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DevicePostureNewResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    devicePostureNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePostureNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DevicePostureNewResponseEnvelopeMessages]
+type devicePostureNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePostureNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2400,9 +2445,9 @@ func (r DevicePostureUpdateParamsType) IsKnown() bool {
 }
 
 type DevicePostureUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DevicePostureRule     `json:"result,required,nullable"`
+	Errors   []DevicePostureUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePostureUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   DevicePostureRule                             `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureUpdateResponseEnvelopeJSON    `json:"-"`
@@ -2424,6 +2469,52 @@ func (r *DevicePostureUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r devicePostureUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DevicePostureUpdateResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    devicePostureUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// devicePostureUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DevicePostureUpdateResponseEnvelopeErrors]
+type devicePostureUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePostureUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DevicePostureUpdateResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    devicePostureUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePostureUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DevicePostureUpdateResponseEnvelopeMessages]
+type devicePostureUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePostureUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2451,9 +2542,9 @@ type DevicePostureDeleteParams struct {
 }
 
 type DevicePostureDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   DevicePostureDeleteResponse `json:"result,required,nullable"`
+	Errors   []DevicePostureDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePostureDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   DevicePostureDeleteResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureDeleteResponseEnvelopeJSON    `json:"-"`
@@ -2478,6 +2569,52 @@ func (r devicePostureDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type DevicePostureDeleteResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    devicePostureDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// devicePostureDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DevicePostureDeleteResponseEnvelopeErrors]
+type devicePostureDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePostureDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DevicePostureDeleteResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    devicePostureDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePostureDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DevicePostureDeleteResponseEnvelopeMessages]
+type devicePostureDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePostureDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful.
 type DevicePostureDeleteResponseEnvelopeSuccess bool
 
@@ -2498,9 +2635,9 @@ type DevicePostureGetParams struct {
 }
 
 type DevicePostureGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DevicePostureRule     `json:"result,required,nullable"`
+	Errors   []DevicePostureGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePostureGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DevicePostureRule                          `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureGetResponseEnvelopeJSON    `json:"-"`
@@ -2522,6 +2659,52 @@ func (r *DevicePostureGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r devicePostureGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DevicePostureGetResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    devicePostureGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// devicePostureGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DevicePostureGetResponseEnvelopeErrors]
+type devicePostureGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePostureGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DevicePostureGetResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    devicePostureGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePostureGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DevicePostureGetResponseEnvelopeMessages]
+type devicePostureGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePostureGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

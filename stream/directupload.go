@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DirectUploadService contains methods and other services that help with
@@ -138,8 +137,8 @@ func (r DirectUploadNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 }
 
 type DirectUploadNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DirectUploadNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DirectUploadNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DirectUploadNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DirectUploadNewResponse                `json:"result"`
@@ -162,6 +161,52 @@ func (r *DirectUploadNewResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r directUploadNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DirectUploadNewResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    directUploadNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// directUploadNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DirectUploadNewResponseEnvelopeErrors]
+type directUploadNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DirectUploadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r directUploadNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DirectUploadNewResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    directUploadNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// directUploadNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DirectUploadNewResponseEnvelopeMessages]
+type directUploadNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DirectUploadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r directUploadNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

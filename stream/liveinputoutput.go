@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // LiveInputOutputService contains methods and other services that help with
@@ -189,8 +188,8 @@ func (r LiveInputOutputNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LiveInputOutputNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []LiveInputOutputNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LiveInputOutputNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success LiveInputOutputNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Output                                    `json:"result"`
@@ -213,6 +212,52 @@ func (r *LiveInputOutputNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r liveInputOutputNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type LiveInputOutputNewResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    liveInputOutputNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// liveInputOutputNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [LiveInputOutputNewResponseEnvelopeErrors]
+type liveInputOutputNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LiveInputOutputNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r liveInputOutputNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type LiveInputOutputNewResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    liveInputOutputNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// liveInputOutputNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [LiveInputOutputNewResponseEnvelopeMessages]
+type liveInputOutputNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LiveInputOutputNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r liveInputOutputNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -247,8 +292,8 @@ func (r LiveInputOutputUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LiveInputOutputUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []LiveInputOutputUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LiveInputOutputUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success LiveInputOutputUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Output                                       `json:"result"`
@@ -271,6 +316,52 @@ func (r *LiveInputOutputUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r liveInputOutputUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type LiveInputOutputUpdateResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    liveInputOutputUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// liveInputOutputUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [LiveInputOutputUpdateResponseEnvelopeErrors]
+type liveInputOutputUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LiveInputOutputUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r liveInputOutputUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type LiveInputOutputUpdateResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    liveInputOutputUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// liveInputOutputUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [LiveInputOutputUpdateResponseEnvelopeMessages]
+type liveInputOutputUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LiveInputOutputUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r liveInputOutputUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

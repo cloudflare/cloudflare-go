@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PolicyService contains methods and other services that help with interacting
@@ -401,10 +400,10 @@ func (r PolicyNewParams) MarshalJSON() (data []byte, err error) {
 type PolicyNewResponseEnvelope struct {
 	Result PolicyNewResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success  PolicyNewResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []shared.ResponseInfo            `json:"errors"`
-	Messages []shared.ResponseInfo            `json:"messages"`
-	JSON     policyNewResponseEnvelopeJSON    `json:"-"`
+	Success  PolicyNewResponseEnvelopeSuccess    `json:"success,required"`
+	Errors   []PolicyNewResponseEnvelopeErrors   `json:"errors"`
+	Messages []PolicyNewResponseEnvelopeMessages `json:"messages"`
+	JSON     policyNewResponseEnvelopeJSON       `json:"-"`
 }
 
 // policyNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -439,6 +438,52 @@ func (r PolicyNewResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type PolicyNewResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    policyNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// policyNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PolicyNewResponseEnvelopeErrors]
+type policyNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PolicyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PolicyNewResponseEnvelopeMessages struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    policyNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// policyNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [PolicyNewResponseEnvelopeMessages]
+type policyNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PolicyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type PolicyUpdateParams struct {
@@ -480,10 +525,10 @@ func (r PolicyUpdateParamsAction) IsKnown() bool {
 type PolicyUpdateResponseEnvelope struct {
 	Result PolicyUpdateResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success  PolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []shared.ResponseInfo               `json:"errors"`
-	Messages []shared.ResponseInfo               `json:"messages"`
-	JSON     policyUpdateResponseEnvelopeJSON    `json:"-"`
+	Success  PolicyUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	Errors   []PolicyUpdateResponseEnvelopeErrors   `json:"errors"`
+	Messages []PolicyUpdateResponseEnvelopeMessages `json:"messages"`
+	JSON     policyUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
 // policyUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -520,6 +565,52 @@ func (r PolicyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type PolicyUpdateResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    policyUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// policyUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PolicyUpdateResponseEnvelopeErrors]
+type policyUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PolicyUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PolicyUpdateResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    policyUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// policyUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PolicyUpdateResponseEnvelopeMessages]
+type policyUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PolicyUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 type PolicyListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -538,10 +629,10 @@ type PolicyGetParams struct {
 type PolicyGetResponseEnvelope struct {
 	Result PolicyGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success  PolicyGetResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []shared.ResponseInfo            `json:"errors"`
-	Messages []shared.ResponseInfo            `json:"messages"`
-	JSON     policyGetResponseEnvelopeJSON    `json:"-"`
+	Success  PolicyGetResponseEnvelopeSuccess    `json:"success,required"`
+	Errors   []PolicyGetResponseEnvelopeErrors   `json:"errors"`
+	Messages []PolicyGetResponseEnvelopeMessages `json:"messages"`
+	JSON     policyGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // policyGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -576,4 +667,50 @@ func (r PolicyGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type PolicyGetResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    policyGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// policyGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PolicyGetResponseEnvelopeErrors]
+type policyGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PolicyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PolicyGetResponseEnvelopeMessages struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    policyGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// policyGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [PolicyGetResponseEnvelopeMessages]
+type policyGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PolicyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

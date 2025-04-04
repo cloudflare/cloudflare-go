@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DEXCommandQuotaService contains methods and other services that help with
@@ -86,8 +85,8 @@ type DEXCommandQuotaGetParams struct {
 }
 
 type DEXCommandQuotaGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DEXCommandQuotaGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DEXCommandQuotaGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success    DEXCommandQuotaGetResponseEnvelopeSuccess    `json:"success,required"`
 	Result     DEXCommandQuotaGetResponse                   `json:"result"`
@@ -112,6 +111,52 @@ func (r *DEXCommandQuotaGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r dexCommandQuotaGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXCommandQuotaGetResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    dexCommandQuotaGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dexCommandQuotaGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DEXCommandQuotaGetResponseEnvelopeErrors]
+type dexCommandQuotaGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXCommandQuotaGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexCommandQuotaGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXCommandQuotaGetResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    dexCommandQuotaGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dexCommandQuotaGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DEXCommandQuotaGetResponseEnvelopeMessages]
+type dexCommandQuotaGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXCommandQuotaGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexCommandQuotaGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

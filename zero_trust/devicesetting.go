@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DeviceSettingService contains methods and other services that help with
@@ -147,9 +146,9 @@ func (r DeviceSettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceSettingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceSettings        `json:"result,required,nullable"`
+	Errors   []DeviceSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   DeviceSettings                                `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceSettingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -174,6 +173,52 @@ func (r deviceSettingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type DeviceSettingUpdateResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    deviceSettingUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// deviceSettingUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceSettingUpdateResponseEnvelopeErrors]
+type deviceSettingUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceSettingUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceSettingUpdateResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    deviceSettingUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// deviceSettingUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DeviceSettingUpdateResponseEnvelopeMessages]
+type deviceSettingUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceSettingUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful.
 type DeviceSettingUpdateResponseEnvelopeSuccess bool
 
@@ -194,9 +239,9 @@ type DeviceSettingListParams struct {
 }
 
 type DeviceSettingListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceSettings        `json:"result,required,nullable"`
+	Errors   []DeviceSettingListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceSettingListResponseEnvelopeMessages `json:"messages,required"`
+	Result   DeviceSettings                              `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceSettingListResponseEnvelopeJSON    `json:"-"`
@@ -218,6 +263,52 @@ func (r *DeviceSettingListResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r deviceSettingListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceSettingListResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    deviceSettingListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// deviceSettingListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceSettingListResponseEnvelopeErrors]
+type deviceSettingListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceSettingListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceSettingListResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    deviceSettingListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// deviceSettingListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DeviceSettingListResponseEnvelopeMessages]
+type deviceSettingListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceSettingListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -246,9 +337,9 @@ func (r DeviceSettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceSettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceSettings        `json:"result,required,nullable"`
+	Errors   []DeviceSettingEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   DeviceSettings                              `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -270,6 +361,52 @@ func (r *DeviceSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r deviceSettingEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceSettingEditResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    deviceSettingEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// deviceSettingEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceSettingEditResponseEnvelopeErrors]
+type deviceSettingEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceSettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceSettingEditResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    deviceSettingEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// deviceSettingEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DeviceSettingEditResponseEnvelopeMessages]
+type deviceSettingEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceSettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

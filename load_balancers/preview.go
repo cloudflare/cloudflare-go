@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PreviewService contains methods and other services that help with interacting
@@ -114,8 +113,8 @@ type PreviewGetParams struct {
 }
 
 type PreviewGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []PreviewGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PreviewGetResponseEnvelopeMessages `json:"messages,required"`
 	// Resulting health data from a preview operation.
 	Result PreviewGetResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -139,6 +138,52 @@ func (r *PreviewGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r previewGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PreviewGetResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    previewGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// previewGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PreviewGetResponseEnvelopeErrors]
+type previewGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PreviewGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r previewGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PreviewGetResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    previewGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// previewGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [PreviewGetResponseEnvelopeMessages]
+type previewGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PreviewGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r previewGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

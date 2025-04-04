@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PurgeService contains methods and other services that help with interacting with
@@ -113,9 +112,9 @@ func (r PurgeStartParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PurgeStartResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   Queue                 `json:"result"`
+	Errors   []PurgeStartResponseEnvelopeErrors `json:"errors"`
+	Messages []string                           `json:"messages"`
+	Result   Queue                              `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success PurgeStartResponseEnvelopeSuccess `json:"success"`
 	JSON    purgeStartResponseEnvelopeJSON    `json:"-"`
@@ -140,6 +139,29 @@ func (r purgeStartResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type PurgeStartResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    purgeStartResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// purgeStartResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PurgeStartResponseEnvelopeErrors]
+type purgeStartResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PurgeStartResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r purgeStartResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Indicates if the API call was successful or not.
 type PurgeStartResponseEnvelopeSuccess bool
 
@@ -161,9 +183,9 @@ type PurgeStatusParams struct {
 }
 
 type PurgeStatusResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   PurgeStatusResponse   `json:"result"`
+	Errors   []PurgeStatusResponseEnvelopeErrors `json:"errors"`
+	Messages []string                            `json:"messages"`
+	Result   PurgeStatusResponse                 `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success PurgeStatusResponseEnvelopeSuccess `json:"success"`
 	JSON    purgeStatusResponseEnvelopeJSON    `json:"-"`
@@ -185,6 +207,29 @@ func (r *PurgeStatusResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r purgeStatusResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PurgeStatusResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    purgeStatusResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// purgeStatusResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PurgeStatusResponseEnvelopeErrors]
+type purgeStatusResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PurgeStatusResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r purgeStatusResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
