@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // JobService contains methods and other services that help with interacting with
@@ -603,9 +602,9 @@ func (r JobNewParamsKind) IsKnown() bool {
 }
 
 type JobNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []JobNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []JobNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success JobNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  LogpushJob                    `json:"result,nullable"`
 	JSON    jobNewResponseEnvelopeJSON    `json:"-"`
@@ -630,7 +629,103 @@ func (r jobNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type JobNewResponseEnvelopeErrors struct {
+	Code             int64                              `json:"code,required"`
+	Message          string                             `json:"message,required"`
+	DocumentationURL string                             `json:"documentation_url"`
+	Source           JobNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             jobNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// jobNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [JobNewResponseEnvelopeErrors]
+type jobNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *JobNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                 `json:"pointer"`
+	JSON    jobNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// jobNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the struct
+// [JobNewResponseEnvelopeErrorsSource]
+type jobNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *JobNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobNewResponseEnvelopeMessages struct {
+	Code             int64                                `json:"code,required"`
+	Message          string                               `json:"message,required"`
+	DocumentationURL string                               `json:"documentation_url"`
+	Source           JobNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             jobNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// jobNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [JobNewResponseEnvelopeMessages]
+type jobNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *JobNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                   `json:"pointer"`
+	JSON    jobNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// jobNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [JobNewResponseEnvelopeMessagesSource]
+type jobNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *JobNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type JobNewResponseEnvelopeSuccess bool
 
 const (
@@ -740,9 +835,9 @@ func (r JobUpdateParamsKind) IsKnown() bool {
 }
 
 type JobUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []JobUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []JobUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success JobUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  LogpushJob                       `json:"result,nullable"`
 	JSON    jobUpdateResponseEnvelopeJSON    `json:"-"`
@@ -767,7 +862,103 @@ func (r jobUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type JobUpdateResponseEnvelopeErrors struct {
+	Code             int64                                 `json:"code,required"`
+	Message          string                                `json:"message,required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           JobUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             jobUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// jobUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [JobUpdateResponseEnvelopeErrors]
+type jobUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *JobUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    jobUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// jobUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [JobUpdateResponseEnvelopeErrorsSource]
+type jobUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *JobUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobUpdateResponseEnvelopeMessages struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           JobUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             jobUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// jobUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [JobUpdateResponseEnvelopeMessages]
+type jobUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *JobUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    jobUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// jobUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [JobUpdateResponseEnvelopeMessagesSource]
+type jobUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *JobUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type JobUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -797,9 +988,9 @@ type JobDeleteParams struct {
 }
 
 type JobDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []JobDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []JobDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success JobDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  JobDeleteResponse                `json:"result"`
 	JSON    jobDeleteResponseEnvelopeJSON    `json:"-"`
@@ -824,7 +1015,103 @@ func (r jobDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type JobDeleteResponseEnvelopeErrors struct {
+	Code             int64                                 `json:"code,required"`
+	Message          string                                `json:"message,required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           JobDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             jobDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// jobDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [JobDeleteResponseEnvelopeErrors]
+type jobDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *JobDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    jobDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// jobDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [JobDeleteResponseEnvelopeErrorsSource]
+type jobDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *JobDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobDeleteResponseEnvelopeMessages struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           JobDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             jobDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// jobDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [JobDeleteResponseEnvelopeMessages]
+type jobDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *JobDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    jobDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// jobDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [JobDeleteResponseEnvelopeMessagesSource]
+type jobDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *JobDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type JobDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -847,9 +1134,9 @@ type JobGetParams struct {
 }
 
 type JobGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []JobGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []JobGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success JobGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  LogpushJob                    `json:"result,nullable"`
 	JSON    jobGetResponseEnvelopeJSON    `json:"-"`
@@ -874,7 +1161,103 @@ func (r jobGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type JobGetResponseEnvelopeErrors struct {
+	Code             int64                              `json:"code,required"`
+	Message          string                             `json:"message,required"`
+	DocumentationURL string                             `json:"documentation_url"`
+	Source           JobGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             jobGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// jobGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [JobGetResponseEnvelopeErrors]
+type jobGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *JobGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                 `json:"pointer"`
+	JSON    jobGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// jobGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the struct
+// [JobGetResponseEnvelopeErrorsSource]
+type jobGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *JobGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobGetResponseEnvelopeMessages struct {
+	Code             int64                                `json:"code,required"`
+	Message          string                               `json:"message,required"`
+	DocumentationURL string                               `json:"documentation_url"`
+	Source           JobGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             jobGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// jobGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [JobGetResponseEnvelopeMessages]
+type jobGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *JobGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type JobGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                   `json:"pointer"`
+	JSON    jobGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// jobGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [JobGetResponseEnvelopeMessagesSource]
+type jobGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *JobGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type JobGetResponseEnvelopeSuccess bool
 
 const (
