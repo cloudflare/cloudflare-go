@@ -13,9 +13,48 @@ func (UnionTime) ImplementsAuditLogListParamsSinceUnion()  {}
 
 type UnionString string
 
-func (UnionString) ImplementsReceivedGetParamsEndUnion()                                    {}
-func (UnionString) ImplementsReceivedGetParamsStartUnion()                                  {}
-func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
+func (UnionString) ImplementsReceivedGetParamsEndUnion()                             {}
+func (UnionString) ImplementsReceivedGetParamsStartUnion()                           {}
+func (UnionString) ImplementsObservabilityTelemetryKeyNewParamsFiltersValueUnion()   {}
+func (UnionString) ImplementsObservabilityTelemetryKeyNewParamsKeyNeedleValueUnion() {}
+func (UnionString) ImplementsObservabilityTelemetryKeyNewParamsNeedleValueUnion()    {}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseRunQueryParametersFiltersValueUnion() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseRunQueryParametersNeedleValueUnion() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseCalculationsAggregatesGroupsValueUnion() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseCalculationsSeriesDataGroupsValueUnion() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseCompareAggregatesGroupsValueUnion() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseCompareSeriesDataGroupsValueUnion() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventUnion() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventMapUnionItem() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventMapMapUnionItem() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventMapMapArrayUnionItem() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseEventsSeriesDataGroupsUnion() {}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventUnion() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventMapUnionItem() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventMapMapUnionItem() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventMapMapArrayUnionItem() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewResponsePatternsSeriesDataGroupsValueUnion() {
+}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewParamsParametersFiltersValueUnion() {}
+func (UnionString) ImplementsObservabilityTelemetryQueryNewParamsParametersNeedleValueUnion()  {}
+func (UnionString) ImplementsObservabilityTelemetryValueNewResponseValueUnion()                {}
+func (UnionString) ImplementsObservabilityTelemetryValueNewParamsFiltersValueUnion()           {}
+func (UnionString) ImplementsObservabilityTelemetryValueNewParamsNeedleValueUnion()            {}
+func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()    {}
 func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
 }
 func (UnionString) ImplementsOriginPortUnionParam()                                                {}
@@ -101,7 +140,46 @@ func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()           
 
 type UnionBool bool
 
-func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
+func (UnionBool) ImplementsObservabilityTelemetryKeyNewParamsFiltersValueUnion()   {}
+func (UnionBool) ImplementsObservabilityTelemetryKeyNewParamsKeyNeedleValueUnion() {}
+func (UnionBool) ImplementsObservabilityTelemetryKeyNewParamsNeedleValueUnion()    {}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseRunQueryParametersFiltersValueUnion() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseRunQueryParametersNeedleValueUnion() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseCalculationsAggregatesGroupsValueUnion() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseCalculationsSeriesDataGroupsValueUnion() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseCompareAggregatesGroupsValueUnion() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseCompareSeriesDataGroupsValueUnion() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventUnion() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventMapUnionItem() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventMapMapUnionItem() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventMapMapArrayUnionItem() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseEventsSeriesDataGroupsUnion() {}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventUnion() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventMapUnionItem() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventMapMapUnionItem() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventMapMapArrayUnionItem() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewResponsePatternsSeriesDataGroupsValueUnion() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewParamsParametersFiltersValueUnion() {}
+func (UnionBool) ImplementsObservabilityTelemetryQueryNewParamsParametersNeedleValueUnion()  {}
+func (UnionBool) ImplementsObservabilityTelemetryValueNewResponseValueUnion()                {}
+func (UnionBool) ImplementsObservabilityTelemetryValueNewParamsFiltersValueUnion()           {}
+func (UnionBool) ImplementsObservabilityTelemetryValueNewParamsNeedleValueUnion()            {}
+func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()    {}
 func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
 }
 func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()      {}
@@ -140,9 +218,48 @@ func (UnionInt) ImplementsOriginPortUnion()                                     
 
 type UnionFloat float64
 
-func (UnionFloat) ImplementsTTLParam()                                                     {}
-func (UnionFloat) ImplementsTTL()                                                          {}
-func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
+func (UnionFloat) ImplementsTTLParam()                                              {}
+func (UnionFloat) ImplementsTTL()                                                   {}
+func (UnionFloat) ImplementsObservabilityTelemetryKeyNewParamsFiltersValueUnion()   {}
+func (UnionFloat) ImplementsObservabilityTelemetryKeyNewParamsKeyNeedleValueUnion() {}
+func (UnionFloat) ImplementsObservabilityTelemetryKeyNewParamsNeedleValueUnion()    {}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseRunQueryParametersFiltersValueUnion() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseRunQueryParametersNeedleValueUnion() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseCalculationsAggregatesGroupsValueUnion() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseCalculationsSeriesDataGroupsValueUnion() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseCompareAggregatesGroupsValueUnion() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseCompareSeriesDataGroupsValueUnion() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventUnion() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventMapUnionItem() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventMapMapUnionItem() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseEventsEventsWorkersObjectEventMapMapArrayUnionItem() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseEventsSeriesDataGroupsUnion() {}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventUnion() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventMapUnionItem() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventMapMapUnionItem() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponseInvocationsWorkersObjectEventMapMapArrayUnionItem() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewResponsePatternsSeriesDataGroupsValueUnion() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewParamsParametersFiltersValueUnion() {}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryNewParamsParametersNeedleValueUnion()  {}
+func (UnionFloat) ImplementsObservabilityTelemetryValueNewResponseValueUnion()                {}
+func (UnionFloat) ImplementsObservabilityTelemetryValueNewParamsFiltersValueUnion()           {}
+func (UnionFloat) ImplementsObservabilityTelemetryValueNewParamsNeedleValueUnion()            {}
+func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()    {}
 func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion() {
 }
 func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                {}
