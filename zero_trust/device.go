@@ -56,7 +56,12 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 	return
 }
 
-// Fetches a list of enrolled devices.
+// List WARP registrations.
+//
+// **Deprecated**: please use one of the following endpoints instead:
+//
+// - GET /accounts/{account_id}/devices/physical-devices
+// - GET /accounts/{account_id}/devices/registrations
 func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Device], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -78,12 +83,22 @@ func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts .
 	return res, nil
 }
 
-// Fetches a list of enrolled devices.
+// List WARP registrations.
+//
+// **Deprecated**: please use one of the following endpoints instead:
+//
+// - GET /accounts/{account_id}/devices/physical-devices
+// - GET /accounts/{account_id}/devices/registrations
 func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Device] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Fetches details for a single device.
+// Fetches a single WARP registration.
+//
+// **Deprecated**: please use one of the following endpoints instead:
+//
+// - GET /accounts/{account_id}/devices/physical-devices/{device_id}
+// - GET /accounts/{account_id}/devices/registrations/{registration_id}
 func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *DeviceGetResponse, err error) {
 	var env DeviceGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -105,7 +120,8 @@ func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGe
 }
 
 type Device struct {
-	// Device ID.
+	// Registration ID. Equal to Device ID except for accounts which enabled
+	// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/).
 	ID string `json:"id"`
 	// When the device was created.
 	Created time.Time `json:"created" format:"date-time"`
@@ -226,7 +242,8 @@ func (r deviceUserJSON) RawJSON() string {
 }
 
 type DeviceGetResponse struct {
-	// Device ID.
+	// Registration ID. Equal to Device ID except for accounts which enabled
+	// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/).
 	ID      string                   `json:"id"`
 	Account DeviceGetResponseAccount `json:"account"`
 	// When the device was created.
