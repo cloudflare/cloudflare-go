@@ -113,7 +113,7 @@ type SettingsPolicy struct {
 	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
 	GatewayUniqueID  string           `json:"gateway_unique_id"`
 	// List of routes included in the WARP client's tunnel.
-	Include []SplitTunnelExclude `json:"include"`
+	Include []SplitTunnelInclude `json:"include"`
 	// The amount of time in minutes a user is allowed access to their LAN. A value of
 	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
 	// laptop waking from sleep. Note that this field is omitted from the response if
@@ -125,8 +125,7 @@ type SettingsPolicy struct {
 	// The wirefilter expression to match devices.
 	Match string `json:"match"`
 	// The name of the device settings profile.
-	Name string `json:"name"`
-	// Device ID.
+	Name     string `json:"name"`
 	PolicyID string `json:"policy_id"`
 	// The precedence of the policy. Lower values indicate higher precedence. Policies
 	// will be evaluated in ascending order of this field.

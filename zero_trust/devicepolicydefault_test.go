@@ -40,9 +40,9 @@ func TestDevicePolicyDefaultEditWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("Exclude testing domains from the tunnel"),
 		}}),
 		ExcludeOfficeIPs: cloudflare.F(true),
-		Include: cloudflare.F([]zero_trust.SplitTunnelExcludeUnionParam{zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam{
+		Include: cloudflare.F([]zero_trust.SplitTunnelIncludeUnionParam{zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam{
 			Address:     cloudflare.F("192.0.2.0/24"),
-			Description: cloudflare.F("Exclude testing domains from the tunnel"),
+			Description: cloudflare.F("Include testing domains in the tunnel"),
 		}}),
 		RegisterInterfaceIPWithDNS: cloudflare.F(true),
 		ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyDefaultEditParamsServiceModeV2{
