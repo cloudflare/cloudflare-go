@@ -214,6 +214,8 @@ type GatewayList struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The description of the list.
 	Description string `json:"description"`
+	// The items in the list.
+	Items []GatewayItem `json:"items"`
 	// The name of the list.
 	Name string `json:"name"`
 	// The type of list.
@@ -228,6 +230,7 @@ type gatewayListJSON struct {
 	Count       apijson.Field
 	CreatedAt   apijson.Field
 	Description apijson.Field
+	Items       apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
