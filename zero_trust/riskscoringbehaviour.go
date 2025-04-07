@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RiskScoringBehaviourService contains methods and other services that help with
@@ -227,9 +226,9 @@ func (r RiskScoringBehaviourUpdateParamsBehaviorsRiskLevel) IsKnown() bool {
 }
 
 type RiskScoringBehaviourUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RiskScoringBehaviourUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RiskScoringBehaviourUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RiskScoringBehaviourUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  RiskScoringBehaviourUpdateResponse                `json:"result"`
 	JSON    riskScoringBehaviourUpdateResponseEnvelopeJSON    `json:"-"`
@@ -254,7 +253,104 @@ func (r riskScoringBehaviourUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RiskScoringBehaviourUpdateResponseEnvelopeErrors struct {
+	Code             int64                                                  `json:"code,required"`
+	Message          string                                                 `json:"message,required"`
+	DocumentationURL string                                                 `json:"documentation_url"`
+	Source           RiskScoringBehaviourUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             riskScoringBehaviourUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// riskScoringBehaviourUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [RiskScoringBehaviourUpdateResponseEnvelopeErrors]
+type riskScoringBehaviourUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RiskScoringBehaviourUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringBehaviourUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RiskScoringBehaviourUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                                     `json:"pointer"`
+	JSON    riskScoringBehaviourUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// riskScoringBehaviourUpdateResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [RiskScoringBehaviourUpdateResponseEnvelopeErrorsSource]
+type riskScoringBehaviourUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringBehaviourUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringBehaviourUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RiskScoringBehaviourUpdateResponseEnvelopeMessages struct {
+	Code             int64                                                    `json:"code,required"`
+	Message          string                                                   `json:"message,required"`
+	DocumentationURL string                                                   `json:"documentation_url"`
+	Source           RiskScoringBehaviourUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             riskScoringBehaviourUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// riskScoringBehaviourUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [RiskScoringBehaviourUpdateResponseEnvelopeMessages]
+type riskScoringBehaviourUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RiskScoringBehaviourUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringBehaviourUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RiskScoringBehaviourUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                       `json:"pointer"`
+	JSON    riskScoringBehaviourUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// riskScoringBehaviourUpdateResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [RiskScoringBehaviourUpdateResponseEnvelopeMessagesSource]
+type riskScoringBehaviourUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringBehaviourUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringBehaviourUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RiskScoringBehaviourUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -274,9 +370,9 @@ type RiskScoringBehaviourGetParams struct {
 }
 
 type RiskScoringBehaviourGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RiskScoringBehaviourGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RiskScoringBehaviourGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RiskScoringBehaviourGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RiskScoringBehaviourGetResponse                `json:"result"`
 	JSON    riskScoringBehaviourGetResponseEnvelopeJSON    `json:"-"`
@@ -301,7 +397,103 @@ func (r riskScoringBehaviourGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RiskScoringBehaviourGetResponseEnvelopeErrors struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           RiskScoringBehaviourGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             riskScoringBehaviourGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// riskScoringBehaviourGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [RiskScoringBehaviourGetResponseEnvelopeErrors]
+type riskScoringBehaviourGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RiskScoringBehaviourGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringBehaviourGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RiskScoringBehaviourGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    riskScoringBehaviourGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// riskScoringBehaviourGetResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [RiskScoringBehaviourGetResponseEnvelopeErrorsSource]
+type riskScoringBehaviourGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringBehaviourGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringBehaviourGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RiskScoringBehaviourGetResponseEnvelopeMessages struct {
+	Code             int64                                                 `json:"code,required"`
+	Message          string                                                `json:"message,required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           RiskScoringBehaviourGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             riskScoringBehaviourGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// riskScoringBehaviourGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [RiskScoringBehaviourGetResponseEnvelopeMessages]
+type riskScoringBehaviourGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RiskScoringBehaviourGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringBehaviourGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RiskScoringBehaviourGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    riskScoringBehaviourGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// riskScoringBehaviourGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [RiskScoringBehaviourGetResponseEnvelopeMessagesSource]
+type riskScoringBehaviourGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringBehaviourGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringBehaviourGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RiskScoringBehaviourGetResponseEnvelopeSuccess bool
 
 const (

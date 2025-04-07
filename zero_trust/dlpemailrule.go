@@ -1208,9 +1208,9 @@ func (r DLPEmailRuleNewParamsConditionsValueArray) ImplementsDLPEmailRuleNewPara
 }
 
 type DLPEmailRuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DLPEmailRuleNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPEmailRuleNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DLPEmailRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailRuleNewResponse                `json:"result"`
 	JSON    dlpEmailRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -1235,7 +1235,103 @@ func (r dlpEmailRuleNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DLPEmailRuleNewResponseEnvelopeErrors struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           DLPEmailRuleNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpEmailRuleNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpEmailRuleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPEmailRuleNewResponseEnvelopeErrors]
+type dlpEmailRuleNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    dlpEmailRuleNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpEmailRuleNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [DLPEmailRuleNewResponseEnvelopeErrorsSource]
+type dlpEmailRuleNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleNewResponseEnvelopeMessages struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           DLPEmailRuleNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpEmailRuleNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpEmailRuleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DLPEmailRuleNewResponseEnvelopeMessages]
+type dlpEmailRuleNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    dlpEmailRuleNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpEmailRuleNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [DLPEmailRuleNewResponseEnvelopeMessagesSource]
+type dlpEmailRuleNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DLPEmailRuleNewResponseEnvelopeSuccess bool
 
 const (
@@ -1342,9 +1438,9 @@ func (r DLPEmailRuleUpdateParamsConditionsValueArray) ImplementsDLPEmailRuleUpda
 }
 
 type DLPEmailRuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DLPEmailRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPEmailRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DLPEmailRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailRuleUpdateResponse                `json:"result"`
 	JSON    dlpEmailRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1369,7 +1465,103 @@ func (r dlpEmailRuleUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DLPEmailRuleUpdateResponseEnvelopeErrors struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           DLPEmailRuleUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpEmailRuleUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpEmailRuleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPEmailRuleUpdateResponseEnvelopeErrors]
+type dlpEmailRuleUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    dlpEmailRuleUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpEmailRuleUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [DLPEmailRuleUpdateResponseEnvelopeErrorsSource]
+type dlpEmailRuleUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleUpdateResponseEnvelopeMessages struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           DLPEmailRuleUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpEmailRuleUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpEmailRuleUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DLPEmailRuleUpdateResponseEnvelopeMessages]
+type dlpEmailRuleUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    dlpEmailRuleUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpEmailRuleUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [DLPEmailRuleUpdateResponseEnvelopeMessagesSource]
+type dlpEmailRuleUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DLPEmailRuleUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1393,9 +1585,9 @@ type DLPEmailRuleDeleteParams struct {
 }
 
 type DLPEmailRuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DLPEmailRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPEmailRuleDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DLPEmailRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailRuleDeleteResponse                `json:"result"`
 	JSON    dlpEmailRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1420,7 +1612,103 @@ func (r dlpEmailRuleDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DLPEmailRuleDeleteResponseEnvelopeErrors struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           DLPEmailRuleDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpEmailRuleDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpEmailRuleDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPEmailRuleDeleteResponseEnvelopeErrors]
+type dlpEmailRuleDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    dlpEmailRuleDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpEmailRuleDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [DLPEmailRuleDeleteResponseEnvelopeErrorsSource]
+type dlpEmailRuleDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleDeleteResponseEnvelopeMessages struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           DLPEmailRuleDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpEmailRuleDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpEmailRuleDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DLPEmailRuleDeleteResponseEnvelopeMessages]
+type dlpEmailRuleDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    dlpEmailRuleDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpEmailRuleDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [DLPEmailRuleDeleteResponseEnvelopeMessagesSource]
+type dlpEmailRuleDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DLPEmailRuleDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1445,9 +1733,9 @@ func (r DLPEmailRuleBulkEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPEmailRuleBulkEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DLPEmailRuleBulkEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPEmailRuleBulkEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DLPEmailRuleBulkEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailRuleBulkEditResponse                `json:"result"`
 	JSON    dlpEmailRuleBulkEditResponseEnvelopeJSON    `json:"-"`
@@ -1472,7 +1760,103 @@ func (r dlpEmailRuleBulkEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DLPEmailRuleBulkEditResponseEnvelopeErrors struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           DLPEmailRuleBulkEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpEmailRuleBulkEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpEmailRuleBulkEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DLPEmailRuleBulkEditResponseEnvelopeErrors]
+type dlpEmailRuleBulkEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleBulkEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleBulkEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleBulkEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    dlpEmailRuleBulkEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpEmailRuleBulkEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [DLPEmailRuleBulkEditResponseEnvelopeErrorsSource]
+type dlpEmailRuleBulkEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleBulkEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleBulkEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleBulkEditResponseEnvelopeMessages struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           DLPEmailRuleBulkEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpEmailRuleBulkEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpEmailRuleBulkEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DLPEmailRuleBulkEditResponseEnvelopeMessages]
+type dlpEmailRuleBulkEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleBulkEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleBulkEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleBulkEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    dlpEmailRuleBulkEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpEmailRuleBulkEditResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [DLPEmailRuleBulkEditResponseEnvelopeMessagesSource]
+type dlpEmailRuleBulkEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleBulkEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleBulkEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DLPEmailRuleBulkEditResponseEnvelopeSuccess bool
 
 const (
@@ -1492,9 +1876,9 @@ type DLPEmailRuleGetParams struct {
 }
 
 type DLPEmailRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DLPEmailRuleGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPEmailRuleGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DLPEmailRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailRuleGetResponse                `json:"result"`
 	JSON    dlpEmailRuleGetResponseEnvelopeJSON    `json:"-"`
@@ -1519,7 +1903,103 @@ func (r dlpEmailRuleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DLPEmailRuleGetResponseEnvelopeErrors struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           DLPEmailRuleGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpEmailRuleGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpEmailRuleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPEmailRuleGetResponseEnvelopeErrors]
+type dlpEmailRuleGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    dlpEmailRuleGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpEmailRuleGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [DLPEmailRuleGetResponseEnvelopeErrorsSource]
+type dlpEmailRuleGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleGetResponseEnvelopeMessages struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           DLPEmailRuleGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpEmailRuleGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpEmailRuleGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DLPEmailRuleGetResponseEnvelopeMessages]
+type dlpEmailRuleGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailRuleGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    dlpEmailRuleGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpEmailRuleGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [DLPEmailRuleGetResponseEnvelopeMessagesSource]
+type dlpEmailRuleGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailRuleGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailRuleGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DLPEmailRuleGetResponseEnvelopeSuccess bool
 
 const (

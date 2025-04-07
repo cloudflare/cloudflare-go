@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -478,9 +477,9 @@ func (r DLPEmailAccountMappingNewParamsAuthRequirementsTypeType) IsKnown() bool 
 }
 
 type DLPEmailAccountMappingNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DLPEmailAccountMappingNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPEmailAccountMappingNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DLPEmailAccountMappingNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailAccountMappingNewResponse                `json:"result"`
 	JSON    dlpEmailAccountMappingNewResponseEnvelopeJSON    `json:"-"`
@@ -505,7 +504,104 @@ func (r dlpEmailAccountMappingNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DLPEmailAccountMappingNewResponseEnvelopeErrors struct {
+	Code             int64                                                 `json:"code,required"`
+	Message          string                                                `json:"message,required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           DLPEmailAccountMappingNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpEmailAccountMappingNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpEmailAccountMappingNewResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [DLPEmailAccountMappingNewResponseEnvelopeErrors]
+type dlpEmailAccountMappingNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailAccountMappingNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailAccountMappingNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailAccountMappingNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    dlpEmailAccountMappingNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpEmailAccountMappingNewResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [DLPEmailAccountMappingNewResponseEnvelopeErrorsSource]
+type dlpEmailAccountMappingNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailAccountMappingNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailAccountMappingNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailAccountMappingNewResponseEnvelopeMessages struct {
+	Code             int64                                                   `json:"code,required"`
+	Message          string                                                  `json:"message,required"`
+	DocumentationURL string                                                  `json:"documentation_url"`
+	Source           DLPEmailAccountMappingNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpEmailAccountMappingNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpEmailAccountMappingNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DLPEmailAccountMappingNewResponseEnvelopeMessages]
+type dlpEmailAccountMappingNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailAccountMappingNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailAccountMappingNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailAccountMappingNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                                      `json:"pointer"`
+	JSON    dlpEmailAccountMappingNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpEmailAccountMappingNewResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [DLPEmailAccountMappingNewResponseEnvelopeMessagesSource]
+type dlpEmailAccountMappingNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailAccountMappingNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailAccountMappingNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DLPEmailAccountMappingNewResponseEnvelopeSuccess bool
 
 const (
@@ -525,9 +621,9 @@ type DLPEmailAccountMappingGetParams struct {
 }
 
 type DLPEmailAccountMappingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DLPEmailAccountMappingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPEmailAccountMappingGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DLPEmailAccountMappingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DLPEmailAccountMappingGetResponse                `json:"result"`
 	JSON    dlpEmailAccountMappingGetResponseEnvelopeJSON    `json:"-"`
@@ -552,7 +648,104 @@ func (r dlpEmailAccountMappingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DLPEmailAccountMappingGetResponseEnvelopeErrors struct {
+	Code             int64                                                 `json:"code,required"`
+	Message          string                                                `json:"message,required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           DLPEmailAccountMappingGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpEmailAccountMappingGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpEmailAccountMappingGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [DLPEmailAccountMappingGetResponseEnvelopeErrors]
+type dlpEmailAccountMappingGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailAccountMappingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailAccountMappingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailAccountMappingGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    dlpEmailAccountMappingGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpEmailAccountMappingGetResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [DLPEmailAccountMappingGetResponseEnvelopeErrorsSource]
+type dlpEmailAccountMappingGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailAccountMappingGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailAccountMappingGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailAccountMappingGetResponseEnvelopeMessages struct {
+	Code             int64                                                   `json:"code,required"`
+	Message          string                                                  `json:"message,required"`
+	DocumentationURL string                                                  `json:"documentation_url"`
+	Source           DLPEmailAccountMappingGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpEmailAccountMappingGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpEmailAccountMappingGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DLPEmailAccountMappingGetResponseEnvelopeMessages]
+type dlpEmailAccountMappingGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPEmailAccountMappingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailAccountMappingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPEmailAccountMappingGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                      `json:"pointer"`
+	JSON    dlpEmailAccountMappingGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpEmailAccountMappingGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [DLPEmailAccountMappingGetResponseEnvelopeMessagesSource]
+type dlpEmailAccountMappingGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPEmailAccountMappingGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpEmailAccountMappingGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DLPEmailAccountMappingGetResponseEnvelopeSuccess bool
 
 const (
