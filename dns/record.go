@@ -583,7 +583,7 @@ type BatchPatchUnionParam interface {
 }
 
 type BatchPatchAParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	ARecordParam
 }
@@ -595,7 +595,7 @@ func (r BatchPatchAParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchAParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchAAAAParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	AAAARecordParam
 }
@@ -607,7 +607,7 @@ func (r BatchPatchAAAAParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchAAAAParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchCAAParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	CAARecordParam
 }
@@ -619,7 +619,7 @@ func (r BatchPatchCAAParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchCAAParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchCERTParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	CERTRecordParam
 }
@@ -631,7 +631,7 @@ func (r BatchPatchCERTParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchCERTParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchCNAMEParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	CNAMERecordParam
 }
@@ -643,7 +643,7 @@ func (r BatchPatchCNAMEParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchCNAMEParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchDNSKEYParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	DNSKEYRecordParam
 }
@@ -655,7 +655,7 @@ func (r BatchPatchDNSKEYParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchDNSKEYParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchDSParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	DSRecordParam
 }
@@ -667,7 +667,7 @@ func (r BatchPatchDSParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchDSParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchHTTPSParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	HTTPSRecordParam
 }
@@ -679,7 +679,7 @@ func (r BatchPatchHTTPSParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchHTTPSParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchLOCParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	LOCRecordParam
 }
@@ -691,7 +691,7 @@ func (r BatchPatchLOCParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchLOCParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchMXParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	MXRecordParam
 }
@@ -703,7 +703,7 @@ func (r BatchPatchMXParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchMXParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchNAPTRParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	NAPTRRecordParam
 }
@@ -715,7 +715,7 @@ func (r BatchPatchNAPTRParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchNAPTRParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchNSParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	NSRecordParam
 }
@@ -727,7 +727,7 @@ func (r BatchPatchNSParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchNSParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchOpenpgpkeyParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -791,7 +791,7 @@ func (r BatchPatchOpenpgpkeyType) IsKnown() bool {
 }
 
 type BatchPatchPTRParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	PTRRecordParam
 }
@@ -803,7 +803,7 @@ func (r BatchPatchPTRParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchPTRParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSMIMEAParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	SMIMEARecordParam
 }
@@ -815,7 +815,7 @@ func (r BatchPatchSMIMEAParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchSMIMEAParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSRVParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	SRVRecordParam
 }
@@ -827,7 +827,7 @@ func (r BatchPatchSRVParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchSRVParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSSHFPParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	SSHFPRecordParam
 }
@@ -839,7 +839,7 @@ func (r BatchPatchSSHFPParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchSSHFPParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSVCBParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	SVCBRecordParam
 }
@@ -851,7 +851,7 @@ func (r BatchPatchSVCBParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchSVCBParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchTLSAParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	TLSARecordParam
 }
@@ -863,7 +863,7 @@ func (r BatchPatchTLSAParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchTLSAParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchTXTParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	TXTRecordParam
 }
@@ -875,7 +875,7 @@ func (r BatchPatchTXTParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPatchTXTParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchURIParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	URIRecordParam
 }
@@ -899,7 +899,7 @@ type BatchPutUnionParam interface {
 }
 
 type BatchPutAParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	ARecordParam
 }
@@ -911,7 +911,7 @@ func (r BatchPutAParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutAParam) implementsBatchPutUnionParam() {}
 
 type BatchPutAAAAParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	AAAARecordParam
 }
@@ -923,7 +923,7 @@ func (r BatchPutAAAAParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutAAAAParam) implementsBatchPutUnionParam() {}
 
 type BatchPutCAAParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	CAARecordParam
 }
@@ -935,7 +935,7 @@ func (r BatchPutCAAParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutCAAParam) implementsBatchPutUnionParam() {}
 
 type BatchPutCERTParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	CERTRecordParam
 }
@@ -947,7 +947,7 @@ func (r BatchPutCERTParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutCERTParam) implementsBatchPutUnionParam() {}
 
 type BatchPutCNAMEParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	CNAMERecordParam
 }
@@ -959,7 +959,7 @@ func (r BatchPutCNAMEParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutCNAMEParam) implementsBatchPutUnionParam() {}
 
 type BatchPutDNSKEYParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	DNSKEYRecordParam
 }
@@ -971,7 +971,7 @@ func (r BatchPutDNSKEYParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutDNSKEYParam) implementsBatchPutUnionParam() {}
 
 type BatchPutDSParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	DSRecordParam
 }
@@ -983,7 +983,7 @@ func (r BatchPutDSParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutDSParam) implementsBatchPutUnionParam() {}
 
 type BatchPutHTTPSParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	HTTPSRecordParam
 }
@@ -995,7 +995,7 @@ func (r BatchPutHTTPSParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutHTTPSParam) implementsBatchPutUnionParam() {}
 
 type BatchPutLOCParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	LOCRecordParam
 }
@@ -1007,7 +1007,7 @@ func (r BatchPutLOCParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutLOCParam) implementsBatchPutUnionParam() {}
 
 type BatchPutMXParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	MXRecordParam
 }
@@ -1019,7 +1019,7 @@ func (r BatchPutMXParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutMXParam) implementsBatchPutUnionParam() {}
 
 type BatchPutNAPTRParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	NAPTRRecordParam
 }
@@ -1031,7 +1031,7 @@ func (r BatchPutNAPTRParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutNAPTRParam) implementsBatchPutUnionParam() {}
 
 type BatchPutNSParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	NSRecordParam
 }
@@ -1049,7 +1049,7 @@ type BatchPutOpenpgpkeyParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[BatchPutOpenpgpkeyType] `json:"type,required"`
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -1107,7 +1107,7 @@ func (r BatchPutOpenpgpkeySettingsParam) MarshalJSON() (data []byte, err error) 
 }
 
 type BatchPutPTRParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	PTRRecordParam
 }
@@ -1119,7 +1119,7 @@ func (r BatchPutPTRParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutPTRParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSMIMEAParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	SMIMEARecordParam
 }
@@ -1131,7 +1131,7 @@ func (r BatchPutSMIMEAParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutSMIMEAParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSRVParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	SRVRecordParam
 }
@@ -1143,7 +1143,7 @@ func (r BatchPutSRVParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutSRVParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSSHFPParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	SSHFPRecordParam
 }
@@ -1155,7 +1155,7 @@ func (r BatchPutSSHFPParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutSSHFPParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSVCBParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	SVCBRecordParam
 }
@@ -1167,7 +1167,7 @@ func (r BatchPutSVCBParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutSVCBParam) implementsBatchPutUnionParam() {}
 
 type BatchPutTLSAParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	TLSARecordParam
 }
@@ -1179,7 +1179,7 @@ func (r BatchPutTLSAParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutTLSAParam) implementsBatchPutUnionParam() {}
 
 type BatchPutTXTParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	TXTRecordParam
 }
@@ -1191,7 +1191,7 @@ func (r BatchPutTXTParam) MarshalJSON() (data []byte, err error) {
 func (r BatchPutTXTParam) implementsBatchPutUnionParam() {}
 
 type BatchPutURIParam struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	URIRecordParam
 }
@@ -3324,7 +3324,7 @@ func (r RecordType) IsKnown() bool {
 }
 
 type RecordResponse struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -3554,7 +3554,7 @@ func init() {
 }
 
 type RecordResponseA struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -3596,7 +3596,7 @@ func (r recordResponseAJSON) RawJSON() string {
 func (r RecordResponseA) implementsRecordResponse() {}
 
 type RecordResponseAAAA struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -3639,7 +3639,7 @@ func (r recordResponseAAAAJSON) RawJSON() string {
 func (r RecordResponseAAAA) implementsRecordResponse() {}
 
 type RecordResponseCAA struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -3682,7 +3682,7 @@ func (r recordResponseCAAJSON) RawJSON() string {
 func (r RecordResponseCAA) implementsRecordResponse() {}
 
 type RecordResponseCERT struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -3725,7 +3725,7 @@ func (r recordResponseCERTJSON) RawJSON() string {
 func (r RecordResponseCERT) implementsRecordResponse() {}
 
 type RecordResponseCNAME struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -3768,7 +3768,7 @@ func (r recordResponseCNAMEJSON) RawJSON() string {
 func (r RecordResponseCNAME) implementsRecordResponse() {}
 
 type RecordResponseDNSKEY struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -3811,7 +3811,7 @@ func (r recordResponseDNSKEYJSON) RawJSON() string {
 func (r RecordResponseDNSKEY) implementsRecordResponse() {}
 
 type RecordResponseDS struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -3854,7 +3854,7 @@ func (r recordResponseDSJSON) RawJSON() string {
 func (r RecordResponseDS) implementsRecordResponse() {}
 
 type RecordResponseHTTPS struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -3897,7 +3897,7 @@ func (r recordResponseHTTPSJSON) RawJSON() string {
 func (r RecordResponseHTTPS) implementsRecordResponse() {}
 
 type RecordResponseLOC struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -3940,7 +3940,7 @@ func (r recordResponseLOCJSON) RawJSON() string {
 func (r RecordResponseLOC) implementsRecordResponse() {}
 
 type RecordResponseMX struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -3983,7 +3983,7 @@ func (r recordResponseMXJSON) RawJSON() string {
 func (r RecordResponseMX) implementsRecordResponse() {}
 
 type RecordResponseNAPTR struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -4026,7 +4026,7 @@ func (r recordResponseNAPTRJSON) RawJSON() string {
 func (r RecordResponseNAPTR) implementsRecordResponse() {}
 
 type RecordResponseNS struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -4069,7 +4069,7 @@ func (r recordResponseNSJSON) RawJSON() string {
 func (r RecordResponseNS) implementsRecordResponse() {}
 
 type RecordResponseOpenpgpkey struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -4186,7 +4186,7 @@ func (r RecordResponseOpenpgpkeyType) IsKnown() bool {
 }
 
 type RecordResponsePTR struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -4229,7 +4229,7 @@ func (r recordResponsePTRJSON) RawJSON() string {
 func (r RecordResponsePTR) implementsRecordResponse() {}
 
 type RecordResponseSMIMEA struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -4272,7 +4272,7 @@ func (r recordResponseSMIMEAJSON) RawJSON() string {
 func (r RecordResponseSMIMEA) implementsRecordResponse() {}
 
 type RecordResponseSRV struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -4315,7 +4315,7 @@ func (r recordResponseSRVJSON) RawJSON() string {
 func (r RecordResponseSRV) implementsRecordResponse() {}
 
 type RecordResponseSSHFP struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -4358,7 +4358,7 @@ func (r recordResponseSSHFPJSON) RawJSON() string {
 func (r RecordResponseSSHFP) implementsRecordResponse() {}
 
 type RecordResponseSVCB struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -4401,7 +4401,7 @@ func (r recordResponseSVCBJSON) RawJSON() string {
 func (r RecordResponseSVCB) implementsRecordResponse() {}
 
 type RecordResponseTLSA struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -4444,7 +4444,7 @@ func (r recordResponseTLSAJSON) RawJSON() string {
 func (r RecordResponseTLSA) implementsRecordResponse() {}
 
 type RecordResponseTXT struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -4487,7 +4487,7 @@ func (r recordResponseTXTJSON) RawJSON() string {
 func (r RecordResponseTXT) implementsRecordResponse() {}
 
 type RecordResponseURI struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
@@ -5867,7 +5867,7 @@ func (r URIRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordDeleteResponse struct {
-	// Identifier
+	// Identifier.
 	ID   string                   `json:"id"`
 	JSON recordDeleteResponseJSON `json:"-"`
 }
@@ -5966,7 +5966,7 @@ func (r recordScanResponseJSON) RawJSON() string {
 }
 
 type RecordNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Record RecordUnionParam    `json:"record,required"`
 }
@@ -5976,9 +5976,9 @@ func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RecordNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RecordNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordResponse                   `json:"result"`
 	JSON    recordNewResponseEnvelopeJSON    `json:"-"`
@@ -6003,7 +6003,103 @@ func (r recordNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RecordNewResponseEnvelopeErrors struct {
+	Code             int64                                 `json:"code,required"`
+	Message          string                                `json:"message,required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           RecordNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordNewResponseEnvelopeErrors]
+type recordNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    recordNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordNewResponseEnvelopeErrorsSource]
+type recordNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordNewResponseEnvelopeMessages struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           RecordNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [RecordNewResponseEnvelopeMessages]
+type recordNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    recordNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RecordNewResponseEnvelopeMessagesSource]
+type recordNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RecordNewResponseEnvelopeSuccess bool
 
 const (
@@ -6019,7 +6115,7 @@ func (r RecordNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RecordUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Record RecordUnionParam    `json:"record,required"`
 }
@@ -6029,9 +6125,9 @@ func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RecordUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RecordUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordResponse                      `json:"result"`
 	JSON    recordUpdateResponseEnvelopeJSON    `json:"-"`
@@ -6056,7 +6152,103 @@ func (r recordUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RecordUpdateResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           RecordUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordUpdateResponseEnvelopeErrors]
+type recordUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    recordUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordUpdateResponseEnvelopeErrorsSource]
+type recordUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordUpdateResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           RecordUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RecordUpdateResponseEnvelopeMessages]
+type recordUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    recordUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [RecordUpdateResponseEnvelopeMessagesSource]
+type recordUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RecordUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -6072,7 +6264,7 @@ func (r RecordUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RecordListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID  param.Field[string]                  `path:"zone_id,required"`
 	Comment param.Field[RecordListParamsComment] `query:"comment"`
 	Content param.Field[RecordListParamsContent] `query:"content"`
@@ -6306,7 +6498,7 @@ func (r RecordListParamsType) IsKnown() bool {
 }
 
 type RecordDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -6332,7 +6524,7 @@ func (r recordDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RecordBatchParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID  param.Field[string]                    `path:"zone_id,required"`
 	Deletes param.Field[[]RecordBatchParamsDelete] `json:"deletes"`
 	Patches param.Field[[]BatchPatchUnionParam]    `json:"patches"`
@@ -6345,7 +6537,7 @@ func (r RecordBatchParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordBatchParamsDelete struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 }
 
@@ -6354,9 +6546,9 @@ func (r RecordBatchParamsDelete) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordBatchResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RecordBatchResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordBatchResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RecordBatchResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordBatchResponse                `json:"result"`
 	JSON    recordBatchResponseEnvelopeJSON    `json:"-"`
@@ -6381,7 +6573,103 @@ func (r recordBatchResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RecordBatchResponseEnvelopeErrors struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           RecordBatchResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordBatchResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordBatchResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordBatchResponseEnvelopeErrors]
+type recordBatchResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordBatchResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordBatchResponseEnvelopeErrorsSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    recordBatchResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordBatchResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordBatchResponseEnvelopeErrorsSource]
+type recordBatchResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordBatchResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordBatchResponseEnvelopeMessages struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           RecordBatchResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordBatchResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordBatchResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RecordBatchResponseEnvelopeMessages]
+type recordBatchResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordBatchResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordBatchResponseEnvelopeMessagesSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    recordBatchResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordBatchResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RecordBatchResponseEnvelopeMessagesSource]
+type recordBatchResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordBatchResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RecordBatchResponseEnvelopeSuccess bool
 
 const (
@@ -6397,7 +6685,7 @@ func (r RecordBatchResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RecordEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Record RecordUnionParam    `json:"record,required"`
 }
@@ -6407,9 +6695,9 @@ func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RecordEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RecordEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordResponse                    `json:"result"`
 	JSON    recordEditResponseEnvelopeJSON    `json:"-"`
@@ -6434,7 +6722,103 @@ func (r recordEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RecordEditResponseEnvelopeErrors struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           RecordEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordEditResponseEnvelopeErrors]
+type recordEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    recordEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordEditResponseEnvelopeErrorsSource]
+type recordEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordEditResponseEnvelopeMessages struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           RecordEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [RecordEditResponseEnvelopeMessages]
+type recordEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    recordEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RecordEditResponseEnvelopeMessagesSource]
+type recordEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RecordEditResponseEnvelopeSuccess bool
 
 const (
@@ -6450,19 +6834,19 @@ func (r RecordEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RecordExportParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RecordGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RecordGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RecordGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RecordGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordResponse                   `json:"result"`
 	JSON    recordGetResponseEnvelopeJSON    `json:"-"`
@@ -6487,7 +6871,103 @@ func (r recordGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RecordGetResponseEnvelopeErrors struct {
+	Code             int64                                 `json:"code,required"`
+	Message          string                                `json:"message,required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           RecordGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordGetResponseEnvelopeErrors]
+type recordGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    recordGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordGetResponseEnvelopeErrorsSource]
+type recordGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordGetResponseEnvelopeMessages struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           RecordGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [RecordGetResponseEnvelopeMessages]
+type recordGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    recordGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RecordGetResponseEnvelopeMessagesSource]
+type recordGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RecordGetResponseEnvelopeSuccess bool
 
 const (
@@ -6503,7 +6983,7 @@ func (r RecordGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RecordImportParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// BIND config to import.
 	//
@@ -6533,9 +7013,9 @@ func (r RecordImportParams) MarshalMultipart() (data []byte, contentType string,
 }
 
 type RecordImportResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RecordImportResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordImportResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RecordImportResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordImportResponse                `json:"result"`
 	JSON    recordImportResponseEnvelopeJSON    `json:"-"`
@@ -6560,7 +7040,103 @@ func (r recordImportResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RecordImportResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           RecordImportResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordImportResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordImportResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordImportResponseEnvelopeErrors]
+type recordImportResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordImportResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordImportResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordImportResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    recordImportResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordImportResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordImportResponseEnvelopeErrorsSource]
+type recordImportResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordImportResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordImportResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordImportResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           RecordImportResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordImportResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordImportResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RecordImportResponseEnvelopeMessages]
+type recordImportResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordImportResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordImportResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordImportResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    recordImportResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordImportResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [RecordImportResponseEnvelopeMessagesSource]
+type recordImportResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordImportResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordImportResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RecordImportResponseEnvelopeSuccess bool
 
 const (
@@ -6576,7 +7152,7 @@ func (r RecordImportResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RecordScanParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Body   interface{}         `json:"body,required"`
 }
@@ -6586,9 +7162,9 @@ func (r RecordScanParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordScanResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RecordScanResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordScanResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RecordScanResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordScanResponse                `json:"result"`
 	JSON    recordScanResponseEnvelopeJSON    `json:"-"`
@@ -6613,7 +7189,103 @@ func (r recordScanResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RecordScanResponseEnvelopeErrors struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           RecordScanResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordScanResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordScanResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordScanResponseEnvelopeErrors]
+type recordScanResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordScanResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanResponseEnvelopeErrorsSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    recordScanResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordScanResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordScanResponseEnvelopeErrorsSource]
+type recordScanResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordScanResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanResponseEnvelopeMessages struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           RecordScanResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordScanResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordScanResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [RecordScanResponseEnvelopeMessages]
+type recordScanResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordScanResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanResponseEnvelopeMessagesSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    recordScanResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordScanResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RecordScanResponseEnvelopeMessagesSource]
+type recordScanResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordScanResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RecordScanResponseEnvelopeSuccess bool
 
 const (
