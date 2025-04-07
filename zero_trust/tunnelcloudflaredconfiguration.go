@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TunnelCloudflaredConfigurationService contains methods and other services that
@@ -79,7 +78,7 @@ func (r *TunnelCloudflaredConfigurationService) Get(ctx context.Context, tunnelI
 
 // Cloudflare Tunnel configuration
 type TunnelCloudflaredConfigurationUpdateResponse struct {
-	// Identifier
+	// Identifier.
 	AccountID string `json:"account_id"`
 	// The tunnel configuration and ingress rules.
 	Config    TunnelCloudflaredConfigurationUpdateResponseConfig `json:"config"`
@@ -442,7 +441,7 @@ func (r TunnelCloudflaredConfigurationUpdateResponseSource) IsKnown() bool {
 
 // Cloudflare Tunnel configuration
 type TunnelCloudflaredConfigurationGetResponse struct {
-	// Identifier
+	// Identifier.
 	AccountID string `json:"account_id"`
 	// The tunnel configuration and ingress rules.
 	Config    TunnelCloudflaredConfigurationGetResponseConfig `json:"config"`
@@ -803,7 +802,7 @@ func (r TunnelCloudflaredConfigurationGetResponseSource) IsKnown() bool {
 }
 
 type TunnelCloudflaredConfigurationUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The tunnel configuration and ingress rules.
 	Config param.Field[TunnelCloudflaredConfigurationUpdateParamsConfig] `json:"config"`
@@ -985,9 +984,9 @@ func (r TunnelCloudflaredConfigurationUpdateParamsConfigWARPRouting) MarshalJSON
 }
 
 type TunnelCloudflaredConfigurationUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// Cloudflare Tunnel configuration
 	Result TunnelCloudflaredConfigurationUpdateResponse             `json:"result"`
@@ -1013,7 +1012,107 @@ func (r tunnelCloudflaredConfigurationUpdateResponseEnvelopeJSON) RawJSON() stri
 	return r.raw
 }
 
-// Whether the API call was successful
+type TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrors struct {
+	Code             int64                                                            `json:"code,required"`
+	Message          string                                                           `json:"message,required"`
+	DocumentationURL string                                                           `json:"documentation_url"`
+	Source           TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             tunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// tunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrors]
+type tunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                                               `json:"pointer"`
+	JSON    tunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// tunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsSourceJSON contains
+// the JSON metadata for the struct
+// [TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsSource]
+type tunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessages struct {
+	Code             int64                                                              `json:"code,required"`
+	Message          string                                                             `json:"message,required"`
+	DocumentationURL string                                                             `json:"documentation_url"`
+	Source           TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             tunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// tunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesJSON contains the
+// JSON metadata for the struct
+// [TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessages]
+type tunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                                 `json:"pointer"`
+	JSON    tunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// tunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesSourceJSON contains
+// the JSON metadata for the struct
+// [TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesSource]
+type tunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1029,14 +1128,14 @@ func (r TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess) IsKnown() b
 }
 
 type TunnelCloudflaredConfigurationGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type TunnelCloudflaredConfigurationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []TunnelCloudflaredConfigurationGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TunnelCloudflaredConfigurationGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success TunnelCloudflaredConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
 	// Cloudflare Tunnel configuration
 	Result TunnelCloudflaredConfigurationGetResponse             `json:"result"`
@@ -1062,7 +1161,107 @@ func (r tunnelCloudflaredConfigurationGetResponseEnvelopeJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful
+type TunnelCloudflaredConfigurationGetResponseEnvelopeErrors struct {
+	Code             int64                                                         `json:"code,required"`
+	Message          string                                                        `json:"message,required"`
+	DocumentationURL string                                                        `json:"documentation_url"`
+	Source           TunnelCloudflaredConfigurationGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             tunnelCloudflaredConfigurationGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// tunnelCloudflaredConfigurationGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [TunnelCloudflaredConfigurationGetResponseEnvelopeErrors]
+type tunnelCloudflaredConfigurationGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConfigurationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConfigurationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredConfigurationGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                            `json:"pointer"`
+	JSON    tunnelCloudflaredConfigurationGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// tunnelCloudflaredConfigurationGetResponseEnvelopeErrorsSourceJSON contains the
+// JSON metadata for the struct
+// [TunnelCloudflaredConfigurationGetResponseEnvelopeErrorsSource]
+type tunnelCloudflaredConfigurationGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConfigurationGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConfigurationGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredConfigurationGetResponseEnvelopeMessages struct {
+	Code             int64                                                           `json:"code,required"`
+	Message          string                                                          `json:"message,required"`
+	DocumentationURL string                                                          `json:"documentation_url"`
+	Source           TunnelCloudflaredConfigurationGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             tunnelCloudflaredConfigurationGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// tunnelCloudflaredConfigurationGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [TunnelCloudflaredConfigurationGetResponseEnvelopeMessages]
+type tunnelCloudflaredConfigurationGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConfigurationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConfigurationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredConfigurationGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                              `json:"pointer"`
+	JSON    tunnelCloudflaredConfigurationGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// tunnelCloudflaredConfigurationGetResponseEnvelopeMessagesSourceJSON contains the
+// JSON metadata for the struct
+// [TunnelCloudflaredConfigurationGetResponseEnvelopeMessagesSource]
+type tunnelCloudflaredConfigurationGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConfigurationGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConfigurationGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type TunnelCloudflaredConfigurationGetResponseEnvelopeSuccess bool
 
 const (
