@@ -54,6 +54,6 @@ func (r *CaptionLanguageVttService) Get(ctx context.Context, identifier string, 
 }
 
 type CaptionLanguageVttGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
