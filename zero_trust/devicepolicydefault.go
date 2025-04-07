@@ -103,7 +103,7 @@ type DevicePolicyDefaultEditResponse struct {
 	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
 	GatewayUniqueID  string           `json:"gateway_unique_id"`
 	// List of routes included in the WARP client's tunnel.
-	Include []SplitTunnelExclude `json:"include"`
+	Include []SplitTunnelInclude `json:"include"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool                                         `json:"register_interface_ip_with_dns"`
@@ -202,7 +202,7 @@ type DevicePolicyDefaultGetResponse struct {
 	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
 	GatewayUniqueID  string           `json:"gateway_unique_id"`
 	// List of routes included in the WARP client's tunnel.
-	Include []SplitTunnelExclude `json:"include"`
+	Include []SplitTunnelInclude `json:"include"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool                                        `json:"register_interface_ip_with_dns"`
@@ -298,7 +298,7 @@ type DevicePolicyDefaultEditParams struct {
 	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
 	// List of routes included in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
-	Include param.Field[[]SplitTunnelExcludeUnionParam] `json:"include"`
+	Include param.Field[[]SplitTunnelIncludeUnionParam] `json:"include"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS param.Field[bool]                                       `json:"register_interface_ip_with_dns"`
