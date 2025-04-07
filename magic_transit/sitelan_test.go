@@ -33,7 +33,6 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 		magic_transit.SiteLANNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Physport:  cloudflare.F(int64(1)),
-			VlanTag:   cloudflare.F(int64(0)),
 			HaLink:    cloudflare.F(true),
 			Name:      cloudflare.F("name"),
 			Nat: cloudflare.F(magic_transit.NatParam{
@@ -64,6 +63,7 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 				SecondaryAddress: cloudflare.F("192.0.2.0/24"),
 				VirtualAddress:   cloudflare.F("192.0.2.0/24"),
 			}),
+			VlanTag: cloudflare.F(int64(42)),
 		},
 	)
 	if err != nil {
@@ -124,7 +124,7 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 				SecondaryAddress: cloudflare.F("192.0.2.0/24"),
 				VirtualAddress:   cloudflare.F("192.0.2.0/24"),
 			}),
-			VlanTag: cloudflare.F(int64(0)),
+			VlanTag: cloudflare.F(int64(42)),
 		},
 	)
 	if err != nil {
@@ -244,7 +244,7 @@ func TestSiteLANEditWithOptionalParams(t *testing.T) {
 				SecondaryAddress: cloudflare.F("192.0.2.0/24"),
 				VirtualAddress:   cloudflare.F("192.0.2.0/24"),
 			}),
-			VlanTag: cloudflare.F(int64(0)),
+			VlanTag: cloudflare.F(int64(42)),
 		},
 	)
 	if err != nil {
