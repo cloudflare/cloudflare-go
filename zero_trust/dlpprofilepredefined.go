@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DLPProfilePredefinedService contains methods and other services that help with
@@ -102,9 +101,9 @@ func (r DLPProfilePredefinedUpdateParamsEntry) MarshalJSON() (data []byte, err e
 }
 
 type DLPProfilePredefinedUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DLPProfilePredefinedUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPProfilePredefinedUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DLPProfilePredefinedUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  Profile                                           `json:"result"`
 	JSON    dlpProfilePredefinedUpdateResponseEnvelopeJSON    `json:"-"`
@@ -129,7 +128,104 @@ func (r dlpProfilePredefinedUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DLPProfilePredefinedUpdateResponseEnvelopeErrors struct {
+	Code             int64                                                  `json:"code,required"`
+	Message          string                                                 `json:"message,required"`
+	DocumentationURL string                                                 `json:"documentation_url"`
+	Source           DLPProfilePredefinedUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpProfilePredefinedUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpProfilePredefinedUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [DLPProfilePredefinedUpdateResponseEnvelopeErrors]
+type dlpProfilePredefinedUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                                     `json:"pointer"`
+	JSON    dlpProfilePredefinedUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpProfilePredefinedUpdateResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [DLPProfilePredefinedUpdateResponseEnvelopeErrorsSource]
+type dlpProfilePredefinedUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedUpdateResponseEnvelopeMessages struct {
+	Code             int64                                                    `json:"code,required"`
+	Message          string                                                   `json:"message,required"`
+	DocumentationURL string                                                   `json:"documentation_url"`
+	Source           DLPProfilePredefinedUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpProfilePredefinedUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpProfilePredefinedUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [DLPProfilePredefinedUpdateResponseEnvelopeMessages]
+type dlpProfilePredefinedUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                       `json:"pointer"`
+	JSON    dlpProfilePredefinedUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpProfilePredefinedUpdateResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [DLPProfilePredefinedUpdateResponseEnvelopeMessagesSource]
+type dlpProfilePredefinedUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DLPProfilePredefinedUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -149,9 +245,9 @@ type DLPProfilePredefinedGetParams struct {
 }
 
 type DLPProfilePredefinedGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DLPProfilePredefinedGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPProfilePredefinedGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DLPProfilePredefinedGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Profile                                        `json:"result"`
 	JSON    dlpProfilePredefinedGetResponseEnvelopeJSON    `json:"-"`
@@ -176,7 +272,103 @@ func (r dlpProfilePredefinedGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DLPProfilePredefinedGetResponseEnvelopeErrors struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           DLPProfilePredefinedGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpProfilePredefinedGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpProfilePredefinedGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DLPProfilePredefinedGetResponseEnvelopeErrors]
+type dlpProfilePredefinedGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    dlpProfilePredefinedGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpProfilePredefinedGetResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [DLPProfilePredefinedGetResponseEnvelopeErrorsSource]
+type dlpProfilePredefinedGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedGetResponseEnvelopeMessages struct {
+	Code             int64                                                 `json:"code,required"`
+	Message          string                                                `json:"message,required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           DLPProfilePredefinedGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpProfilePredefinedGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpProfilePredefinedGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DLPProfilePredefinedGetResponseEnvelopeMessages]
+type dlpProfilePredefinedGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    dlpProfilePredefinedGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpProfilePredefinedGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [DLPProfilePredefinedGetResponseEnvelopeMessagesSource]
+type dlpProfilePredefinedGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DLPProfilePredefinedGetResponseEnvelopeSuccess bool
 
 const (
