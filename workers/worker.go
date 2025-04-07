@@ -22,6 +22,7 @@ type WorkerService struct {
 	AccountSettings *AccountSettingService
 	Domains         *DomainService
 	Subdomains      *SubdomainService
+	Observability   *ObservabilityService
 }
 
 // NewWorkerService generates a new service that applies the given options to each
@@ -36,6 +37,7 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 	r.AccountSettings = NewAccountSettingService(opts...)
 	r.Domains = NewDomainService(opts...)
 	r.Subdomains = NewSubdomainService(opts...)
+	r.Observability = NewObservabilityService(opts...)
 	return
 }
 
