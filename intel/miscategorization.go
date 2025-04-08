@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // MiscategorizationService contains methods and other services that help with
@@ -47,9 +46,9 @@ func (r *MiscategorizationService) New(ctx context.Context, params Miscategoriza
 }
 
 type MiscategorizationNewResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []MiscategorizationNewResponseError   `json:"errors,required"`
+	Messages []MiscategorizationNewResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
 	Success MiscategorizationNewResponseSuccess `json:"success,required"`
 	JSON    miscategorizationNewResponseJSON    `json:"-"`
 }
@@ -72,7 +71,103 @@ func (r miscategorizationNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type MiscategorizationNewResponseError struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           MiscategorizationNewResponseErrorsSource `json:"source"`
+	JSON             miscategorizationNewResponseErrorJSON    `json:"-"`
+}
+
+// miscategorizationNewResponseErrorJSON contains the JSON metadata for the struct
+// [MiscategorizationNewResponseError]
+type miscategorizationNewResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *MiscategorizationNewResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r miscategorizationNewResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type MiscategorizationNewResponseErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    miscategorizationNewResponseErrorsSourceJSON `json:"-"`
+}
+
+// miscategorizationNewResponseErrorsSourceJSON contains the JSON metadata for the
+// struct [MiscategorizationNewResponseErrorsSource]
+type miscategorizationNewResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MiscategorizationNewResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r miscategorizationNewResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type MiscategorizationNewResponseMessage struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           MiscategorizationNewResponseMessagesSource `json:"source"`
+	JSON             miscategorizationNewResponseMessageJSON    `json:"-"`
+}
+
+// miscategorizationNewResponseMessageJSON contains the JSON metadata for the
+// struct [MiscategorizationNewResponseMessage]
+type miscategorizationNewResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *MiscategorizationNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r miscategorizationNewResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type MiscategorizationNewResponseMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    miscategorizationNewResponseMessagesSourceJSON `json:"-"`
+}
+
+// miscategorizationNewResponseMessagesSourceJSON contains the JSON metadata for
+// the struct [MiscategorizationNewResponseMessagesSource]
+type miscategorizationNewResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MiscategorizationNewResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r miscategorizationNewResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type MiscategorizationNewResponseSuccess bool
 
 const (
