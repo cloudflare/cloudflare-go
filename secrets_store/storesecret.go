@@ -155,37 +155,6 @@ func (r *StoreSecretService) BulkDeleteAutoPaging(ctx context.Context, storeID s
 	return pagination.NewSinglePageAutoPager(r.BulkDelete(ctx, storeID, body, opts...))
 }
 
-// Updates one or more secrets
-func (r *StoreSecretService) BulkdEdit(ctx context.Context, storeID string, params StoreSecretBulkdEditParams, opts ...option.RequestOption) (res *pagination.SinglePage[StoreSecretBulkdEditResponse], err error) {
-	var raw *http.Response
-	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if storeID == "" {
-		err = errors.New("missing required store_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s/secrets", params.AccountID, storeID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPatch, path, params, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Updates one or more secrets
-func (r *StoreSecretService) BulkdEditAutoPaging(ctx context.Context, storeID string, params StoreSecretBulkdEditParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StoreSecretBulkdEditResponse] {
-	return pagination.NewSinglePageAutoPager(r.BulkdEdit(ctx, storeID, params, opts...))
-}
-
 // Duplicates the secret, keeping the value
 func (r *StoreSecretService) Duplicate(ctx context.Context, storeID string, secretID string, params StoreSecretDuplicateParams, opts ...option.RequestOption) (res *StoreSecretDuplicateResponse, err error) {
 	var env StoreSecretDuplicateResponseEnvelope
@@ -476,61 +445,6 @@ const (
 func (r StoreSecretBulkDeleteResponseStatus) IsKnown() bool {
 	switch r {
 	case StoreSecretBulkDeleteResponseStatusPending, StoreSecretBulkDeleteResponseStatusActive, StoreSecretBulkDeleteResponseStatusDeleted:
-		return true
-	}
-	return false
-}
-
-type StoreSecretBulkdEditResponse struct {
-	// Secret identifier tag.
-	ID string `json:"id,required"`
-	// Whenthe secret was created.
-	Created time.Time `json:"created,required" format:"date-time"`
-	// When the secret was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
-	// The name of the secret
-	Name   string                             `json:"name,required"`
-	Status StoreSecretBulkdEditResponseStatus `json:"status,required"`
-	// Store Identifier
-	StoreID string `json:"store_id,required"`
-	// Freeform text describing the secret
-	Comment string                           `json:"comment"`
-	JSON    storeSecretBulkdEditResponseJSON `json:"-"`
-}
-
-// storeSecretBulkdEditResponseJSON contains the JSON metadata for the struct
-// [StoreSecretBulkdEditResponse]
-type storeSecretBulkdEditResponseJSON struct {
-	ID          apijson.Field
-	Created     apijson.Field
-	Modified    apijson.Field
-	Name        apijson.Field
-	Status      apijson.Field
-	StoreID     apijson.Field
-	Comment     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StoreSecretBulkdEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r storeSecretBulkdEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type StoreSecretBulkdEditResponseStatus string
-
-const (
-	StoreSecretBulkdEditResponseStatusPending StoreSecretBulkdEditResponseStatus = "pending"
-	StoreSecretBulkdEditResponseStatusActive  StoreSecretBulkdEditResponseStatus = "active"
-	StoreSecretBulkdEditResponseStatusDeleted StoreSecretBulkdEditResponseStatus = "deleted"
-)
-
-func (r StoreSecretBulkdEditResponseStatus) IsKnown() bool {
-	switch r {
-	case StoreSecretBulkdEditResponseStatusPending, StoreSecretBulkdEditResponseStatusActive, StoreSecretBulkdEditResponseStatusDeleted:
 		return true
 	}
 	return false
@@ -961,28 +875,6 @@ func (r storeSecretDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
 type StoreSecretBulkDeleteParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type StoreSecretBulkdEditParams struct {
-	// Account Identifier
-	AccountID param.Field[string]              `path:"account_id,required"`
-	Body      []StoreSecretBulkdEditParamsBody `json:"body,required"`
-}
-
-func (r StoreSecretBulkdEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type StoreSecretBulkdEditParamsBody struct {
-	// The name of the secret
-	Name param.Field[string] `json:"name,required"`
-	// The value of the secret. Note that this is 'write only' - no API reponse will
-	// provide this value, it is only used to create/modify secrets.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r StoreSecretBulkdEditParamsBody) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type StoreSecretDuplicateParams struct {
