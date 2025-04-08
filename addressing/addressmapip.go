@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AddressMapIPService contains methods and other services that help with
@@ -75,8 +74,8 @@ func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, i
 }
 
 type AddressMapIPUpdateResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []AddressMapIPUpdateResponseError   `json:"errors,required"`
+	Messages []AddressMapIPUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapIPUpdateResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapIPUpdateResponseResultInfo `json:"result_info"`
@@ -99,6 +98,52 @@ func (r *AddressMapIPUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r addressMapIPUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapIPUpdateResponseError struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    addressMapIPUpdateResponseErrorJSON `json:"-"`
+}
+
+// addressMapIPUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [AddressMapIPUpdateResponseError]
+type addressMapIPUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapIPUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapIPUpdateResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapIPUpdateResponseMessage struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    addressMapIPUpdateResponseMessageJSON `json:"-"`
+}
+
+// addressMapIPUpdateResponseMessageJSON contains the JSON metadata for the struct
+// [AddressMapIPUpdateResponseMessage]
+type addressMapIPUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapIPUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapIPUpdateResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -149,8 +194,8 @@ func (r addressMapIPUpdateResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapIPDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []AddressMapIPDeleteResponseError   `json:"errors,required"`
+	Messages []AddressMapIPDeleteResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AddressMapIPDeleteResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapIPDeleteResponseResultInfo `json:"result_info"`
@@ -173,6 +218,52 @@ func (r *AddressMapIPDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r addressMapIPDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapIPDeleteResponseError struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    addressMapIPDeleteResponseErrorJSON `json:"-"`
+}
+
+// addressMapIPDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [AddressMapIPDeleteResponseError]
+type addressMapIPDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapIPDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapIPDeleteResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapIPDeleteResponseMessage struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    addressMapIPDeleteResponseMessageJSON `json:"-"`
+}
+
+// addressMapIPDeleteResponseMessageJSON contains the JSON metadata for the struct
+// [AddressMapIPDeleteResponseMessage]
+type addressMapIPDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapIPDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapIPDeleteResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 

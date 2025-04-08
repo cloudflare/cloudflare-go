@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CookieService contains methods and other services that help with interacting
@@ -389,10 +388,10 @@ type CookieGetParams struct {
 type CookieGetResponseEnvelope struct {
 	Result CookieGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success  CookieGetResponseEnvelopeSuccess `json:"success,required"`
-	Errors   []shared.ResponseInfo            `json:"errors"`
-	Messages []shared.ResponseInfo            `json:"messages"`
-	JSON     cookieGetResponseEnvelopeJSON    `json:"-"`
+	Success  CookieGetResponseEnvelopeSuccess    `json:"success,required"`
+	Errors   []CookieGetResponseEnvelopeErrors   `json:"errors"`
+	Messages []CookieGetResponseEnvelopeMessages `json:"messages"`
+	JSON     cookieGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // cookieGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -427,4 +426,50 @@ func (r CookieGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type CookieGetResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    cookieGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cookieGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [CookieGetResponseEnvelopeErrors]
+type cookieGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CookieGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cookieGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CookieGetResponseEnvelopeMessages struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    cookieGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cookieGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [CookieGetResponseEnvelopeMessages]
+type cookieGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CookieGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cookieGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

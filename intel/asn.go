@@ -60,8 +60,8 @@ type ASNGetParams struct {
 }
 
 type ASNGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []ASNGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ASNGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success ASNGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.ASN                    `json:"result"`
@@ -84,6 +84,52 @@ func (r *ASNGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r asnGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ASNGetResponseEnvelopeErrors struct {
+	Code    int64                            `json:"code,required"`
+	Message string                           `json:"message,required"`
+	JSON    asnGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// asnGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ASNGetResponseEnvelopeErrors]
+type asnGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ASNGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ASNGetResponseEnvelopeMessages struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    asnGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// asnGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [ASNGetResponseEnvelopeMessages]
+type asnGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ASNGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

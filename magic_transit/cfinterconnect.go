@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CfInterconnectService contains methods and other services that help with
@@ -550,9 +549,9 @@ func (r CfInterconnectUpdateParamsGRE) MarshalJSON() (data []byte, err error) {
 }
 
 type CfInterconnectUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   CfInterconnectUpdateResponse `json:"result,required"`
+	Errors   []CfInterconnectUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CfInterconnectUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   CfInterconnectUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cfInterconnectUpdateResponseEnvelopeJSON    `json:"-"`
@@ -574,6 +573,52 @@ func (r *CfInterconnectUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r cfInterconnectUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectUpdateResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    cfInterconnectUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cfInterconnectUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [CfInterconnectUpdateResponseEnvelopeErrors]
+type cfInterconnectUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectUpdateResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    cfInterconnectUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cfInterconnectUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [CfInterconnectUpdateResponseEnvelopeMessages]
+type cfInterconnectUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -599,9 +644,9 @@ type CfInterconnectListParams struct {
 }
 
 type CfInterconnectListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   CfInterconnectListResponse `json:"result,required"`
+	Errors   []CfInterconnectListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CfInterconnectListResponseEnvelopeMessages `json:"messages,required"`
+	Result   CfInterconnectListResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cfInterconnectListResponseEnvelopeJSON    `json:"-"`
@@ -623,6 +668,52 @@ func (r *CfInterconnectListResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r cfInterconnectListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectListResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    cfInterconnectListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cfInterconnectListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CfInterconnectListResponseEnvelopeErrors]
+type cfInterconnectListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectListResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    cfInterconnectListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cfInterconnectListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [CfInterconnectListResponseEnvelopeMessages]
+type cfInterconnectListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -653,9 +744,9 @@ func (r CfInterconnectBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CfInterconnectBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   CfInterconnectBulkUpdateResponse `json:"result,required"`
+	Errors   []CfInterconnectBulkUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CfInterconnectBulkUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   CfInterconnectBulkUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cfInterconnectBulkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -677,6 +768,52 @@ func (r *CfInterconnectBulkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r cfInterconnectBulkUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectBulkUpdateResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    cfInterconnectBulkUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cfInterconnectBulkUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [CfInterconnectBulkUpdateResponseEnvelopeErrors]
+type cfInterconnectBulkUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectBulkUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectBulkUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectBulkUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    cfInterconnectBulkUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cfInterconnectBulkUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [CfInterconnectBulkUpdateResponseEnvelopeMessages]
+type cfInterconnectBulkUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectBulkUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectBulkUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -702,9 +839,9 @@ type CfInterconnectGetParams struct {
 }
 
 type CfInterconnectGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   CfInterconnectGetResponse `json:"result,required"`
+	Errors   []CfInterconnectGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CfInterconnectGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   CfInterconnectGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cfInterconnectGetResponseEnvelopeJSON    `json:"-"`
@@ -726,6 +863,52 @@ func (r *CfInterconnectGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r cfInterconnectGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectGetResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    cfInterconnectGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cfInterconnectGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CfInterconnectGetResponseEnvelopeErrors]
+type cfInterconnectGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectGetResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    cfInterconnectGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cfInterconnectGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [CfInterconnectGetResponseEnvelopeMessages]
+type cfInterconnectGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

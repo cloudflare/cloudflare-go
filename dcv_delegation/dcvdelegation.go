@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DCVDelegationService contains methods and other services that help with
@@ -80,8 +79,8 @@ type DCVDelegationGetParams struct {
 }
 
 type DCVDelegationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DCVDelegationGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DCVDelegationGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success DCVDelegationGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DCVDelegationUUID                       `json:"result"`
@@ -104,6 +103,52 @@ func (r *DCVDelegationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r dcvDelegationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DCVDelegationGetResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    dcvDelegationGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dcvDelegationGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DCVDelegationGetResponseEnvelopeErrors]
+type dcvDelegationGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DCVDelegationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dcvDelegationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DCVDelegationGetResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    dcvDelegationGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dcvDelegationGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DCVDelegationGetResponseEnvelopeMessages]
+type dcvDelegationGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DCVDelegationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dcvDelegationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

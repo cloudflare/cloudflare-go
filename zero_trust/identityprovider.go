@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -3149,8 +3148,8 @@ func (r IdentityProviderNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IdentityProviderNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []IdentityProviderNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IdentityProviderNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success IdentityProviderNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProvider                           `json:"result"`
@@ -3173,6 +3172,52 @@ func (r *IdentityProviderNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r identityProviderNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderNewResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    identityProviderNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// identityProviderNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [IdentityProviderNewResponseEnvelopeErrors]
+type identityProviderNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderNewResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    identityProviderNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// identityProviderNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [IdentityProviderNewResponseEnvelopeMessages]
+type identityProviderNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3204,8 +3249,8 @@ func (r IdentityProviderUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IdentityProviderUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []IdentityProviderUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IdentityProviderUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success IdentityProviderUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProvider                              `json:"result"`
@@ -3228,6 +3273,52 @@ func (r *IdentityProviderUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r identityProviderUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderUpdateResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    identityProviderUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// identityProviderUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [IdentityProviderUpdateResponseEnvelopeErrors]
+type identityProviderUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderUpdateResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    identityProviderUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// identityProviderUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [IdentityProviderUpdateResponseEnvelopeMessages]
+type identityProviderUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3273,8 +3364,8 @@ type IdentityProviderDeleteParams struct {
 }
 
 type IdentityProviderDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []IdentityProviderDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IdentityProviderDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success IdentityProviderDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProviderDeleteResponse                `json:"result"`
@@ -3297,6 +3388,52 @@ func (r *IdentityProviderDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r identityProviderDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderDeleteResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    identityProviderDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// identityProviderDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [IdentityProviderDeleteResponseEnvelopeErrors]
+type identityProviderDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderDeleteResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    identityProviderDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// identityProviderDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [IdentityProviderDeleteResponseEnvelopeMessages]
+type identityProviderDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3323,8 +3460,8 @@ type IdentityProviderGetParams struct {
 }
 
 type IdentityProviderGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []IdentityProviderGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IdentityProviderGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success IdentityProviderGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProvider                           `json:"result"`
@@ -3347,6 +3484,52 @@ func (r *IdentityProviderGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r identityProviderGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderGetResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    identityProviderGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// identityProviderGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [IdentityProviderGetResponseEnvelopeErrors]
+type identityProviderGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderGetResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    identityProviderGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// identityProviderGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [IdentityProviderGetResponseEnvelopeMessages]
+type identityProviderGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

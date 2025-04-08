@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessInfrastructureTargetService contains methods and other services that help
@@ -792,8 +791,8 @@ func (r AccessInfrastructureTargetNewParamsIPIPV6) MarshalJSON() (data []byte, e
 }
 
 type AccessInfrastructureTargetNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []AccessInfrastructureTargetNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessInfrastructureTargetNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessInfrastructureTargetNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessInfrastructureTargetNewResponse                `json:"result"`
@@ -816,6 +815,52 @@ func (r *AccessInfrastructureTargetNewResponseEnvelope) UnmarshalJSON(data []byt
 }
 
 func (r accessInfrastructureTargetNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessInfrastructureTargetNewResponseEnvelopeErrors struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    accessInfrastructureTargetNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessInfrastructureTargetNewResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AccessInfrastructureTargetNewResponseEnvelopeErrors]
+type accessInfrastructureTargetNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessInfrastructureTargetNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessInfrastructureTargetNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessInfrastructureTargetNewResponseEnvelopeMessages struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    accessInfrastructureTargetNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessInfrastructureTargetNewResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AccessInfrastructureTargetNewResponseEnvelopeMessages]
+type accessInfrastructureTargetNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessInfrastructureTargetNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessInfrastructureTargetNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -888,8 +933,8 @@ func (r AccessInfrastructureTargetUpdateParamsIPIPV6) MarshalJSON() (data []byte
 }
 
 type AccessInfrastructureTargetUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []AccessInfrastructureTargetUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessInfrastructureTargetUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessInfrastructureTargetUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessInfrastructureTargetUpdateResponse                `json:"result"`
@@ -912,6 +957,53 @@ func (r *AccessInfrastructureTargetUpdateResponseEnvelope) UnmarshalJSON(data []
 }
 
 func (r accessInfrastructureTargetUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessInfrastructureTargetUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    accessInfrastructureTargetUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessInfrastructureTargetUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AccessInfrastructureTargetUpdateResponseEnvelopeErrors]
+type accessInfrastructureTargetUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessInfrastructureTargetUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessInfrastructureTargetUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessInfrastructureTargetUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    accessInfrastructureTargetUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessInfrastructureTargetUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [AccessInfrastructureTargetUpdateResponseEnvelopeMessages]
+type accessInfrastructureTargetUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessInfrastructureTargetUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessInfrastructureTargetUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1100,8 +1192,8 @@ type AccessInfrastructureTargetGetParams struct {
 }
 
 type AccessInfrastructureTargetGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []AccessInfrastructureTargetGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessInfrastructureTargetGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessInfrastructureTargetGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessInfrastructureTargetGetResponse                `json:"result"`
@@ -1124,6 +1216,52 @@ func (r *AccessInfrastructureTargetGetResponseEnvelope) UnmarshalJSON(data []byt
 }
 
 func (r accessInfrastructureTargetGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessInfrastructureTargetGetResponseEnvelopeErrors struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    accessInfrastructureTargetGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessInfrastructureTargetGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AccessInfrastructureTargetGetResponseEnvelopeErrors]
+type accessInfrastructureTargetGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessInfrastructureTargetGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessInfrastructureTargetGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessInfrastructureTargetGetResponseEnvelopeMessages struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    accessInfrastructureTargetGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessInfrastructureTargetGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AccessInfrastructureTargetGetResponseEnvelopeMessages]
+type accessInfrastructureTargetGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessInfrastructureTargetGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessInfrastructureTargetGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CacheReserveService contains methods and other services that help with
@@ -346,8 +345,8 @@ func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CacheReserveClearResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []CacheReserveClearResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CacheReserveClearResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success CacheReserveClearResponseEnvelopeSuccess `json:"success,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
@@ -374,6 +373,52 @@ func (r *CacheReserveClearResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r cacheReserveClearResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CacheReserveClearResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    cacheReserveClearResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cacheReserveClearResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CacheReserveClearResponseEnvelopeErrors]
+type cacheReserveClearResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveClearResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheReserveClearResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CacheReserveClearResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    cacheReserveClearResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cacheReserveClearResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [CacheReserveClearResponseEnvelopeMessages]
+type cacheReserveClearResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveClearResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheReserveClearResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -420,8 +465,8 @@ func (r CacheReserveEditParamsValue) IsKnown() bool {
 }
 
 type CacheReserveEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []CacheReserveEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CacheReserveEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success CacheReserveEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  CacheReserveEditResponse                `json:"result"`
@@ -447,6 +492,52 @@ func (r cacheReserveEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type CacheReserveEditResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    cacheReserveEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cacheReserveEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CacheReserveEditResponseEnvelopeErrors]
+type cacheReserveEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheReserveEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CacheReserveEditResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    cacheReserveEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cacheReserveEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [CacheReserveEditResponseEnvelopeMessages]
+type cacheReserveEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheReserveEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type CacheReserveEditResponseEnvelopeSuccess bool
 
@@ -468,8 +559,8 @@ type CacheReserveGetParams struct {
 }
 
 type CacheReserveGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []CacheReserveGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CacheReserveGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success CacheReserveGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  CacheReserveGetResponse                `json:"result"`
@@ -495,6 +586,52 @@ func (r cacheReserveGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type CacheReserveGetResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    cacheReserveGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cacheReserveGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CacheReserveGetResponseEnvelopeErrors]
+type cacheReserveGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheReserveGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CacheReserveGetResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    cacheReserveGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cacheReserveGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [CacheReserveGetResponseEnvelopeMessages]
+type cacheReserveGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheReserveGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type CacheReserveGetResponseEnvelopeSuccess bool
 
@@ -516,8 +653,8 @@ type CacheReserveStatusParams struct {
 }
 
 type CacheReserveStatusResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []CacheReserveStatusResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CacheReserveStatusResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success CacheReserveStatusResponseEnvelopeSuccess `json:"success,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
@@ -544,6 +681,52 @@ func (r *CacheReserveStatusResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r cacheReserveStatusResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CacheReserveStatusResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    cacheReserveStatusResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cacheReserveStatusResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CacheReserveStatusResponseEnvelopeErrors]
+type cacheReserveStatusResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveStatusResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheReserveStatusResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CacheReserveStatusResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    cacheReserveStatusResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cacheReserveStatusResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [CacheReserveStatusResponseEnvelopeMessages]
+type cacheReserveStatusResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveStatusResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheReserveStatusResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CustomNameserverService contains methods and other services that help with
@@ -219,8 +218,8 @@ func (r CustomNameserverNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []CustomNameserverNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CustomNameserverNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomNameserverNewResponseEnvelopeSuccess `json:"success,required"`
 	// A single account custom nameserver.
@@ -244,6 +243,52 @@ func (r *CustomNameserverNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r customNameserverNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CustomNameserverNewResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    customNameserverNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// customNameserverNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CustomNameserverNewResponseEnvelopeErrors]
+type customNameserverNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomNameserverNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customNameserverNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CustomNameserverNewResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    customNameserverNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// customNameserverNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [CustomNameserverNewResponseEnvelopeMessages]
+type customNameserverNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomNameserverNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customNameserverNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
