@@ -30,7 +30,7 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 	_, err := client.EmailRouting.Rules.New(context.TODO(), email_routing.RuleNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Actions: cloudflare.F([]email_routing.ActionParam{{
-			Type:  cloudflare.F(email_routing.ActionTypeDrop),
+			Type:  cloudflare.F(email_routing.ActionTypeForward),
 			Value: cloudflare.F([]string{"destinationaddress@example.net"}),
 		}}),
 		Matchers: cloudflare.F([]email_routing.MatcherParam{{
@@ -70,7 +70,7 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 		email_routing.RuleUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Actions: cloudflare.F([]email_routing.ActionParam{{
-				Type:  cloudflare.F(email_routing.ActionTypeDrop),
+				Type:  cloudflare.F(email_routing.ActionTypeForward),
 				Value: cloudflare.F([]string{"destinationaddress@example.net"}),
 			}}),
 			Matchers: cloudflare.F([]email_routing.MatcherParam{{

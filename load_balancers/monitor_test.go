@@ -47,7 +47,7 @@ func TestMonitorNewWithOptionalParams(t *testing.T) {
 		ProbeZone: cloudflare.F("example.com"),
 		Retries:   cloudflare.F(int64(0)),
 		Timeout:   cloudflare.F(int64(0)),
-		Type:      cloudflare.F(load_balancers.MonitorNewParamsTypeHTTP),
+		Type:      cloudflare.F(load_balancers.MonitorNewParamsTypeHTTPS),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -94,7 +94,7 @@ func TestMonitorUpdateWithOptionalParams(t *testing.T) {
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(load_balancers.MonitorUpdateParamsTypeHTTP),
+			Type:      cloudflare.F(load_balancers.MonitorUpdateParamsTypeHTTPS),
 		},
 	)
 	if err != nil {
@@ -196,7 +196,7 @@ func TestMonitorEditWithOptionalParams(t *testing.T) {
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(load_balancers.MonitorEditParamsTypeHTTP),
+			Type:      cloudflare.F(load_balancers.MonitorEditParamsTypeHTTPS),
 		},
 	)
 	if err != nil {
