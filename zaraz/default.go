@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DefaultService contains methods and other services that help with interacting
@@ -56,8 +57,8 @@ type DefaultGetParams struct {
 }
 
 type DefaultGetResponseEnvelope struct {
-	Errors   []DefaultGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DefaultGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Zaraz configuration
 	Result Configuration `json:"result,required"`
 	// Whether the API call was successful
@@ -81,51 +82,5 @@ func (r *DefaultGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r defaultGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DefaultGetResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    defaultGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// defaultGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DefaultGetResponseEnvelopeErrors]
-type defaultGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DefaultGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r defaultGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DefaultGetResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    defaultGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// defaultGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [DefaultGetResponseEnvelopeMessages]
-type defaultGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DefaultGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r defaultGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

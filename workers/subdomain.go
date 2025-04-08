@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SubdomainService contains methods and other services that help with interacting
@@ -121,8 +120,8 @@ func (r SubdomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubdomainUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []SubdomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SubdomainUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success SubdomainUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  SubdomainUpdateResponse                `json:"result"`
@@ -148,6 +147,102 @@ func (r subdomainUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type SubdomainUpdateResponseEnvelopeErrors struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           SubdomainUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             subdomainUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// subdomainUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SubdomainUpdateResponseEnvelopeErrors]
+type subdomainUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SubdomainUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SubdomainUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    subdomainUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// subdomainUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [SubdomainUpdateResponseEnvelopeErrorsSource]
+type subdomainUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubdomainUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SubdomainUpdateResponseEnvelopeMessages struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           SubdomainUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             subdomainUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// subdomainUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SubdomainUpdateResponseEnvelopeMessages]
+type subdomainUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SubdomainUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SubdomainUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    subdomainUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// subdomainUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [SubdomainUpdateResponseEnvelopeMessagesSource]
+type subdomainUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubdomainUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful.
 type SubdomainUpdateResponseEnvelopeSuccess bool
 
@@ -169,8 +264,8 @@ type SubdomainGetParams struct {
 }
 
 type SubdomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []SubdomainGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SubdomainGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success SubdomainGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  SubdomainGetResponse                `json:"result"`
@@ -193,6 +288,102 @@ func (r *SubdomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r subdomainGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SubdomainGetResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           SubdomainGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             subdomainGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// subdomainGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SubdomainGetResponseEnvelopeErrors]
+type subdomainGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SubdomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SubdomainGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    subdomainGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// subdomainGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [SubdomainGetResponseEnvelopeErrorsSource]
+type subdomainGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubdomainGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SubdomainGetResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           SubdomainGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             subdomainGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// subdomainGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SubdomainGetResponseEnvelopeMessages]
+type subdomainGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SubdomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SubdomainGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    subdomainGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// subdomainGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [SubdomainGetResponseEnvelopeMessagesSource]
+type subdomainGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubdomainGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

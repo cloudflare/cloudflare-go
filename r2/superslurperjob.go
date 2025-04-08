@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -1149,9 +1150,9 @@ func (r SuperSlurperJobNewParamsTargetSecret) MarshalJSON() (data []byte, err er
 }
 
 type SuperSlurperJobNewResponseEnvelope struct {
-	Errors   []SuperSlurperJobNewResponseEnvelopeErrors `json:"errors"`
-	Messages []string                                   `json:"messages"`
-	Result   SuperSlurperJobNewResponse                 `json:"result"`
+	Errors   []shared.ResponseInfo      `json:"errors"`
+	Messages []string                   `json:"messages"`
+	Result   SuperSlurperJobNewResponse `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success SuperSlurperJobNewResponseEnvelopeSuccess `json:"success"`
 	JSON    superSlurperJobNewResponseEnvelopeJSON    `json:"-"`
@@ -1173,29 +1174,6 @@ func (r *SuperSlurperJobNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r superSlurperJobNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SuperSlurperJobNewResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    superSlurperJobNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// superSlurperJobNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SuperSlurperJobNewResponseEnvelopeErrors]
-type superSlurperJobNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SuperSlurperJobNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r superSlurperJobNewResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1234,9 +1212,9 @@ type SuperSlurperJobAbortParams struct {
 }
 
 type SuperSlurperJobAbortResponseEnvelope struct {
-	Errors   []SuperSlurperJobAbortResponseEnvelopeErrors `json:"errors"`
-	Messages []string                                     `json:"messages"`
-	Result   string                                       `json:"result"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   string                `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success SuperSlurperJobAbortResponseEnvelopeSuccess `json:"success"`
 	JSON    superSlurperJobAbortResponseEnvelopeJSON    `json:"-"`
@@ -1261,29 +1239,6 @@ func (r superSlurperJobAbortResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SuperSlurperJobAbortResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    superSlurperJobAbortResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// superSlurperJobAbortResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SuperSlurperJobAbortResponseEnvelopeErrors]
-type superSlurperJobAbortResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SuperSlurperJobAbortResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r superSlurperJobAbortResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Indicates if the API call was successful or not.
 type SuperSlurperJobAbortResponseEnvelopeSuccess bool
 
@@ -1304,9 +1259,9 @@ type SuperSlurperJobAbortAllParams struct {
 }
 
 type SuperSlurperJobAbortAllResponseEnvelope struct {
-	Errors   []SuperSlurperJobAbortAllResponseEnvelopeErrors `json:"errors"`
-	Messages []string                                        `json:"messages"`
-	Result   string                                          `json:"result"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   string                `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success SuperSlurperJobAbortAllResponseEnvelopeSuccess `json:"success"`
 	JSON    superSlurperJobAbortAllResponseEnvelopeJSON    `json:"-"`
@@ -1331,29 +1286,6 @@ func (r superSlurperJobAbortAllResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SuperSlurperJobAbortAllResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    superSlurperJobAbortAllResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// superSlurperJobAbortAllResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SuperSlurperJobAbortAllResponseEnvelopeErrors]
-type superSlurperJobAbortAllResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SuperSlurperJobAbortAllResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r superSlurperJobAbortAllResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Indicates if the API call was successful or not.
 type SuperSlurperJobAbortAllResponseEnvelopeSuccess bool
 
@@ -1374,9 +1306,9 @@ type SuperSlurperJobGetParams struct {
 }
 
 type SuperSlurperJobGetResponseEnvelope struct {
-	Errors   []SuperSlurperJobGetResponseEnvelopeErrors `json:"errors"`
-	Messages []string                                   `json:"messages"`
-	Result   SuperSlurperJobGetResponse                 `json:"result"`
+	Errors   []shared.ResponseInfo      `json:"errors"`
+	Messages []string                   `json:"messages"`
+	Result   SuperSlurperJobGetResponse `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success SuperSlurperJobGetResponseEnvelopeSuccess `json:"success"`
 	JSON    superSlurperJobGetResponseEnvelopeJSON    `json:"-"`
@@ -1401,29 +1333,6 @@ func (r superSlurperJobGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SuperSlurperJobGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    superSlurperJobGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// superSlurperJobGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SuperSlurperJobGetResponseEnvelopeErrors]
-type superSlurperJobGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SuperSlurperJobGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r superSlurperJobGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Indicates if the API call was successful or not.
 type SuperSlurperJobGetResponseEnvelopeSuccess bool
 
@@ -1444,9 +1353,9 @@ type SuperSlurperJobPauseParams struct {
 }
 
 type SuperSlurperJobPauseResponseEnvelope struct {
-	Errors   []SuperSlurperJobPauseResponseEnvelopeErrors `json:"errors"`
-	Messages []string                                     `json:"messages"`
-	Result   string                                       `json:"result"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   string                `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success SuperSlurperJobPauseResponseEnvelopeSuccess `json:"success"`
 	JSON    superSlurperJobPauseResponseEnvelopeJSON    `json:"-"`
@@ -1471,29 +1380,6 @@ func (r superSlurperJobPauseResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SuperSlurperJobPauseResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    superSlurperJobPauseResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// superSlurperJobPauseResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SuperSlurperJobPauseResponseEnvelopeErrors]
-type superSlurperJobPauseResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SuperSlurperJobPauseResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r superSlurperJobPauseResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Indicates if the API call was successful or not.
 type SuperSlurperJobPauseResponseEnvelopeSuccess bool
 
@@ -1514,9 +1400,9 @@ type SuperSlurperJobProgressParams struct {
 }
 
 type SuperSlurperJobProgressResponseEnvelope struct {
-	Errors   []SuperSlurperJobProgressResponseEnvelopeErrors `json:"errors"`
-	Messages []string                                        `json:"messages"`
-	Result   SuperSlurperJobProgressResponse                 `json:"result"`
+	Errors   []shared.ResponseInfo           `json:"errors"`
+	Messages []string                        `json:"messages"`
+	Result   SuperSlurperJobProgressResponse `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success SuperSlurperJobProgressResponseEnvelopeSuccess `json:"success"`
 	JSON    superSlurperJobProgressResponseEnvelopeJSON    `json:"-"`
@@ -1541,29 +1427,6 @@ func (r superSlurperJobProgressResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SuperSlurperJobProgressResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    superSlurperJobProgressResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// superSlurperJobProgressResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SuperSlurperJobProgressResponseEnvelopeErrors]
-type superSlurperJobProgressResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SuperSlurperJobProgressResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r superSlurperJobProgressResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Indicates if the API call was successful or not.
 type SuperSlurperJobProgressResponseEnvelopeSuccess bool
 
@@ -1584,9 +1447,9 @@ type SuperSlurperJobResumeParams struct {
 }
 
 type SuperSlurperJobResumeResponseEnvelope struct {
-	Errors   []SuperSlurperJobResumeResponseEnvelopeErrors `json:"errors"`
-	Messages []string                                      `json:"messages"`
-	Result   string                                        `json:"result"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   string                `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success SuperSlurperJobResumeResponseEnvelopeSuccess `json:"success"`
 	JSON    superSlurperJobResumeResponseEnvelopeJSON    `json:"-"`
@@ -1608,29 +1471,6 @@ func (r *SuperSlurperJobResumeResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r superSlurperJobResumeResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SuperSlurperJobResumeResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    superSlurperJobResumeResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// superSlurperJobResumeResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SuperSlurperJobResumeResponseEnvelopeErrors]
-type superSlurperJobResumeResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SuperSlurperJobResumeResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r superSlurperJobResumeResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

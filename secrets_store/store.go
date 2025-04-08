@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // StoreService contains methods and other services that help with interacting with
@@ -289,8 +288,8 @@ type StoreDeleteParams struct {
 }
 
 type StoreDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []StoreDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StoreDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success    StoreDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	Result     StoreDeleteResponse                   `json:"result"`
@@ -315,6 +314,102 @@ func (r *StoreDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r storeDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreDeleteResponseEnvelopeErrors struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           StoreDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             storeDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// storeDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [StoreDeleteResponseEnvelopeErrors]
+type storeDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StoreDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    storeDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// storeDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [StoreDeleteResponseEnvelopeErrorsSource]
+type storeDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreDeleteResponseEnvelopeMessages struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           StoreDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             storeDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// storeDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [StoreDeleteResponseEnvelopeMessages]
+type storeDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StoreDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    storeDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// storeDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [StoreDeleteResponseEnvelopeMessagesSource]
+type storeDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

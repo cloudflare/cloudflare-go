@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZarazService contains methods and other services that help with interacting with
@@ -160,8 +161,8 @@ func (r ZarazUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZarazUpdateResponseEnvelope struct {
-	Errors   []ZarazUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZarazUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Zaraz workflow
 	Result Workflow `json:"result,required"`
 	// Whether the API call was successful
@@ -185,51 +186,5 @@ func (r *ZarazUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r zarazUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZarazUpdateResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    zarazUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// zarazUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ZarazUpdateResponseEnvelopeErrors]
-type zarazUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zarazUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZarazUpdateResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    zarazUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// zarazUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ZarazUpdateResponseEnvelopeMessages]
-type zarazUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zarazUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

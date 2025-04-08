@@ -3394,8 +3394,8 @@ func (r ConfigUpdateParamsConsentPurposesWithTranslations) MarshalJSON() (data [
 }
 
 type ConfigUpdateResponseEnvelope struct {
-	Errors   []ConfigUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Zaraz configuration
 	Result Configuration `json:"result,required"`
 	// Whether the API call was successful
@@ -3422,60 +3422,14 @@ func (r configUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConfigUpdateResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    configUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// configUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConfigUpdateResponseEnvelopeErrors]
-type configUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigUpdateResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    configUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// configUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConfigUpdateResponseEnvelopeMessages]
-type configUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConfigGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type ConfigGetResponseEnvelope struct {
-	Errors   []ConfigGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Zaraz configuration
 	Result Configuration `json:"result,required"`
 	// Whether the API call was successful
@@ -3499,51 +3453,5 @@ func (r *ConfigGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r configGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    configGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// configGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConfigGetResponseEnvelopeErrors]
-type configGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    configGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// configGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ConfigGetResponseEnvelopeMessages]
-type configGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

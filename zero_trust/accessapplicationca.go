@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessApplicationCAService contains methods and other services that help with
@@ -238,8 +239,8 @@ type AccessApplicationCANewParams struct {
 }
 
 type AccessApplicationCANewResponseEnvelope struct {
-	Errors   []AccessApplicationCANewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationCANewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCANewResponseEnvelopeSuccess `json:"success,required"`
 	Result  CA                                            `json:"result"`
@@ -262,52 +263,6 @@ func (r *AccessApplicationCANewResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r accessApplicationCANewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCANewResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    accessApplicationCANewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationCANewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessApplicationCANewResponseEnvelopeErrors]
-type accessApplicationCANewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCANewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCANewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCANewResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    accessApplicationCANewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationCANewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessApplicationCANewResponseEnvelopeMessages]
-type accessApplicationCANewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCANewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCANewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -341,8 +296,8 @@ type AccessApplicationCADeleteParams struct {
 }
 
 type AccessApplicationCADeleteResponseEnvelope struct {
-	Errors   []AccessApplicationCADeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationCADeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCADeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationCADeleteResponse                `json:"result"`
@@ -365,52 +320,6 @@ func (r *AccessApplicationCADeleteResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r accessApplicationCADeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCADeleteResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    accessApplicationCADeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationCADeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessApplicationCADeleteResponseEnvelopeErrors]
-type accessApplicationCADeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCADeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCADeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCADeleteResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    accessApplicationCADeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationCADeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessApplicationCADeleteResponseEnvelopeMessages]
-type accessApplicationCADeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCADeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCADeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -437,8 +346,8 @@ type AccessApplicationCAGetParams struct {
 }
 
 type AccessApplicationCAGetResponseEnvelope struct {
-	Errors   []AccessApplicationCAGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationCAGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCAGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  CA                                            `json:"result"`
@@ -461,52 +370,6 @@ func (r *AccessApplicationCAGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r accessApplicationCAGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCAGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    accessApplicationCAGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationCAGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessApplicationCAGetResponseEnvelopeErrors]
-type accessApplicationCAGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCAGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCAGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCAGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    accessApplicationCAGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationCAGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessApplicationCAGetResponseEnvelopeMessages]
-type accessApplicationCAGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCAGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCAGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
