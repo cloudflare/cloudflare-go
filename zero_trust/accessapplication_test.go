@@ -88,7 +88,8 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Precedence: cloudflare.F(int64(0)),
 			}}),
-			SameSiteCookieAttribute: cloudflare.F("strict"),
+			ReadServiceTokensFromHeader: cloudflare.F("Authorization"),
+			SameSiteCookieAttribute:     cloudflare.F("strict"),
 			SCIMConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig{
 				IdPUID:    cloudflare.F("idp_uid"),
 				RemoteURI: cloudflare.F("remote_uri"),
@@ -206,7 +207,8 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					Precedence: cloudflare.F(int64(0)),
 				}}),
-				SameSiteCookieAttribute: cloudflare.F("strict"),
+				ReadServiceTokensFromHeader: cloudflare.F("Authorization"),
+				SameSiteCookieAttribute:     cloudflare.F("strict"),
 				SCIMConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig{
 					IdPUID:    cloudflare.F("idp_uid"),
 					RemoteURI: cloudflare.F("remote_uri"),
