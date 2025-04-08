@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ZoneTransferForceAXFRService contains methods and other services that help with
@@ -62,8 +63,8 @@ func (r ZoneTransferForceAXFRNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferForceAXFRNewResponseEnvelope struct {
-	Errors   []ZoneTransferForceAXFRNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferForceAXFRNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ZoneTransferForceAXFRNewResponseEnvelopeSuccess `json:"success,required"`
 	// When force_axfr query parameter is set to true, the response is a simple string
@@ -87,52 +88,6 @@ func (r *ZoneTransferForceAXFRNewResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r zoneTransferForceAXFRNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneTransferForceAXFRNewResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    zoneTransferForceAXFRNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// zoneTransferForceAXFRNewResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [ZoneTransferForceAXFRNewResponseEnvelopeErrors]
-type zoneTransferForceAXFRNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneTransferForceAXFRNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneTransferForceAXFRNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneTransferForceAXFRNewResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    zoneTransferForceAXFRNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// zoneTransferForceAXFRNewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [ZoneTransferForceAXFRNewResponseEnvelopeMessages]
-type zoneTransferForceAXFRNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneTransferForceAXFRNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneTransferForceAXFRNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

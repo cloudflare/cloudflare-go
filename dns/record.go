@@ -5976,8 +5976,8 @@ func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []RecordNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success RecordNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordResponse                   `json:"result"`
@@ -6000,6 +6000,102 @@ func (r *RecordNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordNewResponseEnvelopeErrors struct {
+	Code             int64                                 `json:"code,required"`
+	Message          string                                `json:"message,required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           RecordNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordNewResponseEnvelopeErrors]
+type recordNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    recordNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordNewResponseEnvelopeErrorsSource]
+type recordNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordNewResponseEnvelopeMessages struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           RecordNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [RecordNewResponseEnvelopeMessages]
+type recordNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    recordNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RecordNewResponseEnvelopeMessagesSource]
+type recordNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6029,8 +6125,8 @@ func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []RecordUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success RecordUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordResponse                      `json:"result"`
@@ -6053,6 +6149,102 @@ func (r *RecordUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordUpdateResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           RecordUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordUpdateResponseEnvelopeErrors]
+type recordUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    recordUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordUpdateResponseEnvelopeErrorsSource]
+type recordUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordUpdateResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           RecordUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RecordUpdateResponseEnvelopeMessages]
+type recordUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    recordUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [RecordUpdateResponseEnvelopeMessagesSource]
+type recordUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6354,8 +6546,8 @@ func (r RecordBatchParamsDelete) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordBatchResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []RecordBatchResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordBatchResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success RecordBatchResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordBatchResponse                `json:"result"`
@@ -6378,6 +6570,102 @@ func (r *RecordBatchResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordBatchResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordBatchResponseEnvelopeErrors struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           RecordBatchResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordBatchResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordBatchResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordBatchResponseEnvelopeErrors]
+type recordBatchResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordBatchResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordBatchResponseEnvelopeErrorsSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    recordBatchResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordBatchResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordBatchResponseEnvelopeErrorsSource]
+type recordBatchResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordBatchResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordBatchResponseEnvelopeMessages struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           RecordBatchResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordBatchResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordBatchResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RecordBatchResponseEnvelopeMessages]
+type recordBatchResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordBatchResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordBatchResponseEnvelopeMessagesSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    recordBatchResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordBatchResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RecordBatchResponseEnvelopeMessagesSource]
+type recordBatchResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordBatchResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6407,8 +6695,8 @@ func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []RecordEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success RecordEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordResponse                    `json:"result"`
@@ -6431,6 +6719,102 @@ func (r *RecordEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordEditResponseEnvelopeErrors struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           RecordEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordEditResponseEnvelopeErrors]
+type recordEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    recordEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordEditResponseEnvelopeErrorsSource]
+type recordEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordEditResponseEnvelopeMessages struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           RecordEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [RecordEditResponseEnvelopeMessages]
+type recordEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    recordEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RecordEditResponseEnvelopeMessagesSource]
+type recordEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6460,8 +6844,8 @@ type RecordGetParams struct {
 }
 
 type RecordGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []RecordGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success RecordGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordResponse                   `json:"result"`
@@ -6484,6 +6868,102 @@ func (r *RecordGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordGetResponseEnvelopeErrors struct {
+	Code             int64                                 `json:"code,required"`
+	Message          string                                `json:"message,required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           RecordGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordGetResponseEnvelopeErrors]
+type recordGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    recordGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordGetResponseEnvelopeErrorsSource]
+type recordGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordGetResponseEnvelopeMessages struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           RecordGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [RecordGetResponseEnvelopeMessages]
+type recordGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    recordGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RecordGetResponseEnvelopeMessagesSource]
+type recordGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6533,8 +7013,8 @@ func (r RecordImportParams) MarshalMultipart() (data []byte, contentType string,
 }
 
 type RecordImportResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []RecordImportResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordImportResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success RecordImportResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordImportResponse                `json:"result"`
@@ -6557,6 +7037,102 @@ func (r *RecordImportResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordImportResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordImportResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           RecordImportResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordImportResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordImportResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordImportResponseEnvelopeErrors]
+type recordImportResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordImportResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordImportResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordImportResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    recordImportResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordImportResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordImportResponseEnvelopeErrorsSource]
+type recordImportResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordImportResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordImportResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordImportResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           RecordImportResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordImportResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordImportResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RecordImportResponseEnvelopeMessages]
+type recordImportResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordImportResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordImportResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordImportResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    recordImportResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordImportResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [RecordImportResponseEnvelopeMessagesSource]
+type recordImportResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordImportResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordImportResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6586,8 +7162,8 @@ func (r RecordScanParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordScanResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []RecordScanResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecordScanResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success RecordScanResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordScanResponse                `json:"result"`
@@ -6610,6 +7186,102 @@ func (r *RecordScanResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordScanResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanResponseEnvelopeErrors struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           RecordScanResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recordScanResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recordScanResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RecordScanResponseEnvelopeErrors]
+type recordScanResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordScanResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanResponseEnvelopeErrorsSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    recordScanResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recordScanResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RecordScanResponseEnvelopeErrorsSource]
+type recordScanResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordScanResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanResponseEnvelopeMessages struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           RecordScanResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recordScanResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recordScanResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [RecordScanResponseEnvelopeMessages]
+type recordScanResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecordScanResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordScanResponseEnvelopeMessagesSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    recordScanResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recordScanResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RecordScanResponseEnvelopeMessagesSource]
+type recordScanResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordScanResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordScanResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

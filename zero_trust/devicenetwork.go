@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DeviceNetworkService contains methods and other services that help with
@@ -276,9 +277,9 @@ func (r DeviceNetworkNewParamsType) IsKnown() bool {
 }
 
 type DeviceNetworkNewResponseEnvelope struct {
-	Errors   []DeviceNetworkNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceNetworkNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceNetwork                              `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DeviceNetwork         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -300,52 +301,6 @@ func (r *DeviceNetworkNewResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r deviceNetworkNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceNetworkNewResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    deviceNetworkNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceNetworkNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceNetworkNewResponseEnvelopeErrors]
-type deviceNetworkNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceNetworkNewResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    deviceNetworkNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceNetworkNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DeviceNetworkNewResponseEnvelopeMessages]
-type deviceNetworkNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -411,9 +366,9 @@ func (r DeviceNetworkUpdateParamsType) IsKnown() bool {
 }
 
 type DeviceNetworkUpdateResponseEnvelope struct {
-	Errors   []DeviceNetworkUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceNetworkUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceNetwork                                 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DeviceNetwork         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -435,52 +390,6 @@ func (r *DeviceNetworkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r deviceNetworkUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceNetworkUpdateResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    deviceNetworkUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceNetworkUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceNetworkUpdateResponseEnvelopeErrors]
-type deviceNetworkUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceNetworkUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    deviceNetworkUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceNetworkUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DeviceNetworkUpdateResponseEnvelopeMessages]
-type deviceNetworkUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -512,9 +421,9 @@ type DeviceNetworkGetParams struct {
 }
 
 type DeviceNetworkGetResponseEnvelope struct {
-	Errors   []DeviceNetworkGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceNetworkGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceNetwork                              `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DeviceNetwork         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkGetResponseEnvelopeJSON    `json:"-"`
@@ -536,52 +445,6 @@ func (r *DeviceNetworkGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r deviceNetworkGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceNetworkGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    deviceNetworkGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceNetworkGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceNetworkGetResponseEnvelopeErrors]
-type deviceNetworkGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceNetworkGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    deviceNetworkGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceNetworkGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DeviceNetworkGetResponseEnvelopeMessages]
-type deviceNetworkGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

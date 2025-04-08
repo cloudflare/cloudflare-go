@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DomainBulkService contains methods and other services that help with interacting
@@ -263,9 +264,9 @@ func (r DomainBulkGetParams) URLQuery() (v url.Values) {
 }
 
 type DomainBulkGetResponseEnvelope struct {
-	Errors   []DomainBulkGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DomainBulkGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DomainBulkGetResponse                 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   []DomainBulkGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DomainBulkGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DomainBulkGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -289,52 +290,6 @@ func (r *DomainBulkGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r domainBulkGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainBulkGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    domainBulkGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// domainBulkGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DomainBulkGetResponseEnvelopeErrors]
-type domainBulkGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainBulkGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainBulkGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainBulkGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    domainBulkGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// domainBulkGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DomainBulkGetResponseEnvelopeMessages]
-type domainBulkGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainBulkGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainBulkGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

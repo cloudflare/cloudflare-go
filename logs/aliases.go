@@ -259,9 +259,6 @@ type RatePlanParam = shared.RatePlanParam
 type ResponseInfo = shared.ResponseInfo
 
 // This is an alias to an internal type.
-type ResponseInfoSource = shared.ResponseInfoSource
-
-// This is an alias to an internal type.
 type Role = shared.Role
 
 // This is an alias to an internal type.

@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DNSFirewallService contains methods and other services that help with
@@ -505,8 +504,8 @@ func (r DNSFirewallNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSFirewallNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DNSFirewallNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSFirewallNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success DNSFirewallNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSFirewallNewResponse                `json:"result"`
@@ -529,6 +528,102 @@ func (r *DNSFirewallNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r dnsFirewallNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallNewResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           DNSFirewallNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dnsFirewallNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dnsFirewallNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DNSFirewallNewResponseEnvelopeErrors]
+type dnsFirewallNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSFirewallNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    dnsFirewallNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dnsFirewallNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [DNSFirewallNewResponseEnvelopeErrorsSource]
+type dnsFirewallNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallNewResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           DNSFirewallNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dnsFirewallNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dnsFirewallNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DNSFirewallNewResponseEnvelopeMessages]
+type dnsFirewallNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSFirewallNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    dnsFirewallNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dnsFirewallNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [DNSFirewallNewResponseEnvelopeMessagesSource]
+type dnsFirewallNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -570,8 +665,8 @@ type DNSFirewallDeleteParams struct {
 }
 
 type DNSFirewallDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DNSFirewallDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSFirewallDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success DNSFirewallDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSFirewallDeleteResponse                `json:"result"`
@@ -594,6 +689,102 @@ func (r *DNSFirewallDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r dnsFirewallDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallDeleteResponseEnvelopeErrors struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           DNSFirewallDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dnsFirewallDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dnsFirewallDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DNSFirewallDeleteResponseEnvelopeErrors]
+type dnsFirewallDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSFirewallDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    dnsFirewallDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dnsFirewallDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [DNSFirewallDeleteResponseEnvelopeErrorsSource]
+type dnsFirewallDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallDeleteResponseEnvelopeMessages struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           DNSFirewallDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dnsFirewallDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dnsFirewallDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DNSFirewallDeleteResponseEnvelopeMessages]
+type dnsFirewallDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSFirewallDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    dnsFirewallDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dnsFirewallDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [DNSFirewallDeleteResponseEnvelopeMessagesSource]
+type dnsFirewallDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -648,8 +839,8 @@ func (r DNSFirewallEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSFirewallEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DNSFirewallEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSFirewallEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success DNSFirewallEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSFirewallEditResponse                `json:"result"`
@@ -675,6 +866,102 @@ func (r dnsFirewallEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type DNSFirewallEditResponseEnvelopeErrors struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           DNSFirewallEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dnsFirewallEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dnsFirewallEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DNSFirewallEditResponseEnvelopeErrors]
+type dnsFirewallEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSFirewallEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    dnsFirewallEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dnsFirewallEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [DNSFirewallEditResponseEnvelopeErrorsSource]
+type dnsFirewallEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallEditResponseEnvelopeMessages struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           DNSFirewallEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dnsFirewallEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dnsFirewallEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DNSFirewallEditResponseEnvelopeMessages]
+type dnsFirewallEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSFirewallEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    dnsFirewallEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dnsFirewallEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [DNSFirewallEditResponseEnvelopeMessagesSource]
+type dnsFirewallEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful.
 type DNSFirewallEditResponseEnvelopeSuccess bool
 
@@ -696,8 +983,8 @@ type DNSFirewallGetParams struct {
 }
 
 type DNSFirewallGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DNSFirewallGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSFirewallGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success DNSFirewallGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  DNSFirewallGetResponse                `json:"result"`
@@ -720,6 +1007,102 @@ func (r *DNSFirewallGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r dnsFirewallGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallGetResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           DNSFirewallGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dnsFirewallGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dnsFirewallGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DNSFirewallGetResponseEnvelopeErrors]
+type dnsFirewallGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSFirewallGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    dnsFirewallGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dnsFirewallGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [DNSFirewallGetResponseEnvelopeErrorsSource]
+type dnsFirewallGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallGetResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           DNSFirewallGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dnsFirewallGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dnsFirewallGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DNSFirewallGetResponseEnvelopeMessages]
+type dnsFirewallGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSFirewallGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSFirewallGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    dnsFirewallGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dnsFirewallGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [DNSFirewallGetResponseEnvelopeMessagesSource]
+type dnsFirewallGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

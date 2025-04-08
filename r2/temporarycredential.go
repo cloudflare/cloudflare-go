@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TemporaryCredentialService contains methods and other services that help with
@@ -127,9 +128,9 @@ func (r TemporaryCredentialNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TemporaryCredentialNewResponseEnvelope struct {
-	Errors   []TemporaryCredentialNewResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                       `json:"messages,required"`
-	Result   TemporaryCredentialNewResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []string                       `json:"messages,required"`
+	Result   TemporaryCredentialNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success TemporaryCredentialNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    temporaryCredentialNewResponseEnvelopeJSON    `json:"-"`
@@ -151,29 +152,6 @@ func (r *TemporaryCredentialNewResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r temporaryCredentialNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TemporaryCredentialNewResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    temporaryCredentialNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// temporaryCredentialNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [TemporaryCredentialNewResponseEnvelopeErrors]
-type temporaryCredentialNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TemporaryCredentialNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r temporaryCredentialNewResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
