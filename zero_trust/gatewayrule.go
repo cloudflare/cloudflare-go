@@ -971,6 +971,8 @@ func (r RuleSettingQuarantineFileType) IsKnown() bool {
 type RuleSettingRedirect struct {
 	// URI to which the user will be redirected
 	TargetURI string `json:"target_uri,required" format:"uri"`
+	// If true, context information will be passed as query parameters
+	IncludeContext bool `json:"include_context"`
 	// If true, the path and query parameters from the original request will be
 	// appended to target_uri
 	PreservePathAndQuery bool                    `json:"preserve_path_and_query"`
@@ -981,6 +983,7 @@ type RuleSettingRedirect struct {
 // [RuleSettingRedirect]
 type ruleSettingRedirectJSON struct {
 	TargetURI            apijson.Field
+	IncludeContext       apijson.Field
 	PreservePathAndQuery apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
@@ -1304,6 +1307,8 @@ func (r RuleSettingQuarantineParam) MarshalJSON() (data []byte, err error) {
 type RuleSettingRedirectParam struct {
 	// URI to which the user will be redirected
 	TargetURI param.Field[string] `json:"target_uri,required" format:"uri"`
+	// If true, context information will be passed as query parameters
+	IncludeContext param.Field[bool] `json:"include_context"`
 	// If true, the path and query parameters from the original request will be
 	// appended to target_uri
 	PreservePathAndQuery param.Field[bool] `json:"preserve_path_and_query"`
