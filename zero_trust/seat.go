@@ -96,7 +96,7 @@ func (r seatJSON) RawJSON() string {
 }
 
 type SeatEditParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string]  `path:"account_id,required"`
 	Body      []SeatEditParamsBody `json:"body,required"`
 }

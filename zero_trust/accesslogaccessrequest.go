@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessLogAccessRequestService contains methods and other services that help with
@@ -55,7 +54,7 @@ func (r *AccessLogAccessRequestService) List(ctx context.Context, params AccessL
 }
 
 type AccessLogAccessRequestListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The chronological sorting order for the logs.
 	Direction param.Field[AccessLogAccessRequestListParamsDirection] `query:"direction"`
@@ -93,9 +92,9 @@ func (r AccessLogAccessRequestListParamsDirection) IsKnown() bool {
 }
 
 type AccessLogAccessRequestListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessLogAccessRequestListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessLogAccessRequestListResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessLogAccessRequestListResponseEnvelopeSuccess `json:"success,required"`
 	Result  []AccessRequest                                   `json:"result"`
 	JSON    accessLogAccessRequestListResponseEnvelopeJSON    `json:"-"`
@@ -120,7 +119,104 @@ func (r accessLogAccessRequestListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessLogAccessRequestListResponseEnvelopeErrors struct {
+	Code             int64                                                  `json:"code,required"`
+	Message          string                                                 `json:"message,required"`
+	DocumentationURL string                                                 `json:"documentation_url"`
+	Source           AccessLogAccessRequestListResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessLogAccessRequestListResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessLogAccessRequestListResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [AccessLogAccessRequestListResponseEnvelopeErrors]
+type accessLogAccessRequestListResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessLogAccessRequestListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessLogAccessRequestListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessLogAccessRequestListResponseEnvelopeErrorsSource struct {
+	Pointer string                                                     `json:"pointer"`
+	JSON    accessLogAccessRequestListResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessLogAccessRequestListResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [AccessLogAccessRequestListResponseEnvelopeErrorsSource]
+type accessLogAccessRequestListResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessLogAccessRequestListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessLogAccessRequestListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessLogAccessRequestListResponseEnvelopeMessages struct {
+	Code             int64                                                    `json:"code,required"`
+	Message          string                                                   `json:"message,required"`
+	DocumentationURL string                                                   `json:"documentation_url"`
+	Source           AccessLogAccessRequestListResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessLogAccessRequestListResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessLogAccessRequestListResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AccessLogAccessRequestListResponseEnvelopeMessages]
+type accessLogAccessRequestListResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessLogAccessRequestListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessLogAccessRequestListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessLogAccessRequestListResponseEnvelopeMessagesSource struct {
+	Pointer string                                                       `json:"pointer"`
+	JSON    accessLogAccessRequestListResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessLogAccessRequestListResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [AccessLogAccessRequestListResponseEnvelopeMessagesSource]
+type accessLogAccessRequestListResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessLogAccessRequestListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessLogAccessRequestListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessLogAccessRequestListResponseEnvelopeSuccess bool
 
 const (

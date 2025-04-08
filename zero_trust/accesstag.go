@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessTagService contains methods and other services that help with interacting
@@ -195,7 +194,7 @@ func (r accessTagDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessTagNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the tag
 	Name param.Field[string] `json:"name"`
@@ -206,9 +205,9 @@ func (r AccessTagNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessTagNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessTagNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessTagNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessTagNewResponseEnvelopeSuccess `json:"success,required"`
 	// A tag
 	Result Tag                              `json:"result"`
@@ -234,7 +233,103 @@ func (r accessTagNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessTagNewResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           AccessTagNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessTagNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessTagNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [AccessTagNewResponseEnvelopeErrors]
+type accessTagNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessTagNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    accessTagNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessTagNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [AccessTagNewResponseEnvelopeErrorsSource]
+type accessTagNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagNewResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           AccessTagNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessTagNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessTagNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessTagNewResponseEnvelopeMessages]
+type accessTagNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessTagNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    accessTagNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessTagNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [AccessTagNewResponseEnvelopeMessagesSource]
+type accessTagNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessTagNewResponseEnvelopeSuccess bool
 
 const (
@@ -250,7 +345,7 @@ func (r AccessTagNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessTagUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the tag
 	Name param.Field[string] `json:"name,required"`
@@ -261,9 +356,9 @@ func (r AccessTagUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessTagUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessTagUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessTagUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessTagUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// A tag
 	Result Tag                                 `json:"result"`
@@ -289,7 +384,103 @@ func (r accessTagUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessTagUpdateResponseEnvelopeErrors struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           AccessTagUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessTagUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessTagUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessTagUpdateResponseEnvelopeErrors]
+type accessTagUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessTagUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    accessTagUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessTagUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [AccessTagUpdateResponseEnvelopeErrorsSource]
+type accessTagUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagUpdateResponseEnvelopeMessages struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           AccessTagUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessTagUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessTagUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessTagUpdateResponseEnvelopeMessages]
+type accessTagUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessTagUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    accessTagUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessTagUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [AccessTagUpdateResponseEnvelopeMessagesSource]
+type accessTagUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessTagUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -305,19 +496,19 @@ func (r AccessTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessTagListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessTagDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessTagDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessTagDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessTagDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessTagDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessTagDeleteResponse                `json:"result"`
 	JSON    accessTagDeleteResponseEnvelopeJSON    `json:"-"`
@@ -342,7 +533,103 @@ func (r accessTagDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessTagDeleteResponseEnvelopeErrors struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           AccessTagDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessTagDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessTagDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessTagDeleteResponseEnvelopeErrors]
+type accessTagDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessTagDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    accessTagDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessTagDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [AccessTagDeleteResponseEnvelopeErrorsSource]
+type accessTagDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagDeleteResponseEnvelopeMessages struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           AccessTagDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessTagDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessTagDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessTagDeleteResponseEnvelopeMessages]
+type accessTagDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessTagDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    accessTagDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessTagDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [AccessTagDeleteResponseEnvelopeMessagesSource]
+type accessTagDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessTagDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -358,14 +645,14 @@ func (r AccessTagDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessTagGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessTagGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessTagGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessTagGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessTagGetResponseEnvelopeSuccess `json:"success,required"`
 	// A tag
 	Result Tag                              `json:"result"`
@@ -391,7 +678,103 @@ func (r accessTagGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessTagGetResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           AccessTagGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessTagGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessTagGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [AccessTagGetResponseEnvelopeErrors]
+type accessTagGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessTagGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    accessTagGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessTagGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [AccessTagGetResponseEnvelopeErrorsSource]
+type accessTagGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagGetResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           AccessTagGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessTagGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessTagGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessTagGetResponseEnvelopeMessages]
+type accessTagGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessTagGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessTagGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    accessTagGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessTagGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [AccessTagGetResponseEnvelopeMessagesSource]
+type accessTagGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessTagGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessTagGetResponseEnvelopeSuccess bool
 
 const (

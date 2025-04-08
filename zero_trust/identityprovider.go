@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -229,7 +228,7 @@ type AzureAD struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -441,7 +440,7 @@ type IdentityProvider struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -588,7 +587,7 @@ type IdentityProviderAccessCentrify struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -669,7 +668,7 @@ type IdentityProviderAccessFacebook struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -710,7 +709,7 @@ type IdentityProviderAccessGitHub struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -751,7 +750,7 @@ type IdentityProviderAccessGoogle struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -826,7 +825,7 @@ type IdentityProviderAccessGoogleApps struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -904,7 +903,7 @@ type IdentityProviderAccessLinkedin struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -945,7 +944,7 @@ type IdentityProviderAccessOIDC struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -1035,7 +1034,7 @@ type IdentityProviderAccessOkta struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -1116,7 +1115,7 @@ type IdentityProviderAccessOnelogin struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -1194,7 +1193,7 @@ type IdentityProviderAccessPingone struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -1272,7 +1271,7 @@ type IdentityProviderAccessSAML struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -1384,7 +1383,7 @@ type IdentityProviderAccessYandex struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -1425,7 +1424,7 @@ type IdentityProviderAccessOnetimepin struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2146,7 +2145,7 @@ type IdentityProviderListResponse struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2287,7 +2286,7 @@ type IdentityProviderListResponseAccessCentrify struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2368,7 +2367,7 @@ type IdentityProviderListResponseAccessFacebook struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2409,7 +2408,7 @@ type IdentityProviderListResponseAccessGitHub struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2450,7 +2449,7 @@ type IdentityProviderListResponseAccessGoogle struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2525,7 +2524,7 @@ type IdentityProviderListResponseAccessGoogleApps struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2603,7 +2602,7 @@ type IdentityProviderListResponseAccessLinkedin struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2644,7 +2643,7 @@ type IdentityProviderListResponseAccessOIDC struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2734,7 +2733,7 @@ type IdentityProviderListResponseAccessOkta struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2815,7 +2814,7 @@ type IdentityProviderListResponseAccessOnelogin struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2893,7 +2892,7 @@ type IdentityProviderListResponseAccessPingone struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -2971,7 +2970,7 @@ type IdentityProviderListResponseAccessSAML struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -3084,7 +3083,7 @@ type IdentityProviderListResponseAccessYandex struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type IdentityProviderType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
@@ -3115,7 +3114,7 @@ func (r identityProviderListResponseAccessYandexJSON) RawJSON() string {
 func (r IdentityProviderListResponseAccessYandex) implementsIdentityProviderListResponse() {}
 
 type IdentityProviderDeleteResponse struct {
-	// UUID
+	// UUID.
 	ID   string                             `json:"id"`
 	JSON identityProviderDeleteResponseJSON `json:"-"`
 }
@@ -3149,9 +3148,9 @@ func (r IdentityProviderNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IdentityProviderNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []IdentityProviderNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IdentityProviderNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success IdentityProviderNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProvider                           `json:"result"`
 	JSON    identityProviderNewResponseEnvelopeJSON    `json:"-"`
@@ -3176,7 +3175,103 @@ func (r identityProviderNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type IdentityProviderNewResponseEnvelopeErrors struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           IdentityProviderNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             identityProviderNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// identityProviderNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [IdentityProviderNewResponseEnvelopeErrors]
+type identityProviderNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *IdentityProviderNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    identityProviderNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// identityProviderNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [IdentityProviderNewResponseEnvelopeErrorsSource]
+type identityProviderNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderNewResponseEnvelopeMessages struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           IdentityProviderNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             identityProviderNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// identityProviderNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [IdentityProviderNewResponseEnvelopeMessages]
+type identityProviderNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *IdentityProviderNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    identityProviderNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// identityProviderNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [IdentityProviderNewResponseEnvelopeMessagesSource]
+type identityProviderNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type IdentityProviderNewResponseEnvelopeSuccess bool
 
 const (
@@ -3204,9 +3299,9 @@ func (r IdentityProviderUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IdentityProviderUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []IdentityProviderUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IdentityProviderUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success IdentityProviderUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProvider                              `json:"result"`
 	JSON    identityProviderUpdateResponseEnvelopeJSON    `json:"-"`
@@ -3231,7 +3326,103 @@ func (r identityProviderUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type IdentityProviderUpdateResponseEnvelopeErrors struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           IdentityProviderUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             identityProviderUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// identityProviderUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [IdentityProviderUpdateResponseEnvelopeErrors]
+type identityProviderUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *IdentityProviderUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    identityProviderUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// identityProviderUpdateResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [IdentityProviderUpdateResponseEnvelopeErrorsSource]
+type identityProviderUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderUpdateResponseEnvelopeMessages struct {
+	Code             int64                                                `json:"code,required"`
+	Message          string                                               `json:"message,required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           IdentityProviderUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             identityProviderUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// identityProviderUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [IdentityProviderUpdateResponseEnvelopeMessages]
+type identityProviderUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *IdentityProviderUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    identityProviderUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// identityProviderUpdateResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [IdentityProviderUpdateResponseEnvelopeMessagesSource]
+type identityProviderUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type IdentityProviderUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -3273,9 +3464,9 @@ type IdentityProviderDeleteParams struct {
 }
 
 type IdentityProviderDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []IdentityProviderDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IdentityProviderDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success IdentityProviderDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProviderDeleteResponse                `json:"result"`
 	JSON    identityProviderDeleteResponseEnvelopeJSON    `json:"-"`
@@ -3300,7 +3491,103 @@ func (r identityProviderDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type IdentityProviderDeleteResponseEnvelopeErrors struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           IdentityProviderDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             identityProviderDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// identityProviderDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [IdentityProviderDeleteResponseEnvelopeErrors]
+type identityProviderDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *IdentityProviderDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    identityProviderDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// identityProviderDeleteResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [IdentityProviderDeleteResponseEnvelopeErrorsSource]
+type identityProviderDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderDeleteResponseEnvelopeMessages struct {
+	Code             int64                                                `json:"code,required"`
+	Message          string                                               `json:"message,required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           IdentityProviderDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             identityProviderDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// identityProviderDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [IdentityProviderDeleteResponseEnvelopeMessages]
+type identityProviderDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *IdentityProviderDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    identityProviderDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// identityProviderDeleteResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [IdentityProviderDeleteResponseEnvelopeMessagesSource]
+type identityProviderDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type IdentityProviderDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -3323,9 +3610,9 @@ type IdentityProviderGetParams struct {
 }
 
 type IdentityProviderGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []IdentityProviderGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IdentityProviderGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success IdentityProviderGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  IdentityProvider                           `json:"result"`
 	JSON    identityProviderGetResponseEnvelopeJSON    `json:"-"`
@@ -3350,7 +3637,103 @@ func (r identityProviderGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type IdentityProviderGetResponseEnvelopeErrors struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           IdentityProviderGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             identityProviderGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// identityProviderGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [IdentityProviderGetResponseEnvelopeErrors]
+type identityProviderGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *IdentityProviderGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    identityProviderGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// identityProviderGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [IdentityProviderGetResponseEnvelopeErrorsSource]
+type identityProviderGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderGetResponseEnvelopeMessages struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           IdentityProviderGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             identityProviderGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// identityProviderGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [IdentityProviderGetResponseEnvelopeMessages]
+type identityProviderGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *IdentityProviderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    identityProviderGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// identityProviderGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [IdentityProviderGetResponseEnvelopeMessagesSource]
+type identityProviderGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type IdentityProviderGetResponseEnvelopeSuccess bool
 
 const (

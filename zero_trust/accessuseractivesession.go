@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessUserActiveSessionService contains methods and other services that help
@@ -363,19 +362,19 @@ func (r accessUserActiveSessionGetResponseMTLSAuthJSON) RawJSON() string {
 }
 
 type AccessUserActiveSessionListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessUserActiveSessionGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessUserActiveSessionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessUserActiveSessionGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessUserActiveSessionGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessUserActiveSessionGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessUserActiveSessionGetResponse                `json:"result"`
 	JSON    accessUserActiveSessionGetResponseEnvelopeJSON    `json:"-"`
@@ -400,7 +399,104 @@ func (r accessUserActiveSessionGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessUserActiveSessionGetResponseEnvelopeErrors struct {
+	Code             int64                                                  `json:"code,required"`
+	Message          string                                                 `json:"message,required"`
+	DocumentationURL string                                                 `json:"documentation_url"`
+	Source           AccessUserActiveSessionGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessUserActiveSessionGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessUserActiveSessionGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [AccessUserActiveSessionGetResponseEnvelopeErrors]
+type accessUserActiveSessionGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessUserActiveSessionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessUserActiveSessionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessUserActiveSessionGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                     `json:"pointer"`
+	JSON    accessUserActiveSessionGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessUserActiveSessionGetResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [AccessUserActiveSessionGetResponseEnvelopeErrorsSource]
+type accessUserActiveSessionGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserActiveSessionGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessUserActiveSessionGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessUserActiveSessionGetResponseEnvelopeMessages struct {
+	Code             int64                                                    `json:"code,required"`
+	Message          string                                                   `json:"message,required"`
+	DocumentationURL string                                                   `json:"documentation_url"`
+	Source           AccessUserActiveSessionGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessUserActiveSessionGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessUserActiveSessionGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AccessUserActiveSessionGetResponseEnvelopeMessages]
+type accessUserActiveSessionGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessUserActiveSessionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessUserActiveSessionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessUserActiveSessionGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                       `json:"pointer"`
+	JSON    accessUserActiveSessionGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessUserActiveSessionGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [AccessUserActiveSessionGetResponseEnvelopeMessagesSource]
+type accessUserActiveSessionGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserActiveSessionGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessUserActiveSessionGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessUserActiveSessionGetResponseEnvelopeSuccess bool
 
 const (
