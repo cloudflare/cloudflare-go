@@ -68,7 +68,7 @@ func (r *AccessApplicationPolicyTestUserService) ListAutoPaging(ctx context.Cont
 }
 
 type AccessApplicationPolicyTestUserListResponse struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The email of the user.
 	Email string `json:"email" format:"email"`
@@ -115,7 +115,7 @@ func (r AccessApplicationPolicyTestUserListResponseStatus) IsKnown() bool {
 }
 
 type AccessApplicationPolicyTestUserListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Filter users by their policy evaluation status.
 	Status param.Field[AccessApplicationPolicyTestUserListParamsStatus] `query:"status"`

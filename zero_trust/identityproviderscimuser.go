@@ -69,7 +69,7 @@ func (r *IdentityProviderSCIMUserService) ListAutoPaging(ctx context.Context, id
 }
 
 type IdentityProviderSCIMUserListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The unique Cloudflare-generated Id of the SCIM User resource; also known as the
 	// "Id".
