@@ -114,6 +114,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			}),
 			Redirect: cloudflare.F(zero_trust.RuleSettingRedirectParam{
 				TargetURI:            cloudflare.F("https://example.com"),
+				IncludeContext:       cloudflare.F(true),
 				PreservePathAndQuery: cloudflare.F(true),
 			}),
 			ResolveDNSInternally: cloudflare.F(zero_trust.RuleSettingResolveDNSInternallyParam{
@@ -248,6 +249,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Redirect: cloudflare.F(zero_trust.RuleSettingRedirectParam{
 					TargetURI:            cloudflare.F("https://example.com"),
+					IncludeContext:       cloudflare.F(true),
 					PreservePathAndQuery: cloudflare.F(true),
 				}),
 				ResolveDNSInternally: cloudflare.F(zero_trust.RuleSettingResolveDNSInternallyParam{
