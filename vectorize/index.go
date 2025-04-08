@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // IndexService contains methods and other services that help with interacting with
@@ -602,9 +603,9 @@ func (r IndexNewParamsConfigPreset) IsKnown() bool {
 }
 
 type IndexNewResponseEnvelope struct {
-	Errors   []IndexNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndexNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   CreateIndex                        `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CreateIndex           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexNewResponseEnvelopeJSON    `json:"-"`
@@ -626,52 +627,6 @@ func (r *IndexNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r indexNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexNewResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    indexNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indexNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [IndexNewResponseEnvelopeErrors]
-type indexNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexNewResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    indexNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indexNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [IndexNewResponseEnvelopeMessages]
-type indexNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -701,9 +656,9 @@ type IndexDeleteParams struct {
 }
 
 type IndexDeleteResponseEnvelope struct {
-	Errors   []IndexDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndexDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   interface{}                           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexDeleteResponseEnvelopeJSON    `json:"-"`
@@ -725,52 +680,6 @@ func (r *IndexDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r indexDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexDeleteResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    indexDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indexDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [IndexDeleteResponseEnvelopeErrors]
-type indexDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexDeleteResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    indexDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indexDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IndexDeleteResponseEnvelopeMessages]
-type indexDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -801,9 +710,9 @@ func (r IndexDeleteByIDsParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexDeleteByIDsResponseEnvelope struct {
-	Errors   []IndexDeleteByIDsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndexDeleteByIDsResponseEnvelopeMessages `json:"messages,required"`
-	Result   IndexDeleteByIDsResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   IndexDeleteByIDsResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexDeleteByIDsResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexDeleteByIDsResponseEnvelopeJSON    `json:"-"`
@@ -828,52 +737,6 @@ func (r indexDeleteByIDsResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type IndexDeleteByIDsResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    indexDeleteByIDsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indexDeleteByIDsResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IndexDeleteByIDsResponseEnvelopeErrors]
-type indexDeleteByIDsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexDeleteByIDsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexDeleteByIDsResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexDeleteByIDsResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    indexDeleteByIDsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indexDeleteByIDsResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IndexDeleteByIDsResponseEnvelopeMessages]
-type indexDeleteByIDsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexDeleteByIDsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexDeleteByIDsResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type IndexDeleteByIDsResponseEnvelopeSuccess bool
 
@@ -895,9 +758,9 @@ type IndexGetParams struct {
 }
 
 type IndexGetResponseEnvelope struct {
-	Errors   []IndexGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndexGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CreateIndex                        `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CreateIndex           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexGetResponseEnvelopeJSON    `json:"-"`
@@ -919,52 +782,6 @@ func (r *IndexGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r indexGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexGetResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    indexGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indexGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [IndexGetResponseEnvelopeErrors]
-type indexGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexGetResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    indexGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indexGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [IndexGetResponseEnvelopeMessages]
-type indexGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -995,8 +812,8 @@ func (r IndexGetByIDsParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexGetByIDsResponseEnvelope struct {
-	Errors   []IndexGetByIDsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndexGetByIDsResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Array of vectors with matching ids.
 	Result IndexGetByIDsResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
@@ -1023,52 +840,6 @@ func (r indexGetByIDsResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type IndexGetByIDsResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    indexGetByIDsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indexGetByIDsResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IndexGetByIDsResponseEnvelopeErrors]
-type indexGetByIDsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexGetByIDsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexGetByIDsResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexGetByIDsResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    indexGetByIDsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indexGetByIDsResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IndexGetByIDsResponseEnvelopeMessages]
-type indexGetByIDsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexGetByIDsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexGetByIDsResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type IndexGetByIDsResponseEnvelopeSuccess bool
 
@@ -1090,9 +861,9 @@ type IndexInfoParams struct {
 }
 
 type IndexInfoResponseEnvelope struct {
-	Errors   []IndexInfoResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndexInfoResponseEnvelopeMessages `json:"messages,required"`
-	Result   IndexInfoResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IndexInfoResponse     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexInfoResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexInfoResponseEnvelopeJSON    `json:"-"`
@@ -1114,52 +885,6 @@ func (r *IndexInfoResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r indexInfoResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexInfoResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    indexInfoResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indexInfoResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [IndexInfoResponseEnvelopeErrors]
-type indexInfoResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexInfoResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexInfoResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexInfoResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    indexInfoResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indexInfoResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [IndexInfoResponseEnvelopeMessages]
-type indexInfoResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexInfoResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexInfoResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1216,9 +941,9 @@ func (r IndexInsertParamsUnparsableBehavior) IsKnown() bool {
 }
 
 type IndexInsertResponseEnvelope struct {
-	Errors   []IndexInsertResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndexInsertResponseEnvelopeMessages `json:"messages,required"`
-	Result   IndexInsertResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IndexInsertResponse   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexInsertResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexInsertResponseEnvelopeJSON    `json:"-"`
@@ -1240,52 +965,6 @@ func (r *IndexInsertResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r indexInsertResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexInsertResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    indexInsertResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indexInsertResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [IndexInsertResponseEnvelopeErrors]
-type indexInsertResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexInsertResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexInsertResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexInsertResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    indexInsertResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indexInsertResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IndexInsertResponseEnvelopeMessages]
-type indexInsertResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexInsertResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexInsertResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1343,9 +1022,9 @@ func (r IndexQueryParamsReturnMetadata) IsKnown() bool {
 }
 
 type IndexQueryResponseEnvelope struct {
-	Errors   []IndexQueryResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndexQueryResponseEnvelopeMessages `json:"messages,required"`
-	Result   IndexQueryResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IndexQueryResponse    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexQueryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexQueryResponseEnvelopeJSON    `json:"-"`
@@ -1367,52 +1046,6 @@ func (r *IndexQueryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r indexQueryResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexQueryResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    indexQueryResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indexQueryResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [IndexQueryResponseEnvelopeErrors]
-type indexQueryResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexQueryResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexQueryResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexQueryResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    indexQueryResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indexQueryResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [IndexQueryResponseEnvelopeMessages]
-type indexQueryResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexQueryResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexQueryResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1469,9 +1102,9 @@ func (r IndexUpsertParamsUnparsableBehavior) IsKnown() bool {
 }
 
 type IndexUpsertResponseEnvelope struct {
-	Errors   []IndexUpsertResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndexUpsertResponseEnvelopeMessages `json:"messages,required"`
-	Result   IndexUpsertResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IndexUpsertResponse   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexUpsertResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexUpsertResponseEnvelopeJSON    `json:"-"`
@@ -1493,52 +1126,6 @@ func (r *IndexUpsertResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r indexUpsertResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexUpsertResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    indexUpsertResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indexUpsertResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [IndexUpsertResponseEnvelopeErrors]
-type indexUpsertResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexUpsertResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexUpsertResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexUpsertResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    indexUpsertResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indexUpsertResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IndexUpsertResponseEnvelopeMessages]
-type indexUpsertResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexUpsertResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexUpsertResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

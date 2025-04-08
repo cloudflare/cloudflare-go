@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HistoryService contains methods and other services that help with interacting
@@ -129,8 +130,8 @@ func (r HistoryUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HistoryUpdateResponseEnvelope struct {
-	Errors   []HistoryUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HistoryUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Zaraz configuration
 	Result Configuration `json:"result,required"`
 	// Whether the API call was successful
@@ -154,52 +155,6 @@ func (r *HistoryUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r historyUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HistoryUpdateResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    historyUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// historyUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [HistoryUpdateResponseEnvelopeErrors]
-type historyUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HistoryUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r historyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HistoryUpdateResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    historyUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// historyUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HistoryUpdateResponseEnvelopeMessages]
-type historyUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HistoryUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r historyUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -18,6 +18,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ProjectDeploymentService contains methods and other services that help with
@@ -221,9 +222,9 @@ func (r ProjectDeploymentNewParams) MarshalMultipart() (data []byte, contentType
 }
 
 type ProjectDeploymentNewResponseEnvelope struct {
-	Errors   []ProjectDeploymentNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   Deployment                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentNewResponseEnvelopeJSON    `json:"-"`
@@ -245,52 +246,6 @@ func (r *ProjectDeploymentNewResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r projectDeploymentNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentNewResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    projectDeploymentNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDeploymentNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ProjectDeploymentNewResponseEnvelopeErrors]
-type projectDeploymentNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentNewResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    projectDeploymentNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDeploymentNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ProjectDeploymentNewResponseEnvelopeMessages]
-type projectDeploymentNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -348,9 +303,9 @@ type ProjectDeploymentDeleteParams struct {
 }
 
 type ProjectDeploymentDeleteResponseEnvelope struct {
-	Errors   []ProjectDeploymentDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDeploymentDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   ProjectDeploymentDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDeploymentDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentDeleteResponseEnvelopeJSON    `json:"-"`
@@ -372,52 +327,6 @@ func (r *ProjectDeploymentDeleteResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r projectDeploymentDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentDeleteResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    projectDeploymentDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDeploymentDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ProjectDeploymentDeleteResponseEnvelopeErrors]
-type projectDeploymentDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentDeleteResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    projectDeploymentDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDeploymentDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [ProjectDeploymentDeleteResponseEnvelopeMessages]
-type projectDeploymentDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -443,9 +352,9 @@ type ProjectDeploymentGetParams struct {
 }
 
 type ProjectDeploymentGetResponseEnvelope struct {
-	Errors   []ProjectDeploymentGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   Deployment                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentGetResponseEnvelopeJSON    `json:"-"`
@@ -467,52 +376,6 @@ func (r *ProjectDeploymentGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r projectDeploymentGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentGetResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    projectDeploymentGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDeploymentGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ProjectDeploymentGetResponseEnvelopeErrors]
-type projectDeploymentGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentGetResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    projectDeploymentGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDeploymentGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ProjectDeploymentGetResponseEnvelopeMessages]
-type projectDeploymentGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -543,9 +406,9 @@ func (r ProjectDeploymentRetryParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDeploymentRetryResponseEnvelope struct {
-	Errors   []ProjectDeploymentRetryResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentRetryResponseEnvelopeMessages `json:"messages,required"`
-	Result   Deployment                                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentRetryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentRetryResponseEnvelopeJSON    `json:"-"`
@@ -567,52 +430,6 @@ func (r *ProjectDeploymentRetryResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r projectDeploymentRetryResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentRetryResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    projectDeploymentRetryResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDeploymentRetryResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ProjectDeploymentRetryResponseEnvelopeErrors]
-type projectDeploymentRetryResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentRetryResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentRetryResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentRetryResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    projectDeploymentRetryResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDeploymentRetryResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [ProjectDeploymentRetryResponseEnvelopeMessages]
-type projectDeploymentRetryResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentRetryResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentRetryResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -643,9 +460,9 @@ func (r ProjectDeploymentRollbackParams) MarshalJSON() (data []byte, err error) 
 }
 
 type ProjectDeploymentRollbackResponseEnvelope struct {
-	Errors   []ProjectDeploymentRollbackResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentRollbackResponseEnvelopeMessages `json:"messages,required"`
-	Result   Deployment                                          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Deployment            `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentRollbackResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentRollbackResponseEnvelopeJSON    `json:"-"`
@@ -667,52 +484,6 @@ func (r *ProjectDeploymentRollbackResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r projectDeploymentRollbackResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentRollbackResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    projectDeploymentRollbackResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDeploymentRollbackResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [ProjectDeploymentRollbackResponseEnvelopeErrors]
-type projectDeploymentRollbackResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentRollbackResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentRollbackResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentRollbackResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    projectDeploymentRollbackResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDeploymentRollbackResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [ProjectDeploymentRollbackResponseEnvelopeMessages]
-type projectDeploymentRollbackResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentRollbackResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentRollbackResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

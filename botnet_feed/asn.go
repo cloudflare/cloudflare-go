@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ASNService contains methods and other services that help with interacting with
@@ -138,8 +139,8 @@ func (r ASNDayReportParams) URLQuery() (v url.Values) {
 }
 
 type ASNDayReportResponseEnvelope struct {
-	Errors   []ASNDayReportResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ASNDayReportResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ASNDayReportResponseEnvelopeSuccess `json:"success,required"`
 	Result  ASNDayReportResponse                `json:"result"`
@@ -165,52 +166,6 @@ func (r asnDayReportResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ASNDayReportResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    asnDayReportResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// asnDayReportResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ASNDayReportResponseEnvelopeErrors]
-type asnDayReportResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ASNDayReportResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r asnDayReportResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ASNDayReportResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    asnDayReportResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// asnDayReportResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ASNDayReportResponseEnvelopeMessages]
-type asnDayReportResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ASNDayReportResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r asnDayReportResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ASNDayReportResponseEnvelopeSuccess bool
 
@@ -232,8 +187,8 @@ type ASNFullReportParams struct {
 }
 
 type ASNFullReportResponseEnvelope struct {
-	Errors   []ASNFullReportResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ASNFullReportResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ASNFullReportResponseEnvelopeSuccess `json:"success,required"`
 	Result  ASNFullReportResponse                `json:"result"`
@@ -256,52 +211,6 @@ func (r *ASNFullReportResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r asnFullReportResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ASNFullReportResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    asnFullReportResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// asnFullReportResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ASNFullReportResponseEnvelopeErrors]
-type asnFullReportResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ASNFullReportResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r asnFullReportResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ASNFullReportResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    asnFullReportResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// asnFullReportResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ASNFullReportResponseEnvelopeMessages]
-type asnFullReportResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ASNFullReportResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r asnFullReportResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

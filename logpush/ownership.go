@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // OwnershipService contains methods and other services that help with interacting
@@ -158,8 +157,8 @@ func (r OwnershipNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []OwnershipNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []OwnershipNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success OwnershipNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  OwnershipNewResponse                `json:"result,nullable"`
@@ -182,6 +181,102 @@ func (r *OwnershipNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ownershipNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type OwnershipNewResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           OwnershipNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             ownershipNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// ownershipNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [OwnershipNewResponseEnvelopeErrors]
+type ownershipNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *OwnershipNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ownershipNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type OwnershipNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    ownershipNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// ownershipNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [OwnershipNewResponseEnvelopeErrorsSource]
+type ownershipNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OwnershipNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ownershipNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type OwnershipNewResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           OwnershipNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             ownershipNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// ownershipNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [OwnershipNewResponseEnvelopeMessages]
+type ownershipNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *OwnershipNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ownershipNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type OwnershipNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    ownershipNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// ownershipNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [OwnershipNewResponseEnvelopeMessagesSource]
+type ownershipNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OwnershipNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ownershipNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -218,8 +313,8 @@ func (r OwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipValidateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []OwnershipValidateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []OwnershipValidateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success OwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
 	Result  OwnershipValidation                      `json:"result,nullable"`
@@ -242,6 +337,102 @@ func (r *OwnershipValidateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r ownershipValidateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type OwnershipValidateResponseEnvelopeErrors struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           OwnershipValidateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             ownershipValidateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// ownershipValidateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [OwnershipValidateResponseEnvelopeErrors]
+type ownershipValidateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *OwnershipValidateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ownershipValidateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type OwnershipValidateResponseEnvelopeErrorsSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    ownershipValidateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// ownershipValidateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [OwnershipValidateResponseEnvelopeErrorsSource]
+type ownershipValidateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OwnershipValidateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ownershipValidateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type OwnershipValidateResponseEnvelopeMessages struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           OwnershipValidateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             ownershipValidateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// ownershipValidateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [OwnershipValidateResponseEnvelopeMessages]
+type ownershipValidateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *OwnershipValidateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ownershipValidateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type OwnershipValidateResponseEnvelopeMessagesSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    ownershipValidateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// ownershipValidateResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [OwnershipValidateResponseEnvelopeMessagesSource]
+type ownershipValidateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OwnershipValidateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ownershipValidateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

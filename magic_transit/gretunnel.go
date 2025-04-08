@@ -1422,9 +1422,9 @@ func (r GRETunnelNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelNewResponseEnvelope struct {
-	Errors   []GRETunnelNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GRETunnelNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   GRETunnelNewResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   GRETunnelNewResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -1446,52 +1446,6 @@ func (r *GRETunnelNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r greTunnelNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelNewResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    greTunnelNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// greTunnelNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [GRETunnelNewResponseEnvelopeErrors]
-type greTunnelNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelNewResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    greTunnelNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// greTunnelNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GRETunnelNewResponseEnvelopeMessages]
-type greTunnelNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1618,9 +1572,9 @@ func (r GRETunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) Implements
 }
 
 type GRETunnelUpdateResponseEnvelope struct {
-	Errors   []GRETunnelUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GRETunnelUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   GRETunnelUpdateResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   GRETunnelUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1642,52 +1596,6 @@ func (r *GRETunnelUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r greTunnelUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelUpdateResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    greTunnelUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// greTunnelUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GRETunnelUpdateResponseEnvelopeErrors]
-type greTunnelUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelUpdateResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    greTunnelUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// greTunnelUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GRETunnelUpdateResponseEnvelopeMessages]
-type greTunnelUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1713,9 +1621,9 @@ type GRETunnelListParams struct {
 }
 
 type GRETunnelListResponseEnvelope struct {
-	Errors   []GRETunnelListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GRETunnelListResponseEnvelopeMessages `json:"messages,required"`
-	Result   GRETunnelListResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   GRETunnelListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelListResponseEnvelopeJSON    `json:"-"`
@@ -1737,52 +1645,6 @@ func (r *GRETunnelListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r greTunnelListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelListResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    greTunnelListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// greTunnelListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GRETunnelListResponseEnvelopeErrors]
-type greTunnelListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelListResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    greTunnelListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// greTunnelListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GRETunnelListResponseEnvelopeMessages]
-type greTunnelListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1808,9 +1670,9 @@ type GRETunnelDeleteParams struct {
 }
 
 type GRETunnelDeleteResponseEnvelope struct {
-	Errors   []GRETunnelDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GRETunnelDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   GRETunnelDeleteResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   GRETunnelDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1832,52 +1694,6 @@ func (r *GRETunnelDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r greTunnelDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelDeleteResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    greTunnelDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// greTunnelDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GRETunnelDeleteResponseEnvelopeErrors]
-type greTunnelDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelDeleteResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    greTunnelDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// greTunnelDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GRETunnelDeleteResponseEnvelopeMessages]
-type greTunnelDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1908,9 +1724,9 @@ func (r GRETunnelBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelBulkUpdateResponseEnvelope struct {
-	Errors   []GRETunnelBulkUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GRETunnelBulkUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   GRETunnelBulkUpdateResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   GRETunnelBulkUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelBulkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1932,52 +1748,6 @@ func (r *GRETunnelBulkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r greTunnelBulkUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelBulkUpdateResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    greTunnelBulkUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// greTunnelBulkUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GRETunnelBulkUpdateResponseEnvelopeErrors]
-type greTunnelBulkUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelBulkUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelBulkUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelBulkUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    greTunnelBulkUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// greTunnelBulkUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [GRETunnelBulkUpdateResponseEnvelopeMessages]
-type greTunnelBulkUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelBulkUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelBulkUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2003,9 +1773,9 @@ type GRETunnelGetParams struct {
 }
 
 type GRETunnelGetResponseEnvelope struct {
-	Errors   []GRETunnelGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GRETunnelGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   GRETunnelGetResponse                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   GRETunnelGetResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelGetResponseEnvelopeJSON    `json:"-"`
@@ -2027,52 +1797,6 @@ func (r *GRETunnelGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r greTunnelGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelGetResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    greTunnelGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// greTunnelGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [GRETunnelGetResponseEnvelopeErrors]
-type greTunnelGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelGetResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    greTunnelGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// greTunnelGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GRETunnelGetResponseEnvelopeMessages]
-type greTunnelGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

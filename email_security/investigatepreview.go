@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InvestigatePreviewService contains methods and other services that help with
@@ -128,11 +129,11 @@ func (r InvestigatePreviewNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InvestigatePreviewNewResponseEnvelope struct {
-	Errors   []InvestigatePreviewNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []InvestigatePreviewNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   InvestigatePreviewNewResponse                   `json:"result,required"`
-	Success  bool                                            `json:"success,required"`
-	JSON     investigatePreviewNewResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo                     `json:"errors,required"`
+	Messages []shared.ResponseInfo                     `json:"messages,required"`
+	Result   InvestigatePreviewNewResponse             `json:"result,required"`
+	Success  bool                                      `json:"success,required"`
+	JSON     investigatePreviewNewResponseEnvelopeJSON `json:"-"`
 }
 
 // investigatePreviewNewResponseEnvelopeJSON contains the JSON metadata for the
@@ -154,63 +155,17 @@ func (r investigatePreviewNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type InvestigatePreviewNewResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    investigatePreviewNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// investigatePreviewNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [InvestigatePreviewNewResponseEnvelopeErrors]
-type investigatePreviewNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigatePreviewNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigatePreviewNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigatePreviewNewResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    investigatePreviewNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// investigatePreviewNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [InvestigatePreviewNewResponseEnvelopeMessages]
-type investigatePreviewNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigatePreviewNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigatePreviewNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type InvestigatePreviewGetParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type InvestigatePreviewGetResponseEnvelope struct {
-	Errors   []InvestigatePreviewGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []InvestigatePreviewGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   InvestigatePreviewGetResponse                   `json:"result,required"`
-	Success  bool                                            `json:"success,required"`
-	JSON     investigatePreviewGetResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo                     `json:"errors,required"`
+	Messages []shared.ResponseInfo                     `json:"messages,required"`
+	Result   InvestigatePreviewGetResponse             `json:"result,required"`
+	Success  bool                                      `json:"success,required"`
+	JSON     investigatePreviewGetResponseEnvelopeJSON `json:"-"`
 }
 
 // investigatePreviewGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -229,51 +184,5 @@ func (r *InvestigatePreviewGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r investigatePreviewGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigatePreviewGetResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    investigatePreviewGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// investigatePreviewGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [InvestigatePreviewGetResponseEnvelopeErrors]
-type investigatePreviewGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigatePreviewGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigatePreviewGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigatePreviewGetResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    investigatePreviewGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// investigatePreviewGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [InvestigatePreviewGetResponseEnvelopeMessages]
-type investigatePreviewGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigatePreviewGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigatePreviewGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

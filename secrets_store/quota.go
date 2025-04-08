@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // QuotaService contains methods and other services that help with interacting with
@@ -103,8 +102,8 @@ type QuotaGetParams struct {
 }
 
 type QuotaGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []QuotaGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []QuotaGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success    QuotaGetResponseEnvelopeSuccess    `json:"success,required"`
 	Result     QuotaGetResponse                   `json:"result"`
@@ -129,6 +128,102 @@ func (r *QuotaGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r quotaGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type QuotaGetResponseEnvelopeErrors struct {
+	Code             int64                                `json:"code,required"`
+	Message          string                               `json:"message,required"`
+	DocumentationURL string                               `json:"documentation_url"`
+	Source           QuotaGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             quotaGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// quotaGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [QuotaGetResponseEnvelopeErrors]
+type quotaGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *QuotaGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r quotaGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type QuotaGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                   `json:"pointer"`
+	JSON    quotaGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// quotaGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [QuotaGetResponseEnvelopeErrorsSource]
+type quotaGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QuotaGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r quotaGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type QuotaGetResponseEnvelopeMessages struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           QuotaGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             quotaGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// quotaGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [QuotaGetResponseEnvelopeMessages]
+type quotaGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *QuotaGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r quotaGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type QuotaGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    quotaGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// quotaGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [QuotaGetResponseEnvelopeMessagesSource]
+type quotaGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QuotaGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r quotaGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // HostnameService contains methods and other services that help with interacting
@@ -269,8 +270,8 @@ type HostnameGetParams struct {
 }
 
 type HostnameGetResponseEnvelope struct {
-	Errors   []HostnameGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AuthenticatedOriginPull            `json:"result"`
@@ -293,52 +294,6 @@ func (r *HostnameGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r hostnameGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameGetResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    hostnameGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [HostnameGetResponseEnvelopeErrors]
-type hostnameGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameGetResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    hostnameGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HostnameGetResponseEnvelopeMessages]
-type hostnameGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

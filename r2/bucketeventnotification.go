@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketEventNotificationService contains methods and other services that help
@@ -291,9 +292,9 @@ func (r BucketEventNotificationUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketEventNotificationUpdateResponseEnvelope struct {
-	Errors   []BucketEventNotificationUpdateResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                              `json:"messages,required"`
-	Result   BucketEventNotificationUpdateResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
+	Messages []string                              `json:"messages,required"`
+	Result   BucketEventNotificationUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketEventNotificationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketEventNotificationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -315,29 +316,6 @@ func (r *BucketEventNotificationUpdateResponseEnvelope) UnmarshalJSON(data []byt
 }
 
 func (r bucketEventNotificationUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketEventNotificationUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    bucketEventNotificationUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketEventNotificationUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [BucketEventNotificationUpdateResponseEnvelopeErrors]
-type bucketEventNotificationUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketEventNotificationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketEventNotificationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -381,9 +359,9 @@ func (r BucketEventNotificationDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketEventNotificationDeleteResponseEnvelope struct {
-	Errors   []BucketEventNotificationDeleteResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                              `json:"messages,required"`
-	Result   BucketEventNotificationDeleteResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
+	Messages []string                              `json:"messages,required"`
+	Result   BucketEventNotificationDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketEventNotificationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketEventNotificationDeleteResponseEnvelopeJSON    `json:"-"`
@@ -405,29 +383,6 @@ func (r *BucketEventNotificationDeleteResponseEnvelope) UnmarshalJSON(data []byt
 }
 
 func (r bucketEventNotificationDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketEventNotificationDeleteResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    bucketEventNotificationDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketEventNotificationDeleteResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [BucketEventNotificationDeleteResponseEnvelopeErrors]
-type bucketEventNotificationDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketEventNotificationDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketEventNotificationDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -471,9 +426,9 @@ func (r BucketEventNotificationGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketEventNotificationGetResponseEnvelope struct {
-	Errors   []BucketEventNotificationGetResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                                           `json:"messages,required"`
-	Result   BucketEventNotificationGetResponse                 `json:"result,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []string                           `json:"messages,required"`
+	Result   BucketEventNotificationGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketEventNotificationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketEventNotificationGetResponseEnvelopeJSON    `json:"-"`
@@ -495,29 +450,6 @@ func (r *BucketEventNotificationGetResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r bucketEventNotificationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketEventNotificationGetResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    bucketEventNotificationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketEventNotificationGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [BucketEventNotificationGetResponseEnvelopeErrors]
-type bucketEventNotificationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketEventNotificationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketEventNotificationGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

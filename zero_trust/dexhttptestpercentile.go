@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DEXHTTPTestPercentileService contains methods and other services that help with
@@ -160,8 +159,8 @@ func (r DEXHTTPTestPercentileGetParams) URLQuery() (v url.Values) {
 }
 
 type DexhttpTestPercentileGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []DexhttpTestPercentileGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexhttpTestPercentileGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success DexhttpTestPercentileGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  HTTPDetailsPercentiles                          `json:"result"`
@@ -184,6 +183,102 @@ func (r *DexhttpTestPercentileGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r dexhttpTestPercentileGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DexhttpTestPercentileGetResponseEnvelopeErrors struct {
+	Code             int64                                                `json:"code,required"`
+	Message          string                                               `json:"message,required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           DexhttpTestPercentileGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dexhttpTestPercentileGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dexhttpTestPercentileGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [DexhttpTestPercentileGetResponseEnvelopeErrors]
+type dexhttpTestPercentileGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DexhttpTestPercentileGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexhttpTestPercentileGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DexhttpTestPercentileGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    dexhttpTestPercentileGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dexhttpTestPercentileGetResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [DexhttpTestPercentileGetResponseEnvelopeErrorsSource]
+type dexhttpTestPercentileGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexhttpTestPercentileGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexhttpTestPercentileGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DexhttpTestPercentileGetResponseEnvelopeMessages struct {
+	Code             int64                                                  `json:"code,required"`
+	Message          string                                                 `json:"message,required"`
+	DocumentationURL string                                                 `json:"documentation_url"`
+	Source           DexhttpTestPercentileGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dexhttpTestPercentileGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dexhttpTestPercentileGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DexhttpTestPercentileGetResponseEnvelopeMessages]
+type dexhttpTestPercentileGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DexhttpTestPercentileGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexhttpTestPercentileGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DexhttpTestPercentileGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                     `json:"pointer"`
+	JSON    dexhttpTestPercentileGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dexhttpTestPercentileGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [DexhttpTestPercentileGetResponseEnvelopeMessagesSource]
+type dexhttpTestPercentileGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexhttpTestPercentileGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexhttpTestPercentileGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

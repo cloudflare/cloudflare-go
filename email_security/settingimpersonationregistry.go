@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingImpersonationRegistryService contains methods and other services that
@@ -334,11 +335,11 @@ func (r SettingImpersonationRegistryNewParams) MarshalJSON() (data []byte, err e
 }
 
 type SettingImpersonationRegistryNewResponseEnvelope struct {
-	Errors   []SettingImpersonationRegistryNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingImpersonationRegistryNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SettingImpersonationRegistryNewResponse                   `json:"result,required"`
-	Success  bool                                                      `json:"success,required"`
-	JSON     settingImpersonationRegistryNewResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo                               `json:"errors,required"`
+	Messages []shared.ResponseInfo                               `json:"messages,required"`
+	Result   SettingImpersonationRegistryNewResponse             `json:"result,required"`
+	Success  bool                                                `json:"success,required"`
+	JSON     settingImpersonationRegistryNewResponseEnvelopeJSON `json:"-"`
 }
 
 // settingImpersonationRegistryNewResponseEnvelopeJSON contains the JSON metadata
@@ -357,53 +358,6 @@ func (r *SettingImpersonationRegistryNewResponseEnvelope) UnmarshalJSON(data []b
 }
 
 func (r settingImpersonationRegistryNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingImpersonationRegistryNewResponseEnvelopeErrors struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    settingImpersonationRegistryNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingImpersonationRegistryNewResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingImpersonationRegistryNewResponseEnvelopeErrors]
-type settingImpersonationRegistryNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImpersonationRegistryNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImpersonationRegistryNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingImpersonationRegistryNewResponseEnvelopeMessages struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    settingImpersonationRegistryNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingImpersonationRegistryNewResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingImpersonationRegistryNewResponseEnvelopeMessages]
-type settingImpersonationRegistryNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImpersonationRegistryNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImpersonationRegistryNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -490,11 +444,11 @@ type SettingImpersonationRegistryDeleteParams struct {
 }
 
 type SettingImpersonationRegistryDeleteResponseEnvelope struct {
-	Errors   []SettingImpersonationRegistryDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingImpersonationRegistryDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   SettingImpersonationRegistryDeleteResponse                   `json:"result,required"`
-	Success  bool                                                         `json:"success,required"`
-	JSON     settingImpersonationRegistryDeleteResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo                                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                                  `json:"messages,required"`
+	Result   SettingImpersonationRegistryDeleteResponse             `json:"result,required"`
+	Success  bool                                                   `json:"success,required"`
+	JSON     settingImpersonationRegistryDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // settingImpersonationRegistryDeleteResponseEnvelopeJSON contains the JSON
@@ -516,54 +470,6 @@ func (r settingImpersonationRegistryDeleteResponseEnvelopeJSON) RawJSON() string
 	return r.raw
 }
 
-type SettingImpersonationRegistryDeleteResponseEnvelopeErrors struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    settingImpersonationRegistryDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingImpersonationRegistryDeleteResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [SettingImpersonationRegistryDeleteResponseEnvelopeErrors]
-type settingImpersonationRegistryDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImpersonationRegistryDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImpersonationRegistryDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingImpersonationRegistryDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    settingImpersonationRegistryDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingImpersonationRegistryDeleteResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingImpersonationRegistryDeleteResponseEnvelopeMessages]
-type settingImpersonationRegistryDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImpersonationRegistryDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImpersonationRegistryDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingImpersonationRegistryEditParams struct {
 	// Account Identifier
 	AccountID    param.Field[string] `path:"account_id,required"`
@@ -577,11 +483,11 @@ func (r SettingImpersonationRegistryEditParams) MarshalJSON() (data []byte, err 
 }
 
 type SettingImpersonationRegistryEditResponseEnvelope struct {
-	Errors   []SettingImpersonationRegistryEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingImpersonationRegistryEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   SettingImpersonationRegistryEditResponse                   `json:"result,required"`
-	Success  bool                                                       `json:"success,required"`
-	JSON     settingImpersonationRegistryEditResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo                                `json:"errors,required"`
+	Messages []shared.ResponseInfo                                `json:"messages,required"`
+	Result   SettingImpersonationRegistryEditResponse             `json:"result,required"`
+	Success  bool                                                 `json:"success,required"`
+	JSON     settingImpersonationRegistryEditResponseEnvelopeJSON `json:"-"`
 }
 
 // settingImpersonationRegistryEditResponseEnvelopeJSON contains the JSON metadata
@@ -603,64 +509,17 @@ func (r settingImpersonationRegistryEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingImpersonationRegistryEditResponseEnvelopeErrors struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    settingImpersonationRegistryEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingImpersonationRegistryEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingImpersonationRegistryEditResponseEnvelopeErrors]
-type settingImpersonationRegistryEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImpersonationRegistryEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImpersonationRegistryEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingImpersonationRegistryEditResponseEnvelopeMessages struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    settingImpersonationRegistryEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingImpersonationRegistryEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingImpersonationRegistryEditResponseEnvelopeMessages]
-type settingImpersonationRegistryEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImpersonationRegistryEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImpersonationRegistryEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingImpersonationRegistryGetParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type SettingImpersonationRegistryGetResponseEnvelope struct {
-	Errors   []SettingImpersonationRegistryGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingImpersonationRegistryGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SettingImpersonationRegistryGetResponse                   `json:"result,required"`
-	Success  bool                                                      `json:"success,required"`
-	JSON     settingImpersonationRegistryGetResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo                               `json:"errors,required"`
+	Messages []shared.ResponseInfo                               `json:"messages,required"`
+	Result   SettingImpersonationRegistryGetResponse             `json:"result,required"`
+	Success  bool                                                `json:"success,required"`
+	JSON     settingImpersonationRegistryGetResponseEnvelopeJSON `json:"-"`
 }
 
 // settingImpersonationRegistryGetResponseEnvelopeJSON contains the JSON metadata
@@ -679,52 +538,5 @@ func (r *SettingImpersonationRegistryGetResponseEnvelope) UnmarshalJSON(data []b
 }
 
 func (r settingImpersonationRegistryGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingImpersonationRegistryGetResponseEnvelopeErrors struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    settingImpersonationRegistryGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingImpersonationRegistryGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingImpersonationRegistryGetResponseEnvelopeErrors]
-type settingImpersonationRegistryGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImpersonationRegistryGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImpersonationRegistryGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingImpersonationRegistryGetResponseEnvelopeMessages struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    settingImpersonationRegistryGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingImpersonationRegistryGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingImpersonationRegistryGetResponseEnvelopeMessages]
-type settingImpersonationRegistryGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImpersonationRegistryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImpersonationRegistryGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
