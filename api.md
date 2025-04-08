@@ -2398,35 +2398,17 @@ Methods:
 
 ### Telemetry
 
-#### Keys
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryKeyNewResponse">ObservabilityTelemetryKeyNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryKeysResponse">ObservabilityTelemetryKeysResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryQueryResponse">ObservabilityTelemetryQueryResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryValuesResponse">ObservabilityTelemetryValuesResponse</a>
 
 Methods:
 
-- <code title="post /accounts/{account_id}/workers/observability/telemetry/keys">client.Workers.Observability.Telemetry.Keys.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryKeyService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryKeyNewParams">ObservabilityTelemetryKeyNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryKeyNewResponse">ObservabilityTelemetryKeyNewResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-#### Query
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryQueryNewResponse">ObservabilityTelemetryQueryNewResponse</a>
-
-Methods:
-
-- <code title="post /accounts/{account_id}/workers/observability/telemetry/query">client.Workers.Observability.Telemetry.Query.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryQueryService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryQueryNewParams">ObservabilityTelemetryQueryNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryQueryNewResponse">ObservabilityTelemetryQueryNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-#### Values
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryValueNewResponse">ObservabilityTelemetryValueNewResponse</a>
-
-Methods:
-
-- <code title="post /accounts/{account_id}/workers/observability/telemetry/values">client.Workers.Observability.Telemetry.Values.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryValueService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryValueNewParams">ObservabilityTelemetryValueNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryValueNewResponse">ObservabilityTelemetryValueNewResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/workers/observability/telemetry/keys">client.Workers.Observability.Telemetry.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryService.Keys">Keys</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryKeysParams">ObservabilityTelemetryKeysParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryKeysResponse">ObservabilityTelemetryKeysResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/workers/observability/telemetry/query">client.Workers.Observability.Telemetry.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryService.Query">Query</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryQueryParams">ObservabilityTelemetryQueryParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryQueryResponse">ObservabilityTelemetryQueryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/workers/observability/telemetry/values">client.Workers.Observability.Telemetry.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryService.Values">Values</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryValuesParams">ObservabilityTelemetryValuesParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/workers#ObservabilityTelemetryValuesResponse">ObservabilityTelemetryValuesResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # KV
 
