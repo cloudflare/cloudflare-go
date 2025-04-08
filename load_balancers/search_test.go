@@ -34,7 +34,7 @@ func TestSearchListWithOptionalParams(t *testing.T) {
 		PerPage:   cloudflare.F(1.000000),
 		SearchParams: cloudflare.F(load_balancers.SearchListParamsSearchParams{
 			Query:      cloudflare.F("primary"),
-			References: cloudflare.F(load_balancers.SearchListParamsSearchParamsReferencesEmpty),
+			References: cloudflare.F(load_balancers.SearchListParamsSearchParamsReferencesStar),
 		}),
 	})
 	if err != nil {

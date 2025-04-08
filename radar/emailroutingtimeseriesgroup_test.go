@@ -29,7 +29,7 @@ func TestEmailRoutingTimeseriesGroupARCWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.ARC(context.TODO(), radar.EmailRoutingTimeseriesGroupARCParams{
-		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupARCParamsAggInterval15m),
+		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupARCParamsAggInterval1h),
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
@@ -64,7 +64,7 @@ func TestEmailRoutingTimeseriesGroupDKIMWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.DKIM(context.TODO(), radar.EmailRoutingTimeseriesGroupDKIMParams{
-		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupDKIMParamsAggInterval15m),
+		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupDKIMParamsAggInterval1h),
 		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsARC{radar.EmailRoutingTimeseriesGroupDKIMParamsARCPass}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
@@ -99,7 +99,7 @@ func TestEmailRoutingTimeseriesGroupDMARCWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.DMARC(context.TODO(), radar.EmailRoutingTimeseriesGroupDMARCParams{
-		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupDMARCParamsAggInterval15m),
+		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupDMARCParamsAggInterval1h),
 		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsARC{radar.EmailRoutingTimeseriesGroupDMARCParamsARCPass}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
@@ -134,7 +134,7 @@ func TestEmailRoutingTimeseriesGroupEncryptedWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.Encrypted(context.TODO(), radar.EmailRoutingTimeseriesGroupEncryptedParams{
-		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupEncryptedParamsAggInterval15m),
+		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupEncryptedParamsAggInterval1h),
 		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsARC{radar.EmailRoutingTimeseriesGroupEncryptedParamsARCPass}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
@@ -169,7 +169,7 @@ func TestEmailRoutingTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.IPVersion(context.TODO(), radar.EmailRoutingTimeseriesGroupIPVersionParams{
-		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupIPVersionParamsAggInterval15m),
+		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupIPVersionParamsAggInterval1h),
 		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsARC{radar.EmailRoutingTimeseriesGroupIPVersionParamsARCPass}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
@@ -204,7 +204,7 @@ func TestEmailRoutingTimeseriesGroupSPFWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.SPF(context.TODO(), radar.EmailRoutingTimeseriesGroupSPFParams{
-		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupSPFParamsAggInterval15m),
+		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupSPFParamsAggInterval1h),
 		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsARC{radar.EmailRoutingTimeseriesGroupSPFParamsARCPass}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),

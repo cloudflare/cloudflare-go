@@ -29,7 +29,7 @@ func TestAIInferenceTimeseriesGroupSummaryModelWithOptionalParams(t *testing.T) 
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AI.Inference.TimeseriesGroups.Summary.Model(context.TODO(), radar.AIInferenceTimeseriesGroupSummaryModelParams{
-		AggInterval:   cloudflare.F(radar.AIInferenceTimeseriesGroupSummaryModelParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.AIInferenceTimeseriesGroupSummaryModelParamsAggInterval1h),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
@@ -60,7 +60,7 @@ func TestAIInferenceTimeseriesGroupSummaryTaskWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AI.Inference.TimeseriesGroups.Summary.Task(context.TODO(), radar.AIInferenceTimeseriesGroupSummaryTaskParams{
-		AggInterval:   cloudflare.F(radar.AIInferenceTimeseriesGroupSummaryTaskParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.AIInferenceTimeseriesGroupSummaryTaskParamsAggInterval1h),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),

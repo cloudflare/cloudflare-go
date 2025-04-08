@@ -39,7 +39,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						Headers:          cloudflare.F("/dashboard/*\nX-Frame-Options: DENY\n\n/static/*\nAccess-Control-Allow-Origin: *"),
 						Redirects:        cloudflare.F("/foo /bar 301\n/news/* /blog/:splat"),
 						HTMLHandling:     cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
-						NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingNone),
+						NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling404Page),
 						RunWorkerFirst:   cloudflare.F(false),
 						ServeDirectly:    cloudflare.F(true),
 					}),
@@ -47,7 +47,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Bindings: cloudflare.F([]workers.ScriptUpdateParamsMetadataBindingUnion{workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI{
 					Name: cloudflare.F("MY_ENV_VAR"),
-					Type: cloudflare.F(workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI),
+					Type: cloudflare.F(workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypePlainText),
 				}}),
 				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),

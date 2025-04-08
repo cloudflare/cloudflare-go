@@ -29,7 +29,7 @@ func TestLeakedCredentialTimeseriesGroupBotClassWithOptionalParams(t *testing.T)
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.LeakedCredentials.TimeseriesGroups.BotClass(context.TODO(), radar.LeakedCredentialTimeseriesGroupBotClassParams{
-		AggInterval: cloudflare.F(radar.LeakedCredentialTimeseriesGroupBotClassParamsAggInterval15m),
+		AggInterval: cloudflare.F(radar.LeakedCredentialTimeseriesGroupBotClassParamsAggInterval1h),
 		Compromised: cloudflare.F([]radar.LeakedCredentialTimeseriesGroupBotClassParamsCompromised{radar.LeakedCredentialTimeseriesGroupBotClassParamsCompromisedClean}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
@@ -60,7 +60,7 @@ func TestLeakedCredentialTimeseriesGroupCompromisedWithOptionalParams(t *testing
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.LeakedCredentials.TimeseriesGroups.Compromised(context.TODO(), radar.LeakedCredentialTimeseriesGroupCompromisedParams{
-		AggInterval: cloudflare.F(radar.LeakedCredentialTimeseriesGroupCompromisedParamsAggInterval15m),
+		AggInterval: cloudflare.F(radar.LeakedCredentialTimeseriesGroupCompromisedParamsAggInterval1h),
 		BotClass:    cloudflare.F([]radar.LeakedCredentialTimeseriesGroupCompromisedParamsBotClass{radar.LeakedCredentialTimeseriesGroupCompromisedParamsBotClassLikelyAutomated}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),

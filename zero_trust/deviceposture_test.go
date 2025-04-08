@@ -34,7 +34,7 @@ func TestDevicePostureNewWithOptionalParams(t *testing.T) {
 		Description: cloudflare.F("The rule for admin serial numbers"),
 		Expiration:  cloudflare.F("1h"),
 		Input: cloudflare.F[zero_trust.DeviceInputUnionParam](zero_trust.FileInputParam{
-			OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemWindows),
+			OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemLinux),
 			Path:            cloudflare.F("/bin/cat"),
 			Exists:          cloudflare.F(true),
 			Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
@@ -77,7 +77,7 @@ func TestDevicePostureUpdateWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("The rule for admin serial numbers"),
 			Expiration:  cloudflare.F("1h"),
 			Input: cloudflare.F[zero_trust.DeviceInputUnionParam](zero_trust.FileInputParam{
-				OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemWindows),
+				OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemLinux),
 				Path:            cloudflare.F("/bin/cat"),
 				Exists:          cloudflare.F(true),
 				Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),

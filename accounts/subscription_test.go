@@ -31,7 +31,7 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 	_, err := client.Accounts.Subscriptions.New(context.TODO(), accounts.SubscriptionNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Subscription: shared.SubscriptionParam{
-			Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
+			Frequency: cloudflare.F(shared.SubscriptionFrequencyMonthly),
 			RatePlan: cloudflare.F(shared.RatePlanParam{
 				ID:                cloudflare.F(shared.RatePlanIDFree),
 				Currency:          cloudflare.F("USD"),
@@ -71,7 +71,7 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		accounts.SubscriptionUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Subscription: shared.SubscriptionParam{
-				Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
+				Frequency: cloudflare.F(shared.SubscriptionFrequencyMonthly),
 				RatePlan: cloudflare.F(shared.RatePlanParam{
 					ID:                cloudflare.F(shared.RatePlanIDFree),
 					Currency:          cloudflare.F("USD"),

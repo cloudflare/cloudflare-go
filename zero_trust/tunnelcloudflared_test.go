@@ -31,7 +31,7 @@ func TestTunnelCloudflaredNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Tunnels.Cloudflared.New(context.TODO(), zero_trust.TunnelCloudflaredNewParams{
 		AccountID:    cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Name:         cloudflare.F("blog"),
-		ConfigSrc:    cloudflare.F(zero_trust.TunnelCloudflaredNewParamsConfigSrcLocal),
+		ConfigSrc:    cloudflare.F(zero_trust.TunnelCloudflaredNewParamsConfigSrcCloudflare),
 		TunnelSecret: cloudflare.F("AQIDBAUGBwgBAgMEBQYHCAECAwQFBgcIAQIDBAUGBwg="),
 	})
 	if err != nil {
@@ -65,7 +65,7 @@ func TestTunnelCloudflaredListWithOptionalParams(t *testing.T) {
 		Name:          cloudflare.F("blog"),
 		Page:          cloudflare.F(1.000000),
 		PerPage:       cloudflare.F(1.000000),
-		Status:        cloudflare.F(zero_trust.TunnelCloudflaredListParamsStatusInactive),
+		Status:        cloudflare.F(zero_trust.TunnelCloudflaredListParamsStatusHealthy),
 		UUID:          cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		WasActiveAt:   cloudflare.F(time.Now()),
 		WasInactiveAt: cloudflare.F(time.Now()),

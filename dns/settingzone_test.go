@@ -51,7 +51,7 @@ func TestSettingZoneEditWithOptionalParams(t *testing.T) {
 			RNAME:   cloudflare.F("admin.example.com"),
 			TTL:     cloudflare.F(3600.000000),
 		}),
-		ZoneMode: cloudflare.F(dns.SettingZoneEditParamsZoneModeStandard),
+		ZoneMode: cloudflare.F(dns.SettingZoneEditParamsZoneModeDNSOnly),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

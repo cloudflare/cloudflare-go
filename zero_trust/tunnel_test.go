@@ -37,7 +37,7 @@ func TestTunnelListWithOptionalParams(t *testing.T) {
 		Name:          cloudflare.F("blog"),
 		Page:          cloudflare.F(1.000000),
 		PerPage:       cloudflare.F(1.000000),
-		Status:        cloudflare.F(zero_trust.TunnelListParamsStatusInactive),
+		Status:        cloudflare.F(zero_trust.TunnelListParamsStatusHealthy),
 		TunTypes:      cloudflare.F([]zero_trust.TunnelListParamsTunType{zero_trust.TunnelListParamsTunTypeCfdTunnel}),
 		UUID:          cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		WasActiveAt:   cloudflare.F(time.Now()),

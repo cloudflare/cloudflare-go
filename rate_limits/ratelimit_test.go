@@ -31,7 +31,7 @@ func TestRateLimitNewWithOptionalParams(t *testing.T) {
 	_, err := client.RateLimits.New(context.TODO(), rate_limits.RateLimitNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Action: cloudflare.F(rate_limits.RateLimitNewParamsAction{
-			Mode: cloudflare.F(rate_limits.RateLimitNewParamsActionModeSimulate),
+			Mode: cloudflare.F(rate_limits.RateLimitNewParamsActionModeChallenge),
 			Response: cloudflare.F(rate_limits.RateLimitNewParamsActionResponse{
 				Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
 				ContentType: cloudflare.F("text/xml"),
@@ -41,7 +41,7 @@ func TestRateLimitNewWithOptionalParams(t *testing.T) {
 		Match: cloudflare.F(rate_limits.RateLimitNewParamsMatch{
 			Headers: cloudflare.F([]rate_limits.RateLimitNewParamsMatchHeader{{
 				Name:  cloudflare.F("Cf-Cache-Status"),
-				Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
+				Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpNe),
 				Value: cloudflare.F("HIT"),
 			}}),
 			Request: cloudflare.F(rate_limits.RateLimitNewParamsMatchRequest{
@@ -141,7 +141,7 @@ func TestRateLimitEditWithOptionalParams(t *testing.T) {
 		rate_limits.RateLimitEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Action: cloudflare.F(rate_limits.RateLimitEditParamsAction{
-				Mode: cloudflare.F(rate_limits.RateLimitEditParamsActionModeSimulate),
+				Mode: cloudflare.F(rate_limits.RateLimitEditParamsActionModeChallenge),
 				Response: cloudflare.F(rate_limits.RateLimitEditParamsActionResponse{
 					Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
 					ContentType: cloudflare.F("text/xml"),
@@ -151,7 +151,7 @@ func TestRateLimitEditWithOptionalParams(t *testing.T) {
 			Match: cloudflare.F(rate_limits.RateLimitEditParamsMatch{
 				Headers: cloudflare.F([]rate_limits.RateLimitEditParamsMatchHeader{{
 					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpEq),
+					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpNe),
 					Value: cloudflare.F("HIT"),
 				}}),
 				Request: cloudflare.F(rate_limits.RateLimitEditParamsMatchRequest{
