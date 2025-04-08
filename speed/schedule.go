@@ -225,7 +225,7 @@ func (r scheduleDeleteResponseJSON) RawJSON() string {
 }
 
 type ScheduleNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A test region.
 	Region param.Field[ScheduleNewParamsRegion] `query:"region"`
@@ -303,7 +303,7 @@ func (r scheduleNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScheduleDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A test region.
 	Region param.Field[ScheduleDeleteParamsRegion] `query:"region"`
@@ -381,7 +381,7 @@ func (r scheduleDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScheduleGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A test region.
 	Region param.Field[ScheduleGetParamsRegion] `query:"region"`

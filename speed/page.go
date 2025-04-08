@@ -135,12 +135,12 @@ func (r PageListResponseScheduleFrequency) IsKnown() bool {
 }
 
 type PageListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type PageTrendParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The type of device.
 	DeviceType param.Field[PageTrendParamsDeviceType] `query:"deviceType,required"`

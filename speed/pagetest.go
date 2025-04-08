@@ -138,7 +138,7 @@ func (r *PageTestService) Get(ctx context.Context, url string, testID string, qu
 }
 
 type Test struct {
-	// UUID
+	// UUID.
 	ID   string    `json:"id"`
 	Date time.Time `json:"date" format:"date-time"`
 	// The Lighthouse report.
@@ -214,7 +214,7 @@ func (r pageTestDeleteResponseJSON) RawJSON() string {
 }
 
 type PageTestNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A test region.
 	Region param.Field[PageTestNewParamsRegion] `json:"region"`
@@ -288,7 +288,7 @@ func (r pageTestNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PageTestListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID  param.Field[string] `path:"zone_id,required"`
 	Page    param.Field[int64]  `query:"page"`
 	PerPage param.Field[int64]  `query:"per_page"`
@@ -340,7 +340,7 @@ func (r PageTestListParamsRegion) IsKnown() bool {
 }
 
 type PageTestDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A test region.
 	Region param.Field[PageTestDeleteParamsRegion] `query:"region"`
@@ -418,7 +418,7 @@ func (r pageTestDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PageTestGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
