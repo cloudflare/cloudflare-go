@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InsightTypeService contains methods and other services that help with
@@ -118,8 +117,8 @@ func (r InsightTypeGetParams) URLQuery() (v url.Values) {
 }
 
 type InsightTypeGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []InsightTypeGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []InsightTypeGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success InsightTypeGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  []InsightTypeGetResponse              `json:"result"`
@@ -142,6 +141,52 @@ func (r *InsightTypeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r insightTypeGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightTypeGetResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    insightTypeGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// insightTypeGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [InsightTypeGetResponseEnvelopeErrors]
+type insightTypeGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightTypeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightTypeGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightTypeGetResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    insightTypeGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// insightTypeGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [InsightTypeGetResponseEnvelopeMessages]
+type insightTypeGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightTypeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightTypeGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

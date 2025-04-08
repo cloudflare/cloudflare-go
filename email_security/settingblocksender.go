@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingBlockSenderService contains methods and other services that help with
@@ -390,11 +389,11 @@ func (r SettingBlockSenderNewParamsPatternType) IsKnown() bool {
 }
 
 type SettingBlockSenderNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   SettingBlockSenderNewResponse             `json:"result,required"`
-	Success  bool                                      `json:"success,required"`
-	JSON     settingBlockSenderNewResponseEnvelopeJSON `json:"-"`
+	Errors   []SettingBlockSenderNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingBlockSenderNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   SettingBlockSenderNewResponse                   `json:"result,required"`
+	Success  bool                                            `json:"success,required"`
+	JSON     settingBlockSenderNewResponseEnvelopeJSON       `json:"-"`
 }
 
 // settingBlockSenderNewResponseEnvelopeJSON contains the JSON metadata for the
@@ -413,6 +412,52 @@ func (r *SettingBlockSenderNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r settingBlockSenderNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderNewResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    settingBlockSenderNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingBlockSenderNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingBlockSenderNewResponseEnvelopeErrors]
+type settingBlockSenderNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderNewResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    settingBlockSenderNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// settingBlockSenderNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SettingBlockSenderNewResponseEnvelopeMessages]
+type settingBlockSenderNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -498,11 +543,11 @@ type SettingBlockSenderDeleteParams struct {
 }
 
 type SettingBlockSenderDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                        `json:"messages,required"`
-	Result   SettingBlockSenderDeleteResponse             `json:"result,required"`
-	Success  bool                                         `json:"success,required"`
-	JSON     settingBlockSenderDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   []SettingBlockSenderDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingBlockSenderDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   SettingBlockSenderDeleteResponse                   `json:"result,required"`
+	Success  bool                                               `json:"success,required"`
+	JSON     settingBlockSenderDeleteResponseEnvelopeJSON       `json:"-"`
 }
 
 // settingBlockSenderDeleteResponseEnvelopeJSON contains the JSON metadata for the
@@ -521,6 +566,52 @@ func (r *SettingBlockSenderDeleteResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r settingBlockSenderDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderDeleteResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    settingBlockSenderDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingBlockSenderDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SettingBlockSenderDeleteResponseEnvelopeErrors]
+type settingBlockSenderDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderDeleteResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    settingBlockSenderDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// settingBlockSenderDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingBlockSenderDeleteResponseEnvelopeMessages]
+type settingBlockSenderDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -555,11 +646,11 @@ func (r SettingBlockSenderEditParamsPatternType) IsKnown() bool {
 }
 
 type SettingBlockSenderEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                      `json:"errors,required"`
-	Messages []shared.ResponseInfo                      `json:"messages,required"`
-	Result   SettingBlockSenderEditResponse             `json:"result,required"`
-	Success  bool                                       `json:"success,required"`
-	JSON     settingBlockSenderEditResponseEnvelopeJSON `json:"-"`
+	Errors   []SettingBlockSenderEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingBlockSenderEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   SettingBlockSenderEditResponse                   `json:"result,required"`
+	Success  bool                                             `json:"success,required"`
+	JSON     settingBlockSenderEditResponseEnvelopeJSON       `json:"-"`
 }
 
 // settingBlockSenderEditResponseEnvelopeJSON contains the JSON metadata for the
@@ -581,17 +672,63 @@ func (r settingBlockSenderEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type SettingBlockSenderEditResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    settingBlockSenderEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingBlockSenderEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingBlockSenderEditResponseEnvelopeErrors]
+type settingBlockSenderEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderEditResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    settingBlockSenderEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// settingBlockSenderEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingBlockSenderEditResponseEnvelopeMessages]
+type settingBlockSenderEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 type SettingBlockSenderGetParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type SettingBlockSenderGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   SettingBlockSenderGetResponse             `json:"result,required"`
-	Success  bool                                      `json:"success,required"`
-	JSON     settingBlockSenderGetResponseEnvelopeJSON `json:"-"`
+	Errors   []SettingBlockSenderGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingBlockSenderGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   SettingBlockSenderGetResponse                   `json:"result,required"`
+	Success  bool                                            `json:"success,required"`
+	JSON     settingBlockSenderGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // settingBlockSenderGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -610,5 +747,51 @@ func (r *SettingBlockSenderGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r settingBlockSenderGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderGetResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    settingBlockSenderGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingBlockSenderGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingBlockSenderGetResponseEnvelopeErrors]
+type settingBlockSenderGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderGetResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    settingBlockSenderGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// settingBlockSenderGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SettingBlockSenderGetResponseEnvelopeMessages]
+type settingBlockSenderGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

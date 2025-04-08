@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AudioTrackService contains methods and other services that help with interacting
@@ -195,8 +196,8 @@ type AudioTrackDeleteParams struct {
 }
 
 type AudioTrackDeleteResponseEnvelope struct {
-	Errors   []AudioTrackDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AudioTrackDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success AudioTrackDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  string                                  `json:"result"`
@@ -219,102 +220,6 @@ func (r *AudioTrackDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r audioTrackDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackDeleteResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
-	DocumentationURL string                                       `json:"documentation_url"`
-	Source           AudioTrackDeleteResponseEnvelopeErrorsSource `json:"source"`
-	JSON             audioTrackDeleteResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// audioTrackDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AudioTrackDeleteResponseEnvelopeErrors]
-type audioTrackDeleteResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AudioTrackDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackDeleteResponseEnvelopeErrorsSource struct {
-	Pointer string                                           `json:"pointer"`
-	JSON    audioTrackDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// audioTrackDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
-// the struct [AudioTrackDeleteResponseEnvelopeErrorsSource]
-type audioTrackDeleteResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AudioTrackDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackDeleteResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
-	DocumentationURL string                                         `json:"documentation_url"`
-	Source           AudioTrackDeleteResponseEnvelopeMessagesSource `json:"source"`
-	JSON             audioTrackDeleteResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// audioTrackDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AudioTrackDeleteResponseEnvelopeMessages]
-type audioTrackDeleteResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AudioTrackDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackDeleteResponseEnvelopeMessagesSource struct {
-	Pointer string                                             `json:"pointer"`
-	JSON    audioTrackDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// audioTrackDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata
-// for the struct [AudioTrackDeleteResponseEnvelopeMessagesSource]
-type audioTrackDeleteResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AudioTrackDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -350,8 +255,8 @@ func (r AudioTrackCopyParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AudioTrackCopyResponseEnvelope struct {
-	Errors   []AudioTrackCopyResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AudioTrackCopyResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success AudioTrackCopyResponseEnvelopeSuccess `json:"success,required"`
 	Result  Audio                                 `json:"result"`
@@ -374,102 +279,6 @@ func (r *AudioTrackCopyResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r audioTrackCopyResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackCopyResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
-	DocumentationURL string                                     `json:"documentation_url"`
-	Source           AudioTrackCopyResponseEnvelopeErrorsSource `json:"source"`
-	JSON             audioTrackCopyResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// audioTrackCopyResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AudioTrackCopyResponseEnvelopeErrors]
-type audioTrackCopyResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AudioTrackCopyResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackCopyResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackCopyResponseEnvelopeErrorsSource struct {
-	Pointer string                                         `json:"pointer"`
-	JSON    audioTrackCopyResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// audioTrackCopyResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
-// the struct [AudioTrackCopyResponseEnvelopeErrorsSource]
-type audioTrackCopyResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AudioTrackCopyResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackCopyResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackCopyResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
-	DocumentationURL string                                       `json:"documentation_url"`
-	Source           AudioTrackCopyResponseEnvelopeMessagesSource `json:"source"`
-	JSON             audioTrackCopyResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// audioTrackCopyResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AudioTrackCopyResponseEnvelopeMessages]
-type audioTrackCopyResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AudioTrackCopyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackCopyResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackCopyResponseEnvelopeMessagesSource struct {
-	Pointer string                                           `json:"pointer"`
-	JSON    audioTrackCopyResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// audioTrackCopyResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
-// the struct [AudioTrackCopyResponseEnvelopeMessagesSource]
-type audioTrackCopyResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AudioTrackCopyResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackCopyResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -503,8 +312,8 @@ func (r AudioTrackEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AudioTrackEditResponseEnvelope struct {
-	Errors   []AudioTrackEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AudioTrackEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success AudioTrackEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  Audio                                 `json:"result"`
@@ -527,102 +336,6 @@ func (r *AudioTrackEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r audioTrackEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackEditResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
-	DocumentationURL string                                     `json:"documentation_url"`
-	Source           AudioTrackEditResponseEnvelopeErrorsSource `json:"source"`
-	JSON             audioTrackEditResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// audioTrackEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AudioTrackEditResponseEnvelopeErrors]
-type audioTrackEditResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AudioTrackEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackEditResponseEnvelopeErrorsSource struct {
-	Pointer string                                         `json:"pointer"`
-	JSON    audioTrackEditResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// audioTrackEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
-// the struct [AudioTrackEditResponseEnvelopeErrorsSource]
-type audioTrackEditResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AudioTrackEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackEditResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
-	DocumentationURL string                                       `json:"documentation_url"`
-	Source           AudioTrackEditResponseEnvelopeMessagesSource `json:"source"`
-	JSON             audioTrackEditResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// audioTrackEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AudioTrackEditResponseEnvelopeMessages]
-type audioTrackEditResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AudioTrackEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type AudioTrackEditResponseEnvelopeMessagesSource struct {
-	Pointer string                                           `json:"pointer"`
-	JSON    audioTrackEditResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// audioTrackEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
-// the struct [AudioTrackEditResponseEnvelopeMessagesSource]
-type audioTrackEditResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AudioTrackEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r audioTrackEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

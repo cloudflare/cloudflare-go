@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SiteLANService contains methods and other services that help with interacting
@@ -484,9 +483,9 @@ func (r SiteLANUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteLANUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LAN                   `json:"result,required"`
+	Errors   []SiteLANUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SiteLANUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   LAN                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteLANUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteLANUpdateResponseEnvelopeJSON    `json:"-"`
@@ -508,6 +507,52 @@ func (r *SiteLANUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteLANUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SiteLANUpdateResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    siteLANUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// siteLANUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SiteLANUpdateResponseEnvelopeErrors]
+type siteLANUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLANUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLANUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SiteLANUpdateResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    siteLANUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// siteLANUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SiteLANUpdateResponseEnvelopeMessages]
+type siteLANUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLANUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLANUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -537,9 +582,9 @@ type SiteLANDeleteParams struct {
 }
 
 type SiteLANDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LAN                   `json:"result,required"`
+	Errors   []SiteLANDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SiteLANDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   LAN                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteLANDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteLANDeleteResponseEnvelopeJSON    `json:"-"`
@@ -561,6 +606,52 @@ func (r *SiteLANDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteLANDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SiteLANDeleteResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    siteLANDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// siteLANDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SiteLANDeleteResponseEnvelopeErrors]
+type siteLANDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLANDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLANDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SiteLANDeleteResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    siteLANDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// siteLANDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SiteLANDeleteResponseEnvelopeMessages]
+type siteLANDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLANDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLANDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -599,9 +690,9 @@ func (r SiteLANEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteLANEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LAN                   `json:"result,required"`
+	Errors   []SiteLANEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SiteLANEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   LAN                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteLANEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteLANEditResponseEnvelopeJSON    `json:"-"`
@@ -626,6 +717,52 @@ func (r siteLANEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type SiteLANEditResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    siteLANEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// siteLANEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SiteLANEditResponseEnvelopeErrors]
+type siteLANEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLANEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLANEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SiteLANEditResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    siteLANEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// siteLANEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SiteLANEditResponseEnvelopeMessages]
+type siteLANEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLANEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLANEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type SiteLANEditResponseEnvelopeSuccess bool
 
@@ -647,9 +784,9 @@ type SiteLANGetParams struct {
 }
 
 type SiteLANGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LAN                   `json:"result,required"`
+	Errors   []SiteLANGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SiteLANGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   LAN                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteLANGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteLANGetResponseEnvelopeJSON    `json:"-"`
@@ -671,6 +808,52 @@ func (r *SiteLANGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteLANGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SiteLANGetResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    siteLANGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// siteLANGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SiteLANGetResponseEnvelopeErrors]
+type siteLANGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLANGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLANGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SiteLANGetResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    siteLANGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// siteLANGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [SiteLANGetResponseEnvelopeMessages]
+type siteLANGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLANGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLANGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

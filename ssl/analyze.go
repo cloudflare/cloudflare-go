@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AnalyzeService contains methods and other services that help with interacting
@@ -72,8 +71,8 @@ func (r AnalyzeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AnalyzeNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []AnalyzeNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AnalyzeNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success AnalyzeNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AnalyzeNewResponse                `json:"result"`
@@ -96,6 +95,52 @@ func (r *AnalyzeNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r analyzeNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AnalyzeNewResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    analyzeNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// analyzeNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [AnalyzeNewResponseEnvelopeErrors]
+type analyzeNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnalyzeNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyzeNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AnalyzeNewResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    analyzeNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// analyzeNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [AnalyzeNewResponseEnvelopeMessages]
+type analyzeNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnalyzeNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyzeNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

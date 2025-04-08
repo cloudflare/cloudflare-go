@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // GatewayLoggingService contains methods and other services that help with
@@ -260,8 +259,8 @@ func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLoggingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []GatewayLoggingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayLoggingUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  LoggingSetting                              `json:"result"`
@@ -287,6 +286,52 @@ func (r gatewayLoggingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type GatewayLoggingUpdateResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    gatewayLoggingUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// gatewayLoggingUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [GatewayLoggingUpdateResponseEnvelopeErrors]
+type gatewayLoggingUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayLoggingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayLoggingUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type GatewayLoggingUpdateResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    gatewayLoggingUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// gatewayLoggingUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [GatewayLoggingUpdateResponseEnvelopeMessages]
+type gatewayLoggingUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayLoggingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayLoggingUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type GatewayLoggingUpdateResponseEnvelopeSuccess bool
 
@@ -307,8 +352,8 @@ type GatewayLoggingGetParams struct {
 }
 
 type GatewayLoggingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []GatewayLoggingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayLoggingGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  LoggingSetting                           `json:"result"`
@@ -331,6 +376,52 @@ func (r *GatewayLoggingGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r gatewayLoggingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type GatewayLoggingGetResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    gatewayLoggingGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// gatewayLoggingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [GatewayLoggingGetResponseEnvelopeErrors]
+type gatewayLoggingGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayLoggingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayLoggingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type GatewayLoggingGetResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    gatewayLoggingGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// gatewayLoggingGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [GatewayLoggingGetResponseEnvelopeMessages]
+type gatewayLoggingGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayLoggingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayLoggingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

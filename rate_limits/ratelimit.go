@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RateLimitService contains methods and other services that help with interacting
@@ -1033,9 +1032,9 @@ func (r RateLimitNewParamsMatchResponse) MarshalJSON() (data []byte, err error) 
 }
 
 type RateLimitNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RateLimit             `json:"result,required"`
+	Errors   []RateLimitNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RateLimitNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   RateLimit                              `json:"result,required"`
 	// Whether the API call was successful
 	Success RateLimitNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitNewResponseEnvelopeJSON    `json:"-"`
@@ -1057,6 +1056,52 @@ func (r *RateLimitNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r rateLimitNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RateLimitNewResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    rateLimitNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// rateLimitNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RateLimitNewResponseEnvelopeErrors]
+type rateLimitNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RateLimitNewResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    rateLimitNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// rateLimitNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RateLimitNewResponseEnvelopeMessages]
+type rateLimitNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1099,9 +1144,9 @@ type RateLimitDeleteParams struct {
 }
 
 type RateLimitDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   RateLimitDeleteResponse `json:"result,required"`
+	Errors   []RateLimitDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RateLimitDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   RateLimitDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success RateLimitDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1123,6 +1168,52 @@ func (r *RateLimitDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r rateLimitDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RateLimitDeleteResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    rateLimitDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// rateLimitDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RateLimitDeleteResponseEnvelopeErrors]
+type rateLimitDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RateLimitDeleteResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    rateLimitDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// rateLimitDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RateLimitDeleteResponseEnvelopeMessages]
+type rateLimitDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1318,9 +1409,9 @@ func (r RateLimitEditParamsMatchResponse) MarshalJSON() (data []byte, err error)
 }
 
 type RateLimitEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RateLimit             `json:"result,required"`
+	Errors   []RateLimitEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RateLimitEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   RateLimit                               `json:"result,required"`
 	// Whether the API call was successful
 	Success RateLimitEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitEditResponseEnvelopeJSON    `json:"-"`
@@ -1345,6 +1436,52 @@ func (r rateLimitEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type RateLimitEditResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    rateLimitEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// rateLimitEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RateLimitEditResponseEnvelopeErrors]
+type rateLimitEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RateLimitEditResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    rateLimitEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// rateLimitEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RateLimitEditResponseEnvelopeMessages]
+type rateLimitEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type RateLimitEditResponseEnvelopeSuccess bool
 
@@ -1366,9 +1503,9 @@ type RateLimitGetParams struct {
 }
 
 type RateLimitGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RateLimit             `json:"result,required"`
+	Errors   []RateLimitGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RateLimitGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   RateLimit                              `json:"result,required"`
 	// Whether the API call was successful
 	Success RateLimitGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitGetResponseEnvelopeJSON    `json:"-"`
@@ -1390,6 +1527,52 @@ func (r *RateLimitGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r rateLimitGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RateLimitGetResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    rateLimitGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// rateLimitGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RateLimitGetResponseEnvelopeErrors]
+type rateLimitGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RateLimitGetResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    rateLimitGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// rateLimitGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RateLimitGetResponseEnvelopeMessages]
+type rateLimitGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

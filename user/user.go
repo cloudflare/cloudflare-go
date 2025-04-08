@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // UserService contains methods and other services that help with interacting with
@@ -91,8 +92,8 @@ func (r UserEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UserEditResponseEnvelope struct {
-	Errors   []UserEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success UserEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  UserEditResponse                `json:"result"`
@@ -118,102 +119,6 @@ func (r userEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type UserEditResponseEnvelopeErrors struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
-	DocumentationURL string                               `json:"documentation_url"`
-	Source           UserEditResponseEnvelopeErrorsSource `json:"source"`
-	JSON             userEditResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// userEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [UserEditResponseEnvelopeErrors]
-type userEditResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *UserEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type UserEditResponseEnvelopeErrorsSource struct {
-	Pointer string                                   `json:"pointer"`
-	JSON    userEditResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// userEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [UserEditResponseEnvelopeErrorsSource]
-type userEditResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type UserEditResponseEnvelopeMessages struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
-	DocumentationURL string                                 `json:"documentation_url"`
-	Source           UserEditResponseEnvelopeMessagesSource `json:"source"`
-	JSON             userEditResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// userEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [UserEditResponseEnvelopeMessages]
-type userEditResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *UserEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type UserEditResponseEnvelopeMessagesSource struct {
-	Pointer string                                     `json:"pointer"`
-	JSON    userEditResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// userEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
-// struct [UserEditResponseEnvelopeMessagesSource]
-type userEditResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful.
 type UserEditResponseEnvelopeSuccess bool
 
@@ -230,8 +135,8 @@ func (r UserEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UserGetResponseEnvelope struct {
-	Errors   []UserGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success UserGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  UserGetResponse                `json:"result"`
@@ -254,102 +159,6 @@ func (r *UserGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r userGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type UserGetResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
-	DocumentationURL string                              `json:"documentation_url"`
-	Source           UserGetResponseEnvelopeErrorsSource `json:"source"`
-	JSON             userGetResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// userGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [UserGetResponseEnvelopeErrors]
-type userGetResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *UserGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type UserGetResponseEnvelopeErrorsSource struct {
-	Pointer string                                  `json:"pointer"`
-	JSON    userGetResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// userGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [UserGetResponseEnvelopeErrorsSource]
-type userGetResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type UserGetResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
-	DocumentationURL string                                `json:"documentation_url"`
-	Source           UserGetResponseEnvelopeMessagesSource `json:"source"`
-	JSON             userGetResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// userGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [UserGetResponseEnvelopeMessages]
-type userGetResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *UserGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type UserGetResponseEnvelopeMessagesSource struct {
-	Pointer string                                    `json:"pointer"`
-	JSON    userGetResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// userGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
-// struct [UserGetResponseEnvelopeMessagesSource]
-type userGetResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

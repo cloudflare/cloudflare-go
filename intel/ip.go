@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // IPService contains methods and other services that help with interacting with
@@ -168,9 +167,9 @@ func (r IPGetParams) URLQuery() (v url.Values) {
 }
 
 type IPGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []IP                  `json:"result,required,nullable"`
+	Errors   []IPGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IPGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []IP                            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    IPGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo IPGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -194,6 +193,52 @@ func (r *IPGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ipGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPGetResponseEnvelopeErrors struct {
+	Code    int64                           `json:"code,required"`
+	Message string                          `json:"message,required"`
+	JSON    ipGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// ipGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [IPGetResponseEnvelopeErrors]
+type ipGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPGetResponseEnvelopeMessages struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    ipGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// ipGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [IPGetResponseEnvelopeMessages]
+type ipGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

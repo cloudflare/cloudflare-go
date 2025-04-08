@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptSettingService contains methods and other services that help with
@@ -90,8 +91,8 @@ func (r ScriptSettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptSettingEditResponseEnvelope struct {
-	Errors   []ScriptSettingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success ScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptSetting                            `json:"result"`
@@ -117,102 +118,6 @@ func (r scriptSettingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptSettingEditResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
-	DocumentationURL string                                        `json:"documentation_url"`
-	Source           ScriptSettingEditResponseEnvelopeErrorsSource `json:"source"`
-	JSON             scriptSettingEditResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// scriptSettingEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ScriptSettingEditResponseEnvelopeErrors]
-type scriptSettingEditResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptSettingEditResponseEnvelopeErrorsSource struct {
-	Pointer string                                            `json:"pointer"`
-	JSON    scriptSettingEditResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// scriptSettingEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
-// the struct [ScriptSettingEditResponseEnvelopeErrorsSource]
-type scriptSettingEditResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptSettingEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSettingEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptSettingEditResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
-	DocumentationURL string                                          `json:"documentation_url"`
-	Source           ScriptSettingEditResponseEnvelopeMessagesSource `json:"source"`
-	JSON             scriptSettingEditResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// scriptSettingEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ScriptSettingEditResponseEnvelopeMessages]
-type scriptSettingEditResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptSettingEditResponseEnvelopeMessagesSource struct {
-	Pointer string                                              `json:"pointer"`
-	JSON    scriptSettingEditResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// scriptSettingEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata
-// for the struct [ScriptSettingEditResponseEnvelopeMessagesSource]
-type scriptSettingEditResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptSettingEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSettingEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful.
 type ScriptSettingEditResponseEnvelopeSuccess bool
 
@@ -234,8 +139,8 @@ type ScriptSettingGetParams struct {
 }
 
 type ScriptSettingGetResponseEnvelope struct {
-	Errors   []ScriptSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success ScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScriptSetting                           `json:"result"`
@@ -258,102 +163,6 @@ func (r *ScriptSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r scriptSettingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptSettingGetResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
-	DocumentationURL string                                       `json:"documentation_url"`
-	Source           ScriptSettingGetResponseEnvelopeErrorsSource `json:"source"`
-	JSON             scriptSettingGetResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// scriptSettingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ScriptSettingGetResponseEnvelopeErrors]
-type scriptSettingGetResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptSettingGetResponseEnvelopeErrorsSource struct {
-	Pointer string                                           `json:"pointer"`
-	JSON    scriptSettingGetResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// scriptSettingGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
-// the struct [ScriptSettingGetResponseEnvelopeErrorsSource]
-type scriptSettingGetResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptSettingGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSettingGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptSettingGetResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
-	DocumentationURL string                                         `json:"documentation_url"`
-	Source           ScriptSettingGetResponseEnvelopeMessagesSource `json:"source"`
-	JSON             scriptSettingGetResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// scriptSettingGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ScriptSettingGetResponseEnvelopeMessages]
-type scriptSettingGetResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptSettingGetResponseEnvelopeMessagesSource struct {
-	Pointer string                                             `json:"pointer"`
-	JSON    scriptSettingGetResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// scriptSettingGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
-// for the struct [ScriptSettingGetResponseEnvelopeMessagesSource]
-type scriptSettingGetResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptSettingGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSettingGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

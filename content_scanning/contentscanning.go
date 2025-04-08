@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ContentScanningService contains methods and other services that help with
@@ -82,9 +81,9 @@ type ContentScanningDisableParams struct {
 }
 
 type ContentScanningDisableResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ContentScanningDisableResponse `json:"result,required"`
+	Errors   []ContentScanningDisableResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ContentScanningDisableResponseEnvelopeMessages `json:"messages,required"`
+	Result   ContentScanningDisableResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ContentScanningDisableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    contentScanningDisableResponseEnvelopeJSON    `json:"-"`
@@ -109,6 +108,52 @@ func (r contentScanningDisableResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type ContentScanningDisableResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    contentScanningDisableResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// contentScanningDisableResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ContentScanningDisableResponseEnvelopeErrors]
+type contentScanningDisableResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ContentScanningDisableResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r contentScanningDisableResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ContentScanningDisableResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    contentScanningDisableResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// contentScanningDisableResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [ContentScanningDisableResponseEnvelopeMessages]
+type contentScanningDisableResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ContentScanningDisableResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r contentScanningDisableResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type ContentScanningDisableResponseEnvelopeSuccess bool
 
@@ -130,9 +175,9 @@ type ContentScanningEnableParams struct {
 }
 
 type ContentScanningEnableResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   ContentScanningEnableResponse `json:"result,required"`
+	Errors   []ContentScanningEnableResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ContentScanningEnableResponseEnvelopeMessages `json:"messages,required"`
+	Result   ContentScanningEnableResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ContentScanningEnableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    contentScanningEnableResponseEnvelopeJSON    `json:"-"`
@@ -154,6 +199,52 @@ func (r *ContentScanningEnableResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r contentScanningEnableResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ContentScanningEnableResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    contentScanningEnableResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// contentScanningEnableResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ContentScanningEnableResponseEnvelopeErrors]
+type contentScanningEnableResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ContentScanningEnableResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r contentScanningEnableResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ContentScanningEnableResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    contentScanningEnableResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// contentScanningEnableResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ContentScanningEnableResponseEnvelopeMessages]
+type contentScanningEnableResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ContentScanningEnableResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r contentScanningEnableResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

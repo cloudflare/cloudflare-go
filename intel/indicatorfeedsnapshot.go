@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // IndicatorFeedSnapshotService contains methods and other services that help with
@@ -104,8 +105,8 @@ func (r IndicatorFeedSnapshotUpdateParams) MarshalMultipart() (data []byte, cont
 }
 
 type IndicatorFeedSnapshotUpdateResponseEnvelope struct {
-	Errors   []IndicatorFeedSnapshotUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedSnapshotUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success IndicatorFeedSnapshotUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  IndicatorFeedSnapshotUpdateResponse                `json:"result"`
@@ -128,104 +129,6 @@ func (r *IndicatorFeedSnapshotUpdateResponseEnvelope) UnmarshalJSON(data []byte)
 }
 
 func (r indicatorFeedSnapshotUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedSnapshotUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
-	DocumentationURL string                                                  `json:"documentation_url"`
-	Source           IndicatorFeedSnapshotUpdateResponseEnvelopeErrorsSource `json:"source"`
-	JSON             indicatorFeedSnapshotUpdateResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// indicatorFeedSnapshotUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [IndicatorFeedSnapshotUpdateResponseEnvelopeErrors]
-type indicatorFeedSnapshotUpdateResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *IndicatorFeedSnapshotUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedSnapshotUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedSnapshotUpdateResponseEnvelopeErrorsSource struct {
-	Pointer string                                                      `json:"pointer"`
-	JSON    indicatorFeedSnapshotUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// indicatorFeedSnapshotUpdateResponseEnvelopeErrorsSourceJSON contains the JSON
-// metadata for the struct
-// [IndicatorFeedSnapshotUpdateResponseEnvelopeErrorsSource]
-type indicatorFeedSnapshotUpdateResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedSnapshotUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedSnapshotUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedSnapshotUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
-	DocumentationURL string                                                    `json:"documentation_url"`
-	Source           IndicatorFeedSnapshotUpdateResponseEnvelopeMessagesSource `json:"source"`
-	JSON             indicatorFeedSnapshotUpdateResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// indicatorFeedSnapshotUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [IndicatorFeedSnapshotUpdateResponseEnvelopeMessages]
-type indicatorFeedSnapshotUpdateResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *IndicatorFeedSnapshotUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedSnapshotUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedSnapshotUpdateResponseEnvelopeMessagesSource struct {
-	Pointer string                                                        `json:"pointer"`
-	JSON    indicatorFeedSnapshotUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// indicatorFeedSnapshotUpdateResponseEnvelopeMessagesSourceJSON contains the JSON
-// metadata for the struct
-// [IndicatorFeedSnapshotUpdateResponseEnvelopeMessagesSource]
-type indicatorFeedSnapshotUpdateResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedSnapshotUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedSnapshotUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

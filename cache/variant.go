@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // VariantService contains methods and other services that help with interacting
@@ -239,8 +238,8 @@ type VariantDeleteParams struct {
 }
 
 type VariantDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []VariantDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []VariantDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  VariantDeleteResponse                `json:"result"`
@@ -263,6 +262,52 @@ func (r *VariantDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r variantDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type VariantDeleteResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    variantDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// variantDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [VariantDeleteResponseEnvelopeErrors]
+type variantDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VariantDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r variantDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type VariantDeleteResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    variantDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// variantDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [VariantDeleteResponseEnvelopeMessages]
+type variantDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VariantDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r variantDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -334,8 +379,8 @@ func (r VariantEditParamsValue) MarshalJSON() (data []byte, err error) {
 }
 
 type VariantEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []VariantEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []VariantEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success VariantEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  VariantEditResponse                `json:"result"`
@@ -361,6 +406,52 @@ func (r variantEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type VariantEditResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    variantEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// variantEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [VariantEditResponseEnvelopeErrors]
+type variantEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VariantEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r variantEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type VariantEditResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    variantEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// variantEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [VariantEditResponseEnvelopeMessages]
+type variantEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VariantEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r variantEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type VariantEditResponseEnvelopeSuccess bool
 
@@ -382,8 +473,8 @@ type VariantGetParams struct {
 }
 
 type VariantGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []VariantGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []VariantGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success VariantGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  VariantGetResponse                `json:"result"`
@@ -406,6 +497,52 @@ func (r *VariantGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r variantGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type VariantGetResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    variantGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// variantGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [VariantGetResponseEnvelopeErrors]
+type variantGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VariantGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r variantGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type VariantGetResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    variantGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// variantGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [VariantGetResponseEnvelopeMessages]
+type variantGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VariantGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r variantGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

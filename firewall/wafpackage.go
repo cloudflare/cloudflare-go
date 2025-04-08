@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -98,9 +97,11 @@ func (r *WAFPackageService) Get(ctx context.Context, packageID string, query WAF
 type WAFPackageListResponse = interface{}
 
 type WAFPackageGetResponse struct {
-	// This field can have the runtime type of [[]shared.ResponseInfo].
+	// This field can have the runtime type of
+	// [[]WAFPackageGetResponseFirewallAPIResponseSingleError].
 	Errors interface{} `json:"errors"`
-	// This field can have the runtime type of [[]shared.ResponseInfo].
+	// This field can have the runtime type of
+	// [[]WAFPackageGetResponseFirewallAPIResponseSingleMessage].
 	Messages interface{} `json:"messages"`
 	// This field can have the runtime type of [interface{}].
 	Result interface{} `json:"result"`
@@ -166,9 +167,9 @@ func init() {
 }
 
 type WAFPackageGetResponseFirewallAPIResponseSingle struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []WAFPackageGetResponseFirewallAPIResponseSingleError   `json:"errors,required"`
+	Messages []WAFPackageGetResponseFirewallAPIResponseSingleMessage `json:"messages,required"`
+	Result   interface{}                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGetResponseFirewallAPIResponseSingleSuccess `json:"success,required"`
 	JSON    wafPackageGetResponseFirewallAPIResponseSingleJSON    `json:"-"`
@@ -194,6 +195,52 @@ func (r wafPackageGetResponseFirewallAPIResponseSingleJSON) RawJSON() string {
 }
 
 func (r WAFPackageGetResponseFirewallAPIResponseSingle) implementsWAFPackageGetResponse() {}
+
+type WAFPackageGetResponseFirewallAPIResponseSingleError struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    wafPackageGetResponseFirewallAPIResponseSingleErrorJSON `json:"-"`
+}
+
+// wafPackageGetResponseFirewallAPIResponseSingleErrorJSON contains the JSON
+// metadata for the struct [WAFPackageGetResponseFirewallAPIResponseSingleError]
+type wafPackageGetResponseFirewallAPIResponseSingleErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFPackageGetResponseFirewallAPIResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafPackageGetResponseFirewallAPIResponseSingleErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type WAFPackageGetResponseFirewallAPIResponseSingleMessage struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    wafPackageGetResponseFirewallAPIResponseSingleMessageJSON `json:"-"`
+}
+
+// wafPackageGetResponseFirewallAPIResponseSingleMessageJSON contains the JSON
+// metadata for the struct [WAFPackageGetResponseFirewallAPIResponseSingleMessage]
+type wafPackageGetResponseFirewallAPIResponseSingleMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFPackageGetResponseFirewallAPIResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafPackageGetResponseFirewallAPIResponseSingleMessageJSON) RawJSON() string {
+	return r.raw
+}
 
 // Whether the API call was successful
 type WAFPackageGetResponseFirewallAPIResponseSingleSuccess bool

@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ClipService contains methods and other services that help with interacting with
@@ -232,8 +233,8 @@ func (r ClipNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 }
 
 type ClipNewResponseEnvelope struct {
-	Errors   []ClipNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ClipNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success ClipNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Clip                           `json:"result"`
@@ -256,102 +257,6 @@ func (r *ClipNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r clipNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ClipNewResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
-	DocumentationURL string                              `json:"documentation_url"`
-	Source           ClipNewResponseEnvelopeErrorsSource `json:"source"`
-	JSON             clipNewResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// clipNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ClipNewResponseEnvelopeErrors]
-type clipNewResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ClipNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r clipNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ClipNewResponseEnvelopeErrorsSource struct {
-	Pointer string                                  `json:"pointer"`
-	JSON    clipNewResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// clipNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [ClipNewResponseEnvelopeErrorsSource]
-type clipNewResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ClipNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r clipNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ClipNewResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
-	DocumentationURL string                                `json:"documentation_url"`
-	Source           ClipNewResponseEnvelopeMessagesSource `json:"source"`
-	JSON             clipNewResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// clipNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ClipNewResponseEnvelopeMessages]
-type clipNewResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ClipNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r clipNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type ClipNewResponseEnvelopeMessagesSource struct {
-	Pointer string                                    `json:"pointer"`
-	JSON    clipNewResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// clipNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
-// struct [ClipNewResponseEnvelopeMessagesSource]
-type clipNewResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ClipNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r clipNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

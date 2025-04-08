@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DEXCommandService contains methods and other services that help with interacting
@@ -297,8 +298,8 @@ func (r DEXCommandNewParamsCommandsCommandArgsInterface) IsKnown() bool {
 }
 
 type DEXCommandNewResponseEnvelope struct {
-	Errors   []DEXCommandNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXCommandNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success    DEXCommandNewResponseEnvelopeSuccess    `json:"success,required"`
 	Result     DEXCommandNewResponse                   `json:"result"`
@@ -323,102 +324,6 @@ func (r *DEXCommandNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dexCommandNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXCommandNewResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
-	DocumentationURL string                                    `json:"documentation_url"`
-	Source           DEXCommandNewResponseEnvelopeErrorsSource `json:"source"`
-	JSON             dexCommandNewResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// dexCommandNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DEXCommandNewResponseEnvelopeErrors]
-type dexCommandNewResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DEXCommandNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexCommandNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXCommandNewResponseEnvelopeErrorsSource struct {
-	Pointer string                                        `json:"pointer"`
-	JSON    dexCommandNewResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// dexCommandNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [DEXCommandNewResponseEnvelopeErrorsSource]
-type dexCommandNewResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXCommandNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexCommandNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXCommandNewResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
-	DocumentationURL string                                      `json:"documentation_url"`
-	Source           DEXCommandNewResponseEnvelopeMessagesSource `json:"source"`
-	JSON             dexCommandNewResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// dexCommandNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DEXCommandNewResponseEnvelopeMessages]
-type dexCommandNewResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DEXCommandNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexCommandNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXCommandNewResponseEnvelopeMessagesSource struct {
-	Pointer string                                          `json:"pointer"`
-	JSON    dexCommandNewResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// dexCommandNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
-// the struct [DEXCommandNewResponseEnvelopeMessagesSource]
-type dexCommandNewResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXCommandNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexCommandNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 

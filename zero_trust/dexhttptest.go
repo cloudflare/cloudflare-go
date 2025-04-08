@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DEXHTTPTestService contains methods and other services that help with
@@ -384,8 +385,8 @@ func (r DexhttpTestGetParamsInterval) IsKnown() bool {
 }
 
 type DexhttpTestGetResponseEnvelope struct {
-	Errors   []DexhttpTestGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DexhttpTestGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful.
 	Success DexhttpTestGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  HTTPDetails                           `json:"result"`
@@ -408,102 +409,6 @@ func (r *DexhttpTestGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r dexhttpTestGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DexhttpTestGetResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
-	DocumentationURL string                                     `json:"documentation_url"`
-	Source           DexhttpTestGetResponseEnvelopeErrorsSource `json:"source"`
-	JSON             dexhttpTestGetResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// dexhttpTestGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DexhttpTestGetResponseEnvelopeErrors]
-type dexhttpTestGetResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DexhttpTestGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexhttpTestGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DexhttpTestGetResponseEnvelopeErrorsSource struct {
-	Pointer string                                         `json:"pointer"`
-	JSON    dexhttpTestGetResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// dexhttpTestGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
-// the struct [DexhttpTestGetResponseEnvelopeErrorsSource]
-type dexhttpTestGetResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexhttpTestGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexhttpTestGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type DexhttpTestGetResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
-	DocumentationURL string                                       `json:"documentation_url"`
-	Source           DexhttpTestGetResponseEnvelopeMessagesSource `json:"source"`
-	JSON             dexhttpTestGetResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// dexhttpTestGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DexhttpTestGetResponseEnvelopeMessages]
-type dexhttpTestGetResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DexhttpTestGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexhttpTestGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type DexhttpTestGetResponseEnvelopeMessagesSource struct {
-	Pointer string                                           `json:"pointer"`
-	JSON    dexhttpTestGetResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// dexhttpTestGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
-// the struct [DexhttpTestGetResponseEnvelopeMessagesSource]
-type dexhttpTestGetResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexhttpTestGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexhttpTestGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
