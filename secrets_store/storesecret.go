@@ -628,6 +628,8 @@ func (r StoreSecretNewParams) MarshalJSON() (data []byte, err error) {
 type StoreSecretNewParamsBody struct {
 	// The name of the secret
 	Name param.Field[string] `json:"name,required"`
+	// The list of services that can use this secret.
+	Scopes param.Field[[]string] `json:"scopes,required"`
 	// The value of the secret. Note that this is 'write only' - no API reponse will
 	// provide this value, it is only used to create/modify secrets.
 	Value param.Field[string] `json:"value,required"`
@@ -1065,6 +1067,8 @@ type StoreSecretEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the secret
 	Name param.Field[string] `json:"name,required"`
+	// The list of services that can use this secret.
+	Scopes param.Field[[]string] `json:"scopes"`
 	// The value of the secret. Note that this is 'write only' - no API reponse will
 	// provide this value, it is only used to create/modify secrets.
 	Value param.Field[string] `json:"value"`
