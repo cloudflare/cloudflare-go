@@ -26,6 +26,7 @@ import (
 type DeviceService struct {
 	Options       []option.RequestOption
 	Resilience    *DeviceResilienceService
+	Registrations *DeviceRegistrationService
 	DEXTests      *DeviceDEXTestService
 	Networks      *DeviceNetworkService
 	FleetStatus   *DeviceFleetStatusService
@@ -44,6 +45,7 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 	r = &DeviceService{}
 	r.Options = opts
 	r.Resilience = NewDeviceResilienceService(opts...)
+	r.Registrations = NewDeviceRegistrationService(opts...)
 	r.DEXTests = NewDeviceDEXTestService(opts...)
 	r.Networks = NewDeviceNetworkService(opts...)
 	r.FleetStatus = NewDeviceFleetStatusService(opts...)
