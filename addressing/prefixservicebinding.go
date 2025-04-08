@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PrefixServiceBindingService contains methods and other services that help with
@@ -222,8 +221,8 @@ func (r ServiceBindingProvisioningState) IsKnown() bool {
 }
 
 type PrefixServiceBindingDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []PrefixServiceBindingDeleteResponseError   `json:"errors,required"`
+	Messages []PrefixServiceBindingDeleteResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixServiceBindingDeleteResponseSuccess `json:"success,required"`
 	JSON    prefixServiceBindingDeleteResponseJSON    `json:"-"`
@@ -244,6 +243,52 @@ func (r *PrefixServiceBindingDeleteResponse) UnmarshalJSON(data []byte) (err err
 }
 
 func (r prefixServiceBindingDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixServiceBindingDeleteResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    prefixServiceBindingDeleteResponseErrorJSON `json:"-"`
+}
+
+// prefixServiceBindingDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [PrefixServiceBindingDeleteResponseError]
+type prefixServiceBindingDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixServiceBindingDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixServiceBindingDeleteResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixServiceBindingDeleteResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    prefixServiceBindingDeleteResponseMessageJSON `json:"-"`
+}
+
+// prefixServiceBindingDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [PrefixServiceBindingDeleteResponseMessage]
+type prefixServiceBindingDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixServiceBindingDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixServiceBindingDeleteResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -277,8 +322,8 @@ func (r PrefixServiceBindingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixServiceBindingNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []PrefixServiceBindingNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixServiceBindingNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixServiceBindingNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ServiceBinding                                 `json:"result"`
@@ -301,6 +346,52 @@ func (r *PrefixServiceBindingNewResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r prefixServiceBindingNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixServiceBindingNewResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    prefixServiceBindingNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// prefixServiceBindingNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [PrefixServiceBindingNewResponseEnvelopeErrors]
+type prefixServiceBindingNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixServiceBindingNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixServiceBindingNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixServiceBindingNewResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    prefixServiceBindingNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// prefixServiceBindingNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [PrefixServiceBindingNewResponseEnvelopeMessages]
+type prefixServiceBindingNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixServiceBindingNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixServiceBindingNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -335,8 +426,8 @@ type PrefixServiceBindingGetParams struct {
 }
 
 type PrefixServiceBindingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []PrefixServiceBindingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixServiceBindingGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success PrefixServiceBindingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  ServiceBinding                                 `json:"result"`
@@ -359,6 +450,52 @@ func (r *PrefixServiceBindingGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r prefixServiceBindingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixServiceBindingGetResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    prefixServiceBindingGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// prefixServiceBindingGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [PrefixServiceBindingGetResponseEnvelopeErrors]
+type prefixServiceBindingGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixServiceBindingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixServiceBindingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixServiceBindingGetResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    prefixServiceBindingGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// prefixServiceBindingGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [PrefixServiceBindingGetResponseEnvelopeMessages]
+type prefixServiceBindingGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixServiceBindingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixServiceBindingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

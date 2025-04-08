@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InsightClassService contains methods and other services that help with
@@ -118,8 +117,8 @@ func (r InsightClassGetParams) URLQuery() (v url.Values) {
 }
 
 type InsightClassGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []InsightClassGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []InsightClassGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success InsightClassGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  []InsightClassGetResponse              `json:"result"`
@@ -142,6 +141,52 @@ func (r *InsightClassGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r insightClassGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightClassGetResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    insightClassGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// insightClassGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [InsightClassGetResponseEnvelopeErrors]
+type insightClassGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightClassGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightClassGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightClassGetResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    insightClassGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// insightClassGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [InsightClassGetResponseEnvelopeMessages]
+type insightClassGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightClassGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightClassGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

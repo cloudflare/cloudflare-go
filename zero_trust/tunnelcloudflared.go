@@ -1670,8 +1670,8 @@ func (r TunnelCloudflaredNewParamsConfigSrc) IsKnown() bool {
 }
 
 type TunnelCloudflaredNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []TunnelCloudflaredNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TunnelCloudflaredNewResponseEnvelopeMessages `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelCloudflaredNewResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -1695,6 +1695,52 @@ func (r *TunnelCloudflaredNewResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r tunnelCloudflaredNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredNewResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    tunnelCloudflaredNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tunnelCloudflaredNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [TunnelCloudflaredNewResponseEnvelopeErrors]
+type tunnelCloudflaredNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredNewResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    tunnelCloudflaredNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tunnelCloudflaredNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [TunnelCloudflaredNewResponseEnvelopeMessages]
+type tunnelCloudflaredNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1777,8 +1823,8 @@ type TunnelCloudflaredDeleteParams struct {
 }
 
 type TunnelCloudflaredDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []TunnelCloudflaredDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TunnelCloudflaredDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelCloudflaredDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -1802,6 +1848,52 @@ func (r *TunnelCloudflaredDeleteResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r tunnelCloudflaredDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredDeleteResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    tunnelCloudflaredDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tunnelCloudflaredDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [TunnelCloudflaredDeleteResponseEnvelopeErrors]
+type tunnelCloudflaredDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredDeleteResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    tunnelCloudflaredDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tunnelCloudflaredDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [TunnelCloudflaredDeleteResponseEnvelopeMessages]
+type tunnelCloudflaredDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1835,8 +1927,8 @@ func (r TunnelCloudflaredEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelCloudflaredEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []TunnelCloudflaredEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TunnelCloudflaredEditResponseEnvelopeMessages `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelCloudflaredEditResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -1863,6 +1955,52 @@ func (r tunnelCloudflaredEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type TunnelCloudflaredEditResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    tunnelCloudflaredEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tunnelCloudflaredEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [TunnelCloudflaredEditResponseEnvelopeErrors]
+type tunnelCloudflaredEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredEditResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    tunnelCloudflaredEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tunnelCloudflaredEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [TunnelCloudflaredEditResponseEnvelopeMessages]
+type tunnelCloudflaredEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type TunnelCloudflaredEditResponseEnvelopeSuccess bool
 
@@ -1884,8 +2022,8 @@ type TunnelCloudflaredGetParams struct {
 }
 
 type TunnelCloudflaredGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []TunnelCloudflaredGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TunnelCloudflaredGetResponseEnvelopeMessages `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result TunnelCloudflaredGetResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -1909,6 +2047,52 @@ func (r *TunnelCloudflaredGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r tunnelCloudflaredGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredGetResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    tunnelCloudflaredGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tunnelCloudflaredGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [TunnelCloudflaredGetResponseEnvelopeErrors]
+type tunnelCloudflaredGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredGetResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    tunnelCloudflaredGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tunnelCloudflaredGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [TunnelCloudflaredGetResponseEnvelopeMessages]
+type tunnelCloudflaredGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

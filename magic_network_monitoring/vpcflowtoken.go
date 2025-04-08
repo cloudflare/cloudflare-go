@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // VPCFlowTokenService contains methods and other services that help with
@@ -56,8 +55,8 @@ type VPCFlowTokenNewParams struct {
 }
 
 type VPCFlowTokenNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []VPCFlowTokenNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []VPCFlowTokenNewResponseEnvelopeMessages `json:"messages,required"`
 	// Authentication token to be used for VPC Flows export authentication.
 	Result string `json:"result,required"`
 	// Whether the API call was successful
@@ -81,6 +80,52 @@ func (r *VPCFlowTokenNewResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r vpcFlowTokenNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type VPCFlowTokenNewResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    vpcFlowTokenNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// vpcFlowTokenNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [VPCFlowTokenNewResponseEnvelopeErrors]
+type vpcFlowTokenNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VPCFlowTokenNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vpcFlowTokenNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type VPCFlowTokenNewResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    vpcFlowTokenNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// vpcFlowTokenNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [VPCFlowTokenNewResponseEnvelopeMessages]
+type vpcFlowTokenNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VPCFlowTokenNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vpcFlowTokenNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

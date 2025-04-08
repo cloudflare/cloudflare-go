@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // LeakedCredentialCheckService contains methods and other services that help with
@@ -128,8 +127,8 @@ func (r LeakedCredentialCheckNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LeakedCredentialCheckNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []LeakedCredentialCheckNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LeakedCredentialCheckNewResponseEnvelopeMessages `json:"messages,required"`
 	// The overall status for Leaked Credential Checks
 	Result LeakedCredentialCheckNewResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -156,6 +155,52 @@ func (r leakedCredentialCheckNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type LeakedCredentialCheckNewResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    leakedCredentialCheckNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// leakedCredentialCheckNewResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [LeakedCredentialCheckNewResponseEnvelopeErrors]
+type leakedCredentialCheckNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LeakedCredentialCheckNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r leakedCredentialCheckNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type LeakedCredentialCheckNewResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    leakedCredentialCheckNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// leakedCredentialCheckNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [LeakedCredentialCheckNewResponseEnvelopeMessages]
+type leakedCredentialCheckNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LeakedCredentialCheckNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r leakedCredentialCheckNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type LeakedCredentialCheckNewResponseEnvelopeSuccess bool
 
@@ -177,8 +222,8 @@ type LeakedCredentialCheckGetParams struct {
 }
 
 type LeakedCredentialCheckGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []LeakedCredentialCheckGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LeakedCredentialCheckGetResponseEnvelopeMessages `json:"messages,required"`
 	// The overall status for Leaked Credential Checks
 	Result LeakedCredentialCheckGetResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -202,6 +247,52 @@ func (r *LeakedCredentialCheckGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r leakedCredentialCheckGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type LeakedCredentialCheckGetResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    leakedCredentialCheckGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// leakedCredentialCheckGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [LeakedCredentialCheckGetResponseEnvelopeErrors]
+type leakedCredentialCheckGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LeakedCredentialCheckGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r leakedCredentialCheckGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type LeakedCredentialCheckGetResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    leakedCredentialCheckGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// leakedCredentialCheckGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [LeakedCredentialCheckGetResponseEnvelopeMessages]
+type leakedCredentialCheckGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LeakedCredentialCheckGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r leakedCredentialCheckGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

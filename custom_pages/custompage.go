@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CustomPageService contains methods and other services that help with interacting
@@ -180,9 +179,9 @@ func (r CustomPageUpdateParamsState) IsKnown() bool {
 }
 
 type CustomPageUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Errors   []CustomPageUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CustomPageUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   interface{}                                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success CustomPageUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customPageUpdateResponseEnvelopeJSON    `json:"-"`
@@ -204,6 +203,52 @@ func (r *CustomPageUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r customPageUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CustomPageUpdateResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    customPageUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// customPageUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CustomPageUpdateResponseEnvelopeErrors]
+type customPageUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomPageUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customPageUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CustomPageUpdateResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    customPageUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// customPageUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [CustomPageUpdateResponseEnvelopeMessages]
+type customPageUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomPageUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customPageUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -237,9 +282,9 @@ type CustomPageGetParams struct {
 }
 
 type CustomPageGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Errors   []CustomPageGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CustomPageGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   interface{}                             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success CustomPageGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customPageGetResponseEnvelopeJSON    `json:"-"`
@@ -261,6 +306,52 @@ func (r *CustomPageGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r customPageGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CustomPageGetResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    customPageGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// customPageGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CustomPageGetResponseEnvelopeErrors]
+type customPageGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomPageGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customPageGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CustomPageGetResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    customPageGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// customPageGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [CustomPageGetResponseEnvelopeMessages]
+type customPageGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomPageGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customPageGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

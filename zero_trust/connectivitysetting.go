@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ConnectivitySettingService contains methods and other services that help with
@@ -132,9 +131,9 @@ func (r ConnectivitySettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConnectivitySettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   ConnectivitySettingEditResponse `json:"result,required"`
+	Errors   []ConnectivitySettingEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ConnectivitySettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   ConnectivitySettingEditResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ConnectivitySettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    connectivitySettingEditResponseEnvelopeJSON    `json:"-"`
@@ -159,6 +158,52 @@ func (r connectivitySettingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type ConnectivitySettingEditResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    connectivitySettingEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// connectivitySettingEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ConnectivitySettingEditResponseEnvelopeErrors]
+type connectivitySettingEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectivitySettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectivitySettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectivitySettingEditResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    connectivitySettingEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// connectivitySettingEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [ConnectivitySettingEditResponseEnvelopeMessages]
+type connectivitySettingEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectivitySettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectivitySettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type ConnectivitySettingEditResponseEnvelopeSuccess bool
 
@@ -180,9 +225,9 @@ type ConnectivitySettingGetParams struct {
 }
 
 type ConnectivitySettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ConnectivitySettingGetResponse `json:"result,required"`
+	Errors   []ConnectivitySettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ConnectivitySettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ConnectivitySettingGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ConnectivitySettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    connectivitySettingGetResponseEnvelopeJSON    `json:"-"`
@@ -204,6 +249,52 @@ func (r *ConnectivitySettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r connectivitySettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectivitySettingGetResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    connectivitySettingGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// connectivitySettingGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ConnectivitySettingGetResponseEnvelopeErrors]
+type connectivitySettingGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectivitySettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectivitySettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectivitySettingGetResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    connectivitySettingGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// connectivitySettingGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [ConnectivitySettingGetResponseEnvelopeMessages]
+type connectivitySettingGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectivitySettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectivitySettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

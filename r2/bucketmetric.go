@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketMetricService contains methods and other services that help with
@@ -252,8 +251,8 @@ type BucketMetricListParams struct {
 }
 
 type BucketMetricListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
+	Errors   []BucketMetricListResponseEnvelopeErrors `json:"errors,required"`
+	Messages []string                                 `json:"messages,required"`
 	// Metrics based on the class they belong to
 	Result BucketMetricListResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -277,6 +276,29 @@ func (r *BucketMetricListResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r bucketMetricListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type BucketMetricListResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    bucketMetricListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// bucketMetricListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [BucketMetricListResponseEnvelopeErrors]
+type bucketMetricListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BucketMetricListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bucketMetricListResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 

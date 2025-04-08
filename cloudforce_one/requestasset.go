@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RequestAssetService contains methods and other services that help with
@@ -216,8 +215,8 @@ func (r requestAssetUpdateResponseJSON) RawJSON() string {
 }
 
 type RequestAssetDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []RequestAssetDeleteResponseError   `json:"errors,required"`
+	Messages []RequestAssetDeleteResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestAssetDeleteResponseSuccess `json:"success,required"`
 	JSON    requestAssetDeleteResponseJSON    `json:"-"`
@@ -238,6 +237,52 @@ func (r *RequestAssetDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r requestAssetDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestAssetDeleteResponseError struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    requestAssetDeleteResponseErrorJSON `json:"-"`
+}
+
+// requestAssetDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [RequestAssetDeleteResponseError]
+type requestAssetDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RequestAssetDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetDeleteResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestAssetDeleteResponseMessage struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    requestAssetDeleteResponseMessageJSON `json:"-"`
+}
+
+// requestAssetDeleteResponseMessageJSON contains the JSON metadata for the struct
+// [RequestAssetDeleteResponseMessage]
+type requestAssetDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RequestAssetDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetDeleteResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -311,8 +356,8 @@ func (r RequestAssetUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestAssetUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []RequestAssetUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RequestAssetUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestAssetUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  RequestAssetUpdateResponse                `json:"result"`
@@ -335,6 +380,52 @@ func (r *RequestAssetUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r requestAssetUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestAssetUpdateResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    requestAssetUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// requestAssetUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RequestAssetUpdateResponseEnvelopeErrors]
+type requestAssetUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RequestAssetUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestAssetUpdateResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    requestAssetUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// requestAssetUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [RequestAssetUpdateResponseEnvelopeMessages]
+type requestAssetUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RequestAssetUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestAssetUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

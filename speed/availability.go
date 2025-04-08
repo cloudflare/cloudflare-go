@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AvailabilityService contains methods and other services that help with
@@ -246,8 +245,8 @@ type AvailabilityListParams struct {
 }
 
 type AvailabilityListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []AvailabilityListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AvailabilityListResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success bool                                 `json:"success,required"`
 	Result  Availability                         `json:"result"`
@@ -270,5 +269,51 @@ func (r *AvailabilityListResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r availabilityListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AvailabilityListResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    availabilityListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// availabilityListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AvailabilityListResponseEnvelopeErrors]
+type availabilityListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AvailabilityListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availabilityListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AvailabilityListResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    availabilityListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// availabilityListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AvailabilityListResponseEnvelopeMessages]
+type availabilityListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AvailabilityListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availabilityListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

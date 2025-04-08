@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessUserLastSeenIdentityService contains methods and other services that help
@@ -247,8 +246,8 @@ type AccessUserLastSeenIdentityGetParams struct {
 }
 
 type AccessUserLastSeenIdentityGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []AccessUserLastSeenIdentityGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessUserLastSeenIdentityGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessUserLastSeenIdentityGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Identity                                             `json:"result"`
@@ -271,6 +270,52 @@ func (r *AccessUserLastSeenIdentityGetResponseEnvelope) UnmarshalJSON(data []byt
 }
 
 func (r accessUserLastSeenIdentityGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessUserLastSeenIdentityGetResponseEnvelopeErrors struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    accessUserLastSeenIdentityGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessUserLastSeenIdentityGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AccessUserLastSeenIdentityGetResponseEnvelopeErrors]
+type accessUserLastSeenIdentityGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserLastSeenIdentityGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessUserLastSeenIdentityGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessUserLastSeenIdentityGetResponseEnvelopeMessages struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    accessUserLastSeenIdentityGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessUserLastSeenIdentityGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AccessUserLastSeenIdentityGetResponseEnvelopeMessages]
+type accessUserLastSeenIdentityGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserLastSeenIdentityGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessUserLastSeenIdentityGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

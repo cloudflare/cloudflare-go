@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -468,8 +467,8 @@ func (r ConsumerMqHTTPConsumerSettingsParam) MarshalJSON() (data []byte, err err
 }
 
 type ConsumerDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
+	Errors   []ConsumerDeleteResponseError `json:"errors"`
+	Messages []string                      `json:"messages"`
 	// Indicates if the API call was successful or not.
 	Success ConsumerDeleteResponseSuccess `json:"success"`
 	JSON    consumerDeleteResponseJSON    `json:"-"`
@@ -490,6 +489,29 @@ func (r *ConsumerDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r consumerDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerDeleteResponseError struct {
+	Code    int64                           `json:"code,required"`
+	Message string                          `json:"message,required"`
+	JSON    consumerDeleteResponseErrorJSON `json:"-"`
+}
+
+// consumerDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [ConsumerDeleteResponseError]
+type consumerDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerDeleteResponseErrorJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -645,9 +667,9 @@ func (r ConsumerNewParamsBodyType) IsKnown() bool {
 }
 
 type ConsumerNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   Consumer              `json:"result"`
+	Errors   []ConsumerNewResponseEnvelopeErrors `json:"errors"`
+	Messages []string                            `json:"messages"`
+	Result   Consumer                            `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success ConsumerNewResponseEnvelopeSuccess `json:"success"`
 	JSON    consumerNewResponseEnvelopeJSON    `json:"-"`
@@ -669,6 +691,29 @@ func (r *ConsumerNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r consumerNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerNewResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    consumerNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// consumerNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ConsumerNewResponseEnvelopeErrors]
+type consumerNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerNewResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -824,9 +869,9 @@ func (r ConsumerUpdateParamsBodyType) IsKnown() bool {
 }
 
 type ConsumerUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   Consumer              `json:"result"`
+	Errors   []ConsumerUpdateResponseEnvelopeErrors `json:"errors"`
+	Messages []string                               `json:"messages"`
+	Result   Consumer                               `json:"result"`
 	// Indicates if the API call was successful or not.
 	Success ConsumerUpdateResponseEnvelopeSuccess `json:"success"`
 	JSON    consumerUpdateResponseEnvelopeJSON    `json:"-"`
@@ -848,6 +893,29 @@ func (r *ConsumerUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r consumerUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerUpdateResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    consumerUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// consumerUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ConsumerUpdateResponseEnvelopeErrors]
+type consumerUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
