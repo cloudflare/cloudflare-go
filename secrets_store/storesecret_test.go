@@ -33,8 +33,9 @@ func TestStoreSecretNew(t *testing.T) {
 		secrets_store.StoreSecretNewParams{
 			AccountID: cloudflare.F("985e105f4ecef8ad9ca31a8372d0c353"),
 			Body: []secrets_store.StoreSecretNewParamsBody{{
-				Name:  cloudflare.F("MY_API_KEY"),
-				Value: cloudflare.F("api-token-secret-123"),
+				Name:   cloudflare.F("MY_API_KEY"),
+				Scopes: cloudflare.F([]string{"workers"}),
+				Value:  cloudflare.F("api-token-secret-123"),
 			}},
 		},
 	)
@@ -191,6 +192,7 @@ func TestStoreSecretEditWithOptionalParams(t *testing.T) {
 		secrets_store.StoreSecretEditParams{
 			AccountID: cloudflare.F("985e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F("MY_API_KEY"),
+			Scopes:    cloudflare.F([]string{"workers"}),
 			Value:     cloudflare.F("api-token-secret-123"),
 		},
 	)
