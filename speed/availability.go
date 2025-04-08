@@ -241,7 +241,7 @@ func (r availabilityRegionsPerPlanJSON) RawJSON() string {
 }
 
 type AvailabilityListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
