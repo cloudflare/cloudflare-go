@@ -71,6 +71,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/page_rules"
 	"github.com/cloudflare/cloudflare-go/v4/page_shield"
 	"github.com/cloudflare/cloudflare-go/v4/pages"
+	"github.com/cloudflare/cloudflare-go/v4/pipelines"
 	"github.com/cloudflare/cloudflare-go/v4/queues"
 	"github.com/cloudflare/cloudflare-go/v4/r2"
 	"github.com/cloudflare/cloudflare-go/v4/radar"
@@ -210,6 +211,7 @@ type Client struct {
 	BrowserRendering            *browser_rendering.BrowserRenderingService
 	CustomPages                 *custom_pages.CustomPageService
 	SecretsStore                *secrets_store.SecretsStoreService
+	Pipelines                   *pipelines.PipelineService
 }
 
 // DefaultClientOptions read from the environment (CLOUDFLARE_API_TOKEN,
@@ -335,6 +337,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.BrowserRendering = browser_rendering.NewBrowserRenderingService(opts...)
 	r.CustomPages = custom_pages.NewCustomPageService(opts...)
 	r.SecretsStore = secrets_store.NewSecretsStoreService(opts...)
+	r.Pipelines = pipelines.NewPipelineService(opts...)
 
 	return
 }
