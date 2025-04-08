@@ -33,7 +33,7 @@ func TestTemporaryCredentialNewWithOptionalParams(t *testing.T) {
 		TemporaryCredential: r2.TemporaryCredentialParam{
 			Bucket:            cloudflare.F("example-bucket"),
 			ParentAccessKeyID: cloudflare.F("example-access-key-id"),
-			Permission:        cloudflare.F(r2.TemporaryCredentialPermissionAdminReadWrite),
+			Permission:        cloudflare.F(r2.TemporaryCredentialPermissionObjectReadWrite),
 			TTLSeconds:        cloudflare.F(3600.000000),
 			Objects:           cloudflare.F([]string{"example-object"}),
 			Prefixes:          cloudflare.F([]string{"example-prefix/"}),

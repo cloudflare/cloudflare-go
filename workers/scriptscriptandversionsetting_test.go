@@ -35,7 +35,7 @@ func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
 			Settings: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettings{
 				Bindings: cloudflare.F([]workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingUnion{workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAI{
 					Name: cloudflare.F("MY_ENV_VAR"),
-					Type: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeAI),
+					Type: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypePlainText),
 				}}),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),

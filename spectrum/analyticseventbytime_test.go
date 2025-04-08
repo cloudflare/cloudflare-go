@@ -30,7 +30,7 @@ func TestAnalyticsEventBytimeGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Spectrum.Analytics.Events.Bytimes.Get(context.TODO(), spectrum.AnalyticsEventBytimeGetParams{
 		ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		TimeDelta:  cloudflare.F(spectrum.AnalyticsEventBytimeGetParamsTimeDeltaYear),
+		TimeDelta:  cloudflare.F(spectrum.AnalyticsEventBytimeGetParamsTimeDeltaMinute),
 		Dimensions: cloudflare.F([]spectrum.Dimension{spectrum.DimensionEvent, spectrum.DimensionAppID}),
 		Filters:    cloudflare.F("event==disconnect%20AND%20coloName!=SFO"),
 		Metrics:    cloudflare.F([]spectrum.AnalyticsEventBytimeGetParamsMetric{spectrum.AnalyticsEventBytimeGetParamsMetricCount, spectrum.AnalyticsEventBytimeGetParamsMetricBytesIngress}),

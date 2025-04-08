@@ -149,7 +149,7 @@ func TestTokenListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Accounts.Tokens.List(context.TODO(), accounts.TokenListParams{
 		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
-		Direction: cloudflare.F(accounts.TokenListParamsDirectionAsc),
+		Direction: cloudflare.F(accounts.TokenListParamsDirectionDesc),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 	})

@@ -61,7 +61,7 @@ func TestNetflowTimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Netflows.Timeseries(context.TODO(), radar.NetflowTimeseriesParams{
-		AggInterval:   cloudflare.F(radar.NetflowTimeseriesParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.NetflowTimeseriesParamsAggInterval1h),
 		ASN:           cloudflare.F([]string{"string"}),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
@@ -70,7 +70,7 @@ func TestNetflowTimeseriesWithOptionalParams(t *testing.T) {
 		Format:        cloudflare.F(radar.NetflowTimeseriesParamsFormatJson),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"main_series"}),
-		Normalization: cloudflare.F(radar.NetflowTimeseriesParamsNormalizationPercentageChange),
+		Normalization: cloudflare.F(radar.NetflowTimeseriesParamsNormalizationMin0Max),
 		Product:       cloudflare.F([]radar.NetflowTimeseriesParamsProduct{radar.NetflowTimeseriesParamsProductHTTP}),
 	})
 	if err != nil {

@@ -30,7 +30,7 @@ func TestAbuseReportNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AbuseReports.New(
 		context.TODO(),
-		abuse_reports.AbuseReportNewParamsReportTypeAbuseDmca,
+		abuse_reports.AbuseReportNewParamsReportTypeAbuseGeneral,
 		abuse_reports.AbuseReportNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReport{
@@ -44,7 +44,7 @@ func TestAbuseReportNewWithOptionalParams(t *testing.T) {
 				OwnerNotification:          cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSend),
 				Signature:                  cloudflare.F("signature"),
 				State:                      cloudflare.F("x"),
-				Act:                        cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseDmca),
+				Act:                        cloudflare.F(abuse_reports.AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseGeneral),
 				Comments:                   cloudflare.F("x"),
 				Company:                    cloudflare.F("x"),
 				DestinationIPs:             cloudflare.F("destination_ips"),
