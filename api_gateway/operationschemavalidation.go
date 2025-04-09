@@ -264,7 +264,7 @@ func (r OperationSchemaValidationGetResponseMitigationAction) IsKnown() bool {
 }
 
 type OperationSchemaValidationUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// When set, this applies a mitigation action to this operation
 	//
@@ -306,7 +306,7 @@ func (r OperationSchemaValidationUpdateParamsMitigationAction) IsKnown() bool {
 }
 
 type OperationSchemaValidationEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID                  param.Field[string]          `path:"zone_id,required"`
 	SettingsMultipleRequest SettingsMultipleRequestParam `json:"settings_multiple_request,required"`
 }
@@ -319,7 +319,7 @@ type OperationSchemaValidationEditResponseEnvelope struct {
 	Errors   Message                 `json:"errors,required"`
 	Messages Message                 `json:"messages,required"`
 	Result   SettingsMultipleRequest `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success OperationSchemaValidationEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    operationSchemaValidationEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -343,7 +343,7 @@ func (r operationSchemaValidationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type OperationSchemaValidationEditResponseEnvelopeSuccess bool
 
 const (
@@ -359,6 +359,6 @@ func (r OperationSchemaValidationEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OperationSchemaValidationGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

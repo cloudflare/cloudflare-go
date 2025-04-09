@@ -76,7 +76,7 @@ func (r expressionTemplateFallthroughNewResponseJSON) RawJSON() string {
 }
 
 type ExpressionTemplateFallthroughNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// List of hosts to be targeted in the expression
 	Hosts param.Field[[]string] `json:"hosts,required"`
@@ -90,7 +90,7 @@ type ExpressionTemplateFallthroughNewResponseEnvelope struct {
 	Errors   Message                                  `json:"errors,required"`
 	Messages Message                                  `json:"messages,required"`
 	Result   ExpressionTemplateFallthroughNewResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success ExpressionTemplateFallthroughNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    expressionTemplateFallthroughNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -114,7 +114,7 @@ func (r expressionTemplateFallthroughNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ExpressionTemplateFallthroughNewResponseEnvelopeSuccess bool
 
 const (

@@ -196,7 +196,7 @@ func (r DiscoveryOperationEditResponseState) IsKnown() bool {
 }
 
 type DiscoveryOperationListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// When `true`, only return API Discovery results that are not saved into API
 	// Shield Endpoint Management
@@ -324,7 +324,7 @@ func (r DiscoveryOperationListParamsState) IsKnown() bool {
 }
 
 type DiscoveryOperationBulkEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string]                             `path:"zone_id,required"`
 	Body   map[string]DiscoveryOperationBulkEditParamsBody `json:"body,required"`
 }
@@ -369,7 +369,7 @@ type DiscoveryOperationBulkEditResponseEnvelope struct {
 	Errors   Message                            `json:"errors,required"`
 	Messages Message                            `json:"messages,required"`
 	Result   DiscoveryOperationBulkEditResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success DiscoveryOperationBulkEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    discoveryOperationBulkEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -393,7 +393,7 @@ func (r discoveryOperationBulkEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type DiscoveryOperationBulkEditResponseEnvelopeSuccess bool
 
 const (
@@ -409,7 +409,7 @@ func (r DiscoveryOperationBulkEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DiscoveryOperationEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Mark state of operation in API Discovery
 	//
@@ -445,7 +445,7 @@ type DiscoveryOperationEditResponseEnvelope struct {
 	Errors   Message                        `json:"errors,required"`
 	Messages Message                        `json:"messages,required"`
 	Result   DiscoveryOperationEditResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success DiscoveryOperationEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    discoveryOperationEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -469,7 +469,7 @@ func (r discoveryOperationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type DiscoveryOperationEditResponseEnvelopeSuccess bool
 
 const (
