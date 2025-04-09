@@ -472,12 +472,14 @@ func (r *InstanceGetResponseStep) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are
 // [workflows.InstanceGetResponseStepsObject],
 // [workflows.InstanceGetResponseStepsObject],
+// [workflows.InstanceGetResponseStepsObject],
 // [workflows.InstanceGetResponseStepsObject].
 func (r InstanceGetResponseStep) AsUnion() InstanceGetResponseStepsUnion {
 	return r.union
 }
 
 // Union satisfied by [workflows.InstanceGetResponseStepsObject],
+// [workflows.InstanceGetResponseStepsObject],
 // [workflows.InstanceGetResponseStepsObject] or
 // [workflows.InstanceGetResponseStepsObject].
 type InstanceGetResponseStepsUnion interface {
@@ -488,6 +490,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*InstanceGetResponseStepsUnion)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(InstanceGetResponseStepsObject{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(InstanceGetResponseStepsObject{}),
@@ -711,14 +717,15 @@ func (r InstanceGetResponseStepsObjectType) IsKnown() bool {
 type InstanceGetResponseStepsType string
 
 const (
-	InstanceGetResponseStepsTypeStep        InstanceGetResponseStepsType = "step"
-	InstanceGetResponseStepsTypeSleep       InstanceGetResponseStepsType = "sleep"
-	InstanceGetResponseStepsTypeTermination InstanceGetResponseStepsType = "termination"
+	InstanceGetResponseStepsTypeStep         InstanceGetResponseStepsType = "step"
+	InstanceGetResponseStepsTypeSleep        InstanceGetResponseStepsType = "sleep"
+	InstanceGetResponseStepsTypeTermination  InstanceGetResponseStepsType = "termination"
+	InstanceGetResponseStepsTypeWaitForEvent InstanceGetResponseStepsType = "waitForEvent"
 )
 
 func (r InstanceGetResponseStepsType) IsKnown() bool {
 	switch r {
-	case InstanceGetResponseStepsTypeStep, InstanceGetResponseStepsTypeSleep, InstanceGetResponseStepsTypeTermination:
+	case InstanceGetResponseStepsTypeStep, InstanceGetResponseStepsTypeSleep, InstanceGetResponseStepsTypeTermination, InstanceGetResponseStepsTypeWaitForEvent:
 		return true
 	}
 	return false
