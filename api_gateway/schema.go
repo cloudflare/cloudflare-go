@@ -76,7 +76,7 @@ func (r schemaListResponseJSON) RawJSON() string {
 }
 
 type SchemaListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Add feature(s) to the results. The feature name that is given here corresponds
 	// to the resulting feature object. Have a look at the top-level object description
@@ -114,7 +114,7 @@ type SchemaListResponseEnvelope struct {
 	Errors   Message            `json:"errors,required"`
 	Messages Message            `json:"messages,required"`
 	Result   SchemaListResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success SchemaListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    schemaListResponseEnvelopeJSON    `json:"-"`
 }
@@ -138,7 +138,7 @@ func (r schemaListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type SchemaListResponseEnvelopeSuccess bool
 
 const (
