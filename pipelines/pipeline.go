@@ -37,7 +37,7 @@ func NewPipelineService(opts ...option.RequestOption) (r *PipelineService) {
 	return
 }
 
-// Create a new Pipeline.
+// Create a new pipeline.
 func (r *PipelineService) New(ctx context.Context, params PipelineNewParams, opts ...option.RequestOption) (res *PipelineNewResponse, err error) {
 	var env PipelineNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -54,7 +54,7 @@ func (r *PipelineService) New(ctx context.Context, params PipelineNewParams, opt
 	return
 }
 
-// Update an existing Pipeline.
+// Update an existing pipeline.
 func (r *PipelineService) Update(ctx context.Context, pipelineName string, params PipelineUpdateParams, opts ...option.RequestOption) (res *PipelineUpdateResponse, err error) {
 	var env PipelineUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -75,7 +75,7 @@ func (r *PipelineService) Update(ctx context.Context, pipelineName string, param
 	return
 }
 
-// List, filter, and paginate Pipelines in an account.
+// List, filter, and paginate pipelines in an account.
 func (r *PipelineService) List(ctx context.Context, params PipelineListParams, opts ...option.RequestOption) (res *PipelineListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -87,7 +87,7 @@ func (r *PipelineService) List(ctx context.Context, params PipelineListParams, o
 	return
 }
 
-// Delete a Pipeline.
+// Delete a pipeline.
 func (r *PipelineService) Delete(ctx context.Context, pipelineName string, body PipelineDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
@@ -104,7 +104,7 @@ func (r *PipelineService) Delete(ctx context.Context, pipelineName string, body 
 	return
 }
 
-// Get configuration details of a Pipeline.
+// Get configuration of a pipeline.
 func (r *PipelineService) Get(ctx context.Context, pipelineName string, query PipelineGetParams, opts ...option.RequestOption) (res *PipelineGetResponse, err error) {
 	var env PipelineGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -125,14 +125,14 @@ func (r *PipelineService) Get(ctx context.Context, pipelineName string, query Pi
 	return
 }
 
-// Describes the configuration of a Pipeline.
+// Describes the configuration of a pipeline.
 type PipelineNewResponse struct {
-	// Specifies the Pipeline identifier.
+	// Specifies the pipeline identifier.
 	ID          string                         `json:"id,required"`
 	Destination PipelineNewResponseDestination `json:"destination,required"`
 	// Indicates the endpoint URL to send traffic.
 	Endpoint string `json:"endpoint,required"`
-	// Defines the name of Pipeline.
+	// Defines the name of the pipeline.
 	Name   string                      `json:"name,required"`
 	Source []PipelineNewResponseSource `json:"source,required"`
 	// Indicates the version number of last saved configuration.
@@ -324,10 +324,10 @@ type PipelineNewResponseSource struct {
 	// Specifies the format of source data.
 	Format PipelineNewResponseSourceFormat `json:"format,required"`
 	Type   string                          `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool `json:"authentication"`
 	// This field can have the runtime type of
-	// [PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS].
+	// [PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS].
 	CORS  interface{}                   `json:"cors"`
 	JSON  pipelineNewResponseSourceJSON `json:"-"`
 	union PipelineNewResponseSourceUnion
@@ -361,16 +361,16 @@ func (r *PipelineNewResponseSource) UnmarshalJSON(data []byte) (err error) {
 // to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [pipelines.PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource],
-// [pipelines.PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSource].
+// [pipelines.PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
+// [pipelines.PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 func (r PipelineNewResponseSource) AsUnion() PipelineNewResponseSourceUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [pipelines.PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource]
+// [pipelines.PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
 // or
-// [pipelines.PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSource].
+// [pipelines.PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 type PipelineNewResponseSourceUnion interface {
 	implementsPipelineNewResponseSource()
 }
@@ -381,29 +381,29 @@ func init() {
 		"type",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource{}),
+			Type:       reflect.TypeOf(PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSource{}),
+			Type:       reflect.TypeOf(PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource{}),
 		},
 	)
 }
 
-type PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource struct {
+type PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
-	Type   string                                                                    `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
-	Authentication bool                                                                    `json:"authentication"`
-	CORS           PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
-	JSON           pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON `json:"-"`
+	Format PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
+	Type   string                                                                       `json:"type,required"`
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
+	Authentication bool                                                                       `json:"authentication"`
+	CORS           PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
+	JSON           pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON `json:"-"`
 }
 
-// pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON contains
-// the JSON metadata for the struct
-// [PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource]
-type pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON struct {
+// pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON
+// contains the JSON metadata for the struct
+// [PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
+type pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON struct {
 	Format         apijson.Field
 	Type           apijson.Field
 	Authentication apijson.Field
@@ -412,93 +412,93 @@ type pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON str
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON) RawJSON() string {
+func (r pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource) implementsPipelineNewResponseSource() {
+func (r PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource) implementsPipelineNewResponseSource() {
 }
 
 // Specifies the format of source data.
-type PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat string
+type PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat string
 
 const (
-	PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat = "json"
+	PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat = "json"
 )
 
-func (r PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
+func (r PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson:
+	case PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson:
 		return true
 	}
 	return false
 }
 
-type PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS struct {
+type PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS struct {
 	// Specifies allowed origins to allow Cross Origin HTTP Requests.
-	Origins []string                                                                    `json:"origins"`
-	JSON    pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON `json:"-"`
+	Origins []string                                                                       `json:"origins"`
+	JSON    pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON `json:"-"`
 }
 
-// pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON
+// pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON
 // contains the JSON metadata for the struct
-// [PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS]
-type pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON struct {
+// [PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS]
+type pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON struct {
 	Origins     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON) RawJSON() string {
+func (r pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON) RawJSON() string {
 	return r.raw
 }
 
-type PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSource struct {
+type PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
-	Type   string                                                                       `json:"type,required"`
-	JSON   pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
+	Format PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
+	Type   string                                                                          `json:"type,required"`
+	JSON   pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
 }
 
-// pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON
+// pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON
 // contains the JSON metadata for the struct
-// [PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSource]
-type pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON struct {
+// [PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource]
+type pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON struct {
 	Format      apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSource) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON) RawJSON() string {
+func (r pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSource) implementsPipelineNewResponseSource() {
+func (r PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource) implementsPipelineNewResponseSource() {
 }
 
 // Specifies the format of source data.
-type PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat string
+type PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat string
 
 const (
-	PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat = "json"
+	PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat = "json"
 )
 
-func (r PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
+func (r PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineNewResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson:
+	case PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson:
 		return true
 	}
 	return false
@@ -519,14 +519,14 @@ func (r PipelineNewResponseSourceFormat) IsKnown() bool {
 	return false
 }
 
-// Describes the configuration of a Pipeline.
+// Describes the configuration of a pipeline.
 type PipelineUpdateResponse struct {
-	// Specifies the Pipeline identifier.
+	// Specifies the pipeline identifier.
 	ID          string                            `json:"id,required"`
 	Destination PipelineUpdateResponseDestination `json:"destination,required"`
 	// Indicates the endpoint URL to send traffic.
 	Endpoint string `json:"endpoint,required"`
-	// Defines the name of Pipeline.
+	// Defines the name of the pipeline.
 	Name   string                         `json:"name,required"`
 	Source []PipelineUpdateResponseSource `json:"source,required"`
 	// Indicates the version number of last saved configuration.
@@ -718,10 +718,10 @@ type PipelineUpdateResponseSource struct {
 	// Specifies the format of source data.
 	Format PipelineUpdateResponseSourceFormat `json:"format,required"`
 	Type   string                             `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool `json:"authentication"`
 	// This field can have the runtime type of
-	// [PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS].
+	// [PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS].
 	CORS  interface{}                      `json:"cors"`
 	JSON  pipelineUpdateResponseSourceJSON `json:"-"`
 	union PipelineUpdateResponseSourceUnion
@@ -755,16 +755,16 @@ func (r *PipelineUpdateResponseSource) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [pipelines.PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource],
-// [pipelines.PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSource].
+// [pipelines.PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
+// [pipelines.PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 func (r PipelineUpdateResponseSource) AsUnion() PipelineUpdateResponseSourceUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [pipelines.PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource]
+// [pipelines.PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
 // or
-// [pipelines.PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSource].
+// [pipelines.PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 type PipelineUpdateResponseSourceUnion interface {
 	implementsPipelineUpdateResponseSource()
 }
@@ -775,29 +775,29 @@ func init() {
 		"type",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource{}),
+			Type:       reflect.TypeOf(PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSource{}),
+			Type:       reflect.TypeOf(PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource{}),
 		},
 	)
 }
 
-type PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource struct {
+type PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
-	Type   string                                                                       `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
-	Authentication bool                                                                       `json:"authentication"`
-	CORS           PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
-	JSON           pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON `json:"-"`
+	Format PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
+	Type   string                                                                          `json:"type,required"`
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
+	Authentication bool                                                                          `json:"authentication"`
+	CORS           PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
+	JSON           pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON `json:"-"`
 }
 
-// pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON
+// pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON
 // contains the JSON metadata for the struct
-// [PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource]
-type pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON struct {
+// [PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
+type pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON struct {
 	Format         apijson.Field
 	Type           apijson.Field
 	Authentication apijson.Field
@@ -806,93 +806,93 @@ type pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON 
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON) RawJSON() string {
+func (r pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource) implementsPipelineUpdateResponseSource() {
+func (r PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource) implementsPipelineUpdateResponseSource() {
 }
 
 // Specifies the format of source data.
-type PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat string
+type PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat string
 
 const (
-	PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat = "json"
+	PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat = "json"
 )
 
-func (r PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
+func (r PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson:
+	case PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson:
 		return true
 	}
 	return false
 }
 
-type PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS struct {
+type PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS struct {
 	// Specifies allowed origins to allow Cross Origin HTTP Requests.
-	Origins []string                                                                       `json:"origins"`
-	JSON    pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON `json:"-"`
+	Origins []string                                                                          `json:"origins"`
+	JSON    pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON `json:"-"`
 }
 
-// pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON
+// pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON
 // contains the JSON metadata for the struct
-// [PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS]
-type pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON struct {
+// [PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS]
+type pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON struct {
 	Origins     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON) RawJSON() string {
+func (r pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON) RawJSON() string {
 	return r.raw
 }
 
-type PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSource struct {
+type PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
-	Type   string                                                                          `json:"type,required"`
-	JSON   pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
+	Format PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
+	Type   string                                                                             `json:"type,required"`
+	JSON   pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
 }
 
-// pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON
+// pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON
 // contains the JSON metadata for the struct
-// [PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSource]
-type pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON struct {
+// [PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource]
+type pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON struct {
 	Format      apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSource) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON) RawJSON() string {
+func (r pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSource) implementsPipelineUpdateResponseSource() {
+func (r PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource) implementsPipelineUpdateResponseSource() {
 }
 
 // Specifies the format of source data.
-type PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat string
+type PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat string
 
 const (
-	PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat = "json"
+	PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat = "json"
 )
 
-func (r PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
+func (r PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineUpdateResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson:
+	case PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson:
 		return true
 	}
 	return false
@@ -970,14 +970,14 @@ func (r pipelineListResponseResultInfoJSON) RawJSON() string {
 	return r.raw
 }
 
-// Describes the configuration of a Pipeline.
+// Describes the configuration of a pipeline.
 type PipelineListResponseResult struct {
-	// Specifies the Pipeline identifier.
+	// Specifies the pipeline identifier.
 	ID          string                                 `json:"id,required"`
 	Destination PipelineListResponseResultsDestination `json:"destination,required"`
 	// Indicates the endpoint URL to send traffic.
 	Endpoint string `json:"endpoint,required"`
-	// Defines the name of Pipeline.
+	// Defines the name of the pipeline.
 	Name   string                              `json:"name,required"`
 	Source []PipelineListResponseResultsSource `json:"source,required"`
 	// Indicates the version number of last saved configuration.
@@ -1169,10 +1169,10 @@ type PipelineListResponseResultsSource struct {
 	// Specifies the format of source data.
 	Format PipelineListResponseResultsSourceFormat `json:"format,required"`
 	Type   string                                  `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool `json:"authentication"`
 	// This field can have the runtime type of
-	// [PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS].
+	// [PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS].
 	CORS  interface{}                           `json:"cors"`
 	JSON  pipelineListResponseResultsSourceJSON `json:"-"`
 	union PipelineListResponseResultsSourceUnion
@@ -1206,16 +1206,16 @@ func (r *PipelineListResponseResultsSource) UnmarshalJSON(data []byte) (err erro
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [pipelines.PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSource],
-// [pipelines.PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSource].
+// [pipelines.PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
+// [pipelines.PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 func (r PipelineListResponseResultsSource) AsUnion() PipelineListResponseResultsSourceUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [pipelines.PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSource]
+// [pipelines.PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
 // or
-// [pipelines.PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSource].
+// [pipelines.PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 type PipelineListResponseResultsSourceUnion interface {
 	implementsPipelineListResponseResultsSource()
 }
@@ -1226,29 +1226,29 @@ func init() {
 		"type",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSource{}),
+			Type:       reflect.TypeOf(PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSource{}),
+			Type:       reflect.TypeOf(PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource{}),
 		},
 	)
 }
 
-type PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSource struct {
+type PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
-	Type   string                                                                            `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
-	Authentication bool                                                                            `json:"authentication"`
-	CORS           PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
-	JSON           pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON `json:"-"`
+	Format PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
+	Type   string                                                                               `json:"type,required"`
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
+	Authentication bool                                                                               `json:"authentication"`
+	CORS           PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
+	JSON           pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON `json:"-"`
 }
 
-// pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON
+// pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON
 // contains the JSON metadata for the struct
-// [PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSource]
-type pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON struct {
+// [PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
+type pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON struct {
 	Format         apijson.Field
 	Type           apijson.Field
 	Authentication apijson.Field
@@ -1257,93 +1257,93 @@ type pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSource
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSource) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON) RawJSON() string {
+func (r pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSource) implementsPipelineListResponseResultsSource() {
+func (r PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource) implementsPipelineListResponseResultsSource() {
 }
 
 // Specifies the format of source data.
-type PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat string
+type PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat string
 
 const (
-	PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat = "json"
+	PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat = "json"
 )
 
-func (r PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
+func (r PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson:
+	case PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson:
 		return true
 	}
 	return false
 }
 
-type PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS struct {
+type PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS struct {
 	// Specifies allowed origins to allow Cross Origin HTTP Requests.
-	Origins []string                                                                            `json:"origins"`
-	JSON    pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON `json:"-"`
+	Origins []string                                                                               `json:"origins"`
+	JSON    pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON `json:"-"`
 }
 
-// pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON
+// pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON
 // contains the JSON metadata for the struct
-// [PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS]
-type pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON struct {
+// [PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS]
+type pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON struct {
 	Origins     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON) RawJSON() string {
+func (r pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON) RawJSON() string {
 	return r.raw
 }
 
-type PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSource struct {
+type PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
-	Type   string                                                                               `json:"type,required"`
-	JSON   pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
+	Format PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
+	Type   string                                                                                  `json:"type,required"`
+	JSON   pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
 }
 
-// pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON
+// pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON
 // contains the JSON metadata for the struct
-// [PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSource]
-type pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON struct {
+// [PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource]
+type pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON struct {
 	Format      apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSource) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON) RawJSON() string {
+func (r pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSource) implementsPipelineListResponseResultsSource() {
+func (r PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource) implementsPipelineListResponseResultsSource() {
 }
 
 // Specifies the format of source data.
-type PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat string
+type PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat string
 
 const (
-	PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat = "json"
+	PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat = "json"
 )
 
-func (r PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
+func (r PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineListResponseResultsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson:
+	case PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson:
 		return true
 	}
 	return false
@@ -1364,14 +1364,14 @@ func (r PipelineListResponseResultsSourceFormat) IsKnown() bool {
 	return false
 }
 
-// Describes the configuration of a Pipeline.
+// Describes the configuration of a pipeline.
 type PipelineGetResponse struct {
-	// Specifies the Pipeline identifier.
+	// Specifies the pipeline identifier.
 	ID          string                         `json:"id,required"`
 	Destination PipelineGetResponseDestination `json:"destination,required"`
 	// Indicates the endpoint URL to send traffic.
 	Endpoint string `json:"endpoint,required"`
-	// Defines the name of Pipeline.
+	// Defines the name of the pipeline.
 	Name   string                      `json:"name,required"`
 	Source []PipelineGetResponseSource `json:"source,required"`
 	// Indicates the version number of last saved configuration.
@@ -1563,10 +1563,10 @@ type PipelineGetResponseSource struct {
 	// Specifies the format of source data.
 	Format PipelineGetResponseSourceFormat `json:"format,required"`
 	Type   string                          `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool `json:"authentication"`
 	// This field can have the runtime type of
-	// [PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS].
+	// [PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS].
 	CORS  interface{}                   `json:"cors"`
 	JSON  pipelineGetResponseSourceJSON `json:"-"`
 	union PipelineGetResponseSourceUnion
@@ -1600,16 +1600,16 @@ func (r *PipelineGetResponseSource) UnmarshalJSON(data []byte) (err error) {
 // to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [pipelines.PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource],
-// [pipelines.PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSource].
+// [pipelines.PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
+// [pipelines.PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 func (r PipelineGetResponseSource) AsUnion() PipelineGetResponseSourceUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [pipelines.PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource]
+// [pipelines.PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
 // or
-// [pipelines.PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSource].
+// [pipelines.PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 type PipelineGetResponseSourceUnion interface {
 	implementsPipelineGetResponseSource()
 }
@@ -1620,29 +1620,29 @@ func init() {
 		"type",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource{}),
+			Type:       reflect.TypeOf(PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSource{}),
+			Type:       reflect.TypeOf(PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource{}),
 		},
 	)
 }
 
-type PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource struct {
+type PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
-	Type   string                                                                    `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
-	Authentication bool                                                                    `json:"authentication"`
-	CORS           PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
-	JSON           pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON `json:"-"`
+	Format PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
+	Type   string                                                                       `json:"type,required"`
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
+	Authentication bool                                                                       `json:"authentication"`
+	CORS           PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
+	JSON           pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON `json:"-"`
 }
 
-// pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON contains
-// the JSON metadata for the struct
-// [PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource]
-type pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON struct {
+// pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON
+// contains the JSON metadata for the struct
+// [PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
+type pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON struct {
 	Format         apijson.Field
 	Type           apijson.Field
 	Authentication apijson.Field
@@ -1651,93 +1651,93 @@ type pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON str
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceJSON) RawJSON() string {
+func (r pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSource) implementsPipelineGetResponseSource() {
+func (r PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource) implementsPipelineGetResponseSource() {
 }
 
 // Specifies the format of source data.
-type PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat string
+type PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat string
 
 const (
-	PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat = "json"
+	PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat = "json"
 )
 
-func (r PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
+func (r PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson:
+	case PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson:
 		return true
 	}
 	return false
 }
 
-type PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS struct {
+type PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS struct {
 	// Specifies allowed origins to allow Cross Origin HTTP Requests.
-	Origins []string                                                                    `json:"origins"`
-	JSON    pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON `json:"-"`
+	Origins []string                                                                       `json:"origins"`
+	JSON    pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON `json:"-"`
 }
 
-// pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON
+// pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON
 // contains the JSON metadata for the struct
-// [PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS]
-type pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON struct {
+// [PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS]
+type pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON struct {
 	Origins     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORSJSON) RawJSON() string {
+func (r pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORSJSON) RawJSON() string {
 	return r.raw
 }
 
-type PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSource struct {
+type PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
-	Type   string                                                                       `json:"type,required"`
-	JSON   pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
+	Format PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
+	Type   string                                                                          `json:"type,required"`
+	JSON   pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
 }
 
-// pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON
+// pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON
 // contains the JSON metadata for the struct
-// [PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSource]
-type pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON struct {
+// [PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource]
+type pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON struct {
 	Format      apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSource) UnmarshalJSON(data []byte) (err error) {
+func (r *PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceJSON) RawJSON() string {
+func (r pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSource) implementsPipelineGetResponseSource() {
+func (r PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource) implementsPipelineGetResponseSource() {
 }
 
 // Specifies the format of source data.
-type PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat string
+type PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat string
 
 const (
-	PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat = "json"
+	PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat = "json"
 )
 
-func (r PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
+func (r PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineGetResponseSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson:
+	case PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson:
 		return true
 	}
 	return false
@@ -1762,7 +1762,7 @@ type PipelineNewParams struct {
 	// Specifies the public ID of the account.
 	AccountID   param.Field[string]                       `path:"account_id,required"`
 	Destination param.Field[PipelineNewParamsDestination] `json:"destination,required"`
-	// Defines the name of Pipeline.
+	// Defines the name of the pipeline.
 	Name   param.Field[string]                         `json:"name,required"`
 	Source param.Field[[]PipelineNewParamsSourceUnion] `json:"source,required"`
 }
@@ -1887,7 +1887,7 @@ type PipelineNewParamsSource struct {
 	// Specifies the format of source data.
 	Format param.Field[PipelineNewParamsSourceFormat] `json:"format,required"`
 	Type   param.Field[string]                        `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication param.Field[bool]        `json:"authentication"`
 	CORS           param.Field[interface{}] `json:"cors"`
 }
@@ -1899,76 +1899,76 @@ func (r PipelineNewParamsSource) MarshalJSON() (data []byte, err error) {
 func (r PipelineNewParamsSource) implementsPipelineNewParamsSourceUnion() {}
 
 // Satisfied by
-// [pipelines.PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSource],
-// [pipelines.PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesBindingSource],
+// [pipelines.PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
+// [pipelines.PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource],
 // [PipelineNewParamsSource].
 type PipelineNewParamsSourceUnion interface {
 	implementsPipelineNewParamsSourceUnion()
 }
 
-type PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSource struct {
+type PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format param.Field[PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat] `json:"format,required"`
-	Type   param.Field[string]                                                                  `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
-	Authentication param.Field[bool]                                                                  `json:"authentication"`
-	CORS           param.Field[PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS] `json:"cors"`
+	Format param.Field[PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat] `json:"format,required"`
+	Type   param.Field[string]                                                                     `json:"type,required"`
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
+	Authentication param.Field[bool]                                                                     `json:"authentication"`
+	CORS           param.Field[PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS] `json:"cors"`
 }
 
-func (r PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSource) MarshalJSON() (data []byte, err error) {
+func (r PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSource) implementsPipelineNewParamsSourceUnion() {
+func (r PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource) implementsPipelineNewParamsSourceUnion() {
 }
 
 // Specifies the format of source data.
-type PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat string
+type PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat string
 
 const (
-	PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat = "json"
+	PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat = "json"
 )
 
-func (r PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
+func (r PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson:
+	case PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson:
 		return true
 	}
 	return false
 }
 
-type PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS struct {
+type PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS struct {
 	// Specifies allowed origins to allow Cross Origin HTTP Requests.
 	Origins param.Field[[]string] `json:"origins"`
 }
 
-func (r PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS) MarshalJSON() (data []byte, err error) {
+func (r PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesBindingSource struct {
+type PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format param.Field[PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat] `json:"format,required"`
-	Type   param.Field[string]                                                                     `json:"type,required"`
+	Format param.Field[PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat] `json:"format,required"`
+	Type   param.Field[string]                                                                        `json:"type,required"`
 }
 
-func (r PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesBindingSource) MarshalJSON() (data []byte, err error) {
+func (r PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesBindingSource) implementsPipelineNewParamsSourceUnion() {
+func (r PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource) implementsPipelineNewParamsSourceUnion() {
 }
 
 // Specifies the format of source data.
-type PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat string
+type PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat string
 
 const (
-	PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat = "json"
+	PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat = "json"
 )
 
-func (r PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
+func (r PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson:
+	case PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson:
 		return true
 	}
 	return false
@@ -1990,7 +1990,7 @@ func (r PipelineNewParamsSourceFormat) IsKnown() bool {
 }
 
 type PipelineNewResponseEnvelope struct {
-	// Describes the configuration of a Pipeline.
+	// Describes the configuration of a pipeline.
 	Result PipelineNewResponse `json:"result,required"`
 	// Indicates whether the API call was successful.
 	Success bool                            `json:"success,required"`
@@ -2018,7 +2018,7 @@ type PipelineUpdateParams struct {
 	// Specifies the public ID of the account.
 	AccountID   param.Field[string]                          `path:"account_id,required"`
 	Destination param.Field[PipelineUpdateParamsDestination] `json:"destination,required"`
-	// Defines the name of Pipeline.
+	// Defines the name of the pipeline.
 	Name   param.Field[string]                            `json:"name,required"`
 	Source param.Field[[]PipelineUpdateParamsSourceUnion] `json:"source,required"`
 }
@@ -2143,7 +2143,7 @@ type PipelineUpdateParamsSource struct {
 	// Specifies the format of source data.
 	Format param.Field[PipelineUpdateParamsSourceFormat] `json:"format,required"`
 	Type   param.Field[string]                           `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication param.Field[bool]        `json:"authentication"`
 	CORS           param.Field[interface{}] `json:"cors"`
 }
@@ -2155,76 +2155,76 @@ func (r PipelineUpdateParamsSource) MarshalJSON() (data []byte, err error) {
 func (r PipelineUpdateParamsSource) implementsPipelineUpdateParamsSourceUnion() {}
 
 // Satisfied by
-// [pipelines.PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSource],
-// [pipelines.PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesBindingSource],
+// [pipelines.PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
+// [pipelines.PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource],
 // [PipelineUpdateParamsSource].
 type PipelineUpdateParamsSourceUnion interface {
 	implementsPipelineUpdateParamsSourceUnion()
 }
 
-type PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSource struct {
+type PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format param.Field[PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat] `json:"format,required"`
-	Type   param.Field[string]                                                                     `json:"type,required"`
-	// Specifies authentication is required to send to this Pipeline.
-	Authentication param.Field[bool]                                                                     `json:"authentication"`
-	CORS           param.Field[PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS] `json:"cors"`
+	Format param.Field[PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat] `json:"format,required"`
+	Type   param.Field[string]                                                                        `json:"type,required"`
+	// Specifies whether authentication is required to send to this pipeline via HTTP.
+	Authentication param.Field[bool]                                                                        `json:"authentication"`
+	CORS           param.Field[PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS] `json:"cors"`
 }
 
-func (r PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSource) MarshalJSON() (data []byte, err error) {
+func (r PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSource) implementsPipelineUpdateParamsSourceUnion() {
+func (r PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource) implementsPipelineUpdateParamsSourceUnion() {
 }
 
 // Specifies the format of source data.
-type PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat string
+type PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat string
 
 const (
-	PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat = "json"
+	PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat = "json"
 )
 
-func (r PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
+func (r PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson:
+	case PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson:
 		return true
 	}
 	return false
 }
 
-type PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS struct {
+type PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS struct {
 	// Specifies allowed origins to allow Cross Origin HTTP Requests.
 	Origins param.Field[[]string] `json:"origins"`
 }
 
-func (r PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS) MarshalJSON() (data []byte, err error) {
+func (r PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesBindingSource struct {
+type PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format param.Field[PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat] `json:"format,required"`
-	Type   param.Field[string]                                                                        `json:"type,required"`
+	Format param.Field[PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat] `json:"format,required"`
+	Type   param.Field[string]                                                                           `json:"type,required"`
 }
 
-func (r PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesBindingSource) MarshalJSON() (data []byte, err error) {
+func (r PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesBindingSource) implementsPipelineUpdateParamsSourceUnion() {
+func (r PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource) implementsPipelineUpdateParamsSourceUnion() {
 }
 
 // Specifies the format of source data.
-type PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat string
+type PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat string
 
 const (
-	PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat = "json"
+	PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat = "json"
 )
 
-func (r PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
+func (r PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat) IsKnown() bool {
 	switch r {
-	case PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesBindingSourceFormatJson:
+	case PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormatJson:
 		return true
 	}
 	return false
@@ -2246,7 +2246,7 @@ func (r PipelineUpdateParamsSourceFormat) IsKnown() bool {
 }
 
 type PipelineUpdateResponseEnvelope struct {
-	// Describes the configuration of a Pipeline.
+	// Describes the configuration of a pipeline.
 	Result PipelineUpdateResponse `json:"result,required"`
 	// Indicates whether the API call was successful.
 	Success bool                               `json:"success,required"`
@@ -2275,9 +2275,9 @@ type PipelineListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Specifies which page to retrieve.
 	Page param.Field[string] `query:"page"`
-	// Specifies the number of Pipelines per page.
+	// Specifies the number of pipelines per page.
 	PerPage param.Field[string] `query:"per_page"`
-	// Specifies the prefix of Pipeline name to search.
+	// Specifies the prefix of pipeline name to search.
 	Search param.Field[string] `query:"search"`
 }
 
@@ -2300,7 +2300,7 @@ type PipelineGetParams struct {
 }
 
 type PipelineGetResponseEnvelope struct {
-	// Describes the configuration of a Pipeline.
+	// Describes the configuration of a pipeline.
 	Result PipelineGetResponse `json:"result,required"`
 	// Indicates whether the API call was successful.
 	Success bool                            `json:"success,required"`
