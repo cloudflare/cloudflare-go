@@ -70,7 +70,7 @@ type UserSchemaHostListResponse struct {
 	Hosts []string `json:"hosts,required"`
 	// Name of the schema
 	Name string `json:"name,required"`
-	// UUID
+	// UUID.
 	SchemaID string                         `json:"schema_id,required"`
 	JSON     userSchemaHostListResponseJSON `json:"-"`
 }
@@ -95,7 +95,7 @@ func (r userSchemaHostListResponseJSON) RawJSON() string {
 }
 
 type UserSchemaHostListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Page number of paginated results.
 	Page param.Field[int64] `query:"page"`

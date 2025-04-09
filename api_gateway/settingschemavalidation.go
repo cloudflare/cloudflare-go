@@ -70,7 +70,7 @@ func (r *SettingSchemaValidationService) Get(ctx context.Context, query SettingS
 }
 
 type SettingSchemaValidationUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The default mitigation action used when there is no mitigation action defined on
 	// the operation
@@ -144,7 +144,7 @@ func (r SettingSchemaValidationUpdateParamsValidationOverrideMitigationAction) I
 }
 
 type SettingSchemaValidationEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The default mitigation action used when there is no mitigation action defined on
 	// the operation Mitigation actions are as follows:
@@ -220,6 +220,6 @@ func (r SettingSchemaValidationEditParamsValidationOverrideMitigationAction) IsK
 }
 
 type SettingSchemaValidationGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
