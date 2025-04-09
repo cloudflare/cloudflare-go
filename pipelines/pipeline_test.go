@@ -53,11 +53,11 @@ func TestPipelineNew(t *testing.T) {
 			Type: cloudflare.F(pipelines.PipelineNewParamsDestinationTypeR2),
 		}),
 		Name: cloudflare.F("sample_pipeline"),
-		Source: cloudflare.F([]pipelines.PipelineNewParamsSourceUnion{pipelines.PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSource{
-			Format:         cloudflare.F(pipelines.PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson),
+		Source: cloudflare.F([]pipelines.PipelineNewParamsSourceUnion{pipelines.PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource{
+			Format:         cloudflare.F(pipelines.PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson),
 			Type:           cloudflare.F("type"),
 			Authentication: cloudflare.F(true),
-			CORS: cloudflare.F(pipelines.PipelineNewParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS{
+			CORS: cloudflare.F(pipelines.PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS{
 				Origins: cloudflare.F([]string{"*"}),
 			}),
 		}}),
@@ -113,11 +113,11 @@ func TestPipelineUpdateWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			Name: cloudflare.F("sample_pipeline"),
-			Source: cloudflare.F([]pipelines.PipelineUpdateParamsSourceUnion{pipelines.PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSource{
-				Format:         cloudflare.F(pipelines.PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceFormatJson),
+			Source: cloudflare.F([]pipelines.PipelineUpdateParamsSourceUnion{pipelines.PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource{
+				Format:         cloudflare.F(pipelines.PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormatJson),
 				Type:           cloudflare.F("type"),
 				Authentication: cloudflare.F(true),
-				CORS: cloudflare.F(pipelines.PipelineUpdateParamsSourceWorkersPipelinesWorkersPipelinesHTTPSourceCORS{
+				CORS: cloudflare.F(pipelines.PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS{
 					Origins: cloudflare.F([]string{"*"}),
 				}),
 			}}),
