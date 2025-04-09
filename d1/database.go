@@ -260,27 +260,47 @@ func (r queryResultJSON) RawJSON() string {
 }
 
 type QueryResultMeta struct {
-	ChangedDB   bool                `json:"changed_db"`
-	Changes     float64             `json:"changes"`
-	Duration    float64             `json:"duration"`
-	LastRowID   float64             `json:"last_row_id"`
-	RowsRead    float64             `json:"rows_read"`
-	RowsWritten float64             `json:"rows_written"`
-	SizeAfter   float64             `json:"size_after"`
-	JSON        queryResultMetaJSON `json:"-"`
+	// Denotes if the database has been altered in some way, like deleting rows.
+	ChangedDB bool `json:"changed_db"`
+	// Rough indication of how many rows were modified by the query, as provided by
+	// SQLite's `sqlite3_total_changes()`.
+	Changes float64 `json:"changes"`
+	// The duration of the SQL query execution inside the database. Does not include
+	// any network communication.
+	Duration float64 `json:"duration"`
+	// The row ID of the last inserted row in a table with an `INTEGER PRIMARY KEY` as
+	// provided by SQLite. Tables created with `WITHOUT ROWID` do not populate this.
+	LastRowID float64 `json:"last_row_id"`
+	// Number of rows read during the SQL query execution, including indices (not all
+	// rows are necessarily returned).
+	RowsRead float64 `json:"rows_read"`
+	// Number of rows written during the SQL query execution, including indices.
+	RowsWritten float64 `json:"rows_written"`
+	// Denotes if the query has been handled by the database primary instance.
+	ServedByPrimary bool `json:"served_by_primary"`
+	// Region location hint of the database instance that handled the query.
+	ServedByRegion QueryResultMetaServedByRegion `json:"served_by_region"`
+	// Size of the database after the query committed, in bytes.
+	SizeAfter float64 `json:"size_after"`
+	// Various durations for the query.
+	Timings QueryResultMetaTimings `json:"timings"`
+	JSON    queryResultMetaJSON    `json:"-"`
 }
 
 // queryResultMetaJSON contains the JSON metadata for the struct [QueryResultMeta]
 type queryResultMetaJSON struct {
-	ChangedDB   apijson.Field
-	Changes     apijson.Field
-	Duration    apijson.Field
-	LastRowID   apijson.Field
-	RowsRead    apijson.Field
-	RowsWritten apijson.Field
-	SizeAfter   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ChangedDB       apijson.Field
+	Changes         apijson.Field
+	Duration        apijson.Field
+	LastRowID       apijson.Field
+	RowsRead        apijson.Field
+	RowsWritten     apijson.Field
+	ServedByPrimary apijson.Field
+	ServedByRegion  apijson.Field
+	SizeAfter       apijson.Field
+	Timings         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *QueryResultMeta) UnmarshalJSON(data []byte) (err error) {
@@ -288,6 +308,50 @@ func (r *QueryResultMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r queryResultMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Region location hint of the database instance that handled the query.
+type QueryResultMetaServedByRegion string
+
+const (
+	QueryResultMetaServedByRegionWnam QueryResultMetaServedByRegion = "WNAM"
+	QueryResultMetaServedByRegionEnam QueryResultMetaServedByRegion = "ENAM"
+	QueryResultMetaServedByRegionWeur QueryResultMetaServedByRegion = "WEUR"
+	QueryResultMetaServedByRegionEeur QueryResultMetaServedByRegion = "EEUR"
+	QueryResultMetaServedByRegionApac QueryResultMetaServedByRegion = "APAC"
+	QueryResultMetaServedByRegionOc   QueryResultMetaServedByRegion = "OC"
+)
+
+func (r QueryResultMetaServedByRegion) IsKnown() bool {
+	switch r {
+	case QueryResultMetaServedByRegionWnam, QueryResultMetaServedByRegionEnam, QueryResultMetaServedByRegionWeur, QueryResultMetaServedByRegionEeur, QueryResultMetaServedByRegionApac, QueryResultMetaServedByRegionOc:
+		return true
+	}
+	return false
+}
+
+// Various durations for the query.
+type QueryResultMetaTimings struct {
+	// The duration of the SQL query execution inside the database. Does not include
+	// any network communication.
+	SqlDurationMs float64                    `json:"sql_duration_ms"`
+	JSON          queryResultMetaTimingsJSON `json:"-"`
+}
+
+// queryResultMetaTimingsJSON contains the JSON metadata for the struct
+// [QueryResultMetaTimings]
+type queryResultMetaTimingsJSON struct {
+	SqlDurationMs apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *QueryResultMetaTimings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queryResultMetaTimingsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -494,28 +558,48 @@ func (r databaseImportResponseResultJSON) RawJSON() string {
 }
 
 type DatabaseImportResponseResultMeta struct {
-	ChangedDB   bool                                 `json:"changed_db"`
-	Changes     float64                              `json:"changes"`
-	Duration    float64                              `json:"duration"`
-	LastRowID   float64                              `json:"last_row_id"`
-	RowsRead    float64                              `json:"rows_read"`
-	RowsWritten float64                              `json:"rows_written"`
-	SizeAfter   float64                              `json:"size_after"`
-	JSON        databaseImportResponseResultMetaJSON `json:"-"`
+	// Denotes if the database has been altered in some way, like deleting rows.
+	ChangedDB bool `json:"changed_db"`
+	// Rough indication of how many rows were modified by the query, as provided by
+	// SQLite's `sqlite3_total_changes()`.
+	Changes float64 `json:"changes"`
+	// The duration of the SQL query execution inside the database. Does not include
+	// any network communication.
+	Duration float64 `json:"duration"`
+	// The row ID of the last inserted row in a table with an `INTEGER PRIMARY KEY` as
+	// provided by SQLite. Tables created with `WITHOUT ROWID` do not populate this.
+	LastRowID float64 `json:"last_row_id"`
+	// Number of rows read during the SQL query execution, including indices (not all
+	// rows are necessarily returned).
+	RowsRead float64 `json:"rows_read"`
+	// Number of rows written during the SQL query execution, including indices.
+	RowsWritten float64 `json:"rows_written"`
+	// Denotes if the query has been handled by the database primary instance.
+	ServedByPrimary bool `json:"served_by_primary"`
+	// Region location hint of the database instance that handled the query.
+	ServedByRegion DatabaseImportResponseResultMetaServedByRegion `json:"served_by_region"`
+	// Size of the database after the query committed, in bytes.
+	SizeAfter float64 `json:"size_after"`
+	// Various durations for the query.
+	Timings DatabaseImportResponseResultMetaTimings `json:"timings"`
+	JSON    databaseImportResponseResultMetaJSON    `json:"-"`
 }
 
 // databaseImportResponseResultMetaJSON contains the JSON metadata for the struct
 // [DatabaseImportResponseResultMeta]
 type databaseImportResponseResultMetaJSON struct {
-	ChangedDB   apijson.Field
-	Changes     apijson.Field
-	Duration    apijson.Field
-	LastRowID   apijson.Field
-	RowsRead    apijson.Field
-	RowsWritten apijson.Field
-	SizeAfter   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ChangedDB       apijson.Field
+	Changes         apijson.Field
+	Duration        apijson.Field
+	LastRowID       apijson.Field
+	RowsRead        apijson.Field
+	RowsWritten     apijson.Field
+	ServedByPrimary apijson.Field
+	ServedByRegion  apijson.Field
+	SizeAfter       apijson.Field
+	Timings         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *DatabaseImportResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
@@ -523,6 +607,50 @@ func (r *DatabaseImportResponseResultMeta) UnmarshalJSON(data []byte) (err error
 }
 
 func (r databaseImportResponseResultMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Region location hint of the database instance that handled the query.
+type DatabaseImportResponseResultMetaServedByRegion string
+
+const (
+	DatabaseImportResponseResultMetaServedByRegionWnam DatabaseImportResponseResultMetaServedByRegion = "WNAM"
+	DatabaseImportResponseResultMetaServedByRegionEnam DatabaseImportResponseResultMetaServedByRegion = "ENAM"
+	DatabaseImportResponseResultMetaServedByRegionWeur DatabaseImportResponseResultMetaServedByRegion = "WEUR"
+	DatabaseImportResponseResultMetaServedByRegionEeur DatabaseImportResponseResultMetaServedByRegion = "EEUR"
+	DatabaseImportResponseResultMetaServedByRegionApac DatabaseImportResponseResultMetaServedByRegion = "APAC"
+	DatabaseImportResponseResultMetaServedByRegionOc   DatabaseImportResponseResultMetaServedByRegion = "OC"
+)
+
+func (r DatabaseImportResponseResultMetaServedByRegion) IsKnown() bool {
+	switch r {
+	case DatabaseImportResponseResultMetaServedByRegionWnam, DatabaseImportResponseResultMetaServedByRegionEnam, DatabaseImportResponseResultMetaServedByRegionWeur, DatabaseImportResponseResultMetaServedByRegionEeur, DatabaseImportResponseResultMetaServedByRegionApac, DatabaseImportResponseResultMetaServedByRegionOc:
+		return true
+	}
+	return false
+}
+
+// Various durations for the query.
+type DatabaseImportResponseResultMetaTimings struct {
+	// The duration of the SQL query execution inside the database. Does not include
+	// any network communication.
+	SqlDurationMs float64                                     `json:"sql_duration_ms"`
+	JSON          databaseImportResponseResultMetaTimingsJSON `json:"-"`
+}
+
+// databaseImportResponseResultMetaTimingsJSON contains the JSON metadata for the
+// struct [DatabaseImportResponseResultMetaTimings]
+type databaseImportResponseResultMetaTimingsJSON struct {
+	SqlDurationMs apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DatabaseImportResponseResultMetaTimings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r databaseImportResponseResultMetaTimingsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -581,28 +709,48 @@ func (r databaseRawResponseJSON) RawJSON() string {
 }
 
 type DatabaseRawResponseMeta struct {
-	ChangedDB   bool                        `json:"changed_db"`
-	Changes     float64                     `json:"changes"`
-	Duration    float64                     `json:"duration"`
-	LastRowID   float64                     `json:"last_row_id"`
-	RowsRead    float64                     `json:"rows_read"`
-	RowsWritten float64                     `json:"rows_written"`
-	SizeAfter   float64                     `json:"size_after"`
-	JSON        databaseRawResponseMetaJSON `json:"-"`
+	// Denotes if the database has been altered in some way, like deleting rows.
+	ChangedDB bool `json:"changed_db"`
+	// Rough indication of how many rows were modified by the query, as provided by
+	// SQLite's `sqlite3_total_changes()`.
+	Changes float64 `json:"changes"`
+	// The duration of the SQL query execution inside the database. Does not include
+	// any network communication.
+	Duration float64 `json:"duration"`
+	// The row ID of the last inserted row in a table with an `INTEGER PRIMARY KEY` as
+	// provided by SQLite. Tables created with `WITHOUT ROWID` do not populate this.
+	LastRowID float64 `json:"last_row_id"`
+	// Number of rows read during the SQL query execution, including indices (not all
+	// rows are necessarily returned).
+	RowsRead float64 `json:"rows_read"`
+	// Number of rows written during the SQL query execution, including indices.
+	RowsWritten float64 `json:"rows_written"`
+	// Denotes if the query has been handled by the database primary instance.
+	ServedByPrimary bool `json:"served_by_primary"`
+	// Region location hint of the database instance that handled the query.
+	ServedByRegion DatabaseRawResponseMetaServedByRegion `json:"served_by_region"`
+	// Size of the database after the query committed, in bytes.
+	SizeAfter float64 `json:"size_after"`
+	// Various durations for the query.
+	Timings DatabaseRawResponseMetaTimings `json:"timings"`
+	JSON    databaseRawResponseMetaJSON    `json:"-"`
 }
 
 // databaseRawResponseMetaJSON contains the JSON metadata for the struct
 // [DatabaseRawResponseMeta]
 type databaseRawResponseMetaJSON struct {
-	ChangedDB   apijson.Field
-	Changes     apijson.Field
-	Duration    apijson.Field
-	LastRowID   apijson.Field
-	RowsRead    apijson.Field
-	RowsWritten apijson.Field
-	SizeAfter   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ChangedDB       apijson.Field
+	Changes         apijson.Field
+	Duration        apijson.Field
+	LastRowID       apijson.Field
+	RowsRead        apijson.Field
+	RowsWritten     apijson.Field
+	ServedByPrimary apijson.Field
+	ServedByRegion  apijson.Field
+	SizeAfter       apijson.Field
+	Timings         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *DatabaseRawResponseMeta) UnmarshalJSON(data []byte) (err error) {
@@ -610,6 +758,50 @@ func (r *DatabaseRawResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r databaseRawResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Region location hint of the database instance that handled the query.
+type DatabaseRawResponseMetaServedByRegion string
+
+const (
+	DatabaseRawResponseMetaServedByRegionWnam DatabaseRawResponseMetaServedByRegion = "WNAM"
+	DatabaseRawResponseMetaServedByRegionEnam DatabaseRawResponseMetaServedByRegion = "ENAM"
+	DatabaseRawResponseMetaServedByRegionWeur DatabaseRawResponseMetaServedByRegion = "WEUR"
+	DatabaseRawResponseMetaServedByRegionEeur DatabaseRawResponseMetaServedByRegion = "EEUR"
+	DatabaseRawResponseMetaServedByRegionApac DatabaseRawResponseMetaServedByRegion = "APAC"
+	DatabaseRawResponseMetaServedByRegionOc   DatabaseRawResponseMetaServedByRegion = "OC"
+)
+
+func (r DatabaseRawResponseMetaServedByRegion) IsKnown() bool {
+	switch r {
+	case DatabaseRawResponseMetaServedByRegionWnam, DatabaseRawResponseMetaServedByRegionEnam, DatabaseRawResponseMetaServedByRegionWeur, DatabaseRawResponseMetaServedByRegionEeur, DatabaseRawResponseMetaServedByRegionApac, DatabaseRawResponseMetaServedByRegionOc:
+		return true
+	}
+	return false
+}
+
+// Various durations for the query.
+type DatabaseRawResponseMetaTimings struct {
+	// The duration of the SQL query execution inside the database. Does not include
+	// any network communication.
+	SqlDurationMs float64                            `json:"sql_duration_ms"`
+	JSON          databaseRawResponseMetaTimingsJSON `json:"-"`
+}
+
+// databaseRawResponseMetaTimingsJSON contains the JSON metadata for the struct
+// [DatabaseRawResponseMetaTimings]
+type databaseRawResponseMetaTimingsJSON struct {
+	SqlDurationMs apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DatabaseRawResponseMetaTimings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r databaseRawResponseMetaTimingsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -674,7 +866,8 @@ func (r DatabaseNewParamsPrimaryLocationHint) IsKnown() bool {
 type DatabaseNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   D1                    `json:"result,required"`
+	// The details of the D1 database.
+	Result D1 `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseNewResponseEnvelopeJSON    `json:"-"`
@@ -876,7 +1069,8 @@ type DatabaseGetParams struct {
 type DatabaseGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   D1                    `json:"result,required"`
+	// The details of the D1 database.
+	Result D1 `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseGetResponseEnvelopeJSON    `json:"-"`
