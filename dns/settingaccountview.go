@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingAccountViewService contains methods and other services that help with
@@ -146,7 +145,7 @@ func (r *SettingAccountViewService) Get(ctx context.Context, viewID string, quer
 }
 
 type SettingAccountViewNewResponse struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the view was created.
 	CreatedTime time.Time `json:"created_time,required" format:"date-time"`
@@ -180,7 +179,7 @@ func (r settingAccountViewNewResponseJSON) RawJSON() string {
 }
 
 type SettingAccountViewListResponse struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the view was created.
 	CreatedTime time.Time `json:"created_time,required" format:"date-time"`
@@ -214,7 +213,7 @@ func (r settingAccountViewListResponseJSON) RawJSON() string {
 }
 
 type SettingAccountViewDeleteResponse struct {
-	// Identifier
+	// Identifier.
 	ID   string                               `json:"id"`
 	JSON settingAccountViewDeleteResponseJSON `json:"-"`
 }
@@ -236,7 +235,7 @@ func (r settingAccountViewDeleteResponseJSON) RawJSON() string {
 }
 
 type SettingAccountViewEditResponse struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the view was created.
 	CreatedTime time.Time `json:"created_time,required" format:"date-time"`
@@ -270,7 +269,7 @@ func (r settingAccountViewEditResponseJSON) RawJSON() string {
 }
 
 type SettingAccountViewGetResponse struct {
-	// Identifier
+	// Identifier.
 	ID string `json:"id,required"`
 	// When the view was created.
 	CreatedTime time.Time `json:"created_time,required" format:"date-time"`
@@ -304,7 +303,7 @@ func (r settingAccountViewGetResponseJSON) RawJSON() string {
 }
 
 type SettingAccountViewNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the view.
 	Name param.Field[string] `json:"name,required"`
@@ -317,9 +316,9 @@ func (r SettingAccountViewNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingAccountViewNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []SettingAccountViewNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingAccountViewNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success SettingAccountViewNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  SettingAccountViewNewResponse                `json:"result"`
 	JSON    settingAccountViewNewResponseEnvelopeJSON    `json:"-"`
@@ -344,7 +343,103 @@ func (r settingAccountViewNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type SettingAccountViewNewResponseEnvelopeErrors struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           SettingAccountViewNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             settingAccountViewNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// settingAccountViewNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingAccountViewNewResponseEnvelopeErrors]
+type settingAccountViewNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingAccountViewNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingAccountViewNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    settingAccountViewNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// settingAccountViewNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [SettingAccountViewNewResponseEnvelopeErrorsSource]
+type settingAccountViewNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingAccountViewNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingAccountViewNewResponseEnvelopeMessages struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           SettingAccountViewNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             settingAccountViewNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// settingAccountViewNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SettingAccountViewNewResponseEnvelopeMessages]
+type settingAccountViewNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingAccountViewNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingAccountViewNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    settingAccountViewNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// settingAccountViewNewResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [SettingAccountViewNewResponseEnvelopeMessagesSource]
+type settingAccountViewNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingAccountViewNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type SettingAccountViewNewResponseEnvelopeSuccess bool
 
 const (
@@ -360,7 +455,7 @@ func (r SettingAccountViewNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SettingAccountViewListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Direction to order DNS views in.
 	Direction param.Field[SettingAccountViewListParamsDirection] `query:"direction"`
@@ -462,7 +557,7 @@ func (r SettingAccountViewListParamsOrder) IsKnown() bool {
 }
 
 type SettingAccountViewDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -488,7 +583,7 @@ func (r settingAccountViewDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingAccountViewEditParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the view.
 	Name param.Field[string] `json:"name"`
@@ -501,9 +596,9 @@ func (r SettingAccountViewEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingAccountViewEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []SettingAccountViewEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingAccountViewEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success SettingAccountViewEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  SettingAccountViewEditResponse                `json:"result"`
 	JSON    settingAccountViewEditResponseEnvelopeJSON    `json:"-"`
@@ -528,7 +623,103 @@ func (r settingAccountViewEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type SettingAccountViewEditResponseEnvelopeErrors struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           SettingAccountViewEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             settingAccountViewEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// settingAccountViewEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingAccountViewEditResponseEnvelopeErrors]
+type settingAccountViewEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingAccountViewEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingAccountViewEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    settingAccountViewEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// settingAccountViewEditResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [SettingAccountViewEditResponseEnvelopeErrorsSource]
+type settingAccountViewEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingAccountViewEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingAccountViewEditResponseEnvelopeMessages struct {
+	Code             int64                                                `json:"code,required"`
+	Message          string                                               `json:"message,required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           SettingAccountViewEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             settingAccountViewEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// settingAccountViewEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingAccountViewEditResponseEnvelopeMessages]
+type settingAccountViewEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingAccountViewEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingAccountViewEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    settingAccountViewEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// settingAccountViewEditResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [SettingAccountViewEditResponseEnvelopeMessagesSource]
+type settingAccountViewEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingAccountViewEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type SettingAccountViewEditResponseEnvelopeSuccess bool
 
 const (
@@ -544,14 +735,14 @@ func (r SettingAccountViewEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SettingAccountViewGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type SettingAccountViewGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []SettingAccountViewGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingAccountViewGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success SettingAccountViewGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  SettingAccountViewGetResponse                `json:"result"`
 	JSON    settingAccountViewGetResponseEnvelopeJSON    `json:"-"`
@@ -576,7 +767,103 @@ func (r settingAccountViewGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type SettingAccountViewGetResponseEnvelopeErrors struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           SettingAccountViewGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             settingAccountViewGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// settingAccountViewGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingAccountViewGetResponseEnvelopeErrors]
+type settingAccountViewGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingAccountViewGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingAccountViewGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    settingAccountViewGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// settingAccountViewGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [SettingAccountViewGetResponseEnvelopeErrorsSource]
+type settingAccountViewGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingAccountViewGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingAccountViewGetResponseEnvelopeMessages struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           SettingAccountViewGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             settingAccountViewGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// settingAccountViewGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SettingAccountViewGetResponseEnvelopeMessages]
+type settingAccountViewGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingAccountViewGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingAccountViewGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    settingAccountViewGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// settingAccountViewGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [SettingAccountViewGetResponseEnvelopeMessagesSource]
+type settingAccountViewGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingAccountViewGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingAccountViewGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type SettingAccountViewGetResponseEnvelopeSuccess bool
 
 const (
