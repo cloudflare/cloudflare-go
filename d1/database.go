@@ -55,6 +55,27 @@ func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opt
 	return
 }
 
+// Updates the specified D1 database.
+func (r *DatabaseService) Update(ctx context.Context, databaseID string, params DatabaseUpdateParams, opts ...option.RequestOption) (res *D1, err error) {
+	var env DatabaseUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if databaseID == "" {
+		err = errors.New("missing required database_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/d1/database/%s", params.AccountID, databaseID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Returns a list of D1 databases.
 func (r *DatabaseService) List(ctx context.Context, params DatabaseListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DatabaseListResponse], err error) {
 	var raw *http.Response
@@ -96,6 +117,27 @@ func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body Da
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s", body.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Updates partially the specified D1 database.
+func (r *DatabaseService) Edit(ctx context.Context, databaseID string, params DatabaseEditParams, opts ...option.RequestOption) (res *D1, err error) {
+	var env DatabaseEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if databaseID == "" {
+		err = errors.New("missing required database_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/d1/database/%s", params.AccountID, databaseID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -907,6 +949,91 @@ func (r DatabaseNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type DatabaseUpdateParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Configuration for D1 read replication.
+	ReadReplication param.Field[DatabaseUpdateParamsReadReplication] `json:"read_replication,required"`
+}
+
+func (r DatabaseUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configuration for D1 read replication.
+type DatabaseUpdateParamsReadReplication struct {
+	// The read replication mode for the database. Use 'auto' to create replicas and
+	// allow D1 automatically place them around the world, or 'disabled' to not use any
+	// database replicas (it can take a few hours for all replicas to be deleted).
+	Mode param.Field[DatabaseUpdateParamsReadReplicationMode] `json:"mode,required"`
+}
+
+func (r DatabaseUpdateParamsReadReplication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The read replication mode for the database. Use 'auto' to create replicas and
+// allow D1 automatically place them around the world, or 'disabled' to not use any
+// database replicas (it can take a few hours for all replicas to be deleted).
+type DatabaseUpdateParamsReadReplicationMode string
+
+const (
+	DatabaseUpdateParamsReadReplicationModeAuto     DatabaseUpdateParamsReadReplicationMode = "auto"
+	DatabaseUpdateParamsReadReplicationModeDisabled DatabaseUpdateParamsReadReplicationMode = "disabled"
+)
+
+func (r DatabaseUpdateParamsReadReplicationMode) IsKnown() bool {
+	switch r {
+	case DatabaseUpdateParamsReadReplicationModeAuto, DatabaseUpdateParamsReadReplicationModeDisabled:
+		return true
+	}
+	return false
+}
+
+type DatabaseUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// The details of the D1 database.
+	Result D1 `json:"result,required"`
+	// Whether the API call was successful
+	Success DatabaseUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    databaseUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// databaseUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DatabaseUpdateResponseEnvelope]
+type databaseUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DatabaseUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r databaseUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DatabaseUpdateResponseEnvelopeSuccess bool
+
+const (
+	DatabaseUpdateResponseEnvelopeSuccessTrue DatabaseUpdateResponseEnvelopeSuccess = true
+)
+
+func (r DatabaseUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DatabaseUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DatabaseListParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -969,6 +1096,91 @@ const (
 func (r DatabaseDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case DatabaseDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DatabaseEditParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Configuration for D1 read replication.
+	ReadReplication param.Field[DatabaseEditParamsReadReplication] `json:"read_replication"`
+}
+
+func (r DatabaseEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configuration for D1 read replication.
+type DatabaseEditParamsReadReplication struct {
+	// The read replication mode for the database. Use 'auto' to create replicas and
+	// allow D1 automatically place them around the world, or 'disabled' to not use any
+	// database replicas (it can take a few hours for all replicas to be deleted).
+	Mode param.Field[DatabaseEditParamsReadReplicationMode] `json:"mode,required"`
+}
+
+func (r DatabaseEditParamsReadReplication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The read replication mode for the database. Use 'auto' to create replicas and
+// allow D1 automatically place them around the world, or 'disabled' to not use any
+// database replicas (it can take a few hours for all replicas to be deleted).
+type DatabaseEditParamsReadReplicationMode string
+
+const (
+	DatabaseEditParamsReadReplicationModeAuto     DatabaseEditParamsReadReplicationMode = "auto"
+	DatabaseEditParamsReadReplicationModeDisabled DatabaseEditParamsReadReplicationMode = "disabled"
+)
+
+func (r DatabaseEditParamsReadReplicationMode) IsKnown() bool {
+	switch r {
+	case DatabaseEditParamsReadReplicationModeAuto, DatabaseEditParamsReadReplicationModeDisabled:
+		return true
+	}
+	return false
+}
+
+type DatabaseEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// The details of the D1 database.
+	Result D1 `json:"result,required"`
+	// Whether the API call was successful
+	Success DatabaseEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    databaseEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// databaseEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DatabaseEditResponseEnvelope]
+type databaseEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DatabaseEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r databaseEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DatabaseEditResponseEnvelopeSuccess bool
+
+const (
+	DatabaseEditResponseEnvelopeSuccessTrue DatabaseEditResponseEnvelopeSuccess = true
+)
+
+func (r DatabaseEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DatabaseEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
