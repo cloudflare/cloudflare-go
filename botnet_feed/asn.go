@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ASNService contains methods and other services that help with interacting with
@@ -125,7 +124,7 @@ func (r asnFullReportResponseJSON) RawJSON() string {
 }
 
 type ASNDayReportParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string]    `path:"account_id,required"`
 	Date      param.Field[time.Time] `query:"date" format:"date-time"`
 }
@@ -139,9 +138,9 @@ func (r ASNDayReportParams) URLQuery() (v url.Values) {
 }
 
 type ASNDayReportResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ASNDayReportResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ASNDayReportResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ASNDayReportResponseEnvelopeSuccess `json:"success,required"`
 	Result  ASNDayReportResponse                `json:"result"`
 	JSON    asnDayReportResponseEnvelopeJSON    `json:"-"`
@@ -166,7 +165,103 @@ func (r asnDayReportResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ASNDayReportResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           ASNDayReportResponseEnvelopeErrorsSource `json:"source"`
+	JSON             asnDayReportResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// asnDayReportResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ASNDayReportResponseEnvelopeErrors]
+type asnDayReportResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ASNDayReportResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnDayReportResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ASNDayReportResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    asnDayReportResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// asnDayReportResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [ASNDayReportResponseEnvelopeErrorsSource]
+type asnDayReportResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ASNDayReportResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnDayReportResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ASNDayReportResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           ASNDayReportResponseEnvelopeMessagesSource `json:"source"`
+	JSON             asnDayReportResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// asnDayReportResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ASNDayReportResponseEnvelopeMessages]
+type asnDayReportResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ASNDayReportResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnDayReportResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ASNDayReportResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    asnDayReportResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// asnDayReportResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [ASNDayReportResponseEnvelopeMessagesSource]
+type asnDayReportResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ASNDayReportResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnDayReportResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ASNDayReportResponseEnvelopeSuccess bool
 
 const (
@@ -182,14 +277,14 @@ func (r ASNDayReportResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ASNFullReportParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ASNFullReportResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ASNFullReportResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ASNFullReportResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ASNFullReportResponseEnvelopeSuccess `json:"success,required"`
 	Result  ASNFullReportResponse                `json:"result"`
 	JSON    asnFullReportResponseEnvelopeJSON    `json:"-"`
@@ -214,7 +309,103 @@ func (r asnFullReportResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ASNFullReportResponseEnvelopeErrors struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           ASNFullReportResponseEnvelopeErrorsSource `json:"source"`
+	JSON             asnFullReportResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// asnFullReportResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ASNFullReportResponseEnvelopeErrors]
+type asnFullReportResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ASNFullReportResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnFullReportResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ASNFullReportResponseEnvelopeErrorsSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    asnFullReportResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// asnFullReportResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [ASNFullReportResponseEnvelopeErrorsSource]
+type asnFullReportResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ASNFullReportResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnFullReportResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ASNFullReportResponseEnvelopeMessages struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           ASNFullReportResponseEnvelopeMessagesSource `json:"source"`
+	JSON             asnFullReportResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// asnFullReportResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ASNFullReportResponseEnvelopeMessages]
+type asnFullReportResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ASNFullReportResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnFullReportResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ASNFullReportResponseEnvelopeMessagesSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    asnFullReportResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// asnFullReportResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [ASNFullReportResponseEnvelopeMessagesSource]
+type asnFullReportResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ASNFullReportResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnFullReportResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ASNFullReportResponseEnvelopeSuccess bool
 
 const (
