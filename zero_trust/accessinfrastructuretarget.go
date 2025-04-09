@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessInfrastructureTargetService contains methods and other services that help
@@ -791,9 +792,9 @@ func (r AccessInfrastructureTargetNewParamsIPIPV6) MarshalJSON() (data []byte, e
 }
 
 type AccessInfrastructureTargetNewResponseEnvelope struct {
-	Errors   []AccessInfrastructureTargetNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessInfrastructureTargetNewResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful.
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
 	Success AccessInfrastructureTargetNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessInfrastructureTargetNewResponse                `json:"result"`
 	JSON    accessInfrastructureTargetNewResponseEnvelopeJSON    `json:"-"`
@@ -818,105 +819,7 @@ func (r accessInfrastructureTargetNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessInfrastructureTargetNewResponseEnvelopeErrors struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
-	DocumentationURL string                                                    `json:"documentation_url"`
-	Source           AccessInfrastructureTargetNewResponseEnvelopeErrorsSource `json:"source"`
-	JSON             accessInfrastructureTargetNewResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// accessInfrastructureTargetNewResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AccessInfrastructureTargetNewResponseEnvelopeErrors]
-type accessInfrastructureTargetNewResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessInfrastructureTargetNewResponseEnvelopeErrorsSource struct {
-	Pointer string                                                        `json:"pointer"`
-	JSON    accessInfrastructureTargetNewResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// accessInfrastructureTargetNewResponseEnvelopeErrorsSourceJSON contains the JSON
-// metadata for the struct
-// [AccessInfrastructureTargetNewResponseEnvelopeErrorsSource]
-type accessInfrastructureTargetNewResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessInfrastructureTargetNewResponseEnvelopeMessages struct {
-	Code             int64                                                       `json:"code,required"`
-	Message          string                                                      `json:"message,required"`
-	DocumentationURL string                                                      `json:"documentation_url"`
-	Source           AccessInfrastructureTargetNewResponseEnvelopeMessagesSource `json:"source"`
-	JSON             accessInfrastructureTargetNewResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// accessInfrastructureTargetNewResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessInfrastructureTargetNewResponseEnvelopeMessages]
-type accessInfrastructureTargetNewResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessInfrastructureTargetNewResponseEnvelopeMessagesSource struct {
-	Pointer string                                                          `json:"pointer"`
-	JSON    accessInfrastructureTargetNewResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// accessInfrastructureTargetNewResponseEnvelopeMessagesSourceJSON contains the
-// JSON metadata for the struct
-// [AccessInfrastructureTargetNewResponseEnvelopeMessagesSource]
-type accessInfrastructureTargetNewResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
+// Whether the API call was successful
 type AccessInfrastructureTargetNewResponseEnvelopeSuccess bool
 
 const (
@@ -985,9 +888,9 @@ func (r AccessInfrastructureTargetUpdateParamsIPIPV6) MarshalJSON() (data []byte
 }
 
 type AccessInfrastructureTargetUpdateResponseEnvelope struct {
-	Errors   []AccessInfrastructureTargetUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessInfrastructureTargetUpdateResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful.
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
 	Success AccessInfrastructureTargetUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessInfrastructureTargetUpdateResponse                `json:"result"`
 	JSON    accessInfrastructureTargetUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1012,106 +915,7 @@ func (r accessInfrastructureTargetUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessInfrastructureTargetUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                        `json:"code,required"`
-	Message          string                                                       `json:"message,required"`
-	DocumentationURL string                                                       `json:"documentation_url"`
-	Source           AccessInfrastructureTargetUpdateResponseEnvelopeErrorsSource `json:"source"`
-	JSON             accessInfrastructureTargetUpdateResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// accessInfrastructureTargetUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AccessInfrastructureTargetUpdateResponseEnvelopeErrors]
-type accessInfrastructureTargetUpdateResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessInfrastructureTargetUpdateResponseEnvelopeErrorsSource struct {
-	Pointer string                                                           `json:"pointer"`
-	JSON    accessInfrastructureTargetUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// accessInfrastructureTargetUpdateResponseEnvelopeErrorsSourceJSON contains the
-// JSON metadata for the struct
-// [AccessInfrastructureTargetUpdateResponseEnvelopeErrorsSource]
-type accessInfrastructureTargetUpdateResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessInfrastructureTargetUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                          `json:"code,required"`
-	Message          string                                                         `json:"message,required"`
-	DocumentationURL string                                                         `json:"documentation_url"`
-	Source           AccessInfrastructureTargetUpdateResponseEnvelopeMessagesSource `json:"source"`
-	JSON             accessInfrastructureTargetUpdateResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// accessInfrastructureTargetUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [AccessInfrastructureTargetUpdateResponseEnvelopeMessages]
-type accessInfrastructureTargetUpdateResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessInfrastructureTargetUpdateResponseEnvelopeMessagesSource struct {
-	Pointer string                                                             `json:"pointer"`
-	JSON    accessInfrastructureTargetUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// accessInfrastructureTargetUpdateResponseEnvelopeMessagesSourceJSON contains the
-// JSON metadata for the struct
-// [AccessInfrastructureTargetUpdateResponseEnvelopeMessagesSource]
-type accessInfrastructureTargetUpdateResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
+// Whether the API call was successful
 type AccessInfrastructureTargetUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1296,9 +1100,9 @@ type AccessInfrastructureTargetGetParams struct {
 }
 
 type AccessInfrastructureTargetGetResponseEnvelope struct {
-	Errors   []AccessInfrastructureTargetGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessInfrastructureTargetGetResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful.
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
 	Success AccessInfrastructureTargetGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessInfrastructureTargetGetResponse                `json:"result"`
 	JSON    accessInfrastructureTargetGetResponseEnvelopeJSON    `json:"-"`
@@ -1323,105 +1127,7 @@ func (r accessInfrastructureTargetGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessInfrastructureTargetGetResponseEnvelopeErrors struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
-	DocumentationURL string                                                    `json:"documentation_url"`
-	Source           AccessInfrastructureTargetGetResponseEnvelopeErrorsSource `json:"source"`
-	JSON             accessInfrastructureTargetGetResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// accessInfrastructureTargetGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AccessInfrastructureTargetGetResponseEnvelopeErrors]
-type accessInfrastructureTargetGetResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessInfrastructureTargetGetResponseEnvelopeErrorsSource struct {
-	Pointer string                                                        `json:"pointer"`
-	JSON    accessInfrastructureTargetGetResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// accessInfrastructureTargetGetResponseEnvelopeErrorsSourceJSON contains the JSON
-// metadata for the struct
-// [AccessInfrastructureTargetGetResponseEnvelopeErrorsSource]
-type accessInfrastructureTargetGetResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessInfrastructureTargetGetResponseEnvelopeMessages struct {
-	Code             int64                                                       `json:"code,required"`
-	Message          string                                                      `json:"message,required"`
-	DocumentationURL string                                                      `json:"documentation_url"`
-	Source           AccessInfrastructureTargetGetResponseEnvelopeMessagesSource `json:"source"`
-	JSON             accessInfrastructureTargetGetResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// accessInfrastructureTargetGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessInfrastructureTargetGetResponseEnvelopeMessages]
-type accessInfrastructureTargetGetResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessInfrastructureTargetGetResponseEnvelopeMessagesSource struct {
-	Pointer string                                                          `json:"pointer"`
-	JSON    accessInfrastructureTargetGetResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// accessInfrastructureTargetGetResponseEnvelopeMessagesSourceJSON contains the
-// JSON metadata for the struct
-// [AccessInfrastructureTargetGetResponseEnvelopeMessagesSource]
-type accessInfrastructureTargetGetResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessInfrastructureTargetGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessInfrastructureTargetGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
+// Whether the API call was successful
 type AccessInfrastructureTargetGetResponseEnvelopeSuccess bool
 
 const (
