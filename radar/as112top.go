@@ -706,10 +706,6 @@ func (r as112TopLocationsResponseTop0JSON) RawJSON() string {
 }
 
 type AS112TopDNSSECParams struct {
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
-	ASN param.Field[[]string] `query:"asn"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -798,10 +794,6 @@ func (r as112TopDNSSECResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AS112TopEdnsParams struct {
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
-	ASN param.Field[[]string] `query:"asn"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -890,10 +882,6 @@ func (r as112TopEdnsResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AS112TopIPVersionParams struct {
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
-	ASN param.Field[[]string] `query:"asn"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
@@ -983,10 +971,6 @@ func (r as112TopIPVersionResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AS112TopLocationsParams struct {
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
-	ASN param.Field[[]string] `query:"asn"`
 	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
 	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
 	// but includes results from NA.
