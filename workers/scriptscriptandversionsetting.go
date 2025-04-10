@@ -146,6 +146,8 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	Type ScriptScriptAndVersionSettingEditResponseBindingsType `json:"type,required"`
 	// Identifier of the D1 database to bind to.
 	ID string `json:"id"`
+	// This field can have the runtime type of [interface{}].
+	Algorithm interface{} `json:"algorithm"`
 	// R2 bucket to bind to.
 	BucketName string `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
@@ -156,10 +158,15 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	Dataset string `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
+	// Data format of the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	Format ScriptScriptAndVersionSettingEditResponseBindingsFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// JSON data to use.
 	Json string `json:"json"`
+	// This field can have the runtime type of [interface{}].
+	KeyJwk interface{} `json:"key_jwk"`
 	// Namespace to bind to.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
@@ -172,12 +179,19 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string `json:"script_name"`
+	// Name of the secret in the store.
+	SecretName string `json:"secret_name"`
 	// Name of Worker to bind to.
 	Service string `json:"service"`
+	// ID of the store containing the secret.
+	StoreID string `json:"store_id"`
 	// The text value to use.
-	Text  string                                               `json:"text"`
-	JSON  scriptScriptAndVersionSettingEditResponseBindingJSON `json:"-"`
-	union ScriptScriptAndVersionSettingEditResponseBindingsUnion
+	Text string `json:"text"`
+	// This field can have the runtime type of
+	// [[]ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage].
+	Usages interface{}                                          `json:"usages"`
+	JSON   scriptScriptAndVersionSettingEditResponseBindingJSON `json:"-"`
+	union  ScriptScriptAndVersionSettingEditResponseBindingsUnion
 }
 
 // scriptScriptAndVersionSettingEditResponseBindingJSON contains the JSON metadata
@@ -186,20 +200,26 @@ type scriptScriptAndVersionSettingEditResponseBindingJSON struct {
 	Name          apijson.Field
 	Type          apijson.Field
 	ID            apijson.Field
+	Algorithm     apijson.Field
 	BucketName    apijson.Field
 	CertificateID apijson.Field
 	ClassName     apijson.Field
 	Dataset       apijson.Field
 	Environment   apijson.Field
+	Format        apijson.Field
 	IndexName     apijson.Field
 	Json          apijson.Field
+	KeyJwk        apijson.Field
 	Namespace     apijson.Field
 	NamespaceID   apijson.Field
 	Outbound      apijson.Field
 	QueueName     apijson.Field
 	ScriptName    apijson.Field
+	SecretName    apijson.Field
 	Service       apijson.Field
+	StoreID       apijson.Field
 	Text          apijson.Field
+	Usages        apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -239,7 +259,9 @@ func (r *ScriptScriptAndVersionSettingEditResponseBinding) UnmarshalJSON(data []
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata].
+// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
+// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
 func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScriptAndVersionSettingEditResponseBindingsUnion {
 	return r.union
 }
@@ -264,9 +286,11 @@ func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScript
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize]
+// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
+// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
+// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret]
 // or
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata].
+// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
 type ScriptScriptAndVersionSettingEditResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingEditResponseBinding()
 }
@@ -282,197 +306,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
 			DiscriminatorValue: "analytics_engine",
 		},
 		apijson.UnionVariant{
@@ -482,197 +316,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
 			DiscriminatorValue: "browser_rendering",
 		},
 		apijson.UnionVariant{
@@ -682,197 +326,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
 			DiscriminatorValue: "dispatch_namespace",
 		},
 		apijson.UnionVariant{
@@ -882,197 +336,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
 			DiscriminatorValue: "hyperdrive",
 		},
 		apijson.UnionVariant{
@@ -1082,197 +346,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
 			DiscriminatorValue: "kv_namespace",
 		},
 		apijson.UnionVariant{
@@ -1282,197 +356,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
 			DiscriminatorValue: "plain_text",
 		},
 		apijson.UnionVariant{
@@ -1482,197 +366,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
 			DiscriminatorValue: "r2_bucket",
 		},
 		apijson.UnionVariant{
@@ -1682,197 +376,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
 			DiscriminatorValue: "service",
 		},
 		apijson.UnionVariant{
@@ -1882,203 +386,23 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
 			DiscriminatorValue: "vectorize",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata{}),
 			DiscriminatorValue: "version_metadata",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret{}),
+			DiscriminatorValue: "secrets_store_secret",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey{}),
+			DiscriminatorValue: "secret_key",
 		},
 	)
 }
@@ -2116,30 +440,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI) i
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeAI ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType = "ai"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAITypeAI:
 		return true
 	}
 	return false
@@ -2181,30 +487,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnaly
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
 		return true
 	}
 	return false
@@ -2243,30 +531,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAsset
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeAssets ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType = "assets"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssetsTypeAssets:
 		return true
 	}
 	return false
@@ -2305,30 +575,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrows
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering:
 		return true
 	}
 	return false
@@ -2370,30 +622,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1) i
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeD1 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type = "d1"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1Type) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1TypeD1:
 		return true
 	}
 	return false
@@ -2438,30 +672,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispa
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
 		return true
 	}
 	return false
@@ -2568,30 +784,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurab
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "dispatch_namespace"
 	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "version_metadata"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace:
 		return true
 	}
 	return false
@@ -2633,30 +831,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyper
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeHyperdrive ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
 		return true
 	}
 	return false
@@ -2698,30 +878,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson)
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeJson ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType = "json"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJsonTypeJson:
 		return true
 	}
 	return false
@@ -2763,30 +925,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNam
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeKVNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
 		return true
 	}
 	return false
@@ -2828,30 +972,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSC
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate:
 		return true
 	}
 	return false
@@ -2893,30 +1019,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlain
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypePlainText ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType = "plain_text"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainTextTypePlainText:
 		return true
 	}
 	return false
@@ -2958,30 +1066,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeQueue ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType = "queue"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueueTypeQueue:
 		return true
 	}
 	return false
@@ -3023,30 +1113,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Buc
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeR2Bucket ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType = "r2_bucket"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketTypeR2Bucket:
 		return true
 	}
 	return false
@@ -3055,8 +1127,6 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Buc
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
-	// The secret value to use.
-	Text string `json:"text,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType `json:"type,required"`
 	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextJSON `json:"-"`
@@ -3067,7 +1137,6 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTe
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText]
 type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextJSON struct {
 	Name        apijson.Field
-	Text        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -3088,30 +1157,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecre
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeSecretText ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType = "secret_text"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretTextTypeSecretText:
 		return true
 	}
 	return false
@@ -3156,30 +1207,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServi
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeService ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType = "service"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceTypeService:
 		return true
 	}
 	return false
@@ -3221,30 +1254,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailC
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeTailConsumer ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
 		return true
 	}
 	return false
@@ -3286,30 +1301,12 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVecto
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeVectorize ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType = "vectorize"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorizeTypeVectorize:
 		return true
 	}
 	return false
@@ -3348,30 +1345,158 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersi
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "ai"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "d1"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeHyperdrive             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeJson                   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "json"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeKVNamespace            ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "plain_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "queue"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeSecretText             ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "secret_text"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeService                ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "service"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "vectorize"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeService, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of the secret in the store.
+	SecretName string `json:"secret_name,required"`
+	// ID of the store containing the secret.
+	StoreID string `json:"store_id,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretJSON struct {
+	Name        apijson.Field
+	SecretName  apijson.Field
+	StoreID     apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretType string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretType = "secrets_store_secret"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey struct {
+	// Algorithm-specific key parameters
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	Algorithm interface{} `json:"algorithm,required"`
+	// Data format of the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	Format ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyType `json:"type,required"`
+	// Allowed operations with the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	Usages []ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	JSON   scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyJSON    `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyJSON struct {
+	Algorithm   apijson.Field
+	Format      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	Usages      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// Data format of the key
+// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormat string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormatRaw   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormat = "raw"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormatPkcs8 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormat = "pkcs8"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormatSpki  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormat = "spki"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormatJwk   ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormat = "jwk"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormat) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormatRaw, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormatPkcs8, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormatSpki, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyType string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyTypeSecretKey ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyType = "secret_key"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageEncrypt    ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage = "encrypt"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageDecrypt    ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage = "decrypt"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageSign       ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage = "sign"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageVerify     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage = "verify"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageDeriveKey  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage = "deriveKey"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageDeriveBits ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage = "deriveBits"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageWrapKey    ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage = "wrapKey"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageUnwrapKey  ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage = "unwrapKey"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageEncrypt, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageDecrypt, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageSign, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageVerify, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageDeriveKey, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageDeriveBits, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageWrapKey, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsageUnwrapKey:
 		return true
 	}
 	return false
@@ -3400,11 +1525,32 @@ const (
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeTailConsumer           ScriptScriptAndVersionSettingEditResponseBindingsType = "tail_consumer"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize              ScriptScriptAndVersionSettingEditResponseBindingsType = "vectorize"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata        ScriptScriptAndVersionSettingEditResponseBindingsType = "version_metadata"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret     ScriptScriptAndVersionSettingEditResponseBindingsType = "secrets_store_secret"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey              ScriptScriptAndVersionSettingEditResponseBindingsType = "secret_key"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+// Data format of the key
+// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+type ScriptScriptAndVersionSettingEditResponseBindingsFormat string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsFormatRaw   ScriptScriptAndVersionSettingEditResponseBindingsFormat = "raw"
+	ScriptScriptAndVersionSettingEditResponseBindingsFormatPkcs8 ScriptScriptAndVersionSettingEditResponseBindingsFormat = "pkcs8"
+	ScriptScriptAndVersionSettingEditResponseBindingsFormatSpki  ScriptScriptAndVersionSettingEditResponseBindingsFormat = "spki"
+	ScriptScriptAndVersionSettingEditResponseBindingsFormatJwk   ScriptScriptAndVersionSettingEditResponseBindingsFormat = "jwk"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsFormat) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsFormatRaw, ScriptScriptAndVersionSettingEditResponseBindingsFormatPkcs8, ScriptScriptAndVersionSettingEditResponseBindingsFormatSpki, ScriptScriptAndVersionSettingEditResponseBindingsFormatJwk:
 		return true
 	}
 	return false
@@ -3698,6 +1844,8 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	Type ScriptScriptAndVersionSettingGetResponseBindingsType `json:"type,required"`
 	// Identifier of the D1 database to bind to.
 	ID string `json:"id"`
+	// This field can have the runtime type of [interface{}].
+	Algorithm interface{} `json:"algorithm"`
 	// R2 bucket to bind to.
 	BucketName string `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
@@ -3708,10 +1856,15 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	Dataset string `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
+	// Data format of the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	Format ScriptScriptAndVersionSettingGetResponseBindingsFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// JSON data to use.
 	Json string `json:"json"`
+	// This field can have the runtime type of [interface{}].
+	KeyJwk interface{} `json:"key_jwk"`
 	// Namespace to bind to.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
@@ -3724,12 +1877,19 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string `json:"script_name"`
+	// Name of the secret in the store.
+	SecretName string `json:"secret_name"`
 	// Name of Worker to bind to.
 	Service string `json:"service"`
+	// ID of the store containing the secret.
+	StoreID string `json:"store_id"`
 	// The text value to use.
-	Text  string                                              `json:"text"`
-	JSON  scriptScriptAndVersionSettingGetResponseBindingJSON `json:"-"`
-	union ScriptScriptAndVersionSettingGetResponseBindingsUnion
+	Text string `json:"text"`
+	// This field can have the runtime type of
+	// [[]ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage].
+	Usages interface{}                                         `json:"usages"`
+	JSON   scriptScriptAndVersionSettingGetResponseBindingJSON `json:"-"`
+	union  ScriptScriptAndVersionSettingGetResponseBindingsUnion
 }
 
 // scriptScriptAndVersionSettingGetResponseBindingJSON contains the JSON metadata
@@ -3738,20 +1898,26 @@ type scriptScriptAndVersionSettingGetResponseBindingJSON struct {
 	Name          apijson.Field
 	Type          apijson.Field
 	ID            apijson.Field
+	Algorithm     apijson.Field
 	BucketName    apijson.Field
 	CertificateID apijson.Field
 	ClassName     apijson.Field
 	Dataset       apijson.Field
 	Environment   apijson.Field
+	Format        apijson.Field
 	IndexName     apijson.Field
 	Json          apijson.Field
+	KeyJwk        apijson.Field
 	Namespace     apijson.Field
 	NamespaceID   apijson.Field
 	Outbound      apijson.Field
 	QueueName     apijson.Field
 	ScriptName    apijson.Field
+	SecretName    apijson.Field
 	Service       apijson.Field
+	StoreID       apijson.Field
 	Text          apijson.Field
+	Usages        apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -3791,7 +1957,9 @@ func (r *ScriptScriptAndVersionSettingGetResponseBinding) UnmarshalJSON(data []b
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata].
+// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
+// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
 func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptAndVersionSettingGetResponseBindingsUnion {
 	return r.union
 }
@@ -3816,9 +1984,11 @@ func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptA
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize]
+// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
+// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
+// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret]
 // or
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata].
+// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
 type ScriptScriptAndVersionSettingGetResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingGetResponseBinding()
 }
@@ -3834,197 +2004,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
 			DiscriminatorValue: "analytics_engine",
 		},
 		apijson.UnionVariant{
@@ -4034,197 +2014,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
 			DiscriminatorValue: "browser_rendering",
 		},
 		apijson.UnionVariant{
@@ -4234,197 +2024,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
 			DiscriminatorValue: "dispatch_namespace",
 		},
 		apijson.UnionVariant{
@@ -4434,197 +2034,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
 			DiscriminatorValue: "hyperdrive",
 		},
 		apijson.UnionVariant{
@@ -4634,197 +2044,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
 			DiscriminatorValue: "kv_namespace",
 		},
 		apijson.UnionVariant{
@@ -4834,197 +2054,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
 			DiscriminatorValue: "plain_text",
 		},
 		apijson.UnionVariant{
@@ -5034,197 +2064,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
 			DiscriminatorValue: "r2_bucket",
 		},
 		apijson.UnionVariant{
@@ -5234,197 +2074,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
 			DiscriminatorValue: "service",
 		},
 		apijson.UnionVariant{
@@ -5434,203 +2084,23 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
 			DiscriminatorValue: "vectorize",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata{}),
 			DiscriminatorValue: "version_metadata",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret{}),
+			DiscriminatorValue: "secrets_store_secret",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey{}),
+			DiscriminatorValue: "secret_key",
 		},
 	)
 }
@@ -5668,30 +2138,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI) im
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeAI ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType = "ai"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAITypeAI:
 		return true
 	}
 	return false
@@ -5733,30 +2185,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyt
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
 		return true
 	}
 	return false
@@ -5795,30 +2229,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeAssets ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType = "assets"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssetsTypeAssets:
 		return true
 	}
 	return false
@@ -5857,30 +2273,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowse
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering:
 		return true
 	}
 	return false
@@ -5922,30 +2320,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1) im
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeD1 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type = "d1"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1Type) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1TypeD1:
 		return true
 	}
 	return false
@@ -5990,30 +2370,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispat
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
 		return true
 	}
 	return false
@@ -6120,30 +2482,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurabl
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "dispatch_namespace"
 	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType = "version_metadata"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace:
 		return true
 	}
 	return false
@@ -6185,30 +2529,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperd
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeHyperdrive ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
 		return true
 	}
 	return false
@@ -6250,30 +2576,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson) 
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeJson ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType = "json"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJsonTypeJson:
 		return true
 	}
 	return false
@@ -6315,30 +2623,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVName
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeKVNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
 		return true
 	}
 	return false
@@ -6380,30 +2670,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCe
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate:
 		return true
 	}
 	return false
@@ -6445,30 +2717,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainT
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypePlainText ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType = "plain_text"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainTextTypePlainText:
 		return true
 	}
 	return false
@@ -6510,30 +2764,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue)
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeQueue ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType = "queue"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueueTypeQueue:
 		return true
 	}
 	return false
@@ -6575,30 +2811,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Buck
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeR2Bucket ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType = "r2_bucket"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketTypeR2Bucket:
 		return true
 	}
 	return false
@@ -6607,8 +2825,6 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Buck
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
-	// The secret value to use.
-	Text string `json:"text,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType `json:"type,required"`
 	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextJSON `json:"-"`
@@ -6619,7 +2835,6 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTex
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText]
 type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextJSON struct {
 	Name        apijson.Field
-	Text        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -6640,30 +2855,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecret
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeSecretText ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType = "secret_text"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretTextTypeSecretText:
 		return true
 	}
 	return false
@@ -6708,30 +2905,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServic
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeService ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType = "service"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceTypeService:
 		return true
 	}
 	return false
@@ -6773,30 +2952,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailCo
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeTailConsumer ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
 		return true
 	}
 	return false
@@ -6838,30 +2999,12 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVector
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeVectorize ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType = "vectorize"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorizeTypeVectorize:
 		return true
 	}
 	return false
@@ -6900,30 +3043,158 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersio
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "ai"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "analytics_engine"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "browser_rendering"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "d1"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeHyperdrive             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "hyperdrive"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeJson                   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "json"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeKVNamespace            ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "kv_namespace"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "mtls_certificate"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "plain_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "queue"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "r2_bucket"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeSecretText             ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "secret_text"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeService                ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "service"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "tail_consumer"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "vectorize"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeService, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of the secret in the store.
+	SecretName string `json:"secret_name,required"`
+	// ID of the store containing the secret.
+	StoreID string `json:"store_id,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretJSON struct {
+	Name        apijson.Field
+	SecretName  apijson.Field
+	StoreID     apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretType string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretType = "secrets_store_secret"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey struct {
+	// Algorithm-specific key parameters
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	Algorithm interface{} `json:"algorithm,required"`
+	// Data format of the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	Format ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyType `json:"type,required"`
+	// Allowed operations with the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	Usages []ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	JSON   scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyJSON    `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyJSON struct {
+	Algorithm   apijson.Field
+	Format      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	Usages      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// Data format of the key
+// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormat string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormatRaw   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormat = "raw"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormatPkcs8 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormat = "pkcs8"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormatSpki  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormat = "spki"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormatJwk   ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormat = "jwk"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormat) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormatRaw, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormatPkcs8, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormatSpki, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyType string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyTypeSecretKey ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyType = "secret_key"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageEncrypt    ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage = "encrypt"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageDecrypt    ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage = "decrypt"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageSign       ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage = "sign"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageVerify     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage = "verify"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageDeriveKey  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage = "deriveKey"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageDeriveBits ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage = "deriveBits"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageWrapKey    ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage = "wrapKey"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageUnwrapKey  ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage = "unwrapKey"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageEncrypt, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageDecrypt, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageSign, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageVerify, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageDeriveKey, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageDeriveBits, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageWrapKey, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsageUnwrapKey:
 		return true
 	}
 	return false
@@ -6952,11 +3223,32 @@ const (
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeTailConsumer           ScriptScriptAndVersionSettingGetResponseBindingsType = "tail_consumer"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize              ScriptScriptAndVersionSettingGetResponseBindingsType = "vectorize"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata        ScriptScriptAndVersionSettingGetResponseBindingsType = "version_metadata"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret     ScriptScriptAndVersionSettingGetResponseBindingsType = "secrets_store_secret"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey              ScriptScriptAndVersionSettingGetResponseBindingsType = "secret_key"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+// Data format of the key
+// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+type ScriptScriptAndVersionSettingGetResponseBindingsFormat string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsFormatRaw   ScriptScriptAndVersionSettingGetResponseBindingsFormat = "raw"
+	ScriptScriptAndVersionSettingGetResponseBindingsFormatPkcs8 ScriptScriptAndVersionSettingGetResponseBindingsFormat = "pkcs8"
+	ScriptScriptAndVersionSettingGetResponseBindingsFormatSpki  ScriptScriptAndVersionSettingGetResponseBindingsFormat = "spki"
+	ScriptScriptAndVersionSettingGetResponseBindingsFormatJwk   ScriptScriptAndVersionSettingGetResponseBindingsFormat = "jwk"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsFormat) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsFormatRaw, ScriptScriptAndVersionSettingGetResponseBindingsFormatPkcs8, ScriptScriptAndVersionSettingGetResponseBindingsFormatSpki, ScriptScriptAndVersionSettingGetResponseBindingsFormatJwk:
 		return true
 	}
 	return false
@@ -7247,7 +3539,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsType] `json:"type,required"`
 	// Identifier of the D1 database to bind to.
-	ID param.Field[string] `json:"id"`
+	ID        param.Field[string]      `json:"id"`
+	Algorithm param.Field[interface{}] `json:"algorithm"`
 	// R2 bucket to bind to.
 	BucketName param.Field[string] `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
@@ -7258,10 +3551,16 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	Dataset param.Field[string] `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
+	// Data format of the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	Format param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat] `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
 	// JSON data to use.
 	Json param.Field[string] `json:"json"`
+	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
+	KeyBase64 param.Field[string]      `json:"key_base64"`
+	KeyJwk    param.Field[interface{}] `json:"key_jwk"`
 	// Namespace to bind to.
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
@@ -7272,10 +3571,15 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName param.Field[string] `json:"script_name"`
+	// Name of the secret in the store.
+	SecretName param.Field[string] `json:"secret_name"`
 	// Name of Worker to bind to.
 	Service param.Field[string] `json:"service"`
+	// ID of the store containing the secret.
+	StoreID param.Field[string] `json:"store_id"`
 	// The text value to use.
-	Text param.Field[string] `json:"text"`
+	Text   param.Field[string]      `json:"text"`
+	Usages param.Field[interface{}] `json:"usages"`
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) MarshalJSON() (data []byte, err error) {
@@ -7307,6 +3611,8 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) implementsScript
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumer],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorize],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadata],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecret],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey],
 // [ScriptScriptAndVersionSettingEditParamsSettingsBinding].
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingUnion interface {
 	implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion()
@@ -7330,30 +3636,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeAI ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType = "ai"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAITypeAI:
 		return true
 	}
 	return false
@@ -7379,30 +3667,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
 		return true
 	}
 	return false
@@ -7426,30 +3696,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeAssets ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType = "assets"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssetsTypeAssets:
 		return true
 	}
 	return false
@@ -7473,30 +3725,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering:
 		return true
 	}
 	return false
@@ -7522,30 +3756,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeD1 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type = "d1"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1Type) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1TypeD1:
 		return true
 	}
 	return false
@@ -7573,30 +3789,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
 		return true
 	}
 	return false
@@ -7654,30 +3852,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "dispatch_namespace"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType = "version_metadata"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace:
 		return true
 	}
 	return false
@@ -7703,30 +3883,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeHyperdrive ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
 		return true
 	}
 	return false
@@ -7752,30 +3914,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeJson ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "json"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeJson:
 		return true
 	}
 	return false
@@ -7801,30 +3945,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeKVNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
 		return true
 	}
 	return false
@@ -7850,30 +3976,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate:
 		return true
 	}
 	return false
@@ -7899,30 +4007,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypePlainText ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType = "plain_text"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextTypePlainText:
 		return true
 	}
 	return false
@@ -7948,30 +4038,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeQueue ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType = "queue"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueueTypeQueue:
 		return true
 	}
 	return false
@@ -7997,30 +4069,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeR2Bucket ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType = "r2_bucket"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketTypeR2Bucket:
 		return true
 	}
 	return false
@@ -8046,30 +4100,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeSecretText ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType = "secret_text"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextTypeSecretText:
 		return true
 	}
 	return false
@@ -8097,30 +4133,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeService ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType = "service"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceTypeService:
 		return true
 	}
 	return false
@@ -8146,30 +4164,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeTailConsumer ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
 		return true
 	}
 	return false
@@ -8195,30 +4195,12 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeVectorize ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType = "vectorize"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeTypeVectorize:
 		return true
 	}
 	return false
@@ -8242,30 +4224,129 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "ai"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "analytics_engine"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "browser_rendering"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "d1"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "dispatch_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "durable_object_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeHyperdrive             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "hyperdrive"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeJson                   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "json"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeKVNamespace            ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "kv_namespace"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "mtls_certificate"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "plain_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "queue"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "r2_bucket"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeSecretText             ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "secret_text"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeService                ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "service"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "tail_consumer"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "vectorize"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecret struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Name of the secret in the store.
+	SecretName param.Field[string] `json:"secret_name,required"`
+	// ID of the store containing the secret.
+	StoreID param.Field[string] `json:"store_id,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecretType] `json:"type,required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecret) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecret) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecretType string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecretType = "secrets_store_secret"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecretType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey struct {
+	// Algorithm-specific key parameters
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	Algorithm param.Field[interface{}] `json:"algorithm,required"`
+	// Data format of the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	Format param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormat] `json:"format,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyType] `json:"type,required"`
+	// Allowed operations with the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	Usages param.Field[[]ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage] `json:"usages,required"`
+	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
+	KeyBase64 param.Field[string] `json:"key_base64"`
+	// Key data in
+	// [JSON Web Key](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#json_web_key)
+	// format. Required if `format` is "jwk".
+	KeyJwk param.Field[interface{}] `json:"key_jwk"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// Data format of the key
+// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormat string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormatRaw   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormat = "raw"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormatPkcs8 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormat = "pkcs8"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormatSpki  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormat = "spki"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormatJwk   ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormat = "jwk"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormat) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormatRaw, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormatPkcs8, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormatSpki, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyType string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyTypeSecretKey ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyType = "secret_key"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageEncrypt    ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage = "encrypt"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageDecrypt    ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage = "decrypt"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageSign       ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage = "sign"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageVerify     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage = "verify"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageDeriveKey  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage = "deriveKey"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageDeriveBits ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage = "deriveBits"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageWrapKey    ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage = "wrapKey"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageUnwrapKey  ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage = "unwrapKey"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageEncrypt, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageDecrypt, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageSign, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageVerify, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageDeriveKey, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageDeriveBits, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageWrapKey, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsageUnwrapKey:
 		return true
 	}
 	return false
@@ -8294,11 +4375,32 @@ const (
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTailConsumer           ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "tail_consumer"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize              ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "vectorize"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata        ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "version_metadata"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret     ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "secrets_store_secret"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey              ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "secret_key"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+// Data format of the key
+// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatRaw   ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat = "raw"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatPkcs8 ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat = "pkcs8"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatSpki  ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat = "spki"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatJwk   ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat = "jwk"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatRaw, ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatPkcs8, ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatSpki, ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatJwk:
 		return true
 	}
 	return false
