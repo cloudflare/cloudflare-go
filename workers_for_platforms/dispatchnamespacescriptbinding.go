@@ -81,6 +81,8 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	Type DispatchNamespaceScriptBindingGetResponseType `json:"type,required"`
 	// Identifier of the D1 database to bind to.
 	ID string `json:"id"`
+	// This field can have the runtime type of [interface{}].
+	Algorithm interface{} `json:"algorithm"`
 	// R2 bucket to bind to.
 	BucketName string `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
@@ -91,10 +93,15 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	Dataset string `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
+	// Data format of the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	Format DispatchNamespaceScriptBindingGetResponseFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// JSON data to use.
 	Json string `json:"json"`
+	// This field can have the runtime type of [interface{}].
+	KeyJwk interface{} `json:"key_jwk"`
 	// Namespace to bind to.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
@@ -107,12 +114,19 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string `json:"script_name"`
+	// Name of the secret in the store.
+	SecretName string `json:"secret_name"`
 	// Name of Worker to bind to.
 	Service string `json:"service"`
+	// ID of the store containing the secret.
+	StoreID string `json:"store_id"`
 	// The text value to use.
-	Text  string                                        `json:"text"`
-	JSON  dispatchNamespaceScriptBindingGetResponseJSON `json:"-"`
-	union DispatchNamespaceScriptBindingGetResponseUnion
+	Text string `json:"text"`
+	// This field can have the runtime type of
+	// [[]DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage].
+	Usages interface{}                                   `json:"usages"`
+	JSON   dispatchNamespaceScriptBindingGetResponseJSON `json:"-"`
+	union  DispatchNamespaceScriptBindingGetResponseUnion
 }
 
 // dispatchNamespaceScriptBindingGetResponseJSON contains the JSON metadata for the
@@ -121,20 +135,26 @@ type dispatchNamespaceScriptBindingGetResponseJSON struct {
 	Name          apijson.Field
 	Type          apijson.Field
 	ID            apijson.Field
+	Algorithm     apijson.Field
 	BucketName    apijson.Field
 	CertificateID apijson.Field
 	ClassName     apijson.Field
 	Dataset       apijson.Field
 	Environment   apijson.Field
+	Format        apijson.Field
 	IndexName     apijson.Field
 	Json          apijson.Field
+	KeyJwk        apijson.Field
 	Namespace     apijson.Field
 	NamespaceID   apijson.Field
 	Outbound      apijson.Field
 	QueueName     apijson.Field
 	ScriptName    apijson.Field
+	SecretName    apijson.Field
 	Service       apijson.Field
+	StoreID       apijson.Field
 	Text          apijson.Field
+	Usages        apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -174,7 +194,9 @@ func (r *DispatchNamespaceScriptBindingGetResponse) UnmarshalJSON(data []byte) (
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata].
+// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata],
+// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret],
+// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey].
 func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceScriptBindingGetResponseUnion {
 	return r.union
 }
@@ -199,9 +221,11 @@ func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceSc
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize]
+// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize],
+// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata],
+// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret]
 // or
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata].
+// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey].
 type DispatchNamespaceScriptBindingGetResponseUnion interface {
 	implementsDispatchNamespaceScriptBindingGetResponse()
 }
@@ -217,197 +241,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
 			DiscriminatorValue: "analytics_engine",
 		},
 		apijson.UnionVariant{
@@ -417,197 +251,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
 			DiscriminatorValue: "browser_rendering",
 		},
 		apijson.UnionVariant{
@@ -617,197 +261,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
 			DiscriminatorValue: "dispatch_namespace",
 		},
 		apijson.UnionVariant{
@@ -817,197 +271,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
 			DiscriminatorValue: "hyperdrive",
 		},
 		apijson.UnionVariant{
@@ -1017,197 +281,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
 			DiscriminatorValue: "kv_namespace",
 		},
 		apijson.UnionVariant{
@@ -1217,197 +291,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
 			DiscriminatorValue: "plain_text",
 		},
 		apijson.UnionVariant{
@@ -1417,197 +301,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
 			DiscriminatorValue: "r2_bucket",
 		},
 		apijson.UnionVariant{
@@ -1617,197 +311,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
 			DiscriminatorValue: "service",
 		},
 		apijson.UnionVariant{
@@ -1817,203 +321,23 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "vectorize",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize{}),
-			DiscriminatorValue: "version_metadata",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "ai",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "analytics_engine",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "assets",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "browser_rendering",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "d1",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "dispatch_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "durable_object_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "hyperdrive",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "kv_namespace",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "mtls_certificate",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "plain_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "queue",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "r2_bucket",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "secret_text",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "service",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
-			DiscriminatorValue: "tail_consumer",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
 			DiscriminatorValue: "vectorize",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata{}),
 			DiscriminatorValue: "version_metadata",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret{}),
+			DiscriminatorValue: "secrets_store_secret",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey{}),
+			DiscriminatorValue: "secret_key",
 		},
 	)
 }
@@ -2051,30 +375,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI) implement
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeAI DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType = "ai"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeAI:
 		return true
 	}
 	return false
@@ -2116,30 +422,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngi
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType = "analytics_engine"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
 		return true
 	}
 	return false
@@ -2178,30 +466,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets) imple
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeAssets DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType = "assets"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsTypeAssets:
 		return true
 	}
 	return false
@@ -2240,30 +510,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRender
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeBrowserRendering DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "browser_rendering"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeBrowserRendering:
 		return true
 	}
 	return false
@@ -2305,30 +557,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1) implement
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeD1 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type = "d1"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1TypeD1:
 		return true
 	}
 	return false
@@ -2373,30 +607,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNames
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeDispatchNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
 		return true
 	}
 	return false
@@ -2503,30 +719,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObject
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "dispatch_namespace"
 	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType = "version_metadata"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace:
 		return true
 	}
 	return false
@@ -2568,30 +766,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive) i
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeHyperdrive DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType = "hyperdrive"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTypeHyperdrive:
 		return true
 	}
 	return false
@@ -2633,30 +813,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson) impleme
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeJson DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType = "json"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonTypeJson:
 		return true
 	}
 	return false
@@ -2698,30 +860,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace) 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeKVNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType = "kv_namespace"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTypeKVNamespace:
 		return true
 	}
 	return false
@@ -2763,30 +907,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertifica
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeMTLSCertificate DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType = "mtls_certificate"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateTypeMTLSCertificate:
 		return true
 	}
 	return false
@@ -2828,30 +954,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText) im
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypePlainText DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType = "plain_text"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextTypePlainText:
 		return true
 	}
 	return false
@@ -2893,30 +1001,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue) implem
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeQueue DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType = "queue"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueTypeQueue:
 		return true
 	}
 	return false
@@ -2958,30 +1048,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket) imp
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeR2Bucket DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType = "r2_bucket"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketTypeR2Bucket:
 		return true
 	}
 	return false
@@ -2990,8 +1062,6 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType)
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
-	// The secret value to use.
-	Text string `json:"text,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType `json:"type,required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextJSON `json:"-"`
@@ -3002,7 +1072,6 @@ type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText struc
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText]
 type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextJSON struct {
 	Name        apijson.Field
-	Text        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -3023,30 +1092,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText) i
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeSecretText DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType = "secret_text"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTypeSecretText:
 		return true
 	}
 	return false
@@ -3091,30 +1142,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService) impl
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeService DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType = "service"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceTypeService:
 		return true
 	}
 	return false
@@ -3156,30 +1189,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer)
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeTailConsumer DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType = "tail_consumer"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumerTypeTailConsumer:
 		return true
 	}
 	return false
@@ -3221,30 +1236,12 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize) im
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeVectorize DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType = "vectorize"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeTypeVectorize:
 		return true
 	}
 	return false
@@ -3283,30 +1280,158 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetada
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeAI                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "ai"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "analytics_engine"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeAssets                 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "assets"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "browser_rendering"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeD1                     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "d1"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "dispatch_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "durable_object_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeHyperdrive             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "hyperdrive"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeJson                   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "json"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "kv_namespace"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "mtls_certificate"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypePlainText              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "plain_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeQueue                  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "queue"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "r2_bucket"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeSecretText             DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "secret_text"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeService                DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "service"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "tail_consumer"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeVectorize              DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "vectorize"
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeVersionMetadata DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType = "version_metadata"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeAI, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeAssets, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeD1, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeJson, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypePlainText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeQueue, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeSecretText, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeService, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeVectorize, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataTypeVersionMetadata:
+		return true
+	}
+	return false
+}
+
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of the secret in the store.
+	SecretName string `json:"secret_name,required"`
+	// ID of the store containing the secret.
+	StoreID string `json:"store_id,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretType `json:"type,required"`
+	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret]
+type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretJSON struct {
+	Name        apijson.Field
+	SecretName  apijson.Field
+	StoreID     apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret) implementsDispatchNamespaceScriptBindingGetResponse() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretType string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretType = "secrets_store_secret"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret:
+		return true
+	}
+	return false
+}
+
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey struct {
+	// Algorithm-specific key parameters
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	Algorithm interface{} `json:"algorithm,required"`
+	// Data format of the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	Format DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyType `json:"type,required"`
+	// Allowed operations with the key
+	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	Usages []DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	JSON   dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyJSON    `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey]
+type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyJSON struct {
+	Algorithm   apijson.Field
+	Format      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	Usages      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey) implementsDispatchNamespaceScriptBindingGetResponse() {
+}
+
+// Data format of the key
+// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormat string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormatRaw   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormat = "raw"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormatPkcs8 DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormat = "pkcs8"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormatSpki  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormat = "spki"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormatJwk   DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormat = "jwk"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormat) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormatRaw, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormatPkcs8, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormatSpki, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyType string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyTypeSecretKey DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyType = "secret_key"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageEncrypt    DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage = "encrypt"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageDecrypt    DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage = "decrypt"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageSign       DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage = "sign"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageVerify     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage = "verify"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageDeriveKey  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage = "deriveKey"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageDeriveBits DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage = "deriveBits"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageWrapKey    DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage = "wrapKey"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageUnwrapKey  DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage = "unwrapKey"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageEncrypt, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageDecrypt, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageSign, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageVerify, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageDeriveKey, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageDeriveBits, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageWrapKey, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsageUnwrapKey:
 		return true
 	}
 	return false
@@ -3335,11 +1460,32 @@ const (
 	DispatchNamespaceScriptBindingGetResponseTypeTailConsumer           DispatchNamespaceScriptBindingGetResponseType = "tail_consumer"
 	DispatchNamespaceScriptBindingGetResponseTypeVectorize              DispatchNamespaceScriptBindingGetResponseType = "vectorize"
 	DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata        DispatchNamespaceScriptBindingGetResponseType = "version_metadata"
+	DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret     DispatchNamespaceScriptBindingGetResponseType = "secrets_store_secret"
+	DispatchNamespaceScriptBindingGetResponseTypeSecretKey              DispatchNamespaceScriptBindingGetResponseType = "secret_key"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata:
+	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata, DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret, DispatchNamespaceScriptBindingGetResponseTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+// Data format of the key
+// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+type DispatchNamespaceScriptBindingGetResponseFormat string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseFormatRaw   DispatchNamespaceScriptBindingGetResponseFormat = "raw"
+	DispatchNamespaceScriptBindingGetResponseFormatPkcs8 DispatchNamespaceScriptBindingGetResponseFormat = "pkcs8"
+	DispatchNamespaceScriptBindingGetResponseFormatSpki  DispatchNamespaceScriptBindingGetResponseFormat = "spki"
+	DispatchNamespaceScriptBindingGetResponseFormatJwk   DispatchNamespaceScriptBindingGetResponseFormat = "jwk"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseFormat) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseFormatRaw, DispatchNamespaceScriptBindingGetResponseFormatPkcs8, DispatchNamespaceScriptBindingGetResponseFormatSpki, DispatchNamespaceScriptBindingGetResponseFormatJwk:
 		return true
 	}
 	return false

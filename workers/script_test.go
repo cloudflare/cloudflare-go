@@ -45,9 +45,10 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					}),
 					JWT: cloudflare.F("jwt"),
 				}),
-				Bindings: cloudflare.F([]workers.ScriptUpdateParamsMetadataBindingUnion{workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI{
+				Bindings: cloudflare.F([]workers.ScriptUpdateParamsMetadataBindingUnion{workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText{
 					Name: cloudflare.F("MY_ENV_VAR"),
-					Type: cloudflare.F(workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypePlainText),
+					Text: cloudflare.F("my_data"),
+					Type: cloudflare.F(workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText),
 				}}),
 				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
