@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingService contains methods and other services that help with interacting
@@ -116,7 +115,7 @@ func (r settingGetResponseJSON) RawJSON() string {
 }
 
 type SettingUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Indicates whether zone-level authenticated origin pulls is enabled.
 	Enabled param.Field[bool] `json:"enabled,required"`
@@ -127,9 +126,9 @@ func (r SettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []SettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success SettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  SettingUpdateResponse                `json:"result"`
 	JSON    settingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -154,7 +153,103 @@ func (r settingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type SettingUpdateResponseEnvelopeErrors struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           SettingUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             settingUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// settingUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingUpdateResponseEnvelopeErrors]
+type settingUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    settingUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// settingUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [SettingUpdateResponseEnvelopeErrorsSource]
+type settingUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingUpdateResponseEnvelopeMessages struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           SettingUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             settingUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// settingUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingUpdateResponseEnvelopeMessages]
+type settingUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    settingUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// settingUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [SettingUpdateResponseEnvelopeMessagesSource]
+type settingUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type SettingUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -170,14 +265,14 @@ func (r SettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SettingGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []SettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success SettingGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  SettingGetResponse                `json:"result"`
 	JSON    settingGetResponseEnvelopeJSON    `json:"-"`
@@ -202,7 +297,103 @@ func (r settingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type SettingGetResponseEnvelopeErrors struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           SettingGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             settingGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// settingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SettingGetResponseEnvelopeErrors]
+type settingGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    settingGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// settingGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [SettingGetResponseEnvelopeErrorsSource]
+type settingGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingGetResponseEnvelopeMessages struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           SettingGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             settingGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// settingGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [SettingGetResponseEnvelopeMessages]
+type settingGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    settingGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// settingGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [SettingGetResponseEnvelopeMessagesSource]
+type settingGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type SettingGetResponseEnvelopeSuccess bool
 
 const (

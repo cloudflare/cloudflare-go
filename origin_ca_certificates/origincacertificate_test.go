@@ -45,7 +45,7 @@ func TestOriginCACertificateNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestOriginCACertificateList(t *testing.T) {
+func TestOriginCACertificateListWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate auth errors on test suite")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -60,7 +60,11 @@ func TestOriginCACertificateList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.OriginCACertificates.List(context.TODO(), origin_ca_certificates.OriginCACertificateListParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Limit:   cloudflare.F(int64(10)),
+		Offset:  cloudflare.F(int64(10)),
+		Page:    cloudflare.F(1.000000),
+		PerPage: cloudflare.F(5.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
