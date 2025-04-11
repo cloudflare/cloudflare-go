@@ -38,9 +38,10 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 				EnabledUploadPhase:   cloudflare.F(false),
 				FailClosed:           cloudflare.F(false),
 				NotificationSettings: cloudflare.F(zero_trust.NotificationSettingsParam{
-					Enabled:    cloudflare.F(true),
-					Msg:        cloudflare.F("msg"),
-					SupportURL: cloudflare.F("support_url"),
+					Enabled:        cloudflare.F(true),
+					IncludeContext: cloudflare.F(true),
+					Msg:            cloudflare.F("msg"),
+					SupportURL:     cloudflare.F("support_url"),
 				}),
 			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
@@ -122,9 +123,10 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 				EnabledUploadPhase:   cloudflare.F(false),
 				FailClosed:           cloudflare.F(false),
 				NotificationSettings: cloudflare.F(zero_trust.NotificationSettingsParam{
-					Enabled:    cloudflare.F(true),
-					Msg:        cloudflare.F("msg"),
-					SupportURL: cloudflare.F("support_url"),
+					Enabled:        cloudflare.F(true),
+					IncludeContext: cloudflare.F(true),
+					Msg:            cloudflare.F("msg"),
+					SupportURL:     cloudflare.F("support_url"),
 				}),
 			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
