@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -243,7 +242,7 @@ func (r AnalyticsEventBytimeGetResponseQueryMetric) IsKnown() bool {
 }
 
 type AnalyticsEventBytimeGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Used to select time series resolution.
 	TimeDelta param.Field[AnalyticsEventBytimeGetParamsTimeDelta] `query:"time_delta,required"`
@@ -347,9 +346,9 @@ func (r AnalyticsEventBytimeGetParamsMetric) IsKnown() bool {
 }
 
 type AnalyticsEventBytimeGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AnalyticsEventBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AnalyticsEventBytimeGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AnalyticsEventBytimeGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AnalyticsEventBytimeGetResponse                `json:"result"`
 	JSON    analyticsEventBytimeGetResponseEnvelopeJSON    `json:"-"`
@@ -374,7 +373,103 @@ func (r analyticsEventBytimeGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AnalyticsEventBytimeGetResponseEnvelopeErrors struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           AnalyticsEventBytimeGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             analyticsEventBytimeGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// analyticsEventBytimeGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [AnalyticsEventBytimeGetResponseEnvelopeErrors]
+type analyticsEventBytimeGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AnalyticsEventBytimeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyticsEventBytimeGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AnalyticsEventBytimeGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    analyticsEventBytimeGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// analyticsEventBytimeGetResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [AnalyticsEventBytimeGetResponseEnvelopeErrorsSource]
+type analyticsEventBytimeGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnalyticsEventBytimeGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyticsEventBytimeGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AnalyticsEventBytimeGetResponseEnvelopeMessages struct {
+	Code             int64                                                 `json:"code,required"`
+	Message          string                                                `json:"message,required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           AnalyticsEventBytimeGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             analyticsEventBytimeGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// analyticsEventBytimeGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [AnalyticsEventBytimeGetResponseEnvelopeMessages]
+type analyticsEventBytimeGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AnalyticsEventBytimeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyticsEventBytimeGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AnalyticsEventBytimeGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    analyticsEventBytimeGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// analyticsEventBytimeGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [AnalyticsEventBytimeGetResponseEnvelopeMessagesSource]
+type analyticsEventBytimeGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnalyticsEventBytimeGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyticsEventBytimeGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AnalyticsEventBytimeGetResponseEnvelopeSuccess bool
 
 const (
