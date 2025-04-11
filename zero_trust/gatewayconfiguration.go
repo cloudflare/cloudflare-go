@@ -669,6 +669,8 @@ func (r GatewayConfigurationSettingsSandboxParam) MarshalJSON() (data []byte, er
 type NotificationSettings struct {
 	// Set notification on
 	Enabled bool `json:"enabled"`
+	// If true, context information will be passed as query parameters
+	IncludeContext bool `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
@@ -680,11 +682,12 @@ type NotificationSettings struct {
 // notificationSettingsJSON contains the JSON metadata for the struct
 // [NotificationSettings]
 type notificationSettingsJSON struct {
-	Enabled     apijson.Field
-	Msg         apijson.Field
-	SupportURL  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Enabled        apijson.Field
+	IncludeContext apijson.Field
+	Msg            apijson.Field
+	SupportURL     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *NotificationSettings) UnmarshalJSON(data []byte) (err error) {
@@ -700,6 +703,8 @@ func (r notificationSettingsJSON) RawJSON() string {
 type NotificationSettingsParam struct {
 	// Set notification on
 	Enabled param.Field[bool] `json:"enabled"`
+	// If true, context information will be passed as query parameters
+	IncludeContext param.Field[bool] `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg param.Field[string] `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the

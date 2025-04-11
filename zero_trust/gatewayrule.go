@@ -445,6 +445,9 @@ type RuleSetting struct {
 	AuditSSH RuleSettingAuditSSH `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
 	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls"`
+	// Custom block page settings. If missing/null, blocking will use the the account
+	// settings.
+	BlockPage RuleSettingBlockPage `json:"block_page"`
 	// Enable the custom block page.
 	BlockPageEnabled bool `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -511,6 +514,7 @@ type ruleSettingJSON struct {
 	AllowChildBypass                apijson.Field
 	AuditSSH                        apijson.Field
 	BISOAdminControls               apijson.Field
+	BlockPage                       apijson.Field
 	BlockPageEnabled                apijson.Field
 	BlockReason                     apijson.Field
 	BypassParentRule                apijson.Field
@@ -752,6 +756,33 @@ func (r RuleSettingBISOAdminControlsVersion) IsKnown() bool {
 	return false
 }
 
+// Custom block page settings. If missing/null, blocking will use the the account
+// settings.
+type RuleSettingBlockPage struct {
+	// URI to which the user will be redirected
+	TargetURI string `json:"target_uri,required" format:"uri"`
+	// If true, context information will be passed as query parameters
+	IncludeContext bool                     `json:"include_context"`
+	JSON           ruleSettingBlockPageJSON `json:"-"`
+}
+
+// ruleSettingBlockPageJSON contains the JSON metadata for the struct
+// [RuleSettingBlockPage]
+type ruleSettingBlockPageJSON struct {
+	TargetURI      apijson.Field
+	IncludeContext apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleSettingBlockPage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleSettingBlockPageJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure how session check behaves.
 type RuleSettingCheckSession struct {
 	// Configure how fresh the session needs to be to be considered valid.
@@ -869,6 +900,8 @@ func (r ruleSettingL4overrideJSON) RawJSON() string {
 type RuleSettingNotificationSettings struct {
 	// Set notification on
 	Enabled bool `json:"enabled"`
+	// If true, context information will be passed as query parameters
+	IncludeContext bool `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
@@ -880,11 +913,12 @@ type RuleSettingNotificationSettings struct {
 // ruleSettingNotificationSettingsJSON contains the JSON metadata for the struct
 // [RuleSettingNotificationSettings]
 type ruleSettingNotificationSettingsJSON struct {
-	Enabled     apijson.Field
-	Msg         apijson.Field
-	SupportURL  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Enabled        apijson.Field
+	IncludeContext apijson.Field
+	Msg            apijson.Field
+	SupportURL     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *RuleSettingNotificationSettings) UnmarshalJSON(data []byte) (err error) {
@@ -1099,6 +1133,9 @@ type RuleSettingParam struct {
 	AuditSSH param.Field[RuleSettingAuditSSHParam] `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
 	BISOAdminControls param.Field[RuleSettingBISOAdminControlsParam] `json:"biso_admin_controls"`
+	// Custom block page settings. If missing/null, blocking will use the the account
+	// settings.
+	BlockPage param.Field[RuleSettingBlockPageParam] `json:"block_page"`
 	// Enable the custom block page.
 	BlockPageEnabled param.Field[bool] `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -1212,6 +1249,19 @@ func (r RuleSettingBISOAdminControlsParam) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
+// Custom block page settings. If missing/null, blocking will use the the account
+// settings.
+type RuleSettingBlockPageParam struct {
+	// URI to which the user will be redirected
+	TargetURI param.Field[string] `json:"target_uri,required" format:"uri"`
+	// If true, context information will be passed as query parameters
+	IncludeContext param.Field[bool] `json:"include_context"`
+}
+
+func (r RuleSettingBlockPageParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Configure how session check behaves.
 type RuleSettingCheckSessionParam struct {
 	// Configure how fresh the session needs to be to be considered valid.
@@ -1272,6 +1322,8 @@ func (r RuleSettingL4overrideParam) MarshalJSON() (data []byte, err error) {
 type RuleSettingNotificationSettingsParam struct {
 	// Set notification on
 	Enabled param.Field[bool] `json:"enabled"`
+	// If true, context information will be passed as query parameters
+	IncludeContext param.Field[bool] `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg param.Field[string] `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
