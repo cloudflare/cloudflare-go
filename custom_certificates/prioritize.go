@@ -66,7 +66,7 @@ func (r *PrioritizeService) UpdateAutoPaging(ctx context.Context, params Priorit
 }
 
 type PrioritizeUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Array of ordered certificates.
 	Certificates param.Field[[]PrioritizeUpdateParamsCertificate] `json:"certificates,required"`
@@ -77,7 +77,7 @@ func (r PrioritizeUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrioritizeUpdateParamsCertificate struct {
-	// Identifier
+	// Identifier.
 	ID param.Field[string] `json:"id"`
 	// The order/priority in which the certificate will be used in a request. The
 	// higher priority will break ties across overlapping 'legacy_custom' certificates,

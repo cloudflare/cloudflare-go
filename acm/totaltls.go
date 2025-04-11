@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TotalTLSService contains methods and other services that help with interacting
@@ -174,7 +173,7 @@ func (r TotalTLSGetResponseValidityPeriod) IsKnown() bool {
 }
 
 type TotalTLSNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
@@ -188,9 +187,9 @@ func (r TotalTLSNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TotalTLSNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []TotalTLSNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TotalTLSNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success TotalTLSNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  TotalTLSNewResponse                `json:"result"`
 	JSON    totalTLSNewResponseEnvelopeJSON    `json:"-"`
@@ -215,7 +214,103 @@ func (r totalTLSNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type TotalTLSNewResponseEnvelopeErrors struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           TotalTLSNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             totalTLSNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// totalTLSNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [TotalTLSNewResponseEnvelopeErrors]
+type totalTLSNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TotalTLSNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TotalTLSNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    totalTLSNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// totalTLSNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [TotalTLSNewResponseEnvelopeErrorsSource]
+type totalTLSNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TotalTLSNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type TotalTLSNewResponseEnvelopeMessages struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           TotalTLSNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             totalTLSNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// totalTLSNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [TotalTLSNewResponseEnvelopeMessages]
+type totalTLSNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TotalTLSNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type TotalTLSNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    totalTLSNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// totalTLSNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [TotalTLSNewResponseEnvelopeMessagesSource]
+type totalTLSNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TotalTLSNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type TotalTLSNewResponseEnvelopeSuccess bool
 
 const (
@@ -231,14 +326,14 @@ func (r TotalTLSNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TotalTLSGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type TotalTLSGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []TotalTLSGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TotalTLSGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success TotalTLSGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  TotalTLSGetResponse                `json:"result"`
 	JSON    totalTLSGetResponseEnvelopeJSON    `json:"-"`
@@ -263,7 +358,103 @@ func (r totalTLSGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type TotalTLSGetResponseEnvelopeErrors struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           TotalTLSGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             totalTLSGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// totalTLSGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [TotalTLSGetResponseEnvelopeErrors]
+type totalTLSGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TotalTLSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TotalTLSGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    totalTLSGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// totalTLSGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [TotalTLSGetResponseEnvelopeErrorsSource]
+type totalTLSGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TotalTLSGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type TotalTLSGetResponseEnvelopeMessages struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           TotalTLSGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             totalTLSGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// totalTLSGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [TotalTLSGetResponseEnvelopeMessages]
+type totalTLSGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *TotalTLSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type TotalTLSGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    totalTLSGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// totalTLSGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [TotalTLSGetResponseEnvelopeMessagesSource]
+type totalTLSGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TotalTLSGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r totalTLSGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type TotalTLSGetResponseEnvelopeSuccess bool
 
 const (
