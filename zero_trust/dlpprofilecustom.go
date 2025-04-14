@@ -252,6 +252,9 @@ type DLPProfileCustomNewResponseCustomProfileEntry struct {
 	Enabled bool                                                `json:"enabled,required"`
 	Name    string                                              `json:"name,required"`
 	Type    DLPProfileCustomNewResponseCustomProfileEntriesType `json:"type,required"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntryConfidence].
 	Confidence interface{} `json:"confidence"`
@@ -269,19 +272,20 @@ type DLPProfileCustomNewResponseCustomProfileEntry struct {
 // dlpProfileCustomNewResponseCustomProfileEntryJSON contains the JSON metadata for
 // the struct [DLPProfileCustomNewResponseCustomProfileEntry]
 type dlpProfileCustomNewResponseCustomProfileEntryJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	Confidence  apijson.Field
-	CreatedAt   apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	Secret      apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Type          apijson.Field
+	CaseSensitive apijson.Field
+	Confidence    apijson.Field
+	CreatedAt     apijson.Field
+	Pattern       apijson.Field
+	ProfileID     apijson.Field
+	Secret        apijson.Field
+	UpdatedAt     apijson.Field
+	WordList      apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r dlpProfileCustomNewResponseCustomProfileEntryJSON) RawJSON() string {
@@ -528,29 +532,33 @@ func (r DLPProfileCustomNewResponseCustomProfileEntriesIntegrationEntryType) IsK
 }
 
 type DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntry struct {
-	ID        string                                                            `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                                         `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                              `json:"enabled,required"`
-	Name      string                                                            `json:"name,required"`
-	Secret    bool                                                              `json:"secret,required"`
-	Type      DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt time.Time                                                         `json:"updated_at,required" format:"date-time"`
-	JSON      dlpProfileCustomNewResponseCustomProfileEntriesExactDataEntryJSON `json:"-"`
+	ID string `json:"id,required" format:"uuid"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool                                                              `json:"case_sensitive,required"`
+	CreatedAt     time.Time                                                         `json:"created_at,required" format:"date-time"`
+	Enabled       bool                                                              `json:"enabled,required"`
+	Name          string                                                            `json:"name,required"`
+	Secret        bool                                                              `json:"secret,required"`
+	Type          DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntryType `json:"type,required"`
+	UpdatedAt     time.Time                                                         `json:"updated_at,required" format:"date-time"`
+	JSON          dlpProfileCustomNewResponseCustomProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
 // dlpProfileCustomNewResponseCustomProfileEntriesExactDataEntryJSON contains the
 // JSON metadata for the struct
 // [DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntry]
 type dlpProfileCustomNewResponseCustomProfileEntriesExactDataEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	CaseSensitive apijson.Field
+	CreatedAt     apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Secret        apijson.Field
+	Type          apijson.Field
+	UpdatedAt     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *DLPProfileCustomNewResponseCustomProfileEntriesExactDataEntry) UnmarshalJSON(data []byte) (err error) {
@@ -731,6 +739,9 @@ type DLPProfileCustomNewResponsePredefinedProfileEntry struct {
 	Enabled bool                                                    `json:"enabled,required"`
 	Name    string                                                  `json:"name,required"`
 	Type    DLPProfileCustomNewResponsePredefinedProfileEntriesType `json:"type,required"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntryConfidence].
 	Confidence interface{} `json:"confidence"`
@@ -748,19 +759,20 @@ type DLPProfileCustomNewResponsePredefinedProfileEntry struct {
 // dlpProfileCustomNewResponsePredefinedProfileEntryJSON contains the JSON metadata
 // for the struct [DLPProfileCustomNewResponsePredefinedProfileEntry]
 type dlpProfileCustomNewResponsePredefinedProfileEntryJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	Confidence  apijson.Field
-	CreatedAt   apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	Secret      apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Type          apijson.Field
+	CaseSensitive apijson.Field
+	Confidence    apijson.Field
+	CreatedAt     apijson.Field
+	Pattern       apijson.Field
+	ProfileID     apijson.Field
+	Secret        apijson.Field
+	UpdatedAt     apijson.Field
+	WordList      apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r dlpProfileCustomNewResponsePredefinedProfileEntryJSON) RawJSON() string {
@@ -1008,29 +1020,33 @@ func (r DLPProfileCustomNewResponsePredefinedProfileEntriesIntegrationEntryType)
 }
 
 type DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntry struct {
-	ID        string                                                                `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                                             `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                                  `json:"enabled,required"`
-	Name      string                                                                `json:"name,required"`
-	Secret    bool                                                                  `json:"secret,required"`
-	Type      DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt time.Time                                                             `json:"updated_at,required" format:"date-time"`
-	JSON      dlpProfileCustomNewResponsePredefinedProfileEntriesExactDataEntryJSON `json:"-"`
+	ID string `json:"id,required" format:"uuid"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool                                                                  `json:"case_sensitive,required"`
+	CreatedAt     time.Time                                                             `json:"created_at,required" format:"date-time"`
+	Enabled       bool                                                                  `json:"enabled,required"`
+	Name          string                                                                `json:"name,required"`
+	Secret        bool                                                                  `json:"secret,required"`
+	Type          DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntryType `json:"type,required"`
+	UpdatedAt     time.Time                                                             `json:"updated_at,required" format:"date-time"`
+	JSON          dlpProfileCustomNewResponsePredefinedProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
 // dlpProfileCustomNewResponsePredefinedProfileEntriesExactDataEntryJSON contains
 // the JSON metadata for the struct
 // [DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntry]
 type dlpProfileCustomNewResponsePredefinedProfileEntriesExactDataEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	CaseSensitive apijson.Field
+	CreatedAt     apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Secret        apijson.Field
+	Type          apijson.Field
+	UpdatedAt     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *DLPProfileCustomNewResponsePredefinedProfileEntriesExactDataEntry) UnmarshalJSON(data []byte) (err error) {
@@ -1201,6 +1217,9 @@ type DLPProfileCustomNewResponseIntegrationProfileEntry struct {
 	Enabled bool                                                     `json:"enabled,required"`
 	Name    string                                                   `json:"name,required"`
 	Type    DLPProfileCustomNewResponseIntegrationProfileEntriesType `json:"type,required"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntryConfidence].
 	Confidence interface{} `json:"confidence"`
@@ -1218,19 +1237,20 @@ type DLPProfileCustomNewResponseIntegrationProfileEntry struct {
 // dlpProfileCustomNewResponseIntegrationProfileEntryJSON contains the JSON
 // metadata for the struct [DLPProfileCustomNewResponseIntegrationProfileEntry]
 type dlpProfileCustomNewResponseIntegrationProfileEntryJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	Confidence  apijson.Field
-	CreatedAt   apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	Secret      apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Type          apijson.Field
+	CaseSensitive apijson.Field
+	Confidence    apijson.Field
+	CreatedAt     apijson.Field
+	Pattern       apijson.Field
+	ProfileID     apijson.Field
+	Secret        apijson.Field
+	UpdatedAt     apijson.Field
+	WordList      apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r dlpProfileCustomNewResponseIntegrationProfileEntryJSON) RawJSON() string {
@@ -1478,29 +1498,33 @@ func (r DLPProfileCustomNewResponseIntegrationProfileEntriesIntegrationEntryType
 }
 
 type DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntry struct {
-	ID        string                                                                 `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                                              `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                                   `json:"enabled,required"`
-	Name      string                                                                 `json:"name,required"`
-	Secret    bool                                                                   `json:"secret,required"`
-	Type      DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt time.Time                                                              `json:"updated_at,required" format:"date-time"`
-	JSON      dlpProfileCustomNewResponseIntegrationProfileEntriesExactDataEntryJSON `json:"-"`
+	ID string `json:"id,required" format:"uuid"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool                                                                   `json:"case_sensitive,required"`
+	CreatedAt     time.Time                                                              `json:"created_at,required" format:"date-time"`
+	Enabled       bool                                                                   `json:"enabled,required"`
+	Name          string                                                                 `json:"name,required"`
+	Secret        bool                                                                   `json:"secret,required"`
+	Type          DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntryType `json:"type,required"`
+	UpdatedAt     time.Time                                                              `json:"updated_at,required" format:"date-time"`
+	JSON          dlpProfileCustomNewResponseIntegrationProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
 // dlpProfileCustomNewResponseIntegrationProfileEntriesExactDataEntryJSON contains
 // the JSON metadata for the struct
 // [DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntry]
 type dlpProfileCustomNewResponseIntegrationProfileEntriesExactDataEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	CaseSensitive apijson.Field
+	CreatedAt     apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Secret        apijson.Field
+	Type          apijson.Field
+	UpdatedAt     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *DLPProfileCustomNewResponseIntegrationProfileEntriesExactDataEntry) UnmarshalJSON(data []byte) (err error) {

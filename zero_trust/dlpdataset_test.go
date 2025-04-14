@@ -30,6 +30,7 @@ func TestDLPDatasetNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.DLP.Datasets.New(context.TODO(), zero_trust.DLPDatasetNewParams{
 		AccountID:       cloudflare.F("account_id"),
 		Name:            cloudflare.F("name"),
+		CaseSensitive:   cloudflare.F(true),
 		Description:     cloudflare.F("description"),
 		EncodingVersion: cloudflare.F(int64(0)),
 		Secret:          cloudflare.F(true),
@@ -60,9 +61,10 @@ func TestDLPDatasetUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPDatasetUpdateParams{
-			AccountID:   cloudflare.F("account_id"),
-			Description: cloudflare.F("description"),
-			Name:        cloudflare.F("name"),
+			AccountID:     cloudflare.F("account_id"),
+			CaseSensitive: cloudflare.F(true),
+			Description:   cloudflare.F("description"),
+			Name:          cloudflare.F("name"),
 		},
 	)
 	if err != nil {

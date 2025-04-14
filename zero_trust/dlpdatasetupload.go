@@ -86,6 +86,7 @@ type NewVersion struct {
 	EncodingVersion int64              `json:"encoding_version,required"`
 	MaxCells        int64              `json:"max_cells,required"`
 	Version         int64              `json:"version,required"`
+	CaseSensitive   bool               `json:"case_sensitive"`
 	Columns         []NewVersionColumn `json:"columns"`
 	Secret          string             `json:"secret" format:"password"`
 	JSON            newVersionJSON     `json:"-"`
@@ -96,6 +97,7 @@ type newVersionJSON struct {
 	EncodingVersion apijson.Field
 	MaxCells        apijson.Field
 	Version         apijson.Field
+	CaseSensitive   apijson.Field
 	Columns         apijson.Field
 	Secret          apijson.Field
 	raw             string
