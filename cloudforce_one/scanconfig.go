@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScanConfigService contains methods and other services that help with interacting
@@ -122,17 +121,17 @@ func (r *ScanConfigService) Edit(ctx context.Context, configID string, params Sc
 }
 
 type ScanConfigNewResponse struct {
-	// Config ID
+	// Defines the Config ID.
 	ID        string `json:"id,required"`
 	AccountID string `json:"account_id,required"`
-	// The number of days between each scan (0 = no recurring scans).
+	// Defines the number of days between each scan (0 = One-off scan).
 	Frequency float64 `json:"frequency,required"`
-	// A list of IP addresses or CIDR blocks to scan. The maximum number of total IP
-	// addresses allowed is 5000.
+	// Defines a list of IP addresses or CIDR blocks to scan. The maximum number of
+	// total IP addresses allowed is 5000.
 	IPs []string `json:"ips,required"`
-	// A list of ports to scan. Allowed values:"default", "all", or a comma-separated
-	// list of ports or range of ports (e.g. ["1-80", "443"]). Default will scan the
-	// 100 most commonly open ports.
+	// Defines a list of ports to scan. Valid values are:"default", "all", or a
+	// comma-separated list of ports or range of ports (e.g. ["1-80", "443"]).
+	// "default" scans the 100 most commonly open ports.
 	Ports []string                  `json:"ports,required"`
 	JSON  scanConfigNewResponseJSON `json:"-"`
 }
@@ -158,17 +157,17 @@ func (r scanConfigNewResponseJSON) RawJSON() string {
 }
 
 type ScanConfigListResponse struct {
-	// Config ID
+	// Defines the Config ID.
 	ID        string `json:"id,required"`
 	AccountID string `json:"account_id,required"`
-	// The number of days between each scan (0 = no recurring scans).
+	// Defines the number of days between each scan (0 = One-off scan).
 	Frequency float64 `json:"frequency,required"`
-	// A list of IP addresses or CIDR blocks to scan. The maximum number of total IP
-	// addresses allowed is 5000.
+	// Defines a list of IP addresses or CIDR blocks to scan. The maximum number of
+	// total IP addresses allowed is 5000.
 	IPs []string `json:"ips,required"`
-	// A list of ports to scan. Allowed values:"default", "all", or a comma-separated
-	// list of ports or range of ports (e.g. ["1-80", "443"]). Default will scan the
-	// 100 most commonly open ports.
+	// Defines a list of ports to scan. Valid values are:"default", "all", or a
+	// comma-separated list of ports or range of ports (e.g. ["1-80", "443"]).
+	// "default" scans the 100 most commonly open ports.
 	Ports []string                   `json:"ports,required"`
 	JSON  scanConfigListResponseJSON `json:"-"`
 }
@@ -196,17 +195,17 @@ func (r scanConfigListResponseJSON) RawJSON() string {
 type ScanConfigDeleteResponse = interface{}
 
 type ScanConfigEditResponse struct {
-	// Config ID
+	// Defines the Config ID.
 	ID        string `json:"id,required"`
 	AccountID string `json:"account_id,required"`
-	// The number of days between each scan (0 = no recurring scans).
+	// Defines the number of days between each scan (0 = One-off scan).
 	Frequency float64 `json:"frequency,required"`
-	// A list of IP addresses or CIDR blocks to scan. The maximum number of total IP
-	// addresses allowed is 5000.
+	// Defines a list of IP addresses or CIDR blocks to scan. The maximum number of
+	// total IP addresses allowed is 5000.
 	IPs []string `json:"ips,required"`
-	// A list of ports to scan. Allowed values:"default", "all", or a comma-separated
-	// list of ports or range of ports (e.g. ["1-80", "443"]). Default will scan the
-	// 100 most commonly open ports.
+	// Defines a list of ports to scan. Valid values are:"default", "all", or a
+	// comma-separated list of ports or range of ports (e.g. ["1-80", "443"]).
+	// "default" scans the 100 most commonly open ports.
 	Ports []string                   `json:"ports,required"`
 	JSON  scanConfigEditResponseJSON `json:"-"`
 }
@@ -232,16 +231,16 @@ func (r scanConfigEditResponseJSON) RawJSON() string {
 }
 
 type ScanConfigNewParams struct {
-	// Account ID
+	// Defines the Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A list of IP addresses or CIDR blocks to scan. The maximum number of total IP
-	// addresses allowed is 5000.
+	// Defines a list of IP addresses or CIDR blocks to scan. The maximum number of
+	// total IP addresses allowed is 5000.
 	IPs param.Field[[]string] `json:"ips,required"`
-	// The number of days between each scan (0 = no recurring scans).
+	// Defines the number of days between each scan (0 = One-off scan).
 	Frequency param.Field[float64] `json:"frequency"`
-	// A list of ports to scan. Allowed values:"default", "all", or a comma-separated
-	// list of ports or range of ports (e.g. ["1-80", "443"]). Default will scan the
-	// 100 most commonly open ports.
+	// Defines a list of ports to scan. Valid values are:"default", "all", or a
+	// comma-separated list of ports or range of ports (e.g. ["1-80", "443"]).
+	// "default" scans the 100 most commonly open ports.
 	Ports param.Field[[]string] `json:"ports"`
 }
 
@@ -250,9 +249,9 @@ func (r ScanConfigNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScanConfigNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ScanConfigNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScanConfigNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ScanConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScanConfigNewResponse                `json:"result"`
 	JSON    scanConfigNewResponseEnvelopeJSON    `json:"-"`
@@ -277,7 +276,103 @@ func (r scanConfigNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ScanConfigNewResponseEnvelopeErrors struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           ScanConfigNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scanConfigNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scanConfigNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ScanConfigNewResponseEnvelopeErrors]
+type scanConfigNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScanConfigNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanConfigNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanConfigNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    scanConfigNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scanConfigNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [ScanConfigNewResponseEnvelopeErrorsSource]
+type scanConfigNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanConfigNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanConfigNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanConfigNewResponseEnvelopeMessages struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           ScanConfigNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scanConfigNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scanConfigNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ScanConfigNewResponseEnvelopeMessages]
+type scanConfigNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScanConfigNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanConfigNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanConfigNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    scanConfigNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scanConfigNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [ScanConfigNewResponseEnvelopeMessagesSource]
+type scanConfigNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanConfigNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanConfigNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ScanConfigNewResponseEnvelopeSuccess bool
 
 const (
@@ -293,12 +388,12 @@ func (r ScanConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ScanConfigListParams struct {
-	// Account ID
+	// Defines the Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ScanConfigDeleteParams struct {
-	// Account ID
+	// Defines the Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -330,16 +425,16 @@ func (r scanConfigDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScanConfigEditParams struct {
-	// Account ID
+	// Defines the Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The number of days between each scan (0 = no recurring scans).
+	// Defines the number of days between each scan (0 = One-off scan).
 	Frequency param.Field[float64] `json:"frequency"`
-	// A list of IP addresses or CIDR blocks to scan. The maximum number of total IP
-	// addresses allowed is 5000.
+	// Defines a list of IP addresses or CIDR blocks to scan. The maximum number of
+	// total IP addresses allowed is 5000.
 	IPs param.Field[[]string] `json:"ips"`
-	// A list of ports to scan. Allowed values:"default", "all", or a comma-separated
-	// list of ports or range of ports (e.g. ["1-80", "443"]). Default will scan the
-	// 100 most commonly open ports.
+	// Defines a list of ports to scan. Valid values are:"default", "all", or a
+	// comma-separated list of ports or range of ports (e.g. ["1-80", "443"]).
+	// "default" scans the 100 most commonly open ports.
 	Ports param.Field[[]string] `json:"ports"`
 }
 
@@ -348,9 +443,9 @@ func (r ScanConfigEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScanConfigEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ScanConfigEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScanConfigEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ScanConfigEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  ScanConfigEditResponse                `json:"result"`
 	JSON    scanConfigEditResponseEnvelopeJSON    `json:"-"`
@@ -375,7 +470,103 @@ func (r scanConfigEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ScanConfigEditResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           ScanConfigEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scanConfigEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scanConfigEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ScanConfigEditResponseEnvelopeErrors]
+type scanConfigEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScanConfigEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanConfigEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanConfigEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    scanConfigEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scanConfigEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [ScanConfigEditResponseEnvelopeErrorsSource]
+type scanConfigEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanConfigEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanConfigEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanConfigEditResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           ScanConfigEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scanConfigEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scanConfigEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ScanConfigEditResponseEnvelopeMessages]
+type scanConfigEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScanConfigEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanConfigEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanConfigEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    scanConfigEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scanConfigEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [ScanConfigEditResponseEnvelopeMessagesSource]
+type scanConfigEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanConfigEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanConfigEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ScanConfigEditResponseEnvelopeSuccess bool
 
 const (
