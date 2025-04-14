@@ -37,7 +37,7 @@ func NewAccessApplicationPolicyTestUserService(opts ...option.RequestOption) (r 
 }
 
 // Fetches a single page of user results from an Access policy test.
-func (r *AccessApplicationPolicyTestUserService) List(ctx context.Context, policyTestID string, params AccessApplicationPolicyTestUserListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationPolicyTestUserListResponse], err error) {
+func (r *AccessApplicationPolicyTestUserService) List(ctx context.Context, policyTestID string, params AccessApplicationPolicyTestUserListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessApplicationPolicyTestUserListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -63,8 +63,8 @@ func (r *AccessApplicationPolicyTestUserService) List(ctx context.Context, polic
 }
 
 // Fetches a single page of user results from an Access policy test.
-func (r *AccessApplicationPolicyTestUserService) ListAutoPaging(ctx context.Context, policyTestID string, params AccessApplicationPolicyTestUserListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessApplicationPolicyTestUserListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, policyTestID, params, opts...))
+func (r *AccessApplicationPolicyTestUserService) ListAutoPaging(ctx context.Context, policyTestID string, params AccessApplicationPolicyTestUserListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessApplicationPolicyTestUserListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, policyTestID, params, opts...))
 }
 
 type AccessApplicationPolicyTestUserListResponse struct {
@@ -104,11 +104,12 @@ type AccessApplicationPolicyTestUserListResponseStatus string
 const (
 	AccessApplicationPolicyTestUserListResponseStatusApproved AccessApplicationPolicyTestUserListResponseStatus = "approved"
 	AccessApplicationPolicyTestUserListResponseStatusBlocked  AccessApplicationPolicyTestUserListResponseStatus = "blocked"
+	AccessApplicationPolicyTestUserListResponseStatusError    AccessApplicationPolicyTestUserListResponseStatus = "error"
 )
 
 func (r AccessApplicationPolicyTestUserListResponseStatus) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyTestUserListResponseStatusApproved, AccessApplicationPolicyTestUserListResponseStatusBlocked:
+	case AccessApplicationPolicyTestUserListResponseStatusApproved, AccessApplicationPolicyTestUserListResponseStatusBlocked, AccessApplicationPolicyTestUserListResponseStatusError:
 		return true
 	}
 	return false
@@ -117,6 +118,8 @@ func (r AccessApplicationPolicyTestUserListResponseStatus) IsKnown() bool {
 type AccessApplicationPolicyTestUserListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+	Page      param.Field[int64]  `query:"page"`
+	PerPage   param.Field[int64]  `query:"per_page"`
 	// Filter users by their policy evaluation status.
 	Status param.Field[AccessApplicationPolicyTestUserListParamsStatus] `query:"status"`
 }
@@ -136,11 +139,12 @@ type AccessApplicationPolicyTestUserListParamsStatus string
 const (
 	AccessApplicationPolicyTestUserListParamsStatusSuccess AccessApplicationPolicyTestUserListParamsStatus = "success"
 	AccessApplicationPolicyTestUserListParamsStatusFail    AccessApplicationPolicyTestUserListParamsStatus = "fail"
+	AccessApplicationPolicyTestUserListParamsStatusError   AccessApplicationPolicyTestUserListParamsStatus = "error"
 )
 
 func (r AccessApplicationPolicyTestUserListParamsStatus) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyTestUserListParamsStatusSuccess, AccessApplicationPolicyTestUserListParamsStatusFail:
+	case AccessApplicationPolicyTestUserListParamsStatusSuccess, AccessApplicationPolicyTestUserListParamsStatusFail, AccessApplicationPolicyTestUserListParamsStatusError:
 		return true
 	}
 	return false
