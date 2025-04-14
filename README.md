@@ -2,8 +2,8 @@
 
 <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v4.svg" alt="Go Reference"></a>
 
-The Cloudflare Go library provides convenient access to [the Cloudflare REST
-API](https://developers.cloudflare.com/api) from applications written in Go. The full API of this library can be found in [api.md](api.md).
+The Cloudflare Go library provides convenient access to the [Cloudflare REST API](https://developers.cloudflare.com/api)
+from applications written in Go.
 
 ## Installation
 
