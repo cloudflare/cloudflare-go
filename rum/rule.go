@@ -316,7 +316,7 @@ func (r ruleBulkNewResponseRulesetJSON) RawJSON() string {
 }
 
 type RuleNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Host      param.Field[string] `json:"host"`
 	// Whether the rule includes or excludes traffic from being measured.
@@ -359,7 +359,7 @@ func (r ruleNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RuleUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Host      param.Field[string] `json:"host"`
 	// Whether the rule includes or excludes traffic from being measured.
@@ -402,7 +402,7 @@ func (r ruleUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RuleListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -435,7 +435,7 @@ func (r ruleListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RuleDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -468,7 +468,7 @@ func (r ruleDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RuleBulkNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of rule identifiers to delete.
 	DeleteRules param.Field[[]string] `json:"delete_rules"`
