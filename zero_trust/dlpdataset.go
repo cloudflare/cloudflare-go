@@ -154,8 +154,9 @@ type Dataset struct {
 	// When the dataset was last updated.
 	//
 	// This includes name or description changes as well as uploads.
-	UpdatedAt time.Time       `json:"updated_at,required" format:"date-time"`
-	Uploads   []DatasetUpload `json:"uploads,required"`
+	UpdatedAt     time.Time       `json:"updated_at,required" format:"date-time"`
+	Uploads       []DatasetUpload `json:"uploads,required"`
+	CaseSensitive bool            `json:"case_sensitive"`
 	// The description of the dataset
 	Description string      `json:"description,nullable"`
 	JSON        datasetJSON `json:"-"`
@@ -173,6 +174,7 @@ type datasetJSON struct {
 	Status          apijson.Field
 	UpdatedAt       apijson.Field
 	Uploads         apijson.Field
+	CaseSensitive   apijson.Field
 	Description     apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
@@ -327,6 +329,9 @@ func (r datasetCreationJSON) RawJSON() string {
 type DLPDatasetNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	Name      param.Field[string] `json:"name,required"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if `secret` is true or undefined
+	CaseSensitive param.Field[bool] `json:"case_sensitive"`
 	// The description of the dataset
 	Description param.Field[string] `json:"description"`
 	// Dataset encoding version
@@ -488,6 +493,10 @@ func (r DLPDatasetNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DLPDatasetUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Determines if the words should be matched in a case-sensitive manner.
+	//
+	// Only required for custom word lists.
+	CaseSensitive param.Field[bool] `json:"case_sensitive"`
 	// The description of the dataset
 	Description param.Field[string] `json:"description"`
 	// The name of the dataset, must be unique
