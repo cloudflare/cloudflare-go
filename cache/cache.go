@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CacheService contains methods and other services that help with interacting with
@@ -64,10 +63,6 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 // **hostname**. The port number can be omitted if it is the default port (80 for
 // http, 443 for https), but must be included otherwise.
 //
-// **NB:** For Zones on Free/Pro/Business plan, you may purge up to 30 URLs in one
-// API call. For Zones on Enterprise plan, you may purge up to 500 URLs in one API
-// call.
-//
 // Single file purge example with files:
 //
 // ```
@@ -83,13 +78,7 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 // ### Purge Cached Content by Tag, Host or Prefix
 //
 // Granularly removes one or more files from Cloudflare's cache either by
-// specifying the host, the associated Cache-Tag, or a Prefix. Only Enterprise
-// customers are permitted to purge by Tag, Host or Prefix.
-//
-// **NB:** Cache-Tag, host, and prefix purging each have a rate limit of 30,000
-// purge API calls in every 24 hour period. You may purge up to 30 tags, hosts, or
-// prefixes in one API call. This rate limit can be raised for customers who need
-// to purge at higher volume.
+// specifying the host, the associated Cache-Tag, or a Prefix.
 //
 // Flex purge with tags:
 //
@@ -108,6 +97,11 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 // ```
 // {"prefixes": ["www.example.com/foo", "images.example.com/bar/baz"]}
 // ```
+//
+// ### Availability and limits
+//
+// please refer to
+// [purge cache availability and limits documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/#availability-and-limits).
 func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts ...option.RequestOption) (res *CachePurgeResponse, err error) {
 	var env CachePurgeResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -125,7 +119,7 @@ func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts 
 }
 
 type CachePurgeResponse struct {
-	// Identifier
+	// Identifier.
 	ID   string                 `json:"id,required"`
 	JSON cachePurgeResponseJSON `json:"-"`
 }
@@ -184,7 +178,7 @@ type CachePurgeParamsBodyUnion interface {
 
 type CachePurgeParamsBodyCachePurgeFlexPurgeByTags struct {
 	// For more information on cache tags and purging by tags, please refer to
-	// [purge by cache-tags documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-tags/#purge-cache-by-cache-tags-enterprise-only).
+	// [purge by cache-tags documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-tags/).
 	Tags param.Field[[]string] `json:"tags"`
 }
 
@@ -265,9 +259,9 @@ func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeadersFile) MarshalJS
 }
 
 type CachePurgeResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []CachePurgeResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CachePurgeResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success CachePurgeResponseEnvelopeSuccess `json:"success,required"`
 	Result  CachePurgeResponse                `json:"result,nullable"`
 	JSON    cachePurgeResponseEnvelopeJSON    `json:"-"`
@@ -292,7 +286,103 @@ func (r cachePurgeResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type CachePurgeResponseEnvelopeErrors struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           CachePurgeResponseEnvelopeErrorsSource `json:"source"`
+	JSON             cachePurgeResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// cachePurgeResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [CachePurgeResponseEnvelopeErrors]
+type cachePurgeResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *CachePurgeResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cachePurgeResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CachePurgeResponseEnvelopeErrorsSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    cachePurgeResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// cachePurgeResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [CachePurgeResponseEnvelopeErrorsSource]
+type cachePurgeResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CachePurgeResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cachePurgeResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type CachePurgeResponseEnvelopeMessages struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           CachePurgeResponseEnvelopeMessagesSource `json:"source"`
+	JSON             cachePurgeResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// cachePurgeResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [CachePurgeResponseEnvelopeMessages]
+type cachePurgeResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *CachePurgeResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cachePurgeResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type CachePurgeResponseEnvelopeMessagesSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    cachePurgeResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// cachePurgeResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [CachePurgeResponseEnvelopeMessagesSource]
+type cachePurgeResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CachePurgeResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cachePurgeResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type CachePurgeResponseEnvelopeSuccess bool
 
 const (
