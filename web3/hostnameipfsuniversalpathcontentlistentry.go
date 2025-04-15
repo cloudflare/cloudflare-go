@@ -153,17 +153,17 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Get(ctx context.Conte
 	return
 }
 
-// Content list entry to be blocked.
+// Specify a content list entry to block.
 type HostnameIPFSUniversalPathContentListEntryNewResponse struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ID string `json:"id"`
-	// CID or content path of content to block.
+	// Specify the CID or content path of content to block.
 	Content   string    `json:"content"`
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// An optional description of the content list entry.
+	// Specify an optional description of the content list entry.
 	Description string    `json:"description"`
 	ModifiedOn  time.Time `json:"modified_on" format:"date-time"`
-	// Type of content list entry to block.
+	// Specify the type of content list entry to block.
 	Type HostnameIPFSUniversalPathContentListEntryNewResponseType `json:"type"`
 	JSON hostnameIPFSUniversalPathContentListEntryNewResponseJSON `json:"-"`
 }
@@ -189,7 +189,7 @@ func (r hostnameIPFSUniversalPathContentListEntryNewResponseJSON) RawJSON() stri
 	return r.raw
 }
 
-// Type of content list entry to block.
+// Specify the type of content list entry to block.
 type HostnameIPFSUniversalPathContentListEntryNewResponseType string
 
 const (
@@ -205,17 +205,17 @@ func (r HostnameIPFSUniversalPathContentListEntryNewResponseType) IsKnown() bool
 	return false
 }
 
-// Content list entry to be blocked.
+// Specify a content list entry to block.
 type HostnameIPFSUniversalPathContentListEntryUpdateResponse struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ID string `json:"id"`
-	// CID or content path of content to block.
+	// Specify the CID or content path of content to block.
 	Content   string    `json:"content"`
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// An optional description of the content list entry.
+	// Specify an optional description of the content list entry.
 	Description string    `json:"description"`
 	ModifiedOn  time.Time `json:"modified_on" format:"date-time"`
-	// Type of content list entry to block.
+	// Specify the type of content list entry to block.
 	Type HostnameIPFSUniversalPathContentListEntryUpdateResponseType `json:"type"`
 	JSON hostnameIPFSUniversalPathContentListEntryUpdateResponseJSON `json:"-"`
 }
@@ -242,7 +242,7 @@ func (r hostnameIPFSUniversalPathContentListEntryUpdateResponseJSON) RawJSON() s
 	return r.raw
 }
 
-// Type of content list entry to block.
+// Specify the type of content list entry to block.
 type HostnameIPFSUniversalPathContentListEntryUpdateResponseType string
 
 const (
@@ -259,7 +259,7 @@ func (r HostnameIPFSUniversalPathContentListEntryUpdateResponseType) IsKnown() b
 }
 
 type HostnameIPFSUniversalPathContentListEntryListResponse struct {
-	// Content list entries.
+	// Provides content list entries.
 	Entries []HostnameIPFSUniversalPathContentListEntryListResponseEntry `json:"entries"`
 	JSON    hostnameIPFSUniversalPathContentListEntryListResponseJSON    `json:"-"`
 }
@@ -280,17 +280,17 @@ func (r hostnameIPFSUniversalPathContentListEntryListResponseJSON) RawJSON() str
 	return r.raw
 }
 
-// Content list entry to be blocked.
+// Specify a content list entry to block.
 type HostnameIPFSUniversalPathContentListEntryListResponseEntry struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ID string `json:"id"`
-	// CID or content path of content to block.
+	// Specify the CID or content path of content to block.
 	Content   string    `json:"content"`
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// An optional description of the content list entry.
+	// Specify an optional description of the content list entry.
 	Description string    `json:"description"`
 	ModifiedOn  time.Time `json:"modified_on" format:"date-time"`
-	// Type of content list entry to block.
+	// Specify the type of content list entry to block.
 	Type HostnameIPFSUniversalPathContentListEntryListResponseEntriesType `json:"type"`
 	JSON hostnameIPFSUniversalPathContentListEntryListResponseEntryJSON   `json:"-"`
 }
@@ -317,7 +317,7 @@ func (r hostnameIPFSUniversalPathContentListEntryListResponseEntryJSON) RawJSON(
 	return r.raw
 }
 
-// Type of content list entry to block.
+// Specify the type of content list entry to block.
 type HostnameIPFSUniversalPathContentListEntryListResponseEntriesType string
 
 const (
@@ -334,7 +334,7 @@ func (r HostnameIPFSUniversalPathContentListEntryListResponseEntriesType) IsKnow
 }
 
 type HostnameIPFSUniversalPathContentListEntryDeleteResponse struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ID   string                                                      `json:"id,required"`
 	JSON hostnameIPFSUniversalPathContentListEntryDeleteResponseJSON `json:"-"`
 }
@@ -356,17 +356,17 @@ func (r hostnameIPFSUniversalPathContentListEntryDeleteResponseJSON) RawJSON() s
 	return r.raw
 }
 
-// Content list entry to be blocked.
+// Specify a content list entry to block.
 type HostnameIPFSUniversalPathContentListEntryGetResponse struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ID string `json:"id"`
-	// CID or content path of content to block.
+	// Specify the CID or content path of content to block.
 	Content   string    `json:"content"`
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// An optional description of the content list entry.
+	// Specify an optional description of the content list entry.
 	Description string    `json:"description"`
 	ModifiedOn  time.Time `json:"modified_on" format:"date-time"`
-	// Type of content list entry to block.
+	// Specify the type of content list entry to block.
 	Type HostnameIPFSUniversalPathContentListEntryGetResponseType `json:"type"`
 	JSON hostnameIPFSUniversalPathContentListEntryGetResponseJSON `json:"-"`
 }
@@ -392,7 +392,7 @@ func (r hostnameIPFSUniversalPathContentListEntryGetResponseJSON) RawJSON() stri
 	return r.raw
 }
 
-// Type of content list entry to block.
+// Specify the type of content list entry to block.
 type HostnameIPFSUniversalPathContentListEntryGetResponseType string
 
 const (
@@ -409,13 +409,13 @@ func (r HostnameIPFSUniversalPathContentListEntryGetResponseType) IsKnown() bool
 }
 
 type HostnameIPFSUniversalPathContentListEntryNewParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// CID or content path of content to block.
+	// Specify the CID or content path of content to block.
 	Content param.Field[string] `json:"content,required"`
-	// Type of content list entry to block.
+	// Specify the type of content list entry to block.
 	Type param.Field[HostnameIPFSUniversalPathContentListEntryNewParamsType] `json:"type,required"`
-	// An optional description of the content list entry.
+	// Specify an optional description of the content list entry.
 	Description param.Field[string] `json:"description"`
 }
 
@@ -423,7 +423,7 @@ func (r HostnameIPFSUniversalPathContentListEntryNewParams) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-// Type of content list entry to block.
+// Specify the type of content list entry to block.
 type HostnameIPFSUniversalPathContentListEntryNewParamsType string
 
 const (
@@ -442,11 +442,13 @@ func (r HostnameIPFSUniversalPathContentListEntryNewParamsType) IsKnown() bool {
 type HostnameIPFSUniversalPathContentListEntryNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Content list entry to be blocked.
+	// Specify a content list entry to block.
 	Result HostnameIPFSUniversalPathContentListEntryNewResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Specifies whether the API call was successful.
 	Success HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    hostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeJSON    `json:"-"`
+	// Provides the API response.
+	ResultInfo interface{}                                                      `json:"result_info"`
+	JSON       hostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeJSON `json:"-"`
 }
 
 // hostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeJSON contains the
@@ -457,6 +459,7 @@ type hostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -469,7 +472,7 @@ func (r hostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeJSON) RawJSO
 	return r.raw
 }
 
-// Whether the API call was successful
+// Specifies whether the API call was successful.
 type HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeSuccess bool
 
 const (
@@ -485,13 +488,13 @@ func (r HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeSuccess) IsK
 }
 
 type HostnameIPFSUniversalPathContentListEntryUpdateParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// CID or content path of content to block.
+	// Specify the CID or content path of content to block.
 	Content param.Field[string] `json:"content,required"`
-	// Type of content list entry to block.
+	// Specify the type of content list entry to block.
 	Type param.Field[HostnameIPFSUniversalPathContentListEntryUpdateParamsType] `json:"type,required"`
-	// An optional description of the content list entry.
+	// Specify an optional description of the content list entry.
 	Description param.Field[string] `json:"description"`
 }
 
@@ -499,7 +502,7 @@ func (r HostnameIPFSUniversalPathContentListEntryUpdateParams) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// Type of content list entry to block.
+// Specify the type of content list entry to block.
 type HostnameIPFSUniversalPathContentListEntryUpdateParamsType string
 
 const (
@@ -518,11 +521,13 @@ func (r HostnameIPFSUniversalPathContentListEntryUpdateParamsType) IsKnown() boo
 type HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Content list entry to be blocked.
+	// Specify a content list entry to block.
 	Result HostnameIPFSUniversalPathContentListEntryUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Specifies whether the API call was successful.
 	Success HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    hostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeJSON    `json:"-"`
+	// Provides the API response.
+	ResultInfo interface{}                                                         `json:"result_info"`
+	JSON       hostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // hostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeJSON contains the
@@ -533,6 +538,7 @@ type hostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeJSON struct 
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -545,7 +551,7 @@ func (r hostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeJSON) Raw
 	return r.raw
 }
 
-// Whether the API call was successful
+// Specifies whether the API call was successful.
 type HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -561,7 +567,7 @@ func (r HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeSuccess) 
 }
 
 type HostnameIPFSUniversalPathContentListEntryListParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -569,7 +575,7 @@ type HostnameIPFSUniversalPathContentListEntryListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                                 `json:"errors,required"`
 	Messages []shared.ResponseInfo                                 `json:"messages,required"`
 	Result   HostnameIPFSUniversalPathContentListEntryListResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Specifies whether the API call was successful.
 	Success    HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       hostnameIPFSUniversalPathContentListEntryListResponseEnvelopeJSON       `json:"-"`
@@ -596,7 +602,7 @@ func (r hostnameIPFSUniversalPathContentListEntryListResponseEnvelopeJSON) RawJS
 	return r.raw
 }
 
-// Whether the API call was successful
+// Specifies whether the API call was successful.
 type HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeSuccess bool
 
 const (
@@ -612,13 +618,13 @@ func (r HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeSuccess) Is
 }
 
 type HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Specifies the total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Specifies the current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Specifies the number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Specifies the total results available without any search parameters.
 	TotalCount float64                                                                     `json:"total_count"`
 	JSON       hostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -644,7 +650,7 @@ func (r hostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResultInfoJ
 }
 
 type HostnameIPFSUniversalPathContentListEntryDeleteParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -652,7 +658,7 @@ type HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                                   `json:"errors,required"`
 	Messages []shared.ResponseInfo                                   `json:"messages,required"`
 	Result   HostnameIPFSUniversalPathContentListEntryDeleteResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Specifies whether the API call was successful.
 	Success HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -677,7 +683,7 @@ func (r hostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeJSON) Raw
 	return r.raw
 }
 
-// Whether the API call was successful
+// Specifies whether the API call was successful.
 type HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -693,18 +699,20 @@ func (r HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccess) 
 }
 
 type HostnameIPFSUniversalPathContentListEntryGetParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Content list entry to be blocked.
+	// Specify a content list entry to block.
 	Result HostnameIPFSUniversalPathContentListEntryGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Specifies whether the API call was successful.
 	Success HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    hostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeJSON    `json:"-"`
+	// Provides the API response.
+	ResultInfo interface{}                                                      `json:"result_info"`
+	JSON       hostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeJSON `json:"-"`
 }
 
 // hostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeJSON contains the
@@ -715,6 +723,7 @@ type hostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -727,7 +736,7 @@ func (r hostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeJSON) RawJSO
 	return r.raw
 }
 
-// Whether the API call was successful
+// Specifies whether the API call was successful.
 type HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeSuccess bool
 
 const (
