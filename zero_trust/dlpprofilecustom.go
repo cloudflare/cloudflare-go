@@ -195,25 +195,25 @@ func init() {
 }
 
 type DLPProfileCustomNewResponseCustomProfile struct {
-	// The id of the profile (uuid)
+	// The id of the profile (uuid).
 	ID string `json:"id,required" format:"uuid"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount int64 `json:"allowed_match_count,required"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness,required"`
-	// When the profile was created
+	// When the profile was created.
 	CreatedAt time.Time                                       `json:"created_at,required" format:"date-time"`
 	Entries   []DLPProfileCustomNewResponseCustomProfileEntry `json:"entries,required"`
-	// The name of the profile
+	// The name of the profile.
 	Name       string                                       `json:"name,required"`
 	OCREnabled bool                                         `json:"ocr_enabled,required"`
 	Type       DLPProfileCustomNewResponseCustomProfileType `json:"type,required"`
-	// When the profile was lasted updated
+	// When the profile was lasted updated.
 	UpdatedAt           time.Time                                                   `json:"updated_at,required" format:"date-time"`
 	AIContextEnabled    bool                                                        `json:"ai_context_enabled"`
 	ConfidenceThreshold DLPProfileCustomNewResponseCustomProfileConfidenceThreshold `json:"confidence_threshold"`
-	// The description of the profile
+	// The description of the profile.
 	Description string                                       `json:"description,nullable"`
 	JSON        dlpProfileCustomNewResponseCustomProfileJSON `json:"-"`
 }
@@ -440,10 +440,10 @@ func (r DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntry) implemen
 }
 
 type DLPProfileCustomNewResponseCustomProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                                                         `json:"available,required"`
 	JSON      dlpProfileCustomNewResponseCustomProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -689,11 +689,11 @@ func (r DLPProfileCustomNewResponseCustomProfileConfidenceThreshold) IsKnown() b
 }
 
 type DLPProfileCustomNewResponsePredefinedProfile struct {
-	// The id of the predefined profile (uuid)
+	// The id of the predefined profile (uuid).
 	ID                string                                              `json:"id,required" format:"uuid"`
 	AllowedMatchCount int64                                               `json:"allowed_match_count,required"`
 	Entries           []DLPProfileCustomNewResponsePredefinedProfileEntry `json:"entries,required"`
-	// The name of the predefined profile
+	// The name of the predefined profile.
 	Name                string                                                          `json:"name,required"`
 	Type                DLPProfileCustomNewResponsePredefinedProfileType                `json:"type,required"`
 	AIContextEnabled    bool                                                            `json:"ai_context_enabled"`
@@ -702,7 +702,7 @@ type DLPProfileCustomNewResponsePredefinedProfile struct {
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
 	OCREnabled       bool             `json:"ocr_enabled"`
-	// Whether this profile can be accessed by anyone
+	// Whether this profile can be accessed by anyone.
 	OpenAccess bool                                             `json:"open_access"`
 	JSON       dlpProfileCustomNewResponsePredefinedProfileJSON `json:"-"`
 }
@@ -928,10 +928,10 @@ func (r DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntry) impl
 }
 
 type DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                                                             `json:"available,required"`
 	JSON      dlpProfileCustomNewResponsePredefinedProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -1183,7 +1183,7 @@ type DLPProfileCustomNewResponseIntegrationProfile struct {
 	Name      string                                               `json:"name,required"`
 	Type      DLPProfileCustomNewResponseIntegrationProfileType    `json:"type,required"`
 	UpdatedAt time.Time                                            `json:"updated_at,required" format:"date-time"`
-	// The description of the profile
+	// The description of the profile.
 	Description string                                            `json:"description,nullable"`
 	JSON        dlpProfileCustomNewResponseIntegrationProfileJSON `json:"-"`
 }
@@ -1406,10 +1406,10 @@ func (r DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntry) imp
 }
 
 type DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                                                              `json:"available,required"`
 	JSON      dlpProfileCustomNewResponseIntegrationProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -1660,7 +1660,7 @@ type DLPProfileCustomNewParamsBody struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
-	// The description of the profile
+	// The description of the profile.
 	Description   param.Field[string]      `json:"description"`
 	Entries       param.Field[interface{}] `json:"entries"`
 	Name          param.Field[string]      `json:"name"`
@@ -1703,7 +1703,7 @@ type DLPProfileCustomNewParamsBodyProfilesProfile struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
-	// The description of the profile
+	// The description of the profile.
 	Description param.Field[string] `json:"description"`
 	OCREnabled  param.Field[bool]   `json:"ocr_enabled"`
 	// Entries from other profiles (e.g. pre-defined Cloudflare profiles, or your
@@ -1840,7 +1840,7 @@ type DLPProfileCustomNewParamsBodyDLPNewCustomProfile struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
-	// The description of the profile
+	// The description of the profile.
 	Description param.Field[string] `json:"description"`
 	OCREnabled  param.Field[bool]   `json:"ocr_enabled"`
 	// Entries from other profiles (e.g. pre-defined Cloudflare profiles, or your
@@ -2118,7 +2118,7 @@ type DLPProfileCustomUpdateParams struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
-	// The description of the profile
+	// The description of the profile.
 	Description param.Field[string] `json:"description"`
 	// Custom entries from this profile. If this field is omitted, entries owned by
 	// this profile will not be changed.

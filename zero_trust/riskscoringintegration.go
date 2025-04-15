@@ -54,7 +54,8 @@ func (r *RiskScoringIntegrationService) New(ctx context.Context, params RiskScor
 	return
 }
 
-// Overwrite the reference_id, tenant_url, and active values with the ones provided
+// Overwrite the reference_id, tenant_url, and active values with the ones
+// provided.
 func (r *RiskScoringIntegrationService) Update(ctx context.Context, integrationID string, params RiskScoringIntegrationUpdateParams, opts ...option.RequestOption) (res *RiskScoringIntegrationUpdateResponse, err error) {
 	var env RiskScoringIntegrationUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -158,11 +159,11 @@ type RiskScoringIntegrationNewResponse struct {
 	// integration ID. Useful when the risk-score integration needs to be associated
 	// with a secondary asset and recalled using that ID.
 	ReferenceID string `json:"reference_id,required"`
-	// The base URL for the tenant. E.g. "https://tenant.okta.com"
+	// The base URL for the tenant. E.g. "https://tenant.okta.com".
 	TenantURL string `json:"tenant_url,required"`
 	// The URL for the Shared Signals Framework configuration, e.g.
 	// "/.well-known/sse-configuration/{integration_uuid}/".
-	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1
+	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1.
 	WellKnownURL string                                `json:"well_known_url,required"`
 	JSON         riskScoringIntegrationNewResponseJSON `json:"-"`
 }
@@ -218,11 +219,11 @@ type RiskScoringIntegrationUpdateResponse struct {
 	// integration ID. Useful when the risk-score integration needs to be associated
 	// with a secondary asset and recalled using that ID.
 	ReferenceID string `json:"reference_id,required"`
-	// The base URL for the tenant. E.g. "https://tenant.okta.com"
+	// The base URL for the tenant. E.g. "https://tenant.okta.com".
 	TenantURL string `json:"tenant_url,required"`
 	// The URL for the Shared Signals Framework configuration, e.g.
 	// "/.well-known/sse-configuration/{integration_uuid}/".
-	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1
+	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1.
 	WellKnownURL string                                   `json:"well_known_url,required"`
 	JSON         riskScoringIntegrationUpdateResponseJSON `json:"-"`
 }
@@ -278,11 +279,11 @@ type RiskScoringIntegrationListResponse struct {
 	// integration ID. Useful when the risk-score integration needs to be associated
 	// with a secondary asset and recalled using that ID.
 	ReferenceID string `json:"reference_id,required"`
-	// The base URL for the tenant. E.g. "https://tenant.okta.com"
+	// The base URL for the tenant. E.g. "https://tenant.okta.com".
 	TenantURL string `json:"tenant_url,required"`
 	// The URL for the Shared Signals Framework configuration, e.g.
 	// "/.well-known/sse-configuration/{integration_uuid}/".
-	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1
+	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1.
 	WellKnownURL string                                 `json:"well_known_url,required"`
 	JSON         riskScoringIntegrationListResponseJSON `json:"-"`
 }
@@ -340,11 +341,11 @@ type RiskScoringIntegrationGetResponse struct {
 	// integration ID. Useful when the risk-score integration needs to be associated
 	// with a secondary asset and recalled using that ID.
 	ReferenceID string `json:"reference_id,required"`
-	// The base URL for the tenant. E.g. "https://tenant.okta.com"
+	// The base URL for the tenant. E.g. "https://tenant.okta.com".
 	TenantURL string `json:"tenant_url,required"`
 	// The URL for the Shared Signals Framework configuration, e.g.
 	// "/.well-known/sse-configuration/{integration_uuid}/".
-	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1
+	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1.
 	WellKnownURL string                                `json:"well_known_url,required"`
 	JSON         riskScoringIntegrationGetResponseJSON `json:"-"`
 }
@@ -389,7 +390,7 @@ func (r RiskScoringIntegrationGetResponseIntegrationType) IsKnown() bool {
 type RiskScoringIntegrationNewParams struct {
 	AccountID       param.Field[string]                                         `path:"account_id,required"`
 	IntegrationType param.Field[RiskScoringIntegrationNewParamsIntegrationType] `json:"integration_type,required"`
-	// The base url of the tenant, e.g. "https://tenant.okta.com"
+	// The base url of the tenant, e.g. "https://tenant.okta.com".
 	TenantURL param.Field[string] `json:"tenant_url,required" format:"uri"`
 	// A reference id that can be supplied by the client. Currently this should be set
 	// to the Access-Okta IDP ID (a UUIDv4).
@@ -560,7 +561,7 @@ type RiskScoringIntegrationUpdateParams struct {
 	// Whether this integration is enabled. If disabled, no risk changes will be
 	// exported to the third-party.
 	Active param.Field[bool] `json:"active,required"`
-	// The base url of the tenant, e.g. "https://tenant.okta.com"
+	// The base url of the tenant, e.g. "https://tenant.okta.com".
 	TenantURL param.Field[string] `json:"tenant_url,required" format:"uri"`
 	// A reference id that can be supplied by the client. Currently this should be set
 	// to the Access-Okta IDP ID (a UUIDv4).

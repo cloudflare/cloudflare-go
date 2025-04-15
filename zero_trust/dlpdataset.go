@@ -157,7 +157,7 @@ type Dataset struct {
 	UpdatedAt     time.Time       `json:"updated_at,required" format:"date-time"`
 	Uploads       []DatasetUpload `json:"uploads,required"`
 	CaseSensitive bool            `json:"case_sensitive"`
-	// The description of the dataset
+	// The description of the dataset.
 	Description string      `json:"description,nullable"`
 	JSON        datasetJSON `json:"-"`
 }
@@ -296,7 +296,7 @@ type DatasetArray []Dataset
 
 type DatasetCreation struct {
 	Dataset Dataset `json:"dataset,required"`
-	// Encoding version to use for dataset
+	// Encoding version to use for dataset.
 	EncodingVersion int64 `json:"encoding_version,required"`
 	MaxCells        int64 `json:"max_cells,required"`
 	// The version to use when uploading the dataset.
@@ -332,7 +332,7 @@ type DLPDatasetNewParams struct {
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if `secret` is true or undefined
 	CaseSensitive param.Field[bool] `json:"case_sensitive"`
-	// The description of the dataset
+	// The description of the dataset.
 	Description param.Field[string] `json:"description"`
 	// Dataset encoding version
 	//
@@ -497,9 +497,9 @@ type DLPDatasetUpdateParams struct {
 	//
 	// Only required for custom word lists.
 	CaseSensitive param.Field[bool] `json:"case_sensitive"`
-	// The description of the dataset
+	// The description of the dataset.
 	Description param.Field[string] `json:"description"`
-	// The name of the dataset, must be unique
+	// The name of the dataset, must be unique.
 	Name param.Field[string] `json:"name"`
 }
 

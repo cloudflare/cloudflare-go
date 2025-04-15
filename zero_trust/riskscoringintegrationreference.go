@@ -69,11 +69,11 @@ type RiskScoringIntegrationReferenceGetResponse struct {
 	// integration ID. Useful when the risk-score integration needs to be associated
 	// with a secondary asset and recalled using that ID.
 	ReferenceID string `json:"reference_id,required"`
-	// The base URL for the tenant. E.g. "https://tenant.okta.com"
+	// The base URL for the tenant. E.g. "https://tenant.okta.com".
 	TenantURL string `json:"tenant_url,required"`
 	// The URL for the Shared Signals Framework configuration, e.g.
 	// "/.well-known/sse-configuration/{integration_uuid}/".
-	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1
+	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1.
 	WellKnownURL string                                         `json:"well_known_url,required"`
 	JSON         riskScoringIntegrationReferenceGetResponseJSON `json:"-"`
 }
