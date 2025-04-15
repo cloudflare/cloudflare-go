@@ -43,6 +43,7 @@ type Hyperdrive struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// When the Hyperdrive configuration was last modified.
 	ModifiedOn time.Time      `json:"modified_on" format:"date-time"`
+	MTLS       HyperdriveMTLS `json:"mtls"`
 	JSON       hyperdriveJSON `json:"-"`
 }
 
@@ -54,6 +55,7 @@ type hyperdriveJSON struct {
 	Caching     apijson.Field
 	CreatedOn   apijson.Field
 	ModifiedOn  apijson.Field
+	MTLS        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -182,11 +184,12 @@ type HyperdriveOriginPublicDatabaseScheme string
 const (
 	HyperdriveOriginPublicDatabaseSchemePostgres   HyperdriveOriginPublicDatabaseScheme = "postgres"
 	HyperdriveOriginPublicDatabaseSchemePostgresql HyperdriveOriginPublicDatabaseScheme = "postgresql"
+	HyperdriveOriginPublicDatabaseSchemeMysql      HyperdriveOriginPublicDatabaseScheme = "mysql"
 )
 
 func (r HyperdriveOriginPublicDatabaseScheme) IsKnown() bool {
 	switch r {
-	case HyperdriveOriginPublicDatabaseSchemePostgres, HyperdriveOriginPublicDatabaseSchemePostgresql:
+	case HyperdriveOriginPublicDatabaseSchemePostgres, HyperdriveOriginPublicDatabaseSchemePostgresql, HyperdriveOriginPublicDatabaseSchemeMysql:
 		return true
 	}
 	return false
@@ -235,11 +238,12 @@ type HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme string
 const (
 	HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgres   HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme = "postgres"
 	HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgresql HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme = "postgresql"
+	HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemeMysql      HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme = "mysql"
 )
 
 func (r HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme) IsKnown() bool {
 	switch r {
-	case HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgres, HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgresql:
+	case HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgres, HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgresql, HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemeMysql:
 		return true
 	}
 	return false
@@ -251,11 +255,12 @@ type HyperdriveOriginScheme string
 const (
 	HyperdriveOriginSchemePostgres   HyperdriveOriginScheme = "postgres"
 	HyperdriveOriginSchemePostgresql HyperdriveOriginScheme = "postgresql"
+	HyperdriveOriginSchemeMysql      HyperdriveOriginScheme = "mysql"
 )
 
 func (r HyperdriveOriginScheme) IsKnown() bool {
 	switch r {
-	case HyperdriveOriginSchemePostgres, HyperdriveOriginSchemePostgresql:
+	case HyperdriveOriginSchemePostgres, HyperdriveOriginSchemePostgresql, HyperdriveOriginSchemeMysql:
 		return true
 	}
 	return false
@@ -385,10 +390,39 @@ func (r hyperdriveCachingHyperdriveHyperdriveCachingEnabledJSON) RawJSON() strin
 
 func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabled) implementsHyperdriveCaching() {}
 
+type HyperdriveMTLS struct {
+	// CA certificate ID
+	CACertificateID string `json:"ca_certificate_id"`
+	// mTLS certificate ID
+	MTLSCertificateID string `json:"mtls_certificate_id"`
+	// SSL mode used for CA verification. Must be 'require', 'verify-ca', or
+	// 'verify-full'
+	Sslmode string             `json:"sslmode"`
+	JSON    hyperdriveMTLSJSON `json:"-"`
+}
+
+// hyperdriveMTLSJSON contains the JSON metadata for the struct [HyperdriveMTLS]
+type hyperdriveMTLSJSON struct {
+	CACertificateID   apijson.Field
+	MTLSCertificateID apijson.Field
+	Sslmode           apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *HyperdriveMTLS) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveMTLSJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveParam struct {
 	Name    param.Field[string]                      `json:"name,required"`
 	Origin  param.Field[HyperdriveOriginUnionParam]  `json:"origin,required"`
 	Caching param.Field[HyperdriveCachingUnionParam] `json:"caching"`
+	MTLS    param.Field[HyperdriveMTLSParam]         `json:"mtls"`
 }
 
 func (r HyperdriveParam) MarshalJSON() (data []byte, err error) {
@@ -530,4 +564,18 @@ func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam) MarshalJSON() 
 }
 
 func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam) implementsHyperdriveCachingUnionParam() {
+}
+
+type HyperdriveMTLSParam struct {
+	// CA certificate ID
+	CACertificateID param.Field[string] `json:"ca_certificate_id"`
+	// mTLS certificate ID
+	MTLSCertificateID param.Field[string] `json:"mtls_certificate_id"`
+	// SSL mode used for CA verification. Must be 'require', 'verify-ca', or
+	// 'verify-full'
+	Sslmode param.Field[string] `json:"sslmode"`
+}
+
+func (r HyperdriveMTLSParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
