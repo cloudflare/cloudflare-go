@@ -42,6 +42,11 @@ func TestConfigNewWithOptionalParams(t *testing.T) {
 			Caching: cloudflare.F[hyperdrive.HyperdriveCachingUnionParam](hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingCommonParam{
 				Disabled: cloudflare.F(true),
 			}),
+			MTLS: cloudflare.F(hyperdrive.HyperdriveMTLSParam{
+				CACertificateID:   cloudflare.F("00000000-0000-0000-0000-0000000000"),
+				MTLSCertificateID: cloudflare.F("00000000-0000-0000-0000-0000000000"),
+				Sslmode:           cloudflare.F("verify-full"),
+			}),
 		},
 	})
 	if err != nil {
@@ -83,6 +88,11 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Caching: cloudflare.F[hyperdrive.HyperdriveCachingUnionParam](hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingCommonParam{
 					Disabled: cloudflare.F(true),
+				}),
+				MTLS: cloudflare.F(hyperdrive.HyperdriveMTLSParam{
+					CACertificateID:   cloudflare.F("00000000-0000-0000-0000-0000000000"),
+					MTLSCertificateID: cloudflare.F("00000000-0000-0000-0000-0000000000"),
+					Sslmode:           cloudflare.F("verify-full"),
 				}),
 			},
 		},
@@ -171,6 +181,11 @@ func TestConfigEditWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Caching: cloudflare.F[hyperdrive.ConfigEditParamsCachingUnion](hyperdrive.ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon{
 				Disabled: cloudflare.F(true),
+			}),
+			MTLS: cloudflare.F(hyperdrive.ConfigEditParamsMTLS{
+				CACertificateID:   cloudflare.F("00000000-0000-0000-0000-0000000000"),
+				MTLSCertificateID: cloudflare.F("00000000-0000-0000-0000-0000000000"),
+				Sslmode:           cloudflare.F("verify-full"),
 			}),
 			Name: cloudflare.F("example-hyperdrive"),
 			Origin: cloudflare.F[hyperdrive.ConfigEditParamsOriginUnion](hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveDatabase{
