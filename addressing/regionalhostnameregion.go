@@ -87,6 +87,6 @@ func (r regionalHostnameRegionListResponseJSON) RawJSON() string {
 }
 
 type RegionalHostnameRegionListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

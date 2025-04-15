@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestRegionalHostnameNew(t *testing.T) {
+func TestRegionalHostnameNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -31,6 +31,7 @@ func TestRegionalHostnameNew(t *testing.T) {
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Hostname:  cloudflare.F("foo.example.com"),
 		RegionKey: cloudflare.F("ca"),
+		Routing:   cloudflare.F("routing"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
