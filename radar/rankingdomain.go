@@ -204,7 +204,7 @@ func (r rankingDomainGetResponseMetaDateRangeJSON) RawJSON() string {
 }
 
 type RankingDomainGetParams struct {
-	// Array of dates to filter the results.
+	// Filters results by the specified array of dates.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Format in which results will be returned.
 	Format param.Field[RankingDomainGetParamsFormat] `query:"format"`
@@ -214,7 +214,7 @@ type RankingDomainGetParams struct {
 	Limit param.Field[int64] `query:"limit"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Ranking type.
+	// The ranking type.
 	RankingType param.Field[RankingDomainGetParamsRankingType] `query:"rankingType"`
 }
 
@@ -242,7 +242,7 @@ func (r RankingDomainGetParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Ranking type.
+// The ranking type.
 type RankingDomainGetParamsRankingType string
 
 const (

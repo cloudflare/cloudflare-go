@@ -160,17 +160,17 @@ func (r leakedCredentialTimeseriesGroupCompromisedResponseSerie0JSON) RawJSON() 
 }
 
 type LeakedCredentialTimeseriesGroupBotClassParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[LeakedCredentialTimeseriesGroupBotClassParamsAggInterval] `query:"aggInterval"`
 	// Filters results by compromised credential status (clean vs. compromised).
 	Compromised param.Field[[]LeakedCredentialTimeseriesGroupBotClassParamsCompromised] `query:"compromised"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -189,8 +189,8 @@ func (r LeakedCredentialTimeseriesGroupBotClassParams) URLQuery() (v url.Values)
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type LeakedCredentialTimeseriesGroupBotClassParamsAggInterval string
 
@@ -265,8 +265,8 @@ func (r leakedCredentialTimeseriesGroupBotClassResponseEnvelopeJSON) RawJSON() s
 }
 
 type LeakedCredentialTimeseriesGroupCompromisedParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[LeakedCredentialTimeseriesGroupCompromisedParamsAggInterval] `query:"aggInterval"`
 	// Filters results by bot class. Refer to
@@ -274,9 +274,9 @@ type LeakedCredentialTimeseriesGroupCompromisedParams struct {
 	BotClass param.Field[[]LeakedCredentialTimeseriesGroupCompromisedParamsBotClass] `query:"botClass"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -295,8 +295,8 @@ func (r LeakedCredentialTimeseriesGroupCompromisedParams) URLQuery() (v url.Valu
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type LeakedCredentialTimeseriesGroupCompromisedParamsAggInterval string
 

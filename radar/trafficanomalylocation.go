@@ -98,8 +98,7 @@ func (r trafficAnomalyLocationGetResponseTrafficAnomalyJSON) RawJSON() string {
 type TrafficAnomalyLocationGetParams struct {
 	// End of the date range (inclusive).
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
-	// Shorthand date ranges for the last X days - use when you don't need specific
-	// start and end dates.
+	// Filters results by date range.
 	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
