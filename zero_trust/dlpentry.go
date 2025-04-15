@@ -123,7 +123,7 @@ func (r *DLPEntryService) Delete(ctx context.Context, entryID string, body DLPEn
 	return
 }
 
-// Fetches a DLP entry by ID
+// Fetches a DLP entry by ID.
 func (r *DLPEntryService) Get(ctx context.Context, entryID string, query DLPEntryGetParams, opts ...option.RequestOption) (res *DLPEntryGetResponse, err error) {
 	var env DLPEntryGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -365,10 +365,10 @@ func (r dlpEntryUpdateResponsePredefinedEntryJSON) RawJSON() string {
 func (r DLPEntryUpdateResponsePredefinedEntry) implementsDLPEntryUpdateResponse() {}
 
 type DLPEntryUpdateResponsePredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                                `json:"available,required"`
 	JSON      dlpEntryUpdateResponsePredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -763,10 +763,10 @@ func (r dlpEntryListResponsePredefinedEntryJSON) RawJSON() string {
 func (r DLPEntryListResponsePredefinedEntry) implementsDLPEntryListResponse() {}
 
 type DLPEntryListResponsePredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                              `json:"available,required"`
 	JSON      dlpEntryListResponsePredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -1163,10 +1163,10 @@ func (r dlpEntryGetResponsePredefinedEntryJSON) RawJSON() string {
 func (r DLPEntryGetResponsePredefinedEntry) implementsDLPEntryGetResponse() {}
 
 type DLPEntryGetResponsePredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                             `json:"available,required"`
 	JSON      dlpEntryGetResponsePredefinedEntryConfidenceJSON `json:"-"`
 }

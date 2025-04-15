@@ -70,7 +70,7 @@ func (r *DLPProfileService) ListAutoPaging(ctx context.Context, params DLPProfil
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Fetches a DLP profile by ID
+// Fetches a DLP profile by ID.
 func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLPProfileGetParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfileGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -134,12 +134,12 @@ func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
 }
 
 type Profile struct {
-	// The id of the profile (uuid)
+	// The id of the profile (uuid).
 	ID string `json:"id,required" format:"uuid"`
 	// This field can have the runtime type of [[]ProfileCustomProfileEntry],
 	// [[]ProfilePredefinedProfileEntry], [[]ProfileIntegrationProfileEntry].
 	Entries interface{} `json:"entries,required"`
-	// The name of the profile
+	// The name of the profile.
 	Name             string      `json:"name,required"`
 	Type             ProfileType `json:"type,required"`
 	AIContextEnabled bool        `json:"ai_context_enabled"`
@@ -149,14 +149,14 @@ type Profile struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
-	// When the profile was created
+	// When the profile was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The description of the profile
+	// The description of the profile.
 	Description string `json:"description,nullable"`
 	OCREnabled  bool   `json:"ocr_enabled"`
-	// Whether this profile can be accessed by anyone
+	// Whether this profile can be accessed by anyone.
 	OpenAccess bool `json:"open_access"`
-	// When the profile was lasted updated
+	// When the profile was lasted updated.
 	UpdatedAt time.Time   `json:"updated_at" format:"date-time"`
 	JSON      profileJSON `json:"-"`
 	union     ProfileUnion
@@ -229,25 +229,25 @@ func init() {
 }
 
 type ProfileCustomProfile struct {
-	// The id of the profile (uuid)
+	// The id of the profile (uuid).
 	ID string `json:"id,required" format:"uuid"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount int64 `json:"allowed_match_count,required"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness,required"`
-	// When the profile was created
+	// When the profile was created.
 	CreatedAt time.Time                   `json:"created_at,required" format:"date-time"`
 	Entries   []ProfileCustomProfileEntry `json:"entries,required"`
-	// The name of the profile
+	// The name of the profile.
 	Name       string                   `json:"name,required"`
 	OCREnabled bool                     `json:"ocr_enabled,required"`
 	Type       ProfileCustomProfileType `json:"type,required"`
-	// When the profile was lasted updated
+	// When the profile was lasted updated.
 	UpdatedAt           time.Time                               `json:"updated_at,required" format:"date-time"`
 	AIContextEnabled    bool                                    `json:"ai_context_enabled"`
 	ConfidenceThreshold ProfileCustomProfileConfidenceThreshold `json:"confidence_threshold"`
-	// The description of the profile
+	// The description of the profile.
 	Description string                   `json:"description,nullable"`
 	JSON        profileCustomProfileJSON `json:"-"`
 }
@@ -469,10 +469,10 @@ func (r profileCustomProfileEntriesPredefinedEntryJSON) RawJSON() string {
 func (r ProfileCustomProfileEntriesPredefinedEntry) implementsProfileCustomProfileEntry() {}
 
 type ProfileCustomProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                                     `json:"available,required"`
 	JSON      profileCustomProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -711,11 +711,11 @@ func (r ProfileCustomProfileConfidenceThreshold) IsKnown() bool {
 }
 
 type ProfilePredefinedProfile struct {
-	// The id of the predefined profile (uuid)
+	// The id of the predefined profile (uuid).
 	ID                string                          `json:"id,required" format:"uuid"`
 	AllowedMatchCount int64                           `json:"allowed_match_count,required"`
 	Entries           []ProfilePredefinedProfileEntry `json:"entries,required"`
-	// The name of the predefined profile
+	// The name of the predefined profile.
 	Name                string                                      `json:"name,required"`
 	Type                ProfilePredefinedProfileType                `json:"type,required"`
 	AIContextEnabled    bool                                        `json:"ai_context_enabled"`
@@ -724,7 +724,7 @@ type ProfilePredefinedProfile struct {
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
 	OCREnabled       bool             `json:"ocr_enabled"`
-	// Whether this profile can be accessed by anyone
+	// Whether this profile can be accessed by anyone.
 	OpenAccess bool                         `json:"open_access"`
 	JSON       profilePredefinedProfileJSON `json:"-"`
 }
@@ -944,10 +944,10 @@ func (r profilePredefinedProfileEntriesPredefinedEntryJSON) RawJSON() string {
 func (r ProfilePredefinedProfileEntriesPredefinedEntry) implementsProfilePredefinedProfileEntry() {}
 
 type ProfilePredefinedProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                                         `json:"available,required"`
 	JSON      profilePredefinedProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -1193,7 +1193,7 @@ type ProfileIntegrationProfile struct {
 	Name      string                           `json:"name,required"`
 	Type      ProfileIntegrationProfileType    `json:"type,required"`
 	UpdatedAt time.Time                        `json:"updated_at,required" format:"date-time"`
-	// The description of the profile
+	// The description of the profile.
 	Description string                        `json:"description,nullable"`
 	JSON        profileIntegrationProfileJSON `json:"-"`
 }
@@ -1410,10 +1410,10 @@ func (r profileIntegrationProfileEntriesPredefinedEntryJSON) RawJSON() string {
 func (r ProfileIntegrationProfileEntriesPredefinedEntry) implementsProfileIntegrationProfileEntry() {}
 
 type ProfileIntegrationProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                                          `json:"available,required"`
 	JSON      profileIntegrationProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
