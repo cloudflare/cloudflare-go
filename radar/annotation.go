@@ -210,12 +210,12 @@ func (r annotationListResponseAnnotationsOutageJSON) RawJSON() string {
 }
 
 type AnnotationListParams struct {
-	// Single Autonomous System Number (ASN) as integer.
+	// Filters results by Autonomous System. Specify a single Autonomous System Number
+	// (ASN) as integer.
 	ASN param.Field[int64] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
-	// Shorthand date ranges for the last X days - use when you don't need specific
-	// start and end dates.
+	// Filters results by date range.
 	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
@@ -223,7 +223,7 @@ type AnnotationListParams struct {
 	Format param.Field[AnnotationListParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Location alpha-2 code.
+	// Filters results by location. Specify an alpha-2 location code.
 	Location param.Field[string] `query:"location"`
 	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`

@@ -233,7 +233,7 @@ func (r robotsTXTTopUserAgentDirectiveResponseTop0JSON) RawJSON() string {
 }
 
 type RobotsTXTTopUserAgentDirectiveParams struct {
-	// Array of dates to filter the results.
+	// Filters results by the specified array of dates.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Filters results by robots.txt directive.
 	Directive param.Field[RobotsTXTTopUserAgentDirectiveParamsDirective] `query:"directive"`

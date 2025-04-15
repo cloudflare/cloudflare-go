@@ -302,25 +302,26 @@ func (r rankingTopResponseTop0CategoryJSON) RawJSON() string {
 type RankingTimeseriesGroupsParams struct {
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by domain category.
 	DomainCategory param.Field[[]string] `query:"domainCategory"`
-	// Comma-separated list of domain names.
+	// Filters results by domain name. Specify a comma-separated list of domain names.
 	Domains param.Field[[]string] `query:"domains"`
 	// Format in which results will be returned.
 	Format param.Field[RankingTimeseriesGroupsParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Comma-separated list of locations (alpha-2 codes).
+	// Filters results by location. Specify a comma-separated list of alpha-2 location
+	// codes.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Ranking type.
+	// The ranking type.
 	RankingType param.Field[RankingTimeseriesGroupsParamsRankingType] `query:"rankingType"`
 }
 
@@ -349,7 +350,7 @@ func (r RankingTimeseriesGroupsParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Ranking type.
+// The ranking type.
 type RankingTimeseriesGroupsParamsRankingType string
 
 const (
@@ -390,7 +391,7 @@ func (r rankingTimeseriesGroupsResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RankingTopParams struct {
-	// Array of dates to filter the results.
+	// Filters results by the specified array of dates.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Filters results by domain category.
 	DomainCategory param.Field[[]string] `query:"domainCategory"`
@@ -398,11 +399,12 @@ type RankingTopParams struct {
 	Format param.Field[RankingTopParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Comma-separated list of locations (alpha-2 codes).
+	// Filters results by location. Specify a comma-separated list of alpha-2 location
+	// codes.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Ranking type.
+	// The ranking type.
 	RankingType param.Field[RankingTopParamsRankingType] `query:"rankingType"`
 }
 
@@ -430,7 +432,7 @@ func (r RankingTopParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Ranking type.
+// The ranking type.
 type RankingTopParamsRankingType string
 
 const (

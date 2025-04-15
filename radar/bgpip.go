@@ -164,25 +164,27 @@ func (r bgpipTimeseriesResponseSerie174JSON) RawJSON() string {
 }
 
 type BGPIPTimeseriesParams struct {
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[BgpipTimeseriesParamsFormat] `query:"format"`
-	// Include data delay meta information.
+	// Includes data delay meta information.
 	IncludeDelay param.Field[bool] `query:"includeDelay"`
 	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]BgpipTimeseriesParamsIPVersion] `query:"ipVersion"`
-	// Comma-separated list of locations (alpha-2 codes).
+	// Filters results by location. Specify a comma-separated list of alpha-2 location
+	// codes.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`

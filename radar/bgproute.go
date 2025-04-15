@@ -124,23 +124,23 @@ func (r bgpRouteAsesResponseJSON) RawJSON() string {
 
 type BGPRouteAsesResponseASN struct {
 	ASN int64 `json:"asn,required"`
-	// AS's customer cone size
+	// AS's customer cone size.
 	ConeSize int64 `json:"coneSize,required"`
-	// 2-letter country code for the AS's registration country
+	// Alpha-2 code for the AS's registration country.
 	Country string `json:"country,required"`
-	// number of IPv4 addresses originated by the AS
+	// Number of IPv4 addresses originated by the AS.
 	IPV4Count int64 `json:"ipv4Count,required"`
-	// number of IPv6 addresses originated by the AS
+	// Number of IPv6 addresses originated by the AS.
 	IPV6Count string `json:"ipv6Count,required"`
-	// name of the AS
+	// Name of the AS.
 	Name string `json:"name,required"`
-	// number of total IP prefixes originated by the AS
+	// Number of total IP prefixes originated by the AS.
 	PfxsCount int64 `json:"pfxsCount,required"`
-	// number of RPKI invalid prefixes originated by the AS
+	// Number of RPKI invalid prefixes originated by the AS.
 	RPKIInvalid int64 `json:"rpkiInvalid,required"`
-	// number of RPKI unknown prefixes originated by the AS
+	// Number of RPKI unknown prefixes originated by the AS.
 	RPKIUnknown int64 `json:"rpkiUnknown,required"`
-	// number of RPKI valid prefixes originated by the AS
+	// Number of RPKI valid prefixes originated by the AS.
 	RPKIValid int64                       `json:"rpkiValid,required"`
 	JSON      bgpRouteAsesResponseASNJSON `json:"-"`
 }
@@ -171,11 +171,11 @@ func (r bgpRouteAsesResponseASNJSON) RawJSON() string {
 }
 
 type BGPRouteAsesResponseMeta struct {
-	// the timestamp of when the data is generated
+	// The timestamp of when the data is generated.
 	DataTime string `json:"dataTime,required"`
-	// the timestamp of the query
+	// The timestamp of the query.
 	QueryTime string `json:"queryTime,required"`
-	// total number of route collector peers used to generate this data
+	// Total number of route collector peers used to generate this data.
 	TotalPeers int64                        `json:"totalPeers,required"`
 	JSON       bgpRouteAsesResponseMetaJSON `json:"-"`
 }
@@ -393,14 +393,20 @@ func (r bgpRouteRealtimeResponseJSON) RawJSON() string {
 }
 
 type BGPRouteRealtimeResponseMeta struct {
+	ASNInfo    []BGPRouteRealtimeResponseMetaASNInfo   `json:"asn_info,required"`
 	Collectors []BGPRouteRealtimeResponseMetaCollector `json:"collectors,required"`
+	RPKI       []BGPRouteRealtimeResponseMetaRPKI      `json:"rpki,required"`
+	Visibility BGPRouteRealtimeResponseMetaVisibility  `json:"visibility,required"`
 	JSON       bgpRouteRealtimeResponseMetaJSON        `json:"-"`
 }
 
 // bgpRouteRealtimeResponseMetaJSON contains the JSON metadata for the struct
 // [BGPRouteRealtimeResponseMeta]
 type bgpRouteRealtimeResponseMetaJSON struct {
+	ASNInfo     apijson.Field
 	Collectors  apijson.Field
+	RPKI        apijson.Field
+	Visibility  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -413,16 +419,56 @@ func (r bgpRouteRealtimeResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
+type BGPRouteRealtimeResponseMetaASNInfo struct {
+	// Name of the autonomous system.
+	AsName string `json:"as_name,required"`
+	// AS number.
+	ASN int64 `json:"asn,required"`
+	// Alpha-2 code for the AS's registration country.
+	CountryCode string `json:"country_code,required"`
+	// Organization ID.
+	OrgID string `json:"org_id,required"`
+	// Organization name.
+	OrgName string                                  `json:"org_name,required"`
+	JSON    bgpRouteRealtimeResponseMetaASNInfoJSON `json:"-"`
+}
+
+// bgpRouteRealtimeResponseMetaASNInfoJSON contains the JSON metadata for the
+// struct [BGPRouteRealtimeResponseMetaASNInfo]
+type bgpRouteRealtimeResponseMetaASNInfoJSON struct {
+	AsName      apijson.Field
+	ASN         apijson.Field
+	CountryCode apijson.Field
+	OrgID       apijson.Field
+	OrgName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BGPRouteRealtimeResponseMetaASNInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteRealtimeResponseMetaASNInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type BGPRouteRealtimeResponseMetaCollector struct {
-	// public route collector ID
+	// Public route collector ID.
 	Collector string `json:"collector,required"`
-	// latest realtime stream timestamp for this collector
+	// Latest realtime stream timestamp for this collector.
 	LatestRealtimeTs string `json:"latest_realtime_ts,required"`
-	// latest RIB dump MRT file timestamp for this collector
+	// Latest RIB dump MRT file timestamp for this collector.
 	LatestRibTs string `json:"latest_rib_ts,required"`
-	// latest BGP updates MRT file timestamp for this collector
-	LatestUpdatesTs string                                    `json:"latest_updates_ts,required"`
-	JSON            bgpRouteRealtimeResponseMetaCollectorJSON `json:"-"`
+	// Latest BGP updates MRT file timestamp for this collector.
+	LatestUpdatesTs string `json:"latest_updates_ts,required"`
+	// Total number of collector peers used from this collector.
+	PeersCount int64 `json:"peers_count,required"`
+	// Total number of collector peers used from this collector for IPv4 prefixes.
+	PeersV4Count int64 `json:"peers_v4_count,required"`
+	// Total number of collector peers used from this collector for IPv6 prefixes.
+	PeersV6Count int64                                     `json:"peers_v6_count,required"`
+	JSON         bgpRouteRealtimeResponseMetaCollectorJSON `json:"-"`
 }
 
 // bgpRouteRealtimeResponseMetaCollectorJSON contains the JSON metadata for the
@@ -432,6 +478,9 @@ type bgpRouteRealtimeResponseMetaCollectorJSON struct {
 	LatestRealtimeTs apijson.Field
 	LatestRibTs      apijson.Field
 	LatestUpdatesTs  apijson.Field
+	PeersCount       apijson.Field
+	PeersV4Count     apijson.Field
+	PeersV6Count     apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -444,16 +493,69 @@ func (r bgpRouteRealtimeResponseMetaCollectorJSON) RawJSON() string {
 	return r.raw
 }
 
+type BGPRouteRealtimeResponseMetaRPKI struct {
+	// Origin ASN.
+	Origin int64 `json:"origin,required"`
+	// Validation status: valid, invalid, or unknown.
+	RPKIValidation string                               `json:"rpki_validation,required"`
+	JSON           bgpRouteRealtimeResponseMetaRPKIJSON `json:"-"`
+}
+
+// bgpRouteRealtimeResponseMetaRPKIJSON contains the JSON metadata for the struct
+// [BGPRouteRealtimeResponseMetaRPKI]
+type bgpRouteRealtimeResponseMetaRPKIJSON struct {
+	Origin         apijson.Field
+	RPKIValidation apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *BGPRouteRealtimeResponseMetaRPKI) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteRealtimeResponseMetaRPKIJSON) RawJSON() string {
+	return r.raw
+}
+
+type BGPRouteRealtimeResponseMetaVisibility struct {
+	// Total number of peers.
+	TotalPeers int64 `json:"total_peers,required"`
+	// Total number of peers seeing this prefix.
+	TotalVisible int64 `json:"total_visible,required"`
+	// Ratio of peers seeing this prefix to total number of peers.
+	Visibility float64                                    `json:"visibility,required"`
+	JSON       bgpRouteRealtimeResponseMetaVisibilityJSON `json:"-"`
+}
+
+// bgpRouteRealtimeResponseMetaVisibilityJSON contains the JSON metadata for the
+// struct [BGPRouteRealtimeResponseMetaVisibility]
+type bgpRouteRealtimeResponseMetaVisibilityJSON struct {
+	TotalPeers   apijson.Field
+	TotalVisible apijson.Field
+	Visibility   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *BGPRouteRealtimeResponseMetaVisibility) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpRouteRealtimeResponseMetaVisibilityJSON) RawJSON() string {
+	return r.raw
+}
+
 type BGPRouteRealtimeResponseRoute struct {
-	// AS-level path for this route, from collector to origin
+	// AS-level path for this route, from collector to origin.
 	AsPath []int64 `json:"as_path,required"`
-	// public collector ID for this route
+	// Public collector ID for this route.
 	Collector string `json:"collector,required"`
-	// BGP community values
+	// BGP community values.
 	Communities []string `json:"communities,required"`
-	// IP prefix of this query
+	// IP prefix of this query.
 	Prefix string `json:"prefix,required"`
-	// latest timestamp of change for this route
+	// Latest timestamp of change for this route.
 	Timestamp string                            `json:"timestamp,required"`
 	JSON      bgpRouteRealtimeResponseRouteJSON `json:"-"`
 }
@@ -586,7 +688,7 @@ type BGPRouteAsesParams struct {
 	Format param.Field[BGPRouteAsesParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Location alpha-2 code.
+	// Filters results by location. Specify an alpha-2 location code.
 	Location param.Field[string] `query:"location"`
 	// Sorts results by the specified field.
 	SortBy param.Field[BGPRouteAsesParamsSortBy] `query:"sortBy"`
@@ -869,11 +971,12 @@ func (r bgpRouteRealtimeResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BGPRouteStatsParams struct {
-	// Single Autonomous System Number (ASN) as integer.
+	// Filters results by Autonomous System. Specify a single Autonomous System Number
+	// (ASN) as integer.
 	ASN param.Field[int64] `query:"asn"`
 	// Format in which results will be returned.
 	Format param.Field[BGPRouteStatsParamsFormat] `query:"format"`
-	// Location alpha-2 code.
+	// Filters results by location. Specify an alpha-2 location code.
 	Location param.Field[string] `query:"location"`
 }
 
