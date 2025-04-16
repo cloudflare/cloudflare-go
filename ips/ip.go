@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -191,9 +190,9 @@ func (r IPListParams) URLQuery() (v url.Values) {
 }
 
 type IPListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []IPListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IPListResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success IPListResponseEnvelopeSuccess `json:"success,required"`
 	Result  IPListResponse                `json:"result"`
 	JSON    ipListResponseEnvelopeJSON    `json:"-"`
@@ -218,7 +217,103 @@ func (r ipListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type IPListResponseEnvelopeErrors struct {
+	Code             int64                              `json:"code,required"`
+	Message          string                             `json:"message,required"`
+	DocumentationURL string                             `json:"documentation_url"`
+	Source           IPListResponseEnvelopeErrorsSource `json:"source"`
+	JSON             ipListResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// ipListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [IPListResponseEnvelopeErrors]
+type ipListResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *IPListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPListResponseEnvelopeErrorsSource struct {
+	Pointer string                                 `json:"pointer"`
+	JSON    ipListResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// ipListResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the struct
+// [IPListResponseEnvelopeErrorsSource]
+type ipListResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPListResponseEnvelopeMessages struct {
+	Code             int64                                `json:"code,required"`
+	Message          string                               `json:"message,required"`
+	DocumentationURL string                               `json:"documentation_url"`
+	Source           IPListResponseEnvelopeMessagesSource `json:"source"`
+	JSON             ipListResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// ipListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [IPListResponseEnvelopeMessages]
+type ipListResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *IPListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPListResponseEnvelopeMessagesSource struct {
+	Pointer string                                   `json:"pointer"`
+	JSON    ipListResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// ipListResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [IPListResponseEnvelopeMessagesSource]
+type ipListResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type IPListResponseEnvelopeSuccess bool
 
 const (
