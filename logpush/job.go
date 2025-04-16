@@ -205,7 +205,7 @@ type LogpushJob struct {
 	ID int64 `json:"id"`
 	// Name of the dataset. A list of supported datasets can be found on the
 	// [Developer Docs](https://developers.cloudflare.com/logs/reference/log-fields/).
-	Dataset string `json:"dataset,nullable"`
+	Dataset LogpushJobDataset `json:"dataset,nullable"`
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
 	// included.
@@ -299,6 +299,45 @@ func (r *LogpushJob) UnmarshalJSON(data []byte) (err error) {
 
 func (r logpushJobJSON) RawJSON() string {
 	return r.raw
+}
+
+// Name of the dataset. A list of supported datasets can be found on the
+// [Developer Docs](https://developers.cloudflare.com/logs/reference/log-fields/).
+type LogpushJobDataset string
+
+const (
+	LogpushJobDatasetAccessRequests           LogpushJobDataset = "access_requests"
+	LogpushJobDatasetAuditLogs                LogpushJobDataset = "audit_logs"
+	LogpushJobDatasetBISOUserActions          LogpushJobDataset = "biso_user_actions"
+	LogpushJobDatasetCasbFindings             LogpushJobDataset = "casb_findings"
+	LogpushJobDatasetDevicePostureResults     LogpushJobDataset = "device_posture_results"
+	LogpushJobDatasetDLPForensicCopies        LogpushJobDataset = "dlp_forensic_copies"
+	LogpushJobDatasetDNSFirewallLogs          LogpushJobDataset = "dns_firewall_logs"
+	LogpushJobDatasetDNSLogs                  LogpushJobDataset = "dns_logs"
+	LogpushJobDatasetEmailSecurityAlerts      LogpushJobDataset = "email_security_alerts"
+	LogpushJobDatasetFirewallEvents           LogpushJobDataset = "firewall_events"
+	LogpushJobDatasetGatewayDNS               LogpushJobDataset = "gateway_dns"
+	LogpushJobDatasetGatewayHTTP              LogpushJobDataset = "gateway_http"
+	LogpushJobDatasetGatewayNetwork           LogpushJobDataset = "gateway_network"
+	LogpushJobDatasetHTTPRequests             LogpushJobDataset = "http_requests"
+	LogpushJobDatasetMagicIDsDetections       LogpushJobDataset = "magic_ids_detections"
+	LogpushJobDatasetNELReports               LogpushJobDataset = "nel_reports"
+	LogpushJobDatasetNetworkAnalyticsLogs     LogpushJobDataset = "network_analytics_logs"
+	LogpushJobDatasetPageShieldEvents         LogpushJobDataset = "page_shield_events"
+	LogpushJobDatasetSinkholeHTTPLogs         LogpushJobDataset = "sinkhole_http_logs"
+	LogpushJobDatasetSpectrumEvents           LogpushJobDataset = "spectrum_events"
+	LogpushJobDatasetSSHLogs                  LogpushJobDataset = "ssh_logs"
+	LogpushJobDatasetWorkersTraceEvents       LogpushJobDataset = "workers_trace_events"
+	LogpushJobDatasetZarazEvents              LogpushJobDataset = "zaraz_events"
+	LogpushJobDatasetZeroTrustNetworkSessions LogpushJobDataset = "zero_trust_network_sessions"
+)
+
+func (r LogpushJobDataset) IsKnown() bool {
+	switch r {
+	case LogpushJobDatasetAccessRequests, LogpushJobDatasetAuditLogs, LogpushJobDatasetBISOUserActions, LogpushJobDatasetCasbFindings, LogpushJobDatasetDevicePostureResults, LogpushJobDatasetDLPForensicCopies, LogpushJobDatasetDNSFirewallLogs, LogpushJobDatasetDNSLogs, LogpushJobDatasetEmailSecurityAlerts, LogpushJobDatasetFirewallEvents, LogpushJobDatasetGatewayDNS, LogpushJobDatasetGatewayHTTP, LogpushJobDatasetGatewayNetwork, LogpushJobDatasetHTTPRequests, LogpushJobDatasetMagicIDsDetections, LogpushJobDatasetNELReports, LogpushJobDatasetNetworkAnalyticsLogs, LogpushJobDatasetPageShieldEvents, LogpushJobDatasetSinkholeHTTPLogs, LogpushJobDatasetSpectrumEvents, LogpushJobDatasetSSHLogs, LogpushJobDatasetWorkersTraceEvents, LogpushJobDatasetZarazEvents, LogpushJobDatasetZeroTrustNetworkSessions:
+		return true
+	}
+	return false
 }
 
 // This field is deprecated. Please use `max_upload_*` parameters instead. The
@@ -515,7 +554,7 @@ type JobNewParams struct {
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Name of the dataset. A list of supported datasets can be found on the
 	// [Developer Docs](https://developers.cloudflare.com/logs/reference/log-fields/).
-	Dataset param.Field[string] `json:"dataset"`
+	Dataset param.Field[JobNewParamsDataset] `json:"dataset"`
 	// Flag that indicates if the job is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
 	// This field is deprecated. Please use `max_upload_*` parameters instead. The
@@ -563,6 +602,45 @@ type JobNewParams struct {
 
 func (r JobNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Name of the dataset. A list of supported datasets can be found on the
+// [Developer Docs](https://developers.cloudflare.com/logs/reference/log-fields/).
+type JobNewParamsDataset string
+
+const (
+	JobNewParamsDatasetAccessRequests           JobNewParamsDataset = "access_requests"
+	JobNewParamsDatasetAuditLogs                JobNewParamsDataset = "audit_logs"
+	JobNewParamsDatasetBISOUserActions          JobNewParamsDataset = "biso_user_actions"
+	JobNewParamsDatasetCasbFindings             JobNewParamsDataset = "casb_findings"
+	JobNewParamsDatasetDevicePostureResults     JobNewParamsDataset = "device_posture_results"
+	JobNewParamsDatasetDLPForensicCopies        JobNewParamsDataset = "dlp_forensic_copies"
+	JobNewParamsDatasetDNSFirewallLogs          JobNewParamsDataset = "dns_firewall_logs"
+	JobNewParamsDatasetDNSLogs                  JobNewParamsDataset = "dns_logs"
+	JobNewParamsDatasetEmailSecurityAlerts      JobNewParamsDataset = "email_security_alerts"
+	JobNewParamsDatasetFirewallEvents           JobNewParamsDataset = "firewall_events"
+	JobNewParamsDatasetGatewayDNS               JobNewParamsDataset = "gateway_dns"
+	JobNewParamsDatasetGatewayHTTP              JobNewParamsDataset = "gateway_http"
+	JobNewParamsDatasetGatewayNetwork           JobNewParamsDataset = "gateway_network"
+	JobNewParamsDatasetHTTPRequests             JobNewParamsDataset = "http_requests"
+	JobNewParamsDatasetMagicIDsDetections       JobNewParamsDataset = "magic_ids_detections"
+	JobNewParamsDatasetNELReports               JobNewParamsDataset = "nel_reports"
+	JobNewParamsDatasetNetworkAnalyticsLogs     JobNewParamsDataset = "network_analytics_logs"
+	JobNewParamsDatasetPageShieldEvents         JobNewParamsDataset = "page_shield_events"
+	JobNewParamsDatasetSinkholeHTTPLogs         JobNewParamsDataset = "sinkhole_http_logs"
+	JobNewParamsDatasetSpectrumEvents           JobNewParamsDataset = "spectrum_events"
+	JobNewParamsDatasetSSHLogs                  JobNewParamsDataset = "ssh_logs"
+	JobNewParamsDatasetWorkersTraceEvents       JobNewParamsDataset = "workers_trace_events"
+	JobNewParamsDatasetZarazEvents              JobNewParamsDataset = "zaraz_events"
+	JobNewParamsDatasetZeroTrustNetworkSessions JobNewParamsDataset = "zero_trust_network_sessions"
+)
+
+func (r JobNewParamsDataset) IsKnown() bool {
+	switch r {
+	case JobNewParamsDatasetAccessRequests, JobNewParamsDatasetAuditLogs, JobNewParamsDatasetBISOUserActions, JobNewParamsDatasetCasbFindings, JobNewParamsDatasetDevicePostureResults, JobNewParamsDatasetDLPForensicCopies, JobNewParamsDatasetDNSFirewallLogs, JobNewParamsDatasetDNSLogs, JobNewParamsDatasetEmailSecurityAlerts, JobNewParamsDatasetFirewallEvents, JobNewParamsDatasetGatewayDNS, JobNewParamsDatasetGatewayHTTP, JobNewParamsDatasetGatewayNetwork, JobNewParamsDatasetHTTPRequests, JobNewParamsDatasetMagicIDsDetections, JobNewParamsDatasetNELReports, JobNewParamsDatasetNetworkAnalyticsLogs, JobNewParamsDatasetPageShieldEvents, JobNewParamsDatasetSinkholeHTTPLogs, JobNewParamsDatasetSpectrumEvents, JobNewParamsDatasetSSHLogs, JobNewParamsDatasetWorkersTraceEvents, JobNewParamsDatasetZarazEvents, JobNewParamsDatasetZeroTrustNetworkSessions:
+		return true
+	}
+	return false
 }
 
 // This field is deprecated. Please use `max_upload_*` parameters instead. The
