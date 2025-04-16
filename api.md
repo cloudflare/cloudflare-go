@@ -5228,7 +5228,6 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#AllowedIdPs">AllowedIdPs</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#AllowedMethods">AllowedMethods</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#AllowedOrigins">AllowedOrigins</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#ApplicationPolicy">ApplicationPolicy</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#ApplicationType">ApplicationType</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#CORSHeaders">CORSHeaders</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#Decision">Decision</a>
