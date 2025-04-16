@@ -7513,7 +7513,7 @@ func (r SkipRuleAction) IsKnown() bool {
 // The parameters configuring the rule's action.
 type SkipRuleActionParameters struct {
 	// A list of phases to skip the execution of. This option is incompatible with the
-	// ruleset and rulesets options.
+	// rulesets options.
 	Phases []Phase `json:"phases"`
 	// A list of legacy security products to skip the execution of.
 	Products []SkipRuleActionParametersProduct `json:"products"`
@@ -7521,7 +7521,8 @@ type SkipRuleActionParameters struct {
 	// execution of. This option is incompatible with the ruleset option.
 	Rules map[string][]string `json:"rules"`
 	// A ruleset to skip the execution of. This option is incompatible with the
-	// rulesets, rules and phases options.
+	// rulesets, rules. It can be incompatible with phases options base on the phase of
+	// the ruleset.
 	Ruleset SkipRuleActionParametersRuleset `json:"ruleset"`
 	// A list of ruleset IDs to skip the execution of. This option is incompatible with
 	// the ruleset and phases options.
@@ -7571,7 +7572,8 @@ func (r SkipRuleActionParametersProduct) IsKnown() bool {
 }
 
 // A ruleset to skip the execution of. This option is incompatible with the
-// rulesets, rules and phases options.
+// rulesets, rules. It can be incompatible with phases options base on the phase of
+// the ruleset.
 type SkipRuleActionParametersRuleset string
 
 const (
@@ -7716,7 +7718,7 @@ func (r SkipRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 // The parameters configuring the rule's action.
 type SkipRuleActionParametersParam struct {
 	// A list of phases to skip the execution of. This option is incompatible with the
-	// ruleset and rulesets options.
+	// rulesets options.
 	Phases param.Field[[]Phase] `json:"phases"`
 	// A list of legacy security products to skip the execution of.
 	Products param.Field[[]SkipRuleActionParametersProduct] `json:"products"`
@@ -7724,7 +7726,8 @@ type SkipRuleActionParametersParam struct {
 	// execution of. This option is incompatible with the ruleset option.
 	Rules param.Field[map[string][]string] `json:"rules"`
 	// A ruleset to skip the execution of. This option is incompatible with the
-	// rulesets, rules and phases options.
+	// rulesets, rules. It can be incompatible with phases options base on the phase of
+	// the ruleset.
 	Ruleset param.Field[SkipRuleActionParametersRuleset] `json:"ruleset"`
 	// A list of ruleset IDs to skip the execution of. This option is incompatible with
 	// the ruleset and phases options.
