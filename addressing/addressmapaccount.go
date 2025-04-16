@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AddressMapAccountService contains methods and other services that help with
@@ -67,9 +66,9 @@ func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID stri
 }
 
 type AddressMapAccountUpdateResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AddressMapAccountUpdateResponseError   `json:"errors,required"`
+	Messages []AddressMapAccountUpdateResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
 	Success    AddressMapAccountUpdateResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapAccountUpdateResponseResultInfo `json:"result_info"`
 	JSON       addressMapAccountUpdateResponseJSON       `json:"-"`
@@ -94,7 +93,103 @@ func (r addressMapAccountUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AddressMapAccountUpdateResponseError struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           AddressMapAccountUpdateResponseErrorsSource `json:"source"`
+	JSON             addressMapAccountUpdateResponseErrorJSON    `json:"-"`
+}
+
+// addressMapAccountUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [AddressMapAccountUpdateResponseError]
+type addressMapAccountUpdateResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AddressMapAccountUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountUpdateResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapAccountUpdateResponseErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    addressMapAccountUpdateResponseErrorsSourceJSON `json:"-"`
+}
+
+// addressMapAccountUpdateResponseErrorsSourceJSON contains the JSON metadata for
+// the struct [AddressMapAccountUpdateResponseErrorsSource]
+type addressMapAccountUpdateResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapAccountUpdateResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountUpdateResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapAccountUpdateResponseMessage struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           AddressMapAccountUpdateResponseMessagesSource `json:"source"`
+	JSON             addressMapAccountUpdateResponseMessageJSON    `json:"-"`
+}
+
+// addressMapAccountUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [AddressMapAccountUpdateResponseMessage]
+type addressMapAccountUpdateResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AddressMapAccountUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountUpdateResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapAccountUpdateResponseMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    addressMapAccountUpdateResponseMessagesSourceJSON `json:"-"`
+}
+
+// addressMapAccountUpdateResponseMessagesSourceJSON contains the JSON metadata for
+// the struct [AddressMapAccountUpdateResponseMessagesSource]
+type addressMapAccountUpdateResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapAccountUpdateResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountUpdateResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AddressMapAccountUpdateResponseSuccess bool
 
 const (
@@ -110,13 +205,13 @@ func (r AddressMapAccountUpdateResponseSuccess) IsKnown() bool {
 }
 
 type AddressMapAccountUpdateResponseResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                       `json:"total_count"`
 	JSON       addressMapAccountUpdateResponseResultInfoJSON `json:"-"`
 }
@@ -141,9 +236,9 @@ func (r addressMapAccountUpdateResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapAccountDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AddressMapAccountDeleteResponseError   `json:"errors,required"`
+	Messages []AddressMapAccountDeleteResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
 	Success    AddressMapAccountDeleteResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapAccountDeleteResponseResultInfo `json:"result_info"`
 	JSON       addressMapAccountDeleteResponseJSON       `json:"-"`
@@ -168,7 +263,103 @@ func (r addressMapAccountDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AddressMapAccountDeleteResponseError struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           AddressMapAccountDeleteResponseErrorsSource `json:"source"`
+	JSON             addressMapAccountDeleteResponseErrorJSON    `json:"-"`
+}
+
+// addressMapAccountDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [AddressMapAccountDeleteResponseError]
+type addressMapAccountDeleteResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AddressMapAccountDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountDeleteResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapAccountDeleteResponseErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    addressMapAccountDeleteResponseErrorsSourceJSON `json:"-"`
+}
+
+// addressMapAccountDeleteResponseErrorsSourceJSON contains the JSON metadata for
+// the struct [AddressMapAccountDeleteResponseErrorsSource]
+type addressMapAccountDeleteResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapAccountDeleteResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountDeleteResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapAccountDeleteResponseMessage struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           AddressMapAccountDeleteResponseMessagesSource `json:"source"`
+	JSON             addressMapAccountDeleteResponseMessageJSON    `json:"-"`
+}
+
+// addressMapAccountDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AddressMapAccountDeleteResponseMessage]
+type addressMapAccountDeleteResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AddressMapAccountDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountDeleteResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapAccountDeleteResponseMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    addressMapAccountDeleteResponseMessagesSourceJSON `json:"-"`
+}
+
+// addressMapAccountDeleteResponseMessagesSourceJSON contains the JSON metadata for
+// the struct [AddressMapAccountDeleteResponseMessagesSource]
+type addressMapAccountDeleteResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapAccountDeleteResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountDeleteResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AddressMapAccountDeleteResponseSuccess bool
 
 const (
@@ -184,13 +375,13 @@ func (r AddressMapAccountDeleteResponseSuccess) IsKnown() bool {
 }
 
 type AddressMapAccountDeleteResponseResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                       `json:"total_count"`
 	JSON       addressMapAccountDeleteResponseResultInfoJSON `json:"-"`
 }

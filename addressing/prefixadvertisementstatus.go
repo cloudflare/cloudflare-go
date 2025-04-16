@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PrefixAdvertisementStatusService contains methods and other services that help
@@ -150,9 +149,9 @@ func (r PrefixAdvertisementStatusEditParams) MarshalJSON() (data []byte, err err
 }
 
 type PrefixAdvertisementStatusEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []PrefixAdvertisementStatusEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixAdvertisementStatusEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success PrefixAdvertisementStatusEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  PrefixAdvertisementStatusEditResponse                `json:"result"`
 	JSON    prefixAdvertisementStatusEditResponseEnvelopeJSON    `json:"-"`
@@ -177,7 +176,105 @@ func (r prefixAdvertisementStatusEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type PrefixAdvertisementStatusEditResponseEnvelopeErrors struct {
+	Code             int64                                                     `json:"code,required"`
+	Message          string                                                    `json:"message,required"`
+	DocumentationURL string                                                    `json:"documentation_url"`
+	Source           PrefixAdvertisementStatusEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             prefixAdvertisementStatusEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// prefixAdvertisementStatusEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [PrefixAdvertisementStatusEditResponseEnvelopeErrors]
+type prefixAdvertisementStatusEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixAdvertisementStatusEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixAdvertisementStatusEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixAdvertisementStatusEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                                        `json:"pointer"`
+	JSON    prefixAdvertisementStatusEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// prefixAdvertisementStatusEditResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct
+// [PrefixAdvertisementStatusEditResponseEnvelopeErrorsSource]
+type prefixAdvertisementStatusEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixAdvertisementStatusEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixAdvertisementStatusEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixAdvertisementStatusEditResponseEnvelopeMessages struct {
+	Code             int64                                                       `json:"code,required"`
+	Message          string                                                      `json:"message,required"`
+	DocumentationURL string                                                      `json:"documentation_url"`
+	Source           PrefixAdvertisementStatusEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             prefixAdvertisementStatusEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// prefixAdvertisementStatusEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [PrefixAdvertisementStatusEditResponseEnvelopeMessages]
+type prefixAdvertisementStatusEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixAdvertisementStatusEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixAdvertisementStatusEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixAdvertisementStatusEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                                          `json:"pointer"`
+	JSON    prefixAdvertisementStatusEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// prefixAdvertisementStatusEditResponseEnvelopeMessagesSourceJSON contains the
+// JSON metadata for the struct
+// [PrefixAdvertisementStatusEditResponseEnvelopeMessagesSource]
+type prefixAdvertisementStatusEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixAdvertisementStatusEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixAdvertisementStatusEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type PrefixAdvertisementStatusEditResponseEnvelopeSuccess bool
 
 const (
@@ -198,9 +295,9 @@ type PrefixAdvertisementStatusGetParams struct {
 }
 
 type PrefixAdvertisementStatusGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []PrefixAdvertisementStatusGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixAdvertisementStatusGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success PrefixAdvertisementStatusGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  PrefixAdvertisementStatusGetResponse                `json:"result"`
 	JSON    prefixAdvertisementStatusGetResponseEnvelopeJSON    `json:"-"`
@@ -225,7 +322,105 @@ func (r prefixAdvertisementStatusGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type PrefixAdvertisementStatusGetResponseEnvelopeErrors struct {
+	Code             int64                                                    `json:"code,required"`
+	Message          string                                                   `json:"message,required"`
+	DocumentationURL string                                                   `json:"documentation_url"`
+	Source           PrefixAdvertisementStatusGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             prefixAdvertisementStatusGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// prefixAdvertisementStatusGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [PrefixAdvertisementStatusGetResponseEnvelopeErrors]
+type prefixAdvertisementStatusGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixAdvertisementStatusGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixAdvertisementStatusGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixAdvertisementStatusGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                       `json:"pointer"`
+	JSON    prefixAdvertisementStatusGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// prefixAdvertisementStatusGetResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct
+// [PrefixAdvertisementStatusGetResponseEnvelopeErrorsSource]
+type prefixAdvertisementStatusGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixAdvertisementStatusGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixAdvertisementStatusGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixAdvertisementStatusGetResponseEnvelopeMessages struct {
+	Code             int64                                                      `json:"code,required"`
+	Message          string                                                     `json:"message,required"`
+	DocumentationURL string                                                     `json:"documentation_url"`
+	Source           PrefixAdvertisementStatusGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             prefixAdvertisementStatusGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// prefixAdvertisementStatusGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [PrefixAdvertisementStatusGetResponseEnvelopeMessages]
+type prefixAdvertisementStatusGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixAdvertisementStatusGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixAdvertisementStatusGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixAdvertisementStatusGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                         `json:"pointer"`
+	JSON    prefixAdvertisementStatusGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// prefixAdvertisementStatusGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [PrefixAdvertisementStatusGetResponseEnvelopeMessagesSource]
+type prefixAdvertisementStatusGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixAdvertisementStatusGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixAdvertisementStatusGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type PrefixAdvertisementStatusGetResponseEnvelopeSuccess bool
 
 const (
