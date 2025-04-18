@@ -163,8 +163,8 @@ type DispatchNamespaceScriptSecretUpdateResponse struct {
 	Type DispatchNamespaceScriptSecretUpdateResponseType `json:"type,required"`
 	// This field can have the runtime type of [interface{}].
 	Algorithm interface{} `json:"algorithm"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSecretUpdateResponseFormat `json:"format"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
@@ -283,18 +283,18 @@ func (r DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretTextT
 }
 
 type DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKey struct {
-	// Algorithm-specific key parameters
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm interface{} `json:"algorithm,required"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKeyFormat `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKeyType `json:"type,required"`
-	// Allowed operations with the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
 	Usages []DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKeyUsage `json:"usages,required"`
 	JSON   dispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
@@ -323,8 +323,8 @@ func (r dispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKeyJS
 func (r DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKey) implementsDispatchNamespaceScriptSecretUpdateResponse() {
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSecretUpdateResponseWorkersBindingKindSecretKeyFormat string
 
 const (
@@ -394,8 +394,8 @@ func (r DispatchNamespaceScriptSecretUpdateResponseType) IsKnown() bool {
 	return false
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSecretUpdateResponseFormat string
 
 const (
@@ -421,8 +421,8 @@ type DispatchNamespaceScriptSecretListResponse struct {
 	Type DispatchNamespaceScriptSecretListResponseType `json:"type,required"`
 	// This field can have the runtime type of [interface{}].
 	Algorithm interface{} `json:"algorithm"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSecretListResponseFormat `json:"format"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
@@ -541,18 +541,18 @@ func (r DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretTextTyp
 }
 
 type DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKey struct {
-	// Algorithm-specific key parameters
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm interface{} `json:"algorithm,required"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKeyFormat `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKeyType `json:"type,required"`
-	// Allowed operations with the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
 	Usages []DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKeyUsage `json:"usages,required"`
 	JSON   dispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
@@ -581,8 +581,8 @@ func (r dispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKeyJSON
 func (r DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKey) implementsDispatchNamespaceScriptSecretListResponse() {
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSecretListResponseWorkersBindingKindSecretKeyFormat string
 
 const (
@@ -652,8 +652,8 @@ func (r DispatchNamespaceScriptSecretListResponseType) IsKnown() bool {
 	return false
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSecretListResponseFormat string
 
 const (
@@ -681,8 +681,8 @@ type DispatchNamespaceScriptSecretGetResponse struct {
 	Type DispatchNamespaceScriptSecretGetResponseType `json:"type,required"`
 	// This field can have the runtime type of [interface{}].
 	Algorithm interface{} `json:"algorithm"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSecretGetResponseFormat `json:"format"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
@@ -801,18 +801,18 @@ func (r DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretTextType
 }
 
 type DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKey struct {
-	// Algorithm-specific key parameters
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm interface{} `json:"algorithm,required"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKeyFormat `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKeyType `json:"type,required"`
-	// Allowed operations with the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
 	Usages []DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKeyUsage `json:"usages,required"`
 	JSON   dispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
@@ -841,8 +841,8 @@ func (r dispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKeyJSON)
 func (r DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKey) implementsDispatchNamespaceScriptSecretGetResponse() {
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSecretGetResponseWorkersBindingKindSecretKeyFormat string
 
 const (
@@ -912,8 +912,8 @@ func (r DispatchNamespaceScriptSecretGetResponseType) IsKnown() bool {
 	return false
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSecretGetResponseFormat string
 
 const (
@@ -949,8 +949,8 @@ type DispatchNamespaceScriptSecretUpdateParamsBody struct {
 	// The kind of resource that the binding provides.
 	Type      param.Field[DispatchNamespaceScriptSecretUpdateParamsBodyType] `json:"type,required"`
 	Algorithm param.Field[interface{}]                                       `json:"algorithm"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[DispatchNamespaceScriptSecretUpdateParamsBodyFormat] `json:"format"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string]      `json:"key_base64"`
@@ -1009,18 +1009,18 @@ func (r DispatchNamespaceScriptSecretUpdateParamsBodyWorkersBindingKindSecretTex
 }
 
 type DispatchNamespaceScriptSecretUpdateParamsBodyWorkersBindingKindSecretKey struct {
-	// Algorithm-specific key parameters
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm param.Field[interface{}] `json:"algorithm,required"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[DispatchNamespaceScriptSecretUpdateParamsBodyWorkersBindingKindSecretKeyFormat] `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[DispatchNamespaceScriptSecretUpdateParamsBodyWorkersBindingKindSecretKeyType] `json:"type,required"`
-	// Allowed operations with the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
 	Usages param.Field[[]DispatchNamespaceScriptSecretUpdateParamsBodyWorkersBindingKindSecretKeyUsage] `json:"usages,required"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string] `json:"key_base64"`
@@ -1037,8 +1037,8 @@ func (r DispatchNamespaceScriptSecretUpdateParamsBodyWorkersBindingKindSecretKey
 func (r DispatchNamespaceScriptSecretUpdateParamsBodyWorkersBindingKindSecretKey) implementsDispatchNamespaceScriptSecretUpdateParamsBodyUnion() {
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSecretUpdateParamsBodyWorkersBindingKindSecretKeyFormat string
 
 const (
@@ -1108,8 +1108,8 @@ func (r DispatchNamespaceScriptSecretUpdateParamsBodyType) IsKnown() bool {
 	return false
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSecretUpdateParamsBodyFormat string
 
 const (
