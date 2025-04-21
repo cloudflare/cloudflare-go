@@ -230,21 +230,14 @@ func (r routeListResponseJSON) RawJSON() string {
 
 type RouteDeleteResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
-	// Pattern to match incoming requests against.
-	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-	Pattern string `json:"pattern,required"`
-	// Name of the script to run if the route matches.
-	Script string                  `json:"script,required"`
-	JSON   routeDeleteResponseJSON `json:"-"`
+	ID   string                  `json:"id"`
+	JSON routeDeleteResponseJSON `json:"-"`
 }
 
 // routeDeleteResponseJSON contains the JSON metadata for the struct
 // [RouteDeleteResponse]
 type routeDeleteResponseJSON struct {
 	ID          apijson.Field
-	Pattern     apijson.Field
-	Script      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
