@@ -395,20 +395,24 @@ func (r bgpRouteRealtimeResponseJSON) RawJSON() string {
 type BGPRouteRealtimeResponseMeta struct {
 	ASNInfo    []BGPRouteRealtimeResponseMetaASNInfo   `json:"asn_info,required"`
 	Collectors []BGPRouteRealtimeResponseMetaCollector `json:"collectors,required"`
-	RPKI       []BGPRouteRealtimeResponseMetaRPKI      `json:"rpki,required"`
-	Visibility BGPRouteRealtimeResponseMetaVisibility  `json:"visibility,required"`
-	JSON       bgpRouteRealtimeResponseMetaJSON        `json:"-"`
+	// The most recent data timestamp for from the real-time sources.
+	DataTime      string                                     `json:"data_time,required"`
+	PrefixOrigins []BGPRouteRealtimeResponseMetaPrefixOrigin `json:"prefix_origins,required"`
+	// The timestamp of this query.
+	QueryTime string                           `json:"query_time,required"`
+	JSON      bgpRouteRealtimeResponseMetaJSON `json:"-"`
 }
 
 // bgpRouteRealtimeResponseMetaJSON contains the JSON metadata for the struct
 // [BGPRouteRealtimeResponseMeta]
 type bgpRouteRealtimeResponseMetaJSON struct {
-	ASNInfo     apijson.Field
-	Collectors  apijson.Field
-	RPKI        apijson.Field
-	Visibility  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ASNInfo       apijson.Field
+	Collectors    apijson.Field
+	DataTime      apijson.Field
+	PrefixOrigins apijson.Field
+	QueryTime     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *BGPRouteRealtimeResponseMeta) UnmarshalJSON(data []byte) (err error) {
@@ -493,56 +497,40 @@ func (r bgpRouteRealtimeResponseMetaCollectorJSON) RawJSON() string {
 	return r.raw
 }
 
-type BGPRouteRealtimeResponseMetaRPKI struct {
+type BGPRouteRealtimeResponseMetaPrefixOrigin struct {
 	// Origin ASN.
 	Origin int64 `json:"origin,required"`
-	// Validation status: valid, invalid, or unknown.
-	RPKIValidation string                               `json:"rpki_validation,required"`
-	JSON           bgpRouteRealtimeResponseMetaRPKIJSON `json:"-"`
-}
-
-// bgpRouteRealtimeResponseMetaRPKIJSON contains the JSON metadata for the struct
-// [BGPRouteRealtimeResponseMetaRPKI]
-type bgpRouteRealtimeResponseMetaRPKIJSON struct {
-	Origin         apijson.Field
-	RPKIValidation apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *BGPRouteRealtimeResponseMetaRPKI) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpRouteRealtimeResponseMetaRPKIJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPRouteRealtimeResponseMetaVisibility struct {
+	// IP prefix of this query.
+	Prefix string `json:"prefix,required"`
+	// Prefix-origin RPKI validation: valid, invalid, unknown.
+	RPKIValidation string `json:"rpki_validation,required"`
 	// Total number of peers.
 	TotalPeers int64 `json:"total_peers,required"`
 	// Total number of peers seeing this prefix.
 	TotalVisible int64 `json:"total_visible,required"`
 	// Ratio of peers seeing this prefix to total number of peers.
-	Visibility float64                                    `json:"visibility,required"`
-	JSON       bgpRouteRealtimeResponseMetaVisibilityJSON `json:"-"`
+	Visibility float64                                      `json:"visibility,required"`
+	JSON       bgpRouteRealtimeResponseMetaPrefixOriginJSON `json:"-"`
 }
 
-// bgpRouteRealtimeResponseMetaVisibilityJSON contains the JSON metadata for the
-// struct [BGPRouteRealtimeResponseMetaVisibility]
-type bgpRouteRealtimeResponseMetaVisibilityJSON struct {
-	TotalPeers   apijson.Field
-	TotalVisible apijson.Field
-	Visibility   apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+// bgpRouteRealtimeResponseMetaPrefixOriginJSON contains the JSON metadata for the
+// struct [BGPRouteRealtimeResponseMetaPrefixOrigin]
+type bgpRouteRealtimeResponseMetaPrefixOriginJSON struct {
+	Origin         apijson.Field
+	Prefix         apijson.Field
+	RPKIValidation apijson.Field
+	TotalPeers     apijson.Field
+	TotalVisible   apijson.Field
+	Visibility     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
-func (r *BGPRouteRealtimeResponseMetaVisibility) UnmarshalJSON(data []byte) (err error) {
+func (r *BGPRouteRealtimeResponseMetaPrefixOrigin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bgpRouteRealtimeResponseMetaVisibilityJSON) RawJSON() string {
+func (r bgpRouteRealtimeResponseMetaPrefixOriginJSON) RawJSON() string {
 	return r.raw
 }
 
