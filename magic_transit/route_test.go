@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestRouteNew(t *testing.T) {
+func TestRouteNewWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,8 +29,16 @@ func TestRouteNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.Routes.New(context.TODO(), magic_transit.RouteNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:      map[string]interface{}{},
+		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Nexthop:     cloudflare.F("203.0.113.1"),
+		Prefix:      cloudflare.F("192.0.2.0/24"),
+		Priority:    cloudflare.F(int64(0)),
+		Description: cloudflare.F("New route for new prefix 203.0.113.1"),
+		Scope: cloudflare.F(magic_transit.ScopeParam{
+			ColoNames:   cloudflare.F([]string{"den01"}),
+			ColoRegions: cloudflare.F([]string{"APAC"}),
+		}),
+		Weight: cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
