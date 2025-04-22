@@ -59,14 +59,15 @@ func (UnionString) ImplementsOriginPortUnionParam()                             
 func (UnionString) ImplementsOriginPortUnion()                                                     {}
 func (UnionString) ImplementsHealthCheckTargetUnionParam()                                         {}
 func (UnionString) ImplementsHealthCheckTargetUnion()                                              {}
-func (UnionString) ImplementsGRETunnelNewResponseGRETunnelsHealthCheckTargetUnion()                {}
+func (UnionString) ImplementsGRETunnelNewResponseHealthCheckTargetUnion()                          {}
 func (UnionString) ImplementsGRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion()      {}
 func (UnionString) ImplementsGRETunnelListResponseGRETunnelsHealthCheckTargetUnion()               {}
 func (UnionString) ImplementsGRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion()       {}
 func (UnionString) ImplementsGRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion() {}
 func (UnionString) ImplementsGRETunnelGetResponseGRETunnelHealthCheckTargetUnion()                 {}
+func (UnionString) ImplementsGRETunnelNewParamsHealthCheckTargetUnion()                            {}
 func (UnionString) ImplementsGRETunnelUpdateParamsHealthCheckTargetUnion()                         {}
-func (UnionString) ImplementsIPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion()            {}
+func (UnionString) ImplementsIPSECTunnelNewResponseHealthCheckTargetUnion()                        {}
 func (UnionString) ImplementsIPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion()  {}
 func (UnionString) ImplementsIPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion()           {}
 func (UnionString) ImplementsIPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion()   {}

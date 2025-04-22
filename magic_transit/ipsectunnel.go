@@ -37,7 +37,7 @@ func NewIPSECTunnelService(opts ...option.RequestOption) (r *IPSECTunnelService)
 	return
 }
 
-// Creates new IPsec tunnels associated with an account. Use `?validate_only=true`
+// Creates a new IPsec tunnel associated with an account. Use `?validate_only=true`
 // as an optional query parameter to only run validation without persisting
 // changes.
 func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParams, opts ...option.RequestOption) (res *IPSECTunnelNewResponse, err error) {
@@ -225,27 +225,8 @@ func (r pskMetadataJSON) RawJSON() string {
 }
 
 type IPSECTunnelNewResponse struct {
-	IPSECTunnels []IPSECTunnelNewResponseIPSECTunnel `json:"ipsec_tunnels"`
-	JSON         ipsecTunnelNewResponseJSON          `json:"-"`
-}
-
-// ipsecTunnelNewResponseJSON contains the JSON metadata for the struct
-// [IPSECTunnelNewResponse]
-type ipsecTunnelNewResponseJSON struct {
-	IPSECTunnels apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *IPSECTunnelNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipsecTunnelNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPSECTunnelNewResponseIPSECTunnel struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
@@ -254,8 +235,6 @@ type IPSECTunnelNewResponseIPSECTunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name string `json:"name,required"`
-	// Tunnel identifier tag.
-	ID string `json:"id"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -265,25 +244,25 @@ type IPSECTunnelNewResponseIPSECTunnel struct {
 	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint string `json:"customer_endpoint"`
 	// An optional description forthe IPsec tunnel.
-	Description string                                        `json:"description"`
-	HealthCheck IPSECTunnelNewResponseIPSECTunnelsHealthCheck `json:"health_check"`
+	Description string                            `json:"description"`
+	HealthCheck IPSECTunnelNewResponseHealthCheck `json:"health_check"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The PSK metadata that includes when the PSK was generated.
 	PSKMetadata PSKMetadata `json:"psk_metadata"`
 	// If `true`, then IPsec replay protection will be supported in the
 	// Cloudflare-to-customer direction.
-	ReplayProtection bool                                  `json:"replay_protection"`
-	JSON             ipsecTunnelNewResponseIPSECTunnelJSON `json:"-"`
+	ReplayProtection bool                       `json:"replay_protection"`
+	JSON             ipsecTunnelNewResponseJSON `json:"-"`
 }
 
-// ipsecTunnelNewResponseIPSECTunnelJSON contains the JSON metadata for the struct
-// [IPSECTunnelNewResponseIPSECTunnel]
-type ipsecTunnelNewResponseIPSECTunnelJSON struct {
+// ipsecTunnelNewResponseJSON contains the JSON metadata for the struct
+// [IPSECTunnelNewResponse]
+type ipsecTunnelNewResponseJSON struct {
+	ID                 apijson.Field
 	CloudflareEndpoint apijson.Field
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
-	ID                 apijson.Field
 	AllowNullCipher    apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
@@ -296,20 +275,20 @@ type ipsecTunnelNewResponseIPSECTunnelJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *IPSECTunnelNewResponseIPSECTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *IPSECTunnelNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ipsecTunnelNewResponseIPSECTunnelJSON) RawJSON() string {
+func (r ipsecTunnelNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type IPSECTunnelNewResponseIPSECTunnelsHealthCheck struct {
+type IPSECTunnelNewResponseHealthCheck struct {
 	// The direction of the flow of the healthcheck. Either unidirectional, where the
 	// probe comes to you via the tunnel and the result comes back to Cloudflare via
 	// the open Internet, or bidirectional where both the probe and result come and go
 	// via the tunnel.
-	Direction IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirection `json:"direction"`
+	Direction IPSECTunnelNewResponseHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
@@ -321,15 +300,15 @@ type IPSECTunnelNewResponseIPSECTunnelsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
 	// object form if the x-magic-new-hc-target header is set to true and string form
 	// if x-magic-new-hc-target is absent or set to false.
-	Target IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion `json:"target"`
+	Target IPSECTunnelNewResponseHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                   `json:"type"`
-	JSON ipsecTunnelNewResponseIPSECTunnelsHealthCheckJSON `json:"-"`
+	Type HealthCheckType                       `json:"type"`
+	JSON ipsecTunnelNewResponseHealthCheckJSON `json:"-"`
 }
 
-// ipsecTunnelNewResponseIPSECTunnelsHealthCheckJSON contains the JSON metadata for
-// the struct [IPSECTunnelNewResponseIPSECTunnelsHealthCheck]
-type ipsecTunnelNewResponseIPSECTunnelsHealthCheckJSON struct {
+// ipsecTunnelNewResponseHealthCheckJSON contains the JSON metadata for the struct
+// [IPSECTunnelNewResponseHealthCheck]
+type ipsecTunnelNewResponseHealthCheckJSON struct {
 	Direction   apijson.Field
 	Enabled     apijson.Field
 	Rate        apijson.Field
@@ -339,11 +318,11 @@ type ipsecTunnelNewResponseIPSECTunnelsHealthCheckJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IPSECTunnelNewResponseIPSECTunnelsHealthCheck) UnmarshalJSON(data []byte) (err error) {
+func (r *IPSECTunnelNewResponseHealthCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ipsecTunnelNewResponseIPSECTunnelsHealthCheckJSON) RawJSON() string {
+func (r ipsecTunnelNewResponseHealthCheckJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -351,16 +330,16 @@ func (r ipsecTunnelNewResponseIPSECTunnelsHealthCheckJSON) RawJSON() string {
 // probe comes to you via the tunnel and the result comes back to Cloudflare via
 // the open Internet, or bidirectional where both the probe and result come and go
 // via the tunnel.
-type IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirection string
+type IPSECTunnelNewResponseHealthCheckDirection string
 
 const (
-	IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirectionUnidirectional IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirection = "unidirectional"
-	IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirectionBidirectional  IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirection = "bidirectional"
+	IPSECTunnelNewResponseHealthCheckDirectionUnidirectional IPSECTunnelNewResponseHealthCheckDirection = "unidirectional"
+	IPSECTunnelNewResponseHealthCheckDirectionBidirectional  IPSECTunnelNewResponseHealthCheckDirection = "bidirectional"
 )
 
-func (r IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirection) IsKnown() bool {
+func (r IPSECTunnelNewResponseHealthCheckDirection) IsKnown() bool {
 	switch r {
-	case IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirectionUnidirectional, IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirectionBidirectional:
+	case IPSECTunnelNewResponseHealthCheckDirectionUnidirectional, IPSECTunnelNewResponseHealthCheckDirectionBidirectional:
 		return true
 	}
 	return false
@@ -375,19 +354,19 @@ func (r IPSECTunnelNewResponseIPSECTunnelsHealthCheckDirection) IsKnown() bool {
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget]
-// or [shared.UnionString].
-type IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion interface {
-	ImplementsIPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion()
+// [magic_transit.IPSECTunnelNewResponseHealthCheckTargetMagicHealthCheckTarget] or
+// [shared.UnionString].
+type IPSECTunnelNewResponseHealthCheckTargetUnion interface {
+	ImplementsIPSECTunnelNewResponseHealthCheckTargetUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion)(nil)).Elem(),
+		reflect.TypeOf((*IPSECTunnelNewResponseHealthCheckTargetUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget{}),
+			Type:       reflect.TypeOf(IPSECTunnelNewResponseHealthCheckTargetMagicHealthCheckTarget{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -401,36 +380,36 @@ func init() {
 // to this address. This field defaults to `customer_gre_endpoint address`. This
 // field is ignored for bidirectional healthchecks as the interface_address (not
 // assigned to the Cloudflare side of the tunnel) is used as the target.
-type IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget struct {
+type IPSECTunnelNewResponseHealthCheckTargetMagicHealthCheckTarget struct {
 	// The effective health check target. If 'saved' is empty, then this field will be
 	// populated with the calculated default value on GET requests. Ignored in POST,
 	// PUT, and PATCH requests.
 	Effective string `json:"effective"`
 	// The saved health check target. Setting the value to the empty string indicates
 	// that the calculated default value will be used.
-	Saved string                                                                        `json:"saved"`
-	JSON  ipsecTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTargetJSON `json:"-"`
+	Saved string                                                            `json:"saved"`
+	JSON  ipsecTunnelNewResponseHealthCheckTargetMagicHealthCheckTargetJSON `json:"-"`
 }
 
-// ipsecTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTargetJSON
-// contains the JSON metadata for the struct
-// [IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget]
-type ipsecTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTargetJSON struct {
+// ipsecTunnelNewResponseHealthCheckTargetMagicHealthCheckTargetJSON contains the
+// JSON metadata for the struct
+// [IPSECTunnelNewResponseHealthCheckTargetMagicHealthCheckTarget]
+type ipsecTunnelNewResponseHealthCheckTargetMagicHealthCheckTargetJSON struct {
 	Effective   apijson.Field
 	Saved       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) UnmarshalJSON(data []byte) (err error) {
+func (r *IPSECTunnelNewResponseHealthCheckTargetMagicHealthCheckTarget) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ipsecTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTargetJSON) RawJSON() string {
+func (r ipsecTunnelNewResponseHealthCheckTargetMagicHealthCheckTargetJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsIPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion() {
+func (r IPSECTunnelNewResponseHealthCheckTargetMagicHealthCheckTarget) ImplementsIPSECTunnelNewResponseHealthCheckTargetUnion() {
 }
 
 type IPSECTunnelUpdateResponse struct {
@@ -457,6 +436,8 @@ func (r ipsecTunnelUpdateResponseJSON) RawJSON() string {
 }
 
 type IPSECTunnelUpdateResponseModifiedIPSECTunnel struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
@@ -465,8 +446,6 @@ type IPSECTunnelUpdateResponseModifiedIPSECTunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name string `json:"name,required"`
-	// Tunnel identifier tag.
-	ID string `json:"id"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -491,10 +470,10 @@ type IPSECTunnelUpdateResponseModifiedIPSECTunnel struct {
 // ipsecTunnelUpdateResponseModifiedIPSECTunnelJSON contains the JSON metadata for
 // the struct [IPSECTunnelUpdateResponseModifiedIPSECTunnel]
 type ipsecTunnelUpdateResponseModifiedIPSECTunnelJSON struct {
+	ID                 apijson.Field
 	CloudflareEndpoint apijson.Field
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
-	ID                 apijson.Field
 	AllowNullCipher    apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
@@ -667,6 +646,8 @@ func (r ipsecTunnelListResponseJSON) RawJSON() string {
 }
 
 type IPSECTunnelListResponseIPSECTunnel struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
@@ -675,8 +656,6 @@ type IPSECTunnelListResponseIPSECTunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name string `json:"name,required"`
-	// Tunnel identifier tag.
-	ID string `json:"id"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -701,10 +680,10 @@ type IPSECTunnelListResponseIPSECTunnel struct {
 // ipsecTunnelListResponseIPSECTunnelJSON contains the JSON metadata for the struct
 // [IPSECTunnelListResponseIPSECTunnel]
 type ipsecTunnelListResponseIPSECTunnelJSON struct {
+	ID                 apijson.Field
 	CloudflareEndpoint apijson.Field
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
-	ID                 apijson.Field
 	AllowNullCipher    apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
@@ -878,6 +857,8 @@ func (r ipsecTunnelDeleteResponseJSON) RawJSON() string {
 }
 
 type IPSECTunnelDeleteResponseDeletedIPSECTunnel struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
@@ -886,8 +867,6 @@ type IPSECTunnelDeleteResponseDeletedIPSECTunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name string `json:"name,required"`
-	// Tunnel identifier tag.
-	ID string `json:"id"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -912,10 +891,10 @@ type IPSECTunnelDeleteResponseDeletedIPSECTunnel struct {
 // ipsecTunnelDeleteResponseDeletedIPSECTunnelJSON contains the JSON metadata for
 // the struct [IPSECTunnelDeleteResponseDeletedIPSECTunnel]
 type ipsecTunnelDeleteResponseDeletedIPSECTunnelJSON struct {
+	ID                 apijson.Field
 	CloudflareEndpoint apijson.Field
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
-	ID                 apijson.Field
 	AllowNullCipher    apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
@@ -1089,6 +1068,8 @@ func (r ipsecTunnelBulkUpdateResponseJSON) RawJSON() string {
 }
 
 type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
@@ -1097,8 +1078,6 @@ type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name string `json:"name,required"`
-	// Tunnel identifier tag.
-	ID string `json:"id"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -1123,10 +1102,10 @@ type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel struct {
 // ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON contains the JSON metadata
 // for the struct [IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel]
 type ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON struct {
+	ID                 apijson.Field
 	CloudflareEndpoint apijson.Field
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
-	ID                 apijson.Field
 	AllowNullCipher    apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
@@ -1299,6 +1278,8 @@ func (r ipsecTunnelGetResponseJSON) RawJSON() string {
 }
 
 type IPSECTunnelGetResponseIPSECTunnel struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
@@ -1307,8 +1288,6 @@ type IPSECTunnelGetResponseIPSECTunnel struct {
 	InterfaceAddress string `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name string `json:"name,required"`
-	// Tunnel identifier tag.
-	ID string `json:"id"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -1333,10 +1312,10 @@ type IPSECTunnelGetResponseIPSECTunnel struct {
 // ipsecTunnelGetResponseIPSECTunnelJSON contains the JSON metadata for the struct
 // [IPSECTunnelGetResponseIPSECTunnel]
 type ipsecTunnelGetResponseIPSECTunnelJSON struct {
+	ID                 apijson.Field
 	CloudflareEndpoint apijson.Field
 	InterfaceAddress   apijson.Field
 	Name               apijson.Field
-	ID                 apijson.Field
 	AllowNullCipher    apijson.Field
 	CreatedOn          apijson.Field
 	CustomerEndpoint   apijson.Field
