@@ -167,13 +167,16 @@ type OperationSchemaValidationUpdateResponse struct {
 	//   - `null` indicates that no operation level mitigation is in place, see Zone
 	//     Level Schema Validation Settings for mitigation action that will be applied
 	MitigationAction OperationSchemaValidationUpdateResponseMitigationAction `json:"mitigation_action,nullable"`
-	JSON             operationSchemaValidationUpdateResponseJSON             `json:"-"`
+	// UUID.
+	OperationID string                                      `json:"operation_id"`
+	JSON        operationSchemaValidationUpdateResponseJSON `json:"-"`
 }
 
 // operationSchemaValidationUpdateResponseJSON contains the JSON metadata for the
 // struct [OperationSchemaValidationUpdateResponse]
 type operationSchemaValidationUpdateResponseJSON struct {
 	MitigationAction apijson.Field
+	OperationID      apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -220,13 +223,16 @@ type OperationSchemaValidationGetResponse struct {
 	//   - `null` indicates that no operation level mitigation is in place, see Zone
 	//     Level Schema Validation Settings for mitigation action that will be applied
 	MitigationAction OperationSchemaValidationGetResponseMitigationAction `json:"mitigation_action,nullable"`
-	JSON             operationSchemaValidationGetResponseJSON             `json:"-"`
+	// UUID.
+	OperationID string                                   `json:"operation_id"`
+	JSON        operationSchemaValidationGetResponseJSON `json:"-"`
 }
 
 // operationSchemaValidationGetResponseJSON contains the JSON metadata for the
 // struct [OperationSchemaValidationGetResponse]
 type operationSchemaValidationGetResponseJSON struct {
 	MitigationAction apijson.Field
+	OperationID      apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
