@@ -163,7 +163,10 @@ func (r *DevicePolicyCustomService) Get(ctx context.Context, policyID string, qu
 
 type DevicePolicyCustomNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The wirefilter expression to match devices.
+	// The wirefilter expression to match devices. Available values: "identity.email",
+	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
+	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
+	// "os.version"
 	Match param.Field[string] `json:"match,required"`
 	// The name of the device settings profile.
 	Name param.Field[string] `json:"name,required"`
@@ -312,7 +315,10 @@ type DevicePolicyCustomEditParams struct {
 	// List of routes included in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
 	Include param.Field[[]SplitTunnelIncludeUnionParam] `json:"include"`
-	// The wirefilter expression to match devices.
+	// The wirefilter expression to match devices. Available values: "identity.email",
+	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
+	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
+	// "os.version"
 	Match param.Field[string] `json:"match"`
 	// The name of the device settings profile.
 	Name param.Field[string] `json:"name"`

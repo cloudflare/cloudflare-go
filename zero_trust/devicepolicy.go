@@ -122,7 +122,10 @@ type SettingsPolicy struct {
 	// The size of the subnet for the local access network. Note that this field is
 	// omitted from the response if null or unset.
 	LANAllowSubnetSize float64 `json:"lan_allow_subnet_size"`
-	// The wirefilter expression to match devices.
+	// The wirefilter expression to match devices. Available values: "identity.email",
+	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
+	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
+	// "os.version"
 	Match string `json:"match"`
 	// The name of the device settings profile.
 	Name     string `json:"name"`
