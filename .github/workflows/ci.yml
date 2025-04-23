@@ -16,7 +16,7 @@ jobs:
   lint:
     timeout-minutes: 10
     name: lint
-    runs-on: depot-ubuntu-24.04
+    runs-on: ${{ github.repository == 'stainless-sdks/cloudflare-go' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
   test:
     timeout-minutes: 10
     name: test
-    runs-on: depot-ubuntu-24.04
+    runs-on: ${{ github.repository == 'stainless-sdks/cloudflare-go' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
 
     steps:
       - uses: actions/checkout@v4
