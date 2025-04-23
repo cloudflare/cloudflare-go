@@ -29,7 +29,6 @@ func TestRouteNew(t *testing.T) {
 	)
 	_, err := client.Workers.Routes.New(context.TODO(), workers.RouteNewParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Pattern: cloudflare.F("example.com/*"),
 		Script:  cloudflare.F("my-workers-script"),
 	})
@@ -60,7 +59,6 @@ func TestRouteUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		workers.RouteUpdateParams{
 			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Pattern: cloudflare.F("example.com/*"),
 			Script:  cloudflare.F("my-workers-script"),
 		},
