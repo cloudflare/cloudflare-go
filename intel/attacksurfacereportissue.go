@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AttackSurfaceReportIssueService contains methods and other services that help
@@ -277,9 +276,9 @@ func (r attackSurfaceReportIssueClassResponseJSON) RawJSON() string {
 }
 
 type AttackSurfaceReportIssueDismissResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AttackSurfaceReportIssueDismissResponseError   `json:"errors,required"`
+	Messages []AttackSurfaceReportIssueDismissResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AttackSurfaceReportIssueDismissResponseSuccess `json:"success,required"`
 	JSON    attackSurfaceReportIssueDismissResponseJSON    `json:"-"`
 }
@@ -302,7 +301,103 @@ func (r attackSurfaceReportIssueDismissResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AttackSurfaceReportIssueDismissResponseError struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           AttackSurfaceReportIssueDismissResponseErrorsSource `json:"source"`
+	JSON             attackSurfaceReportIssueDismissResponseErrorJSON    `json:"-"`
+}
+
+// attackSurfaceReportIssueDismissResponseErrorJSON contains the JSON metadata for
+// the struct [AttackSurfaceReportIssueDismissResponseError]
+type attackSurfaceReportIssueDismissResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueDismissResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueDismissResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueDismissResponseErrorsSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    attackSurfaceReportIssueDismissResponseErrorsSourceJSON `json:"-"`
+}
+
+// attackSurfaceReportIssueDismissResponseErrorsSourceJSON contains the JSON
+// metadata for the struct [AttackSurfaceReportIssueDismissResponseErrorsSource]
+type attackSurfaceReportIssueDismissResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueDismissResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueDismissResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueDismissResponseMessage struct {
+	Code             int64                                                 `json:"code,required"`
+	Message          string                                                `json:"message,required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           AttackSurfaceReportIssueDismissResponseMessagesSource `json:"source"`
+	JSON             attackSurfaceReportIssueDismissResponseMessageJSON    `json:"-"`
+}
+
+// attackSurfaceReportIssueDismissResponseMessageJSON contains the JSON metadata
+// for the struct [AttackSurfaceReportIssueDismissResponseMessage]
+type attackSurfaceReportIssueDismissResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueDismissResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueDismissResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueDismissResponseMessagesSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    attackSurfaceReportIssueDismissResponseMessagesSourceJSON `json:"-"`
+}
+
+// attackSurfaceReportIssueDismissResponseMessagesSourceJSON contains the JSON
+// metadata for the struct [AttackSurfaceReportIssueDismissResponseMessagesSource]
+type attackSurfaceReportIssueDismissResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueDismissResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueDismissResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AttackSurfaceReportIssueDismissResponseSuccess bool
 
 const (
@@ -364,7 +459,7 @@ func (r attackSurfaceReportIssueTypeResponseJSON) RawJSON() string {
 }
 
 type AttackSurfaceReportIssueListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID     param.Field[string]      `path:"account_id,required"`
 	Dismissed     param.Field[bool]        `query:"dismissed"`
 	IssueClass    param.Field[[]string]    `query:"issue_class"`
@@ -393,7 +488,7 @@ func (r AttackSurfaceReportIssueListParams) URLQuery() (v url.Values) {
 }
 
 type AttackSurfaceReportIssueClassParams struct {
-	// Identifier
+	// Identifier.
 	AccountID     param.Field[string]               `path:"account_id,required"`
 	Dismissed     param.Field[bool]                 `query:"dismissed"`
 	IssueClass    param.Field[[]string]             `query:"issue_class"`
@@ -418,9 +513,9 @@ func (r AttackSurfaceReportIssueClassParams) URLQuery() (v url.Values) {
 }
 
 type AttackSurfaceReportIssueClassResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AttackSurfaceReportIssueClassResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AttackSurfaceReportIssueClassResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AttackSurfaceReportIssueClassResponseEnvelopeSuccess `json:"success,required"`
 	Result  []AttackSurfaceReportIssueClassResponse              `json:"result"`
 	JSON    attackSurfaceReportIssueClassResponseEnvelopeJSON    `json:"-"`
@@ -445,7 +540,105 @@ func (r attackSurfaceReportIssueClassResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AttackSurfaceReportIssueClassResponseEnvelopeErrors struct {
+	Code             int64                                                     `json:"code,required"`
+	Message          string                                                    `json:"message,required"`
+	DocumentationURL string                                                    `json:"documentation_url"`
+	Source           AttackSurfaceReportIssueClassResponseEnvelopeErrorsSource `json:"source"`
+	JSON             attackSurfaceReportIssueClassResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// attackSurfaceReportIssueClassResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AttackSurfaceReportIssueClassResponseEnvelopeErrors]
+type attackSurfaceReportIssueClassResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueClassResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueClassResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueClassResponseEnvelopeErrorsSource struct {
+	Pointer string                                                        `json:"pointer"`
+	JSON    attackSurfaceReportIssueClassResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// attackSurfaceReportIssueClassResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct
+// [AttackSurfaceReportIssueClassResponseEnvelopeErrorsSource]
+type attackSurfaceReportIssueClassResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueClassResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueClassResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueClassResponseEnvelopeMessages struct {
+	Code             int64                                                       `json:"code,required"`
+	Message          string                                                      `json:"message,required"`
+	DocumentationURL string                                                      `json:"documentation_url"`
+	Source           AttackSurfaceReportIssueClassResponseEnvelopeMessagesSource `json:"source"`
+	JSON             attackSurfaceReportIssueClassResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// attackSurfaceReportIssueClassResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AttackSurfaceReportIssueClassResponseEnvelopeMessages]
+type attackSurfaceReportIssueClassResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueClassResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueClassResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueClassResponseEnvelopeMessagesSource struct {
+	Pointer string                                                          `json:"pointer"`
+	JSON    attackSurfaceReportIssueClassResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// attackSurfaceReportIssueClassResponseEnvelopeMessagesSourceJSON contains the
+// JSON metadata for the struct
+// [AttackSurfaceReportIssueClassResponseEnvelopeMessagesSource]
+type attackSurfaceReportIssueClassResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueClassResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueClassResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AttackSurfaceReportIssueClassResponseEnvelopeSuccess bool
 
 const (
@@ -461,7 +654,7 @@ func (r AttackSurfaceReportIssueClassResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AttackSurfaceReportIssueDismissParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Dismiss   param.Field[bool]   `json:"dismiss"`
 }
@@ -471,7 +664,7 @@ func (r AttackSurfaceReportIssueDismissParams) MarshalJSON() (data []byte, err e
 }
 
 type AttackSurfaceReportIssueSeverityParams struct {
-	// Identifier
+	// Identifier.
 	AccountID     param.Field[string]               `path:"account_id,required"`
 	Dismissed     param.Field[bool]                 `query:"dismissed"`
 	IssueClass    param.Field[[]string]             `query:"issue_class"`
@@ -496,9 +689,9 @@ func (r AttackSurfaceReportIssueSeverityParams) URLQuery() (v url.Values) {
 }
 
 type AttackSurfaceReportIssueSeverityResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AttackSurfaceReportIssueSeverityResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AttackSurfaceReportIssueSeverityResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess `json:"success,required"`
 	Result  []AttackSurfaceReportIssueSeverityResponse              `json:"result"`
 	JSON    attackSurfaceReportIssueSeverityResponseEnvelopeJSON    `json:"-"`
@@ -523,7 +716,106 @@ func (r attackSurfaceReportIssueSeverityResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AttackSurfaceReportIssueSeverityResponseEnvelopeErrors struct {
+	Code             int64                                                        `json:"code,required"`
+	Message          string                                                       `json:"message,required"`
+	DocumentationURL string                                                       `json:"documentation_url"`
+	Source           AttackSurfaceReportIssueSeverityResponseEnvelopeErrorsSource `json:"source"`
+	JSON             attackSurfaceReportIssueSeverityResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// attackSurfaceReportIssueSeverityResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AttackSurfaceReportIssueSeverityResponseEnvelopeErrors]
+type attackSurfaceReportIssueSeverityResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueSeverityResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueSeverityResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueSeverityResponseEnvelopeErrorsSource struct {
+	Pointer string                                                           `json:"pointer"`
+	JSON    attackSurfaceReportIssueSeverityResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// attackSurfaceReportIssueSeverityResponseEnvelopeErrorsSourceJSON contains the
+// JSON metadata for the struct
+// [AttackSurfaceReportIssueSeverityResponseEnvelopeErrorsSource]
+type attackSurfaceReportIssueSeverityResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueSeverityResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueSeverityResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueSeverityResponseEnvelopeMessages struct {
+	Code             int64                                                          `json:"code,required"`
+	Message          string                                                         `json:"message,required"`
+	DocumentationURL string                                                         `json:"documentation_url"`
+	Source           AttackSurfaceReportIssueSeverityResponseEnvelopeMessagesSource `json:"source"`
+	JSON             attackSurfaceReportIssueSeverityResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// attackSurfaceReportIssueSeverityResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [AttackSurfaceReportIssueSeverityResponseEnvelopeMessages]
+type attackSurfaceReportIssueSeverityResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueSeverityResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueSeverityResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueSeverityResponseEnvelopeMessagesSource struct {
+	Pointer string                                                             `json:"pointer"`
+	JSON    attackSurfaceReportIssueSeverityResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// attackSurfaceReportIssueSeverityResponseEnvelopeMessagesSourceJSON contains the
+// JSON metadata for the struct
+// [AttackSurfaceReportIssueSeverityResponseEnvelopeMessagesSource]
+type attackSurfaceReportIssueSeverityResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueSeverityResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueSeverityResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess bool
 
 const (
@@ -539,7 +831,7 @@ func (r AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess) IsKnown() bool 
 }
 
 type AttackSurfaceReportIssueTypeParams struct {
-	// Identifier
+	// Identifier.
 	AccountID     param.Field[string]               `path:"account_id,required"`
 	Dismissed     param.Field[bool]                 `query:"dismissed"`
 	IssueClass    param.Field[[]string]             `query:"issue_class"`
@@ -564,9 +856,9 @@ func (r AttackSurfaceReportIssueTypeParams) URLQuery() (v url.Values) {
 }
 
 type AttackSurfaceReportIssueTypeResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AttackSurfaceReportIssueTypeResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AttackSurfaceReportIssueTypeResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AttackSurfaceReportIssueTypeResponseEnvelopeSuccess `json:"success,required"`
 	Result  []AttackSurfaceReportIssueTypeResponse              `json:"result"`
 	JSON    attackSurfaceReportIssueTypeResponseEnvelopeJSON    `json:"-"`
@@ -591,7 +883,105 @@ func (r attackSurfaceReportIssueTypeResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AttackSurfaceReportIssueTypeResponseEnvelopeErrors struct {
+	Code             int64                                                    `json:"code,required"`
+	Message          string                                                   `json:"message,required"`
+	DocumentationURL string                                                   `json:"documentation_url"`
+	Source           AttackSurfaceReportIssueTypeResponseEnvelopeErrorsSource `json:"source"`
+	JSON             attackSurfaceReportIssueTypeResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// attackSurfaceReportIssueTypeResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AttackSurfaceReportIssueTypeResponseEnvelopeErrors]
+type attackSurfaceReportIssueTypeResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueTypeResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueTypeResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueTypeResponseEnvelopeErrorsSource struct {
+	Pointer string                                                       `json:"pointer"`
+	JSON    attackSurfaceReportIssueTypeResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// attackSurfaceReportIssueTypeResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct
+// [AttackSurfaceReportIssueTypeResponseEnvelopeErrorsSource]
+type attackSurfaceReportIssueTypeResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueTypeResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueTypeResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueTypeResponseEnvelopeMessages struct {
+	Code             int64                                                      `json:"code,required"`
+	Message          string                                                     `json:"message,required"`
+	DocumentationURL string                                                     `json:"documentation_url"`
+	Source           AttackSurfaceReportIssueTypeResponseEnvelopeMessagesSource `json:"source"`
+	JSON             attackSurfaceReportIssueTypeResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// attackSurfaceReportIssueTypeResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AttackSurfaceReportIssueTypeResponseEnvelopeMessages]
+type attackSurfaceReportIssueTypeResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueTypeResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueTypeResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackSurfaceReportIssueTypeResponseEnvelopeMessagesSource struct {
+	Pointer string                                                         `json:"pointer"`
+	JSON    attackSurfaceReportIssueTypeResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// attackSurfaceReportIssueTypeResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [AttackSurfaceReportIssueTypeResponseEnvelopeMessagesSource]
+type attackSurfaceReportIssueTypeResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueTypeResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueTypeResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AttackSurfaceReportIssueTypeResponseEnvelopeSuccess bool
 
 const (

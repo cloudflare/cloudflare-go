@@ -61,6 +61,6 @@ func (r *AttackSurfaceReportIssueTypeService) GetAutoPaging(ctx context.Context,
 }
 
 type AttackSurfaceReportIssueTypeGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
