@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InsightService contains methods and other services that help with interacting
@@ -204,9 +203,9 @@ func (r InsightListResponseIssuesSeverity) IsKnown() bool {
 }
 
 type InsightDismissResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []InsightDismissResponseError   `json:"errors,required"`
+	Messages []InsightDismissResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
 	Success InsightDismissResponseSuccess `json:"success,required"`
 	JSON    insightDismissResponseJSON    `json:"-"`
 }
@@ -229,7 +228,103 @@ func (r insightDismissResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type InsightDismissResponseError struct {
+	Code             int64                              `json:"code,required"`
+	Message          string                             `json:"message,required"`
+	DocumentationURL string                             `json:"documentation_url"`
+	Source           InsightDismissResponseErrorsSource `json:"source"`
+	JSON             insightDismissResponseErrorJSON    `json:"-"`
+}
+
+// insightDismissResponseErrorJSON contains the JSON metadata for the struct
+// [InsightDismissResponseError]
+type insightDismissResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InsightDismissResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightDismissResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightDismissResponseErrorsSource struct {
+	Pointer string                                 `json:"pointer"`
+	JSON    insightDismissResponseErrorsSourceJSON `json:"-"`
+}
+
+// insightDismissResponseErrorsSourceJSON contains the JSON metadata for the struct
+// [InsightDismissResponseErrorsSource]
+type insightDismissResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightDismissResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightDismissResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightDismissResponseMessage struct {
+	Code             int64                                `json:"code,required"`
+	Message          string                               `json:"message,required"`
+	DocumentationURL string                               `json:"documentation_url"`
+	Source           InsightDismissResponseMessagesSource `json:"source"`
+	JSON             insightDismissResponseMessageJSON    `json:"-"`
+}
+
+// insightDismissResponseMessageJSON contains the JSON metadata for the struct
+// [InsightDismissResponseMessage]
+type insightDismissResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InsightDismissResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightDismissResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightDismissResponseMessagesSource struct {
+	Pointer string                                   `json:"pointer"`
+	JSON    insightDismissResponseMessagesSourceJSON `json:"-"`
+}
+
+// insightDismissResponseMessagesSourceJSON contains the JSON metadata for the
+// struct [InsightDismissResponseMessagesSource]
+type insightDismissResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightDismissResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightDismissResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type InsightDismissResponseSuccess bool
 
 const (

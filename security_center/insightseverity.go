@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InsightSeverityService contains methods and other services that help with
@@ -119,9 +118,9 @@ func (r InsightSeverityGetParams) URLQuery() (v url.Values) {
 }
 
 type InsightSeverityGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []InsightSeverityGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []InsightSeverityGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success InsightSeverityGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  []InsightSeverityGetResponse              `json:"result"`
 	JSON    insightSeverityGetResponseEnvelopeJSON    `json:"-"`
@@ -146,7 +145,103 @@ func (r insightSeverityGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type InsightSeverityGetResponseEnvelopeErrors struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           InsightSeverityGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             insightSeverityGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// insightSeverityGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [InsightSeverityGetResponseEnvelopeErrors]
+type insightSeverityGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InsightSeverityGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightSeverityGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightSeverityGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    insightSeverityGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// insightSeverityGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [InsightSeverityGetResponseEnvelopeErrorsSource]
+type insightSeverityGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightSeverityGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightSeverityGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightSeverityGetResponseEnvelopeMessages struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           InsightSeverityGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             insightSeverityGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// insightSeverityGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [InsightSeverityGetResponseEnvelopeMessages]
+type insightSeverityGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InsightSeverityGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightSeverityGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightSeverityGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    insightSeverityGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// insightSeverityGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [InsightSeverityGetResponseEnvelopeMessagesSource]
+type insightSeverityGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightSeverityGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightSeverityGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type InsightSeverityGetResponseEnvelopeSuccess bool
 
 const (
