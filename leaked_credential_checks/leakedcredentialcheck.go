@@ -36,7 +36,7 @@ func NewLeakedCredentialCheckService(opts ...option.RequestOption) (r *LeakedCre
 	return
 }
 
-// Updates the current status of Leaked Credential Checks
+// Updates the current status of Leaked Credential Checks.
 func (r *LeakedCredentialCheckService) New(ctx context.Context, params LeakedCredentialCheckNewParams, opts ...option.RequestOption) (res *LeakedCredentialCheckNewResponse, err error) {
 	var env LeakedCredentialCheckNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -53,7 +53,7 @@ func (r *LeakedCredentialCheckService) New(ctx context.Context, params LeakedCre
 	return
 }
 
-// Retrieves the current status of Leaked Credential Checks
+// Retrieves the current status of Leaked Credential Checks.
 func (r *LeakedCredentialCheckService) Get(ctx context.Context, query LeakedCredentialCheckGetParams, opts ...option.RequestOption) (res *LeakedCredentialCheckGetResponse, err error) {
 	var env LeakedCredentialCheckGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -70,9 +70,9 @@ func (r *LeakedCredentialCheckService) Get(ctx context.Context, query LeakedCred
 	return
 }
 
-// The overall status for Leaked Credential Checks
+// Defines the overall status for Leaked Credential Checks.
 type LeakedCredentialCheckNewResponse struct {
-	// Whether or not Leaked Credential Checks are enabled
+	// Determines whether or not Leaked Credential Checks are enabled.
 	Enabled bool                                 `json:"enabled"`
 	JSON    leakedCredentialCheckNewResponseJSON `json:"-"`
 }
@@ -93,9 +93,9 @@ func (r leakedCredentialCheckNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The overall status for Leaked Credential Checks
+// Defines the overall status for Leaked Credential Checks.
 type LeakedCredentialCheckGetResponse struct {
-	// Whether or not Leaked Credential Checks are enabled
+	// Determines whether or not Leaked Credential Checks are enabled.
 	Enabled bool                                 `json:"enabled"`
 	JSON    leakedCredentialCheckGetResponseJSON `json:"-"`
 }
@@ -117,9 +117,9 @@ func (r leakedCredentialCheckGetResponseJSON) RawJSON() string {
 }
 
 type LeakedCredentialCheckNewParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Whether or not Leaked Credential Checks are enabled
+	// Determines whether or not Leaked Credential Checks are enabled.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
@@ -130,9 +130,9 @@ func (r LeakedCredentialCheckNewParams) MarshalJSON() (data []byte, err error) {
 type LeakedCredentialCheckNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// The overall status for Leaked Credential Checks
+	// Defines the overall status for Leaked Credential Checks.
 	Result LeakedCredentialCheckNewResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success LeakedCredentialCheckNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    leakedCredentialCheckNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -156,7 +156,7 @@ func (r leakedCredentialCheckNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type LeakedCredentialCheckNewResponseEnvelopeSuccess bool
 
 const (
@@ -172,16 +172,16 @@ func (r LeakedCredentialCheckNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LeakedCredentialCheckGetParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type LeakedCredentialCheckGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// The overall status for Leaked Credential Checks
+	// Defines the overall status for Leaked Credential Checks.
 	Result LeakedCredentialCheckGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success LeakedCredentialCheckGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    leakedCredentialCheckGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -205,7 +205,7 @@ func (r leakedCredentialCheckGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type LeakedCredentialCheckGetResponseEnvelopeSuccess bool
 
 const (

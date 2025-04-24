@@ -35,7 +35,7 @@ func NewDetectionService(opts ...option.RequestOption) (r *DetectionService) {
 	return
 }
 
-// Create user-defined detection pattern for Leaked Credential Checks
+// Create user-defined detection pattern for Leaked Credential Checks.
 func (r *DetectionService) New(ctx context.Context, params DetectionNewParams, opts ...option.RequestOption) (res *DetectionNewResponse, err error) {
 	var env DetectionNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -52,7 +52,7 @@ func (r *DetectionService) New(ctx context.Context, params DetectionNewParams, o
 	return
 }
 
-// Update user-defined detection pattern for Leaked Credential Checks
+// Update user-defined detection pattern for Leaked Credential Checks.
 func (r *DetectionService) Update(ctx context.Context, detectionID string, params DetectionUpdateParams, opts ...option.RequestOption) (res *DetectionUpdateResponse, err error) {
 	var env DetectionUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -73,7 +73,7 @@ func (r *DetectionService) Update(ctx context.Context, detectionID string, param
 	return
 }
 
-// List user-defined detection patterns for Leaked Credential Checks
+// List user-defined detection patterns for Leaked Credential Checks.
 func (r *DetectionService) List(ctx context.Context, query DetectionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DetectionListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -95,12 +95,12 @@ func (r *DetectionService) List(ctx context.Context, query DetectionListParams, 
 	return res, nil
 }
 
-// List user-defined detection patterns for Leaked Credential Checks
+// List user-defined detection patterns for Leaked Credential Checks.
 func (r *DetectionService) ListAutoPaging(ctx context.Context, query DetectionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DetectionListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Remove user-defined detection pattern for Leaked Credential Checks
+// Remove user-defined detection pattern for Leaked Credential Checks.
 func (r *DetectionService) Delete(ctx context.Context, detectionID string, body DetectionDeleteParams, opts ...option.RequestOption) (res *DetectionDeleteResponse, err error) {
 	var env DetectionDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -121,14 +121,14 @@ func (r *DetectionService) Delete(ctx context.Context, detectionID string, body 
 	return
 }
 
-// A custom set of username/password expressions to match Leaked Credential Checks
-// on
+// Defines a custom set of username/password expressions to match Leaked Credential
+// Checks on.
 type DetectionNewResponse struct {
-	// The unique ID for this custom detection
+	// Defines the unique ID for this custom detection.
 	ID string `json:"id"`
-	// The ruleset expression to use in matching the password in a request
+	// Defines ehe ruleset expression to use in matching the password in a request.
 	Password string `json:"password"`
-	// The ruleset expression to use in matching the username in a request
+	// Defines the ruleset expression to use in matching the username in a request.
 	Username string                   `json:"username"`
 	JSON     detectionNewResponseJSON `json:"-"`
 }
@@ -151,14 +151,14 @@ func (r detectionNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A custom set of username/password expressions to match Leaked Credential Checks
-// on
+// Defines a custom set of username/password expressions to match Leaked Credential
+// Checks on.
 type DetectionUpdateResponse struct {
-	// The unique ID for this custom detection
+	// Defines the unique ID for this custom detection.
 	ID string `json:"id"`
-	// The ruleset expression to use in matching the password in a request
+	// Defines ehe ruleset expression to use in matching the password in a request.
 	Password string `json:"password"`
-	// The ruleset expression to use in matching the username in a request
+	// Defines the ruleset expression to use in matching the username in a request.
 	Username string                      `json:"username"`
 	JSON     detectionUpdateResponseJSON `json:"-"`
 }
@@ -181,14 +181,14 @@ func (r detectionUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A custom set of username/password expressions to match Leaked Credential Checks
-// on
+// Defines a custom set of username/password expressions to match Leaked Credential
+// Checks on.
 type DetectionListResponse struct {
-	// The unique ID for this custom detection
+	// Defines the unique ID for this custom detection.
 	ID string `json:"id"`
-	// The ruleset expression to use in matching the password in a request
+	// Defines ehe ruleset expression to use in matching the password in a request.
 	Password string `json:"password"`
-	// The ruleset expression to use in matching the username in a request
+	// Defines the ruleset expression to use in matching the username in a request.
 	Username string                    `json:"username"`
 	JSON     detectionListResponseJSON `json:"-"`
 }
@@ -214,11 +214,11 @@ func (r detectionListResponseJSON) RawJSON() string {
 type DetectionDeleteResponse = interface{}
 
 type DetectionNewParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The ruleset expression to use in matching the password in a request
+	// Defines ehe ruleset expression to use in matching the password in a request.
 	Password param.Field[string] `json:"password"`
-	// The ruleset expression to use in matching the username in a request
+	// Defines the ruleset expression to use in matching the username in a request.
 	Username param.Field[string] `json:"username"`
 }
 
@@ -229,10 +229,10 @@ func (r DetectionNewParams) MarshalJSON() (data []byte, err error) {
 type DetectionNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// A custom set of username/password expressions to match Leaked Credential Checks
-	// on
+	// Defines a custom set of username/password expressions to match Leaked Credential
+	// Checks on.
 	Result DetectionNewResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success DetectionNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    detectionNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -256,7 +256,7 @@ func (r detectionNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type DetectionNewResponseEnvelopeSuccess bool
 
 const (
@@ -272,11 +272,11 @@ func (r DetectionNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DetectionUpdateParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The ruleset expression to use in matching the password in a request
+	// Defines ehe ruleset expression to use in matching the password in a request.
 	Password param.Field[string] `json:"password"`
-	// The ruleset expression to use in matching the username in a request
+	// Defines the ruleset expression to use in matching the username in a request.
 	Username param.Field[string] `json:"username"`
 }
 
@@ -287,10 +287,10 @@ func (r DetectionUpdateParams) MarshalJSON() (data []byte, err error) {
 type DetectionUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// A custom set of username/password expressions to match Leaked Credential Checks
-	// on
+	// Defines a custom set of username/password expressions to match Leaked Credential
+	// Checks on.
 	Result DetectionUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success DetectionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    detectionUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -314,7 +314,7 @@ func (r detectionUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type DetectionUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -330,12 +330,12 @@ func (r DetectionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DetectionListParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type DetectionDeleteParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -343,7 +343,7 @@ type DetectionDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo   `json:"errors,required"`
 	Messages []shared.ResponseInfo   `json:"messages,required"`
 	Result   DetectionDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success DetectionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    detectionDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -367,7 +367,7 @@ func (r detectionDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type DetectionDeleteResponseEnvelopeSuccess bool
 
 const (

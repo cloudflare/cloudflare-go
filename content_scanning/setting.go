@@ -34,7 +34,7 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	return
 }
 
-// Retrieve the current status of Content Scanning
+// Retrieve the current status of Content Scanning.
 func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
 	var env SettingGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -51,11 +51,11 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 	return
 }
 
-// The status for Content Scanning
+// Defines the status for Content Scanning.
 type SettingGetResponse struct {
-	// Last modification date (ISO 8601) of the Content Scanning status
+	// Defines the last modification date (ISO 8601) of the Content Scanning status.
 	Modified string `json:"modified"`
-	// Status of Content Scanning
+	// Defines the status of Content Scanning.
 	Value string                 `json:"value"`
 	JSON  settingGetResponseJSON `json:"-"`
 }
@@ -78,16 +78,16 @@ func (r settingGetResponseJSON) RawJSON() string {
 }
 
 type SettingGetParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// The status for Content Scanning
+	// Defines the status for Content Scanning.
 	Result SettingGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success SettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    settingGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -111,7 +111,7 @@ func (r settingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type SettingGetResponseEnvelopeSuccess bool
 
 const (
