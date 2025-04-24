@@ -597,9 +597,9 @@ func (r instanceGetResponseStepsObjectAttemptsErrorJSON) RawJSON() string {
 }
 
 type InstanceGetResponseStepsObjectConfig struct {
-	Retries InstanceGetResponseStepsObjectConfigRetries      `json:"retries,required"`
-	Timeout InstanceGetResponseStepsObjectConfigTimeoutUnion `json:"timeout,required"`
-	JSON    instanceGetResponseStepsObjectConfigJSON         `json:"-"`
+	Retries InstanceGetResponseStepsObjectConfigRetries `json:"retries,required"`
+	Timeout interface{}                                 `json:"timeout,required"`
+	JSON    instanceGetResponseStepsObjectConfigJSON    `json:"-"`
 }
 
 // instanceGetResponseStepsObjectConfigJSON contains the JSON metadata for the
@@ -620,10 +620,10 @@ func (r instanceGetResponseStepsObjectConfigJSON) RawJSON() string {
 }
 
 type InstanceGetResponseStepsObjectConfigRetries struct {
-	Delay   InstanceGetResponseStepsObjectConfigRetriesDelayUnion `json:"delay,required"`
-	Limit   float64                                               `json:"limit,required"`
-	Backoff InstanceGetResponseStepsObjectConfigRetriesBackoff    `json:"backoff"`
-	JSON    instanceGetResponseStepsObjectConfigRetriesJSON       `json:"-"`
+	Delay   interface{}                                        `json:"delay,required"`
+	Limit   float64                                            `json:"limit,required"`
+	Backoff InstanceGetResponseStepsObjectConfigRetriesBackoff `json:"backoff"`
+	JSON    instanceGetResponseStepsObjectConfigRetriesJSON    `json:"-"`
 }
 
 // instanceGetResponseStepsObjectConfigRetriesJSON contains the JSON metadata for
@@ -644,26 +644,6 @@ func (r instanceGetResponseStepsObjectConfigRetriesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [shared.UnionString] or [shared.UnionFloat].
-type InstanceGetResponseStepsObjectConfigRetriesDelayUnion interface {
-	ImplementsInstanceGetResponseStepsObjectConfigRetriesDelayUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*InstanceGetResponseStepsObjectConfigRetriesDelayUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-	)
-}
-
 type InstanceGetResponseStepsObjectConfigRetriesBackoff string
 
 const (
@@ -678,26 +658,6 @@ func (r InstanceGetResponseStepsObjectConfigRetriesBackoff) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Union satisfied by [shared.UnionString] or [shared.UnionFloat].
-type InstanceGetResponseStepsObjectConfigTimeoutUnion interface {
-	ImplementsInstanceGetResponseStepsObjectConfigTimeoutUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*InstanceGetResponseStepsObjectConfigTimeoutUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-	)
 }
 
 type InstanceGetResponseStepsObjectType string

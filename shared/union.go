@@ -132,8 +132,6 @@ func (UnionString) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()  
 func (UnionString) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                 {}
 func (UnionString) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                    {}
 func (UnionString) ImplementsInstanceGetResponseOutputUnion()                                    {}
-func (UnionString) ImplementsInstanceGetResponseStepsObjectConfigRetriesDelayUnion()             {}
-func (UnionString) ImplementsInstanceGetResponseStepsObjectConfigTimeoutUnion()                  {}
 func (UnionString) ImplementsAIRunResponseUnion()                                                {}
 func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()                            {}
 
@@ -268,5 +266,3 @@ func (UnionFloat) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()   
 func (UnionFloat) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()         {}
 func (UnionFloat) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()            {}
 func (UnionFloat) ImplementsInstanceGetResponseOutputUnion()                            {}
-func (UnionFloat) ImplementsInstanceGetResponseStepsObjectConfigRetriesDelayUnion()     {}
-func (UnionFloat) ImplementsInstanceGetResponseStepsObjectConfigTimeoutUnion()          {}
