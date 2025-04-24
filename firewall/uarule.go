@@ -249,7 +249,7 @@ func (r uaRuleDeleteResponseJSON) RawJSON() string {
 }
 
 type UARuleNewParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The rule configuration.
 	Configuration param.Field[UARuleNewParamsConfigurationUnion] `json:"configuration,required"`
@@ -330,7 +330,7 @@ type UARuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   interface{}           `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success UARuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -354,7 +354,7 @@ func (r uaRuleNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type UARuleNewResponseEnvelopeSuccess bool
 
 const (
@@ -370,7 +370,7 @@ func (r UARuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleUpdateParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The rule configuration.
 	Configuration param.Field[UARuleUpdateParamsConfigurationUnion] `json:"configuration,required"`
@@ -451,7 +451,7 @@ type UARuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   interface{}           `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success UARuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -475,7 +475,7 @@ func (r uaRuleUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type UARuleUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -491,7 +491,7 @@ func (r UARuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleListParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A string to search for in the description of existing rules.
 	Description param.Field[string] `query:"description"`
@@ -515,7 +515,7 @@ func (r UARuleListParams) URLQuery() (v url.Values) {
 }
 
 type UARuleDeleteParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -523,7 +523,7 @@ type UARuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   UARuleDeleteResponse  `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success UARuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -547,7 +547,7 @@ func (r uaRuleDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type UARuleDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -563,7 +563,7 @@ func (r UARuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleGetParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -571,7 +571,7 @@ type UARuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   interface{}           `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success UARuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -595,7 +595,7 @@ func (r uaRuleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type UARuleGetResponseEnvelopeSuccess bool
 
 const (

@@ -416,7 +416,7 @@ func (r wafOverrideDeleteResponseJSON) RawJSON() string {
 }
 
 type WAFOverrideNewParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
@@ -432,7 +432,7 @@ type WAFOverrideNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Override              `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success WAFOverrideNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -456,7 +456,7 @@ func (r wafOverrideNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type WAFOverrideNewResponseEnvelopeSuccess bool
 
 const (
@@ -472,9 +472,9 @@ func (r WAFOverrideNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type WAFOverrideUpdateParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Identifier
+	// Defines an identifier.
 	ID param.Field[string] `json:"id,required"`
 	// Specifies that, when a WAF rule matches, its configured action will be replaced
 	// by the action configured in this object.
@@ -499,7 +499,7 @@ type WAFOverrideUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Override              `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success WAFOverrideUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -523,7 +523,7 @@ func (r wafOverrideUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type WAFOverrideUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -539,7 +539,7 @@ func (r WAFOverrideUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type WAFOverrideListParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The page number of paginated results.
 	Page param.Field[float64] `query:"page"`
@@ -556,7 +556,7 @@ func (r WAFOverrideListParams) URLQuery() (v url.Values) {
 }
 
 type WAFOverrideDeleteParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -582,7 +582,7 @@ func (r wafOverrideDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WAFOverrideGetParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -590,7 +590,7 @@ type WAFOverrideGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Override              `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success WAFOverrideGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -614,7 +614,7 @@ func (r wafOverrideGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type WAFOverrideGetResponseEnvelopeSuccess bool
 
 const (
