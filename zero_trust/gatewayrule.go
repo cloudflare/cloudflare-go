@@ -1598,8 +1598,6 @@ type GatewayRuleNewParamsExpiration struct {
 	// The default duration a policy will be active in minutes. Must be set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration param.Field[int64] `json:"duration"`
-	// Whether the policy has expired.
-	Expired param.Field[bool] `json:"expired"`
 }
 
 func (r GatewayRuleNewParamsExpiration) MarshalJSON() (data []byte, err error) {
@@ -1738,8 +1736,6 @@ type GatewayRuleUpdateParamsExpiration struct {
 	// The default duration a policy will be active in minutes. Must be set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration param.Field[int64] `json:"duration"`
-	// Whether the policy has expired.
-	Expired param.Field[bool] `json:"expired"`
 }
 
 func (r GatewayRuleUpdateParamsExpiration) MarshalJSON() (data []byte, err error) {
