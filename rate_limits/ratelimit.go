@@ -857,7 +857,7 @@ func (r rateLimitDeleteResponseMatchResponseJSON) RawJSON() string {
 }
 
 type RateLimitNewParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
@@ -1036,7 +1036,7 @@ type RateLimitNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   RateLimit             `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success RateLimitNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -1060,7 +1060,7 @@ func (r rateLimitNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type RateLimitNewResponseEnvelopeSuccess bool
 
 const (
@@ -1076,12 +1076,12 @@ func (r RateLimitNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RateLimitListParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The page number of paginated results.
+	// Defines the page number of paginated results.
 	Page param.Field[float64] `query:"page"`
-	// The maximum number of results per page. You can only set the value to `1` or to
-	// a multiple of 5 such as `5`, `10`, `15`, or `20`.
+	// Defines the maximum number of results per page. You can only set the value to
+	// `1` or to a multiple of 5 such as `5`, `10`, `15`, or `20`.
 	PerPage param.Field[float64] `query:"per_page"`
 }
 
@@ -1094,7 +1094,7 @@ func (r RateLimitListParams) URLQuery() (v url.Values) {
 }
 
 type RateLimitDeleteParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -1102,7 +1102,7 @@ type RateLimitDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo   `json:"errors,required"`
 	Messages []shared.ResponseInfo   `json:"messages,required"`
 	Result   RateLimitDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success RateLimitDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -1126,7 +1126,7 @@ func (r rateLimitDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type RateLimitDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1142,7 +1142,7 @@ func (r RateLimitDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RateLimitEditParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
@@ -1321,7 +1321,7 @@ type RateLimitEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   RateLimit             `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success RateLimitEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -1345,7 +1345,7 @@ func (r rateLimitEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type RateLimitEditResponseEnvelopeSuccess bool
 
 const (
@@ -1361,7 +1361,7 @@ func (r RateLimitEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RateLimitGetParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -1369,7 +1369,7 @@ type RateLimitGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   RateLimit             `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success RateLimitGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1393,7 +1393,7 @@ func (r rateLimitGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type RateLimitGetResponseEnvelopeSuccess bool
 
 const (

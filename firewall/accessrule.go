@@ -768,11 +768,11 @@ func (r AccessRuleNewResponseMode) IsKnown() bool {
 
 // All zones owned by the user will have the rule applied.
 type AccessRuleNewResponseScope struct {
-	// Identifier
+	// Defines an identifier.
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
-	// The scope of the rule.
+	// Defines the scope of the rule.
 	Type AccessRuleNewResponseScopeType `json:"type"`
 	JSON accessRuleNewResponseScopeJSON `json:"-"`
 }
@@ -795,7 +795,7 @@ func (r accessRuleNewResponseScopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// The scope of the rule.
+// Defines the scope of the rule.
 type AccessRuleNewResponseScopeType string
 
 const (
@@ -994,11 +994,11 @@ func (r AccessRuleListResponseMode) IsKnown() bool {
 
 // All zones owned by the user will have the rule applied.
 type AccessRuleListResponseScope struct {
-	// Identifier
+	// Defines an identifier.
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
-	// The scope of the rule.
+	// Defines the scope of the rule.
 	Type AccessRuleListResponseScopeType `json:"type"`
 	JSON accessRuleListResponseScopeJSON `json:"-"`
 }
@@ -1021,7 +1021,7 @@ func (r accessRuleListResponseScopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// The scope of the rule.
+// Defines the scope of the rule.
 type AccessRuleListResponseScopeType string
 
 const (
@@ -1038,7 +1038,7 @@ func (r AccessRuleListResponseScopeType) IsKnown() bool {
 }
 
 type AccessRuleDeleteResponse struct {
-	// Identifier
+	// Defines an identifier.
 	ID   string                       `json:"id,required"`
 	JSON accessRuleDeleteResponseJSON `json:"-"`
 }
@@ -1242,11 +1242,11 @@ func (r AccessRuleEditResponseMode) IsKnown() bool {
 
 // All zones owned by the user will have the rule applied.
 type AccessRuleEditResponseScope struct {
-	// Identifier
+	// Defines an identifier.
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
-	// The scope of the rule.
+	// Defines the scope of the rule.
 	Type AccessRuleEditResponseScopeType `json:"type"`
 	JSON accessRuleEditResponseScopeJSON `json:"-"`
 }
@@ -1269,7 +1269,7 @@ func (r accessRuleEditResponseScopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// The scope of the rule.
+// Defines the scope of the rule.
 type AccessRuleEditResponseScopeType string
 
 const (
@@ -1468,11 +1468,11 @@ func (r AccessRuleGetResponseMode) IsKnown() bool {
 
 // All zones owned by the user will have the rule applied.
 type AccessRuleGetResponseScope struct {
-	// Identifier
+	// Defines an identifier.
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
-	// The scope of the rule.
+	// Defines the scope of the rule.
 	Type AccessRuleGetResponseScopeType `json:"type"`
 	JSON accessRuleGetResponseScopeJSON `json:"-"`
 }
@@ -1495,7 +1495,7 @@ func (r accessRuleGetResponseScopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// The scope of the rule.
+// Defines the scope of the rule.
 type AccessRuleGetResponseScopeType string
 
 const (
@@ -1597,7 +1597,7 @@ type AccessRuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   AccessRuleNewResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success AccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -1621,7 +1621,7 @@ func (r accessRuleNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type AccessRuleNewResponseEnvelopeSuccess bool
 
 const (
@@ -1642,22 +1642,22 @@ type AccessRuleListParams struct {
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID        param.Field[string]                            `path:"zone_id"`
 	Configuration param.Field[AccessRuleListParamsConfiguration] `query:"configuration"`
-	// The direction used to sort returned rules.
+	// Defines the direction used to sort returned rules.
 	Direction param.Field[AccessRuleListParamsDirection] `query:"direction"`
-	// When set to `all`, all the search requirements must match. When set to `any`,
-	// only one of the search requirements has to match.
+	// Defines the search requirements. When set to `all`, all the search requirements
+	// must match. When set to `any`, only one of the search requirements has to match.
 	Match param.Field[AccessRuleListParamsMatch] `query:"match"`
 	// The action to apply to a matched request.
 	Mode param.Field[AccessRuleListParamsMode] `query:"mode"`
-	// The string to search for in the notes of existing IP Access rules. Notes: For
-	// example, the string 'attack' would match IP Access rules with notes 'Attack
-	// 26/02' and 'Attack 27/02'. The search is case insensitive.
+	// Defines the string to search for in the notes of existing IP Access rules.
+	// Notes: For example, the string 'attack' would match IP Access rules with notes
+	// 'Attack 26/02' and 'Attack 27/02'. The search is case insensitive.
 	Notes param.Field[string] `query:"notes"`
-	// The field used to sort returned rules.
+	// Defines the field used to sort returned rules.
 	Order param.Field[AccessRuleListParamsOrder] `query:"order"`
-	// Requested page within paginated list of results.
+	// Defines the requested page within paginated list of results.
 	Page param.Field[float64] `query:"page"`
-	// Maximum number of results requested.
+	// Defines the maximum number of results requested.
 	PerPage param.Field[float64] `query:"per_page"`
 }
 
@@ -1670,12 +1670,13 @@ func (r AccessRuleListParams) URLQuery() (v url.Values) {
 }
 
 type AccessRuleListParamsConfiguration struct {
-	// The target to search in existing rules.
+	// Defines the target to search in existing rules.
 	Target param.Field[AccessRuleListParamsConfigurationTarget] `query:"target"`
-	// The target value to search for in existing rules: an IP address, an IP address
-	// range, or a country code, depending on the provided `configuration.target`.
-	// Notes: You can search for a single IPv4 address, an IP address range with a
-	// subnet of '/16' or '/24', or a two-letter ISO-3166-1 alpha-2 country code.
+	// Defines the target value to search for in existing rules: an IP address, an IP
+	// address range, or a country code, depending on the provided
+	// `configuration.target`. Notes: You can search for a single IPv4 address, an IP
+	// address range with a subnet of '/16' or '/24', or a two-letter ISO-3166-1
+	// alpha-2 country code.
 	Value param.Field[string] `query:"value"`
 }
 
@@ -1688,7 +1689,7 @@ func (r AccessRuleListParamsConfiguration) URLQuery() (v url.Values) {
 	})
 }
 
-// The target to search in existing rules.
+// Defines the target to search in existing rules.
 type AccessRuleListParamsConfigurationTarget string
 
 const (
@@ -1706,7 +1707,7 @@ func (r AccessRuleListParamsConfigurationTarget) IsKnown() bool {
 	return false
 }
 
-// The direction used to sort returned rules.
+// Defines the direction used to sort returned rules.
 type AccessRuleListParamsDirection string
 
 const (
@@ -1722,8 +1723,8 @@ func (r AccessRuleListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// When set to `all`, all the search requirements must match. When set to `any`,
-// only one of the search requirements has to match.
+// Defines the search requirements. When set to `all`, all the search requirements
+// must match. When set to `any`, only one of the search requirements has to match.
 type AccessRuleListParamsMatch string
 
 const (
@@ -1758,7 +1759,7 @@ func (r AccessRuleListParamsMode) IsKnown() bool {
 	return false
 }
 
-// The field used to sort returned rules.
+// Defines the field used to sort returned rules.
 type AccessRuleListParamsOrder string
 
 const (
@@ -1786,7 +1787,7 @@ type AccessRuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo    `json:"errors,required"`
 	Messages []shared.ResponseInfo    `json:"messages,required"`
 	Result   AccessRuleDeleteResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success AccessRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -1810,7 +1811,7 @@ func (r accessRuleDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type AccessRuleDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1911,7 +1912,7 @@ type AccessRuleEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo  `json:"errors,required"`
 	Messages []shared.ResponseInfo  `json:"messages,required"`
 	Result   AccessRuleEditResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success AccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -1935,7 +1936,7 @@ func (r accessRuleEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type AccessRuleEditResponseEnvelopeSuccess bool
 
 const (
@@ -1961,7 +1962,7 @@ type AccessRuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   AccessRuleGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success AccessRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1985,7 +1986,7 @@ func (r accessRuleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type AccessRuleGetResponseEnvelopeSuccess bool
 
 const (

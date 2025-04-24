@@ -323,7 +323,7 @@ func (r FirewallFilterParam) MarshalJSON() (data []byte, err error) {
 }
 
 type FilterNewParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The filter expression. For more information, refer to
 	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
@@ -335,7 +335,7 @@ func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FilterUpdateParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Body   interface{}         `json:"body,required"`
 }
@@ -348,7 +348,7 @@ type FilterUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   FirewallFilter        `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success FilterUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -372,7 +372,7 @@ func (r filterUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type FilterUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -388,7 +388,7 @@ func (r FilterUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type FilterListParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The unique identifier of the filter.
 	ID param.Field[string] `query:"id"`
@@ -415,7 +415,7 @@ func (r FilterListParams) URLQuery() (v url.Values) {
 }
 
 type FilterDeleteParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -423,7 +423,7 @@ type FilterDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   FirewallFilter        `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success FilterDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -447,7 +447,7 @@ func (r filterDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type FilterDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -463,12 +463,12 @@ func (r FilterDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type FilterBulkDeleteParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type FilterBulkUpdateParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -477,7 +477,7 @@ func (r FilterBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FilterGetParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -485,7 +485,7 @@ type FilterGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   FirewallFilter        `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success FilterGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -509,7 +509,7 @@ func (r filterGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type FilterGetResponseEnvelopeSuccess bool
 
 const (

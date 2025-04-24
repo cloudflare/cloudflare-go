@@ -516,7 +516,7 @@ func (r Product) IsKnown() bool {
 }
 
 type RuleNewParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
@@ -590,7 +590,7 @@ func (r RuleNewParamsActionResponse) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleUpdateParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
@@ -667,7 +667,7 @@ type RuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   FirewallRule          `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -691,7 +691,7 @@ func (r ruleUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type RuleUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -707,7 +707,7 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleListParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The unique identifier of the firewall rule.
 	ID param.Field[string] `query:"id"`
@@ -732,7 +732,7 @@ func (r RuleListParams) URLQuery() (v url.Values) {
 }
 
 type RuleDeleteParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -740,7 +740,7 @@ type RuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   FirewallRule          `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -764,7 +764,7 @@ func (r ruleDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type RuleDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -780,12 +780,12 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleBulkDeleteParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RuleBulkEditParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Body   interface{}         `json:"body,required"`
 }
@@ -795,7 +795,7 @@ func (r RuleBulkEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleBulkUpdateParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Body   interface{}         `json:"body,required"`
 }
@@ -805,7 +805,7 @@ func (r RuleBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleEditParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -814,7 +814,7 @@ func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleGetParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -822,7 +822,7 @@ type RuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   FirewallRule          `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -846,7 +846,7 @@ func (r ruleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type RuleGetResponseEnvelopeSuccess bool
 
 const (
