@@ -440,7 +440,7 @@ type RuleSetting struct {
 	// header names, pointing to an array with its header value(s).
 	AddHeaders map[string]string `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
-	AllowChildBypass bool `json:"allow_child_bypass,nullable"`
+	AllowChildBypass bool `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
 	AuditSSH RuleSettingAuditSSH `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
@@ -454,7 +454,7 @@ type RuleSetting struct {
 	// (if enabled).
 	BlockReason string `json:"block_reason"`
 	// Set by children MSP accounts to bypass their parent's rules.
-	BypassParentRule bool `json:"bypass_parent_rule,nullable"`
+	BypassParentRule bool `json:"bypass_parent_rule"`
 	// Configure how session check behaves.
 	CheckSession RuleSettingCheckSession `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
