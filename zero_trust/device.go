@@ -203,16 +203,17 @@ func (r deviceJSON) RawJSON() string {
 type DeviceDeviceType string
 
 const (
-	DeviceDeviceTypeWindows DeviceDeviceType = "windows"
-	DeviceDeviceTypeMac     DeviceDeviceType = "mac"
-	DeviceDeviceTypeLinux   DeviceDeviceType = "linux"
-	DeviceDeviceTypeAndroid DeviceDeviceType = "android"
-	DeviceDeviceTypeIos     DeviceDeviceType = "ios"
+	DeviceDeviceTypeWindows  DeviceDeviceType = "windows"
+	DeviceDeviceTypeMac      DeviceDeviceType = "mac"
+	DeviceDeviceTypeLinux    DeviceDeviceType = "linux"
+	DeviceDeviceTypeAndroid  DeviceDeviceType = "android"
+	DeviceDeviceTypeIos      DeviceDeviceType = "ios"
+	DeviceDeviceTypeChromeos DeviceDeviceType = "chromeos"
 )
 
 func (r DeviceDeviceType) IsKnown() bool {
 	switch r {
-	case DeviceDeviceTypeWindows, DeviceDeviceTypeMac, DeviceDeviceTypeLinux, DeviceDeviceTypeAndroid, DeviceDeviceTypeIos:
+	case DeviceDeviceTypeWindows, DeviceDeviceTypeMac, DeviceDeviceTypeLinux, DeviceDeviceTypeAndroid, DeviceDeviceTypeIos, DeviceDeviceTypeChromeos:
 		return true
 	}
 	return false

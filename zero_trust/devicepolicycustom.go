@@ -315,6 +315,14 @@ type DevicePolicyCustomEditParams struct {
 	// List of routes included in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
 	Include param.Field[[]SplitTunnelIncludeUnionParam] `json:"include"`
+	// The amount of time in minutes a user is allowed access to their LAN. A value of
+	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
+	// laptop waking from sleep. Note that this field is omitted from the response if
+	// null or unset.
+	LANAllowMinutes param.Field[float64] `json:"lan_allow_minutes"`
+	// The size of the subnet for the local access network. Note that this field is
+	// omitted from the response if null or unset.
+	LANAllowSubnetSize param.Field[float64] `json:"lan_allow_subnet_size"`
 	// The wirefilter expression to match devices. Available values: "identity.email",
 	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
 	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
