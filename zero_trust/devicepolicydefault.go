@@ -299,6 +299,14 @@ type DevicePolicyDefaultEditParams struct {
 	// List of routes included in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
 	Include param.Field[[]SplitTunnelIncludeUnionParam] `json:"include"`
+	// The amount of time in minutes a user is allowed access to their LAN. A value of
+	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
+	// laptop waking from sleep. Note that this field is omitted from the response if
+	// null or unset.
+	LANAllowMinutes param.Field[float64] `json:"lan_allow_minutes"`
+	// The size of the subnet for the local access network. Note that this field is
+	// omitted from the response if null or unset.
+	LANAllowSubnetSize param.Field[float64] `json:"lan_allow_subnet_size"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS param.Field[bool]                                       `json:"register_interface_ip_with_dns"`

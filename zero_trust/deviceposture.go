@@ -1256,16 +1256,17 @@ func (r deviceMatchJSON) RawJSON() string {
 type DeviceMatchPlatform string
 
 const (
-	DeviceMatchPlatformWindows DeviceMatchPlatform = "windows"
-	DeviceMatchPlatformMac     DeviceMatchPlatform = "mac"
-	DeviceMatchPlatformLinux   DeviceMatchPlatform = "linux"
-	DeviceMatchPlatformAndroid DeviceMatchPlatform = "android"
-	DeviceMatchPlatformIos     DeviceMatchPlatform = "ios"
+	DeviceMatchPlatformWindows  DeviceMatchPlatform = "windows"
+	DeviceMatchPlatformMac      DeviceMatchPlatform = "mac"
+	DeviceMatchPlatformLinux    DeviceMatchPlatform = "linux"
+	DeviceMatchPlatformAndroid  DeviceMatchPlatform = "android"
+	DeviceMatchPlatformIos      DeviceMatchPlatform = "ios"
+	DeviceMatchPlatformChromeos DeviceMatchPlatform = "chromeos"
 )
 
 func (r DeviceMatchPlatform) IsKnown() bool {
 	switch r {
-	case DeviceMatchPlatformWindows, DeviceMatchPlatformMac, DeviceMatchPlatformLinux, DeviceMatchPlatformAndroid, DeviceMatchPlatformIos:
+	case DeviceMatchPlatformWindows, DeviceMatchPlatformMac, DeviceMatchPlatformLinux, DeviceMatchPlatformAndroid, DeviceMatchPlatformIos, DeviceMatchPlatformChromeos:
 		return true
 	}
 	return false

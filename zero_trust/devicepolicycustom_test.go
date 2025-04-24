@@ -160,6 +160,8 @@ func TestDevicePolicyCustomEditWithOptionalParams(t *testing.T) {
 				Address:     cloudflare.F("192.0.2.0/24"),
 				Description: cloudflare.F("Include testing domains in the tunnel"),
 			}}),
+			LANAllowMinutes:            cloudflare.F(30.000000),
+			LANAllowSubnetSize:         cloudflare.F(24.000000),
 			Match:                      cloudflare.F(`identity.email == "test@cloudflare.com"`),
 			Name:                       cloudflare.F("Allow Developers"),
 			Precedence:                 cloudflare.F(100.000000),
