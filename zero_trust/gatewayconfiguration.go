@@ -135,7 +135,7 @@ type AntiVirusSettings struct {
 	FailClosed bool `json:"fail_closed"`
 	// Configure a message to display on the user's device when an antivirus search is
 	// performed.
-	NotificationSettings NotificationSettings  `json:"notification_settings"`
+	NotificationSettings NotificationSettings  `json:"notification_settings,nullable"`
 	JSON                 antiVirusSettingsJSON `json:"-"`
 }
 
@@ -478,33 +478,33 @@ func (r FipsSettingsParam) MarshalJSON() (data []byte, err error) {
 // Account settings
 type GatewayConfigurationSettings struct {
 	// Activity log settings.
-	ActivityLog ActivityLogSettings `json:"activity_log"`
+	ActivityLog ActivityLogSettings `json:"activity_log,nullable"`
 	// Anti-virus settings.
 	Antivirus AntiVirusSettings `json:"antivirus"`
 	// Block page layout settings.
-	BlockPage BlockPageSettings `json:"block_page"`
+	BlockPage BlockPageSettings `json:"block_page,nullable"`
 	// DLP body scanning settings.
-	BodyScanning BodyScanningSettings `json:"body_scanning"`
+	BodyScanning BodyScanningSettings `json:"body_scanning,nullable"`
 	// Browser isolation settings.
-	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation"`
+	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation,nullable"`
 	// Certificate settings for Gateway TLS interception. If not specified, the
 	// Cloudflare Root CA will be used.
-	Certificate GatewayConfigurationSettingsCertificate `json:"certificate"`
+	Certificate GatewayConfigurationSettingsCertificate `json:"certificate,nullable"`
 	// Custom certificate settings for BYO-PKI. (deprecated and replaced by
 	// `certificate`)
 	//
 	// Deprecated: deprecated
-	CustomCertificate CustomCertificateSettings `json:"custom_certificate"`
+	CustomCertificate CustomCertificateSettings `json:"custom_certificate,nullable"`
 	// Extended e-mail matching settings.
 	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching"`
 	// FIPS settings.
-	Fips FipsSettings `json:"fips"`
+	Fips FipsSettings `json:"fips,nullable"`
 	// Protocol Detection settings.
-	ProtocolDetection ProtocolDetection `json:"protocol_detection"`
+	ProtocolDetection ProtocolDetection `json:"protocol_detection,nullable"`
 	// Sandbox settings.
-	Sandbox GatewayConfigurationSettingsSandbox `json:"sandbox"`
+	Sandbox GatewayConfigurationSettingsSandbox `json:"sandbox,nullable"`
 	// TLS interception settings.
-	TLSDecrypt TLSSettings                      `json:"tls_decrypt"`
+	TLSDecrypt TLSSettings                      `json:"tls_decrypt,nullable"`
 	JSON       gatewayConfigurationSettingsJSON `json:"-"`
 }
 
