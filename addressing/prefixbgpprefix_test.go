@@ -91,10 +91,12 @@ func TestPrefixBGPPrefixEditWithOptionalParams(t *testing.T) {
 		"2af39739cc4e3b5910c918468bb89828",
 		"7009ba364c7a5760798ceb430e603b74",
 		addressing.PrefixBGPPrefixEditParams{
-			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+			AccountID:       cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+			ASNPrependCount: cloudflare.F(int64(2)),
 			OnDemand: cloudflare.F(addressing.PrefixBGPPrefixEditParamsOnDemand{
 				Advertised: cloudflare.F(true),
 			}),
+			WithdrawIfNoRoute: cloudflare.F(true),
 		},
 	)
 	if err != nil {
