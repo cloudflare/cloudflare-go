@@ -70,7 +70,7 @@ func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ..
 	return
 }
 
-// Lists all R2 buckets on your account
+// Lists all R2 buckets on your account.
 func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *BucketListResponse, err error) {
 	var env BucketListResponseEnvelope
 	if params.Jurisdiction.Present {
@@ -114,7 +114,7 @@ func (r *BucketService) Delete(ctx context.Context, bucketName string, params Bu
 	return
 }
 
-// Gets metadata for an existing R2 bucket.
+// Gets properties of an existing R2 bucket.
 func (r *BucketService) Get(ctx context.Context, bucketName string, params BucketGetParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketGetResponseEnvelope
 	if params.Jurisdiction.Present {
@@ -138,13 +138,13 @@ func (r *BucketService) Get(ctx context.Context, bucketName string, params Bucke
 	return
 }
 
-// A single R2 bucket
+// A single R2 bucket.
 type Bucket struct {
-	// Creation timestamp
+	// Creation timestamp.
 	CreationDate string `json:"creation_date"`
-	// Location of the bucket
+	// Location of the bucket.
 	Location BucketLocation `json:"location"`
-	// Name of the bucket
+	// Name of the bucket.
 	Name string `json:"name"`
 	// Storage class for newly uploaded objects, unless specified otherwise.
 	StorageClass BucketStorageClass `json:"storage_class"`
@@ -169,7 +169,7 @@ func (r bucketJSON) RawJSON() string {
 	return r.raw
 }
 
-// Location of the bucket
+// Location of the bucket.
 type BucketLocation string
 
 const (
@@ -229,15 +229,15 @@ func (r bucketListResponseJSON) RawJSON() string {
 type BucketDeleteResponse = interface{}
 
 type BucketNewParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Name of the bucket
+	// Name of the bucket.
 	Name param.Field[string] `json:"name,required"`
-	// Location of the bucket
+	// Location of the bucket.
 	LocationHint param.Field[BucketNewParamsLocationHint] `json:"locationHint"`
 	// Storage class for newly uploaded objects, unless specified otherwise.
 	StorageClass param.Field[BucketNewParamsStorageClass] `json:"storageClass"`
-	// Creates the bucket in the provided jurisdiction
+	// Creates the bucket in the provided jurisdiction.
 	Jurisdiction param.Field[BucketNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -245,7 +245,7 @@ func (r BucketNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Location of the bucket
+// Location of the bucket.
 type BucketNewParamsLocationHint string
 
 const (
@@ -281,7 +281,7 @@ func (r BucketNewParamsStorageClass) IsKnown() bool {
 	return false
 }
 
-// Creates the bucket in the provided jurisdiction
+// Creates the bucket in the provided jurisdiction.
 type BucketNewParamsCfR2Jurisdiction string
 
 const (
@@ -301,9 +301,9 @@ func (r BucketNewParamsCfR2Jurisdiction) IsKnown() bool {
 type BucketNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []string              `json:"messages,required"`
-	// A single R2 bucket
+	// A single R2 bucket.
 	Result Bucket `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -327,7 +327,7 @@ func (r bucketNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketNewResponseEnvelopeSuccess bool
 
 const (
@@ -343,23 +343,23 @@ func (r BucketNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketListParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Pagination cursor received during the last List Buckets call. R2 buckets are
 	// paginated using cursors instead of page numbers.
 	Cursor param.Field[string] `query:"cursor"`
-	// Direction to order buckets
+	// Direction to order buckets.
 	Direction param.Field[BucketListParamsDirection] `query:"direction"`
 	// Bucket names to filter by. Only buckets with this phrase in their name will be
 	// returned.
 	NameContains param.Field[string] `query:"name_contains"`
-	// Field to order buckets by
+	// Field to order buckets by.
 	Order param.Field[BucketListParamsOrder] `query:"order"`
-	// Maximum number of buckets to return in a single call
+	// Maximum number of buckets to return in a single call.
 	PerPage param.Field[float64] `query:"per_page"`
 	// Bucket name to start searching after. Buckets are ordered lexicographically.
 	StartAfter param.Field[string] `query:"start_after"`
-	// Lists buckets in the provided jurisdiction
+	// Lists buckets in the provided jurisdiction.
 	Jurisdiction param.Field[BucketListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -371,7 +371,7 @@ func (r BucketListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Direction to order buckets
+// Direction to order buckets.
 type BucketListParamsDirection string
 
 const (
@@ -387,7 +387,7 @@ func (r BucketListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Field to order buckets by
+// Field to order buckets by.
 type BucketListParamsOrder string
 
 const (
@@ -402,7 +402,7 @@ func (r BucketListParamsOrder) IsKnown() bool {
 	return false
 }
 
-// Lists buckets in the provided jurisdiction
+// Lists buckets in the provided jurisdiction.
 type BucketListParamsCfR2Jurisdiction string
 
 const (
@@ -423,7 +423,7 @@ type BucketListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []string              `json:"messages,required"`
 	Result   BucketListResponse    `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    BucketListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo BucketListResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       bucketListResponseEnvelopeJSON       `json:"-"`
@@ -449,7 +449,7 @@ func (r bucketListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketListResponseEnvelopeSuccess bool
 
 const (
@@ -465,9 +465,9 @@ func (r BucketListResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketListResponseEnvelopeResultInfo struct {
-	// A continuation token that should be used to fetch the next page of results
+	// A continuation token that should be used to fetch the next page of results.
 	Cursor string `json:"cursor"`
-	// Maximum number of results on this page
+	// Maximum number of results on this page.
 	PerPage float64                                  `json:"per_page"`
 	JSON    bucketListResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -490,13 +490,13 @@ func (r bucketListResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type BucketDeleteParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -517,7 +517,7 @@ type BucketDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []string              `json:"messages,required"`
 	Result   BucketDeleteResponse  `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -541,7 +541,7 @@ func (r bucketDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -557,13 +557,13 @@ func (r BucketDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketGetParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketGetParamsCfR2Jurisdiction string
 
 const (
@@ -583,9 +583,9 @@ func (r BucketGetParamsCfR2Jurisdiction) IsKnown() bool {
 type BucketGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []string              `json:"messages,required"`
-	// A single R2 bucket
+	// A single R2 bucket.
 	Result Bucket `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -609,7 +609,7 @@ func (r bucketGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketGetResponseEnvelopeSuccess bool
 
 const (

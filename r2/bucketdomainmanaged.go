@@ -83,11 +83,11 @@ func (r *BucketDomainManagedService) List(ctx context.Context, bucketName string
 }
 
 type BucketDomainManagedUpdateResponse struct {
-	// Bucket ID
+	// Bucket ID.
 	BucketID string `json:"bucketId,required"`
-	// Domain name of the bucket's r2.dev domain
+	// Domain name of the bucket's r2.dev domain.
 	Domain string `json:"domain,required"`
-	// Whether this bucket is publicly accessible at the r2.dev domain
+	// Whether this bucket is publicly accessible at the r2.dev domain.
 	Enabled bool                                  `json:"enabled,required"`
 	JSON    bucketDomainManagedUpdateResponseJSON `json:"-"`
 }
@@ -111,11 +111,11 @@ func (r bucketDomainManagedUpdateResponseJSON) RawJSON() string {
 }
 
 type BucketDomainManagedListResponse struct {
-	// Bucket ID
+	// Bucket ID.
 	BucketID string `json:"bucketId,required"`
-	// Domain name of the bucket's r2.dev domain
+	// Domain name of the bucket's r2.dev domain.
 	Domain string `json:"domain,required"`
-	// Whether this bucket is publicly accessible at the r2.dev domain
+	// Whether this bucket is publicly accessible at the r2.dev domain.
 	Enabled bool                                `json:"enabled,required"`
 	JSON    bucketDomainManagedListResponseJSON `json:"-"`
 }
@@ -139,11 +139,11 @@ func (r bucketDomainManagedListResponseJSON) RawJSON() string {
 }
 
 type BucketDomainManagedUpdateParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Whether to enable public bucket access at the r2.dev domain
+	// Whether to enable public bucket access at the r2.dev domain.
 	Enabled param.Field[bool] `json:"enabled,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketDomainManagedUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -151,7 +151,7 @@ func (r BucketDomainManagedUpdateParams) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketDomainManagedUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -172,7 +172,7 @@ type BucketDomainManagedUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo             `json:"errors,required"`
 	Messages []string                          `json:"messages,required"`
 	Result   BucketDomainManagedUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketDomainManagedUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainManagedUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -196,7 +196,7 @@ func (r bucketDomainManagedUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketDomainManagedUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -212,13 +212,13 @@ func (r BucketDomainManagedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketDomainManagedListParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketDomainManagedListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketDomainManagedListParamsCfR2Jurisdiction string
 
 const (
@@ -239,7 +239,7 @@ type BucketDomainManagedListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo           `json:"errors,required"`
 	Messages []string                        `json:"messages,required"`
 	Result   BucketDomainManagedListResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketDomainManagedListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainManagedListResponseEnvelopeJSON    `json:"-"`
 }
@@ -263,7 +263,7 @@ func (r bucketDomainManagedListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketDomainManagedListResponseEnvelopeSuccess bool
 
 const (

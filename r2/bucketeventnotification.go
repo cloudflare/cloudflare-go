@@ -145,9 +145,9 @@ func (r bucketEventNotificationGetResponseJSON) RawJSON() string {
 }
 
 type BucketEventNotificationGetResponseQueue struct {
-	// Queue ID
+	// Queue ID.
 	QueueID string `json:"queueId"`
-	// Name of the queue
+	// Name of the queue.
 	QueueName string                                         `json:"queueName"`
 	Rules     []BucketEventNotificationGetResponseQueuesRule `json:"rules"`
 	JSON      bucketEventNotificationGetResponseQueueJSON    `json:"-"`
@@ -172,18 +172,18 @@ func (r bucketEventNotificationGetResponseQueueJSON) RawJSON() string {
 }
 
 type BucketEventNotificationGetResponseQueuesRule struct {
-	// Array of R2 object actions that will trigger notifications
+	// Array of R2 object actions that will trigger notifications.
 	Actions []BucketEventNotificationGetResponseQueuesRulesAction `json:"actions,required"`
-	// Timestamp when the rule was created
+	// Timestamp when the rule was created.
 	CreatedAt string `json:"createdAt"`
 	// A description that can be used to identify the event notification rule after
-	// creation
+	// creation.
 	Description string `json:"description"`
-	// Notifications will be sent only for objects with this prefix
+	// Notifications will be sent only for objects with this prefix.
 	Prefix string `json:"prefix"`
-	// Rule ID
+	// Rule ID.
 	RuleID string `json:"ruleId"`
-	// Notifications will be sent only for objects with this suffix
+	// Notifications will be sent only for objects with this suffix.
 	Suffix string                                           `json:"suffix"`
 	JSON   bucketEventNotificationGetResponseQueuesRuleJSON `json:"-"`
 }
@@ -228,11 +228,11 @@ func (r BucketEventNotificationGetResponseQueuesRulesAction) IsKnown() bool {
 }
 
 type BucketEventNotificationUpdateParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Array of rules to drive notifications
+	// Array of rules to drive notifications.
 	Rules param.Field[[]BucketEventNotificationUpdateParamsRule] `json:"rules"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketEventNotificationUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -241,14 +241,14 @@ func (r BucketEventNotificationUpdateParams) MarshalJSON() (data []byte, err err
 }
 
 type BucketEventNotificationUpdateParamsRule struct {
-	// Array of R2 object actions that will trigger notifications
+	// Array of R2 object actions that will trigger notifications.
 	Actions param.Field[[]BucketEventNotificationUpdateParamsRulesAction] `json:"actions,required"`
 	// A description that can be used to identify the event notification rule after
-	// creation
+	// creation.
 	Description param.Field[string] `json:"description"`
-	// Notifications will be sent only for objects with this prefix
+	// Notifications will be sent only for objects with this prefix.
 	Prefix param.Field[string] `json:"prefix"`
-	// Notifications will be sent only for objects with this suffix
+	// Notifications will be sent only for objects with this suffix.
 	Suffix param.Field[string] `json:"suffix"`
 }
 
@@ -274,7 +274,7 @@ func (r BucketEventNotificationUpdateParamsRulesAction) IsKnown() bool {
 	return false
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketEventNotificationUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -295,7 +295,7 @@ type BucketEventNotificationUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                 `json:"errors,required"`
 	Messages []string                              `json:"messages,required"`
 	Result   BucketEventNotificationUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketEventNotificationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketEventNotificationUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -319,7 +319,7 @@ func (r bucketEventNotificationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketEventNotificationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -335,13 +335,13 @@ func (r BucketEventNotificationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketEventNotificationDeleteParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketEventNotificationDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketEventNotificationDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -362,7 +362,7 @@ type BucketEventNotificationDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                 `json:"errors,required"`
 	Messages []string                              `json:"messages,required"`
 	Result   BucketEventNotificationDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketEventNotificationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketEventNotificationDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -386,7 +386,7 @@ func (r bucketEventNotificationDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketEventNotificationDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -402,13 +402,13 @@ func (r BucketEventNotificationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketEventNotificationGetParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketEventNotificationGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketEventNotificationGetParamsCfR2Jurisdiction string
 
 const (
@@ -429,7 +429,7 @@ type BucketEventNotificationGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo              `json:"errors,required"`
 	Messages []string                           `json:"messages,required"`
 	Result   BucketEventNotificationGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketEventNotificationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketEventNotificationGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -453,7 +453,7 @@ func (r bucketEventNotificationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketEventNotificationGetResponseEnvelopeSuccess bool
 
 const (
