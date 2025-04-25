@@ -547,3 +547,32 @@ func TestCheckResultInfo(t *testing.T) {
 		})
 	}
 }
+
+func TestClient_RateLimitError(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(429) // HTTP 429 Too Many Requests
+		fmt.Fprint(w, `{
+			"success": false,
+			"errors": [{
+				"code": 10000,
+				"message": "Rate limit exceeded"
+			}],
+			"messages": [],
+			"result": null
+		}`)
+	}
+
+	mux.HandleFunc("/zones", handler)
+
+	_, err := client.ListZonesContext(context.Background())
+
+	// Check if that the error is a rate limit error
+	var apiErr *Error
+	assert.ErrorAs(t, err, &apiErr, "Expected error to be of type cloudflare.Error")
+	assert.Equal(t, apiErr.ClientRateLimited(), true, "Expected error to be a rate limit error")
+}

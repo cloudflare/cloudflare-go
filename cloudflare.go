@@ -262,13 +262,7 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 		// retry if the server is rate limiting us or if it failed
 		// assumes server operations are rolled back on failure
 		if respErr != nil || resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500 {
-			if resp != nil && resp.StatusCode == http.StatusTooManyRequests {
-				respErr = errors.New("exceeded available rate limit retries")
-			}
-
-			if respErr == nil {
-				respErr = fmt.Errorf("received %s response (HTTP %d), please try again later", strings.ToLower(http.StatusText(resp.StatusCode)), resp.StatusCode)
-			}
+			// Retry the request
 			continue
 		} else {
 			respBody, err = io.ReadAll(resp.Body)
@@ -281,14 +275,17 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 		}
 	}
 
-	// still had an error after all retries
-	if respErr != nil {
-		return nil, respErr
-	}
-
 	if resp.StatusCode >= http.StatusBadRequest {
 		if strings.HasSuffix(resp.Request.URL.Path, "/filters/validate-expr") {
 			return nil, fmt.Errorf("%s", respBody)
+		}
+
+		if resp.StatusCode == http.StatusTooManyRequests {
+			return nil, &RatelimitError{cloudflareError: &Error{
+				StatusCode: resp.StatusCode,
+				RayID:      resp.Header.Get("cf-ray"),
+				Type:       ErrorTypeRateLimit,
+			}}
 		}
 
 		if resp.StatusCode >= http.StatusInternalServerError {

@@ -1,0 +1,3 @@
+```release-note:bug
+api: return rate limit amd 5xx errors with correct type
+```
