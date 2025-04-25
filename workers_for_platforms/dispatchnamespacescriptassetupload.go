@@ -91,7 +91,7 @@ type DispatchNamespaceScriptAssetUploadNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A manifest ([path]: {hash, size}) map of files to upload. As an example,
 	// `/blog/hello-world.html` would be a valid path key.
-	Manifest param.Field[map[string]DispatchNamespaceScriptAssetUploadNewParamsManifest] `json:"manifest"`
+	Manifest param.Field[map[string]DispatchNamespaceScriptAssetUploadNewParamsManifest] `json:"manifest,required"`
 }
 
 func (r DispatchNamespaceScriptAssetUploadNewParams) MarshalJSON() (data []byte, err error) {
@@ -100,9 +100,9 @@ func (r DispatchNamespaceScriptAssetUploadNewParams) MarshalJSON() (data []byte,
 
 type DispatchNamespaceScriptAssetUploadNewParamsManifest struct {
 	// The hash of the file.
-	Hash param.Field[string] `json:"hash"`
+	Hash param.Field[string] `json:"hash,required"`
 	// The size of the file in bytes.
-	Size param.Field[int64] `json:"size"`
+	Size param.Field[int64] `json:"size,required"`
 }
 
 func (r DispatchNamespaceScriptAssetUploadNewParamsManifest) MarshalJSON() (data []byte, err error) {
