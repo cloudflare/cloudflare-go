@@ -52,11 +52,11 @@ func (r *BucketMetricService) List(ctx context.Context, query BucketMetricListPa
 	return
 }
 
-// Metrics based on the class they belong to
+// Metrics based on the class they belong to.
 type BucketMetricListResponse struct {
-	// Metrics based on what state they are in(uploaded or published)
+	// Metrics based on what state they are in(uploaded or published).
 	InfrequentAccess BucketMetricListResponseInfrequentAccess `json:"infrequentAccess"`
-	// Metrics based on what state they are in(uploaded or published)
+	// Metrics based on what state they are in(uploaded or published).
 	Standard BucketMetricListResponseStandard `json:"standard"`
 	JSON     bucketMetricListResponseJSON     `json:"-"`
 }
@@ -78,11 +78,11 @@ func (r bucketMetricListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Metrics based on what state they are in(uploaded or published)
+// Metrics based on what state they are in(uploaded or published).
 type BucketMetricListResponseInfrequentAccess struct {
-	// Metrics on number of objects/amount of storage used
+	// Metrics on number of objects/amount of storage used.
 	Published BucketMetricListResponseInfrequentAccessPublished `json:"published"`
-	// Metrics on number of objects/amount of storage used
+	// Metrics on number of objects/amount of storage used.
 	Uploaded BucketMetricListResponseInfrequentAccessUploaded `json:"uploaded"`
 	JSON     bucketMetricListResponseInfrequentAccessJSON     `json:"-"`
 }
@@ -104,13 +104,13 @@ func (r bucketMetricListResponseInfrequentAccessJSON) RawJSON() string {
 	return r.raw
 }
 
-// Metrics on number of objects/amount of storage used
+// Metrics on number of objects/amount of storage used.
 type BucketMetricListResponseInfrequentAccessPublished struct {
-	// Amount of
+	// Amount of.
 	MetadataSize float64 `json:"metadataSize"`
-	// Number of objects stored
+	// Number of objects stored.
 	Objects float64 `json:"objects"`
-	// Amount of storage used by object data
+	// Amount of storage used by object data.
 	PayloadSize float64                                               `json:"payloadSize"`
 	JSON        bucketMetricListResponseInfrequentAccessPublishedJSON `json:"-"`
 }
@@ -133,13 +133,13 @@ func (r bucketMetricListResponseInfrequentAccessPublishedJSON) RawJSON() string 
 	return r.raw
 }
 
-// Metrics on number of objects/amount of storage used
+// Metrics on number of objects/amount of storage used.
 type BucketMetricListResponseInfrequentAccessUploaded struct {
-	// Amount of
+	// Amount of.
 	MetadataSize float64 `json:"metadataSize"`
-	// Number of objects stored
+	// Number of objects stored.
 	Objects float64 `json:"objects"`
-	// Amount of storage used by object data
+	// Amount of storage used by object data.
 	PayloadSize float64                                              `json:"payloadSize"`
 	JSON        bucketMetricListResponseInfrequentAccessUploadedJSON `json:"-"`
 }
@@ -162,11 +162,11 @@ func (r bucketMetricListResponseInfrequentAccessUploadedJSON) RawJSON() string {
 	return r.raw
 }
 
-// Metrics based on what state they are in(uploaded or published)
+// Metrics based on what state they are in(uploaded or published).
 type BucketMetricListResponseStandard struct {
-	// Metrics on number of objects/amount of storage used
+	// Metrics on number of objects/amount of storage used.
 	Published BucketMetricListResponseStandardPublished `json:"published"`
-	// Metrics on number of objects/amount of storage used
+	// Metrics on number of objects/amount of storage used.
 	Uploaded BucketMetricListResponseStandardUploaded `json:"uploaded"`
 	JSON     bucketMetricListResponseStandardJSON     `json:"-"`
 }
@@ -188,13 +188,13 @@ func (r bucketMetricListResponseStandardJSON) RawJSON() string {
 	return r.raw
 }
 
-// Metrics on number of objects/amount of storage used
+// Metrics on number of objects/amount of storage used.
 type BucketMetricListResponseStandardPublished struct {
-	// Amount of
+	// Amount of.
 	MetadataSize float64 `json:"metadataSize"`
-	// Number of objects stored
+	// Number of objects stored.
 	Objects float64 `json:"objects"`
-	// Amount of storage used by object data
+	// Amount of storage used by object data.
 	PayloadSize float64                                       `json:"payloadSize"`
 	JSON        bucketMetricListResponseStandardPublishedJSON `json:"-"`
 }
@@ -217,13 +217,13 @@ func (r bucketMetricListResponseStandardPublishedJSON) RawJSON() string {
 	return r.raw
 }
 
-// Metrics on number of objects/amount of storage used
+// Metrics on number of objects/amount of storage used.
 type BucketMetricListResponseStandardUploaded struct {
-	// Amount of
+	// Amount of.
 	MetadataSize float64 `json:"metadataSize"`
-	// Number of objects stored
+	// Number of objects stored.
 	Objects float64 `json:"objects"`
-	// Amount of storage used by object data
+	// Amount of storage used by object data.
 	PayloadSize float64                                      `json:"payloadSize"`
 	JSON        bucketMetricListResponseStandardUploadedJSON `json:"-"`
 }
@@ -247,16 +247,16 @@ func (r bucketMetricListResponseStandardUploadedJSON) RawJSON() string {
 }
 
 type BucketMetricListParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type BucketMetricListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []string              `json:"messages,required"`
-	// Metrics based on the class they belong to
+	// Metrics based on the class they belong to.
 	Result BucketMetricListResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketMetricListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketMetricListResponseEnvelopeJSON    `json:"-"`
 }
@@ -280,7 +280,7 @@ func (r bucketMetricListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketMetricListResponseEnvelopeSuccess bool
 
 const (

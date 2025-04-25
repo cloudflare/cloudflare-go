@@ -34,7 +34,7 @@ func NewBucketCORSService(opts ...option.RequestOption) (r *BucketCORSService) {
 	return
 }
 
-// Set the CORS policy for a bucket
+// Set the CORS policy for a bucket.
 func (r *BucketCORSService) Update(ctx context.Context, bucketName string, params BucketCORSUpdateParams, opts ...option.RequestOption) (res *BucketCORSUpdateResponse, err error) {
 	var env BucketCORSUpdateResponseEnvelope
 	if params.Jurisdiction.Present {
@@ -58,7 +58,7 @@ func (r *BucketCORSService) Update(ctx context.Context, bucketName string, param
 	return
 }
 
-// Delete the CORS policy for a bucket
+// Delete the CORS policy for a bucket.
 func (r *BucketCORSService) Delete(ctx context.Context, bucketName string, params BucketCORSDeleteParams, opts ...option.RequestOption) (res *BucketCORSDeleteResponse, err error) {
 	var env BucketCORSDeleteResponseEnvelope
 	if params.Jurisdiction.Present {
@@ -82,7 +82,7 @@ func (r *BucketCORSService) Delete(ctx context.Context, bucketName string, param
 	return
 }
 
-// Get the CORS policy for a bucket
+// Get the CORS policy for a bucket.
 func (r *BucketCORSService) Get(ctx context.Context, bucketName string, params BucketCORSGetParams, opts ...option.RequestOption) (res *BucketCORSGetResponse, err error) {
 	var env BucketCORSGetResponseEnvelope
 	if params.Jurisdiction.Present {
@@ -134,7 +134,7 @@ func (r bucketCORSGetResponseJSON) RawJSON() string {
 type BucketCORSGetResponseRule struct {
 	// Object specifying allowed origins, methods and headers for this CORS rule.
 	Allowed BucketCORSGetResponseRulesAllowed `json:"allowed,required"`
-	// Identifier for this rule
+	// Identifier for this rule.
 	ID string `json:"id"`
 	// Specifies the headers that can be exposed back, and accessed by, the JavaScript
 	// making the cross-origin request. If you need to access headers beyond the
@@ -220,10 +220,10 @@ func (r BucketCORSGetResponseRulesAllowedMethod) IsKnown() bool {
 }
 
 type BucketCORSUpdateParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string]                       `path:"account_id,required"`
 	Rules     param.Field[[]BucketCORSUpdateParamsRule] `json:"rules"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketCORSUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -234,7 +234,7 @@ func (r BucketCORSUpdateParams) MarshalJSON() (data []byte, err error) {
 type BucketCORSUpdateParamsRule struct {
 	// Object specifying allowed origins, methods and headers for this CORS rule.
 	Allowed param.Field[BucketCORSUpdateParamsRulesAllowed] `json:"allowed,required"`
-	// Identifier for this rule
+	// Identifier for this rule.
 	ID param.Field[string] `json:"id"`
 	// Specifies the headers that can be exposed back, and accessed by, the JavaScript
 	// making the cross-origin request. If you need to access headers beyond the
@@ -288,7 +288,7 @@ func (r BucketCORSUpdateParamsRulesAllowedMethod) IsKnown() bool {
 	return false
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketCORSUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -309,7 +309,7 @@ type BucketCORSUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo    `json:"errors,required"`
 	Messages []string                 `json:"messages,required"`
 	Result   BucketCORSUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketCORSUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketCORSUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -333,7 +333,7 @@ func (r bucketCORSUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketCORSUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -349,13 +349,13 @@ func (r BucketCORSUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketCORSDeleteParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketCORSDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketCORSDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -376,7 +376,7 @@ type BucketCORSDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo    `json:"errors,required"`
 	Messages []string                 `json:"messages,required"`
 	Result   BucketCORSDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketCORSDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketCORSDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -400,7 +400,7 @@ func (r bucketCORSDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketCORSDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -416,13 +416,13 @@ func (r BucketCORSDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketCORSGetParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketCORSGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketCORSGetParamsCfR2Jurisdiction string
 
 const (
@@ -443,7 +443,7 @@ type BucketCORSGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []string              `json:"messages,required"`
 	Result   BucketCORSGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketCORSGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketCORSGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -467,7 +467,7 @@ func (r bucketCORSGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketCORSGetResponseEnvelopeSuccess bool
 
 const (
