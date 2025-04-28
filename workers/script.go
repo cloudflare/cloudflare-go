@@ -708,7 +708,7 @@ func (r ScriptUpdateParamsMetadataBinding) implementsScriptUpdateParamsMetadataB
 // Satisfied by [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets],
-// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace],
@@ -821,30 +821,30 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType) IsKnown(
 	return false
 }
 
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering struct {
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType] `json:"type,required"`
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering) implementsScriptUpdateParamsMetadataBindingUnion() {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser) implementsScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType string
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserTypeBrowser ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType = "browser"
 )
 
-func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering:
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserTypeBrowser:
 		return true
 	}
 	return false
@@ -1504,7 +1504,7 @@ const (
 	ScriptUpdateParamsMetadataBindingsTypeAI                     ScriptUpdateParamsMetadataBindingsType = "ai"
 	ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine        ScriptUpdateParamsMetadataBindingsType = "analytics_engine"
 	ScriptUpdateParamsMetadataBindingsTypeAssets                 ScriptUpdateParamsMetadataBindingsType = "assets"
-	ScriptUpdateParamsMetadataBindingsTypeBrowserRendering       ScriptUpdateParamsMetadataBindingsType = "browser_rendering"
+	ScriptUpdateParamsMetadataBindingsTypeBrowser                ScriptUpdateParamsMetadataBindingsType = "browser"
 	ScriptUpdateParamsMetadataBindingsTypeD1                     ScriptUpdateParamsMetadataBindingsType = "d1"
 	ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace      ScriptUpdateParamsMetadataBindingsType = "dispatch_namespace"
 	ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace ScriptUpdateParamsMetadataBindingsType = "durable_object_namespace"
@@ -1527,7 +1527,7 @@ const (
 
 func (r ScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowserRendering, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTailConsumer, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey:
+	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTailConsumer, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey:
 		return true
 	}
 	return false

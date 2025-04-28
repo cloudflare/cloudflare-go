@@ -247,7 +247,7 @@ func (r *ScriptScriptAndVersionSettingEditResponseBinding) UnmarshalJSON(data []
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering],
+// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
@@ -276,7 +276,7 @@ func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScript
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering],
+// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
 // [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
@@ -321,8 +321,8 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "browser_rendering",
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser{}),
+			DiscriminatorValue: "browser",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -552,45 +552,45 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAsset
 	return false
 }
 
-type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering struct {
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType `json:"type,required"`
-	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingJSON `json:"-"`
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserJSON `json:"-"`
 }
 
-// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingJSON
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserJSON
 // contains the JSON metadata for the struct
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering]
-type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingJSON struct {
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingJSON) RawJSON() string {
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRendering) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser) implementsScriptScriptAndVersionSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType string
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserType string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserTypeBrowser ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserType = "browser"
 )
 
-func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingType) IsKnown() bool {
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowserTypeBrowser:
 		return true
 	}
 	return false
@@ -1566,7 +1566,7 @@ const (
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeAI                     ScriptScriptAndVersionSettingEditResponseBindingsType = "ai"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditResponseBindingsType = "analytics_engine"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets                 ScriptScriptAndVersionSettingEditResponseBindingsType = "assets"
-	ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowserRendering       ScriptScriptAndVersionSettingEditResponseBindingsType = "browser_rendering"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser                ScriptScriptAndVersionSettingEditResponseBindingsType = "browser"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeD1                     ScriptScriptAndVersionSettingEditResponseBindingsType = "d1"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace      ScriptScriptAndVersionSettingEditResponseBindingsType = "dispatch_namespace"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditResponseBindingsType = "durable_object_namespace"
@@ -1589,7 +1589,7 @@ const (
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowserRendering, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey:
+	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey:
 		return true
 	}
 	return false
@@ -2003,7 +2003,7 @@ func (r *ScriptScriptAndVersionSettingGetResponseBinding) UnmarshalJSON(data []b
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering],
+// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
@@ -2032,7 +2032,7 @@ func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptA
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering],
+// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
 // [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
@@ -2077,8 +2077,8 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "browser_rendering",
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser{}),
+			DiscriminatorValue: "browser",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -2308,45 +2308,45 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets
 	return false
 }
 
-type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering struct {
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType `json:"type,required"`
-	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingJSON `json:"-"`
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserJSON `json:"-"`
 }
 
-// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingJSON
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserJSON
 // contains the JSON metadata for the struct
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering]
-type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingJSON struct {
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingJSON) RawJSON() string {
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRendering) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser) implementsScriptScriptAndVersionSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType string
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserType string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserTypeBrowser ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserType = "browser"
 )
 
-func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingType) IsKnown() bool {
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowserTypeBrowser:
 		return true
 	}
 	return false
@@ -3322,7 +3322,7 @@ const (
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeAI                     ScriptScriptAndVersionSettingGetResponseBindingsType = "ai"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine        ScriptScriptAndVersionSettingGetResponseBindingsType = "analytics_engine"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets                 ScriptScriptAndVersionSettingGetResponseBindingsType = "assets"
-	ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowserRendering       ScriptScriptAndVersionSettingGetResponseBindingsType = "browser_rendering"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser                ScriptScriptAndVersionSettingGetResponseBindingsType = "browser"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeD1                     ScriptScriptAndVersionSettingGetResponseBindingsType = "d1"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace      ScriptScriptAndVersionSettingGetResponseBindingsType = "dispatch_namespace"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace ScriptScriptAndVersionSettingGetResponseBindingsType = "durable_object_namespace"
@@ -3345,7 +3345,7 @@ const (
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowserRendering, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey:
+	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTailConsumer, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey:
 		return true
 	}
 	return false
@@ -3713,7 +3713,7 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) implementsScript
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAI],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngine],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRendering],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowser],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindD1],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespace],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespace],
@@ -3826,30 +3826,30 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 	return false
 }
 
-type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRendering struct {
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType] `json:"type,required"`
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserType] `json:"type,required"`
 }
 
-func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRendering) MarshalJSON() (data []byte, err error) {
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowser) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRendering) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowser) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType string
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserType string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserTypeBrowser ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserType = "browser"
 )
 
-func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingType) IsKnown() bool {
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindBrowserTypeBrowser:
 		return true
 	}
 	return false
@@ -4509,7 +4509,7 @@ const (
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "ai"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine        ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "analytics_engine"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets                 ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "assets"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowserRendering       ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "browser_rendering"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser                ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "browser"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "d1"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace      ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "dispatch_namespace"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "durable_object_namespace"
@@ -4532,7 +4532,7 @@ const (
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowserRendering, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTailConsumer, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey:
 		return true
 	}
 	return false
