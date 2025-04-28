@@ -1594,6 +1594,10 @@ func init() {
 			TypeFilter: gjson.False,
 			Type:       reflect.TypeOf(shared.UnionBool(false)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMap{}),
+		},
 	)
 }
 
@@ -1628,6 +1632,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.False,
 			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMap{}),
 		},
 	)
 }
@@ -2222,6 +2230,10 @@ func init() {
 			TypeFilter: gjson.False,
 			Type:       reflect.TypeOf(shared.UnionBool(false)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMap{}),
+		},
 	)
 }
 
@@ -2256,6 +2268,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.False,
 			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMap{}),
 		},
 	)
 }
