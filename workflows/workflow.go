@@ -111,30 +111,34 @@ func (r *WorkflowService) Get(ctx context.Context, workflowName string, query Wo
 }
 
 type WorkflowUpdateResponse struct {
-	ID          string                     `json:"id,required" format:"uuid"`
-	ClassName   string                     `json:"class_name,required"`
-	CreatedOn   time.Time                  `json:"created_on,required" format:"date-time"`
-	ModifiedOn  time.Time                  `json:"modified_on,required" format:"date-time"`
-	Name        string                     `json:"name,required"`
-	ScriptName  string                     `json:"script_name,required"`
-	TriggeredOn time.Time                  `json:"triggered_on,required,nullable" format:"date-time"`
-	VersionID   string                     `json:"version_id,required" format:"uuid"`
-	JSON        workflowUpdateResponseJSON `json:"-"`
+	ID                string                     `json:"id,required" format:"uuid"`
+	ClassName         string                     `json:"class_name,required"`
+	CreatedOn         time.Time                  `json:"created_on,required" format:"date-time"`
+	IsDeleted         float64                    `json:"is_deleted,required"`
+	ModifiedOn        time.Time                  `json:"modified_on,required" format:"date-time"`
+	Name              string                     `json:"name,required"`
+	ScriptName        string                     `json:"script_name,required"`
+	TerminatorRunning float64                    `json:"terminator_running,required"`
+	TriggeredOn       time.Time                  `json:"triggered_on,required,nullable" format:"date-time"`
+	VersionID         string                     `json:"version_id,required" format:"uuid"`
+	JSON              workflowUpdateResponseJSON `json:"-"`
 }
 
 // workflowUpdateResponseJSON contains the JSON metadata for the struct
 // [WorkflowUpdateResponse]
 type workflowUpdateResponseJSON struct {
-	ID          apijson.Field
-	ClassName   apijson.Field
-	CreatedOn   apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	ScriptName  apijson.Field
-	TriggeredOn apijson.Field
-	VersionID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                apijson.Field
+	ClassName         apijson.Field
+	CreatedOn         apijson.Field
+	IsDeleted         apijson.Field
+	ModifiedOn        apijson.Field
+	Name              apijson.Field
+	ScriptName        apijson.Field
+	TerminatorRunning apijson.Field
+	TriggeredOn       apijson.Field
+	VersionID         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *WorkflowUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -187,7 +191,6 @@ type WorkflowListResponseInstances struct {
 	Queued          float64                           `json:"queued"`
 	Running         float64                           `json:"running"`
 	Terminated      float64                           `json:"terminated"`
-	Unknown         float64                           `json:"unknown"`
 	Waiting         float64                           `json:"waiting"`
 	WaitingForPause float64                           `json:"waitingForPause"`
 	JSON            workflowListResponseInstancesJSON `json:"-"`
@@ -202,7 +205,6 @@ type workflowListResponseInstancesJSON struct {
 	Queued          apijson.Field
 	Running         apijson.Field
 	Terminated      apijson.Field
-	Unknown         apijson.Field
 	Waiting         apijson.Field
 	WaitingForPause apijson.Field
 	raw             string
@@ -259,7 +261,6 @@ type WorkflowGetResponseInstances struct {
 	Queued          float64                          `json:"queued"`
 	Running         float64                          `json:"running"`
 	Terminated      float64                          `json:"terminated"`
-	Unknown         float64                          `json:"unknown"`
 	Waiting         float64                          `json:"waiting"`
 	WaitingForPause float64                          `json:"waitingForPause"`
 	JSON            workflowGetResponseInstancesJSON `json:"-"`
@@ -274,7 +275,6 @@ type workflowGetResponseInstancesJSON struct {
 	Queued          apijson.Field
 	Running         apijson.Field
 	Terminated      apijson.Field
-	Unknown         apijson.Field
 	Waiting         apijson.Field
 	WaitingForPause apijson.Field
 	raw             string
