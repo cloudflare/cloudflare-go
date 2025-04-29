@@ -94,12 +94,11 @@ const (
 	InstanceStatusEditResponseStatusComplete        InstanceStatusEditResponseStatus = "complete"
 	InstanceStatusEditResponseStatusWaitingForPause InstanceStatusEditResponseStatus = "waitingForPause"
 	InstanceStatusEditResponseStatusWaiting         InstanceStatusEditResponseStatus = "waiting"
-	InstanceStatusEditResponseStatusUnknown         InstanceStatusEditResponseStatus = "unknown"
 )
 
 func (r InstanceStatusEditResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceStatusEditResponseStatusQueued, InstanceStatusEditResponseStatusRunning, InstanceStatusEditResponseStatusPaused, InstanceStatusEditResponseStatusErrored, InstanceStatusEditResponseStatusTerminated, InstanceStatusEditResponseStatusComplete, InstanceStatusEditResponseStatusWaitingForPause, InstanceStatusEditResponseStatusWaiting, InstanceStatusEditResponseStatusUnknown:
+	case InstanceStatusEditResponseStatusQueued, InstanceStatusEditResponseStatusRunning, InstanceStatusEditResponseStatusPaused, InstanceStatusEditResponseStatusErrored, InstanceStatusEditResponseStatusTerminated, InstanceStatusEditResponseStatusComplete, InstanceStatusEditResponseStatusWaitingForPause, InstanceStatusEditResponseStatusWaiting:
 		return true
 	}
 	return false

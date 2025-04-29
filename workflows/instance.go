@@ -190,12 +190,11 @@ const (
 	InstanceNewResponseStatusComplete        InstanceNewResponseStatus = "complete"
 	InstanceNewResponseStatusWaitingForPause InstanceNewResponseStatus = "waitingForPause"
 	InstanceNewResponseStatusWaiting         InstanceNewResponseStatus = "waiting"
-	InstanceNewResponseStatusUnknown         InstanceNewResponseStatus = "unknown"
 )
 
 func (r InstanceNewResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseStatusQueued, InstanceNewResponseStatusRunning, InstanceNewResponseStatusPaused, InstanceNewResponseStatusErrored, InstanceNewResponseStatusTerminated, InstanceNewResponseStatusComplete, InstanceNewResponseStatusWaitingForPause, InstanceNewResponseStatusWaiting, InstanceNewResponseStatusUnknown:
+	case InstanceNewResponseStatusQueued, InstanceNewResponseStatusRunning, InstanceNewResponseStatusPaused, InstanceNewResponseStatusErrored, InstanceNewResponseStatusTerminated, InstanceNewResponseStatusComplete, InstanceNewResponseStatusWaitingForPause, InstanceNewResponseStatusWaiting:
 		return true
 	}
 	return false
@@ -247,12 +246,11 @@ const (
 	InstanceListResponseStatusComplete        InstanceListResponseStatus = "complete"
 	InstanceListResponseStatusWaitingForPause InstanceListResponseStatus = "waitingForPause"
 	InstanceListResponseStatusWaiting         InstanceListResponseStatus = "waiting"
-	InstanceListResponseStatusUnknown         InstanceListResponseStatus = "unknown"
 )
 
 func (r InstanceListResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceListResponseStatusQueued, InstanceListResponseStatusRunning, InstanceListResponseStatusPaused, InstanceListResponseStatusErrored, InstanceListResponseStatusTerminated, InstanceListResponseStatusComplete, InstanceListResponseStatusWaitingForPause, InstanceListResponseStatusWaiting, InstanceListResponseStatusUnknown:
+	case InstanceListResponseStatusQueued, InstanceListResponseStatusRunning, InstanceListResponseStatusPaused, InstanceListResponseStatusErrored, InstanceListResponseStatusTerminated, InstanceListResponseStatusComplete, InstanceListResponseStatusWaitingForPause, InstanceListResponseStatusWaiting:
 		return true
 	}
 	return false
@@ -296,12 +294,11 @@ const (
 	InstanceBulkResponseStatusComplete        InstanceBulkResponseStatus = "complete"
 	InstanceBulkResponseStatusWaitingForPause InstanceBulkResponseStatus = "waitingForPause"
 	InstanceBulkResponseStatusWaiting         InstanceBulkResponseStatus = "waiting"
-	InstanceBulkResponseStatusUnknown         InstanceBulkResponseStatus = "unknown"
 )
 
 func (r InstanceBulkResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceBulkResponseStatusQueued, InstanceBulkResponseStatusRunning, InstanceBulkResponseStatusPaused, InstanceBulkResponseStatusErrored, InstanceBulkResponseStatusTerminated, InstanceBulkResponseStatusComplete, InstanceBulkResponseStatusWaitingForPause, InstanceBulkResponseStatusWaiting, InstanceBulkResponseStatusUnknown:
+	case InstanceBulkResponseStatusQueued, InstanceBulkResponseStatusRunning, InstanceBulkResponseStatusPaused, InstanceBulkResponseStatusErrored, InstanceBulkResponseStatusTerminated, InstanceBulkResponseStatusComplete, InstanceBulkResponseStatusWaitingForPause, InstanceBulkResponseStatusWaiting:
 		return true
 	}
 	return false
@@ -402,12 +399,11 @@ const (
 	InstanceGetResponseStatusComplete        InstanceGetResponseStatus = "complete"
 	InstanceGetResponseStatusWaitingForPause InstanceGetResponseStatus = "waitingForPause"
 	InstanceGetResponseStatusWaiting         InstanceGetResponseStatus = "waiting"
-	InstanceGetResponseStatusUnknown         InstanceGetResponseStatus = "unknown"
 )
 
 func (r InstanceGetResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceGetResponseStatusQueued, InstanceGetResponseStatusRunning, InstanceGetResponseStatusPaused, InstanceGetResponseStatusErrored, InstanceGetResponseStatusTerminated, InstanceGetResponseStatusComplete, InstanceGetResponseStatusWaitingForPause, InstanceGetResponseStatusWaiting, InstanceGetResponseStatusUnknown:
+	case InstanceGetResponseStatusQueued, InstanceGetResponseStatusRunning, InstanceGetResponseStatusPaused, InstanceGetResponseStatusErrored, InstanceGetResponseStatusTerminated, InstanceGetResponseStatusComplete, InstanceGetResponseStatusWaitingForPause, InstanceGetResponseStatusWaiting:
 		return true
 	}
 	return false
@@ -886,12 +882,11 @@ const (
 	InstanceListParamsStatusComplete        InstanceListParamsStatus = "complete"
 	InstanceListParamsStatusWaitingForPause InstanceListParamsStatus = "waitingForPause"
 	InstanceListParamsStatusWaiting         InstanceListParamsStatus = "waiting"
-	InstanceListParamsStatusUnknown         InstanceListParamsStatus = "unknown"
 )
 
 func (r InstanceListParamsStatus) IsKnown() bool {
 	switch r {
-	case InstanceListParamsStatusQueued, InstanceListParamsStatusRunning, InstanceListParamsStatusPaused, InstanceListParamsStatusErrored, InstanceListParamsStatusTerminated, InstanceListParamsStatusComplete, InstanceListParamsStatusWaitingForPause, InstanceListParamsStatusWaiting, InstanceListParamsStatusUnknown:
+	case InstanceListParamsStatusQueued, InstanceListParamsStatusRunning, InstanceListParamsStatusPaused, InstanceListParamsStatusErrored, InstanceListParamsStatusTerminated, InstanceListParamsStatusComplete, InstanceListParamsStatusWaitingForPause, InstanceListParamsStatusWaiting:
 		return true
 	}
 	return false
