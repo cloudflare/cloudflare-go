@@ -237,10 +237,9 @@ func (r RuleListResponseProvider) IsKnown() bool {
 }
 
 type RuleUpdateParams struct {
-	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	// List of Cloud Connector rules
-	Rules []RuleUpdateParamsRule `json:"rules"`
+	// Identifier.
+	ZoneID param.Field[string]    `path:"zone_id,required"`
+	Rules  []RuleUpdateParamsRule `json:"rules"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -291,6 +290,6 @@ func (r RuleUpdateParamsRulesProvider) IsKnown() bool {
 }
 
 type RuleListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
