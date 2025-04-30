@@ -89,6 +89,28 @@ func (r *WorkflowService) ListAutoPaging(ctx context.Context, params WorkflowLis
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
+// Deletes a Workflow. This only deletes the Workflow and does not delete or modify
+// any Worker associated to this Workflow or bounded to it.
+func (r *WorkflowService) Delete(ctx context.Context, workflowName string, body WorkflowDeleteParams, opts ...option.RequestOption) (res *WorkflowDeleteResponse, err error) {
+	var env WorkflowDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if workflowName == "" {
+		err = errors.New("missing required workflow_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/workflows/%s", body.AccountID, workflowName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Get Workflow details
 func (r *WorkflowService) Get(ctx context.Context, workflowName string, query WorkflowGetParams, opts ...option.RequestOption) (res *WorkflowGetResponse, err error) {
 	var env WorkflowGetResponseEnvelope
@@ -217,6 +239,43 @@ func (r *WorkflowListResponseInstances) UnmarshalJSON(data []byte) (err error) {
 
 func (r workflowListResponseInstancesJSON) RawJSON() string {
 	return r.raw
+}
+
+type WorkflowDeleteResponse struct {
+	Status  WorkflowDeleteResponseStatus `json:"status,required"`
+	Success bool                         `json:"success,required,nullable"`
+	JSON    workflowDeleteResponseJSON   `json:"-"`
+}
+
+// workflowDeleteResponseJSON contains the JSON metadata for the struct
+// [WorkflowDeleteResponse]
+type workflowDeleteResponseJSON struct {
+	Status      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkflowDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workflowDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkflowDeleteResponseStatus string
+
+const (
+	WorkflowDeleteResponseStatusOk WorkflowDeleteResponseStatus = "ok"
+)
+
+func (r WorkflowDeleteResponseStatus) IsKnown() bool {
+	switch r {
+	case WorkflowDeleteResponseStatusOk:
+		return true
+	}
+	return false
 }
 
 type WorkflowGetResponse struct {
@@ -427,6 +486,126 @@ func (r WorkflowListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type WorkflowDeleteParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type WorkflowDeleteResponseEnvelope struct {
+	Errors     []WorkflowDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages   []WorkflowDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result     WorkflowDeleteResponse                   `json:"result,required"`
+	Success    WorkflowDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo WorkflowDeleteResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       workflowDeleteResponseEnvelopeJSON       `json:"-"`
+}
+
+// workflowDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [WorkflowDeleteResponseEnvelope]
+type workflowDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkflowDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workflowDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkflowDeleteResponseEnvelopeErrors struct {
+	Code    float64                                  `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    workflowDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workflowDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WorkflowDeleteResponseEnvelopeErrors]
+type workflowDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkflowDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workflowDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkflowDeleteResponseEnvelopeMessages struct {
+	Code    float64                                    `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    workflowDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// workflowDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WorkflowDeleteResponseEnvelopeMessages]
+type workflowDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkflowDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workflowDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkflowDeleteResponseEnvelopeSuccess bool
+
+const (
+	WorkflowDeleteResponseEnvelopeSuccessTrue WorkflowDeleteResponseEnvelopeSuccess = true
+)
+
+func (r WorkflowDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WorkflowDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type WorkflowDeleteResponseEnvelopeResultInfo struct {
+	Count      float64                                      `json:"count,required"`
+	Page       float64                                      `json:"page,required"`
+	PerPage    float64                                      `json:"per_page,required"`
+	TotalCount float64                                      `json:"total_count,required"`
+	JSON       workflowDeleteResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// workflowDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [WorkflowDeleteResponseEnvelopeResultInfo]
+type workflowDeleteResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkflowDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workflowDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkflowGetParams struct {

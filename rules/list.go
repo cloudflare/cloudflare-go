@@ -139,6 +139,28 @@ func (r *ListService) Get(ctx context.Context, listID string, query ListGetParam
 
 // Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 // 0 to 9, wildcards (\*), and the hyphen (-).
+type Hostname struct {
+	URLHostname string       `json:"url_hostname,required"`
+	JSON        hostnameJSON `json:"-"`
+}
+
+// hostnameJSON contains the JSON metadata for the struct [Hostname]
+type hostnameJSON struct {
+	URLHostname apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Hostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameJSON) RawJSON() string {
+	return r.raw
+}
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
 type HostnameParam struct {
 	URLHostname param.Field[string] `json:"url_hostname,required"`
 }
@@ -148,18 +170,36 @@ func (r HostnameParam) MarshalJSON() (data []byte, err error) {
 }
 
 // The definition of the redirect.
-type RedirectParam struct {
-	SourceURL           param.Field[string]             `json:"source_url,required"`
-	TargetURL           param.Field[string]             `json:"target_url,required"`
-	IncludeSubdomains   param.Field[bool]               `json:"include_subdomains"`
-	PreservePathSuffix  param.Field[bool]               `json:"preserve_path_suffix"`
-	PreserveQueryString param.Field[bool]               `json:"preserve_query_string"`
-	StatusCode          param.Field[RedirectStatusCode] `json:"status_code"`
-	SubpathMatching     param.Field[bool]               `json:"subpath_matching"`
+type Redirect struct {
+	SourceURL           string             `json:"source_url,required"`
+	TargetURL           string             `json:"target_url,required"`
+	IncludeSubdomains   bool               `json:"include_subdomains"`
+	PreservePathSuffix  bool               `json:"preserve_path_suffix"`
+	PreserveQueryString bool               `json:"preserve_query_string"`
+	StatusCode          RedirectStatusCode `json:"status_code"`
+	SubpathMatching     bool               `json:"subpath_matching"`
+	JSON                redirectJSON       `json:"-"`
 }
 
-func (r RedirectParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// redirectJSON contains the JSON metadata for the struct [Redirect]
+type redirectJSON struct {
+	SourceURL           apijson.Field
+	TargetURL           apijson.Field
+	IncludeSubdomains   apijson.Field
+	PreservePathSuffix  apijson.Field
+	PreserveQueryString apijson.Field
+	StatusCode          apijson.Field
+	SubpathMatching     apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *Redirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r redirectJSON) RawJSON() string {
+	return r.raw
 }
 
 type RedirectStatusCode int64
@@ -177,6 +217,21 @@ func (r RedirectStatusCode) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// The definition of the redirect.
+type RedirectParam struct {
+	SourceURL           param.Field[string]             `json:"source_url,required"`
+	TargetURL           param.Field[string]             `json:"target_url,required"`
+	IncludeSubdomains   param.Field[bool]               `json:"include_subdomains"`
+	PreservePathSuffix  param.Field[bool]               `json:"preserve_path_suffix"`
+	PreserveQueryString param.Field[bool]               `json:"preserve_query_string"`
+	StatusCode          param.Field[RedirectStatusCode] `json:"status_code"`
+	SubpathMatching     param.Field[bool]               `json:"subpath_matching"`
+}
+
+func (r RedirectParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ListNewResponse struct {
