@@ -34,8 +34,8 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 			Value: cloudflare.F([]string{"destinationaddress@example.net"}),
 		}}),
 		Matchers: cloudflare.F([]email_routing.MatcherParam{{
-			Field: cloudflare.F(email_routing.MatcherFieldTo),
 			Type:  cloudflare.F(email_routing.MatcherTypeLiteral),
+			Field: cloudflare.F(email_routing.MatcherFieldTo),
 			Value: cloudflare.F("test@example.com"),
 		}}),
 		Enabled:  cloudflare.F(email_routing.RuleNewParamsEnabledTrue),
@@ -74,8 +74,8 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 				Value: cloudflare.F([]string{"destinationaddress@example.net"}),
 			}}),
 			Matchers: cloudflare.F([]email_routing.MatcherParam{{
-				Field: cloudflare.F(email_routing.MatcherFieldTo),
 				Type:  cloudflare.F(email_routing.MatcherTypeLiteral),
+				Field: cloudflare.F(email_routing.MatcherFieldTo),
 				Value: cloudflare.F("test@example.com"),
 			}}),
 			Enabled:  cloudflare.F(email_routing.RuleUpdateParamsEnabledTrue),
