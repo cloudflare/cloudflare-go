@@ -36,18 +36,13 @@ func NewRouteService(opts ...option.RequestOption) (r *RouteService) {
 
 // Creates a route that maps a URL pattern to a Worker.
 func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...option.RequestOption) (res *RouteNewResponse, err error) {
-	var env RouteNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/workers/routes", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
@@ -101,7 +96,6 @@ func (r *RouteService) ListAutoPaging(ctx context.Context, query RouteListParams
 
 // Deletes a route.
 func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
-	var env RouteDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -112,11 +106,7 @@ func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDel
 		return
 	}
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", body.ZoneID, routeID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -142,22 +132,19 @@ func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetPa
 }
 
 type RouteNewResponse struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// Pattern to match incoming requests against.
-	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-	Pattern string `json:"pattern,required"`
-	// Name of the script to run if the route matches.
-	Script string               `json:"script,required"`
-	JSON   routeNewResponseJSON `json:"-"`
+	Errors   []RouteNewResponseError   `json:"errors,required"`
+	Messages []RouteNewResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
+	Success RouteNewResponseSuccess `json:"success,required"`
+	JSON    routeNewResponseJSON    `json:"-"`
 }
 
 // routeNewResponseJSON contains the JSON metadata for the struct
 // [RouteNewResponse]
 type routeNewResponseJSON struct {
-	ID          apijson.Field
-	Pattern     apijson.Field
-	Script      apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -170,13 +157,122 @@ func (r routeNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type RouteNewResponseError struct {
+	Code             int64                        `json:"code,required"`
+	Message          string                       `json:"message,required"`
+	DocumentationURL string                       `json:"documentation_url"`
+	Source           RouteNewResponseErrorsSource `json:"source"`
+	JSON             routeNewResponseErrorJSON    `json:"-"`
+}
+
+// routeNewResponseErrorJSON contains the JSON metadata for the struct
+// [RouteNewResponseError]
+type routeNewResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RouteNewResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeNewResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteNewResponseErrorsSource struct {
+	Pointer string                           `json:"pointer"`
+	JSON    routeNewResponseErrorsSourceJSON `json:"-"`
+}
+
+// routeNewResponseErrorsSourceJSON contains the JSON metadata for the struct
+// [RouteNewResponseErrorsSource]
+type routeNewResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteNewResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeNewResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteNewResponseMessage struct {
+	Code             int64                          `json:"code,required"`
+	Message          string                         `json:"message,required"`
+	DocumentationURL string                         `json:"documentation_url"`
+	Source           RouteNewResponseMessagesSource `json:"source"`
+	JSON             routeNewResponseMessageJSON    `json:"-"`
+}
+
+// routeNewResponseMessageJSON contains the JSON metadata for the struct
+// [RouteNewResponseMessage]
+type routeNewResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RouteNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeNewResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteNewResponseMessagesSource struct {
+	Pointer string                             `json:"pointer"`
+	JSON    routeNewResponseMessagesSourceJSON `json:"-"`
+}
+
+// routeNewResponseMessagesSourceJSON contains the JSON metadata for the struct
+// [RouteNewResponseMessagesSource]
+type routeNewResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteNewResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeNewResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type RouteNewResponseSuccess bool
+
+const (
+	RouteNewResponseSuccessTrue RouteNewResponseSuccess = true
+)
+
+func (r RouteNewResponseSuccess) IsKnown() bool {
+	switch r {
+	case RouteNewResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteUpdateResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
-	// Pattern to match incoming requests against.
-	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
+	ID      string `json:"id,required"`
 	Pattern string `json:"pattern,required"`
-	// Name of the script to run if the route matches.
+	// Name of the script, used in URLs and route configuration.
 	Script string                  `json:"script,required"`
 	JSON   routeUpdateResponseJSON `json:"-"`
 }
@@ -199,15 +295,14 @@ func (r routeUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type RouteListResponse struct {
+type RouteNewParams struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-	Pattern string `json:"pattern,required"`
+	Pattern param.Field[string] `json:"pattern,required"`
 	// Name of the script to run if the route matches.
-	Script string                `json:"script,required"`
-	JSON   routeListResponseJSON `json:"-"`
+	Script param.Field[string] `json:"script,required"`
 }
 
 // routeListResponseJSON contains the JSON metadata for the struct
@@ -220,24 +315,22 @@ type routeListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RouteListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RouteDeleteResponse struct {
-	// Identifier.
-	ID   string                  `json:"id"`
-	JSON routeDeleteResponseJSON `json:"-"`
+type RouteNewResponseEnvelope struct {
+	Errors   []RouteNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RouteNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   RouteNewResponse                   `json:"result,required"`
+	// Whether the API call was successful.
+	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // routeDeleteResponseJSON contains the JSON metadata for the struct
 // [RouteDeleteResponse]
 type routeDeleteResponseJSON struct {
-	ID          apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -250,196 +343,137 @@ func (r routeDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type RouteGetResponse struct {
-	// Identifier.
-	ID string `json:"id,required"`
-	// Pattern to match incoming requests against.
-	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-	Pattern string `json:"pattern,required"`
-	// Name of the script to run if the route matches.
-	Script string               `json:"script,required"`
-	JSON   routeGetResponseJSON `json:"-"`
+type RouteDeleteResponseError struct {
+	Code             int64                           `json:"code,required"`
+	Message          string                          `json:"message,required"`
+	DocumentationURL string                          `json:"documentation_url"`
+	Source           RouteDeleteResponseErrorsSource `json:"source"`
+	JSON             routeDeleteResponseErrorJSON    `json:"-"`
 }
 
-// routeGetResponseJSON contains the JSON metadata for the struct
-// [RouteGetResponse]
-type routeGetResponseJSON struct {
-	ID          apijson.Field
-	Pattern     apijson.Field
-	Script      apijson.Field
+// routeDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [RouteDeleteResponseError]
+type routeDeleteResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RouteDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeDeleteResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteDeleteResponseErrorsSource struct {
+	Pointer string                              `json:"pointer"`
+	JSON    routeDeleteResponseErrorsSourceJSON `json:"-"`
+}
+
+// routeDeleteResponseErrorsSourceJSON contains the JSON metadata for the struct
+// [RouteDeleteResponseErrorsSource]
+type routeDeleteResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RouteGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RouteDeleteResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r routeGetResponseJSON) RawJSON() string {
+func (r routeDeleteResponseErrorsSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-type RouteNewParams struct {
+type RouteDeleteResponseMessage struct {
+	Code             int64                             `json:"code,required"`
+	Message          string                            `json:"message,required"`
+	DocumentationURL string                            `json:"documentation_url"`
+	Source           RouteDeleteResponseMessagesSource `json:"source"`
+	JSON             routeDeleteResponseMessageJSON    `json:"-"`
+}
+
+// routeDeleteResponseMessageJSON contains the JSON metadata for the struct
+// [RouteDeleteResponseMessage]
+type routeDeleteResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RouteDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeDeleteResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteDeleteResponseMessagesSource struct {
+	Pointer string                                `json:"pointer"`
+	JSON    routeDeleteResponseMessagesSourceJSON `json:"-"`
+}
+
+// routeDeleteResponseMessagesSourceJSON contains the JSON metadata for the struct
+// [RouteDeleteResponseMessagesSource]
+type routeDeleteResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteDeleteResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeDeleteResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type RouteDeleteResponseSuccess bool
+
+const (
+	RouteDeleteResponseSuccessTrue RouteDeleteResponseSuccess = true
+)
+
+func (r RouteDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case RouteDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RouteGetResponse struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern param.Field[string] `json:"pattern,required"`
-	// Name of the script to run if the route matches.
-	Script param.Field[string] `json:"script,required"`
+	// Name of the script, used in URLs and route configuration.
+	Script param.Field[string] `json:"script"`
 }
 
 func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type RouteNewResponseEnvelope struct {
-	Errors   []RouteNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RouteNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   RouteNewResponse                   `json:"result,required"`
-	// Whether the API call was successful.
-	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// routeNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RouteNewResponseEnvelope]
-type routeNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RouteNewResponseEnvelopeErrors struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
-	DocumentationURL string                               `json:"documentation_url"`
-	Source           RouteNewResponseEnvelopeErrorsSource `json:"source"`
-	JSON             routeNewResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// routeNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RouteNewResponseEnvelopeErrors]
-type routeNewResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RouteNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RouteNewResponseEnvelopeErrorsSource struct {
-	Pointer string                                   `json:"pointer"`
-	JSON    routeNewResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// routeNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [RouteNewResponseEnvelopeErrorsSource]
-type routeNewResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type RouteNewResponseEnvelopeMessages struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
-	DocumentationURL string                                 `json:"documentation_url"`
-	Source           RouteNewResponseEnvelopeMessagesSource `json:"source"`
-	JSON             routeNewResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// routeNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RouteNewResponseEnvelopeMessages]
-type routeNewResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RouteNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type RouteNewResponseEnvelopeMessagesSource struct {
-	Pointer string                                     `json:"pointer"`
-	JSON    routeNewResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// routeNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
-// struct [RouteNewResponseEnvelopeMessagesSource]
-type routeNewResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type RouteNewResponseEnvelopeSuccess bool
-
-const (
-	RouteNewResponseEnvelopeSuccessTrue RouteNewResponseEnvelopeSuccess = true
-)
-
-func (r RouteNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RouteNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type RouteUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Pattern to match incoming requests against.
-	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
+	ZoneID  param.Field[string] `path:"zone_id,required"`
 	Pattern param.Field[string] `json:"pattern,required"`
-	// Name of the script to run if the route matches.
-	Script param.Field[string] `json:"script,required"`
+	// Name of the script, used in URLs and route configuration.
+	Script param.Field[string] `json:"script"`
 }
 
 func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {

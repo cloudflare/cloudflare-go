@@ -179,7 +179,7 @@ func (r *DispatchNamespaceScriptBindingGetResponse) UnmarshalJSON(data []byte) (
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering],
+// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace],
@@ -207,7 +207,7 @@ func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceSc
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering],
+// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace],
@@ -251,8 +251,8 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering{}),
-			DiscriminatorValue: "browser_rendering",
+			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser{}),
+			DiscriminatorValue: "browser",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -477,45 +477,45 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType) I
 	return false
 }
 
-type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering struct {
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType `json:"type,required"`
-	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingJSON `json:"-"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserType `json:"type,required"`
+	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserJSON `json:"-"`
 }
 
-// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingJSON
-// contains the JSON metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering]
-type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingJSON struct {
+// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserJSON contains
+// the JSON metadata for the struct
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser]
+type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering) UnmarshalJSON(data []byte) (err error) {
+func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingJSON) RawJSON() string {
+func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRendering) implementsDispatchNamespaceScriptBindingGetResponse() {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
 // The kind of resource that the binding provides.
-type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType string
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserType string
 
 const (
-	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeBrowserRendering DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType = "browser_rendering"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserTypeBrowser DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserType = "browser"
 )
 
-func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingType) IsKnown() bool {
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserRenderingTypeBrowserRendering:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserTypeBrowser:
 		return true
 	}
 	return false
@@ -1444,7 +1444,7 @@ const (
 	DispatchNamespaceScriptBindingGetResponseTypeAI                     DispatchNamespaceScriptBindingGetResponseType = "ai"
 	DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseType = "analytics_engine"
 	DispatchNamespaceScriptBindingGetResponseTypeAssets                 DispatchNamespaceScriptBindingGetResponseType = "assets"
-	DispatchNamespaceScriptBindingGetResponseTypeBrowserRendering       DispatchNamespaceScriptBindingGetResponseType = "browser_rendering"
+	DispatchNamespaceScriptBindingGetResponseTypeBrowser                DispatchNamespaceScriptBindingGetResponseType = "browser"
 	DispatchNamespaceScriptBindingGetResponseTypeD1                     DispatchNamespaceScriptBindingGetResponseType = "d1"
 	DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseType = "dispatch_namespace"
 	DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseType = "durable_object_namespace"
@@ -1466,7 +1466,7 @@ const (
 
 func (r DispatchNamespaceScriptBindingGetResponseType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowserRendering, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata, DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret, DispatchNamespaceScriptBindingGetResponseTypeSecretKey:
+	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowser, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypePipelines, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTailConsumer, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata, DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret, DispatchNamespaceScriptBindingGetResponseTypeSecretKey:
 		return true
 	}
 	return false
