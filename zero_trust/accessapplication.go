@@ -2478,6 +2478,8 @@ type AccessApplicationNewResponse struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// This field can have the runtime type of [[]AllowedIdPs].
 	AllowedIdPs interface{} `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
@@ -2608,6 +2610,7 @@ type AccessApplicationNewResponse struct {
 type accessApplicationNewResponseJSON struct {
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherLogoURL          apijson.Field
 	AppLauncherVisible          apijson.Field
@@ -2755,6 +2758,8 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -2841,6 +2846,7 @@ type accessApplicationNewResponseSelfHostedApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -4037,6 +4043,8 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -4123,6 +4131,7 @@ type accessApplicationNewResponseBrowserSSHApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -4759,6 +4768,8 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -4845,6 +4856,7 @@ type accessApplicationNewResponseBrowserVNCApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -7806,6 +7818,8 @@ type AccessApplicationNewResponseBrowserRdpApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -7893,6 +7907,7 @@ type accessApplicationNewResponseBrowserRdpApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -8569,6 +8584,8 @@ type AccessApplicationUpdateResponse struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// This field can have the runtime type of [[]AllowedIdPs].
 	AllowedIdPs interface{} `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
@@ -8699,6 +8716,7 @@ type AccessApplicationUpdateResponse struct {
 type accessApplicationUpdateResponseJSON struct {
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherLogoURL          apijson.Field
 	AppLauncherVisible          apijson.Field
@@ -8846,6 +8864,8 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -8932,6 +8952,7 @@ type accessApplicationUpdateResponseSelfHostedApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -10130,6 +10151,8 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -10216,6 +10239,7 @@ type accessApplicationUpdateResponseBrowserSSHApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -10853,6 +10877,8 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -10939,6 +10965,7 @@ type accessApplicationUpdateResponseBrowserVNCApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -13903,6 +13930,8 @@ type AccessApplicationUpdateResponseBrowserRdpApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -13990,6 +14019,7 @@ type accessApplicationUpdateResponseBrowserRdpApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -14667,6 +14697,8 @@ type AccessApplicationListResponse struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// This field can have the runtime type of [[]AllowedIdPs].
 	AllowedIdPs interface{} `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
@@ -14797,6 +14829,7 @@ type AccessApplicationListResponse struct {
 type accessApplicationListResponseJSON struct {
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherLogoURL          apijson.Field
 	AppLauncherVisible          apijson.Field
@@ -14944,6 +14977,8 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -15030,6 +15065,7 @@ type accessApplicationListResponseSelfHostedApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -16227,6 +16263,8 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -16313,6 +16351,7 @@ type accessApplicationListResponseBrowserSSHApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -16950,6 +16989,8 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -17036,6 +17077,7 @@ type accessApplicationListResponseBrowserVNCApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -19998,6 +20040,8 @@ type AccessApplicationListResponseBrowserRdpApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -20085,6 +20129,7 @@ type accessApplicationListResponseBrowserRdpApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -20784,6 +20829,8 @@ type AccessApplicationGetResponse struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// This field can have the runtime type of [[]AllowedIdPs].
 	AllowedIdPs interface{} `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
@@ -20914,6 +20961,7 @@ type AccessApplicationGetResponse struct {
 type accessApplicationGetResponseJSON struct {
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherLogoURL          apijson.Field
 	AppLauncherVisible          apijson.Field
@@ -21061,6 +21109,8 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -21147,6 +21197,7 @@ type accessApplicationGetResponseSelfHostedApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -22343,6 +22394,8 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -22429,6 +22482,7 @@ type accessApplicationGetResponseBrowserSSHApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -23065,6 +23119,8 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -23151,6 +23207,7 @@ type accessApplicationGetResponseBrowserVNCApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -26112,6 +26169,8 @@ type AccessApplicationGetResponseBrowserRdpApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -26199,6 +26258,7 @@ type accessApplicationGetResponseBrowserRdpApplicationJSON struct {
 	Type                        apijson.Field
 	ID                          apijson.Field
 	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
 	AllowedIdPs                 apijson.Field
 	AppLauncherVisible          apijson.Field
 	AUD                         apijson.Field
@@ -26888,8 +26948,10 @@ type AccessApplicationNewParamsBody struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWARP param.Field[bool]        `json:"allow_authenticate_via_warp"`
-	AllowedIdPs              param.Field[interface{}] `json:"allowed_idps"`
+	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool]        `json:"allow_iframe"`
+	AllowedIdPs param.Field[interface{}] `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
 	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// Displays the application in the App Launcher.
@@ -26999,6 +27061,8 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -28008,6 +28072,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -28579,6 +28645,8 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -30660,6 +30728,8 @@ type AccessApplicationNewParamsBodyBrowserRdpApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -31407,8 +31477,10 @@ type AccessApplicationUpdateParamsBody struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWARP param.Field[bool]        `json:"allow_authenticate_via_warp"`
-	AllowedIdPs              param.Field[interface{}] `json:"allowed_idps"`
+	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool]        `json:"allow_iframe"`
+	AllowedIdPs param.Field[interface{}] `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
 	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// Displays the application in the App Launcher.
@@ -31519,6 +31591,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -32528,6 +32602,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -33099,6 +33175,8 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -35180,6 +35258,8 @@ type AccessApplicationUpdateParamsBodyBrowserRdpApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
