@@ -123,6 +123,27 @@ func (r *AppService) Delete(ctx context.Context, accountAppID string, body AppDe
 	return
 }
 
+// Updates an Account App
+func (r *AppService) Edit(ctx context.Context, accountAppID string, params AppEditParams, opts ...option.RequestOption) (res *AppEditResponse, err error) {
+	var env AppEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if accountAppID == "" {
+		err = errors.New("missing required account_app_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/apps/%s", params.AccountID, accountAppID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Custom app defined for an account.
 type AppNewResponse struct {
 	// Magic account app ID.
@@ -377,6 +398,40 @@ func (r appDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Custom app defined for an account.
+type AppEditResponse struct {
+	// Magic account app ID.
+	AccountAppID string `json:"account_app_id,required"`
+	// FQDNs to associate with traffic decisions.
+	Hostnames []string `json:"hostnames"`
+	// CIDRs to associate with traffic decisions.
+	IPSubnets []string `json:"ip_subnets"`
+	// Display name for the app.
+	Name string `json:"name"`
+	// Category of the app.
+	Type string              `json:"type"`
+	JSON appEditResponseJSON `json:"-"`
+}
+
+// appEditResponseJSON contains the JSON metadata for the struct [AppEditResponse]
+type appEditResponseJSON struct {
+	AccountAppID apijson.Field
+	Hostnames    apijson.Field
+	IPSubnets    apijson.Field
+	Name         apijson.Field
+	Type         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AppEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r appEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AppNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -548,6 +603,67 @@ const (
 func (r AppDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case AppDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type AppEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// FQDNs to associate with traffic decisions.
+	Hostnames param.Field[[]string] `json:"hostnames"`
+	// CIDRs to associate with traffic decisions.
+	IPSubnets param.Field[[]string] `json:"ip_subnets"`
+	// Display name for the app.
+	Name param.Field[string] `json:"name"`
+	// Category of the app.
+	Type param.Field[string] `json:"type"`
+}
+
+func (r AppEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AppEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Custom app defined for an account.
+	Result AppEditResponse `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success AppEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    appEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// appEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AppEditResponseEnvelope]
+type appEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AppEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r appEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type AppEditResponseEnvelopeSuccess bool
+
+const (
+	AppEditResponseEnvelopeSuccessTrue AppEditResponseEnvelopeSuccess = true
+)
+
+func (r AppEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AppEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

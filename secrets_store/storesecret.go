@@ -155,6 +155,31 @@ func (r *StoreSecretService) BulkDeleteAutoPaging(ctx context.Context, storeID s
 	return pagination.NewSinglePageAutoPager(r.BulkDelete(ctx, storeID, body, opts...))
 }
 
+// Duplicates the secret, keeping the value
+func (r *StoreSecretService) Duplicate(ctx context.Context, storeID string, secretID string, params StoreSecretDuplicateParams, opts ...option.RequestOption) (res *StoreSecretDuplicateResponse, err error) {
+	var env StoreSecretDuplicateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if storeID == "" {
+		err = errors.New("missing required store_id parameter")
+		return
+	}
+	if secretID == "" {
+		err = errors.New("missing required secret_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s/secrets/%s/duplicate", params.AccountID, storeID, secretID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Updates a single secret
 func (r *StoreSecretService) Edit(ctx context.Context, storeID string, secretID string, params StoreSecretEditParams, opts ...option.RequestOption) (res *StoreSecretEditResponse, err error) {
 	var env StoreSecretEditResponseEnvelope
@@ -420,6 +445,61 @@ const (
 func (r StoreSecretBulkDeleteResponseStatus) IsKnown() bool {
 	switch r {
 	case StoreSecretBulkDeleteResponseStatusPending, StoreSecretBulkDeleteResponseStatusActive, StoreSecretBulkDeleteResponseStatusDeleted:
+		return true
+	}
+	return false
+}
+
+type StoreSecretDuplicateResponse struct {
+	// Secret identifier tag.
+	ID string `json:"id,required"`
+	// Whenthe secret was created.
+	Created time.Time `json:"created,required" format:"date-time"`
+	// When the secret was modified.
+	Modified time.Time `json:"modified,required" format:"date-time"`
+	// The name of the secret
+	Name   string                             `json:"name,required"`
+	Status StoreSecretDuplicateResponseStatus `json:"status,required"`
+	// Store Identifier
+	StoreID string `json:"store_id,required"`
+	// Freeform text describing the secret
+	Comment string                           `json:"comment"`
+	JSON    storeSecretDuplicateResponseJSON `json:"-"`
+}
+
+// storeSecretDuplicateResponseJSON contains the JSON metadata for the struct
+// [StoreSecretDuplicateResponse]
+type storeSecretDuplicateResponseJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	Modified    apijson.Field
+	Name        apijson.Field
+	Status      apijson.Field
+	StoreID     apijson.Field
+	Comment     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreSecretDuplicateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeSecretDuplicateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreSecretDuplicateResponseStatus string
+
+const (
+	StoreSecretDuplicateResponseStatusPending StoreSecretDuplicateResponseStatus = "pending"
+	StoreSecretDuplicateResponseStatusActive  StoreSecretDuplicateResponseStatus = "active"
+	StoreSecretDuplicateResponseStatusDeleted StoreSecretDuplicateResponseStatus = "deleted"
+)
+
+func (r StoreSecretDuplicateResponseStatus) IsKnown() bool {
+	switch r {
+	case StoreSecretDuplicateResponseStatusPending, StoreSecretDuplicateResponseStatusActive, StoreSecretDuplicateResponseStatusDeleted:
 		return true
 	}
 	return false
@@ -797,6 +877,189 @@ func (r storeSecretDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
 type StoreSecretBulkDeleteParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type StoreSecretDuplicateParams struct {
+	// Account Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The name of the secret
+	Name param.Field[string] `json:"name,required"`
+}
+
+func (r StoreSecretDuplicateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type StoreSecretDuplicateResponseEnvelope struct {
+	Errors   []StoreSecretDuplicateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StoreSecretDuplicateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success    StoreSecretDuplicateResponseEnvelopeSuccess    `json:"success,required"`
+	Result     StoreSecretDuplicateResponse                   `json:"result"`
+	ResultInfo StoreSecretDuplicateResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       storeSecretDuplicateResponseEnvelopeJSON       `json:"-"`
+}
+
+// storeSecretDuplicateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [StoreSecretDuplicateResponseEnvelope]
+type storeSecretDuplicateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreSecretDuplicateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeSecretDuplicateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreSecretDuplicateResponseEnvelopeErrors struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           StoreSecretDuplicateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             storeSecretDuplicateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// storeSecretDuplicateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [StoreSecretDuplicateResponseEnvelopeErrors]
+type storeSecretDuplicateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StoreSecretDuplicateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeSecretDuplicateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreSecretDuplicateResponseEnvelopeErrorsSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    storeSecretDuplicateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// storeSecretDuplicateResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [StoreSecretDuplicateResponseEnvelopeErrorsSource]
+type storeSecretDuplicateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreSecretDuplicateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeSecretDuplicateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreSecretDuplicateResponseEnvelopeMessages struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           StoreSecretDuplicateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             storeSecretDuplicateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// storeSecretDuplicateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [StoreSecretDuplicateResponseEnvelopeMessages]
+type storeSecretDuplicateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StoreSecretDuplicateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeSecretDuplicateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreSecretDuplicateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    storeSecretDuplicateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// storeSecretDuplicateResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [StoreSecretDuplicateResponseEnvelopeMessagesSource]
+type storeSecretDuplicateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreSecretDuplicateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeSecretDuplicateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type StoreSecretDuplicateResponseEnvelopeSuccess bool
+
+const (
+	StoreSecretDuplicateResponseEnvelopeSuccessTrue StoreSecretDuplicateResponseEnvelopeSuccess = true
+)
+
+func (r StoreSecretDuplicateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case StoreSecretDuplicateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type StoreSecretDuplicateResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service.
+	Count float64 `json:"count"`
+	// Current page within paginated list of results.
+	Page float64 `json:"page"`
+	// Number of results per page of results.
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters.
+	TotalCount float64                                            `json:"total_count"`
+	JSON       storeSecretDuplicateResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// storeSecretDuplicateResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [StoreSecretDuplicateResponseEnvelopeResultInfo]
+type storeSecretDuplicateResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreSecretDuplicateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeSecretDuplicateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type StoreSecretEditParams struct {

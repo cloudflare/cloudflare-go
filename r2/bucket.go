@@ -114,6 +114,33 @@ func (r *BucketService) Delete(ctx context.Context, bucketName string, params Bu
 	return
 }
 
+// Updates properties of an existing R2 bucket.
+func (r *BucketService) Edit(ctx context.Context, bucketName string, params BucketEditParams, opts ...option.RequestOption) (res *Bucket, err error) {
+	var env BucketEditResponseEnvelope
+	if params.StorageClass.Present {
+		opts = append(opts, option.WithHeader("cf-r2-storage-class", fmt.Sprintf("%s", params.StorageClass)))
+	}
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+	}
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if bucketName == "" {
+		err = errors.New("missing required bucket_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", params.AccountID, bucketName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Gets properties of an existing R2 bucket.
 func (r *BucketService) Get(ctx context.Context, bucketName string, params BucketGetParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketGetResponseEnvelope
@@ -551,6 +578,92 @@ const (
 func (r BucketDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case BucketDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type BucketEditParams struct {
+	// Account ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Storage class for newly uploaded objects, unless specified otherwise.
+	StorageClass param.Field[BucketEditParamsCfR2StorageClass] `header:"cf-r2-storage-class,required"`
+	// The bucket jurisdiction.
+	Jurisdiction param.Field[BucketEditParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+}
+
+// Storage class for newly uploaded objects, unless specified otherwise.
+type BucketEditParamsCfR2StorageClass string
+
+const (
+	BucketEditParamsCfR2StorageClassStandard         BucketEditParamsCfR2StorageClass = "Standard"
+	BucketEditParamsCfR2StorageClassInfrequentAccess BucketEditParamsCfR2StorageClass = "InfrequentAccess"
+)
+
+func (r BucketEditParamsCfR2StorageClass) IsKnown() bool {
+	switch r {
+	case BucketEditParamsCfR2StorageClassStandard, BucketEditParamsCfR2StorageClassInfrequentAccess:
+		return true
+	}
+	return false
+}
+
+// The bucket jurisdiction.
+type BucketEditParamsCfR2Jurisdiction string
+
+const (
+	BucketEditParamsCfR2JurisdictionDefault BucketEditParamsCfR2Jurisdiction = "default"
+	BucketEditParamsCfR2JurisdictionEu      BucketEditParamsCfR2Jurisdiction = "eu"
+	BucketEditParamsCfR2JurisdictionFedramp BucketEditParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r BucketEditParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case BucketEditParamsCfR2JurisdictionDefault, BucketEditParamsCfR2JurisdictionEu, BucketEditParamsCfR2JurisdictionFedramp:
+		return true
+	}
+	return false
+}
+
+type BucketEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	// A single R2 bucket.
+	Result Bucket `json:"result,required"`
+	// Whether the API call was successful.
+	Success BucketEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    bucketEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// bucketEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [BucketEditResponseEnvelope]
+type bucketEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BucketEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bucketEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type BucketEditResponseEnvelopeSuccess bool
+
+const (
+	BucketEditResponseEnvelopeSuccessTrue BucketEditResponseEnvelopeSuccess = true
+)
+
+func (r BucketEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BucketEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
