@@ -295,13 +295,14 @@ func (r routeUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type RouteListResponse struct {
+type RouteNewParams struct {
 	// Identifier.
-	ID      string `json:"id,required"`
-	Pattern string `json:"pattern,required"`
-	// Name of the script, used in URLs and route configuration.
-	Script string                `json:"script,required"`
-	JSON   routeListResponseJSON `json:"-"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Pattern to match incoming requests against.
+	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
+	Pattern param.Field[string] `json:"pattern,required"`
+	// Name of the script to run if the route matches.
+	Script param.Field[string] `json:"script,required"`
 }
 
 // routeListResponseJSON contains the JSON metadata for the struct
@@ -314,20 +315,13 @@ type routeListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RouteListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RouteDeleteResponse struct {
-	Errors   []RouteDeleteResponseError   `json:"errors,required"`
-	Messages []RouteDeleteResponseMessage `json:"messages,required"`
+type RouteNewResponseEnvelope struct {
+	Errors   []RouteNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RouteNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   RouteNewResponse                   `json:"result,required"`
 	// Whether the API call was successful.
-	Success RouteDeleteResponseSuccess `json:"success,required"`
-	JSON    routeDeleteResponseJSON    `json:"-"`
+	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // routeDeleteResponseJSON contains the JSON metadata for the struct
@@ -335,6 +329,7 @@ type RouteDeleteResponse struct {
 type routeDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -461,34 +456,9 @@ func (r RouteDeleteResponseSuccess) IsKnown() bool {
 
 type RouteGetResponse struct {
 	// Identifier.
-	ID      string `json:"id,required"`
-	Pattern string `json:"pattern,required"`
-	// Name of the script, used in URLs and route configuration.
-	Script string               `json:"script,required"`
-	JSON   routeGetResponseJSON `json:"-"`
-}
-
-// routeGetResponseJSON contains the JSON metadata for the struct
-// [RouteGetResponse]
-type routeGetResponseJSON struct {
-	ID          apijson.Field
-	Pattern     apijson.Field
-	Script      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RouteNewParams struct {
-	// Identifier.
-	ZoneID  param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Pattern to match incoming requests against.
+	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern param.Field[string] `json:"pattern,required"`
 	// Name of the script, used in URLs and route configuration.
 	Script param.Field[string] `json:"script"`
@@ -513,9 +483,9 @@ func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {
 type RouteUpdateResponseEnvelope struct {
 	Errors   []RouteUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   RouteUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success RouteUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  RouteUpdateResponse                `json:"result"`
 	JSON    routeUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -524,8 +494,8 @@ type RouteUpdateResponseEnvelope struct {
 type routeUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -659,6 +629,145 @@ type RouteDeleteParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
+type RouteDeleteResponseEnvelope struct {
+	Errors   []RouteDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RouteDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   RouteDeleteResponse                   `json:"result,required"`
+	// Whether the API call was successful.
+	Success RouteDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    routeDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// routeDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RouteDeleteResponseEnvelope]
+type routeDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteDeleteResponseEnvelopeErrors struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           RouteDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             routeDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// routeDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RouteDeleteResponseEnvelopeErrors]
+type routeDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RouteDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    routeDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// routeDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RouteDeleteResponseEnvelopeErrorsSource]
+type routeDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteDeleteResponseEnvelopeMessages struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           RouteDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             routeDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// routeDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RouteDeleteResponseEnvelopeMessages]
+type routeDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RouteDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RouteDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    routeDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// routeDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [RouteDeleteResponseEnvelopeMessagesSource]
+type routeDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type RouteDeleteResponseEnvelopeSuccess bool
+
+const (
+	RouteDeleteResponseEnvelopeSuccessTrue RouteDeleteResponseEnvelopeSuccess = true
+)
+
+func (r RouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteGetParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -667,9 +776,9 @@ type RouteGetParams struct {
 type RouteGetResponseEnvelope struct {
 	Errors   []RouteGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   RouteGetResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success RouteGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  RouteGetResponse                `json:"result"`
 	JSON    routeGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -678,8 +787,8 @@ type RouteGetResponseEnvelope struct {
 type routeGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
