@@ -167,8 +167,8 @@ type DispatchNamespaceScriptSettingEditResponseBinding struct {
 	Dataset string `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSettingEditResponseBindingsFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
@@ -183,6 +183,8 @@ type DispatchNamespaceScriptSettingEditResponseBinding struct {
 	// This field can have the runtime type of
 	// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutbound].
 	Outbound interface{} `json:"outbound"`
+	// Name of the Pipeline to bind to.
+	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName string `json:"queue_name"`
 	// The script where the Durable Object is defined, if it is external to this
@@ -222,6 +224,7 @@ type dispatchNamespaceScriptSettingEditResponseBindingJSON struct {
 	Namespace     apijson.Field
 	NamespaceID   apijson.Field
 	Outbound      apijson.Field
+	Pipeline      apijson.Field
 	QueueName     apijson.Field
 	ScriptName    apijson.Field
 	SecretName    apijson.Field
@@ -262,6 +265,7 @@ func (r *DispatchNamespaceScriptSettingEditResponseBinding) UnmarshalJSON(data [
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2Bucket],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretText],
@@ -290,6 +294,7 @@ func (r DispatchNamespaceScriptSettingEditResponseBinding) AsUnion() DispatchNam
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2Bucket],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretText],
@@ -367,6 +372,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText{}),
 			DiscriminatorValue: "plain_text",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines{}),
+			DiscriminatorValue: "pipelines",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1039,6 +1049,53 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlai
 	return false
 }
 
+type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of the Pipeline to bind to.
+	Pipeline string `json:"pipeline,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesType `json:"type,required"`
+	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines]
+type dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesJSON struct {
+	Name        apijson.Field
+	Pipeline    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesType string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesTypePipelines DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesType = "pipelines"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesTypePipelines:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -1416,18 +1473,18 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecr
 }
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey struct {
-	// Algorithm-specific key parameters
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm interface{} `json:"algorithm,required"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyFormat `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyType `json:"type,required"`
-	// Allowed operations with the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
 	Usages []DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage `json:"usages,required"`
 	JSON   dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
@@ -1456,8 +1513,8 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecr
 func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyFormat string
 
 const (
@@ -1527,6 +1584,7 @@ const (
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeKVNamespace            DispatchNamespaceScriptSettingEditResponseBindingsType = "kv_namespace"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeMTLSCertificate        DispatchNamespaceScriptSettingEditResponseBindingsType = "mtls_certificate"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypePlainText              DispatchNamespaceScriptSettingEditResponseBindingsType = "plain_text"
+	DispatchNamespaceScriptSettingEditResponseBindingsTypePipelines              DispatchNamespaceScriptSettingEditResponseBindingsType = "pipelines"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeQueue                  DispatchNamespaceScriptSettingEditResponseBindingsType = "queue"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeR2Bucket               DispatchNamespaceScriptSettingEditResponseBindingsType = "r2_bucket"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretText             DispatchNamespaceScriptSettingEditResponseBindingsType = "secret_text"
@@ -1546,8 +1604,8 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsType) IsKnown() bool {
 	return false
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSettingEditResponseBindingsFormat string
 
 const (
@@ -1868,8 +1926,8 @@ type DispatchNamespaceScriptSettingGetResponseBinding struct {
 	Dataset string `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSettingGetResponseBindingsFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
@@ -1884,6 +1942,8 @@ type DispatchNamespaceScriptSettingGetResponseBinding struct {
 	// This field can have the runtime type of
 	// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutbound].
 	Outbound interface{} `json:"outbound"`
+	// Name of the Pipeline to bind to.
+	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName string `json:"queue_name"`
 	// The script where the Durable Object is defined, if it is external to this
@@ -1923,6 +1983,7 @@ type dispatchNamespaceScriptSettingGetResponseBindingJSON struct {
 	Namespace     apijson.Field
 	NamespaceID   apijson.Field
 	Outbound      apijson.Field
+	Pipeline      apijson.Field
 	QueueName     apijson.Field
 	ScriptName    apijson.Field
 	SecretName    apijson.Field
@@ -1963,6 +2024,7 @@ func (r *DispatchNamespaceScriptSettingGetResponseBinding) UnmarshalJSON(data []
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText],
+// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2Bucket],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretText],
@@ -1991,6 +2053,7 @@ func (r DispatchNamespaceScriptSettingGetResponseBinding) AsUnion() DispatchName
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText],
+// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2Bucket],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretText],
@@ -2068,6 +2131,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText{}),
 			DiscriminatorValue: "plain_text",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines{}),
+			DiscriminatorValue: "pipelines",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -2740,6 +2808,53 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlain
 	return false
 }
 
+type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of the Pipeline to bind to.
+	Pipeline string `json:"pipeline,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesType `json:"type,required"`
+	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines]
+type dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesJSON struct {
+	Name        apijson.Field
+	Pipeline    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesType string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesTypePipelines DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesType = "pipelines"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesTypePipelines:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -3117,18 +3232,18 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecre
 }
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey struct {
-	// Algorithm-specific key parameters
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm interface{} `json:"algorithm,required"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyFormat `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyType `json:"type,required"`
-	// Allowed operations with the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
 	Usages []DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage `json:"usages,required"`
 	JSON   dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
@@ -3157,8 +3272,8 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecre
 func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyFormat string
 
 const (
@@ -3228,6 +3343,7 @@ const (
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeKVNamespace            DispatchNamespaceScriptSettingGetResponseBindingsType = "kv_namespace"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeMTLSCertificate        DispatchNamespaceScriptSettingGetResponseBindingsType = "mtls_certificate"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypePlainText              DispatchNamespaceScriptSettingGetResponseBindingsType = "plain_text"
+	DispatchNamespaceScriptSettingGetResponseBindingsTypePipelines              DispatchNamespaceScriptSettingGetResponseBindingsType = "pipelines"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeQueue                  DispatchNamespaceScriptSettingGetResponseBindingsType = "queue"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeR2Bucket               DispatchNamespaceScriptSettingGetResponseBindingsType = "r2_bucket"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretText             DispatchNamespaceScriptSettingGetResponseBindingsType = "secret_text"
@@ -3247,8 +3363,8 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsType) IsKnown() bool {
 	return false
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSettingGetResponseBindingsFormat string
 
 const (
@@ -3565,8 +3681,8 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBinding struct {
 	Dataset param.Field[string] `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsFormat] `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
@@ -3580,6 +3696,8 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBinding struct {
 	// Namespace identifier tag.
 	NamespaceID param.Field[string]      `json:"namespace_id"`
 	Outbound    param.Field[interface{}] `json:"outbound"`
+	// Name of the Pipeline to bind to.
+	Pipeline param.Field[string] `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName param.Field[string] `json:"queue_name"`
 	// The script where the Durable Object is defined, if it is external to this
@@ -3618,6 +3736,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) implementsDispa
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificate],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPlainText],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelines],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindQueue],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2Bucket],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretText],
@@ -4032,6 +4151,37 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return false
 }
 
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelines struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Name of the Pipeline to bind to.
+	Pipeline param.Field[string] `json:"pipeline,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelinesType] `json:"type,required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelines) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelines) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelinesType string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelinesTypePipelines DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelinesType = "pipelines"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelinesType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelinesTypePipelines:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -4283,18 +4433,18 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 }
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey struct {
-	// Algorithm-specific key parameters
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm param.Field[interface{}] `json:"algorithm,required"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormat] `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyType] `json:"type,required"`
-	// Allowed operations with the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
 	Usages param.Field[[]DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage] `json:"usages,required"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string] `json:"key_base64"`
@@ -4311,8 +4461,8 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormat string
 
 const (
@@ -4382,6 +4532,7 @@ const (
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeKVNamespace            DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "kv_namespace"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMTLSCertificate        DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "mtls_certificate"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePlainText              DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "plain_text"
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePipelines              DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "pipelines"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeQueue                  DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "queue"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeR2Bucket               DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "r2_bucket"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretText             DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "secret_text"
@@ -4401,8 +4552,8 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsType) IsKnown() 
 	return false
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsFormat string
 
 const (

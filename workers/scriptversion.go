@@ -279,8 +279,8 @@ type ScriptVersionNewParamsMetadataBinding struct {
 	Dataset param.Field[string] `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[ScriptVersionNewParamsMetadataBindingsFormat] `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
@@ -294,6 +294,8 @@ type ScriptVersionNewParamsMetadataBinding struct {
 	// Namespace identifier tag.
 	NamespaceID param.Field[string]      `json:"namespace_id"`
 	Outbound    param.Field[interface{}] `json:"outbound"`
+	// Name of the Pipeline to bind to.
+	Pipeline param.Field[string] `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName param.Field[string] `json:"queue_name"`
 	// The script where the Durable Object is defined, if it is external to this
@@ -332,6 +334,7 @@ func (r ScriptVersionNewParamsMetadataBinding) implementsScriptVersionNewParamsM
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificate],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelines],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Bucket],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretText],
@@ -746,6 +749,37 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextType) I
 	return false
 }
 
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelines struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Name of the Pipeline to bind to.
+	Pipeline param.Field[string] `json:"pipeline,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelinesType] `json:"type,required"`
+}
+
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelines) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelines) implementsScriptVersionNewParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelinesType string
+
+const (
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelinesTypePipelines ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelinesType = "pipelines"
+)
+
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelinesType) IsKnown() bool {
+	switch r {
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelinesTypePipelines:
+		return true
+	}
+	return false
+}
+
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -997,18 +1031,18 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretsStoreSecr
 }
 
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretKey struct {
-	// Algorithm-specific key parameters
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm param.Field[interface{}] `json:"algorithm,required"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretKeyFormat] `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretKeyType] `json:"type,required"`
-	// Allowed operations with the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
 	Usages param.Field[[]ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretKeyUsage] `json:"usages,required"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string] `json:"key_base64"`
@@ -1025,8 +1059,8 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretKey) Marsh
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretKey) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindSecretKeyFormat string
 
 const (
@@ -1096,6 +1130,7 @@ const (
 	ScriptVersionNewParamsMetadataBindingsTypeKVNamespace            ScriptVersionNewParamsMetadataBindingsType = "kv_namespace"
 	ScriptVersionNewParamsMetadataBindingsTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsType = "mtls_certificate"
 	ScriptVersionNewParamsMetadataBindingsTypePlainText              ScriptVersionNewParamsMetadataBindingsType = "plain_text"
+	ScriptVersionNewParamsMetadataBindingsTypePipelines              ScriptVersionNewParamsMetadataBindingsType = "pipelines"
 	ScriptVersionNewParamsMetadataBindingsTypeQueue                  ScriptVersionNewParamsMetadataBindingsType = "queue"
 	ScriptVersionNewParamsMetadataBindingsTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsType = "r2_bucket"
 	ScriptVersionNewParamsMetadataBindingsTypeSecretText             ScriptVersionNewParamsMetadataBindingsType = "secret_text"
@@ -1115,8 +1150,8 @@ func (r ScriptVersionNewParamsMetadataBindingsType) IsKnown() bool {
 	return false
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type ScriptVersionNewParamsMetadataBindingsFormat string
 
 const (

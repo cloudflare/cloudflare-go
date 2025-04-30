@@ -93,8 +93,8 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	Dataset string `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptBindingGetResponseFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
@@ -109,6 +109,8 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	// This field can have the runtime type of
 	// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceOutbound].
 	Outbound interface{} `json:"outbound"`
+	// Name of the Pipeline to bind to.
+	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName string `json:"queue_name"`
 	// The script where the Durable Object is defined, if it is external to this
@@ -148,6 +150,7 @@ type dispatchNamespaceScriptBindingGetResponseJSON struct {
 	Namespace     apijson.Field
 	NamespaceID   apijson.Field
 	Outbound      apijson.Field
+	Pipeline      apijson.Field
 	QueueName     apijson.Field
 	ScriptName    apijson.Field
 	SecretName    apijson.Field
@@ -188,6 +191,7 @@ func (r *DispatchNamespaceScriptBindingGetResponse) UnmarshalJSON(data []byte) (
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText],
+// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText],
@@ -216,6 +220,7 @@ func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceSc
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText],
+// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket],
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText],
@@ -293,6 +298,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText{}),
 			DiscriminatorValue: "plain_text",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines{}),
+			DiscriminatorValue: "pipelines",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -965,6 +975,53 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType
 	return false
 }
 
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of the Pipeline to bind to.
+	Pipeline string `json:"pipeline,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesType `json:"type,required"`
+	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines]
+type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesJSON struct {
+	Name        apijson.Field
+	Pipeline    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines) implementsDispatchNamespaceScriptBindingGetResponse() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesType string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesTypePipelines DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesType = "pipelines"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesTypePipelines:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -1342,18 +1399,18 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreS
 }
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey struct {
-	// Algorithm-specific key parameters
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm)).
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
 	Algorithm interface{} `json:"algorithm,required"`
-	// Data format of the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormat `json:"format,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyType `json:"type,required"`
-	// Allowed operations with the key
-	// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages)).
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
 	Usages []DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage `json:"usages,required"`
 	JSON   dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
@@ -1382,8 +1439,8 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyJSON
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey) implementsDispatchNamespaceScriptBindingGetResponse() {
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormat string
 
 const (
@@ -1453,6 +1510,7 @@ const (
 	DispatchNamespaceScriptBindingGetResponseTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseType = "kv_namespace"
 	DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseType = "mtls_certificate"
 	DispatchNamespaceScriptBindingGetResponseTypePlainText              DispatchNamespaceScriptBindingGetResponseType = "plain_text"
+	DispatchNamespaceScriptBindingGetResponseTypePipelines              DispatchNamespaceScriptBindingGetResponseType = "pipelines"
 	DispatchNamespaceScriptBindingGetResponseTypeQueue                  DispatchNamespaceScriptBindingGetResponseType = "queue"
 	DispatchNamespaceScriptBindingGetResponseTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseType = "r2_bucket"
 	DispatchNamespaceScriptBindingGetResponseTypeSecretText             DispatchNamespaceScriptBindingGetResponseType = "secret_text"
@@ -1472,8 +1530,8 @@ func (r DispatchNamespaceScriptBindingGetResponseType) IsKnown() bool {
 	return false
 }
 
-// Data format of the key
-// ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format)).
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 type DispatchNamespaceScriptBindingGetResponseFormat string
 
 const (
