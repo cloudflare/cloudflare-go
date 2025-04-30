@@ -132,23 +132,23 @@ func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, grou
 }
 
 type Group struct {
-	// The unique identifier of the rule group.
+	// Defines the unique identifier of the rule group.
 	ID string `json:"id,required"`
-	// An informative summary of what the rule group does.
+	// Defines an informative summary of what the rule group does.
 	Description string `json:"description,required,nullable"`
-	// The state of the rules contained in the rule group. When `on`, the rules in the
-	// group are configurable/usable.
+	// Defines the state of the rules contained in the rule group. When `on`, the rules
+	// in the group are configurable/usable.
 	Mode GroupMode `json:"mode,required"`
-	// The name of the rule group.
+	// Defines the name of the rule group.
 	Name string `json:"name,required"`
-	// The number of rules in the current rule group.
+	// Defines the number of rules in the current rule group.
 	RulesCount float64 `json:"rules_count,required"`
-	// The available states for the rule group.
+	// Defines the available states for the rule group.
 	AllowedModes []GroupAllowedMode `json:"allowed_modes"`
-	// The number of rules within the group that have been modified from their default
-	// configuration.
+	// Defines the number of rules within the group that have been modified from their
+	// default configuration.
 	ModifiedRulesCount float64 `json:"modified_rules_count"`
-	// The unique identifier of a WAF package.
+	// Defines the unique identifier of a WAF package.
 	PackageID string    `json:"package_id"`
 	JSON      groupJSON `json:"-"`
 }
@@ -175,8 +175,8 @@ func (r groupJSON) RawJSON() string {
 	return r.raw
 }
 
-// The state of the rules contained in the rule group. When `on`, the rules in the
-// group are configurable/usable.
+// Defines the state of the rules contained in the rule group. When `on`, the rules
+// in the group are configurable/usable.
 type GroupMode string
 
 const (
@@ -192,8 +192,8 @@ func (r GroupMode) IsKnown() bool {
 	return false
 }
 
-// The state of the rules contained in the rule group. When `on`, the rules in the
-// group are configurable/usable.
+// Defines the state of the rules contained in the rule group. When `on`, the rules
+// in the group are configurable/usable.
 type GroupAllowedMode string
 
 const (
@@ -210,25 +210,26 @@ func (r GroupAllowedMode) IsKnown() bool {
 }
 
 type WAFPackageGroupListParams struct {
-	// Identifier
+	// Defines an identifier of a schema.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The direction used to sort returned rule groups.
+	// Defines the direction used to sort returned rule groups.
 	Direction param.Field[WAFPackageGroupListParamsDirection] `query:"direction"`
-	// When set to `all`, all the search requirements must match. When set to `any`,
-	// only one of the search requirements has to match.
+	// Defines the condition for search requirements. When set to `all`, all the search
+	// requirements must match. When set to `any`, only one of the search requirements
+	// has to match.
 	Match param.Field[WAFPackageGroupListParamsMatch] `query:"match"`
-	// The state of the rules contained in the rule group. When `on`, the rules in the
-	// group are configurable/usable.
+	// Defines the state of the rules contained in the rule group. When `on`, the rules
+	// in the group are configurable/usable.
 	Mode param.Field[WAFPackageGroupListParamsMode] `query:"mode"`
-	// The name of the rule group.
+	// Defines the name of the rule group.
 	Name param.Field[string] `query:"name"`
-	// The field used to sort returned rule groups.
+	// Defines the field used to sort returned rule groups.
 	Order param.Field[WAFPackageGroupListParamsOrder] `query:"order"`
-	// The page number of paginated results.
+	// Defines the page number of paginated results.
 	Page param.Field[float64] `query:"page"`
-	// The number of rule groups per page.
+	// Defines the number of rule groups per page.
 	PerPage param.Field[float64] `query:"per_page"`
-	// The number of rules in the current rule group.
+	// Defines the number of rules in the current rule group.
 	RulesCount param.Field[float64] `query:"rules_count"`
 }
 
@@ -241,7 +242,7 @@ func (r WAFPackageGroupListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// The direction used to sort returned rule groups.
+// Defines the direction used to sort returned rule groups.
 type WAFPackageGroupListParamsDirection string
 
 const (
@@ -257,8 +258,9 @@ func (r WAFPackageGroupListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// When set to `all`, all the search requirements must match. When set to `any`,
-// only one of the search requirements has to match.
+// Defines the condition for search requirements. When set to `all`, all the search
+// requirements must match. When set to `any`, only one of the search requirements
+// has to match.
 type WAFPackageGroupListParamsMatch string
 
 const (
@@ -274,8 +276,8 @@ func (r WAFPackageGroupListParamsMatch) IsKnown() bool {
 	return false
 }
 
-// The state of the rules contained in the rule group. When `on`, the rules in the
-// group are configurable/usable.
+// Defines the state of the rules contained in the rule group. When `on`, the rules
+// in the group are configurable/usable.
 type WAFPackageGroupListParamsMode string
 
 const (
@@ -291,7 +293,7 @@ func (r WAFPackageGroupListParamsMode) IsKnown() bool {
 	return false
 }
 
-// The field used to sort returned rule groups.
+// Defines the field used to sort returned rule groups.
 type WAFPackageGroupListParamsOrder string
 
 const (
@@ -308,10 +310,10 @@ func (r WAFPackageGroupListParamsOrder) IsKnown() bool {
 }
 
 type WAFPackageGroupEditParams struct {
-	// Identifier
+	// Defines an identifier of a schema.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The state of the rules contained in the rule group. When `on`, the rules in the
-	// group are configurable/usable.
+	// Defines the state of the rules contained in the rule group. When `on`, the rules
+	// in the group are configurable/usable.
 	Mode param.Field[WAFPackageGroupEditParamsMode] `json:"mode"`
 }
 
@@ -319,8 +321,8 @@ func (r WAFPackageGroupEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The state of the rules contained in the rule group. When `on`, the rules in the
-// group are configurable/usable.
+// Defines the state of the rules contained in the rule group. When `on`, the rules
+// in the group are configurable/usable.
 type WAFPackageGroupEditParamsMode string
 
 const (
@@ -340,7 +342,7 @@ type WAFPackageGroupEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   interface{}           `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success WAFPackageGroupEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -364,7 +366,7 @@ func (r wafPackageGroupEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type WAFPackageGroupEditResponseEnvelopeSuccess bool
 
 const (
@@ -380,7 +382,7 @@ func (r WAFPackageGroupEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type WAFPackageGroupGetParams struct {
-	// Identifier
+	// Defines an identifier of a schema.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -388,7 +390,7 @@ type WAFPackageGroupGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   interface{}           `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success WAFPackageGroupGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -412,7 +414,7 @@ func (r wafPackageGroupGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type WAFPackageGroupGetResponseEnvelopeSuccess bool
 
 const (
