@@ -6101,10 +6101,6 @@ Methods:
 
 #### CustomCertificate
 
-Methods:
-
-- <code title="get /accounts/{account_id}/gateway/configuration/custom_certificate">client.ZeroTrust.Gateway.Configurations.CustomCertificate.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#GatewayConfigurationCustomCertificateService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#GatewayConfigurationCustomCertificateGetParams">GatewayConfigurationCustomCertificateGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/zero_trust#CustomCertificateSettings">CustomCertificateSettings</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Lists
 
 Params Types:

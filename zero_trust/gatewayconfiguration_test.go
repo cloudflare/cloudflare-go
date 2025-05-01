@@ -78,6 +78,9 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 			Fips: cloudflare.F(zero_trust.FipsSettingsParam{
 				TLS: cloudflare.F(true),
 			}),
+			HostSelector: cloudflare.F(zero_trust.GatewayConfigurationSettingsHostSelectorParam{
+				Enabled: cloudflare.F(false),
+			}),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
 			}),
@@ -162,6 +165,9 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 			}),
 			Fips: cloudflare.F(zero_trust.FipsSettingsParam{
 				TLS: cloudflare.F(true),
+			}),
+			HostSelector: cloudflare.F(zero_trust.GatewayConfigurationSettingsHostSelectorParam{
+				Enabled: cloudflare.F(false),
 			}),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
