@@ -32,6 +32,7 @@ type AccessApplicationService struct {
 	UserPolicyChecks *AccessApplicationUserPolicyCheckService
 	Policies         *AccessApplicationPolicyService
 	PolicyTests      *AccessApplicationPolicyTestService
+	Settings         *AccessApplicationSettingService
 }
 
 // NewAccessApplicationService generates a new service that applies the given
@@ -44,6 +45,7 @@ func NewAccessApplicationService(opts ...option.RequestOption) (r *AccessApplica
 	r.UserPolicyChecks = NewAccessApplicationUserPolicyCheckService(opts...)
 	r.Policies = NewAccessApplicationPolicyService(opts...)
 	r.PolicyTests = NewAccessApplicationPolicyTestService(opts...)
+	r.Settings = NewAccessApplicationSettingService(opts...)
 	return
 }
 
