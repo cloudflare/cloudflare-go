@@ -499,6 +499,8 @@ type GatewayConfigurationSettings struct {
 	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching"`
 	// FIPS settings.
 	Fips FipsSettings `json:"fips,nullable"`
+	// Setting to enable host selector in egress policies.
+	HostSelector GatewayConfigurationSettingsHostSelector `json:"host_selector,nullable"`
 	// Protocol Detection settings.
 	ProtocolDetection ProtocolDetection `json:"protocol_detection,nullable"`
 	// Sandbox settings.
@@ -520,6 +522,7 @@ type gatewayConfigurationSettingsJSON struct {
 	CustomCertificate     apijson.Field
 	ExtendedEmailMatching apijson.Field
 	Fips                  apijson.Field
+	HostSelector          apijson.Field
 	ProtocolDetection     apijson.Field
 	Sandbox               apijson.Field
 	TLSDecrypt            apijson.Field
@@ -558,6 +561,29 @@ func (r *GatewayConfigurationSettingsCertificate) UnmarshalJSON(data []byte) (er
 }
 
 func (r gatewayConfigurationSettingsCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
+// Setting to enable host selector in egress policies.
+type GatewayConfigurationSettingsHostSelector struct {
+	// Enable filtering via hosts for egress policies.
+	Enabled bool                                         `json:"enabled"`
+	JSON    gatewayConfigurationSettingsHostSelectorJSON `json:"-"`
+}
+
+// gatewayConfigurationSettingsHostSelectorJSON contains the JSON metadata for the
+// struct [GatewayConfigurationSettingsHostSelector]
+type gatewayConfigurationSettingsHostSelectorJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayConfigurationSettingsHostSelector) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayConfigurationSettingsHostSelectorJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -627,6 +653,8 @@ type GatewayConfigurationSettingsParam struct {
 	ExtendedEmailMatching param.Field[ExtendedEmailMatchingParam] `json:"extended_email_matching"`
 	// FIPS settings.
 	Fips param.Field[FipsSettingsParam] `json:"fips"`
+	// Setting to enable host selector in egress policies.
+	HostSelector param.Field[GatewayConfigurationSettingsHostSelectorParam] `json:"host_selector"`
 	// Protocol Detection settings.
 	ProtocolDetection param.Field[ProtocolDetectionParam] `json:"protocol_detection"`
 	// Sandbox settings.
@@ -649,6 +677,16 @@ type GatewayConfigurationSettingsCertificateParam struct {
 }
 
 func (r GatewayConfigurationSettingsCertificateParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Setting to enable host selector in egress policies.
+type GatewayConfigurationSettingsHostSelectorParam struct {
+	// Enable filtering via hosts for egress policies.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r GatewayConfigurationSettingsHostSelectorParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
