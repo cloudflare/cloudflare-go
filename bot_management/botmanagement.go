@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -1260,7 +1259,7 @@ func (r BotManagementGetResponseSBFMVerifiedBots) IsKnown() bool {
 }
 
 type BotManagementUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string]                `path:"zone_id,required"`
 	Body   BotManagementUpdateParamsBodyUnion `json:"body,required"`
 }
@@ -1399,9 +1398,9 @@ func (r BotManagementUpdateParamsBodySBFMVerifiedBots) IsKnown() bool {
 }
 
 type BotManagementUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []BotManagementUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []BotManagementUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success BotManagementUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  BotManagementUpdateResponse                `json:"result"`
 	JSON    botManagementUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1426,7 +1425,103 @@ func (r botManagementUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type BotManagementUpdateResponseEnvelopeErrors struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           BotManagementUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             botManagementUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// botManagementUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [BotManagementUpdateResponseEnvelopeErrors]
+type botManagementUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BotManagementUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    botManagementUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// botManagementUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [BotManagementUpdateResponseEnvelopeErrorsSource]
+type botManagementUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BotManagementUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementUpdateResponseEnvelopeMessages struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           BotManagementUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             botManagementUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// botManagementUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [BotManagementUpdateResponseEnvelopeMessages]
+type botManagementUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BotManagementUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    botManagementUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// botManagementUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [BotManagementUpdateResponseEnvelopeMessagesSource]
+type botManagementUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BotManagementUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type BotManagementUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1442,14 +1537,14 @@ func (r BotManagementUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BotManagementGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type BotManagementGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []BotManagementGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []BotManagementGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success BotManagementGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  BotManagementGetResponse                `json:"result"`
 	JSON    botManagementGetResponseEnvelopeJSON    `json:"-"`
@@ -1474,7 +1569,103 @@ func (r botManagementGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type BotManagementGetResponseEnvelopeErrors struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           BotManagementGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             botManagementGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// botManagementGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [BotManagementGetResponseEnvelopeErrors]
+type botManagementGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BotManagementGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    botManagementGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// botManagementGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [BotManagementGetResponseEnvelopeErrorsSource]
+type botManagementGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BotManagementGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementGetResponseEnvelopeMessages struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           BotManagementGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             botManagementGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// botManagementGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [BotManagementGetResponseEnvelopeMessages]
+type botManagementGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BotManagementGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    botManagementGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// botManagementGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [BotManagementGetResponseEnvelopeMessagesSource]
+type botManagementGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BotManagementGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type BotManagementGetResponseEnvelopeSuccess bool
 
 const (
