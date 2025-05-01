@@ -29,13 +29,17 @@ func TestSubmissionListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Submissions.List(context.TODO(), email_security.SubmissionListParams{
-		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		End:          cloudflare.F(time.Now()),
-		Page:         cloudflare.F(int64(1)),
-		PerPage:      cloudflare.F(int64(1)),
-		Start:        cloudflare.F(time.Now()),
-		SubmissionID: cloudflare.F("submission_id"),
-		Type:         cloudflare.F(email_security.SubmissionListParamsTypeTeam),
+		AccountID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		End:                  cloudflare.F(time.Now()),
+		OriginalDisposition:  cloudflare.F(email_security.SubmissionListParamsOriginalDispositionMalicious),
+		OutcomeDisposition:   cloudflare.F(email_security.SubmissionListParamsOutcomeDispositionMalicious),
+		Page:                 cloudflare.F(int64(1)),
+		PerPage:              cloudflare.F(int64(1)),
+		Query:                cloudflare.F("query"),
+		RequestedDisposition: cloudflare.F(email_security.SubmissionListParamsRequestedDispositionMalicious),
+		Start:                cloudflare.F(time.Now()),
+		SubmissionID:         cloudflare.F("submission_id"),
+		Type:                 cloudflare.F(email_security.SubmissionListParamsTypeTeam),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
