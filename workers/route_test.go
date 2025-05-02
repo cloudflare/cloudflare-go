@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
-func TestRouteNewWithOptionalParams(t *testing.T) {
+func TestRouteNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -41,7 +41,7 @@ func TestRouteNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRouteUpdateWithOptionalParams(t *testing.T) {
+func TestRouteUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,6 +59,7 @@ func TestRouteUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		workers.RouteUpdateParams{
 			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Pattern: cloudflare.F("example.com/*"),
 			Script:  cloudflare.F("my-workers-script"),
 		},

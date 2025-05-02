@@ -282,6 +282,8 @@ func (r routeGetResponseJSON) RawJSON() string {
 type RouteNewParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Identifier.
+	ID param.Field[string] `json:"id,required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern param.Field[string] `json:"pattern,required"`
@@ -296,9 +298,9 @@ func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
 type RouteNewResponseEnvelope struct {
 	Errors   []RouteNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   RouteNewResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  RouteNewResponse                `json:"result"`
 	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -435,6 +437,8 @@ func (r RouteNewResponseEnvelopeSuccess) IsKnown() bool {
 type RouteUpdateParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Identifier.
+	ID param.Field[string] `json:"id,required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern param.Field[string] `json:"pattern,required"`
