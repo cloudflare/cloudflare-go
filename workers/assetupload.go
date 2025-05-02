@@ -84,9 +84,7 @@ type AssetUploadNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Whether the file contents are base64-encoded. Must be `true`.
 	Base64 param.Field[AssetUploadNewParamsBase64] `query:"base64,required"`
-	// Base-64 encoded contents of the file. The content type of the file should be
-	// included to ensure a valid "Content-Type" header is included in asset responses.
-	AnyFileHash param.Field[[]string] `json:"<any file hash>"`
+	Body   map[string]string                       `json:"body,required"`
 }
 
 func (r AssetUploadNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
