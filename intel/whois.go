@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // WhoisService contains methods and other services that help with interacting with
@@ -55,6 +54,7 @@ func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...o
 }
 
 type WhoisGetResponse struct {
+	DNSSEC                    bool                 `json:"dnssec,required"`
 	Domain                    string               `json:"domain,required"`
 	Extension                 string               `json:"extension,required"`
 	Found                     bool                 `json:"found,required"`
@@ -93,7 +93,6 @@ type WhoisGetResponse struct {
 	BillingStreet             string               `json:"billing_street"`
 	CreatedDate               time.Time            `json:"created_date" format:"date-time"`
 	CreatedDateRaw            string               `json:"created_date_raw"`
-	DNSSEC                    bool                 `json:"dnssec"`
 	ExpirationDate            time.Time            `json:"expiration_date" format:"date-time"`
 	ExpirationDateRaw         string               `json:"expiration_date_raw"`
 	RegistrantCity            string               `json:"registrant_city"`
@@ -148,6 +147,7 @@ type WhoisGetResponse struct {
 // whoisGetResponseJSON contains the JSON metadata for the struct
 // [WhoisGetResponse]
 type whoisGetResponseJSON struct {
+	DNSSEC                    apijson.Field
 	Domain                    apijson.Field
 	Extension                 apijson.Field
 	Found                     apijson.Field
@@ -186,7 +186,6 @@ type whoisGetResponseJSON struct {
 	BillingStreet             apijson.Field
 	CreatedDate               apijson.Field
 	CreatedDateRaw            apijson.Field
-	DNSSEC                    apijson.Field
 	ExpirationDate            apijson.Field
 	ExpirationDateRaw         apijson.Field
 	RegistrantCity            apijson.Field
@@ -248,7 +247,7 @@ func (r whoisGetResponseJSON) RawJSON() string {
 }
 
 type WhoisGetParams struct {
-	// Identifier
+	// Use to uniquely identify or reference the resource.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Domain    param.Field[string] `query:"domain"`
 }
@@ -262,9 +261,9 @@ func (r WhoisGetParams) URLQuery() (v url.Values) {
 }
 
 type WhoisGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []WhoisGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WhoisGetResponseEnvelopeMessages `json:"messages,required"`
+	// Returns a boolean for the success/failure of the API call.
 	Success WhoisGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  WhoisGetResponse                `json:"result"`
 	JSON    whoisGetResponseEnvelopeJSON    `json:"-"`
@@ -289,7 +288,103 @@ func (r whoisGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type WhoisGetResponseEnvelopeErrors struct {
+	Code             int64                                `json:"code,required"`
+	Message          string                               `json:"message,required"`
+	DocumentationURL string                               `json:"documentation_url"`
+	Source           WhoisGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             whoisGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// whoisGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [WhoisGetResponseEnvelopeErrors]
+type whoisGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WhoisGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r whoisGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type WhoisGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                   `json:"pointer"`
+	JSON    whoisGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// whoisGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [WhoisGetResponseEnvelopeErrorsSource]
+type whoisGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WhoisGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r whoisGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type WhoisGetResponseEnvelopeMessages struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           WhoisGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             whoisGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// whoisGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [WhoisGetResponseEnvelopeMessages]
+type whoisGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WhoisGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r whoisGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type WhoisGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    whoisGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// whoisGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [WhoisGetResponseEnvelopeMessagesSource]
+type whoisGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WhoisGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r whoisGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Returns a boolean for the success/failure of the API call.
 type WhoisGetResponseEnvelopeSuccess bool
 
 const (
