@@ -117,6 +117,8 @@ func (UnionString) ImplementsConfigUpdateParamsToolsWorkerDefaultFieldsUnion()  
 func (UnionString) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()                        {}
 func (UnionString) ImplementsSettingValueUnionParam()                                            {}
 func (UnionString) ImplementsSettingValueUnion()                                                 {}
+func (UnionString) ImplementsThreatEventListParamsSearchValueUnion()                             {}
+func (UnionString) ImplementsThreatEventListParamsSearchValueArrayItemUnion()                    {}
 func (UnionString) ImplementsLogListParamsFiltersValueUnion()                                    {}
 func (UnionString) ImplementsLogDeleteParamsFiltersValueUnion()                                  {}
 func (UnionString) ImplementsLogEditParamsMetadataUnion()                                        {}
@@ -251,6 +253,8 @@ func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()        
 func (UnionFloat) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union() {}
 func (UnionFloat) ImplementsSettingValueUnionParam()                                    {}
 func (UnionFloat) ImplementsSettingValueUnion()                                         {}
+func (UnionFloat) ImplementsThreatEventListParamsSearchValueUnion()                     {}
+func (UnionFloat) ImplementsThreatEventListParamsSearchValueArrayItemUnion()            {}
 func (UnionFloat) ImplementsLogListParamsFiltersValueUnion()                            {}
 func (UnionFloat) ImplementsLogDeleteParamsFiltersValueUnion()                          {}
 func (UnionFloat) ImplementsLogEditParamsMetadataUnion()                                {}
