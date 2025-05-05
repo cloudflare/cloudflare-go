@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PrefixService contains methods and other services that help with interacting
@@ -206,9 +205,9 @@ func (r prefixJSON) RawJSON() string {
 }
 
 type PrefixDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []PrefixDeleteResponseError   `json:"errors,required"`
+	Messages []PrefixDeleteResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
 	Success    PrefixDeleteResponseSuccess    `json:"success,required"`
 	ResultInfo PrefixDeleteResponseResultInfo `json:"result_info"`
 	JSON       prefixDeleteResponseJSON       `json:"-"`
@@ -233,7 +232,103 @@ func (r prefixDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type PrefixDeleteResponseError struct {
+	Code             int64                            `json:"code,required"`
+	Message          string                           `json:"message,required"`
+	DocumentationURL string                           `json:"documentation_url"`
+	Source           PrefixDeleteResponseErrorsSource `json:"source"`
+	JSON             prefixDeleteResponseErrorJSON    `json:"-"`
+}
+
+// prefixDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [PrefixDeleteResponseError]
+type prefixDeleteResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixDeleteResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixDeleteResponseErrorsSource struct {
+	Pointer string                               `json:"pointer"`
+	JSON    prefixDeleteResponseErrorsSourceJSON `json:"-"`
+}
+
+// prefixDeleteResponseErrorsSourceJSON contains the JSON metadata for the struct
+// [PrefixDeleteResponseErrorsSource]
+type prefixDeleteResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixDeleteResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixDeleteResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixDeleteResponseMessage struct {
+	Code             int64                              `json:"code,required"`
+	Message          string                             `json:"message,required"`
+	DocumentationURL string                             `json:"documentation_url"`
+	Source           PrefixDeleteResponseMessagesSource `json:"source"`
+	JSON             prefixDeleteResponseMessageJSON    `json:"-"`
+}
+
+// prefixDeleteResponseMessageJSON contains the JSON metadata for the struct
+// [PrefixDeleteResponseMessage]
+type prefixDeleteResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixDeleteResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixDeleteResponseMessagesSource struct {
+	Pointer string                                 `json:"pointer"`
+	JSON    prefixDeleteResponseMessagesSourceJSON `json:"-"`
+}
+
+// prefixDeleteResponseMessagesSourceJSON contains the JSON metadata for the struct
+// [PrefixDeleteResponseMessagesSource]
+type prefixDeleteResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixDeleteResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixDeleteResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type PrefixDeleteResponseSuccess bool
 
 const (
@@ -249,13 +344,13 @@ func (r PrefixDeleteResponseSuccess) IsKnown() bool {
 }
 
 type PrefixDeleteResponseResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                            `json:"total_count"`
 	JSON       prefixDeleteResponseResultInfoJSON `json:"-"`
 }
@@ -295,9 +390,9 @@ func (r PrefixNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []PrefixNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success PrefixNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  Prefix                           `json:"result"`
 	JSON    prefixNewResponseEnvelopeJSON    `json:"-"`
@@ -322,7 +417,103 @@ func (r prefixNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type PrefixNewResponseEnvelopeErrors struct {
+	Code             int64                                 `json:"code,required"`
+	Message          string                                `json:"message,required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           PrefixNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             prefixNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// prefixNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PrefixNewResponseEnvelopeErrors]
+type prefixNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    prefixNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// prefixNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [PrefixNewResponseEnvelopeErrorsSource]
+type prefixNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixNewResponseEnvelopeMessages struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           PrefixNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             prefixNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// prefixNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [PrefixNewResponseEnvelopeMessages]
+type prefixNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    prefixNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// prefixNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [PrefixNewResponseEnvelopeMessagesSource]
+type prefixNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type PrefixNewResponseEnvelopeSuccess bool
 
 const (
@@ -359,9 +550,9 @@ func (r PrefixEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []PrefixEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success PrefixEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  Prefix                            `json:"result"`
 	JSON    prefixEditResponseEnvelopeJSON    `json:"-"`
@@ -386,7 +577,103 @@ func (r prefixEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type PrefixEditResponseEnvelopeErrors struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           PrefixEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             prefixEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// prefixEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PrefixEditResponseEnvelopeErrors]
+type prefixEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    prefixEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// prefixEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [PrefixEditResponseEnvelopeErrorsSource]
+type prefixEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixEditResponseEnvelopeMessages struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           PrefixEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             prefixEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// prefixEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [PrefixEditResponseEnvelopeMessages]
+type prefixEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    prefixEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// prefixEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [PrefixEditResponseEnvelopeMessagesSource]
+type prefixEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type PrefixEditResponseEnvelopeSuccess bool
 
 const (
@@ -407,9 +694,9 @@ type PrefixGetParams struct {
 }
 
 type PrefixGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []PrefixGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success PrefixGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Prefix                           `json:"result"`
 	JSON    prefixGetResponseEnvelopeJSON    `json:"-"`
@@ -434,7 +721,103 @@ func (r prefixGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type PrefixGetResponseEnvelopeErrors struct {
+	Code             int64                                 `json:"code,required"`
+	Message          string                                `json:"message,required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           PrefixGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             prefixGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// prefixGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PrefixGetResponseEnvelopeErrors]
+type prefixGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    prefixGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// prefixGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [PrefixGetResponseEnvelopeErrorsSource]
+type prefixGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixGetResponseEnvelopeMessages struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           PrefixGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             prefixGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// prefixGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [PrefixGetResponseEnvelopeMessages]
+type prefixGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    prefixGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// prefixGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [PrefixGetResponseEnvelopeMessagesSource]
+type prefixGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type PrefixGetResponseEnvelopeSuccess bool
 
 const (

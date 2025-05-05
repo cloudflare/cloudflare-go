@@ -133,7 +133,7 @@ func (r zoneHoldJSON) RawJSON() string {
 }
 
 type HoldNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// If provided, the zone hold will extend to block any subdomain of the given zone,
 	// as well as SSL4SaaS Custom Hostnames. For example, a zone hold on a zone with
@@ -194,7 +194,7 @@ func (r HoldNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type HoldDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// If `hold_after` is provided, the hold will be temporarily disabled, then
 	// automatically re-enabled by the system at the time specified in this
@@ -254,7 +254,7 @@ func (r HoldDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type HoldEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// If `hold_after` is provided and future-dated, the hold will be temporarily
 	// disabled, then automatically re-enabled by the system at the time specified in
@@ -317,7 +317,7 @@ func (r HoldEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type HoldGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 

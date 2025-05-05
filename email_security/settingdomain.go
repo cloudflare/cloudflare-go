@@ -853,20 +853,39 @@ type SettingDomainBulkDeleteParams struct {
 
 type SettingDomainEditParams struct {
 	// Account Identifier
-	AccountID          param.Field[string]                                   `path:"account_id,required"`
-	IPRestrictions     param.Field[[]string]                                 `json:"ip_restrictions,required"`
-	Domain             param.Field[string]                                   `json:"domain"`
-	DropDispositions   param.Field[[]SettingDomainEditParamsDropDisposition] `json:"drop_dispositions"`
-	Folder             param.Field[SettingDomainEditParamsFolder]            `json:"folder"`
-	IntegrationID      param.Field[string]                                   `json:"integration_id" format:"uuid"`
-	LookbackHops       param.Field[int64]                                    `json:"lookback_hops"`
-	RequireTLSInbound  param.Field[bool]                                     `json:"require_tls_inbound"`
-	RequireTLSOutbound param.Field[bool]                                     `json:"require_tls_outbound"`
-	Transport          param.Field[string]                                   `json:"transport"`
+	AccountID            param.Field[string]                                       `path:"account_id,required"`
+	IPRestrictions       param.Field[[]string]                                     `json:"ip_restrictions,required"`
+	AllowedDeliveryModes param.Field[[]SettingDomainEditParamsAllowedDeliveryMode] `json:"allowed_delivery_modes"`
+	Domain               param.Field[string]                                       `json:"domain"`
+	DropDispositions     param.Field[[]SettingDomainEditParamsDropDisposition]     `json:"drop_dispositions"`
+	Folder               param.Field[SettingDomainEditParamsFolder]                `json:"folder"`
+	IntegrationID        param.Field[string]                                       `json:"integration_id" format:"uuid"`
+	LookbackHops         param.Field[int64]                                        `json:"lookback_hops"`
+	RequireTLSInbound    param.Field[bool]                                         `json:"require_tls_inbound"`
+	RequireTLSOutbound   param.Field[bool]                                         `json:"require_tls_outbound"`
+	Transport            param.Field[string]                                       `json:"transport"`
 }
 
 func (r SettingDomainEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type SettingDomainEditParamsAllowedDeliveryMode string
+
+const (
+	SettingDomainEditParamsAllowedDeliveryModeDirect    SettingDomainEditParamsAllowedDeliveryMode = "DIRECT"
+	SettingDomainEditParamsAllowedDeliveryModeBcc       SettingDomainEditParamsAllowedDeliveryMode = "BCC"
+	SettingDomainEditParamsAllowedDeliveryModeJournal   SettingDomainEditParamsAllowedDeliveryMode = "JOURNAL"
+	SettingDomainEditParamsAllowedDeliveryModeAPI       SettingDomainEditParamsAllowedDeliveryMode = "API"
+	SettingDomainEditParamsAllowedDeliveryModeRetroScan SettingDomainEditParamsAllowedDeliveryMode = "RETRO_SCAN"
+)
+
+func (r SettingDomainEditParamsAllowedDeliveryMode) IsKnown() bool {
+	switch r {
+	case SettingDomainEditParamsAllowedDeliveryModeDirect, SettingDomainEditParamsAllowedDeliveryModeBcc, SettingDomainEditParamsAllowedDeliveryModeJournal, SettingDomainEditParamsAllowedDeliveryModeAPI, SettingDomainEditParamsAllowedDeliveryModeRetroScan:
+		return true
+	}
+	return false
 }
 
 type SettingDomainEditParamsDropDisposition string

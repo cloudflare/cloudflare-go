@@ -329,6 +329,7 @@ type ConfigEditParams struct {
 	// Identifier
 	AccountID param.Field[string]                       `path:"account_id,required"`
 	Caching   param.Field[ConfigEditParamsCachingUnion] `json:"caching"`
+	MTLS      param.Field[ConfigEditParamsMTLS]         `json:"mtls"`
 	Name      param.Field[string]                       `json:"name"`
 	Origin    param.Field[ConfigEditParamsOriginUnion]  `json:"origin"`
 }
@@ -392,6 +393,20 @@ func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) MarshalJSON()
 func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) implementsConfigEditParamsCachingUnion() {
 }
 
+type ConfigEditParamsMTLS struct {
+	// CA certificate ID
+	CACertificateID param.Field[string] `json:"ca_certificate_id"`
+	// mTLS certificate ID
+	MTLSCertificateID param.Field[string] `json:"mtls_certificate_id"`
+	// SSL mode used for CA verification. Must be 'require', 'verify-ca', or
+	// 'verify-full'
+	Sslmode param.Field[string] `json:"sslmode"`
+}
+
+func (r ConfigEditParamsMTLS) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ConfigEditParamsOrigin struct {
 	// The Client ID of the Access token to use when connecting to the origin database.
 	AccessClientID param.Field[string] `json:"access_client_id"`
@@ -451,11 +466,12 @@ type ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme string
 const (
 	ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgres   ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme = "postgres"
 	ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgresql ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme = "postgresql"
+	ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemeMysql      ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme = "mysql"
 )
 
 func (r ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme) IsKnown() bool {
 	switch r {
-	case ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgres, ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgresql:
+	case ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgres, ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgresql, ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemeMysql:
 		return true
 	}
 	return false
@@ -496,11 +512,12 @@ type ConfigEditParamsOriginScheme string
 const (
 	ConfigEditParamsOriginSchemePostgres   ConfigEditParamsOriginScheme = "postgres"
 	ConfigEditParamsOriginSchemePostgresql ConfigEditParamsOriginScheme = "postgresql"
+	ConfigEditParamsOriginSchemeMysql      ConfigEditParamsOriginScheme = "mysql"
 )
 
 func (r ConfigEditParamsOriginScheme) IsKnown() bool {
 	switch r {
-	case ConfigEditParamsOriginSchemePostgres, ConfigEditParamsOriginSchemePostgresql:
+	case ConfigEditParamsOriginSchemePostgres, ConfigEditParamsOriginSchemePostgresql, ConfigEditParamsOriginSchemeMysql:
 		return true
 	}
 	return false

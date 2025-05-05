@@ -30,7 +30,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.Rules.New(context.TODO(), zero_trust.GatewayRuleNewParams{
 		AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Action:        cloudflare.F(zero_trust.GatewayRuleNewParamsActionOn),
+		Action:        cloudflare.F(zero_trust.GatewayRuleNewParamsActionAllow),
 		Name:          cloudflare.F("block bad websites"),
 		Description:   cloudflare.F("Block bad websites based on their host name."),
 		DevicePosture: cloudflare.F(`any(device_posture.checks.passed[*] in {"1308749e-fcfb-4ebc-b051-fe022b632644"})`),
@@ -38,7 +38,6 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		Expiration: cloudflare.F(zero_trust.GatewayRuleNewParamsExpiration{
 			ExpiresAt: cloudflare.F(time.Now()),
 			Duration:  cloudflare.F(int64(10)),
-			Expired:   cloudflare.F(false),
 		}),
 		Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
 		Identity:   cloudflare.F(`any(identity.groups.name[*] in {"finance"})`),
@@ -52,7 +51,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				CommandLogging: cloudflare.F(false),
 			}),
 			BISOAdminControls: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsParam{
-				Copy:     cloudflare.F(zero_trust.RuleSettingBISOAdminControlsCopyEnabled),
+				Copy:     cloudflare.F(zero_trust.RuleSettingBISOAdminControlsCopyRemoteOnly),
 				DCP:      cloudflare.F(false),
 				DD:       cloudflare.F(false),
 				DK:       cloudflare.F(false),
@@ -64,6 +63,10 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				Printing: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsPrintingEnabled),
 				Upload:   cloudflare.F(zero_trust.RuleSettingBISOAdminControlsUploadEnabled),
 				Version:  cloudflare.F(zero_trust.RuleSettingBISOAdminControlsVersionV1),
+			}),
+			BlockPage: cloudflare.F(zero_trust.RuleSettingBlockPageParam{
+				TargetURI:      cloudflare.F("https://example.com"),
+				IncludeContext: cloudflare.F(true),
 			}),
 			BlockPageEnabled: cloudflare.F(true),
 			BlockReason:      cloudflare.F("This website is a security risk"),
@@ -100,9 +103,10 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				Port: cloudflare.F(int64(0)),
 			}),
 			NotificationSettings: cloudflare.F(zero_trust.RuleSettingNotificationSettingsParam{
-				Enabled:    cloudflare.F(true),
-				Msg:        cloudflare.F("msg"),
-				SupportURL: cloudflare.F("support_url"),
+				Enabled:        cloudflare.F(true),
+				IncludeContext: cloudflare.F(true),
+				Msg:            cloudflare.F("msg"),
+				SupportURL:     cloudflare.F("support_url"),
 			}),
 			OverrideHost: cloudflare.F("example.com"),
 			OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
@@ -112,13 +116,18 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
 				FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe}),
 			}),
+			Redirect: cloudflare.F(zero_trust.RuleSettingRedirectParam{
+				TargetURI:            cloudflare.F("https://example.com"),
+				IncludeContext:       cloudflare.F(true),
+				PreservePathAndQuery: cloudflare.F(true),
+			}),
 			ResolveDNSInternally: cloudflare.F(zero_trust.RuleSettingResolveDNSInternallyParam{
 				Fallback: cloudflare.F(zero_trust.RuleSettingResolveDNSInternallyFallbackNone),
 				ViewID:   cloudflare.F("view_id"),
 			}),
 			ResolveDNSThroughCloudflare: cloudflare.F(true),
 			UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
-				Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionPassThrough),
+				Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionError),
 			}),
 		}),
 		Schedule: cloudflare.F(zero_trust.ScheduleParam{
@@ -160,7 +169,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayRuleUpdateParams{
 			AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Action:        cloudflare.F(zero_trust.GatewayRuleUpdateParamsActionOn),
+			Action:        cloudflare.F(zero_trust.GatewayRuleUpdateParamsActionAllow),
 			Name:          cloudflare.F("block bad websites"),
 			Description:   cloudflare.F("Block bad websites based on their host name."),
 			DevicePosture: cloudflare.F(`any(device_posture.checks.passed[*] in {"1308749e-fcfb-4ebc-b051-fe022b632644"})`),
@@ -168,7 +177,6 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 			Expiration: cloudflare.F(zero_trust.GatewayRuleUpdateParamsExpiration{
 				ExpiresAt: cloudflare.F(time.Now()),
 				Duration:  cloudflare.F(int64(10)),
-				Expired:   cloudflare.F(false),
 			}),
 			Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
 			Identity:   cloudflare.F(`any(identity.groups.name[*] in {"finance"})`),
@@ -182,7 +190,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					CommandLogging: cloudflare.F(false),
 				}),
 				BISOAdminControls: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsParam{
-					Copy:     cloudflare.F(zero_trust.RuleSettingBISOAdminControlsCopyEnabled),
+					Copy:     cloudflare.F(zero_trust.RuleSettingBISOAdminControlsCopyRemoteOnly),
 					DCP:      cloudflare.F(false),
 					DD:       cloudflare.F(false),
 					DK:       cloudflare.F(false),
@@ -194,6 +202,10 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					Printing: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsPrintingEnabled),
 					Upload:   cloudflare.F(zero_trust.RuleSettingBISOAdminControlsUploadEnabled),
 					Version:  cloudflare.F(zero_trust.RuleSettingBISOAdminControlsVersionV1),
+				}),
+				BlockPage: cloudflare.F(zero_trust.RuleSettingBlockPageParam{
+					TargetURI:      cloudflare.F("https://example.com"),
+					IncludeContext: cloudflare.F(true),
 				}),
 				BlockPageEnabled: cloudflare.F(true),
 				BlockReason:      cloudflare.F("This website is a security risk"),
@@ -230,9 +242,10 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					Port: cloudflare.F(int64(0)),
 				}),
 				NotificationSettings: cloudflare.F(zero_trust.RuleSettingNotificationSettingsParam{
-					Enabled:    cloudflare.F(true),
-					Msg:        cloudflare.F("msg"),
-					SupportURL: cloudflare.F("support_url"),
+					Enabled:        cloudflare.F(true),
+					IncludeContext: cloudflare.F(true),
+					Msg:            cloudflare.F("msg"),
+					SupportURL:     cloudflare.F("support_url"),
 				}),
 				OverrideHost: cloudflare.F("example.com"),
 				OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
@@ -242,13 +255,18 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
 					FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe}),
 				}),
+				Redirect: cloudflare.F(zero_trust.RuleSettingRedirectParam{
+					TargetURI:            cloudflare.F("https://example.com"),
+					IncludeContext:       cloudflare.F(true),
+					PreservePathAndQuery: cloudflare.F(true),
+				}),
 				ResolveDNSInternally: cloudflare.F(zero_trust.RuleSettingResolveDNSInternallyParam{
 					Fallback: cloudflare.F(zero_trust.RuleSettingResolveDNSInternallyFallbackNone),
 					ViewID:   cloudflare.F("view_id"),
 				}),
 				ResolveDNSThroughCloudflare: cloudflare.F(true),
 				UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
-					Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionPassThrough),
+					Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionError),
 				}),
 			}),
 			Schedule: cloudflare.F(zero_trust.ScheduleParam{

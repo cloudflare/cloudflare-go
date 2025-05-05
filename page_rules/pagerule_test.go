@@ -110,7 +110,7 @@ func TestPageRuleListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.PageRules.List(context.TODO(), page_rules.PageRuleListParams{
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction: cloudflare.F(page_rules.PageRuleListParamsDirectionAsc),
+		Direction: cloudflare.F(page_rules.PageRuleListParamsDirectionDesc),
 		Match:     cloudflare.F(page_rules.PageRuleListParamsMatchAny),
 		Order:     cloudflare.F(page_rules.PageRuleListParamsOrderStatus),
 		Status:    cloudflare.F(page_rules.PageRuleListParamsStatusActive),

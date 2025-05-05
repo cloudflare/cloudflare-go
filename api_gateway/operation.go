@@ -184,7 +184,7 @@ type OperationNewResponse struct {
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
 	Method OperationNewResponseMethod `json:"method,required"`
-	// UUID
+	// UUID.
 	OperationID string                       `json:"operation_id,required"`
 	Features    OperationNewResponseFeatures `json:"features"`
 	JSON        operationNewResponseJSON     `json:"-"`
@@ -771,7 +771,7 @@ func (r operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 
 // Schema active on endpoint.
 type OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema struct {
-	// UUID
+	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// True if schema is Cloudflare-provided.
@@ -829,7 +829,7 @@ type OperationListResponse struct {
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
 	Method OperationListResponseMethod `json:"method,required"`
-	// UUID
+	// UUID.
 	OperationID string                        `json:"operation_id,required"`
 	Features    OperationListResponseFeatures `json:"features"`
 	JSON        operationListResponseJSON     `json:"-"`
@@ -1416,7 +1416,7 @@ func (r operationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaIn
 
 // Schema active on endpoint.
 type OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema struct {
-	// UUID
+	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// True if schema is Cloudflare-provided.
@@ -1466,7 +1466,7 @@ func (r OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaIn
 type OperationDeleteResponse struct {
 	Errors   Message `json:"errors,required"`
 	Messages Message `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success OperationDeleteResponseSuccess `json:"success,required"`
 	JSON    operationDeleteResponseJSON    `json:"-"`
 }
@@ -1489,7 +1489,7 @@ func (r operationDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type OperationDeleteResponseSuccess bool
 
 const (
@@ -1515,7 +1515,7 @@ type OperationBulkNewResponse struct {
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
 	Method OperationBulkNewResponseMethod `json:"method,required"`
-	// UUID
+	// UUID.
 	OperationID string                           `json:"operation_id,required"`
 	Features    OperationBulkNewResponseFeatures `json:"features"`
 	JSON        operationBulkNewResponseJSON     `json:"-"`
@@ -2102,7 +2102,7 @@ func (r operationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchem
 
 // Schema active on endpoint.
 type OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema struct {
-	// UUID
+	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// True if schema is Cloudflare-provided.
@@ -2152,7 +2152,7 @@ func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchem
 type OperationBulkDeleteResponse struct {
 	Errors   Message `json:"errors,required"`
 	Messages Message `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success OperationBulkDeleteResponseSuccess `json:"success,required"`
 	JSON    operationBulkDeleteResponseJSON    `json:"-"`
 }
@@ -2175,7 +2175,7 @@ func (r operationBulkDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type OperationBulkDeleteResponseSuccess bool
 
 const (
@@ -2201,7 +2201,7 @@ type OperationGetResponse struct {
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
 	Method OperationGetResponseMethod `json:"method,required"`
-	// UUID
+	// UUID.
 	OperationID string                       `json:"operation_id,required"`
 	Features    OperationGetResponseFeatures `json:"features"`
 	JSON        operationGetResponseJSON     `json:"-"`
@@ -2788,7 +2788,7 @@ func (r operationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 
 // Schema active on endpoint.
 type OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema struct {
-	// UUID
+	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// True if schema is Cloudflare-provided.
@@ -2836,7 +2836,7 @@ func (r OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 }
 
 type OperationNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -2880,7 +2880,7 @@ type OperationNewResponseEnvelope struct {
 	Errors   Message              `json:"errors,required"`
 	Messages Message              `json:"messages,required"`
 	Result   OperationNewResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success OperationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    operationNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -2904,7 +2904,7 @@ func (r operationNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type OperationNewResponseEnvelopeSuccess bool
 
 const (
@@ -2920,7 +2920,7 @@ func (r OperationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OperationListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Direction to order results.
 	Direction param.Field[OperationListParamsDirection] `query:"direction"`
@@ -3003,12 +3003,12 @@ func (r OperationListParamsOrder) IsKnown() bool {
 }
 
 type OperationDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OperationBulkNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string]          `path:"zone_id,required"`
 	Body   []OperationBulkNewParamsBody `json:"body,required"`
 }
@@ -3057,12 +3057,12 @@ func (r OperationBulkNewParamsBodyMethod) IsKnown() bool {
 }
 
 type OperationBulkDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OperationGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Add feature(s) to the results. The feature name that is given here corresponds
 	// to the resulting feature object. Have a look at the top-level object description
@@ -3098,7 +3098,7 @@ type OperationGetResponseEnvelope struct {
 	Errors   Message              `json:"errors,required"`
 	Messages Message              `json:"messages,required"`
 	Result   OperationGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success OperationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    operationGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -3122,7 +3122,7 @@ func (r operationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type OperationGetResponseEnvelopeSuccess bool
 
 const (

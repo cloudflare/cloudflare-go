@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -141,6 +140,8 @@ func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetPa
 type BotFightModeConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection BotFightModeConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+	CrawlerProtection BotFightModeConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
@@ -159,6 +160,7 @@ type BotFightModeConfiguration struct {
 // [BotFightModeConfiguration]
 type botFightModeConfigurationJSON struct {
 	AIBotsProtection       apijson.Field
+	CrawlerProtection      apijson.Field
 	EnableJS               apijson.Field
 	FightMode              apijson.Field
 	StaleZoneConfiguration apijson.Field
@@ -190,6 +192,22 @@ const (
 func (r BotFightModeConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case BotFightModeConfigurationAIBotsProtectionBlock, BotFightModeConfigurationAIBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
+
+// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+type BotFightModeConfigurationCrawlerProtection string
+
+const (
+	BotFightModeConfigurationCrawlerProtectionEnabled  BotFightModeConfigurationCrawlerProtection = "enabled"
+	BotFightModeConfigurationCrawlerProtectionDisabled BotFightModeConfigurationCrawlerProtection = "disabled"
+)
+
+func (r BotFightModeConfigurationCrawlerProtection) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationCrawlerProtectionEnabled, BotFightModeConfigurationCrawlerProtectionDisabled:
 		return true
 	}
 	return false
@@ -239,6 +257,8 @@ func (r botFightModeConfigurationStaleZoneConfigurationJSON) RawJSON() string {
 type BotFightModeConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[BotFightModeConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+	CrawlerProtection param.Field[BotFightModeConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS param.Field[bool] `json:"enable_js"`
@@ -282,6 +302,8 @@ type SubscriptionConfiguration struct {
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
 	AutoUpdateModel bool `json:"auto_update_model"`
+	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+	CrawlerProtection SubscriptionConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
@@ -302,6 +324,7 @@ type SubscriptionConfiguration struct {
 type subscriptionConfigurationJSON struct {
 	AIBotsProtection       apijson.Field
 	AutoUpdateModel        apijson.Field
+	CrawlerProtection      apijson.Field
 	EnableJS               apijson.Field
 	StaleZoneConfiguration apijson.Field
 	SuppressSessionScore   apijson.Field
@@ -333,6 +356,22 @@ const (
 func (r SubscriptionConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case SubscriptionConfigurationAIBotsProtectionBlock, SubscriptionConfigurationAIBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
+
+// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+type SubscriptionConfigurationCrawlerProtection string
+
+const (
+	SubscriptionConfigurationCrawlerProtectionEnabled  SubscriptionConfigurationCrawlerProtection = "enabled"
+	SubscriptionConfigurationCrawlerProtectionDisabled SubscriptionConfigurationCrawlerProtection = "disabled"
+)
+
+func (r SubscriptionConfigurationCrawlerProtection) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationCrawlerProtectionEnabled, SubscriptionConfigurationCrawlerProtectionDisabled:
 		return true
 	}
 	return false
@@ -386,6 +425,8 @@ type SubscriptionConfigurationParam struct {
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
 	AutoUpdateModel param.Field[bool] `json:"auto_update_model"`
+	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+	CrawlerProtection param.Field[SubscriptionConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS param.Field[bool] `json:"enable_js"`
@@ -426,6 +467,8 @@ func (r SubscriptionConfigurationStaleZoneConfigurationParam) MarshalJSON() (dat
 type SuperBotFightModeDefinitelyConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection SuperBotFightModeDefinitelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+	CrawlerProtection SuperBotFightModeDefinitelyConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
@@ -452,6 +495,7 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 // struct [SuperBotFightModeDefinitelyConfiguration]
 type superBotFightModeDefinitelyConfigurationJSON struct {
 	AIBotsProtection             apijson.Field
+	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
@@ -486,6 +530,22 @@ const (
 func (r SuperBotFightModeDefinitelyConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
+
+// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+type SuperBotFightModeDefinitelyConfigurationCrawlerProtection string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationCrawlerProtectionEnabled  SuperBotFightModeDefinitelyConfigurationCrawlerProtection = "enabled"
+	SuperBotFightModeDefinitelyConfigurationCrawlerProtectionDisabled SuperBotFightModeDefinitelyConfigurationCrawlerProtection = "disabled"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationCrawlerProtection) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationCrawlerProtectionEnabled, SuperBotFightModeDefinitelyConfigurationCrawlerProtectionDisabled:
 		return true
 	}
 	return false
@@ -556,6 +616,8 @@ func (r superBotFightModeDefinitelyConfigurationStaleZoneConfigurationJSON) RawJ
 type SuperBotFightModeDefinitelyConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[SuperBotFightModeDefinitelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+	CrawlerProtection param.Field[SuperBotFightModeDefinitelyConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS param.Field[bool] `json:"enable_js"`
@@ -595,6 +657,8 @@ func (r SuperBotFightModeDefinitelyConfigurationStaleZoneConfigurationParam) Mar
 type SuperBotFightModeLikelyConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection SuperBotFightModeLikelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+	CrawlerProtection SuperBotFightModeLikelyConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
@@ -623,6 +687,7 @@ type SuperBotFightModeLikelyConfiguration struct {
 // struct [SuperBotFightModeLikelyConfiguration]
 type superBotFightModeLikelyConfigurationJSON struct {
 	AIBotsProtection             apijson.Field
+	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
@@ -658,6 +723,22 @@ const (
 func (r SuperBotFightModeLikelyConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock, SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
+
+// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+type SuperBotFightModeLikelyConfigurationCrawlerProtection string
+
+const (
+	SuperBotFightModeLikelyConfigurationCrawlerProtectionEnabled  SuperBotFightModeLikelyConfigurationCrawlerProtection = "enabled"
+	SuperBotFightModeLikelyConfigurationCrawlerProtectionDisabled SuperBotFightModeLikelyConfigurationCrawlerProtection = "disabled"
+)
+
+func (r SuperBotFightModeLikelyConfigurationCrawlerProtection) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationCrawlerProtectionEnabled, SuperBotFightModeLikelyConfigurationCrawlerProtectionDisabled:
 		return true
 	}
 	return false
@@ -741,6 +822,8 @@ func (r superBotFightModeLikelyConfigurationStaleZoneConfigurationJSON) RawJSON(
 type SuperBotFightModeLikelyConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[SuperBotFightModeLikelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+	CrawlerProtection param.Field[SuperBotFightModeLikelyConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS param.Field[bool] `json:"enable_js"`
@@ -782,6 +865,8 @@ type BotManagementUpdateResponse struct {
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
 	AutoUpdateModel bool `json:"auto_update_model"`
+	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+	CrawlerProtection BotManagementUpdateResponseCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
@@ -820,6 +905,7 @@ type BotManagementUpdateResponse struct {
 type botManagementUpdateResponseJSON struct {
 	AIBotsProtection             apijson.Field
 	AutoUpdateModel              apijson.Field
+	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
 	OptimizeWordpress            apijson.Field
@@ -906,6 +992,22 @@ func (r BotManagementUpdateResponseAIBotsProtection) IsKnown() bool {
 	return false
 }
 
+// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+type BotManagementUpdateResponseCrawlerProtection string
+
+const (
+	BotManagementUpdateResponseCrawlerProtectionEnabled  BotManagementUpdateResponseCrawlerProtection = "enabled"
+	BotManagementUpdateResponseCrawlerProtectionDisabled BotManagementUpdateResponseCrawlerProtection = "disabled"
+)
+
+func (r BotManagementUpdateResponseCrawlerProtection) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseCrawlerProtectionEnabled, BotManagementUpdateResponseCrawlerProtectionDisabled:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
 type BotManagementUpdateResponseSBFMDefinitelyAutomated string
 
@@ -963,6 +1065,8 @@ type BotManagementGetResponse struct {
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
 	AutoUpdateModel bool `json:"auto_update_model"`
+	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+	CrawlerProtection BotManagementGetResponseCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
@@ -1001,6 +1105,7 @@ type BotManagementGetResponse struct {
 type botManagementGetResponseJSON struct {
 	AIBotsProtection             apijson.Field
 	AutoUpdateModel              apijson.Field
+	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
 	OptimizeWordpress            apijson.Field
@@ -1087,6 +1192,22 @@ func (r BotManagementGetResponseAIBotsProtection) IsKnown() bool {
 	return false
 }
 
+// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+type BotManagementGetResponseCrawlerProtection string
+
+const (
+	BotManagementGetResponseCrawlerProtectionEnabled  BotManagementGetResponseCrawlerProtection = "enabled"
+	BotManagementGetResponseCrawlerProtectionDisabled BotManagementGetResponseCrawlerProtection = "disabled"
+)
+
+func (r BotManagementGetResponseCrawlerProtection) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseCrawlerProtectionEnabled, BotManagementGetResponseCrawlerProtectionDisabled:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
 type BotManagementGetResponseSBFMDefinitelyAutomated string
 
@@ -1138,7 +1259,7 @@ func (r BotManagementGetResponseSBFMVerifiedBots) IsKnown() bool {
 }
 
 type BotManagementUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string]                `path:"zone_id,required"`
 	Body   BotManagementUpdateParamsBodyUnion `json:"body,required"`
 }
@@ -1154,6 +1275,8 @@ type BotManagementUpdateParamsBody struct {
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
 	AutoUpdateModel param.Field[bool] `json:"auto_update_model"`
+	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+	CrawlerProtection param.Field[BotManagementUpdateParamsBodyCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS param.Field[bool] `json:"enable_js"`
@@ -1203,6 +1326,22 @@ const (
 func (r BotManagementUpdateParamsBodyAIBotsProtection) IsKnown() bool {
 	switch r {
 	case BotManagementUpdateParamsBodyAIBotsProtectionBlock, BotManagementUpdateParamsBodyAIBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
+
+// Enable rule to punish AI Scrapers and Crawlers via a link maze.
+type BotManagementUpdateParamsBodyCrawlerProtection string
+
+const (
+	BotManagementUpdateParamsBodyCrawlerProtectionEnabled  BotManagementUpdateParamsBodyCrawlerProtection = "enabled"
+	BotManagementUpdateParamsBodyCrawlerProtectionDisabled BotManagementUpdateParamsBodyCrawlerProtection = "disabled"
+)
+
+func (r BotManagementUpdateParamsBodyCrawlerProtection) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateParamsBodyCrawlerProtectionEnabled, BotManagementUpdateParamsBodyCrawlerProtectionDisabled:
 		return true
 	}
 	return false
@@ -1259,9 +1398,9 @@ func (r BotManagementUpdateParamsBodySBFMVerifiedBots) IsKnown() bool {
 }
 
 type BotManagementUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []BotManagementUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []BotManagementUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success BotManagementUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  BotManagementUpdateResponse                `json:"result"`
 	JSON    botManagementUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1286,7 +1425,103 @@ func (r botManagementUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type BotManagementUpdateResponseEnvelopeErrors struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           BotManagementUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             botManagementUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// botManagementUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [BotManagementUpdateResponseEnvelopeErrors]
+type botManagementUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BotManagementUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    botManagementUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// botManagementUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [BotManagementUpdateResponseEnvelopeErrorsSource]
+type botManagementUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BotManagementUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementUpdateResponseEnvelopeMessages struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           BotManagementUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             botManagementUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// botManagementUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [BotManagementUpdateResponseEnvelopeMessages]
+type botManagementUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BotManagementUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    botManagementUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// botManagementUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [BotManagementUpdateResponseEnvelopeMessagesSource]
+type botManagementUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BotManagementUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type BotManagementUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1302,14 +1537,14 @@ func (r BotManagementUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BotManagementGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type BotManagementGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []BotManagementGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []BotManagementGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success BotManagementGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  BotManagementGetResponse                `json:"result"`
 	JSON    botManagementGetResponseEnvelopeJSON    `json:"-"`
@@ -1334,7 +1569,103 @@ func (r botManagementGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type BotManagementGetResponseEnvelopeErrors struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           BotManagementGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             botManagementGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// botManagementGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [BotManagementGetResponseEnvelopeErrors]
+type botManagementGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BotManagementGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    botManagementGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// botManagementGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [BotManagementGetResponseEnvelopeErrorsSource]
+type botManagementGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BotManagementGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementGetResponseEnvelopeMessages struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           BotManagementGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             botManagementGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// botManagementGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [BotManagementGetResponseEnvelopeMessages]
+type botManagementGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BotManagementGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type BotManagementGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    botManagementGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// botManagementGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [BotManagementGetResponseEnvelopeMessagesSource]
+type botManagementGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BotManagementGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type BotManagementGetResponseEnvelopeSuccess bool
 
 const (

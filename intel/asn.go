@@ -60,9 +60,9 @@ type ASNGetParams struct {
 }
 
 type ASNGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ASNGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ASNGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ASNGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  shared.ASN                    `json:"result"`
 	JSON    asnGetResponseEnvelopeJSON    `json:"-"`
@@ -87,7 +87,103 @@ func (r asnGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ASNGetResponseEnvelopeErrors struct {
+	Code             int64                              `json:"code,required"`
+	Message          string                             `json:"message,required"`
+	DocumentationURL string                             `json:"documentation_url"`
+	Source           ASNGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             asnGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// asnGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ASNGetResponseEnvelopeErrors]
+type asnGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ASNGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ASNGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                 `json:"pointer"`
+	JSON    asnGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// asnGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the struct
+// [ASNGetResponseEnvelopeErrorsSource]
+type asnGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ASNGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ASNGetResponseEnvelopeMessages struct {
+	Code             int64                                `json:"code,required"`
+	Message          string                               `json:"message,required"`
+	DocumentationURL string                               `json:"documentation_url"`
+	Source           ASNGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             asnGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// asnGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [ASNGetResponseEnvelopeMessages]
+type asnGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ASNGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ASNGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                   `json:"pointer"`
+	JSON    asnGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// asnGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [ASNGetResponseEnvelopeMessagesSource]
+type asnGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ASNGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r asnGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ASNGetResponseEnvelopeSuccess bool
 
 const (

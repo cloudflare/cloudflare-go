@@ -767,6 +767,9 @@ type Origin struct {
 	Header Header `json:"header"`
 	// A human-identifiable name for the origin.
 	Name string `json:"name"`
+	// The port for upstream connections. A value of 0 means the default port for the
+	// protocol will be used.
+	Port int64 `json:"port"`
 	// The virtual network subnet ID the origin belongs in. Virtual network must also
 	// belong to the account.
 	VirtualNetworkID string `json:"virtual_network_id"`
@@ -789,6 +792,7 @@ type originJSON struct {
 	Enabled          apijson.Field
 	Header           apijson.Field
 	Name             apijson.Field
+	Port             apijson.Field
 	VirtualNetworkID apijson.Field
 	Weight           apijson.Field
 	raw              string
@@ -818,6 +822,9 @@ type OriginParam struct {
 	Header param.Field[HeaderParam] `json:"header"`
 	// A human-identifiable name for the origin.
 	Name param.Field[string] `json:"name"`
+	// The port for upstream connections. A value of 0 means the default port for the
+	// protocol will be used.
+	Port param.Field[int64] `json:"port"`
 	// The virtual network subnet ID the origin belongs in. Virtual network must also
 	// belong to the account.
 	VirtualNetworkID param.Field[string] `json:"virtual_network_id"`

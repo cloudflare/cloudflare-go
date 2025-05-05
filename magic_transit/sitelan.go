@@ -293,7 +293,7 @@ type LAN struct {
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
 	StaticAddressing LANStaticAddressing `json:"static_addressing"`
-	// VLAN port number.
+	// VLAN ID. Use zero for untagged.
 	VlanTag int64   `json:"vlan_tag"`
 	JSON    lanJSON `json:"-"`
 }
@@ -446,8 +446,6 @@ type SiteLANNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	Physport  param.Field[int64]  `json:"physport,required"`
-	// VLAN port number.
-	VlanTag param.Field[int64] `json:"vlan_tag,required"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
 	HaLink        param.Field[bool]                `json:"ha_link"`
@@ -458,6 +456,8 @@ type SiteLANNewParams struct {
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
 	StaticAddressing param.Field[LANStaticAddressingParam] `json:"static_addressing"`
+	// VLAN ID. Use zero for untagged.
+	VlanTag param.Field[int64] `json:"vlan_tag"`
 }
 
 func (r SiteLANNewParams) MarshalJSON() (data []byte, err error) {
@@ -475,7 +475,7 @@ type SiteLANUpdateParams struct {
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
 	StaticAddressing param.Field[LANStaticAddressingParam] `json:"static_addressing"`
-	// VLAN port number.
+	// VLAN ID. Use zero for untagged.
 	VlanTag param.Field[int64] `json:"vlan_tag"`
 }
 
@@ -590,7 +590,7 @@ type SiteLANEditParams struct {
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
 	StaticAddressing param.Field[LANStaticAddressingParam] `json:"static_addressing"`
-	// VLAN port number.
+	// VLAN ID. Use zero for untagged.
 	VlanTag param.Field[int64] `json:"vlan_tag"`
 }
 

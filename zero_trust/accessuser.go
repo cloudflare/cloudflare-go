@@ -162,7 +162,7 @@ func (r accessUserMetaJSON) RawJSON() string {
 }
 
 type AccessUserListResponse struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// True if the user has authenticated with Cloudflare Access.
 	AccessSeat bool `json:"access_seat"`
@@ -212,7 +212,7 @@ func (r accessUserListResponseJSON) RawJSON() string {
 }
 
 type AccessUserListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The email of the user.
 	Email param.Field[string] `query:"email"`

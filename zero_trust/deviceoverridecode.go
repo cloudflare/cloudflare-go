@@ -34,8 +34,12 @@ func NewDeviceOverrideCodeService(opts ...option.RequestOption) (r *DeviceOverri
 	return
 }
 
-// Fetches a one-time use admin override code for a device. This relies on the
-// **Admin Override** setting being enabled in your device configuration.
+// Fetches a one-time use admin override code for a registration. This relies on
+// the **Admin Override** setting being enabled in your device configuration.
+//
+// **Deprecated:** please use GET
+// /accounts/{account_id}/devices/registrations/{registration_id}/override_codes
+// instead.
 func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) (res *DeviceOverrideCodeListResponse, err error) {
 	var env DeviceOverrideCodeListResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -48,6 +52,28 @@ func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, q
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/devices/%s/override_codes", query.AccountID, deviceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetches one-time use admin override codes for a registration. This relies on the
+// **Admin Override** setting being enabled in your device configuration.
+func (r *DeviceOverrideCodeService) Get(ctx context.Context, registrationID string, query DeviceOverrideCodeGetParams, opts ...option.RequestOption) (res *DeviceOverrideCodeGetResponse, err error) {
+	var env DeviceOverrideCodeGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if registrationID == "" {
+		err = errors.New("missing required registration_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/devices/registrations/%s/override_codes", query.AccountID, registrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -108,6 +134,27 @@ func (r *DeviceOverrideCodeListResponseDisableForTime) UnmarshalJSON(data []byte
 }
 
 func (r deviceOverrideCodeListResponseDisableForTimeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceOverrideCodeGetResponse struct {
+	DisableForTime map[string]string                 `json:"disable_for_time"`
+	JSON           deviceOverrideCodeGetResponseJSON `json:"-"`
+}
+
+// deviceOverrideCodeGetResponseJSON contains the JSON metadata for the struct
+// [DeviceOverrideCodeGetResponse]
+type deviceOverrideCodeGetResponseJSON struct {
+	DisableForTime apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *DeviceOverrideCodeGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceOverrideCodeGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -188,5 +235,87 @@ func (r *DeviceOverrideCodeListResponseEnvelopeResultInfo) UnmarshalJSON(data []
 }
 
 func (r deviceOverrideCodeListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceOverrideCodeGetParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type DeviceOverrideCodeGetResponseEnvelope struct {
+	Errors   []DeviceOverrideCodeGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceOverrideCodeGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DeviceOverrideCodeGetResponse                   `json:"result,required"`
+	// Whether the API call was successful.
+	Success bool                                      `json:"success,required"`
+	JSON    deviceOverrideCodeGetResponseEnvelopeJSON `json:"-"`
+}
+
+// deviceOverrideCodeGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DeviceOverrideCodeGetResponseEnvelope]
+type deviceOverrideCodeGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceOverrideCodeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceOverrideCodeGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// A message which can be returned in either the 'errors' or 'messages' fields in a
+// v4 API response.
+type DeviceOverrideCodeGetResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    deviceOverrideCodeGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// deviceOverrideCodeGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DeviceOverrideCodeGetResponseEnvelopeErrors]
+type deviceOverrideCodeGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceOverrideCodeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceOverrideCodeGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// A message which can be returned in either the 'errors' or 'messages' fields in a
+// v4 API response.
+type DeviceOverrideCodeGetResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    deviceOverrideCodeGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// deviceOverrideCodeGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DeviceOverrideCodeGetResponseEnvelopeMessages]
+type deviceOverrideCodeGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceOverrideCodeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceOverrideCodeGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

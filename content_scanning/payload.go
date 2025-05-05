@@ -34,7 +34,7 @@ func NewPayloadService(opts ...option.RequestOption) (r *PayloadService) {
 	return
 }
 
-// Add custom scan expressions for Content Scanning
+// Add custom scan expressions for Content Scanning.
 func (r *PayloadService) New(ctx context.Context, params PayloadNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadNewResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -56,12 +56,12 @@ func (r *PayloadService) New(ctx context.Context, params PayloadNewParams, opts 
 	return res, nil
 }
 
-// Add custom scan expressions for Content Scanning
+// Add custom scan expressions for Content Scanning.
 func (r *PayloadService) NewAutoPaging(ctx context.Context, params PayloadNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PayloadNewResponse] {
 	return pagination.NewSinglePageAutoPager(r.New(ctx, params, opts...))
 }
 
-// Get a list of existing custom scan expressions for Content Scanning
+// Get a list of existing custom scan expressions for Content Scanning.
 func (r *PayloadService) List(ctx context.Context, query PayloadListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -83,12 +83,12 @@ func (r *PayloadService) List(ctx context.Context, query PayloadListParams, opts
 	return res, nil
 }
 
-// Get a list of existing custom scan expressions for Content Scanning
+// Get a list of existing custom scan expressions for Content Scanning.
 func (r *PayloadService) ListAutoPaging(ctx context.Context, query PayloadListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PayloadListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete a Content Scan Custom Expression
+// Delete a Content Scan Custom Expression.
 func (r *PayloadService) Delete(ctx context.Context, expressionID string, body PayloadDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadDeleteResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -114,16 +114,16 @@ func (r *PayloadService) Delete(ctx context.Context, expressionID string, body P
 	return res, nil
 }
 
-// Delete a Content Scan Custom Expression
+// Delete a Content Scan Custom Expression.
 func (r *PayloadService) DeleteAutoPaging(ctx context.Context, expressionID string, body PayloadDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PayloadDeleteResponse] {
 	return pagination.NewSinglePageAutoPager(r.Delete(ctx, expressionID, body, opts...))
 }
 
-// A custom scan expression to match Content Scanning on
+// Defines a custom scan expression to match Content Scanning on.
 type PayloadNewResponse struct {
-	// The unique ID for this custom scan expression
+	// defines the unique ID for this custom scan expression.
 	ID string `json:"id"`
-	// Ruleset expression to use in matching content objects
+	// Defines the ruleset expression to use in matching content objects.
 	Payload string                 `json:"payload"`
 	JSON    payloadNewResponseJSON `json:"-"`
 }
@@ -145,11 +145,11 @@ func (r payloadNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A custom scan expression to match Content Scanning on
+// Defines a custom scan expression to match Content Scanning on.
 type PayloadListResponse struct {
-	// The unique ID for this custom scan expression
+	// defines the unique ID for this custom scan expression.
 	ID string `json:"id"`
-	// Ruleset expression to use in matching content objects
+	// Defines the ruleset expression to use in matching content objects.
 	Payload string                  `json:"payload"`
 	JSON    payloadListResponseJSON `json:"-"`
 }
@@ -171,11 +171,11 @@ func (r payloadListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A custom scan expression to match Content Scanning on
+// Defines a custom scan expression to match Content Scanning on.
 type PayloadDeleteResponse struct {
-	// The unique ID for this custom scan expression
+	// defines the unique ID for this custom scan expression.
 	ID string `json:"id"`
-	// Ruleset expression to use in matching content objects
+	// Defines the ruleset expression to use in matching content objects.
 	Payload string                    `json:"payload"`
 	JSON    payloadDeleteResponseJSON `json:"-"`
 }
@@ -198,7 +198,7 @@ func (r payloadDeleteResponseJSON) RawJSON() string {
 }
 
 type PayloadNewParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string]    `path:"zone_id,required"`
 	Body   []PayloadNewParamsBody `json:"body,required"`
 }
@@ -208,7 +208,7 @@ func (r PayloadNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PayloadNewParamsBody struct {
-	// Ruleset expression to use in matching content objects
+	// Defines the ruleset expression to use in matching content objects.
 	Payload param.Field[string] `json:"payload,required"`
 }
 
@@ -217,11 +217,11 @@ func (r PayloadNewParamsBody) MarshalJSON() (data []byte, err error) {
 }
 
 type PayloadListParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type PayloadDeleteParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

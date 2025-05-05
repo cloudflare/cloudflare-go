@@ -30,7 +30,7 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.Phases.Update(
 		context.TODO(),
-		rulesets.PhaseDDoSL4,
+		rulesets.PhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseUpdateParams{
 			AccountID:   cloudflare.F("account_id"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),
@@ -57,7 +57,7 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
 					Characteristics:         cloudflare.F([]string{"ip.src"}),
-					Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod10),
+					Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod60),
 					CountingExpression:      cloudflare.F(`http.request.body.raw eq "abcd"`),
 					MitigationTimeout:       cloudflare.F(int64(600)),
 					RequestsPerPeriod:       cloudflare.F(int64(1000)),
@@ -94,7 +94,7 @@ func TestPhaseGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.Phases.Get(
 		context.TODO(),
-		rulesets.PhaseDDoSL4,
+		rulesets.PhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},

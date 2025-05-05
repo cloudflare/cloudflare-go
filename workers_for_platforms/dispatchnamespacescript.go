@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
@@ -221,6 +220,9 @@ func (r dispatchNamespaceScriptUpdateResponseJSON) RawJSON() string {
 // Configuration for
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 type DispatchNamespaceScriptUpdateResponsePlacement struct {
+	// The last time the script was analyzed for
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	LastAnalyzedAt time.Time `json:"last_analyzed_at" format:"date-time"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Mode DispatchNamespaceScriptUpdateResponsePlacementMode `json:"mode"`
@@ -233,10 +235,11 @@ type DispatchNamespaceScriptUpdateResponsePlacement struct {
 // dispatchNamespaceScriptUpdateResponsePlacementJSON contains the JSON metadata
 // for the struct [DispatchNamespaceScriptUpdateResponsePlacement]
 type dispatchNamespaceScriptUpdateResponsePlacementJSON struct {
-	Mode        apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	LastAnalyzedAt apijson.Field
+	Mode           apijson.Field
+	Status         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceScriptUpdateResponsePlacement) UnmarshalJSON(data []byte) (err error) {
@@ -297,7 +300,7 @@ func (r DispatchNamespaceScriptUpdateResponseUsageModel) IsKnown() bool {
 }
 
 type DispatchNamespaceScriptUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[DispatchNamespaceScriptUpdateParamsMetadata] `json:"metadata,required"`
@@ -369,6 +372,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataAssets) MarshalJSON() (data [
 
 // Configuration for assets within a Worker.
 type DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig struct {
+	// The contents of a \_headers file (used to attach custom headers on asset
+	// responses)
+	Headers param.Field[string] `json:"_headers"`
+	// The contents of a \_redirects file (used to apply redirects or proxy paths ahead
+	// of asset serving)
+	Redirects param.Field[string] `json:"_redirects"`
 	// Determines the redirects and rewrites of requests for HTML content.
 	HTMLHandling param.Field[DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
 	// Determines the response when a request does not match a static asset, and there
@@ -432,7 +441,8 @@ type DispatchNamespaceScriptUpdateParamsMetadataBinding struct {
 	// The kind of resource that the binding provides.
 	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsType] `json:"type,required"`
 	// Identifier of the D1 database to bind to.
-	ID param.Field[string] `json:"id"`
+	ID        param.Field[string]      `json:"id"`
+	Algorithm param.Field[interface{}] `json:"algorithm"`
 	// R2 bucket to bind to.
 	BucketName param.Field[string] `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
@@ -443,24 +453,37 @@ type DispatchNamespaceScriptUpdateParamsMetadataBinding struct {
 	Dataset param.Field[string] `json:"dataset"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+	Format param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsFormat] `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
 	// JSON data to use.
 	Json param.Field[string] `json:"json"`
+	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
+	KeyBase64 param.Field[string]      `json:"key_base64"`
+	KeyJwk    param.Field[interface{}] `json:"key_jwk"`
 	// Namespace to bind to.
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string]      `json:"namespace_id"`
 	Outbound    param.Field[interface{}] `json:"outbound"`
+	// Name of the Pipeline to bind to.
+	Pipeline param.Field[string] `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName param.Field[string] `json:"queue_name"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName param.Field[string] `json:"script_name"`
+	// Name of the secret in the store.
+	SecretName param.Field[string] `json:"secret_name"`
 	// Name of Worker to bind to.
 	Service param.Field[string] `json:"service"`
+	// ID of the store containing the secret.
+	StoreID param.Field[string] `json:"store_id"`
 	// The text value to use.
-	Text param.Field[string] `json:"text"`
+	Text   param.Field[string]      `json:"text"`
+	Usages param.Field[interface{}] `json:"usages"`
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) MarshalJSON() (data []byte, err error) {
@@ -476,7 +499,7 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) implementsDispatchNa
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAI],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets],
-// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering],
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace],
@@ -485,6 +508,7 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) implementsDispatchNa
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificate],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText],
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretText],
@@ -492,6 +516,8 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) implementsDispatchNa
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata],
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret],
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey],
 // [DispatchNamespaceScriptUpdateParamsMetadataBinding].
 type DispatchNamespaceScriptUpdateParamsMetadataBindingUnion interface {
 	implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion()
@@ -515,30 +541,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAI)
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "ai"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI:
 		return true
 	}
 	return false
@@ -564,30 +572,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAna
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
 		return true
 	}
 	return false
@@ -611,77 +601,41 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAss
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "assets"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets:
 		return true
 	}
 	return false
 }
 
-type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering struct {
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType] `json:"type,required"`
 }
 
-func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering) MarshalJSON() (data []byte, err error) {
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType string
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserTypeBrowser DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType = "browser"
 )
 
-func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType) IsKnown() bool {
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserTypeBrowser:
 		return true
 	}
 	return false
@@ -707,30 +661,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1)
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeD1 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "d1"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeD1:
 		return true
 	}
 	return false
@@ -758,30 +694,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDis
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
 		return true
 	}
 	return false
@@ -839,30 +757,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDur
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "dispatch_namespace"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType = "version_metadata"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceTypeDurableObjectNamespace:
 		return true
 	}
 	return false
@@ -888,30 +788,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyp
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
 		return true
 	}
 	return false
@@ -937,30 +819,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJso
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeJson DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "json"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeJson:
 		return true
 	}
 	return false
@@ -986,30 +850,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVN
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
 		return true
 	}
 	return false
@@ -1035,30 +881,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTL
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType = "mtls_certificate"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateTypeMTLSCertificate:
 		return true
 	}
 	return false
@@ -1084,30 +912,43 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPla
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "plain_text"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText:
+		return true
+	}
+	return false
+}
+
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Name of the Pipeline to bind to.
+	Pipeline param.Field[string] `json:"pipeline,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType] `json:"type,required"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesTypePipelines DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType = "pipelines"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesTypePipelines:
 		return true
 	}
 	return false
@@ -1133,30 +974,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQue
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeQueue DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "queue"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeQueue:
 		return true
 	}
 	return false
@@ -1182,30 +1005,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2B
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeR2Bucket DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType = "r2_bucket"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketTypeR2Bucket:
 		return true
 	}
 	return false
@@ -1231,30 +1036,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSec
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeSecretText DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType = "secret_text"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextTypeSecretText:
 		return true
 	}
 	return false
@@ -1282,30 +1069,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSer
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeService DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "service"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeService:
 		return true
 	}
 	return false
@@ -1331,30 +1100,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTai
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
 		return true
 	}
 	return false
@@ -1380,30 +1131,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVec
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "vectorize"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize:
 		return true
 	}
 	return false
@@ -1427,30 +1160,129 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVer
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType string
 
 const (
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "ai"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "analytics_engine"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "browser_rendering"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "d1"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "dispatch_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "durable_object_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeHyperdrive             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "hyperdrive"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeJson                   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "json"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "kv_namespace"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "mtls_certificate"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "plain_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "queue"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "r2_bucket"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "secret_text"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeService                DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "service"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "tail_consumer"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "vectorize"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+		return true
+	}
+	return false
+}
+
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Name of the secret in the store.
+	SecretName param.Field[string] `json:"secret_name,required"`
+	// ID of the store containing the secret.
+	StoreID param.Field[string] `json:"store_id,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretType] `json:"type,required"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretType string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretType = "secrets_store_secret"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretTypeSecretsStoreSecret:
+		return true
+	}
+	return false
+}
+
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey struct {
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
+	Algorithm param.Field[interface{}] `json:"algorithm,required"`
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+	Format param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat] `json:"format,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyType] `json:"type,required"`
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
+	Usages param.Field[[]DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage] `json:"usages,required"`
+	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
+	KeyBase64 param.Field[string] `json:"key_base64"`
+	// Key data in
+	// [JSON Web Key](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#json_web_key)
+	// format. Required if `format` is "jwk".
+	KeyJwk param.Field[interface{}] `json:"key_jwk"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatRaw   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat = "raw"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatPkcs8 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat = "pkcs8"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatSpki  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat = "spki"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatJwk   DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat = "jwk"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatRaw, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatPkcs8, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatSpki, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyType string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyTypeSecretKey DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyType = "secret_key"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageEncrypt    DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "encrypt"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDecrypt    DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "decrypt"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageSign       DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "sign"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageVerify     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "verify"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDeriveKey  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "deriveKey"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDeriveBits DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "deriveBits"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageWrapKey    DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "wrapKey"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageUnwrapKey  DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage = "unwrapKey"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageEncrypt, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDecrypt, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageSign, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageVerify, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDeriveKey, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageDeriveBits, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageWrapKey, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsageUnwrapKey:
 		return true
 	}
 	return false
@@ -1463,7 +1295,7 @@ const (
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "ai"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "analytics_engine"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "assets"
-	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowserRendering       DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "browser_rendering"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser                DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "browser"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1                     DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "d1"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "dispatch_namespace"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "durable_object_namespace"
@@ -1472,6 +1304,7 @@ const (
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace            DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "kv_namespace"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "mtls_certificate"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "plain_text"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "pipelines"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "queue"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "r2_bucket"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText             DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "secret_text"
@@ -1479,11 +1312,32 @@ const (
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTailConsumer           DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "tail_consumer"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "vectorize"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata        DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "version_metadata"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret     DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "secrets_store_secret"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "secret_key"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowserRendering, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTailConsumer, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsFormat string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsFormatRaw   DispatchNamespaceScriptUpdateParamsMetadataBindingsFormat = "raw"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsFormatPkcs8 DispatchNamespaceScriptUpdateParamsMetadataBindingsFormat = "pkcs8"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsFormatSpki  DispatchNamespaceScriptUpdateParamsMetadataBindingsFormat = "spki"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsFormatJwk   DispatchNamespaceScriptUpdateParamsMetadataBindingsFormat = "jwk"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsFormat) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsFormatRaw, DispatchNamespaceScriptUpdateParamsMetadataBindingsFormatPkcs8, DispatchNamespaceScriptUpdateParamsMetadataBindingsFormatSpki, DispatchNamespaceScriptUpdateParamsMetadataBindingsFormatJwk:
 		return true
 	}
 	return false
@@ -1612,9 +1466,9 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
 }
 
 type DispatchNamespaceScriptUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DispatchNamespaceScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatchNamespaceScriptUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DispatchNamespaceScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  DispatchNamespaceScriptUpdateResponse                `json:"result"`
 	JSON    dispatchNamespaceScriptUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1639,7 +1493,105 @@ func (r dispatchNamespaceScriptUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DispatchNamespaceScriptUpdateResponseEnvelopeErrors struct {
+	Code             int64                                                     `json:"code,required"`
+	Message          string                                                    `json:"message,required"`
+	DocumentationURL string                                                    `json:"documentation_url"`
+	Source           DispatchNamespaceScriptUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dispatchNamespaceScriptUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptUpdateResponseEnvelopeErrors]
+type dispatchNamespaceScriptUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                                        `json:"pointer"`
+	JSON    dispatchNamespaceScriptUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptUpdateResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptUpdateResponseEnvelopeErrorsSource]
+type dispatchNamespaceScriptUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptUpdateResponseEnvelopeMessages struct {
+	Code             int64                                                       `json:"code,required"`
+	Message          string                                                      `json:"message,required"`
+	DocumentationURL string                                                      `json:"documentation_url"`
+	Source           DispatchNamespaceScriptUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dispatchNamespaceScriptUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptUpdateResponseEnvelopeMessages]
+type dispatchNamespaceScriptUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                          `json:"pointer"`
+	JSON    dispatchNamespaceScriptUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptUpdateResponseEnvelopeMessagesSourceJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptUpdateResponseEnvelopeMessagesSource]
+type dispatchNamespaceScriptUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DispatchNamespaceScriptUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1655,7 +1607,7 @@ func (r DispatchNamespaceScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DispatchNamespaceScriptDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// If set to true, delete will not be stopped by associated service binding,
 	// durable object, or other binding. Any of these associated bindings/durable
@@ -1673,14 +1625,14 @@ func (r DispatchNamespaceScriptDeleteParams) URLQuery() (v url.Values) {
 }
 
 type DispatchNamespaceScriptGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DispatchNamespaceScriptGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DispatchNamespaceScriptGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatchNamespaceScriptGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DispatchNamespaceScriptGetResponseEnvelopeSuccess `json:"success,required"`
 	// Details about a worker uploaded to a Workers for Platforms namespace.
 	Result Script                                         `json:"result"`
@@ -1706,7 +1658,104 @@ func (r dispatchNamespaceScriptGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DispatchNamespaceScriptGetResponseEnvelopeErrors struct {
+	Code             int64                                                  `json:"code,required"`
+	Message          string                                                 `json:"message,required"`
+	DocumentationURL string                                                 `json:"documentation_url"`
+	Source           DispatchNamespaceScriptGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dispatchNamespaceScriptGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [DispatchNamespaceScriptGetResponseEnvelopeErrors]
+type dispatchNamespaceScriptGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                     `json:"pointer"`
+	JSON    dispatchNamespaceScriptGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptGetResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptGetResponseEnvelopeErrorsSource]
+type dispatchNamespaceScriptGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptGetResponseEnvelopeMessages struct {
+	Code             int64                                                    `json:"code,required"`
+	Message          string                                                   `json:"message,required"`
+	DocumentationURL string                                                   `json:"documentation_url"`
+	Source           DispatchNamespaceScriptGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dispatchNamespaceScriptGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptGetResponseEnvelopeMessages]
+type dispatchNamespaceScriptGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                       `json:"pointer"`
+	JSON    dispatchNamespaceScriptGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptGetResponseEnvelopeMessagesSource]
+type dispatchNamespaceScriptGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DispatchNamespaceScriptGetResponseEnvelopeSuccess bool
 
 const (

@@ -306,7 +306,7 @@ type GatewayRule struct {
 	// over the policy's `schedule` configuration, if any.
 	//
 	// This does not apply to HTTP or network policies.
-	Expiration GatewayRuleExpiration `json:"expiration"`
+	Expiration GatewayRuleExpiration `json:"expiration,nullable"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
 	Filters []GatewayFilter `json:"filters"`
@@ -322,7 +322,7 @@ type GatewayRule struct {
 	RuleSettings RuleSetting `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
-	Schedule Schedule `json:"schedule"`
+	Schedule Schedule `json:"schedule,nullable"`
 	// The wirefilter expression used for traffic matching.
 	Traffic   string    `json:"traffic"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
@@ -382,11 +382,12 @@ const (
 	GatewayRuleActionEgress       GatewayRuleAction = "egress"
 	GatewayRuleActionResolve      GatewayRuleAction = "resolve"
 	GatewayRuleActionQuarantine   GatewayRuleAction = "quarantine"
+	GatewayRuleActionRedirect     GatewayRuleAction = "redirect"
 )
 
 func (r GatewayRuleAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionResolve, GatewayRuleActionQuarantine:
+	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionResolve, GatewayRuleActionQuarantine, GatewayRuleActionRedirect:
 		return true
 	}
 	return false
@@ -437,31 +438,34 @@ func (r gatewayRuleExpirationJSON) RawJSON() string {
 type RuleSetting struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
-	AddHeaders map[string]string `json:"add_headers"`
+	AddHeaders map[string]string `json:"add_headers,nullable"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
-	AllowChildBypass bool `json:"allow_child_bypass"`
+	AllowChildBypass bool `json:"allow_child_bypass,nullable"`
 	// Settings for the Audit SSH action.
-	AuditSSH RuleSettingAuditSSH `json:"audit_ssh"`
+	AuditSSH RuleSettingAuditSSH `json:"audit_ssh,nullable"`
 	// Configure how browser isolation behaves.
-	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls"`
+	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls,nullable"`
+	// Custom block page settings. If missing/null, blocking will use the the account
+	// settings.
+	BlockPage RuleSettingBlockPage `json:"block_page,nullable"`
 	// Enable the custom block page.
 	BlockPageEnabled bool `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
 	// (if enabled).
 	BlockReason string `json:"block_reason"`
 	// Set by children MSP accounts to bypass their parent's rules.
-	BypassParentRule bool `json:"bypass_parent_rule"`
+	BypassParentRule bool `json:"bypass_parent_rule,nullable"`
 	// Configure how session check behaves.
-	CheckSession RuleSettingCheckSession `json:"check_session"`
+	CheckSession RuleSettingCheckSession `json:"check_session,nullable"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
 	// Cannot be used when 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
 	// are set. DNS queries will route to the address closest to their origin. Only
 	// valid when a rule's action is set to 'resolve'.
-	DNSResolvers RuleSettingDNSResolvers `json:"dns_resolvers"`
+	DNSResolvers RuleSettingDNSResolvers `json:"dns_resolvers,nullable"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
-	Egress RuleSettingEgress `json:"egress"`
+	Egress RuleSettingEgress `json:"egress,nullable"`
 	// Set to true, to ignore the category matches at CNAME domains in a response. If
 	// unchecked, the categories in this rule will be checked against all the CNAME
 	// domain categories in a response.
@@ -475,30 +479,32 @@ type RuleSetting struct {
 	// indicator feeds only block based on domain names.
 	IPIndicatorFeeds bool `json:"ip_indicator_feeds"`
 	// Send matching traffic to the supplied destination IP address and port.
-	L4override RuleSettingL4override `json:"l4override"`
+	L4override RuleSettingL4override `json:"l4override,nullable"`
 	// Configure a notification to display on the user's device when this rule is
 	// matched.
-	NotificationSettings RuleSettingNotificationSettings `json:"notification_settings"`
+	NotificationSettings RuleSettingNotificationSettings `json:"notification_settings,nullable"`
 	// Override matching DNS queries with a hostname.
 	OverrideHost string `json:"override_host"`
 	// Override matching DNS queries with an IP or set of IPs.
-	OverrideIPs []string `json:"override_ips"`
+	OverrideIPs []string `json:"override_ips,nullable"`
 	// Configure DLP payload logging.
-	PayloadLog RuleSettingPayloadLog `json:"payload_log"`
+	PayloadLog RuleSettingPayloadLog `json:"payload_log,nullable"`
 	// Settings that apply to quarantine rules
-	Quarantine RuleSettingQuarantine `json:"quarantine"`
+	Quarantine RuleSettingQuarantine `json:"quarantine,nullable"`
+	// Settings that apply to redirect rules
+	Redirect RuleSettingRedirect `json:"redirect,nullable"`
 	// Configure to forward the query to the internal DNS service, passing the
 	// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
 	// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
 	// set to 'resolve'.
-	ResolveDNSInternally RuleSettingResolveDNSInternally `json:"resolve_dns_internally"`
+	ResolveDNSInternally RuleSettingResolveDNSInternally `json:"resolve_dns_internally,nullable"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when 'dns_resolvers' are specified or
 	// 'resolve_dns_internally' is set. Only valid when a rule's action is set to
 	// 'resolve'.
 	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCERT RuleSettingUntrustedCERT `json:"untrusted_cert"`
+	UntrustedCERT RuleSettingUntrustedCERT `json:"untrusted_cert,nullable"`
 	JSON          ruleSettingJSON          `json:"-"`
 }
 
@@ -508,6 +514,7 @@ type ruleSettingJSON struct {
 	AllowChildBypass                apijson.Field
 	AuditSSH                        apijson.Field
 	BISOAdminControls               apijson.Field
+	BlockPage                       apijson.Field
 	BlockPageEnabled                apijson.Field
 	BlockReason                     apijson.Field
 	BypassParentRule                apijson.Field
@@ -524,6 +531,7 @@ type ruleSettingJSON struct {
 	OverrideIPs                     apijson.Field
 	PayloadLog                      apijson.Field
 	Quarantine                      apijson.Field
+	Redirect                        apijson.Field
 	ResolveDNSInternally            apijson.Field
 	ResolveDNSThroughCloudflare     apijson.Field
 	UntrustedCERT                   apijson.Field
@@ -748,6 +756,33 @@ func (r RuleSettingBISOAdminControlsVersion) IsKnown() bool {
 	return false
 }
 
+// Custom block page settings. If missing/null, blocking will use the the account
+// settings.
+type RuleSettingBlockPage struct {
+	// URI to which the user will be redirected
+	TargetURI string `json:"target_uri,required" format:"uri"`
+	// If true, context information will be passed as query parameters
+	IncludeContext bool                     `json:"include_context"`
+	JSON           ruleSettingBlockPageJSON `json:"-"`
+}
+
+// ruleSettingBlockPageJSON contains the JSON metadata for the struct
+// [RuleSettingBlockPage]
+type ruleSettingBlockPageJSON struct {
+	TargetURI      apijson.Field
+	IncludeContext apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleSettingBlockPage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleSettingBlockPageJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure how session check behaves.
 type RuleSettingCheckSession struct {
 	// Configure how fresh the session needs to be to be considered valid.
@@ -865,6 +900,8 @@ func (r ruleSettingL4overrideJSON) RawJSON() string {
 type RuleSettingNotificationSettings struct {
 	// Set notification on
 	Enabled bool `json:"enabled"`
+	// If true, context information will be passed as query parameters
+	IncludeContext bool `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
@@ -876,11 +913,12 @@ type RuleSettingNotificationSettings struct {
 // ruleSettingNotificationSettingsJSON contains the JSON metadata for the struct
 // [RuleSettingNotificationSettings]
 type ruleSettingNotificationSettingsJSON struct {
-	Enabled     apijson.Field
-	Msg         apijson.Field
-	SupportURL  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Enabled        apijson.Field
+	IncludeContext apijson.Field
+	Msg            apijson.Field
+	SupportURL     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *RuleSettingNotificationSettings) UnmarshalJSON(data []byte) (err error) {
@@ -961,6 +999,36 @@ func (r RuleSettingQuarantineFileType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Settings that apply to redirect rules
+type RuleSettingRedirect struct {
+	// URI to which the user will be redirected
+	TargetURI string `json:"target_uri,required" format:"uri"`
+	// If true, context information will be passed as query parameters
+	IncludeContext bool `json:"include_context"`
+	// If true, the path and query parameters from the original request will be
+	// appended to target_uri
+	PreservePathAndQuery bool                    `json:"preserve_path_and_query"`
+	JSON                 ruleSettingRedirectJSON `json:"-"`
+}
+
+// ruleSettingRedirectJSON contains the JSON metadata for the struct
+// [RuleSettingRedirect]
+type ruleSettingRedirectJSON struct {
+	TargetURI            apijson.Field
+	IncludeContext       apijson.Field
+	PreservePathAndQuery apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RuleSettingRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleSettingRedirectJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure to forward the query to the internal DNS service, passing the
@@ -1065,6 +1133,9 @@ type RuleSettingParam struct {
 	AuditSSH param.Field[RuleSettingAuditSSHParam] `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
 	BISOAdminControls param.Field[RuleSettingBISOAdminControlsParam] `json:"biso_admin_controls"`
+	// Custom block page settings. If missing/null, blocking will use the the account
+	// settings.
+	BlockPage param.Field[RuleSettingBlockPageParam] `json:"block_page"`
 	// Enable the custom block page.
 	BlockPageEnabled param.Field[bool] `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -1108,6 +1179,8 @@ type RuleSettingParam struct {
 	PayloadLog param.Field[RuleSettingPayloadLogParam] `json:"payload_log"`
 	// Settings that apply to quarantine rules
 	Quarantine param.Field[RuleSettingQuarantineParam] `json:"quarantine"`
+	// Settings that apply to redirect rules
+	Redirect param.Field[RuleSettingRedirectParam] `json:"redirect"`
 	// Configure to forward the query to the internal DNS service, passing the
 	// specified 'view_id' as input. Cannot be set when 'dns_resolvers' are specified
 	// or 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action is
@@ -1176,6 +1249,19 @@ func (r RuleSettingBISOAdminControlsParam) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
+// Custom block page settings. If missing/null, blocking will use the the account
+// settings.
+type RuleSettingBlockPageParam struct {
+	// URI to which the user will be redirected
+	TargetURI param.Field[string] `json:"target_uri,required" format:"uri"`
+	// If true, context information will be passed as query parameters
+	IncludeContext param.Field[bool] `json:"include_context"`
+}
+
+func (r RuleSettingBlockPageParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Configure how session check behaves.
 type RuleSettingCheckSessionParam struct {
 	// Configure how fresh the session needs to be to be considered valid.
@@ -1236,6 +1322,8 @@ func (r RuleSettingL4overrideParam) MarshalJSON() (data []byte, err error) {
 type RuleSettingNotificationSettingsParam struct {
 	// Set notification on
 	Enabled param.Field[bool] `json:"enabled"`
+	// If true, context information will be passed as query parameters
+	IncludeContext param.Field[bool] `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg param.Field[string] `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
@@ -1264,6 +1352,21 @@ type RuleSettingQuarantineParam struct {
 }
 
 func (r RuleSettingQuarantineParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Settings that apply to redirect rules
+type RuleSettingRedirectParam struct {
+	// URI to which the user will be redirected
+	TargetURI param.Field[string] `json:"target_uri,required" format:"uri"`
+	// If true, context information will be passed as query parameters
+	IncludeContext param.Field[bool] `json:"include_context"`
+	// If true, the path and query parameters from the original request will be
+	// appended to target_uri
+	PreservePathAndQuery param.Field[bool] `json:"preserve_path_and_query"`
+}
+
+func (r RuleSettingRedirectParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1466,11 +1569,12 @@ const (
 	GatewayRuleNewParamsActionEgress       GatewayRuleNewParamsAction = "egress"
 	GatewayRuleNewParamsActionResolve      GatewayRuleNewParamsAction = "resolve"
 	GatewayRuleNewParamsActionQuarantine   GatewayRuleNewParamsAction = "quarantine"
+	GatewayRuleNewParamsActionRedirect     GatewayRuleNewParamsAction = "redirect"
 )
 
 func (r GatewayRuleNewParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionResolve, GatewayRuleNewParamsActionQuarantine:
+	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionResolve, GatewayRuleNewParamsActionQuarantine, GatewayRuleNewParamsActionRedirect:
 		return true
 	}
 	return false
@@ -1494,8 +1598,6 @@ type GatewayRuleNewParamsExpiration struct {
 	// The default duration a policy will be active in minutes. Must be set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration param.Field[int64] `json:"duration"`
-	// Whether the policy has expired.
-	Expired param.Field[bool] `json:"expired"`
 }
 
 func (r GatewayRuleNewParamsExpiration) MarshalJSON() (data []byte, err error) {
@@ -1605,11 +1707,12 @@ const (
 	GatewayRuleUpdateParamsActionEgress       GatewayRuleUpdateParamsAction = "egress"
 	GatewayRuleUpdateParamsActionResolve      GatewayRuleUpdateParamsAction = "resolve"
 	GatewayRuleUpdateParamsActionQuarantine   GatewayRuleUpdateParamsAction = "quarantine"
+	GatewayRuleUpdateParamsActionRedirect     GatewayRuleUpdateParamsAction = "redirect"
 )
 
 func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionResolve, GatewayRuleUpdateParamsActionQuarantine:
+	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionResolve, GatewayRuleUpdateParamsActionQuarantine, GatewayRuleUpdateParamsActionRedirect:
 		return true
 	}
 	return false
@@ -1633,8 +1736,6 @@ type GatewayRuleUpdateParamsExpiration struct {
 	// The default duration a policy will be active in minutes. Must be set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration param.Field[int64] `json:"duration"`
-	// Whether the policy has expired.
-	Expired param.Field[bool] `json:"expired"`
 }
 
 func (r GatewayRuleUpdateParamsExpiration) MarshalJSON() (data []byte, err error) {

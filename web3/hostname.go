@@ -146,19 +146,19 @@ func (r *HostnameService) Get(ctx context.Context, identifier string, query Host
 }
 
 type Hostname struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ID        string    `json:"id"`
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// An optional description of the hostname.
+	// Specify an optional description of the hostname.
 	Description string `json:"description"`
-	// DNSLink value used if the target is ipfs.
+	// Specify the DNSLink value used if the target is ipfs.
 	Dnslink    string    `json:"dnslink"`
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// The hostname that will point to the target gateway via CNAME.
+	// Specify the hostname that points to the target gateway via CNAME.
 	Name string `json:"name"`
-	// Status of the hostname's activation.
+	// Specifies the status of the hostname's activation.
 	Status HostnameStatus `json:"status"`
-	// Target gateway of the hostname.
+	// Specify the target gateway of the hostname.
 	Target HostnameTarget `json:"target"`
 	JSON   hostnameJSON   `json:"-"`
 }
@@ -185,7 +185,7 @@ func (r hostnameJSON) RawJSON() string {
 	return r.raw
 }
 
-// Status of the hostname's activation.
+// Specifies the status of the hostname's activation.
 type HostnameStatus string
 
 const (
@@ -203,7 +203,7 @@ func (r HostnameStatus) IsKnown() bool {
 	return false
 }
 
-// Target gateway of the hostname.
+// Specify the target gateway of the hostname.
 type HostnameTarget string
 
 const (
@@ -221,7 +221,7 @@ func (r HostnameTarget) IsKnown() bool {
 }
 
 type HostnameDeleteResponse struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ID   string                     `json:"id,required"`
 	JSON hostnameDeleteResponseJSON `json:"-"`
 }
@@ -243,15 +243,15 @@ func (r hostnameDeleteResponseJSON) RawJSON() string {
 }
 
 type HostnameNewParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The hostname that will point to the target gateway via CNAME.
+	// Specify the hostname that points to the target gateway via CNAME.
 	Name param.Field[string] `json:"name,required"`
-	// Target gateway of the hostname.
+	// Specify the target gateway of the hostname.
 	Target param.Field[HostnameNewParamsTarget] `json:"target,required"`
-	// An optional description of the hostname.
+	// Specify an optional description of the hostname.
 	Description param.Field[string] `json:"description"`
-	// DNSLink value used if the target is ipfs.
+	// Specify the DNSLink value used if the target is ipfs.
 	Dnslink param.Field[string] `json:"dnslink"`
 }
 
@@ -259,7 +259,7 @@ func (r HostnameNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Target gateway of the hostname.
+// Specify the target gateway of the hostname.
 type HostnameNewParamsTarget string
 
 const (
@@ -280,9 +280,11 @@ type HostnameNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Hostname              `json:"result,required"`
-	// Whether the API call was successful
+	// Specifies whether the API call was successful.
 	Success HostnameNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    hostnameNewResponseEnvelopeJSON    `json:"-"`
+	// Provides the API response.
+	ResultInfo interface{}                     `json:"result_info"`
+	JSON       hostnameNewResponseEnvelopeJSON `json:"-"`
 }
 
 // hostnameNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -292,6 +294,7 @@ type hostnameNewResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -304,7 +307,7 @@ func (r hostnameNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Specifies whether the API call was successful.
 type HostnameNewResponseEnvelopeSuccess bool
 
 const (
@@ -320,12 +323,12 @@ func (r HostnameNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type HostnameListParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type HostnameDeleteParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -333,7 +336,7 @@ type HostnameDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo  `json:"errors,required"`
 	Messages []shared.ResponseInfo  `json:"messages,required"`
 	Result   HostnameDeleteResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Specifies whether the API call was successful.
 	Success HostnameDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -357,7 +360,7 @@ func (r hostnameDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Specifies whether the API call was successful.
 type HostnameDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -373,11 +376,11 @@ func (r HostnameDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type HostnameEditParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// An optional description of the hostname.
+	// Specify an optional description of the hostname.
 	Description param.Field[string] `json:"description"`
-	// DNSLink value used if the target is ipfs.
+	// Specify the DNSLink value used if the target is ipfs.
 	Dnslink param.Field[string] `json:"dnslink"`
 }
 
@@ -389,9 +392,11 @@ type HostnameEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Hostname              `json:"result,required"`
-	// Whether the API call was successful
+	// Specifies whether the API call was successful.
 	Success HostnameEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    hostnameEditResponseEnvelopeJSON    `json:"-"`
+	// Provides the API response.
+	ResultInfo interface{}                      `json:"result_info"`
+	JSON       hostnameEditResponseEnvelopeJSON `json:"-"`
 }
 
 // hostnameEditResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -401,6 +406,7 @@ type hostnameEditResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -413,7 +419,7 @@ func (r hostnameEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Specifies whether the API call was successful.
 type HostnameEditResponseEnvelopeSuccess bool
 
 const (
@@ -429,7 +435,7 @@ func (r HostnameEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type HostnameGetParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -437,9 +443,11 @@ type HostnameGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Hostname              `json:"result,required"`
-	// Whether the API call was successful
+	// Specifies whether the API call was successful.
 	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    hostnameGetResponseEnvelopeJSON    `json:"-"`
+	// Provides the API response.
+	ResultInfo interface{}                     `json:"result_info"`
+	JSON       hostnameGetResponseEnvelopeJSON `json:"-"`
 }
 
 // hostnameGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -449,6 +457,7 @@ type hostnameGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -461,7 +470,7 @@ func (r hostnameGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Specifies whether the API call was successful.
 type HostnameGetResponseEnvelopeSuccess bool
 
 const (

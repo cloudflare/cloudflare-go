@@ -644,35 +644,36 @@ func (r dnsTimeseriesGroupResponseTTLResponseSerie0JSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupCacheHitParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[DNSTimeseriesGroupCacheHitParamsAggInterval] `query:"aggInterval"`
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupCacheHitParamsFormat] `query:"format"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Includes empty DNS responses (NODATA).
+	// Specifies whether the response includes empty DNS responses (NODATA).
 	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
 	Protocol param.Field[DNSTimeseriesGroupCacheHitParamsProtocol] `query:"protocol"`
@@ -693,8 +694,8 @@ func (r DNSTimeseriesGroupCacheHitParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type DNSTimeseriesGroupCacheHitParamsAggInterval string
 
@@ -906,35 +907,36 @@ func (r dnsTimeseriesGroupCacheHitResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupDNSSECParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[DNSTimeseriesGroupDNSSECParamsAggInterval] `query:"aggInterval"`
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupDNSSECParamsFormat] `query:"format"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Includes empty DNS responses (NODATA).
+	// Specifies whether the response includes empty DNS responses (NODATA).
 	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
 	Protocol param.Field[DNSTimeseriesGroupDNSSECParamsProtocol] `query:"protocol"`
@@ -955,8 +957,8 @@ func (r DNSTimeseriesGroupDNSSECParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type DNSTimeseriesGroupDNSSECParamsAggInterval string
 
@@ -1168,35 +1170,36 @@ func (r dnsTimeseriesGroupDNSSECResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupDNSSECAwareParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[DNSTimeseriesGroupDNSSECAwareParamsAggInterval] `query:"aggInterval"`
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupDNSSECAwareParamsFormat] `query:"format"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Includes empty DNS responses (NODATA).
+	// Specifies whether the response includes empty DNS responses (NODATA).
 	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
 	Protocol param.Field[DNSTimeseriesGroupDNSSECAwareParamsProtocol] `query:"protocol"`
@@ -1217,8 +1220,8 @@ func (r DNSTimeseriesGroupDNSSECAwareParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type DNSTimeseriesGroupDNSSECAwareParamsAggInterval string
 
@@ -1430,35 +1433,36 @@ func (r dnsTimeseriesGroupDNSSECAwareResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupDNSSECE2EParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[DNSTimeseriesGroupDnssece2EParamsAggInterval] `query:"aggInterval"`
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupDnssece2EParamsFormat] `query:"format"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Includes empty DNS responses (NODATA).
+	// Specifies whether the response includes empty DNS responses (NODATA).
 	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
 	Protocol param.Field[DNSTimeseriesGroupDnssece2EParamsProtocol] `query:"protocol"`
@@ -1479,8 +1483,8 @@ func (r DNSTimeseriesGroupDNSSECE2EParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type DNSTimeseriesGroupDnssece2EParamsAggInterval string
 
@@ -1692,35 +1696,36 @@ func (r dnsTimeseriesGroupDnssece2EResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupIPVersionParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[DNSTimeseriesGroupIPVersionParamsAggInterval] `query:"aggInterval"`
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupIPVersionParamsFormat] `query:"format"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Includes empty DNS responses (NODATA).
+	// Specifies whether the response includes empty DNS responses (NODATA).
 	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
 	Protocol param.Field[DNSTimeseriesGroupIPVersionParamsProtocol] `query:"protocol"`
@@ -1741,8 +1746,8 @@ func (r DNSTimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type DNSTimeseriesGroupIPVersionParamsAggInterval string
 
@@ -1954,35 +1959,36 @@ func (r dnsTimeseriesGroupIPVersionResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupMatchingAnswerParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[DNSTimeseriesGroupMatchingAnswerParamsAggInterval] `query:"aggInterval"`
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupMatchingAnswerParamsFormat] `query:"format"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Includes empty DNS responses (NODATA).
+	// Specifies whether the response includes empty DNS responses (NODATA).
 	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
 	Protocol param.Field[DNSTimeseriesGroupMatchingAnswerParamsProtocol] `query:"protocol"`
@@ -2003,8 +2009,8 @@ func (r DNSTimeseriesGroupMatchingAnswerParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type DNSTimeseriesGroupMatchingAnswerParamsAggInterval string
 
@@ -2216,35 +2222,36 @@ func (r dnsTimeseriesGroupMatchingAnswerResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupProtocolParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[DNSTimeseriesGroupProtocolParamsAggInterval] `query:"aggInterval"`
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupProtocolParamsFormat] `query:"format"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Includes empty DNS responses (NODATA).
+	// Specifies whether the response includes empty DNS responses (NODATA).
 	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS query type.
 	QueryType param.Field[DNSTimeseriesGroupProtocolParamsQueryType] `query:"queryType"`
@@ -2263,8 +2270,8 @@ func (r DNSTimeseriesGroupProtocolParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type DNSTimeseriesGroupProtocolParamsAggInterval string
 
@@ -2458,40 +2465,40 @@ func (r dnsTimeseriesGroupProtocolResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupQueryTypeParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[DNSTimeseriesGroupQueryTypeParamsAggInterval] `query:"aggInterval"`
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupQueryTypeParamsFormat] `query:"format"`
 	// Limits the number of objects per group to the top items within the specified
-	// time range. If there are more items than the limit, the response will include
-	// the count of items, with any remaining items grouped together under an "other"
-	// category.
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Includes empty DNS responses (NODATA).
+	// Specifies whether the response includes empty DNS responses (NODATA).
 	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
 	Protocol param.Field[DNSTimeseriesGroupQueryTypeParamsProtocol] `query:"protocol"`
@@ -2510,8 +2517,8 @@ func (r DNSTimeseriesGroupQueryTypeParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type DNSTimeseriesGroupQueryTypeParamsAggInterval string
 
@@ -2621,40 +2628,40 @@ func (r dnsTimeseriesGroupQueryTypeResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupResponseCodeParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[DNSTimeseriesGroupResponseCodeParamsAggInterval] `query:"aggInterval"`
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupResponseCodeParamsFormat] `query:"format"`
 	// Limits the number of objects per group to the top items within the specified
-	// time range. If there are more items than the limit, the response will include
-	// the count of items, with any remaining items grouped together under an "other"
-	// category.
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Includes empty DNS responses (NODATA).
+	// Specifies whether the response includes empty DNS responses (NODATA).
 	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
 	Protocol param.Field[DNSTimeseriesGroupResponseCodeParamsProtocol] `query:"protocol"`
@@ -2673,8 +2680,8 @@ func (r DNSTimeseriesGroupResponseCodeParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type DNSTimeseriesGroupResponseCodeParamsAggInterval string
 
@@ -2853,35 +2860,36 @@ func (r dnsTimeseriesGroupResponseCodeResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupResponseTTLParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[DNSTimeseriesGroupResponseTTLParamsAggInterval] `query:"aggInterval"`
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupResponseTTLParamsFormat] `query:"format"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Includes empty DNS responses (NODATA).
+	// Specifies whether the response includes empty DNS responses (NODATA).
 	Nodata param.Field[bool] `query:"nodata"`
 	// Filters results by DNS transport protocol.
 	Protocol param.Field[DNSTimeseriesGroupResponseTTLParamsProtocol] `query:"protocol"`
@@ -2902,8 +2910,8 @@ func (r DNSTimeseriesGroupResponseTTLParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type DNSTimeseriesGroupResponseTTLParamsAggInterval string
 

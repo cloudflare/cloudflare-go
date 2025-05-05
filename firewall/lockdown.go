@@ -440,7 +440,7 @@ func (r lockdownDeleteResponseJSON) RawJSON() string {
 }
 
 type LockdownNewParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 	// specified in the Zone Lockdown rule. You can include any number of `ip` or
@@ -460,7 +460,7 @@ type LockdownNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Lockdown              `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success LockdownNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -484,7 +484,7 @@ func (r lockdownNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type LockdownNewResponseEnvelopeSuccess bool
 
 const (
@@ -500,7 +500,7 @@ func (r LockdownNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LockdownUpdateParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 	// specified in the Zone Lockdown rule. You can include any number of `ip` or
@@ -520,7 +520,7 @@ type LockdownUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Lockdown              `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success LockdownUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -544,7 +544,7 @@ func (r lockdownUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type LockdownUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -560,7 +560,7 @@ func (r LockdownUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LockdownListParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The timestamp of when the rule was created.
 	CreatedOn param.Field[time.Time] `query:"created_on" format:"date-time"`
@@ -598,7 +598,7 @@ func (r LockdownListParams) URLQuery() (v url.Values) {
 }
 
 type LockdownDeleteParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -624,7 +624,7 @@ func (r lockdownDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LockdownGetParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -632,7 +632,7 @@ type LockdownGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Lockdown              `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success LockdownGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -656,7 +656,7 @@ func (r lockdownGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type LockdownGetResponseEnvelopeSuccess bool
 
 const (

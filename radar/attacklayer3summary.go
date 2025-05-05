@@ -60,6 +60,19 @@ func (r *AttackLayer3SummaryService) Duration(ctx context.Context, query AttackL
 	return
 }
 
+// Retrieves the distribution of layer 3 attacks by targeted industry.
+func (r *AttackLayer3SummaryService) Industry(ctx context.Context, query AttackLayer3SummaryIndustryParams, opts ...option.RequestOption) (res *AttackLayer3SummaryIndustryResponse, err error) {
+	var env AttackLayer3SummaryIndustryResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	path := "radar/attacks/layer3/summary/industry"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Retrieves the distribution of layer 3 attacks by IP version.
 func (r *AttackLayer3SummaryService) IPVersion(ctx context.Context, query AttackLayer3SummaryIPVersionParams, opts ...option.RequestOption) (res *AttackLayer3SummaryIPVersionResponse, err error) {
 	var env AttackLayer3SummaryIPVersionResponseEnvelope
@@ -91,6 +104,19 @@ func (r *AttackLayer3SummaryService) Vector(ctx context.Context, query AttackLay
 	var env AttackLayer3SummaryVectorResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/summary/vector"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Retrieves the distribution of layer 3 attacks by targeted vertical.
+func (r *AttackLayer3SummaryService) Vertical(ctx context.Context, query AttackLayer3SummaryVerticalParams, opts ...option.RequestOption) (res *AttackLayer3SummaryVerticalResponse, err error) {
+	var env AttackLayer3SummaryVerticalResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	path := "radar/attacks/layer3/summary/vertical"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -420,6 +446,138 @@ func (r *AttackLayer3SummaryDurationResponseSummary0) UnmarshalJSON(data []byte)
 }
 
 func (r attackLayer3SummaryDurationResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3SummaryIndustryResponse struct {
+	Meta     AttackLayer3SummaryIndustryResponseMeta `json:"meta,required"`
+	Summary0 map[string]string                       `json:"summary_0,required"`
+	JSON     attackLayer3SummaryIndustryResponseJSON `json:"-"`
+}
+
+// attackLayer3SummaryIndustryResponseJSON contains the JSON metadata for the
+// struct [AttackLayer3SummaryIndustryResponse]
+type attackLayer3SummaryIndustryResponseJSON struct {
+	Meta        apijson.Field
+	Summary0    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryIndustryResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryIndustryResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3SummaryIndustryResponseMeta struct {
+	DateRange      []AttackLayer3SummaryIndustryResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                `json:"lastUpdated,required"`
+	Normalization  string                                                `json:"normalization,required"`
+	ConfidenceInfo AttackLayer3SummaryIndustryResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           attackLayer3SummaryIndustryResponseMetaJSON           `json:"-"`
+}
+
+// attackLayer3SummaryIndustryResponseMetaJSON contains the JSON metadata for the
+// struct [AttackLayer3SummaryIndustryResponseMeta]
+type attackLayer3SummaryIndustryResponseMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryIndustryResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryIndustryResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3SummaryIndustryResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	JSON      attackLayer3SummaryIndustryResponseMetaDateRangeJSON `json:"-"`
+}
+
+// attackLayer3SummaryIndustryResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [AttackLayer3SummaryIndustryResponseMetaDateRange]
+type attackLayer3SummaryIndustryResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryIndustryResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryIndustryResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3SummaryIndustryResponseMetaConfidenceInfo struct {
+	Annotations []AttackLayer3SummaryIndustryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                             `json:"level"`
+	JSON        attackLayer3SummaryIndustryResponseMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// attackLayer3SummaryIndustryResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [AttackLayer3SummaryIndustryResponseMetaConfidenceInfo]
+type attackLayer3SummaryIndustryResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryIndustryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryIndustryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3SummaryIndustryResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                              `json:"dataSource,required"`
+	Description     string                                                              `json:"description,required"`
+	EventType       string                                                              `json:"eventType,required"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                              `json:"linkedUrl"`
+	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
+	JSON            attackLayer3SummaryIndustryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// attackLayer3SummaryIndustryResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [AttackLayer3SummaryIndustryResponseMetaConfidenceInfoAnnotation]
+type attackLayer3SummaryIndustryResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryIndustryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryIndustryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -869,33 +1027,165 @@ func (r attackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotationJSON) RawJS
 	return r.raw
 }
 
+type AttackLayer3SummaryVerticalResponse struct {
+	Meta     AttackLayer3SummaryVerticalResponseMeta `json:"meta,required"`
+	Summary0 map[string]string                       `json:"summary_0,required"`
+	JSON     attackLayer3SummaryVerticalResponseJSON `json:"-"`
+}
+
+// attackLayer3SummaryVerticalResponseJSON contains the JSON metadata for the
+// struct [AttackLayer3SummaryVerticalResponse]
+type attackLayer3SummaryVerticalResponseJSON struct {
+	Meta        apijson.Field
+	Summary0    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryVerticalResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryVerticalResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3SummaryVerticalResponseMeta struct {
+	DateRange      []AttackLayer3SummaryVerticalResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                `json:"lastUpdated,required"`
+	Normalization  string                                                `json:"normalization,required"`
+	ConfidenceInfo AttackLayer3SummaryVerticalResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           attackLayer3SummaryVerticalResponseMetaJSON           `json:"-"`
+}
+
+// attackLayer3SummaryVerticalResponseMetaJSON contains the JSON metadata for the
+// struct [AttackLayer3SummaryVerticalResponseMeta]
+type attackLayer3SummaryVerticalResponseMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryVerticalResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryVerticalResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3SummaryVerticalResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	JSON      attackLayer3SummaryVerticalResponseMetaDateRangeJSON `json:"-"`
+}
+
+// attackLayer3SummaryVerticalResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [AttackLayer3SummaryVerticalResponseMetaDateRange]
+type attackLayer3SummaryVerticalResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryVerticalResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryVerticalResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3SummaryVerticalResponseMetaConfidenceInfo struct {
+	Annotations []AttackLayer3SummaryVerticalResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                             `json:"level"`
+	JSON        attackLayer3SummaryVerticalResponseMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// attackLayer3SummaryVerticalResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [AttackLayer3SummaryVerticalResponseMetaConfidenceInfo]
+type attackLayer3SummaryVerticalResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryVerticalResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryVerticalResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3SummaryVerticalResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                              `json:"dataSource,required"`
+	Description     string                                                              `json:"description,required"`
+	EventType       string                                                              `json:"eventType,required"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                              `json:"linkedUrl"`
+	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
+	JSON            attackLayer3SummaryVerticalResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// attackLayer3SummaryVerticalResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [AttackLayer3SummaryVerticalResponseMetaConfidenceInfoAnnotation]
+type attackLayer3SummaryVerticalResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryVerticalResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryVerticalResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type AttackLayer3SummaryBitrateParams struct {
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Together with the `location` parameter, will apply the filter to origin or
-	// target location.
+	// Specifies whether the `location` filter applies to the source or target
+	// location.
 	Direction param.Field[AttackLayer3SummaryBitrateParamsDirection] `query:"direction"`
 	// Format in which results will be returned.
 	Format param.Field[AttackLayer3SummaryBitrateParamsFormat] `query:"format"`
 	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3SummaryBitrateParamsIPVersion] `query:"ipVersion"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Array of L3/4 attack types.
+	// Filters the results by layer 3/4 protocol.
 	Protocol param.Field[[]AttackLayer3SummaryBitrateParamsProtocol] `query:"protocol"`
 }
 
@@ -908,8 +1198,8 @@ func (r AttackLayer3SummaryBitrateParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Together with the `location` parameter, will apply the filter to origin or
-// target location.
+// Specifies whether the `location` filter applies to the source or target
+// location.
 type AttackLayer3SummaryBitrateParamsDirection string
 
 const (
@@ -997,32 +1287,32 @@ func (r attackLayer3SummaryBitrateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryDurationParams struct {
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Together with the `location` parameter, will apply the filter to origin or
-	// target location.
+	// Specifies whether the `location` filter applies to the source or target
+	// location.
 	Direction param.Field[AttackLayer3SummaryDurationParamsDirection] `query:"direction"`
 	// Format in which results will be returned.
 	Format param.Field[AttackLayer3SummaryDurationParamsFormat] `query:"format"`
 	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3SummaryDurationParamsIPVersion] `query:"ipVersion"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Array of L3/4 attack types.
+	// Filters the results by layer 3/4 protocol.
 	Protocol param.Field[[]AttackLayer3SummaryDurationParamsProtocol] `query:"protocol"`
 }
 
@@ -1035,8 +1325,8 @@ func (r AttackLayer3SummaryDurationParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Together with the `location` parameter, will apply the filter to origin or
-// target location.
+// Specifies whether the `location` filter applies to the source or target
+// location.
 type AttackLayer3SummaryDurationParamsDirection string
 
 const (
@@ -1123,31 +1413,162 @@ func (r attackLayer3SummaryDurationResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AttackLayer3SummaryIPVersionParams struct {
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+type AttackLayer3SummaryIndustryParams struct {
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Together with the `location` parameter, will apply the filter to origin or
-	// target location.
-	Direction param.Field[AttackLayer3SummaryIPVersionParamsDirection] `query:"direction"`
+	// Specifies whether the `location` filter applies to the source or target
+	// location.
+	Direction param.Field[AttackLayer3SummaryIndustryParamsDirection] `query:"direction"`
 	// Format in which results will be returned.
-	Format param.Field[AttackLayer3SummaryIPVersionParamsFormat] `query:"format"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	Format param.Field[AttackLayer3SummaryIndustryParamsFormat] `query:"format"`
+	// Filters results by IP version (Ipv4 vs. IPv6).
+	IPVersion param.Field[[]AttackLayer3SummaryIndustryParamsIPVersion] `query:"ipVersion"`
+	// Limits the number of objects per group to the top items within the specified
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Array of L3/4 attack types.
+	// Filters the results by layer 3/4 protocol.
+	Protocol param.Field[[]AttackLayer3SummaryIndustryParamsProtocol] `query:"protocol"`
+}
+
+// URLQuery serializes [AttackLayer3SummaryIndustryParams]'s query parameters as
+// `url.Values`.
+func (r AttackLayer3SummaryIndustryParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Specifies whether the `location` filter applies to the source or target
+// location.
+type AttackLayer3SummaryIndustryParamsDirection string
+
+const (
+	AttackLayer3SummaryIndustryParamsDirectionOrigin AttackLayer3SummaryIndustryParamsDirection = "ORIGIN"
+	AttackLayer3SummaryIndustryParamsDirectionTarget AttackLayer3SummaryIndustryParamsDirection = "TARGET"
+)
+
+func (r AttackLayer3SummaryIndustryParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryIndustryParamsDirectionOrigin, AttackLayer3SummaryIndustryParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
+// Format in which results will be returned.
+type AttackLayer3SummaryIndustryParamsFormat string
+
+const (
+	AttackLayer3SummaryIndustryParamsFormatJson AttackLayer3SummaryIndustryParamsFormat = "JSON"
+	AttackLayer3SummaryIndustryParamsFormatCsv  AttackLayer3SummaryIndustryParamsFormat = "CSV"
+)
+
+func (r AttackLayer3SummaryIndustryParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryIndustryParamsFormatJson, AttackLayer3SummaryIndustryParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AttackLayer3SummaryIndustryParamsIPVersion string
+
+const (
+	AttackLayer3SummaryIndustryParamsIPVersionIPv4 AttackLayer3SummaryIndustryParamsIPVersion = "IPv4"
+	AttackLayer3SummaryIndustryParamsIPVersionIPv6 AttackLayer3SummaryIndustryParamsIPVersion = "IPv6"
+)
+
+func (r AttackLayer3SummaryIndustryParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryIndustryParamsIPVersionIPv4, AttackLayer3SummaryIndustryParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type AttackLayer3SummaryIndustryParamsProtocol string
+
+const (
+	AttackLayer3SummaryIndustryParamsProtocolUdp  AttackLayer3SummaryIndustryParamsProtocol = "UDP"
+	AttackLayer3SummaryIndustryParamsProtocolTCP  AttackLayer3SummaryIndustryParamsProtocol = "TCP"
+	AttackLayer3SummaryIndustryParamsProtocolIcmp AttackLayer3SummaryIndustryParamsProtocol = "ICMP"
+	AttackLayer3SummaryIndustryParamsProtocolGRE  AttackLayer3SummaryIndustryParamsProtocol = "GRE"
+)
+
+func (r AttackLayer3SummaryIndustryParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryIndustryParamsProtocolUdp, AttackLayer3SummaryIndustryParamsProtocolTCP, AttackLayer3SummaryIndustryParamsProtocolIcmp, AttackLayer3SummaryIndustryParamsProtocolGRE:
+		return true
+	}
+	return false
+}
+
+type AttackLayer3SummaryIndustryResponseEnvelope struct {
+	Result  AttackLayer3SummaryIndustryResponse             `json:"result,required"`
+	Success bool                                            `json:"success,required"`
+	JSON    attackLayer3SummaryIndustryResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer3SummaryIndustryResponseEnvelopeJSON contains the JSON metadata for
+// the struct [AttackLayer3SummaryIndustryResponseEnvelope]
+type attackLayer3SummaryIndustryResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryIndustryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryIndustryResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3SummaryIPVersionParams struct {
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
+	DateRange param.Field[[]string] `query:"dateRange"`
+	// Start of the date range.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Specifies whether the `location` filter applies to the source or target
+	// location.
+	Direction param.Field[AttackLayer3SummaryIPVersionParamsDirection] `query:"direction"`
+	// Format in which results will be returned.
+	Format param.Field[AttackLayer3SummaryIPVersionParamsFormat] `query:"format"`
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of names used to label the series in the response.
+	Name param.Field[[]string] `query:"name"`
+	// Filters the results by layer 3/4 protocol.
 	Protocol param.Field[[]AttackLayer3SummaryIPVersionParamsProtocol] `query:"protocol"`
 }
 
@@ -1160,8 +1581,8 @@ func (r AttackLayer3SummaryIPVersionParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Together with the `location` parameter, will apply the filter to origin or
-// target location.
+// Specifies whether the `location` filter applies to the source or target
+// location.
 type AttackLayer3SummaryIPVersionParamsDirection string
 
 const (
@@ -1234,28 +1655,28 @@ func (r attackLayer3SummaryIPVersionResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryProtocolParams struct {
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Together with the `location` parameter, will apply the filter to origin or
-	// target location.
+	// Specifies whether the `location` filter applies to the source or target
+	// location.
 	Direction param.Field[AttackLayer3SummaryProtocolParamsDirection] `query:"direction"`
 	// Format in which results will be returned.
 	Format param.Field[AttackLayer3SummaryProtocolParamsFormat] `query:"format"`
 	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3SummaryProtocolParamsIPVersion] `query:"ipVersion"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
@@ -1270,8 +1691,8 @@ func (r AttackLayer3SummaryProtocolParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Together with the `location` parameter, will apply the filter to origin or
-// target location.
+// Specifies whether the `location` filter applies to the source or target
+// location.
 type AttackLayer3SummaryProtocolParamsDirection string
 
 const (
@@ -1342,37 +1763,36 @@ func (r attackLayer3SummaryProtocolResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryVectorParams struct {
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Together with the `location` parameter, will apply the filter to origin or
-	// target location.
+	// Specifies whether the `location` filter applies to the source or target
+	// location.
 	Direction param.Field[AttackLayer3SummaryVectorParamsDirection] `query:"direction"`
 	// Format in which results will be returned.
 	Format param.Field[AttackLayer3SummaryVectorParamsFormat] `query:"format"`
 	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer3SummaryVectorParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects per group to the top items within the specified
-	// time range. If there are more items than the limit, the response will include
-	// the count of items, with any remaining items grouped together under an "other"
-	// category.
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
-	// Array of L3/4 attack types.
+	// Filters the results by layer 3/4 protocol.
 	Protocol param.Field[[]AttackLayer3SummaryVectorParamsProtocol] `query:"protocol"`
 }
 
@@ -1385,8 +1805,8 @@ func (r AttackLayer3SummaryVectorParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Together with the `location` parameter, will apply the filter to origin or
-// target location.
+// Specifies whether the `location` filter applies to the source or target
+// location.
 type AttackLayer3SummaryVectorParamsDirection string
 
 const (
@@ -1470,5 +1890,136 @@ func (r *AttackLayer3SummaryVectorResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r attackLayer3SummaryVectorResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3SummaryVerticalParams struct {
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
+	DateRange param.Field[[]string] `query:"dateRange"`
+	// Start of the date range.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Specifies whether the `location` filter applies to the source or target
+	// location.
+	Direction param.Field[AttackLayer3SummaryVerticalParamsDirection] `query:"direction"`
+	// Format in which results will be returned.
+	Format param.Field[AttackLayer3SummaryVerticalParamsFormat] `query:"format"`
+	// Filters results by IP version (Ipv4 vs. IPv6).
+	IPVersion param.Field[[]AttackLayer3SummaryVerticalParamsIPVersion] `query:"ipVersion"`
+	// Limits the number of objects per group to the top items within the specified
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of names used to label the series in the response.
+	Name param.Field[[]string] `query:"name"`
+	// Filters the results by layer 3/4 protocol.
+	Protocol param.Field[[]AttackLayer3SummaryVerticalParamsProtocol] `query:"protocol"`
+}
+
+// URLQuery serializes [AttackLayer3SummaryVerticalParams]'s query parameters as
+// `url.Values`.
+func (r AttackLayer3SummaryVerticalParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Specifies whether the `location` filter applies to the source or target
+// location.
+type AttackLayer3SummaryVerticalParamsDirection string
+
+const (
+	AttackLayer3SummaryVerticalParamsDirectionOrigin AttackLayer3SummaryVerticalParamsDirection = "ORIGIN"
+	AttackLayer3SummaryVerticalParamsDirectionTarget AttackLayer3SummaryVerticalParamsDirection = "TARGET"
+)
+
+func (r AttackLayer3SummaryVerticalParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryVerticalParamsDirectionOrigin, AttackLayer3SummaryVerticalParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
+// Format in which results will be returned.
+type AttackLayer3SummaryVerticalParamsFormat string
+
+const (
+	AttackLayer3SummaryVerticalParamsFormatJson AttackLayer3SummaryVerticalParamsFormat = "JSON"
+	AttackLayer3SummaryVerticalParamsFormatCsv  AttackLayer3SummaryVerticalParamsFormat = "CSV"
+)
+
+func (r AttackLayer3SummaryVerticalParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryVerticalParamsFormatJson, AttackLayer3SummaryVerticalParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AttackLayer3SummaryVerticalParamsIPVersion string
+
+const (
+	AttackLayer3SummaryVerticalParamsIPVersionIPv4 AttackLayer3SummaryVerticalParamsIPVersion = "IPv4"
+	AttackLayer3SummaryVerticalParamsIPVersionIPv6 AttackLayer3SummaryVerticalParamsIPVersion = "IPv6"
+)
+
+func (r AttackLayer3SummaryVerticalParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryVerticalParamsIPVersionIPv4, AttackLayer3SummaryVerticalParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type AttackLayer3SummaryVerticalParamsProtocol string
+
+const (
+	AttackLayer3SummaryVerticalParamsProtocolUdp  AttackLayer3SummaryVerticalParamsProtocol = "UDP"
+	AttackLayer3SummaryVerticalParamsProtocolTCP  AttackLayer3SummaryVerticalParamsProtocol = "TCP"
+	AttackLayer3SummaryVerticalParamsProtocolIcmp AttackLayer3SummaryVerticalParamsProtocol = "ICMP"
+	AttackLayer3SummaryVerticalParamsProtocolGRE  AttackLayer3SummaryVerticalParamsProtocol = "GRE"
+)
+
+func (r AttackLayer3SummaryVerticalParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryVerticalParamsProtocolUdp, AttackLayer3SummaryVerticalParamsProtocolTCP, AttackLayer3SummaryVerticalParamsProtocolIcmp, AttackLayer3SummaryVerticalParamsProtocolGRE:
+		return true
+	}
+	return false
+}
+
+type AttackLayer3SummaryVerticalResponseEnvelope struct {
+	Result  AttackLayer3SummaryVerticalResponse             `json:"result,required"`
+	Success bool                                            `json:"success,required"`
+	JSON    attackLayer3SummaryVerticalResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer3SummaryVerticalResponseEnvelopeJSON contains the JSON metadata for
+// the struct [AttackLayer3SummaryVerticalResponseEnvelope]
+type attackLayer3SummaryVerticalResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3SummaryVerticalResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3SummaryVerticalResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }

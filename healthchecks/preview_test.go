@@ -32,7 +32,7 @@ func TestPreviewNewWithOptionalParams(t *testing.T) {
 		QueryHealthcheck: healthchecks.QueryHealthcheckParam{
 			Address:              cloudflare.F("www.example.com"),
 			Name:                 cloudflare.F("server-1"),
-			CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWnam, healthchecks.CheckRegionEnam}),
+			CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWeu, healthchecks.CheckRegionEnam}),
 			ConsecutiveFails:     cloudflare.F(int64(0)),
 			ConsecutiveSuccesses: cloudflare.F(int64(0)),
 			Description:          cloudflare.F("Health check for www.example.com"),

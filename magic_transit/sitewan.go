@@ -212,7 +212,7 @@ type WAN struct {
 	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
 	// availability mode.
 	StaticAddressing WANStaticAddressing `json:"static_addressing"`
-	// VLAN port number.
+	// VLAN ID. Use zero for untagged.
 	VlanTag int64   `json:"vlan_tag"`
 	JSON    wanJSON `json:"-"`
 }
@@ -306,13 +306,13 @@ type SiteWANNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	Physport  param.Field[int64]  `json:"physport,required"`
-	// VLAN port number.
-	VlanTag  param.Field[int64]  `json:"vlan_tag,required"`
-	Name     param.Field[string] `json:"name"`
-	Priority param.Field[int64]  `json:"priority"`
+	Name      param.Field[string] `json:"name"`
+	Priority  param.Field[int64]  `json:"priority"`
 	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
 	// availability mode.
 	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
+	// VLAN ID. Use zero for untagged.
+	VlanTag param.Field[int64] `json:"vlan_tag"`
 }
 
 func (r SiteWANNewParams) MarshalJSON() (data []byte, err error) {
@@ -328,7 +328,7 @@ type SiteWANUpdateParams struct {
 	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
 	// availability mode.
 	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
-	// VLAN port number.
+	// VLAN ID. Use zero for untagged.
 	VlanTag param.Field[int64] `json:"vlan_tag"`
 }
 
@@ -441,7 +441,7 @@ type SiteWANEditParams struct {
 	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
 	// availability mode.
 	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
-	// VLAN port number.
+	// VLAN ID. Use zero for untagged.
 	VlanTag param.Field[int64] `json:"vlan_tag"`
 }
 

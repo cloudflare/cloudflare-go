@@ -174,7 +174,8 @@ type EntityLocationListParams struct {
 	Format param.Field[EntityLocationListParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Comma-separated list of locations (alpha-2 location codes).
+	// Filters results by location. Specify a comma-separated list of alpha-2 location
+	// codes.
 	Location param.Field[string] `query:"location"`
 	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`

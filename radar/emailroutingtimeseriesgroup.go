@@ -302,15 +302,15 @@ func (r emailRoutingTimeseriesGroupSPFResponseJSON) RawJSON() string {
 }
 
 type EmailRoutingTimeseriesGroupARCParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailRoutingTimeseriesGroupARCParamsAggInterval] `query:"aggInterval"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -340,8 +340,8 @@ func (r EmailRoutingTimeseriesGroupARCParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type EmailRoutingTimeseriesGroupARCParamsAggInterval string
 
@@ -478,17 +478,17 @@ func (r emailRoutingTimeseriesGroupARCResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailRoutingTimeseriesGroupDKIMParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailRoutingTimeseriesGroupDKIMParamsAggInterval] `query:"aggInterval"`
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingTimeseriesGroupDKIMParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -516,8 +516,8 @@ func (r EmailRoutingTimeseriesGroupDKIMParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type EmailRoutingTimeseriesGroupDKIMParamsAggInterval string
 
@@ -654,17 +654,17 @@ func (r emailRoutingTimeseriesGroupDKIMResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailRoutingTimeseriesGroupDMARCParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailRoutingTimeseriesGroupDMARCParamsAggInterval] `query:"aggInterval"`
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingTimeseriesGroupDMARCParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -691,8 +691,8 @@ func (r EmailRoutingTimeseriesGroupDMARCParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type EmailRoutingTimeseriesGroupDMARCParamsAggInterval string
 
@@ -829,17 +829,17 @@ func (r emailRoutingTimeseriesGroupDMARCResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailRoutingTimeseriesGroupEncryptedParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailRoutingTimeseriesGroupEncryptedParamsAggInterval] `query:"aggInterval"`
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingTimeseriesGroupEncryptedParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -867,8 +867,8 @@ func (r EmailRoutingTimeseriesGroupEncryptedParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type EmailRoutingTimeseriesGroupEncryptedParamsAggInterval string
 
@@ -1006,17 +1006,17 @@ func (r emailRoutingTimeseriesGroupEncryptedResponseEnvelopeJSON) RawJSON() stri
 }
 
 type EmailRoutingTimeseriesGroupIPVersionParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailRoutingTimeseriesGroupIPVersionParamsAggInterval] `query:"aggInterval"`
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingTimeseriesGroupIPVersionParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -1044,8 +1044,8 @@ func (r EmailRoutingTimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type EmailRoutingTimeseriesGroupIPVersionParamsAggInterval string
 
@@ -1183,17 +1183,17 @@ func (r emailRoutingTimeseriesGroupIPVersionResponseEnvelopeJSON) RawJSON() stri
 }
 
 type EmailRoutingTimeseriesGroupSPFParams struct {
-	// Aggregation interval results should be returned in (for example, in 15 minutes
-	// or 1 hour intervals). Refer to
+	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[EmailRoutingTimeseriesGroupSPFParamsAggInterval] `query:"aggInterval"`
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingTimeseriesGroupSPFParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -1221,8 +1221,8 @@ func (r EmailRoutingTimeseriesGroupSPFParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Aggregation interval results should be returned in (for example, in 15 minutes
-// or 1 hour intervals). Refer to
+// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
+// Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 type EmailRoutingTimeseriesGroupSPFParamsAggInterval string
 

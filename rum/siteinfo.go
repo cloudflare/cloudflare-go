@@ -235,7 +235,7 @@ func (r siteInfoDeleteResponseJSON) RawJSON() string {
 }
 
 type SiteInfoNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
@@ -279,7 +279,7 @@ func (r siteInfoNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SiteInfoUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
@@ -329,7 +329,7 @@ func (r siteInfoUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SiteInfoListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The property used to sort the list of results.
 	OrderBy param.Field[SiteInfoListParamsOrderBy] `query:"order_by"`
@@ -364,7 +364,7 @@ func (r SiteInfoListParamsOrderBy) IsKnown() bool {
 }
 
 type SiteInfoDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -397,7 +397,7 @@ func (r siteInfoDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SiteInfoGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

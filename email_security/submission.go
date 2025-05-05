@@ -178,11 +178,15 @@ type SubmissionListParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The end of the search date range. Defaults to `now`.
-	End param.Field[time.Time] `query:"end" format:"date-time"`
+	End                 param.Field[time.Time]                               `query:"end" format:"date-time"`
+	OriginalDisposition param.Field[SubmissionListParamsOriginalDisposition] `query:"original_disposition"`
+	OutcomeDisposition  param.Field[SubmissionListParamsOutcomeDisposition]  `query:"outcome_disposition"`
 	// The page number of paginated results.
 	Page param.Field[int64] `query:"page"`
 	// The number of results per page.
-	PerPage param.Field[int64] `query:"per_page"`
+	PerPage              param.Field[int64]                                    `query:"per_page"`
+	Query                param.Field[string]                                   `query:"query"`
+	RequestedDisposition param.Field[SubmissionListParamsRequestedDisposition] `query:"requested_disposition"`
 	// The beginning of the search date range. Defaults to `now - 30 days`.
 	Start        param.Field[time.Time]                `query:"start" format:"date-time"`
 	SubmissionID param.Field[string]                   `query:"submission_id"`
@@ -195,6 +199,63 @@ func (r SubmissionListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type SubmissionListParamsOriginalDisposition string
+
+const (
+	SubmissionListParamsOriginalDispositionMalicious  SubmissionListParamsOriginalDisposition = "MALICIOUS"
+	SubmissionListParamsOriginalDispositionSuspicious SubmissionListParamsOriginalDisposition = "SUSPICIOUS"
+	SubmissionListParamsOriginalDispositionSpoof      SubmissionListParamsOriginalDisposition = "SPOOF"
+	SubmissionListParamsOriginalDispositionSpam       SubmissionListParamsOriginalDisposition = "SPAM"
+	SubmissionListParamsOriginalDispositionBulk       SubmissionListParamsOriginalDisposition = "BULK"
+	SubmissionListParamsOriginalDispositionNone       SubmissionListParamsOriginalDisposition = "NONE"
+)
+
+func (r SubmissionListParamsOriginalDisposition) IsKnown() bool {
+	switch r {
+	case SubmissionListParamsOriginalDispositionMalicious, SubmissionListParamsOriginalDispositionSuspicious, SubmissionListParamsOriginalDispositionSpoof, SubmissionListParamsOriginalDispositionSpam, SubmissionListParamsOriginalDispositionBulk, SubmissionListParamsOriginalDispositionNone:
+		return true
+	}
+	return false
+}
+
+type SubmissionListParamsOutcomeDisposition string
+
+const (
+	SubmissionListParamsOutcomeDispositionMalicious  SubmissionListParamsOutcomeDisposition = "MALICIOUS"
+	SubmissionListParamsOutcomeDispositionSuspicious SubmissionListParamsOutcomeDisposition = "SUSPICIOUS"
+	SubmissionListParamsOutcomeDispositionSpoof      SubmissionListParamsOutcomeDisposition = "SPOOF"
+	SubmissionListParamsOutcomeDispositionSpam       SubmissionListParamsOutcomeDisposition = "SPAM"
+	SubmissionListParamsOutcomeDispositionBulk       SubmissionListParamsOutcomeDisposition = "BULK"
+	SubmissionListParamsOutcomeDispositionNone       SubmissionListParamsOutcomeDisposition = "NONE"
+)
+
+func (r SubmissionListParamsOutcomeDisposition) IsKnown() bool {
+	switch r {
+	case SubmissionListParamsOutcomeDispositionMalicious, SubmissionListParamsOutcomeDispositionSuspicious, SubmissionListParamsOutcomeDispositionSpoof, SubmissionListParamsOutcomeDispositionSpam, SubmissionListParamsOutcomeDispositionBulk, SubmissionListParamsOutcomeDispositionNone:
+		return true
+	}
+	return false
+}
+
+type SubmissionListParamsRequestedDisposition string
+
+const (
+	SubmissionListParamsRequestedDispositionMalicious  SubmissionListParamsRequestedDisposition = "MALICIOUS"
+	SubmissionListParamsRequestedDispositionSuspicious SubmissionListParamsRequestedDisposition = "SUSPICIOUS"
+	SubmissionListParamsRequestedDispositionSpoof      SubmissionListParamsRequestedDisposition = "SPOOF"
+	SubmissionListParamsRequestedDispositionSpam       SubmissionListParamsRequestedDisposition = "SPAM"
+	SubmissionListParamsRequestedDispositionBulk       SubmissionListParamsRequestedDisposition = "BULK"
+	SubmissionListParamsRequestedDispositionNone       SubmissionListParamsRequestedDisposition = "NONE"
+)
+
+func (r SubmissionListParamsRequestedDisposition) IsKnown() bool {
+	switch r {
+	case SubmissionListParamsRequestedDispositionMalicious, SubmissionListParamsRequestedDispositionSuspicious, SubmissionListParamsRequestedDispositionSpoof, SubmissionListParamsRequestedDispositionSpam, SubmissionListParamsRequestedDispositionBulk, SubmissionListParamsRequestedDispositionNone:
+		return true
+	}
+	return false
 }
 
 type SubmissionListParamsType string

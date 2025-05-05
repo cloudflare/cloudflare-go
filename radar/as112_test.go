@@ -29,8 +29,7 @@ func TestAS112TimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Timeseries(context.TODO(), radar.AS112TimeseriesParams{
-		AggInterval:  cloudflare.F(radar.AS112TimeseriesParamsAggInterval15m),
-		ASN:          cloudflare.F([]string{"string"}),
+		AggInterval:  cloudflare.F(radar.AS112TimeseriesParamsAggInterval1h),
 		Continent:    cloudflare.F([]string{"string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
 		DateRange:    cloudflare.F([]string{"7d"}),

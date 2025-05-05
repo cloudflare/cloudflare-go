@@ -170,13 +170,15 @@ type ConnectorSnapshotGetResponse struct {
 	// Time spent in system mode (milliseconds)
 	CPUTimeSystemMs float64 `json:"cpu_time_system_ms"`
 	// Time spent in user mode (milliseconds)
-	CPUTimeUserMs float64                            `json:"cpu_time_user_ms"`
-	Disks         []ConnectorSnapshotGetResponseDisk `json:"disks"`
+	CPUTimeUserMs float64                                 `json:"cpu_time_user_ms"`
+	DHCPLeases    []ConnectorSnapshotGetResponseDHCPLease `json:"dhcp_leases"`
+	Disks         []ConnectorSnapshotGetResponseDisk      `json:"disks"`
 	// Name of high availability state
 	HaState string `json:"ha_state"`
 	// Numeric value associated with high availability state (0 = unknown, 1 = active,
 	// 2 = standby, 3 = disabled, 4 = fault)
-	HaValue float64 `json:"ha_value"`
+	HaValue    float64                                 `json:"ha_value"`
+	Interfaces []ConnectorSnapshotGetResponseInterface `json:"interfaces"`
 	// Percentage of time over a 10 second window that all tasks were stalled
 	IoPressureFull10s float64 `json:"io_pressure_full_10s"`
 	// Percentage of time over a 5 minute window that all tasks were stalled
@@ -461,6 +463,7 @@ type ConnectorSnapshotGetResponse struct {
 	// Boottime of the system (seconds since the Unix epoch)
 	SystemBootTimeS float64                               `json:"system_boot_time_s"`
 	Thermals        []ConnectorSnapshotGetResponseThermal `json:"thermals"`
+	Tunnels         []ConnectorSnapshotGetResponseTunnel  `json:"tunnels"`
 	// Sum of how much time each core has spent idle
 	UptimeIdleMs float64 `json:"uptime_idle_ms"`
 	// Uptime of the system, including time spent in suspend
@@ -492,9 +495,11 @@ type connectorSnapshotGetResponseJSON struct {
 	CPUTimeStealMs                 apijson.Field
 	CPUTimeSystemMs                apijson.Field
 	CPUTimeUserMs                  apijson.Field
+	DHCPLeases                     apijson.Field
 	Disks                          apijson.Field
 	HaState                        apijson.Field
 	HaValue                        apijson.Field
+	Interfaces                     apijson.Field
 	IoPressureFull10s              apijson.Field
 	IoPressureFull300s             apijson.Field
 	IoPressureFull60s              apijson.Field
@@ -635,6 +640,7 @@ type connectorSnapshotGetResponseJSON struct {
 	SnmpUdpOutDatagrams            apijson.Field
 	SystemBootTimeS                apijson.Field
 	Thermals                       apijson.Field
+	Tunnels                        apijson.Field
 	UptimeIdleMs                   apijson.Field
 	UptimeTotalMs                  apijson.Field
 	raw                            string
@@ -646,6 +652,47 @@ func (r *ConnectorSnapshotGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r connectorSnapshotGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Snapshot DHCP lease
+type ConnectorSnapshotGetResponseDHCPLease struct {
+	// Client ID of the device the IP Address was leased to
+	ClientID string `json:"client_id,required"`
+	// Expiry time of the DHCP lease (seconds since the Unix epoch)
+	ExpiryTime float64 `json:"expiry_time,required"`
+	// Hostname of the device the IP Address was leased to
+	Hostname string `json:"hostname,required"`
+	// Name of the network interface
+	InterfaceName string `json:"interface_name,required"`
+	// IP Address that was leased
+	IPAddress string `json:"ip_address,required"`
+	// MAC Address of the device the IP Address was leased to
+	MacAddress string `json:"mac_address,required"`
+	// Connector identifier
+	ConnectorID string                                    `json:"connector_id"`
+	JSON        connectorSnapshotGetResponseDHCPLeaseJSON `json:"-"`
+}
+
+// connectorSnapshotGetResponseDHCPLeaseJSON contains the JSON metadata for the
+// struct [ConnectorSnapshotGetResponseDHCPLease]
+type connectorSnapshotGetResponseDHCPLeaseJSON struct {
+	ClientID      apijson.Field
+	ExpiryTime    apijson.Field
+	Hostname      apijson.Field
+	InterfaceName apijson.Field
+	IPAddress     apijson.Field
+	MacAddress    apijson.Field
+	ConnectorID   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ConnectorSnapshotGetResponseDHCPLease) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorSnapshotGetResponseDHCPLeaseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -729,6 +776,69 @@ func (r *ConnectorSnapshotGetResponseDisk) UnmarshalJSON(data []byte) (err error
 }
 
 func (r connectorSnapshotGetResponseDiskJSON) RawJSON() string {
+	return r.raw
+}
+
+// Snapshot Interface
+type ConnectorSnapshotGetResponseInterface struct {
+	// Name of the network interface
+	Name string `json:"name,required"`
+	// UP/DOWN state of the network interface
+	Operstate string `json:"operstate,required"`
+	// Connector identifier
+	ConnectorID string                                            `json:"connector_id"`
+	IPAddresses []ConnectorSnapshotGetResponseInterfacesIPAddress `json:"ip_addresses"`
+	// Speed of the network interface (bits per second)
+	Speed float64                                   `json:"speed"`
+	JSON  connectorSnapshotGetResponseInterfaceJSON `json:"-"`
+}
+
+// connectorSnapshotGetResponseInterfaceJSON contains the JSON metadata for the
+// struct [ConnectorSnapshotGetResponseInterface]
+type connectorSnapshotGetResponseInterfaceJSON struct {
+	Name        apijson.Field
+	Operstate   apijson.Field
+	ConnectorID apijson.Field
+	IPAddresses apijson.Field
+	Speed       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectorSnapshotGetResponseInterface) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorSnapshotGetResponseInterfaceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Snapshot Interface Address
+type ConnectorSnapshotGetResponseInterfacesIPAddress struct {
+	// Name of the network interface
+	InterfaceName string `json:"interface_name,required"`
+	// IP address of the network interface
+	IPAddress string `json:"ip_address,required"`
+	// Connector identifier
+	ConnectorID string                                              `json:"connector_id"`
+	JSON        connectorSnapshotGetResponseInterfacesIPAddressJSON `json:"-"`
+}
+
+// connectorSnapshotGetResponseInterfacesIPAddressJSON contains the JSON metadata
+// for the struct [ConnectorSnapshotGetResponseInterfacesIPAddress]
+type connectorSnapshotGetResponseInterfacesIPAddressJSON struct {
+	InterfaceName apijson.Field
+	IPAddress     apijson.Field
+	ConnectorID   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ConnectorSnapshotGetResponseInterfacesIPAddress) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorSnapshotGetResponseInterfacesIPAddressJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -885,6 +995,42 @@ func (r *ConnectorSnapshotGetResponseThermal) UnmarshalJSON(data []byte) (err er
 }
 
 func (r connectorSnapshotGetResponseThermalJSON) RawJSON() string {
+	return r.raw
+}
+
+// Snapshot Tunnels
+type ConnectorSnapshotGetResponseTunnel struct {
+	// Name of tunnel health state (unknown, healthy, degraded, down)
+	HealthState string `json:"health_state,required"`
+	// Numeric value associated with tunnel state (0 = unknown, 1 = healthy, 2 =
+	// degraded, 3 = down)
+	HealthValue float64 `json:"health_value,required"`
+	// The tunnel interface name (i.e. xfrm1, xfrm3.99, etc.)
+	InterfaceName string `json:"interface_name,required"`
+	// Tunnel identifier
+	TunnelID string `json:"tunnel_id,required"`
+	// Connector identifier
+	ConnectorID string                                 `json:"connector_id"`
+	JSON        connectorSnapshotGetResponseTunnelJSON `json:"-"`
+}
+
+// connectorSnapshotGetResponseTunnelJSON contains the JSON metadata for the struct
+// [ConnectorSnapshotGetResponseTunnel]
+type connectorSnapshotGetResponseTunnelJSON struct {
+	HealthState   apijson.Field
+	HealthValue   apijson.Field
+	InterfaceName apijson.Field
+	TunnelID      apijson.Field
+	ConnectorID   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ConnectorSnapshotGetResponseTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorSnapshotGetResponseTunnelJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -100,7 +100,7 @@ func (r scanResultGetResponseJSON) RawJSON() string {
 }
 
 type ScanResultGetParams struct {
-	// Account ID
+	// Defines the Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

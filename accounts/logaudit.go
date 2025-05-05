@@ -233,14 +233,15 @@ func (r LogAuditListResponseActorContext) IsKnown() bool {
 type LogAuditListResponseActorType string
 
 const (
-	LogAuditListResponseActorTypeUser            LogAuditListResponseActorType = "user"
 	LogAuditListResponseActorTypeAccount         LogAuditListResponseActorType = "account"
-	LogAuditListResponseActorTypeCloudflareAdmin LogAuditListResponseActorType = "cloudflare-admin"
+	LogAuditListResponseActorTypeCloudflareAdmin LogAuditListResponseActorType = "cloudflare_admin"
+	LogAuditListResponseActorTypeSystem          LogAuditListResponseActorType = "system"
+	LogAuditListResponseActorTypeUser            LogAuditListResponseActorType = "user"
 )
 
 func (r LogAuditListResponseActorType) IsKnown() bool {
 	switch r {
-	case LogAuditListResponseActorTypeUser, LogAuditListResponseActorTypeAccount, LogAuditListResponseActorTypeCloudflareAdmin:
+	case LogAuditListResponseActorTypeAccount, LogAuditListResponseActorTypeCloudflareAdmin, LogAuditListResponseActorTypeSystem, LogAuditListResponseActorTypeUser:
 		return true
 	}
 	return false

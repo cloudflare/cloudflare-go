@@ -7,14 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessApplicationPolicyTestService contains methods and other services that help
@@ -56,10 +53,10 @@ func (r *AccessApplicationPolicyTestService) New(ctx context.Context, params Acc
 }
 
 // Fetches the current status of a given Access policy test.
-func (r *AccessApplicationPolicyTestService) Get(ctx context.Context, policyTestID string, params AccessApplicationPolicyTestGetParams, opts ...option.RequestOption) (res *AccessApplicationPolicyTestGetResponse, err error) {
+func (r *AccessApplicationPolicyTestService) Get(ctx context.Context, policyTestID string, query AccessApplicationPolicyTestGetParams, opts ...option.RequestOption) (res *AccessApplicationPolicyTestGetResponse, err error) {
 	var env AccessApplicationPolicyTestGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -67,8 +64,8 @@ func (r *AccessApplicationPolicyTestService) Get(ctx context.Context, policyTest
 		err = errors.New("missing required policy_test_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/access/policy-tests/%s", params.AccountID, policyTestID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/access/policy-tests/%s", query.AccountID, policyTestID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -119,12 +116,12 @@ func (r AccessApplicationPolicyTestNewResponseStatus) IsKnown() bool {
 type AccessApplicationPolicyTestGetResponse struct {
 	// The UUID of the policy test.
 	ID string `json:"id"`
-	// The number of pages of (processed) users.
-	PagesProcessed int64 `json:"pages_processed"`
 	// The percentage of (processed) users approved based on policy evaluation results.
 	PercentApproved int64 `json:"percent_approved"`
 	// The percentage of (processed) users blocked based on policy evaluation results.
 	PercentBlocked int64 `json:"percent_blocked"`
+	// The percentage of (processed) users errored based on policy evaluation results.
+	PercentErrored int64 `json:"percent_errored"`
 	// The percentage of users processed so far (of the entire user base).
 	PercentUsersProcessed int64 `json:"percent_users_processed"`
 	// The status of the policy test.
@@ -134,7 +131,9 @@ type AccessApplicationPolicyTestGetResponse struct {
 	// The number of (processed) users approved based on policy evaluation results.
 	UsersApproved int64 `json:"users_approved"`
 	// The number of (processed) users blocked based on policy evaluation results.
-	UsersBlocked int64                                      `json:"users_blocked"`
+	UsersBlocked int64 `json:"users_blocked"`
+	// The number of (processed) users errored based on policy evaluation results.
+	UsersErrored int64                                      `json:"users_errored"`
 	JSON         accessApplicationPolicyTestGetResponseJSON `json:"-"`
 }
 
@@ -142,14 +141,15 @@ type AccessApplicationPolicyTestGetResponse struct {
 // struct [AccessApplicationPolicyTestGetResponse]
 type accessApplicationPolicyTestGetResponseJSON struct {
 	ID                    apijson.Field
-	PagesProcessed        apijson.Field
 	PercentApproved       apijson.Field
 	PercentBlocked        apijson.Field
+	PercentErrored        apijson.Field
 	PercentUsersProcessed apijson.Field
 	Status                apijson.Field
 	TotalUsers            apijson.Field
 	UsersApproved         apijson.Field
 	UsersBlocked          apijson.Field
+	UsersErrored          apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
 }
@@ -166,21 +166,22 @@ func (r accessApplicationPolicyTestGetResponseJSON) RawJSON() string {
 type AccessApplicationPolicyTestGetResponseStatus string
 
 const (
-	AccessApplicationPolicyTestGetResponseStatusBlocked    AccessApplicationPolicyTestGetResponseStatus = "blocked"
-	AccessApplicationPolicyTestGetResponseStatusProcessing AccessApplicationPolicyTestGetResponseStatus = "processing"
-	AccessApplicationPolicyTestGetResponseStatusComplete   AccessApplicationPolicyTestGetResponseStatus = "complete"
+	AccessApplicationPolicyTestGetResponseStatusBlocked      AccessApplicationPolicyTestGetResponseStatus = "blocked"
+	AccessApplicationPolicyTestGetResponseStatusProcessing   AccessApplicationPolicyTestGetResponseStatus = "processing"
+	AccessApplicationPolicyTestGetResponseStatusExceededTime AccessApplicationPolicyTestGetResponseStatus = "exceeded time"
+	AccessApplicationPolicyTestGetResponseStatusComplete     AccessApplicationPolicyTestGetResponseStatus = "complete"
 )
 
 func (r AccessApplicationPolicyTestGetResponseStatus) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyTestGetResponseStatusBlocked, AccessApplicationPolicyTestGetResponseStatusProcessing, AccessApplicationPolicyTestGetResponseStatusComplete:
+	case AccessApplicationPolicyTestGetResponseStatusBlocked, AccessApplicationPolicyTestGetResponseStatusProcessing, AccessApplicationPolicyTestGetResponseStatusExceededTime, AccessApplicationPolicyTestGetResponseStatusComplete:
 		return true
 	}
 	return false
 }
 
 type AccessApplicationPolicyTestNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string]                                            `path:"account_id,required"`
 	Policies  param.Field[[]AccessApplicationPolicyTestNewParamsPolicyUnion] `json:"policies"`
 }
@@ -239,9 +240,9 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObject) ImplementsAccessAppl
 }
 
 type AccessApplicationPolicyTestNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessApplicationPolicyTestNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessApplicationPolicyTestNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessApplicationPolicyTestNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationPolicyTestNewResponse                `json:"result"`
 	JSON    accessApplicationPolicyTestNewResponseEnvelopeJSON    `json:"-"`
@@ -266,7 +267,105 @@ func (r accessApplicationPolicyTestNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessApplicationPolicyTestNewResponseEnvelopeErrors struct {
+	Code             int64                                                      `json:"code,required"`
+	Message          string                                                     `json:"message,required"`
+	DocumentationURL string                                                     `json:"documentation_url"`
+	Source           AccessApplicationPolicyTestNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessApplicationPolicyTestNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessApplicationPolicyTestNewResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AccessApplicationPolicyTestNewResponseEnvelopeErrors]
+type accessApplicationPolicyTestNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyTestNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyTestNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyTestNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                                         `json:"pointer"`
+	JSON    accessApplicationPolicyTestNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessApplicationPolicyTestNewResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationPolicyTestNewResponseEnvelopeErrorsSource]
+type accessApplicationPolicyTestNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyTestNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyTestNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyTestNewResponseEnvelopeMessages struct {
+	Code             int64                                                        `json:"code,required"`
+	Message          string                                                       `json:"message,required"`
+	DocumentationURL string                                                       `json:"documentation_url"`
+	Source           AccessApplicationPolicyTestNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessApplicationPolicyTestNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessApplicationPolicyTestNewResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AccessApplicationPolicyTestNewResponseEnvelopeMessages]
+type accessApplicationPolicyTestNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyTestNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyTestNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyTestNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                                           `json:"pointer"`
+	JSON    accessApplicationPolicyTestNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessApplicationPolicyTestNewResponseEnvelopeMessagesSourceJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationPolicyTestNewResponseEnvelopeMessagesSource]
+type accessApplicationPolicyTestNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyTestNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyTestNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessApplicationPolicyTestNewResponseEnvelopeSuccess bool
 
 const (
@@ -282,24 +381,14 @@ func (r AccessApplicationPolicyTestNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessApplicationPolicyTestGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	Page      param.Field[int64]  `query:"page"`
-}
-
-// URLQuery serializes [AccessApplicationPolicyTestGetParams]'s query parameters as
-// `url.Values`.
-func (r AccessApplicationPolicyTestGetParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type AccessApplicationPolicyTestGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessApplicationPolicyTestGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessApplicationPolicyTestGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessApplicationPolicyTestGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationPolicyTestGetResponse                `json:"result"`
 	JSON    accessApplicationPolicyTestGetResponseEnvelopeJSON    `json:"-"`
@@ -324,7 +413,105 @@ func (r accessApplicationPolicyTestGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessApplicationPolicyTestGetResponseEnvelopeErrors struct {
+	Code             int64                                                      `json:"code,required"`
+	Message          string                                                     `json:"message,required"`
+	DocumentationURL string                                                     `json:"documentation_url"`
+	Source           AccessApplicationPolicyTestGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessApplicationPolicyTestGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessApplicationPolicyTestGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AccessApplicationPolicyTestGetResponseEnvelopeErrors]
+type accessApplicationPolicyTestGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyTestGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyTestGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyTestGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                         `json:"pointer"`
+	JSON    accessApplicationPolicyTestGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessApplicationPolicyTestGetResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationPolicyTestGetResponseEnvelopeErrorsSource]
+type accessApplicationPolicyTestGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyTestGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyTestGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyTestGetResponseEnvelopeMessages struct {
+	Code             int64                                                        `json:"code,required"`
+	Message          string                                                       `json:"message,required"`
+	DocumentationURL string                                                       `json:"documentation_url"`
+	Source           AccessApplicationPolicyTestGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessApplicationPolicyTestGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessApplicationPolicyTestGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AccessApplicationPolicyTestGetResponseEnvelopeMessages]
+type accessApplicationPolicyTestGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyTestGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyTestGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyTestGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                           `json:"pointer"`
+	JSON    accessApplicationPolicyTestGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessApplicationPolicyTestGetResponseEnvelopeMessagesSourceJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationPolicyTestGetResponseEnvelopeMessagesSource]
+type accessApplicationPolicyTestGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyTestGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyTestGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessApplicationPolicyTestGetResponseEnvelopeSuccess bool
 
 const (

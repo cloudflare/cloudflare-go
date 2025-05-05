@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // VerificationService contains methods and other services that help with
@@ -280,7 +279,7 @@ func (r VerificationEditResponseValidationMethod) IsKnown() bool {
 }
 
 type VerificationEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Desired validation method.
 	ValidationMethod param.Field[VerificationEditParamsValidationMethod] `json:"validation_method,required"`
@@ -309,9 +308,9 @@ func (r VerificationEditParamsValidationMethod) IsKnown() bool {
 }
 
 type VerificationEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []VerificationEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []VerificationEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success VerificationEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  VerificationEditResponse                `json:"result"`
 	JSON    verificationEditResponseEnvelopeJSON    `json:"-"`
@@ -336,7 +335,103 @@ func (r verificationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type VerificationEditResponseEnvelopeErrors struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           VerificationEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             verificationEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// verificationEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [VerificationEditResponseEnvelopeErrors]
+type verificationEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *VerificationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r verificationEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type VerificationEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    verificationEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// verificationEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [VerificationEditResponseEnvelopeErrorsSource]
+type verificationEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VerificationEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r verificationEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type VerificationEditResponseEnvelopeMessages struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           VerificationEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             verificationEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// verificationEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [VerificationEditResponseEnvelopeMessages]
+type verificationEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *VerificationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r verificationEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type VerificationEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    verificationEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// verificationEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [VerificationEditResponseEnvelopeMessagesSource]
+type verificationEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VerificationEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r verificationEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type VerificationEditResponseEnvelopeSuccess bool
 
 const (
@@ -352,7 +447,7 @@ func (r VerificationEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type VerificationGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Immediately retry SSL Verification.
 	Retry param.Field[VerificationGetParamsRetry] `query:"retry"`

@@ -29,7 +29,7 @@ func TestDNSTimeseriesGroupCacheHitWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.TimeseriesGroups.CacheHit(context.TODO(), radar.DNSTimeseriesGroupCacheHitParams{
-		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupCacheHitParamsAggInterval15m),
+		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupCacheHitParamsAggInterval1h),
 		ASN:          cloudflare.F([]string{"string"}),
 		Continent:    cloudflare.F([]string{"string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
@@ -67,7 +67,7 @@ func TestDNSTimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.TimeseriesGroups.DNSSEC(context.TODO(), radar.DNSTimeseriesGroupDNSSECParams{
-		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupDNSSECParamsAggInterval15m),
+		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupDNSSECParamsAggInterval1h),
 		ASN:          cloudflare.F([]string{"string"}),
 		Continent:    cloudflare.F([]string{"string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
@@ -105,7 +105,7 @@ func TestDNSTimeseriesGroupDNSSECAwareWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.TimeseriesGroups.DNSSECAware(context.TODO(), radar.DNSTimeseriesGroupDNSSECAwareParams{
-		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupDNSSECAwareParamsAggInterval15m),
+		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupDNSSECAwareParamsAggInterval1h),
 		ASN:          cloudflare.F([]string{"string"}),
 		Continent:    cloudflare.F([]string{"string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
@@ -143,7 +143,7 @@ func TestDNSTimeseriesGroupDNSSECE2EWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.TimeseriesGroups.DNSSECE2E(context.TODO(), radar.DNSTimeseriesGroupDNSSECE2EParams{
-		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupDnssece2EParamsAggInterval15m),
+		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupDnssece2EParamsAggInterval1h),
 		ASN:          cloudflare.F([]string{"string"}),
 		Continent:    cloudflare.F([]string{"string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
@@ -181,7 +181,7 @@ func TestDNSTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.TimeseriesGroups.IPVersion(context.TODO(), radar.DNSTimeseriesGroupIPVersionParams{
-		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupIPVersionParamsAggInterval15m),
+		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupIPVersionParamsAggInterval1h),
 		ASN:          cloudflare.F([]string{"string"}),
 		Continent:    cloudflare.F([]string{"string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
@@ -219,7 +219,7 @@ func TestDNSTimeseriesGroupMatchingAnswerWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.TimeseriesGroups.MatchingAnswer(context.TODO(), radar.DNSTimeseriesGroupMatchingAnswerParams{
-		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupMatchingAnswerParamsAggInterval15m),
+		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupMatchingAnswerParamsAggInterval1h),
 		ASN:          cloudflare.F([]string{"string"}),
 		Continent:    cloudflare.F([]string{"string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
@@ -257,7 +257,7 @@ func TestDNSTimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.TimeseriesGroups.Protocol(context.TODO(), radar.DNSTimeseriesGroupProtocolParams{
-		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupProtocolParamsAggInterval15m),
+		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupProtocolParamsAggInterval1h),
 		ASN:          cloudflare.F([]string{"string"}),
 		Continent:    cloudflare.F([]string{"string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
@@ -294,7 +294,7 @@ func TestDNSTimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.TimeseriesGroups.QueryType(context.TODO(), radar.DNSTimeseriesGroupQueryTypeParams{
-		AggInterval:   cloudflare.F(radar.DNSTimeseriesGroupQueryTypeParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.DNSTimeseriesGroupQueryTypeParamsAggInterval1h),
 		ASN:           cloudflare.F([]string{"string"}),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
@@ -332,7 +332,7 @@ func TestDNSTimeseriesGroupResponseCodeWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.TimeseriesGroups.ResponseCode(context.TODO(), radar.DNSTimeseriesGroupResponseCodeParams{
-		AggInterval:   cloudflare.F(radar.DNSTimeseriesGroupResponseCodeParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.DNSTimeseriesGroupResponseCodeParamsAggInterval1h),
 		ASN:           cloudflare.F([]string{"string"}),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
@@ -370,7 +370,7 @@ func TestDNSTimeseriesGroupResponseTTLWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.TimeseriesGroups.ResponseTTL(context.TODO(), radar.DNSTimeseriesGroupResponseTTLParams{
-		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupResponseTTLParamsAggInterval15m),
+		AggInterval:  cloudflare.F(radar.DNSTimeseriesGroupResponseTTLParamsAggInterval1h),
 		ASN:          cloudflare.F([]string{"string"}),
 		Continent:    cloudflare.F([]string{"string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now()}),

@@ -30,7 +30,7 @@ func TestDevicePolicyCustomNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.Policies.Custom.New(context.TODO(), zero_trust.DevicePolicyCustomNewParams{
 		AccountID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Match:               cloudflare.F(`user.identity == "test@cloudflare.com"`),
+		Match:               cloudflare.F(`identity.email == "test@cloudflare.com"`),
 		Name:                cloudflare.F("Allow Developers"),
 		Precedence:          cloudflare.F(100.000000),
 		AllowModeSwitch:     cloudflare.F(true),
@@ -41,16 +41,14 @@ func TestDevicePolicyCustomNewWithOptionalParams(t *testing.T) {
 		Description:         cloudflare.F("Policy for test teams."),
 		DisableAutoFallback: cloudflare.F(true),
 		Enabled:             cloudflare.F(true),
-		Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+		Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeUnionParam{zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam{
 			Address:     cloudflare.F("192.0.2.0/24"),
 			Description: cloudflare.F("Exclude testing domains from the tunnel"),
-			Host:        cloudflare.F("*.example.com"),
 		}}),
 		ExcludeOfficeIPs: cloudflare.F(true),
-		Include: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+		Include: cloudflare.F([]zero_trust.SplitTunnelIncludeUnionParam{zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam{
 			Address:     cloudflare.F("192.0.2.0/24"),
-			Description: cloudflare.F("Exclude testing domains from the tunnel"),
-			Host:        cloudflare.F("*.example.com"),
+			Description: cloudflare.F("Include testing domains in the tunnel"),
 		}}),
 		LANAllowMinutes:            cloudflare.F(30.000000),
 		LANAllowSubnetSize:         cloudflare.F(24.000000),
@@ -153,18 +151,18 @@ func TestDevicePolicyCustomEditWithOptionalParams(t *testing.T) {
 			Description:         cloudflare.F("Policy for test teams."),
 			DisableAutoFallback: cloudflare.F(true),
 			Enabled:             cloudflare.F(true),
-			Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+			Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeUnionParam{zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam{
 				Address:     cloudflare.F("192.0.2.0/24"),
 				Description: cloudflare.F("Exclude testing domains from the tunnel"),
-				Host:        cloudflare.F("*.example.com"),
 			}}),
 			ExcludeOfficeIPs: cloudflare.F(true),
-			Include: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+			Include: cloudflare.F([]zero_trust.SplitTunnelIncludeUnionParam{zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam{
 				Address:     cloudflare.F("192.0.2.0/24"),
-				Description: cloudflare.F("Exclude testing domains from the tunnel"),
-				Host:        cloudflare.F("*.example.com"),
+				Description: cloudflare.F("Include testing domains in the tunnel"),
 			}}),
-			Match:                      cloudflare.F(`user.identity == "test@cloudflare.com"`),
+			LANAllowMinutes:            cloudflare.F(30.000000),
+			LANAllowSubnetSize:         cloudflare.F(24.000000),
+			Match:                      cloudflare.F(`identity.email == "test@cloudflare.com"`),
 			Name:                       cloudflare.F("Allow Developers"),
 			Precedence:                 cloudflare.F(100.000000),
 			RegisterInterfaceIPWithDNS: cloudflare.F(true),

@@ -28,6 +28,7 @@ type QueueService struct {
 	Options   []option.RequestOption
 	Consumers *ConsumerService
 	Messages  *MessageService
+	Purge     *PurgeService
 }
 
 // NewQueueService generates a new service that applies the given options to each
@@ -38,6 +39,7 @@ func NewQueueService(opts ...option.RequestOption) (r *QueueService) {
 	r.Options = opts
 	r.Consumers = NewConsumerService(opts...)
 	r.Messages = NewMessageService(opts...)
+	r.Purge = NewPurgeService(opts...)
 	return
 }
 
@@ -121,6 +123,27 @@ func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDel
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s", body.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return
+}
+
+// Updates a Queue.
+func (r *QueueService) Edit(ctx context.Context, queueID string, params QueueEditParams, opts ...option.RequestOption) (res *Queue, err error) {
+	var env QueueEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/queues/%s", params.AccountID, queueID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -337,6 +360,8 @@ func (r QueueProducersType) IsKnown() bool {
 type QueueSettings struct {
 	// Number of seconds to delay delivery of all messages to consumers.
 	DeliveryDelay float64 `json:"delivery_delay"`
+	// Indicates if message delivery to consumers is currently paused.
+	DeliveryPaused bool `json:"delivery_paused"`
 	// Number of seconds after which an unconsumed message will be delayed.
 	MessageRetentionPeriod float64           `json:"message_retention_period"`
 	JSON                   queueSettingsJSON `json:"-"`
@@ -345,6 +370,7 @@ type QueueSettings struct {
 // queueSettingsJSON contains the JSON metadata for the struct [QueueSettings]
 type queueSettingsJSON struct {
 	DeliveryDelay          apijson.Field
+	DeliveryPaused         apijson.Field
 	MessageRetentionPeriod apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
@@ -410,6 +436,8 @@ func (r QueueProducersMqR2ProducerParam) implementsQueueProducersUnionParam() {}
 type QueueSettingsParam struct {
 	// Number of seconds to delay delivery of all messages to consumers.
 	DeliveryDelay param.Field[float64] `json:"delivery_delay"`
+	// Indicates if message delivery to consumers is currently paused.
+	DeliveryPaused param.Field[bool] `json:"delivery_paused"`
 	// Number of seconds after which an unconsumed message will be delayed.
 	MessageRetentionPeriod param.Field[float64] `json:"message_retention_period"`
 }
@@ -573,6 +601,59 @@ type QueueListParams struct {
 type QueueDeleteParams struct {
 	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type QueueEditParams struct {
+	// A Resource identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+	Queue     QueueParam          `json:"queue"`
+}
+
+func (r QueueEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Queue)
+}
+
+type QueueEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   Queue                 `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success QueueEditResponseEnvelopeSuccess `json:"success"`
+	JSON    queueEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// queueEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [QueueEditResponseEnvelope]
+type queueEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicates if the API call was successful or not.
+type QueueEditResponseEnvelopeSuccess bool
+
+const (
+	QueueEditResponseEnvelopeSuccessTrue QueueEditResponseEnvelopeSuccess = true
+)
+
+func (r QueueEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case QueueEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type QueueGetParams struct {

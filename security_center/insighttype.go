@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InsightTypeService contains methods and other services that help with
@@ -118,9 +117,9 @@ func (r InsightTypeGetParams) URLQuery() (v url.Values) {
 }
 
 type InsightTypeGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []InsightTypeGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []InsightTypeGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success InsightTypeGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  []InsightTypeGetResponse              `json:"result"`
 	JSON    insightTypeGetResponseEnvelopeJSON    `json:"-"`
@@ -145,7 +144,103 @@ func (r insightTypeGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type InsightTypeGetResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           InsightTypeGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             insightTypeGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// insightTypeGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [InsightTypeGetResponseEnvelopeErrors]
+type insightTypeGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InsightTypeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightTypeGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightTypeGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    insightTypeGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// insightTypeGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [InsightTypeGetResponseEnvelopeErrorsSource]
+type insightTypeGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightTypeGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightTypeGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightTypeGetResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           InsightTypeGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             insightTypeGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// insightTypeGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [InsightTypeGetResponseEnvelopeMessages]
+type insightTypeGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InsightTypeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightTypeGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type InsightTypeGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    insightTypeGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// insightTypeGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [InsightTypeGetResponseEnvelopeMessagesSource]
+type insightTypeGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InsightTypeGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r insightTypeGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type InsightTypeGetResponseEnvelopeSuccess bool
 
 const (

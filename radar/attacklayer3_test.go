@@ -29,7 +29,7 @@ func TestAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Timeseries(context.TODO(), radar.AttackLayer3TimeseriesParams{
-		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesParamsAggInterval1h),
 		ASN:           cloudflare.F([]string{"string"}),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
@@ -41,7 +41,7 @@ func TestAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
 		Location:      cloudflare.F([]string{"string"}),
 		Metric:        cloudflare.F(radar.AttackLayer3TimeseriesParamsMetricBytes),
 		Name:          cloudflare.F([]string{"main_series"}),
-		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesParamsNormalizationPercentageChange),
+		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesParamsNormalizationMin0Max),
 		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesParamsProtocol{radar.AttackLayer3TimeseriesParamsProtocolUdp}),
 	})
 	if err != nil {

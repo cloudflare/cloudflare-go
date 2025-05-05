@@ -115,6 +115,6 @@ func (r CaptionStatus) IsKnown() bool {
 }
 
 type CaptionGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

@@ -95,12 +95,9 @@ func (r loggingSettingJSON) RawJSON() string {
 
 // Logging settings by rule type.
 type LoggingSettingSettingsByRuleType struct {
-	// Logging settings for DNS firewall.
-	DNS interface{} `json:"dns"`
-	// Logging settings for HTTP/HTTPS firewall.
-	HTTP interface{} `json:"http"`
-	// Logging settings for Network firewall.
-	L4   interface{}                          `json:"l4"`
+	DNS  LoggingSettingSettingsByRuleTypeDNS  `json:"dns"`
+	HTTP LoggingSettingSettingsByRuleTypeHTTP `json:"http"`
+	L4   LoggingSettingSettingsByRuleTypeL4   `json:"l4"`
 	JSON loggingSettingSettingsByRuleTypeJSON `json:"-"`
 }
 
@@ -122,6 +119,81 @@ func (r loggingSettingSettingsByRuleTypeJSON) RawJSON() string {
 	return r.raw
 }
 
+type LoggingSettingSettingsByRuleTypeDNS struct {
+	// Log all requests to this service.
+	LogAll bool `json:"log_all"`
+	// Log only blocking requests to this service.
+	LogBlocks bool                                    `json:"log_blocks"`
+	JSON      loggingSettingSettingsByRuleTypeDNSJSON `json:"-"`
+}
+
+// loggingSettingSettingsByRuleTypeDNSJSON contains the JSON metadata for the
+// struct [LoggingSettingSettingsByRuleTypeDNS]
+type loggingSettingSettingsByRuleTypeDNSJSON struct {
+	LogAll      apijson.Field
+	LogBlocks   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoggingSettingSettingsByRuleTypeDNS) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loggingSettingSettingsByRuleTypeDNSJSON) RawJSON() string {
+	return r.raw
+}
+
+type LoggingSettingSettingsByRuleTypeHTTP struct {
+	// Log all requests to this service.
+	LogAll bool `json:"log_all"`
+	// Log only blocking requests to this service.
+	LogBlocks bool                                     `json:"log_blocks"`
+	JSON      loggingSettingSettingsByRuleTypeHTTPJSON `json:"-"`
+}
+
+// loggingSettingSettingsByRuleTypeHTTPJSON contains the JSON metadata for the
+// struct [LoggingSettingSettingsByRuleTypeHTTP]
+type loggingSettingSettingsByRuleTypeHTTPJSON struct {
+	LogAll      apijson.Field
+	LogBlocks   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoggingSettingSettingsByRuleTypeHTTP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loggingSettingSettingsByRuleTypeHTTPJSON) RawJSON() string {
+	return r.raw
+}
+
+type LoggingSettingSettingsByRuleTypeL4 struct {
+	// Log all requests to this service.
+	LogAll bool `json:"log_all"`
+	// Log only blocking requests to this service.
+	LogBlocks bool                                   `json:"log_blocks"`
+	JSON      loggingSettingSettingsByRuleTypeL4JSON `json:"-"`
+}
+
+// loggingSettingSettingsByRuleTypeL4JSON contains the JSON metadata for the struct
+// [LoggingSettingSettingsByRuleTypeL4]
+type loggingSettingSettingsByRuleTypeL4JSON struct {
+	LogAll      apijson.Field
+	LogBlocks   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoggingSettingSettingsByRuleTypeL4) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loggingSettingSettingsByRuleTypeL4JSON) RawJSON() string {
+	return r.raw
+}
+
 type LoggingSettingParam struct {
 	// Redact personally identifiable information from activity logging (PII fields
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
@@ -136,15 +208,45 @@ func (r LoggingSettingParam) MarshalJSON() (data []byte, err error) {
 
 // Logging settings by rule type.
 type LoggingSettingSettingsByRuleTypeParam struct {
-	// Logging settings for DNS firewall.
-	DNS param.Field[interface{}] `json:"dns"`
-	// Logging settings for HTTP/HTTPS firewall.
-	HTTP param.Field[interface{}] `json:"http"`
-	// Logging settings for Network firewall.
-	L4 param.Field[interface{}] `json:"l4"`
+	DNS  param.Field[LoggingSettingSettingsByRuleTypeDNSParam]  `json:"dns"`
+	HTTP param.Field[LoggingSettingSettingsByRuleTypeHTTPParam] `json:"http"`
+	L4   param.Field[LoggingSettingSettingsByRuleTypeL4Param]   `json:"l4"`
 }
 
 func (r LoggingSettingSettingsByRuleTypeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type LoggingSettingSettingsByRuleTypeDNSParam struct {
+	// Log all requests to this service.
+	LogAll param.Field[bool] `json:"log_all"`
+	// Log only blocking requests to this service.
+	LogBlocks param.Field[bool] `json:"log_blocks"`
+}
+
+func (r LoggingSettingSettingsByRuleTypeDNSParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type LoggingSettingSettingsByRuleTypeHTTPParam struct {
+	// Log all requests to this service.
+	LogAll param.Field[bool] `json:"log_all"`
+	// Log only blocking requests to this service.
+	LogBlocks param.Field[bool] `json:"log_blocks"`
+}
+
+func (r LoggingSettingSettingsByRuleTypeHTTPParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type LoggingSettingSettingsByRuleTypeL4Param struct {
+	// Log all requests to this service.
+	LogAll param.Field[bool] `json:"log_all"`
+	// Log only blocking requests to this service.
+	LogBlocks param.Field[bool] `json:"log_blocks"`
+}
+
+func (r LoggingSettingSettingsByRuleTypeL4Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

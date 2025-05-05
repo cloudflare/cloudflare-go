@@ -230,7 +230,7 @@ func (r robotsTXTTopDomainCategoriesResponseTop0JSON) RawJSON() string {
 }
 
 type RobotsTXTTopDomainCategoriesParams struct {
-	// Array of dates to filter the results.
+	// Filters results by the specified array of dates.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Format in which results will be returned.
 	Format param.Field[RobotsTXTTopDomainCategoriesParamsFormat] `query:"format"`

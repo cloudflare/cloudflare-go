@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DEXCommandService contains methods and other services that help with interacting
@@ -298,9 +297,9 @@ func (r DEXCommandNewParamsCommandsCommandArgsInterface) IsKnown() bool {
 }
 
 type DEXCommandNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DEXCommandNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DEXCommandNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success    DEXCommandNewResponseEnvelopeSuccess    `json:"success,required"`
 	Result     DEXCommandNewResponse                   `json:"result"`
 	ResultInfo DEXCommandNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -327,7 +326,103 @@ func (r dexCommandNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DEXCommandNewResponseEnvelopeErrors struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           DEXCommandNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dexCommandNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dexCommandNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DEXCommandNewResponseEnvelopeErrors]
+type dexCommandNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DEXCommandNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexCommandNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXCommandNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    dexCommandNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dexCommandNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [DEXCommandNewResponseEnvelopeErrorsSource]
+type dexCommandNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXCommandNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexCommandNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXCommandNewResponseEnvelopeMessages struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           DEXCommandNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dexCommandNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dexCommandNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DEXCommandNewResponseEnvelopeMessages]
+type dexCommandNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DEXCommandNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexCommandNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DEXCommandNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    dexCommandNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dexCommandNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [DEXCommandNewResponseEnvelopeMessagesSource]
+type dexCommandNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXCommandNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexCommandNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DEXCommandNewResponseEnvelopeSuccess bool
 
 const (
@@ -343,13 +438,13 @@ func (r DEXCommandNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXCommandNewResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                     `json:"total_count"`
 	JSON       dexCommandNewResponseEnvelopeResultInfoJSON `json:"-"`
 }

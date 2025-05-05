@@ -33,7 +33,7 @@ func TestCustomHostnameNewWithOptionalParams(t *testing.T) {
 		Hostname: cloudflare.F("app.example.com"),
 		SSL: cloudflare.F(custom_hostnames.CustomHostnameNewParamsSSL{
 			BundleMethod:         cloudflare.F(custom_hostnames.BundleMethodUbiquitous),
-			CertificateAuthority: cloudflare.F(shared.CertificateCADigicert),
+			CertificateAuthority: cloudflare.F(shared.CertificateCAGoogle),
 			CloudflareBranding:   cloudflare.F(false),
 			CustomCERTBundle: cloudflare.F([]custom_hostnames.CustomHostnameNewParamsSSLCustomCERTBundle{{
 				CustomCertificate: cloudflare.F("-----BEGIN CERTIFICATE-----\nMIIDdjCCAl6gAwIBAgIJAPnMg0Fs+/B0MA0GCSqGSIb3DQEBCwUAMFsx...\n-----END CERTIFICATE-----\n"),
@@ -46,7 +46,7 @@ func TestCustomHostnameNewWithOptionalParams(t *testing.T) {
 				Ciphers:       cloudflare.F([]string{"ECDHE-RSA-AES128-GCM-SHA256", "AES128-SHA"}),
 				EarlyHints:    cloudflare.F(custom_hostnames.CustomHostnameNewParamsSSLSettingsEarlyHintsOn),
 				HTTP2:         cloudflare.F(custom_hostnames.CustomHostnameNewParamsSSLSettingsHTTP2On),
-				MinTLSVersion: cloudflare.F(custom_hostnames.CustomHostnameNewParamsSSLSettingsMinTLSVersion1_0),
+				MinTLSVersion: cloudflare.F(custom_hostnames.CustomHostnameNewParamsSSLSettingsMinTLSVersion1_2),
 				TLS1_3:        cloudflare.F(custom_hostnames.CustomHostnameNewParamsSSLSettingsTLS1_3On),
 			}),
 			Type:     cloudflare.F(custom_hostnames.DomainValidationTypeDv),
@@ -81,7 +81,7 @@ func TestCustomHostnameListWithOptionalParams(t *testing.T) {
 	_, err := client.CustomHostnames.List(context.TODO(), custom_hostnames.CustomHostnameListParams{
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ID:        cloudflare.F("0d89c70d-ad9f-4843-b99f-6cc0252067e9"),
-		Direction: cloudflare.F(custom_hostnames.CustomHostnameListParamsDirectionAsc),
+		Direction: cloudflare.F(custom_hostnames.CustomHostnameListParamsDirectionDesc),
 		Hostname:  cloudflare.F("app.example.com"),
 		Order:     cloudflare.F(custom_hostnames.CustomHostnameListParamsOrderSSL),
 		Page:      cloudflare.F(1.000000),
@@ -151,7 +151,7 @@ func TestCustomHostnameEditWithOptionalParams(t *testing.T) {
 			CustomOriginSNI:    cloudflare.F("sni.example.com"),
 			SSL: cloudflare.F(custom_hostnames.CustomHostnameEditParamsSSL{
 				BundleMethod:         cloudflare.F(custom_hostnames.BundleMethodUbiquitous),
-				CertificateAuthority: cloudflare.F(shared.CertificateCADigicert),
+				CertificateAuthority: cloudflare.F(shared.CertificateCAGoogle),
 				CloudflareBranding:   cloudflare.F(false),
 				CustomCERTBundle: cloudflare.F([]custom_hostnames.CustomHostnameEditParamsSSLCustomCERTBundle{{
 					CustomCertificate: cloudflare.F("-----BEGIN CERTIFICATE-----\nMIIDdjCCAl6gAwIBAgIJAPnMg0Fs+/B0MA0GCSqGSIb3DQEBCwUAMFsx...\n-----END CERTIFICATE-----\n"),
@@ -164,7 +164,7 @@ func TestCustomHostnameEditWithOptionalParams(t *testing.T) {
 					Ciphers:       cloudflare.F([]string{"ECDHE-RSA-AES128-GCM-SHA256", "AES128-SHA"}),
 					EarlyHints:    cloudflare.F(custom_hostnames.CustomHostnameEditParamsSSLSettingsEarlyHintsOn),
 					HTTP2:         cloudflare.F(custom_hostnames.CustomHostnameEditParamsSSLSettingsHTTP2On),
-					MinTLSVersion: cloudflare.F(custom_hostnames.CustomHostnameEditParamsSSLSettingsMinTLSVersion1_0),
+					MinTLSVersion: cloudflare.F(custom_hostnames.CustomHostnameEditParamsSSLSettingsMinTLSVersion1_2),
 					TLS1_3:        cloudflare.F(custom_hostnames.CustomHostnameEditParamsSSLSettingsTLS1_3On),
 				}),
 				Type:     cloudflare.F(custom_hostnames.DomainValidationTypeDv),

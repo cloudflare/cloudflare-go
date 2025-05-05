@@ -32,7 +32,6 @@ func TestAS112TopDNSSECWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		radar.AS112TopDNSSECParamsDNSSECSupported,
 		radar.AS112TopDNSSECParams{
-			ASN:       cloudflare.F([]string{"string"}),
 			Continent: cloudflare.F([]string{"string"}),
 			DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 			DateRange: cloudflare.F([]string{"7d"}),
@@ -69,7 +68,6 @@ func TestAS112TopEdnsWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		radar.AS112TopEdnsParamsEdnsSupported,
 		radar.AS112TopEdnsParams{
-			ASN:       cloudflare.F([]string{"string"}),
 			Continent: cloudflare.F([]string{"string"}),
 			DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 			DateRange: cloudflare.F([]string{"7d"}),
@@ -106,7 +104,6 @@ func TestAS112TopIPVersionWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		radar.AS112TopIPVersionParamsIPVersionIPv4,
 		radar.AS112TopIPVersionParams{
-			ASN:       cloudflare.F([]string{"string"}),
 			Continent: cloudflare.F([]string{"string"}),
 			DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 			DateRange: cloudflare.F([]string{"7d"}),
@@ -140,7 +137,6 @@ func TestAS112TopLocationsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Top.Locations(context.TODO(), radar.AS112TopLocationsParams{
-		ASN:       cloudflare.F([]string{"string"}),
 		Continent: cloudflare.F([]string{"string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),

@@ -635,11 +635,12 @@ const (
 	CompressResponseRuleActionParametersAlgorithmsNameDefault CompressResponseRuleActionParametersAlgorithmsName = "default"
 	CompressResponseRuleActionParametersAlgorithmsNameGzip    CompressResponseRuleActionParametersAlgorithmsName = "gzip"
 	CompressResponseRuleActionParametersAlgorithmsNameBrotli  CompressResponseRuleActionParametersAlgorithmsName = "brotli"
+	CompressResponseRuleActionParametersAlgorithmsNameZstd    CompressResponseRuleActionParametersAlgorithmsName = "zstd"
 )
 
 func (r CompressResponseRuleActionParametersAlgorithmsName) IsKnown() bool {
 	switch r {
-	case CompressResponseRuleActionParametersAlgorithmsNameNone, CompressResponseRuleActionParametersAlgorithmsNameAuto, CompressResponseRuleActionParametersAlgorithmsNameDefault, CompressResponseRuleActionParametersAlgorithmsNameGzip, CompressResponseRuleActionParametersAlgorithmsNameBrotli:
+	case CompressResponseRuleActionParametersAlgorithmsNameNone, CompressResponseRuleActionParametersAlgorithmsNameAuto, CompressResponseRuleActionParametersAlgorithmsNameDefault, CompressResponseRuleActionParametersAlgorithmsNameGzip, CompressResponseRuleActionParametersAlgorithmsNameBrotli, CompressResponseRuleActionParametersAlgorithmsNameZstd:
 		return true
 	}
 	return false
@@ -3680,8 +3681,10 @@ func (r *RewriteRuleActionParametersHeader) UnmarshalJSON(data []byte) (err erro
 //
 // Possible runtime types of the union are
 // [rulesets.RewriteRuleActionParametersHeadersRemoveHeader],
-// [rulesets.RewriteRuleActionParametersHeadersStaticHeader],
-// [rulesets.RewriteRuleActionParametersHeadersDynamicHeader].
+// [rulesets.RewriteRuleActionParametersHeadersAddStaticHeader],
+// [rulesets.RewriteRuleActionParametersHeadersSetStaticHeader],
+// [rulesets.RewriteRuleActionParametersHeadersAddDynamicHeader],
+// [rulesets.RewriteRuleActionParametersHeadersSetDynamicHeader].
 func (r RewriteRuleActionParametersHeader) AsUnion() RewriteRuleActionParametersHeadersUnion {
 	return r.union
 }
@@ -3689,8 +3692,10 @@ func (r RewriteRuleActionParametersHeader) AsUnion() RewriteRuleActionParameters
 // Remove the header from the request.
 //
 // Union satisfied by [rulesets.RewriteRuleActionParametersHeadersRemoveHeader],
-// [rulesets.RewriteRuleActionParametersHeadersStaticHeader] or
-// [rulesets.RewriteRuleActionParametersHeadersDynamicHeader].
+// [rulesets.RewriteRuleActionParametersHeadersAddStaticHeader],
+// [rulesets.RewriteRuleActionParametersHeadersSetStaticHeader],
+// [rulesets.RewriteRuleActionParametersHeadersAddDynamicHeader] or
+// [rulesets.RewriteRuleActionParametersHeadersSetDynamicHeader].
 type RewriteRuleActionParametersHeadersUnion interface {
 	implementsRewriteRuleActionParametersHeader()
 }
@@ -3705,11 +3710,19 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RewriteRuleActionParametersHeadersStaticHeader{}),
+			Type:       reflect.TypeOf(RewriteRuleActionParametersHeadersAddStaticHeader{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RewriteRuleActionParametersHeadersDynamicHeader{}),
+			Type:       reflect.TypeOf(RewriteRuleActionParametersHeadersSetStaticHeader{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RewriteRuleActionParametersHeadersAddDynamicHeader{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RewriteRuleActionParametersHeadersSetDynamicHeader{}),
 		},
 	)
 }
@@ -3753,85 +3766,169 @@ func (r RewriteRuleActionParametersHeadersRemoveHeaderOperation) IsKnown() bool 
 	return false
 }
 
-// Set a request header with a static value.
-type RewriteRuleActionParametersHeadersStaticHeader struct {
-	Operation RewriteRuleActionParametersHeadersStaticHeaderOperation `json:"operation,required"`
+// Add a request header with a static value.
+type RewriteRuleActionParametersHeadersAddStaticHeader struct {
+	Operation RewriteRuleActionParametersHeadersAddStaticHeaderOperation `json:"operation,required"`
 	// Static value for the header.
-	Value string                                             `json:"value,required"`
-	JSON  rewriteRuleActionParametersHeadersStaticHeaderJSON `json:"-"`
+	Value string                                                `json:"value,required"`
+	JSON  rewriteRuleActionParametersHeadersAddStaticHeaderJSON `json:"-"`
 }
 
-// rewriteRuleActionParametersHeadersStaticHeaderJSON contains the JSON metadata
-// for the struct [RewriteRuleActionParametersHeadersStaticHeader]
-type rewriteRuleActionParametersHeadersStaticHeaderJSON struct {
+// rewriteRuleActionParametersHeadersAddStaticHeaderJSON contains the JSON metadata
+// for the struct [RewriteRuleActionParametersHeadersAddStaticHeader]
+type rewriteRuleActionParametersHeadersAddStaticHeaderJSON struct {
 	Operation   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RewriteRuleActionParametersHeadersStaticHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *RewriteRuleActionParametersHeadersAddStaticHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r rewriteRuleActionParametersHeadersStaticHeaderJSON) RawJSON() string {
+func (r rewriteRuleActionParametersHeadersAddStaticHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RewriteRuleActionParametersHeadersStaticHeader) implementsRewriteRuleActionParametersHeader() {
+func (r RewriteRuleActionParametersHeadersAddStaticHeader) implementsRewriteRuleActionParametersHeader() {
 }
 
-type RewriteRuleActionParametersHeadersStaticHeaderOperation string
+type RewriteRuleActionParametersHeadersAddStaticHeaderOperation string
 
 const (
-	RewriteRuleActionParametersHeadersStaticHeaderOperationSet RewriteRuleActionParametersHeadersStaticHeaderOperation = "set"
+	RewriteRuleActionParametersHeadersAddStaticHeaderOperationAdd RewriteRuleActionParametersHeadersAddStaticHeaderOperation = "add"
 )
 
-func (r RewriteRuleActionParametersHeadersStaticHeaderOperation) IsKnown() bool {
+func (r RewriteRuleActionParametersHeadersAddStaticHeaderOperation) IsKnown() bool {
 	switch r {
-	case RewriteRuleActionParametersHeadersStaticHeaderOperationSet:
+	case RewriteRuleActionParametersHeadersAddStaticHeaderOperationAdd:
 		return true
 	}
 	return false
 }
 
-// Set a request header with a dynamic value.
-type RewriteRuleActionParametersHeadersDynamicHeader struct {
-	// Expression for the header value.
-	Expression string                                                   `json:"expression,required"`
-	Operation  RewriteRuleActionParametersHeadersDynamicHeaderOperation `json:"operation,required"`
-	JSON       rewriteRuleActionParametersHeadersDynamicHeaderJSON      `json:"-"`
+// Set a request header with a static value.
+type RewriteRuleActionParametersHeadersSetStaticHeader struct {
+	Operation RewriteRuleActionParametersHeadersSetStaticHeaderOperation `json:"operation,required"`
+	// Static value for the header.
+	Value string                                                `json:"value,required"`
+	JSON  rewriteRuleActionParametersHeadersSetStaticHeaderJSON `json:"-"`
 }
 
-// rewriteRuleActionParametersHeadersDynamicHeaderJSON contains the JSON metadata
-// for the struct [RewriteRuleActionParametersHeadersDynamicHeader]
-type rewriteRuleActionParametersHeadersDynamicHeaderJSON struct {
+// rewriteRuleActionParametersHeadersSetStaticHeaderJSON contains the JSON metadata
+// for the struct [RewriteRuleActionParametersHeadersSetStaticHeader]
+type rewriteRuleActionParametersHeadersSetStaticHeaderJSON struct {
+	Operation   apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RewriteRuleActionParametersHeadersSetStaticHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rewriteRuleActionParametersHeadersSetStaticHeaderJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RewriteRuleActionParametersHeadersSetStaticHeader) implementsRewriteRuleActionParametersHeader() {
+}
+
+type RewriteRuleActionParametersHeadersSetStaticHeaderOperation string
+
+const (
+	RewriteRuleActionParametersHeadersSetStaticHeaderOperationSet RewriteRuleActionParametersHeadersSetStaticHeaderOperation = "set"
+)
+
+func (r RewriteRuleActionParametersHeadersSetStaticHeaderOperation) IsKnown() bool {
+	switch r {
+	case RewriteRuleActionParametersHeadersSetStaticHeaderOperationSet:
+		return true
+	}
+	return false
+}
+
+// Add a request header with a dynamic value.
+type RewriteRuleActionParametersHeadersAddDynamicHeader struct {
+	// Expression for the header value.
+	Expression string                                                      `json:"expression,required"`
+	Operation  RewriteRuleActionParametersHeadersAddDynamicHeaderOperation `json:"operation,required"`
+	JSON       rewriteRuleActionParametersHeadersAddDynamicHeaderJSON      `json:"-"`
+}
+
+// rewriteRuleActionParametersHeadersAddDynamicHeaderJSON contains the JSON
+// metadata for the struct [RewriteRuleActionParametersHeadersAddDynamicHeader]
+type rewriteRuleActionParametersHeadersAddDynamicHeaderJSON struct {
 	Expression  apijson.Field
 	Operation   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RewriteRuleActionParametersHeadersDynamicHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *RewriteRuleActionParametersHeadersAddDynamicHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r rewriteRuleActionParametersHeadersDynamicHeaderJSON) RawJSON() string {
+func (r rewriteRuleActionParametersHeadersAddDynamicHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RewriteRuleActionParametersHeadersDynamicHeader) implementsRewriteRuleActionParametersHeader() {
+func (r RewriteRuleActionParametersHeadersAddDynamicHeader) implementsRewriteRuleActionParametersHeader() {
 }
 
-type RewriteRuleActionParametersHeadersDynamicHeaderOperation string
+type RewriteRuleActionParametersHeadersAddDynamicHeaderOperation string
 
 const (
-	RewriteRuleActionParametersHeadersDynamicHeaderOperationSet RewriteRuleActionParametersHeadersDynamicHeaderOperation = "set"
+	RewriteRuleActionParametersHeadersAddDynamicHeaderOperationAdd RewriteRuleActionParametersHeadersAddDynamicHeaderOperation = "add"
 )
 
-func (r RewriteRuleActionParametersHeadersDynamicHeaderOperation) IsKnown() bool {
+func (r RewriteRuleActionParametersHeadersAddDynamicHeaderOperation) IsKnown() bool {
 	switch r {
-	case RewriteRuleActionParametersHeadersDynamicHeaderOperationSet:
+	case RewriteRuleActionParametersHeadersAddDynamicHeaderOperationAdd:
+		return true
+	}
+	return false
+}
+
+// Set a request header with a dynamic value.
+type RewriteRuleActionParametersHeadersSetDynamicHeader struct {
+	// Expression for the header value.
+	Expression string                                                      `json:"expression,required"`
+	Operation  RewriteRuleActionParametersHeadersSetDynamicHeaderOperation `json:"operation,required"`
+	JSON       rewriteRuleActionParametersHeadersSetDynamicHeaderJSON      `json:"-"`
+}
+
+// rewriteRuleActionParametersHeadersSetDynamicHeaderJSON contains the JSON
+// metadata for the struct [RewriteRuleActionParametersHeadersSetDynamicHeader]
+type rewriteRuleActionParametersHeadersSetDynamicHeaderJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RewriteRuleActionParametersHeadersSetDynamicHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rewriteRuleActionParametersHeadersSetDynamicHeaderJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RewriteRuleActionParametersHeadersSetDynamicHeader) implementsRewriteRuleActionParametersHeader() {
+}
+
+type RewriteRuleActionParametersHeadersSetDynamicHeaderOperation string
+
+const (
+	RewriteRuleActionParametersHeadersSetDynamicHeaderOperationSet RewriteRuleActionParametersHeadersSetDynamicHeaderOperation = "set"
+)
+
+func (r RewriteRuleActionParametersHeadersSetDynamicHeaderOperation) IsKnown() bool {
+	switch r {
+	case RewriteRuleActionParametersHeadersSetDynamicHeaderOperationSet:
 		return true
 	}
 	return false
@@ -3841,12 +3938,13 @@ type RewriteRuleActionParametersHeadersOperation string
 
 const (
 	RewriteRuleActionParametersHeadersOperationRemove RewriteRuleActionParametersHeadersOperation = "remove"
+	RewriteRuleActionParametersHeadersOperationAdd    RewriteRuleActionParametersHeadersOperation = "add"
 	RewriteRuleActionParametersHeadersOperationSet    RewriteRuleActionParametersHeadersOperation = "set"
 )
 
 func (r RewriteRuleActionParametersHeadersOperation) IsKnown() bool {
 	switch r {
-	case RewriteRuleActionParametersHeadersOperationRemove, RewriteRuleActionParametersHeadersOperationSet:
+	case RewriteRuleActionParametersHeadersOperationRemove, RewriteRuleActionParametersHeadersOperationAdd, RewriteRuleActionParametersHeadersOperationSet:
 		return true
 	}
 	return false
@@ -4036,8 +4134,10 @@ func (r RewriteRuleActionParametersHeaderParam) implementsRewriteRuleActionParam
 // Remove the header from the request.
 //
 // Satisfied by [rulesets.RewriteRuleActionParametersHeadersRemoveHeaderParam],
-// [rulesets.RewriteRuleActionParametersHeadersStaticHeaderParam],
-// [rulesets.RewriteRuleActionParametersHeadersDynamicHeaderParam],
+// [rulesets.RewriteRuleActionParametersHeadersAddStaticHeaderParam],
+// [rulesets.RewriteRuleActionParametersHeadersSetStaticHeaderParam],
+// [rulesets.RewriteRuleActionParametersHeadersAddDynamicHeaderParam],
+// [rulesets.RewriteRuleActionParametersHeadersSetDynamicHeaderParam],
 // [RewriteRuleActionParametersHeaderParam].
 type RewriteRuleActionParametersHeadersUnionParam interface {
 	implementsRewriteRuleActionParametersHeadersUnionParam()
@@ -4055,32 +4155,60 @@ func (r RewriteRuleActionParametersHeadersRemoveHeaderParam) MarshalJSON() (data
 func (r RewriteRuleActionParametersHeadersRemoveHeaderParam) implementsRewriteRuleActionParametersHeadersUnionParam() {
 }
 
-// Set a request header with a static value.
-type RewriteRuleActionParametersHeadersStaticHeaderParam struct {
-	Operation param.Field[RewriteRuleActionParametersHeadersStaticHeaderOperation] `json:"operation,required"`
+// Add a request header with a static value.
+type RewriteRuleActionParametersHeadersAddStaticHeaderParam struct {
+	Operation param.Field[RewriteRuleActionParametersHeadersAddStaticHeaderOperation] `json:"operation,required"`
 	// Static value for the header.
 	Value param.Field[string] `json:"value,required"`
 }
 
-func (r RewriteRuleActionParametersHeadersStaticHeaderParam) MarshalJSON() (data []byte, err error) {
+func (r RewriteRuleActionParametersHeadersAddStaticHeaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RewriteRuleActionParametersHeadersStaticHeaderParam) implementsRewriteRuleActionParametersHeadersUnionParam() {
+func (r RewriteRuleActionParametersHeadersAddStaticHeaderParam) implementsRewriteRuleActionParametersHeadersUnionParam() {
+}
+
+// Set a request header with a static value.
+type RewriteRuleActionParametersHeadersSetStaticHeaderParam struct {
+	Operation param.Field[RewriteRuleActionParametersHeadersSetStaticHeaderOperation] `json:"operation,required"`
+	// Static value for the header.
+	Value param.Field[string] `json:"value,required"`
+}
+
+func (r RewriteRuleActionParametersHeadersSetStaticHeaderParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RewriteRuleActionParametersHeadersSetStaticHeaderParam) implementsRewriteRuleActionParametersHeadersUnionParam() {
+}
+
+// Add a request header with a dynamic value.
+type RewriteRuleActionParametersHeadersAddDynamicHeaderParam struct {
+	// Expression for the header value.
+	Expression param.Field[string]                                                      `json:"expression,required"`
+	Operation  param.Field[RewriteRuleActionParametersHeadersAddDynamicHeaderOperation] `json:"operation,required"`
+}
+
+func (r RewriteRuleActionParametersHeadersAddDynamicHeaderParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RewriteRuleActionParametersHeadersAddDynamicHeaderParam) implementsRewriteRuleActionParametersHeadersUnionParam() {
 }
 
 // Set a request header with a dynamic value.
-type RewriteRuleActionParametersHeadersDynamicHeaderParam struct {
+type RewriteRuleActionParametersHeadersSetDynamicHeaderParam struct {
 	// Expression for the header value.
-	Expression param.Field[string]                                                   `json:"expression,required"`
-	Operation  param.Field[RewriteRuleActionParametersHeadersDynamicHeaderOperation] `json:"operation,required"`
+	Expression param.Field[string]                                                      `json:"expression,required"`
+	Operation  param.Field[RewriteRuleActionParametersHeadersSetDynamicHeaderOperation] `json:"operation,required"`
 }
 
-func (r RewriteRuleActionParametersHeadersDynamicHeaderParam) MarshalJSON() (data []byte, err error) {
+func (r RewriteRuleActionParametersHeadersSetDynamicHeaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RewriteRuleActionParametersHeadersDynamicHeaderParam) implementsRewriteRuleActionParametersHeadersUnionParam() {
+func (r RewriteRuleActionParametersHeadersSetDynamicHeaderParam) implementsRewriteRuleActionParametersHeadersUnionParam() {
 }
 
 // URI to rewrite the request to.
@@ -7385,7 +7513,7 @@ func (r SkipRuleAction) IsKnown() bool {
 // The parameters configuring the rule's action.
 type SkipRuleActionParameters struct {
 	// A list of phases to skip the execution of. This option is incompatible with the
-	// ruleset and rulesets options.
+	// rulesets options.
 	Phases []Phase `json:"phases"`
 	// A list of legacy security products to skip the execution of.
 	Products []SkipRuleActionParametersProduct `json:"products"`
@@ -7393,7 +7521,8 @@ type SkipRuleActionParameters struct {
 	// execution of. This option is incompatible with the ruleset option.
 	Rules map[string][]string `json:"rules"`
 	// A ruleset to skip the execution of. This option is incompatible with the
-	// rulesets, rules and phases options.
+	// rulesets, rules. It can be incompatible with phases options base on the phase of
+	// the ruleset.
 	Ruleset SkipRuleActionParametersRuleset `json:"ruleset"`
 	// A list of ruleset IDs to skip the execution of. This option is incompatible with
 	// the ruleset and phases options.
@@ -7443,7 +7572,8 @@ func (r SkipRuleActionParametersProduct) IsKnown() bool {
 }
 
 // A ruleset to skip the execution of. This option is incompatible with the
-// rulesets, rules and phases options.
+// rulesets, rules. It can be incompatible with phases options base on the phase of
+// the ruleset.
 type SkipRuleActionParametersRuleset string
 
 const (
@@ -7588,7 +7718,7 @@ func (r SkipRuleParam) implementsPhaseUpdateParamsRuleUnion() {}
 // The parameters configuring the rule's action.
 type SkipRuleActionParametersParam struct {
 	// A list of phases to skip the execution of. This option is incompatible with the
-	// ruleset and rulesets options.
+	// rulesets options.
 	Phases param.Field[[]Phase] `json:"phases"`
 	// A list of legacy security products to skip the execution of.
 	Products param.Field[[]SkipRuleActionParametersProduct] `json:"products"`
@@ -7596,7 +7726,8 @@ type SkipRuleActionParametersParam struct {
 	// execution of. This option is incompatible with the ruleset option.
 	Rules param.Field[map[string][]string] `json:"rules"`
 	// A ruleset to skip the execution of. This option is incompatible with the
-	// rulesets, rules and phases options.
+	// rulesets, rules. It can be incompatible with phases options base on the phase of
+	// the ruleset.
 	Ruleset param.Field[SkipRuleActionParametersRuleset] `json:"ruleset"`
 	// A list of ruleset IDs to skip the execution of. This option is incompatible with
 	// the ruleset and phases options.

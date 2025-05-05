@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -71,7 +70,7 @@ func (r *DLPProfileService) ListAutoPaging(ctx context.Context, params DLPProfil
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Fetches a DLP profile by ID
+// Fetches a DLP profile by ID.
 func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLPProfileGetParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfileGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -135,12 +134,12 @@ func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
 }
 
 type Profile struct {
-	// The id of the profile (uuid)
+	// The id of the profile (uuid).
 	ID string `json:"id,required" format:"uuid"`
 	// This field can have the runtime type of [[]ProfileCustomProfileEntry],
 	// [[]ProfilePredefinedProfileEntry], [[]ProfileIntegrationProfileEntry].
 	Entries interface{} `json:"entries,required"`
-	// The name of the profile
+	// The name of the profile.
 	Name             string      `json:"name,required"`
 	Type             ProfileType `json:"type,required"`
 	AIContextEnabled bool        `json:"ai_context_enabled"`
@@ -150,14 +149,14 @@ type Profile struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
-	// When the profile was created
+	// When the profile was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The description of the profile
+	// The description of the profile.
 	Description string `json:"description,nullable"`
 	OCREnabled  bool   `json:"ocr_enabled"`
-	// Whether this profile can be accessed by anyone
+	// Whether this profile can be accessed by anyone.
 	OpenAccess bool `json:"open_access"`
-	// When the profile was lasted updated
+	// When the profile was lasted updated.
 	UpdatedAt time.Time   `json:"updated_at" format:"date-time"`
 	JSON      profileJSON `json:"-"`
 	union     ProfileUnion
@@ -230,25 +229,25 @@ func init() {
 }
 
 type ProfileCustomProfile struct {
-	// The id of the profile (uuid)
+	// The id of the profile (uuid).
 	ID string `json:"id,required" format:"uuid"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount int64 `json:"allowed_match_count,required"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness,required"`
-	// When the profile was created
+	// When the profile was created.
 	CreatedAt time.Time                   `json:"created_at,required" format:"date-time"`
 	Entries   []ProfileCustomProfileEntry `json:"entries,required"`
-	// The name of the profile
+	// The name of the profile.
 	Name       string                   `json:"name,required"`
 	OCREnabled bool                     `json:"ocr_enabled,required"`
 	Type       ProfileCustomProfileType `json:"type,required"`
-	// When the profile was lasted updated
+	// When the profile was lasted updated.
 	UpdatedAt           time.Time                               `json:"updated_at,required" format:"date-time"`
 	AIContextEnabled    bool                                    `json:"ai_context_enabled"`
 	ConfidenceThreshold ProfileCustomProfileConfidenceThreshold `json:"confidence_threshold"`
-	// The description of the profile
+	// The description of the profile.
 	Description string                   `json:"description,nullable"`
 	JSON        profileCustomProfileJSON `json:"-"`
 }
@@ -287,6 +286,9 @@ type ProfileCustomProfileEntry struct {
 	Enabled bool                            `json:"enabled,required"`
 	Name    string                          `json:"name,required"`
 	Type    ProfileCustomProfileEntriesType `json:"type,required"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [ProfileCustomProfileEntriesPredefinedEntryConfidence].
 	Confidence interface{} `json:"confidence"`
@@ -304,19 +306,20 @@ type ProfileCustomProfileEntry struct {
 // profileCustomProfileEntryJSON contains the JSON metadata for the struct
 // [ProfileCustomProfileEntry]
 type profileCustomProfileEntryJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	Confidence  apijson.Field
-	CreatedAt   apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	Secret      apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Type          apijson.Field
+	CaseSensitive apijson.Field
+	Confidence    apijson.Field
+	CreatedAt     apijson.Field
+	Pattern       apijson.Field
+	ProfileID     apijson.Field
+	Secret        apijson.Field
+	UpdatedAt     apijson.Field
+	WordList      apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r profileCustomProfileEntryJSON) RawJSON() string {
@@ -466,10 +469,10 @@ func (r profileCustomProfileEntriesPredefinedEntryJSON) RawJSON() string {
 func (r ProfileCustomProfileEntriesPredefinedEntry) implementsProfileCustomProfileEntry() {}
 
 type ProfileCustomProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                                     `json:"available,required"`
 	JSON      profileCustomProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -555,28 +558,32 @@ func (r ProfileCustomProfileEntriesIntegrationEntryType) IsKnown() bool {
 }
 
 type ProfileCustomProfileEntriesExactDataEntry struct {
-	ID        string                                        `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                     `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                          `json:"enabled,required"`
-	Name      string                                        `json:"name,required"`
-	Secret    bool                                          `json:"secret,required"`
-	Type      ProfileCustomProfileEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt time.Time                                     `json:"updated_at,required" format:"date-time"`
-	JSON      profileCustomProfileEntriesExactDataEntryJSON `json:"-"`
+	ID string `json:"id,required" format:"uuid"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool                                          `json:"case_sensitive,required"`
+	CreatedAt     time.Time                                     `json:"created_at,required" format:"date-time"`
+	Enabled       bool                                          `json:"enabled,required"`
+	Name          string                                        `json:"name,required"`
+	Secret        bool                                          `json:"secret,required"`
+	Type          ProfileCustomProfileEntriesExactDataEntryType `json:"type,required"`
+	UpdatedAt     time.Time                                     `json:"updated_at,required" format:"date-time"`
+	JSON          profileCustomProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
 // profileCustomProfileEntriesExactDataEntryJSON contains the JSON metadata for the
 // struct [ProfileCustomProfileEntriesExactDataEntry]
 type profileCustomProfileEntriesExactDataEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	CaseSensitive apijson.Field
+	CreatedAt     apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Secret        apijson.Field
+	Type          apijson.Field
+	UpdatedAt     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ProfileCustomProfileEntriesExactDataEntry) UnmarshalJSON(data []byte) (err error) {
@@ -704,11 +711,11 @@ func (r ProfileCustomProfileConfidenceThreshold) IsKnown() bool {
 }
 
 type ProfilePredefinedProfile struct {
-	// The id of the predefined profile (uuid)
+	// The id of the predefined profile (uuid).
 	ID                string                          `json:"id,required" format:"uuid"`
 	AllowedMatchCount int64                           `json:"allowed_match_count,required"`
 	Entries           []ProfilePredefinedProfileEntry `json:"entries,required"`
-	// The name of the predefined profile
+	// The name of the predefined profile.
 	Name                string                                      `json:"name,required"`
 	Type                ProfilePredefinedProfileType                `json:"type,required"`
 	AIContextEnabled    bool                                        `json:"ai_context_enabled"`
@@ -717,7 +724,7 @@ type ProfilePredefinedProfile struct {
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
 	OCREnabled       bool             `json:"ocr_enabled"`
-	// Whether this profile can be accessed by anyone
+	// Whether this profile can be accessed by anyone.
 	OpenAccess bool                         `json:"open_access"`
 	JSON       profilePredefinedProfileJSON `json:"-"`
 }
@@ -754,6 +761,9 @@ type ProfilePredefinedProfileEntry struct {
 	Enabled bool                                `json:"enabled,required"`
 	Name    string                              `json:"name,required"`
 	Type    ProfilePredefinedProfileEntriesType `json:"type,required"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [ProfilePredefinedProfileEntriesPredefinedEntryConfidence].
 	Confidence interface{} `json:"confidence"`
@@ -771,19 +781,20 @@ type ProfilePredefinedProfileEntry struct {
 // profilePredefinedProfileEntryJSON contains the JSON metadata for the struct
 // [ProfilePredefinedProfileEntry]
 type profilePredefinedProfileEntryJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	Confidence  apijson.Field
-	CreatedAt   apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	Secret      apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Type          apijson.Field
+	CaseSensitive apijson.Field
+	Confidence    apijson.Field
+	CreatedAt     apijson.Field
+	Pattern       apijson.Field
+	ProfileID     apijson.Field
+	Secret        apijson.Field
+	UpdatedAt     apijson.Field
+	WordList      apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r profilePredefinedProfileEntryJSON) RawJSON() string {
@@ -933,10 +944,10 @@ func (r profilePredefinedProfileEntriesPredefinedEntryJSON) RawJSON() string {
 func (r ProfilePredefinedProfileEntriesPredefinedEntry) implementsProfilePredefinedProfileEntry() {}
 
 type ProfilePredefinedProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                                         `json:"available,required"`
 	JSON      profilePredefinedProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -1023,28 +1034,32 @@ func (r ProfilePredefinedProfileEntriesIntegrationEntryType) IsKnown() bool {
 }
 
 type ProfilePredefinedProfileEntriesExactDataEntry struct {
-	ID        string                                            `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                         `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                              `json:"enabled,required"`
-	Name      string                                            `json:"name,required"`
-	Secret    bool                                              `json:"secret,required"`
-	Type      ProfilePredefinedProfileEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt time.Time                                         `json:"updated_at,required" format:"date-time"`
-	JSON      profilePredefinedProfileEntriesExactDataEntryJSON `json:"-"`
+	ID string `json:"id,required" format:"uuid"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool                                              `json:"case_sensitive,required"`
+	CreatedAt     time.Time                                         `json:"created_at,required" format:"date-time"`
+	Enabled       bool                                              `json:"enabled,required"`
+	Name          string                                            `json:"name,required"`
+	Secret        bool                                              `json:"secret,required"`
+	Type          ProfilePredefinedProfileEntriesExactDataEntryType `json:"type,required"`
+	UpdatedAt     time.Time                                         `json:"updated_at,required" format:"date-time"`
+	JSON          profilePredefinedProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
 // profilePredefinedProfileEntriesExactDataEntryJSON contains the JSON metadata for
 // the struct [ProfilePredefinedProfileEntriesExactDataEntry]
 type profilePredefinedProfileEntriesExactDataEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	CaseSensitive apijson.Field
+	CreatedAt     apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Secret        apijson.Field
+	Type          apijson.Field
+	UpdatedAt     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ProfilePredefinedProfileEntriesExactDataEntry) UnmarshalJSON(data []byte) (err error) {
@@ -1178,7 +1193,7 @@ type ProfileIntegrationProfile struct {
 	Name      string                           `json:"name,required"`
 	Type      ProfileIntegrationProfileType    `json:"type,required"`
 	UpdatedAt time.Time                        `json:"updated_at,required" format:"date-time"`
-	// The description of the profile
+	// The description of the profile.
 	Description string                        `json:"description,nullable"`
 	JSON        profileIntegrationProfileJSON `json:"-"`
 }
@@ -1212,6 +1227,9 @@ type ProfileIntegrationProfileEntry struct {
 	Enabled bool                                 `json:"enabled,required"`
 	Name    string                               `json:"name,required"`
 	Type    ProfileIntegrationProfileEntriesType `json:"type,required"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [ProfileIntegrationProfileEntriesPredefinedEntryConfidence].
 	Confidence interface{} `json:"confidence"`
@@ -1229,19 +1247,20 @@ type ProfileIntegrationProfileEntry struct {
 // profileIntegrationProfileEntryJSON contains the JSON metadata for the struct
 // [ProfileIntegrationProfileEntry]
 type profileIntegrationProfileEntryJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	Confidence  apijson.Field
-	CreatedAt   apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	Secret      apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Type          apijson.Field
+	CaseSensitive apijson.Field
+	Confidence    apijson.Field
+	CreatedAt     apijson.Field
+	Pattern       apijson.Field
+	ProfileID     apijson.Field
+	Secret        apijson.Field
+	UpdatedAt     apijson.Field
+	WordList      apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r profileIntegrationProfileEntryJSON) RawJSON() string {
@@ -1391,10 +1410,10 @@ func (r profileIntegrationProfileEntriesPredefinedEntryJSON) RawJSON() string {
 func (r ProfileIntegrationProfileEntriesPredefinedEntry) implementsProfileIntegrationProfileEntry() {}
 
 type ProfileIntegrationProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation
+	// Indicates whether this entry has AI remote service validation.
 	AIContextAvailable bool `json:"ai_context_available,required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service
+	// service.
 	Available bool                                                          `json:"available,required"`
 	JSON      profileIntegrationProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
@@ -1482,28 +1501,32 @@ func (r ProfileIntegrationProfileEntriesIntegrationEntryType) IsKnown() bool {
 }
 
 type ProfileIntegrationProfileEntriesExactDataEntry struct {
-	ID        string                                             `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                          `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                               `json:"enabled,required"`
-	Name      string                                             `json:"name,required"`
-	Secret    bool                                               `json:"secret,required"`
-	Type      ProfileIntegrationProfileEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt time.Time                                          `json:"updated_at,required" format:"date-time"`
-	JSON      profileIntegrationProfileEntriesExactDataEntryJSON `json:"-"`
+	ID string `json:"id,required" format:"uuid"`
+	// Only applies to custom word lists. Determines if the words should be matched in
+	// a case-sensitive manner Cannot be set to false if secret is true
+	CaseSensitive bool                                               `json:"case_sensitive,required"`
+	CreatedAt     time.Time                                          `json:"created_at,required" format:"date-time"`
+	Enabled       bool                                               `json:"enabled,required"`
+	Name          string                                             `json:"name,required"`
+	Secret        bool                                               `json:"secret,required"`
+	Type          ProfileIntegrationProfileEntriesExactDataEntryType `json:"type,required"`
+	UpdatedAt     time.Time                                          `json:"updated_at,required" format:"date-time"`
+	JSON          profileIntegrationProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
 // profileIntegrationProfileEntriesExactDataEntryJSON contains the JSON metadata
 // for the struct [ProfileIntegrationProfileEntriesExactDataEntry]
 type profileIntegrationProfileEntriesExactDataEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	CaseSensitive apijson.Field
+	CreatedAt     apijson.Field
+	Enabled       apijson.Field
+	Name          apijson.Field
+	Secret        apijson.Field
+	Type          apijson.Field
+	UpdatedAt     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ProfileIntegrationProfileEntriesExactDataEntry) UnmarshalJSON(data []byte) (err error) {
@@ -1699,9 +1722,9 @@ type DLPProfileGetParams struct {
 }
 
 type DLPProfileGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []DLPProfileGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPProfileGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success DLPProfileGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Profile                              `json:"result"`
 	JSON    dlpProfileGetResponseEnvelopeJSON    `json:"-"`
@@ -1726,7 +1749,103 @@ func (r dlpProfileGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DLPProfileGetResponseEnvelopeErrors struct {
+	Code             int64                                     `json:"code,required"`
+	Message          string                                    `json:"message,required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           DLPProfileGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpProfileGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpProfileGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPProfileGetResponseEnvelopeErrors]
+type dlpProfileGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfileGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfileGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfileGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    dlpProfileGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpProfileGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [DLPProfileGetResponseEnvelopeErrorsSource]
+type dlpProfileGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfileGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfileGetResponseEnvelopeMessages struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           DLPProfileGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpProfileGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpProfileGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DLPProfileGetResponseEnvelopeMessages]
+type dlpProfileGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfileGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfileGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfileGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    dlpProfileGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpProfileGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [DLPProfileGetResponseEnvelopeMessagesSource]
+type dlpProfileGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfileGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DLPProfileGetResponseEnvelopeSuccess bool
 
 const (

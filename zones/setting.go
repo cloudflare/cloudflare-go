@@ -5348,10 +5348,18 @@ func (r SettingEditResponseZonesSchemasCacheLevelEditable) IsKnown() bool {
 }
 
 // Whether or not cname flattening is on.
+//
+// Deprecated: This zone setting is deprecated; please use the DNS Settings route
+// instead. More information at
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-03-21
 type SettingEditResponseZonesCNAMEFlattening struct {
 	// How to flatten the cname destination.
 	ID SettingEditResponseZonesCNAMEFlatteningID `json:"id,required"`
 	// Current value of the zone setting.
+	//
+	// Deprecated: This zone setting is deprecated; please use the DNS Settings route
+	// instead. More information at
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-03-21
 	Value SettingEditResponseZonesCNAMEFlatteningValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
@@ -8308,10 +8316,18 @@ func (r SettingGetResponseZonesSchemasCacheLevelEditable) IsKnown() bool {
 }
 
 // Whether or not cname flattening is on.
+//
+// Deprecated: This zone setting is deprecated; please use the DNS Settings route
+// instead. More information at
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-03-21
 type SettingGetResponseZonesCNAMEFlattening struct {
 	// How to flatten the cname destination.
 	ID SettingGetResponseZonesCNAMEFlatteningID `json:"id,required"`
 	// Current value of the zone setting.
+	//
+	// Deprecated: This zone setting is deprecated; please use the DNS Settings route
+	// instead. More information at
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-03-21
 	Value SettingGetResponseZonesCNAMEFlatteningValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
@@ -10807,10 +10823,18 @@ func (r SettingEditParamsBodyZonesSchemasCacheLevelEditable) IsKnown() bool {
 }
 
 // Whether or not cname flattening is on.
+//
+// Deprecated: This zone setting is deprecated; please use the DNS Settings route
+// instead. More information at
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-03-21
 type SettingEditParamsBodyZonesCNAMEFlattening struct {
 	// How to flatten the cname destination.
 	ID param.Field[SettingEditParamsBodyZonesCNAMEFlatteningID] `json:"id,required"`
 	// Current value of the zone setting.
+	//
+	// Deprecated: This zone setting is deprecated; please use the DNS Settings route
+	// instead. More information at
+	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-03-21
 	Value param.Field[SettingEditParamsBodyZonesCNAMEFlatteningValue] `json:"value,required"`
 }
 

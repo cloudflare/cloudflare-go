@@ -167,13 +167,16 @@ type OperationSchemaValidationUpdateResponse struct {
 	//   - `null` indicates that no operation level mitigation is in place, see Zone
 	//     Level Schema Validation Settings for mitigation action that will be applied
 	MitigationAction OperationSchemaValidationUpdateResponseMitigationAction `json:"mitigation_action,nullable"`
-	JSON             operationSchemaValidationUpdateResponseJSON             `json:"-"`
+	// UUID.
+	OperationID string                                      `json:"operation_id"`
+	JSON        operationSchemaValidationUpdateResponseJSON `json:"-"`
 }
 
 // operationSchemaValidationUpdateResponseJSON contains the JSON metadata for the
 // struct [OperationSchemaValidationUpdateResponse]
 type operationSchemaValidationUpdateResponseJSON struct {
 	MitigationAction apijson.Field
+	OperationID      apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -220,13 +223,16 @@ type OperationSchemaValidationGetResponse struct {
 	//   - `null` indicates that no operation level mitigation is in place, see Zone
 	//     Level Schema Validation Settings for mitigation action that will be applied
 	MitigationAction OperationSchemaValidationGetResponseMitigationAction `json:"mitigation_action,nullable"`
-	JSON             operationSchemaValidationGetResponseJSON             `json:"-"`
+	// UUID.
+	OperationID string                                   `json:"operation_id"`
+	JSON        operationSchemaValidationGetResponseJSON `json:"-"`
 }
 
 // operationSchemaValidationGetResponseJSON contains the JSON metadata for the
 // struct [OperationSchemaValidationGetResponse]
 type operationSchemaValidationGetResponseJSON struct {
 	MitigationAction apijson.Field
+	OperationID      apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -264,7 +270,7 @@ func (r OperationSchemaValidationGetResponseMitigationAction) IsKnown() bool {
 }
 
 type OperationSchemaValidationUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// When set, this applies a mitigation action to this operation
 	//
@@ -306,7 +312,7 @@ func (r OperationSchemaValidationUpdateParamsMitigationAction) IsKnown() bool {
 }
 
 type OperationSchemaValidationEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID                  param.Field[string]          `path:"zone_id,required"`
 	SettingsMultipleRequest SettingsMultipleRequestParam `json:"settings_multiple_request,required"`
 }
@@ -319,7 +325,7 @@ type OperationSchemaValidationEditResponseEnvelope struct {
 	Errors   Message                 `json:"errors,required"`
 	Messages Message                 `json:"messages,required"`
 	Result   SettingsMultipleRequest `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success OperationSchemaValidationEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    operationSchemaValidationEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -343,7 +349,7 @@ func (r operationSchemaValidationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type OperationSchemaValidationEditResponseEnvelopeSuccess bool
 
 const (
@@ -359,6 +365,6 @@ func (r OperationSchemaValidationEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OperationSchemaValidationGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

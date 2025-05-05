@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RuleCatchAllService contains methods and other services that help with
@@ -279,7 +278,7 @@ func (r RuleCatchAllGetResponseEnabled) IsKnown() bool {
 }
 
 type RuleCatchAllUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// List actions for the catch-all routing rule.
 	Actions param.Field[[]CatchAllActionParam] `json:"actions,required"`
@@ -312,9 +311,9 @@ func (r RuleCatchAllUpdateParamsEnabled) IsKnown() bool {
 }
 
 type RuleCatchAllUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RuleCatchAllUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RuleCatchAllUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RuleCatchAllUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  RuleCatchAllUpdateResponse                `json:"result"`
 	JSON    ruleCatchAllUpdateResponseEnvelopeJSON    `json:"-"`
@@ -339,7 +338,103 @@ func (r ruleCatchAllUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RuleCatchAllUpdateResponseEnvelopeErrors struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           RuleCatchAllUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             ruleCatchAllUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// ruleCatchAllUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RuleCatchAllUpdateResponseEnvelopeErrors]
+type ruleCatchAllUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RuleCatchAllUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleCatchAllUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleCatchAllUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    ruleCatchAllUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// ruleCatchAllUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [RuleCatchAllUpdateResponseEnvelopeErrorsSource]
+type ruleCatchAllUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleCatchAllUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleCatchAllUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleCatchAllUpdateResponseEnvelopeMessages struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           RuleCatchAllUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             ruleCatchAllUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// ruleCatchAllUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [RuleCatchAllUpdateResponseEnvelopeMessages]
+type ruleCatchAllUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RuleCatchAllUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleCatchAllUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleCatchAllUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    ruleCatchAllUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// ruleCatchAllUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [RuleCatchAllUpdateResponseEnvelopeMessagesSource]
+type ruleCatchAllUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleCatchAllUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleCatchAllUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RuleCatchAllUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -355,14 +450,14 @@ func (r RuleCatchAllUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleCatchAllGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RuleCatchAllGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RuleCatchAllGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RuleCatchAllGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RuleCatchAllGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RuleCatchAllGetResponse                `json:"result"`
 	JSON    ruleCatchAllGetResponseEnvelopeJSON    `json:"-"`
@@ -387,7 +482,103 @@ func (r ruleCatchAllGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RuleCatchAllGetResponseEnvelopeErrors struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           RuleCatchAllGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             ruleCatchAllGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// ruleCatchAllGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RuleCatchAllGetResponseEnvelopeErrors]
+type ruleCatchAllGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RuleCatchAllGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleCatchAllGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleCatchAllGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    ruleCatchAllGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// ruleCatchAllGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [RuleCatchAllGetResponseEnvelopeErrorsSource]
+type ruleCatchAllGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleCatchAllGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleCatchAllGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleCatchAllGetResponseEnvelopeMessages struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           RuleCatchAllGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             ruleCatchAllGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// ruleCatchAllGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RuleCatchAllGetResponseEnvelopeMessages]
+type ruleCatchAllGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RuleCatchAllGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleCatchAllGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleCatchAllGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    ruleCatchAllGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// ruleCatchAllGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [RuleCatchAllGetResponseEnvelopeMessagesSource]
+type ruleCatchAllGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleCatchAllGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleCatchAllGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RuleCatchAllGetResponseEnvelopeSuccess bool
 
 const (

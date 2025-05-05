@@ -55,7 +55,7 @@ func (r *DiscoveryService) Get(ctx context.Context, query DiscoveryGetParams, op
 }
 
 type DiscoveryOperation struct {
-	// UUID
+	// UUID.
 	ID string `json:"id,required"`
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -125,19 +125,21 @@ func (r DiscoveryOperationMethod) IsKnown() bool {
 	return false
 }
 
-//   - `ML` - Discovered operation was sourced using ML API Discovery \*
+//   - `ML` - Discovered operation was sourced using ML API Discovery _
 //     `SessionIdentifier` - Discovered operation was sourced using Session
-//     Identifier API Discovery
+//     Identifier API Discovery _ `LabelDiscovery` - Discovered operation was
+//     identified to have a specific label
 type DiscoveryOperationOrigin string
 
 const (
 	DiscoveryOperationOriginMl                DiscoveryOperationOrigin = "ML"
 	DiscoveryOperationOriginSessionIdentifier DiscoveryOperationOrigin = "SessionIdentifier"
+	DiscoveryOperationOriginLabelDiscovery    DiscoveryOperationOrigin = "LabelDiscovery"
 )
 
 func (r DiscoveryOperationOrigin) IsKnown() bool {
 	switch r {
-	case DiscoveryOperationOriginMl, DiscoveryOperationOriginSessionIdentifier:
+	case DiscoveryOperationOriginMl, DiscoveryOperationOriginSessionIdentifier, DiscoveryOperationOriginLabelDiscovery:
 		return true
 	}
 	return false
@@ -236,7 +238,7 @@ func (r discoveryGetResponseJSON) RawJSON() string {
 }
 
 type DiscoveryGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -244,7 +246,7 @@ type DiscoveryGetResponseEnvelope struct {
 	Errors   Message              `json:"errors,required"`
 	Messages Message              `json:"messages,required"`
 	Result   DiscoveryGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success DiscoveryGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    discoveryGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -268,7 +270,7 @@ func (r discoveryGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type DiscoveryGetResponseEnvelopeSuccess bool
 
 const (

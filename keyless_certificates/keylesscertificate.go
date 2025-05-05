@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // KeylessCertificateService contains methods and other services that help with
@@ -250,7 +249,7 @@ func (r TunnelParam) MarshalJSON() (data []byte, err error) {
 }
 
 type KeylessCertificateDeleteResponse struct {
-	// Identifier
+	// Identifier.
 	ID   string                               `json:"id"`
 	JSON keylessCertificateDeleteResponseJSON `json:"-"`
 }
@@ -272,7 +271,7 @@ func (r keylessCertificateDeleteResponseJSON) RawJSON() string {
 }
 
 type KeylessCertificateNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The zone's SSL certificate or SSL certificate and intermediate(s).
 	Certificate param.Field[string] `json:"certificate,required"`
@@ -297,9 +296,9 @@ func (r KeylessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeylessCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []KeylessCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []KeylessCertificateNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success KeylessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  KeylessCertificate                           `json:"result"`
 	JSON    keylessCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -324,7 +323,103 @@ func (r keylessCertificateNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type KeylessCertificateNewResponseEnvelopeErrors struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           KeylessCertificateNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             keylessCertificateNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// keylessCertificateNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [KeylessCertificateNewResponseEnvelopeErrors]
+type keylessCertificateNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *KeylessCertificateNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    keylessCertificateNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// keylessCertificateNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [KeylessCertificateNewResponseEnvelopeErrorsSource]
+type keylessCertificateNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateNewResponseEnvelopeMessages struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           KeylessCertificateNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             keylessCertificateNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// keylessCertificateNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [KeylessCertificateNewResponseEnvelopeMessages]
+type keylessCertificateNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *KeylessCertificateNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    keylessCertificateNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// keylessCertificateNewResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [KeylessCertificateNewResponseEnvelopeMessagesSource]
+type keylessCertificateNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type KeylessCertificateNewResponseEnvelopeSuccess bool
 
 const (
@@ -340,19 +435,19 @@ func (r KeylessCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type KeylessCertificateListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type KeylessCertificateDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type KeylessCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []KeylessCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []KeylessCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success KeylessCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  KeylessCertificateDeleteResponse                `json:"result"`
 	JSON    keylessCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -377,7 +472,103 @@ func (r keylessCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type KeylessCertificateDeleteResponseEnvelopeErrors struct {
+	Code             int64                                                `json:"code,required"`
+	Message          string                                               `json:"message,required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           KeylessCertificateDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             keylessCertificateDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// keylessCertificateDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [KeylessCertificateDeleteResponseEnvelopeErrors]
+type keylessCertificateDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *KeylessCertificateDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    keylessCertificateDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// keylessCertificateDeleteResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [KeylessCertificateDeleteResponseEnvelopeErrorsSource]
+type keylessCertificateDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateDeleteResponseEnvelopeMessages struct {
+	Code             int64                                                  `json:"code,required"`
+	Message          string                                                 `json:"message,required"`
+	DocumentationURL string                                                 `json:"documentation_url"`
+	Source           KeylessCertificateDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             keylessCertificateDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// keylessCertificateDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [KeylessCertificateDeleteResponseEnvelopeMessages]
+type keylessCertificateDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *KeylessCertificateDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                     `json:"pointer"`
+	JSON    keylessCertificateDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// keylessCertificateDeleteResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [KeylessCertificateDeleteResponseEnvelopeMessagesSource]
+type keylessCertificateDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type KeylessCertificateDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -393,7 +584,7 @@ func (r KeylessCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type KeylessCertificateEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Whether or not the Keyless SSL is on or off.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -413,9 +604,9 @@ func (r KeylessCertificateEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeylessCertificateEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []KeylessCertificateEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []KeylessCertificateEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success KeylessCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  KeylessCertificate                            `json:"result"`
 	JSON    keylessCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -440,7 +631,103 @@ func (r keylessCertificateEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type KeylessCertificateEditResponseEnvelopeErrors struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           KeylessCertificateEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             keylessCertificateEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// keylessCertificateEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [KeylessCertificateEditResponseEnvelopeErrors]
+type keylessCertificateEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *KeylessCertificateEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    keylessCertificateEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// keylessCertificateEditResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [KeylessCertificateEditResponseEnvelopeErrorsSource]
+type keylessCertificateEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateEditResponseEnvelopeMessages struct {
+	Code             int64                                                `json:"code,required"`
+	Message          string                                               `json:"message,required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           KeylessCertificateEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             keylessCertificateEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// keylessCertificateEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [KeylessCertificateEditResponseEnvelopeMessages]
+type keylessCertificateEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *KeylessCertificateEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    keylessCertificateEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// keylessCertificateEditResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [KeylessCertificateEditResponseEnvelopeMessagesSource]
+type keylessCertificateEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type KeylessCertificateEditResponseEnvelopeSuccess bool
 
 const (
@@ -456,14 +743,14 @@ func (r KeylessCertificateEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type KeylessCertificateGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type KeylessCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []KeylessCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []KeylessCertificateGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success KeylessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  KeylessCertificate                           `json:"result"`
 	JSON    keylessCertificateGetResponseEnvelopeJSON    `json:"-"`
@@ -488,7 +775,103 @@ func (r keylessCertificateGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type KeylessCertificateGetResponseEnvelopeErrors struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           KeylessCertificateGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             keylessCertificateGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// keylessCertificateGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [KeylessCertificateGetResponseEnvelopeErrors]
+type keylessCertificateGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *KeylessCertificateGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    keylessCertificateGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// keylessCertificateGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [KeylessCertificateGetResponseEnvelopeErrorsSource]
+type keylessCertificateGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateGetResponseEnvelopeMessages struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           KeylessCertificateGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             keylessCertificateGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// keylessCertificateGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [KeylessCertificateGetResponseEnvelopeMessages]
+type keylessCertificateGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *KeylessCertificateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type KeylessCertificateGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    keylessCertificateGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// keylessCertificateGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [KeylessCertificateGetResponseEnvelopeMessagesSource]
+type keylessCertificateGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type KeylessCertificateGetResponseEnvelopeSuccess bool
 
 const (

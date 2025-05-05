@@ -208,35 +208,14 @@ func (r ScopeParam) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteNewResponse struct {
-	Routes []RouteNewResponseRoute `json:"routes"`
-	JSON   routeNewResponseJSON    `json:"-"`
-}
-
-// routeNewResponseJSON contains the JSON metadata for the struct
-// [RouteNewResponse]
-type routeNewResponseJSON struct {
-	Routes      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RouteNewResponseRoute struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The next-hop IP Address for the static route.
 	Nexthop string `json:"nexthop,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Prefix string `json:"prefix,required"`
 	// Priority of the static route.
 	Priority int64 `json:"priority,required"`
-	// Identifier
-	ID string `json:"id"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -246,17 +225,17 @@ type RouteNewResponseRoute struct {
 	// Used only for ECMP routes.
 	Scope Scope `json:"scope"`
 	// Optional weight of the ECMP scope - if provided.
-	Weight int64                     `json:"weight"`
-	JSON   routeNewResponseRouteJSON `json:"-"`
+	Weight int64                `json:"weight"`
+	JSON   routeNewResponseJSON `json:"-"`
 }
 
-// routeNewResponseRouteJSON contains the JSON metadata for the struct
-// [RouteNewResponseRoute]
-type routeNewResponseRouteJSON struct {
+// routeNewResponseJSON contains the JSON metadata for the struct
+// [RouteNewResponse]
+type routeNewResponseJSON struct {
+	ID          apijson.Field
 	Nexthop     apijson.Field
 	Prefix      apijson.Field
 	Priority    apijson.Field
-	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
 	ModifiedOn  apijson.Field
@@ -266,11 +245,11 @@ type routeNewResponseRouteJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RouteNewResponseRoute) UnmarshalJSON(data []byte) (err error) {
+func (r *RouteNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r routeNewResponseRouteJSON) RawJSON() string {
+func (r routeNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -298,14 +277,14 @@ func (r routeUpdateResponseJSON) RawJSON() string {
 }
 
 type RouteUpdateResponseModifiedRoute struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The next-hop IP Address for the static route.
 	Nexthop string `json:"nexthop,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Prefix string `json:"prefix,required"`
 	// Priority of the static route.
 	Priority int64 `json:"priority,required"`
-	// Identifier
-	ID string `json:"id"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -322,10 +301,10 @@ type RouteUpdateResponseModifiedRoute struct {
 // routeUpdateResponseModifiedRouteJSON contains the JSON metadata for the struct
 // [RouteUpdateResponseModifiedRoute]
 type routeUpdateResponseModifiedRouteJSON struct {
+	ID          apijson.Field
 	Nexthop     apijson.Field
 	Prefix      apijson.Field
 	Priority    apijson.Field
-	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
 	ModifiedOn  apijson.Field
@@ -365,14 +344,14 @@ func (r routeListResponseJSON) RawJSON() string {
 }
 
 type RouteListResponseRoute struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The next-hop IP Address for the static route.
 	Nexthop string `json:"nexthop,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Prefix string `json:"prefix,required"`
 	// Priority of the static route.
 	Priority int64 `json:"priority,required"`
-	// Identifier
-	ID string `json:"id"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -389,10 +368,10 @@ type RouteListResponseRoute struct {
 // routeListResponseRouteJSON contains the JSON metadata for the struct
 // [RouteListResponseRoute]
 type routeListResponseRouteJSON struct {
+	ID          apijson.Field
 	Nexthop     apijson.Field
 	Prefix      apijson.Field
 	Priority    apijson.Field
-	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
 	ModifiedOn  apijson.Field
@@ -434,14 +413,14 @@ func (r routeDeleteResponseJSON) RawJSON() string {
 }
 
 type RouteDeleteResponseDeletedRoute struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The next-hop IP Address for the static route.
 	Nexthop string `json:"nexthop,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Prefix string `json:"prefix,required"`
 	// Priority of the static route.
 	Priority int64 `json:"priority,required"`
-	// Identifier
-	ID string `json:"id"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -458,10 +437,10 @@ type RouteDeleteResponseDeletedRoute struct {
 // routeDeleteResponseDeletedRouteJSON contains the JSON metadata for the struct
 // [RouteDeleteResponseDeletedRoute]
 type routeDeleteResponseDeletedRouteJSON struct {
+	ID          apijson.Field
 	Nexthop     apijson.Field
 	Prefix      apijson.Field
 	Priority    apijson.Field
-	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
 	ModifiedOn  apijson.Field
@@ -503,14 +482,14 @@ func (r routeBulkUpdateResponseJSON) RawJSON() string {
 }
 
 type RouteBulkUpdateResponseModifiedRoute struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The next-hop IP Address for the static route.
 	Nexthop string `json:"nexthop,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Prefix string `json:"prefix,required"`
 	// Priority of the static route.
 	Priority int64 `json:"priority,required"`
-	// Identifier
-	ID string `json:"id"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -527,10 +506,10 @@ type RouteBulkUpdateResponseModifiedRoute struct {
 // routeBulkUpdateResponseModifiedRouteJSON contains the JSON metadata for the
 // struct [RouteBulkUpdateResponseModifiedRoute]
 type routeBulkUpdateResponseModifiedRouteJSON struct {
+	ID          apijson.Field
 	Nexthop     apijson.Field
 	Prefix      apijson.Field
 	Priority    apijson.Field
-	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
 	ModifiedOn  apijson.Field
@@ -572,14 +551,14 @@ func (r routeEmptyResponseJSON) RawJSON() string {
 }
 
 type RouteEmptyResponseDeletedRoute struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The next-hop IP Address for the static route.
 	Nexthop string `json:"nexthop,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Prefix string `json:"prefix,required"`
 	// Priority of the static route.
 	Priority int64 `json:"priority,required"`
-	// Identifier
-	ID string `json:"id"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -596,10 +575,10 @@ type RouteEmptyResponseDeletedRoute struct {
 // routeEmptyResponseDeletedRouteJSON contains the JSON metadata for the struct
 // [RouteEmptyResponseDeletedRoute]
 type routeEmptyResponseDeletedRouteJSON struct {
+	ID          apijson.Field
 	Nexthop     apijson.Field
 	Prefix      apijson.Field
 	Priority    apijson.Field
-	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
 	ModifiedOn  apijson.Field
@@ -639,14 +618,14 @@ func (r routeGetResponseJSON) RawJSON() string {
 }
 
 type RouteGetResponseRoute struct {
+	// Identifier
+	ID string `json:"id,required"`
 	// The next-hop IP Address for the static route.
 	Nexthop string `json:"nexthop,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Prefix string `json:"prefix,required"`
 	// Priority of the static route.
 	Priority int64 `json:"priority,required"`
-	// Identifier
-	ID string `json:"id"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -663,10 +642,10 @@ type RouteGetResponseRoute struct {
 // routeGetResponseRouteJSON contains the JSON metadata for the struct
 // [RouteGetResponseRoute]
 type routeGetResponseRouteJSON struct {
+	ID          apijson.Field
 	Nexthop     apijson.Field
 	Prefix      apijson.Field
 	Priority    apijson.Field
-	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
 	ModifiedOn  apijson.Field
@@ -687,11 +666,22 @@ func (r routeGetResponseRouteJSON) RawJSON() string {
 type RouteNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	// The next-hop IP Address for the static route.
+	Nexthop param.Field[string] `json:"nexthop,required"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Prefix param.Field[string] `json:"prefix,required"`
+	// Priority of the static route.
+	Priority param.Field[int64] `json:"priority,required"`
+	// An optional human provided description of the static route.
+	Description param.Field[string] `json:"description"`
+	// Used only for ECMP routes.
+	Scope param.Field[ScopeParam] `json:"scope"`
+	// Optional weight of the ECMP scope - if provided.
+	Weight param.Field[int64] `json:"weight"`
 }
 
 func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type RouteNewResponseEnvelope struct {

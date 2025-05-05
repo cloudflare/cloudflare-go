@@ -53,17 +53,17 @@ func (r *TemporaryCredentialService) New(ctx context.Context, params TemporaryCr
 }
 
 type TemporaryCredentialParam struct {
-	// Name of the R2 bucket
+	// Name of the R2 bucket.
 	Bucket param.Field[string] `json:"bucket,required"`
-	// The parent access key id to use for signing
+	// The parent access key id to use for signing.
 	ParentAccessKeyID param.Field[string] `json:"parentAccessKeyId,required"`
-	// Permissions allowed on the credentials
+	// Permissions allowed on the credentials.
 	Permission param.Field[TemporaryCredentialPermission] `json:"permission,required"`
-	// How long the credentials will live for in seconds
+	// How long the credentials will live for in seconds.
 	TTLSeconds param.Field[float64] `json:"ttlSeconds,required"`
-	// Optional object paths to scope the credentials to
+	// Optional object paths to scope the credentials to.
 	Objects param.Field[[]string] `json:"objects"`
-	// Optional prefix paths to scope the credentials to
+	// Optional prefix paths to scope the credentials to.
 	Prefixes param.Field[[]string] `json:"prefixes"`
 }
 
@@ -71,7 +71,7 @@ func (r TemporaryCredentialParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Permissions allowed on the credentials
+// Permissions allowed on the credentials.
 type TemporaryCredentialPermission string
 
 const (
@@ -90,11 +90,11 @@ func (r TemporaryCredentialPermission) IsKnown() bool {
 }
 
 type TemporaryCredentialNewResponse struct {
-	// ID for new access key
+	// ID for new access key.
 	AccessKeyID string `json:"accessKeyId"`
-	// Secret access key
+	// Secret access key.
 	SecretAccessKey string `json:"secretAccessKey"`
-	// Security token
+	// Security token.
 	SessionToken string                             `json:"sessionToken"`
 	JSON         temporaryCredentialNewResponseJSON `json:"-"`
 }
@@ -118,7 +118,7 @@ func (r temporaryCredentialNewResponseJSON) RawJSON() string {
 }
 
 type TemporaryCredentialNewParams struct {
-	// Account ID
+	// Account ID.
 	AccountID           param.Field[string]      `path:"account_id,required"`
 	TemporaryCredential TemporaryCredentialParam `json:"temporary_credential,required"`
 }
@@ -131,7 +131,7 @@ type TemporaryCredentialNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo          `json:"errors,required"`
 	Messages []string                       `json:"messages,required"`
 	Result   TemporaryCredentialNewResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success TemporaryCredentialNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    temporaryCredentialNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -155,7 +155,7 @@ func (r temporaryCredentialNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type TemporaryCredentialNewResponseEnvelopeSuccess bool
 
 const (

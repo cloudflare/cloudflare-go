@@ -190,6 +190,22 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 			}),
 			Name:             cloudflare.F("NextJS Blog"),
 			ProductionBranch: cloudflare.F("main"),
+			Source: cloudflare.F(pages.ProjectSourceParam{
+				Config: cloudflare.F(pages.ProjectSourceConfigParam{
+					DeploymentsEnabled:           cloudflare.F(true),
+					Owner:                        cloudflare.F("owner"),
+					PathExcludes:                 cloudflare.F([]string{"string"}),
+					PathIncludes:                 cloudflare.F([]string{"string"}),
+					PrCommentsEnabled:            cloudflare.F(true),
+					PreviewBranchExcludes:        cloudflare.F([]string{"string"}),
+					PreviewBranchIncludes:        cloudflare.F([]string{"string"}),
+					PreviewDeploymentSetting:     cloudflare.F(pages.ProjectSourceConfigPreviewDeploymentSettingAll),
+					ProductionBranch:             cloudflare.F("production_branch"),
+					ProductionDeploymentsEnabled: cloudflare.F(true),
+					RepoName:                     cloudflare.F("repo_name"),
+				}),
+				Type: cloudflare.F("type"),
+			}),
 		},
 	})
 	if err != nil {
@@ -434,6 +450,22 @@ func TestProjectEditWithOptionalParams(t *testing.T) {
 				}),
 				Name:             cloudflare.F("NextJS Blog"),
 				ProductionBranch: cloudflare.F("main"),
+				Source: cloudflare.F(pages.ProjectSourceParam{
+					Config: cloudflare.F(pages.ProjectSourceConfigParam{
+						DeploymentsEnabled:           cloudflare.F(true),
+						Owner:                        cloudflare.F("owner"),
+						PathExcludes:                 cloudflare.F([]string{"string"}),
+						PathIncludes:                 cloudflare.F([]string{"string"}),
+						PrCommentsEnabled:            cloudflare.F(true),
+						PreviewBranchExcludes:        cloudflare.F([]string{"string"}),
+						PreviewBranchIncludes:        cloudflare.F([]string{"string"}),
+						PreviewDeploymentSetting:     cloudflare.F(pages.ProjectSourceConfigPreviewDeploymentSettingAll),
+						ProductionBranch:             cloudflare.F("production_branch"),
+						ProductionDeploymentsEnabled: cloudflare.F(true),
+						RepoName:                     cloudflare.F("repo_name"),
+					}),
+					Type: cloudflare.F("type"),
+				}),
 			},
 		},
 	)

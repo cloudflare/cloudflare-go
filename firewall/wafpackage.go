@@ -104,7 +104,7 @@ type WAFPackageGetResponse struct {
 	Messages interface{} `json:"messages"`
 	// This field can have the runtime type of [interface{}].
 	Result interface{} `json:"result"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success WAFPackageGetResponseSuccess `json:"success"`
 	JSON    wafPackageGetResponseJSON    `json:"-"`
 	union   WAFPackageGetResponseUnion
@@ -169,7 +169,7 @@ type WAFPackageGetResponseFirewallAPIResponseSingle struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   interface{}           `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success WAFPackageGetResponseFirewallAPIResponseSingleSuccess `json:"success,required"`
 	JSON    wafPackageGetResponseFirewallAPIResponseSingleJSON    `json:"-"`
 }
@@ -195,7 +195,7 @@ func (r wafPackageGetResponseFirewallAPIResponseSingleJSON) RawJSON() string {
 
 func (r WAFPackageGetResponseFirewallAPIResponseSingle) implementsWAFPackageGetResponse() {}
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type WAFPackageGetResponseFirewallAPIResponseSingleSuccess bool
 
 const (
@@ -233,7 +233,7 @@ func (r wafPackageGetResponseResultJSON) RawJSON() string {
 
 func (r WAFPackageGetResponseResult) implementsWAFPackageGetResponse() {}
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type WAFPackageGetResponseSuccess bool
 
 const (
@@ -249,7 +249,7 @@ func (r WAFPackageGetResponseSuccess) IsKnown() bool {
 }
 
 type WAFPackageListParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The direction used to sort returned packages.
 	Direction param.Field[WAFPackageListParamsDirection] `query:"direction"`
@@ -323,6 +323,6 @@ func (r WAFPackageListParamsOrder) IsKnown() bool {
 }
 
 type WAFPackageGetParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

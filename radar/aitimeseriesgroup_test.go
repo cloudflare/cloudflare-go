@@ -29,7 +29,7 @@ func TestAITimeseriesGroupUserAgentWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AI.TimeseriesGroups.UserAgent(context.TODO(), radar.AITimeseriesGroupUserAgentParams{
-		AggInterval:   cloudflare.F(radar.AITimeseriesGroupUserAgentParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.AITimeseriesGroupUserAgentParamsAggInterval1h),
 		ASN:           cloudflare.F([]string{"string"}),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
