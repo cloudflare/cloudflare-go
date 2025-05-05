@@ -174,7 +174,7 @@ type DeviceRegistrationListResponse struct {
 	// The RFC3339 timestamp when the registration was deleted.
 	DeletedAt string `json:"deleted_at,nullable"`
 	// The type of encryption key used by the WARP client for the active key. Currently
-	// 'curve25519' for WireGuard and 'secp256r1' for MASQUE
+	// 'curve25519' for WireGuard and 'secp256r1' for MASQUE.
 	KeyType string `json:"key_type,nullable"`
 	// The RFC3339 timestamp when the registration was revoked.
 	RevokedAt string `json:"revoked_at,nullable"`
@@ -212,11 +212,11 @@ func (r deviceRegistrationListResponseJSON) RawJSON() string {
 
 // Device details embedded inside of a registration.
 type DeviceRegistrationListResponseDevice struct {
-	// The ID of the device
+	// The ID of the device.
 	ID string `json:"id,required"`
-	// The name of the device
+	// The name of the device.
 	Name string `json:"name,required"`
-	// Version of the WARP client
+	// Version of the WARP client.
 	ClientVersion string                                   `json:"client_version"`
 	JSON          deviceRegistrationListResponseDeviceJSON `json:"-"`
 }
@@ -240,7 +240,7 @@ func (r deviceRegistrationListResponseDeviceJSON) RawJSON() string {
 }
 
 type DeviceRegistrationListResponseUser struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
@@ -289,7 +289,7 @@ type DeviceRegistrationGetResponse struct {
 	// The RFC3339 timestamp when the registration was deleted.
 	DeletedAt string `json:"deleted_at,nullable"`
 	// The type of encryption key used by the WARP client for the active key. Currently
-	// 'curve25519' for WireGuard and 'secp256r1' for MASQUE
+	// 'curve25519' for WireGuard and 'secp256r1' for MASQUE.
 	KeyType string `json:"key_type,nullable"`
 	// The RFC3339 timestamp when the registration was revoked.
 	RevokedAt string `json:"revoked_at,nullable"`
@@ -327,11 +327,11 @@ func (r deviceRegistrationGetResponseJSON) RawJSON() string {
 
 // Device details embedded inside of a registration.
 type DeviceRegistrationGetResponseDevice struct {
-	// The ID of the device
+	// The ID of the device.
 	ID string `json:"id,required"`
-	// The name of the device
+	// The name of the device.
 	Name string `json:"name,required"`
-	// Version of the WARP client
+	// Version of the WARP client.
 	ClientVersion string                                  `json:"client_version"`
 	JSON          deviceRegistrationGetResponseDeviceJSON `json:"-"`
 }
@@ -355,7 +355,7 @@ func (r deviceRegistrationGetResponseDeviceJSON) RawJSON() string {
 }
 
 type DeviceRegistrationGetResponseUser struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
@@ -491,7 +491,7 @@ func (r DeviceRegistrationListParamsStatus) IsKnown() bool {
 }
 
 type DeviceRegistrationListParamsUser struct {
-	// Filter by Access user ID
+	// Filter by Access user ID.
 	ID param.Field[[]string] `query:"id"`
 }
 
@@ -607,7 +607,7 @@ type DeviceRegistrationBulkDeleteResponseEnvelope struct {
 	Result   DeviceRegistrationBulkDeleteResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success bool `json:"success,required"`
-	// v4 public API Pagination/Cursor info
+	// V4 public API Pagination/Cursor info.
 	ResultInfo DeviceRegistrationBulkDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       deviceRegistrationBulkDeleteResponseEnvelopeJSON       `json:"-"`
 }
@@ -682,7 +682,7 @@ func (r deviceRegistrationBulkDeleteResponseEnvelopeMessagesJSON) RawJSON() stri
 	return r.raw
 }
 
-// v4 public API Pagination/Cursor info
+// V4 public API Pagination/Cursor info.
 type DeviceRegistrationBulkDeleteResponseEnvelopeResultInfo struct {
 	// Number of records in the response.
 	Count int64 `json:"count,required"`
@@ -800,7 +800,7 @@ func (r deviceRegistrationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type DeviceRegistrationRevokeParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A list of registration IDs to revoke
+	// A list of registration IDs to revoke.
 	ID param.Field[[]string] `query:"id,required"`
 }
 
@@ -819,7 +819,7 @@ type DeviceRegistrationRevokeResponseEnvelope struct {
 	Result   DeviceRegistrationRevokeResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success bool `json:"success,required"`
-	// v4 public API Pagination/Cursor info
+	// V4 public API Pagination/Cursor info.
 	ResultInfo DeviceRegistrationRevokeResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       deviceRegistrationRevokeResponseEnvelopeJSON       `json:"-"`
 }
@@ -894,7 +894,7 @@ func (r deviceRegistrationRevokeResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
-// v4 public API Pagination/Cursor info
+// V4 public API Pagination/Cursor info.
 type DeviceRegistrationRevokeResponseEnvelopeResultInfo struct {
 	// Number of records in the response.
 	Count int64 `json:"count,required"`
@@ -928,7 +928,7 @@ func (r deviceRegistrationRevokeResponseEnvelopeResultInfoJSON) RawJSON() string
 
 type DeviceRegistrationUnrevokeParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A list of registration IDs to unrevoke
+	// A list of registration IDs to unrevoke.
 	ID param.Field[[]string] `query:"id,required"`
 }
 
@@ -947,7 +947,7 @@ type DeviceRegistrationUnrevokeResponseEnvelope struct {
 	Result   DeviceRegistrationUnrevokeResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success bool `json:"success,required"`
-	// v4 public API Pagination/Cursor info
+	// V4 public API Pagination/Cursor info.
 	ResultInfo DeviceRegistrationUnrevokeResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       deviceRegistrationUnrevokeResponseEnvelopeJSON       `json:"-"`
 }
@@ -1022,7 +1022,7 @@ func (r deviceRegistrationUnrevokeResponseEnvelopeMessagesJSON) RawJSON() string
 	return r.raw
 }
 
-// v4 public API Pagination/Cursor info
+// V4 public API Pagination/Cursor info.
 type DeviceRegistrationUnrevokeResponseEnvelopeResultInfo struct {
 	// Number of records in the response.
 	Count int64 `json:"count,required"`

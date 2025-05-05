@@ -34,6 +34,29 @@ func NewDevicePolicyService(opts ...option.RequestOption) (r *DevicePolicyServic
 	return
 }
 
+type DevicePolicyCertificates struct {
+	// The current status of the device policy certificate provisioning feature for
+	// WARP clients.
+	Enabled bool                         `json:"enabled,required"`
+	JSON    devicePolicyCertificatesJSON `json:"-"`
+}
+
+// devicePolicyCertificatesJSON contains the JSON metadata for the struct
+// [DevicePolicyCertificates]
+type devicePolicyCertificatesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyCertificates) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePolicyCertificatesJSON) RawJSON() string {
+	return r.raw
+}
+
 type DevicePolicyCertificatesParam struct {
 	// The current status of the device policy certificate provisioning feature for
 	// WARP clients.
@@ -125,7 +148,7 @@ type SettingsPolicy struct {
 	// The wirefilter expression to match devices. Available values: "identity.email",
 	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
 	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
-	// "os.version"
+	// "os.version".
 	Match string `json:"match"`
 	// The name of the device settings profile.
 	Name     string `json:"name"`
@@ -213,9 +236,9 @@ func (r settingsPolicyServiceModeV2JSON) RawJSON() string {
 }
 
 type SettingsPolicyTargetTest struct {
-	// The id of the DEX test targeting this policy
+	// The id of the DEX test targeting this policy.
 	ID string `json:"id"`
-	// The name of the DEX test targeting this policy
+	// The name of the DEX test targeting this policy.
 	Name string                       `json:"name"`
 	JSON settingsPolicyTargetTestJSON `json:"-"`
 }
