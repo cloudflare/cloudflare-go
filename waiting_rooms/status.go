@@ -119,7 +119,7 @@ func (r StatusGetResponseStatus) IsKnown() bool {
 }
 
 type StatusGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
