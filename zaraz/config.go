@@ -287,14 +287,13 @@ func (r *ConfigurationTool) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zaraz.ConfigurationToolsZarazManagedComponent],
-// [zaraz.ConfigurationToolsWorker].
+// [ConfigurationToolsZarazManagedComponent], [ConfigurationToolsWorker].
 func (r ConfigurationTool) AsUnion() ConfigurationToolsUnion {
 	return r.union
 }
 
-// Union satisfied by [zaraz.ConfigurationToolsZarazManagedComponent] or
-// [zaraz.ConfigurationToolsWorker].
+// Union satisfied by [ConfigurationToolsZarazManagedComponent] or
+// [ConfigurationToolsWorker].
 type ConfigurationToolsUnion interface {
 	implementsConfigurationTool()
 }
@@ -685,24 +684,24 @@ func (r *ConfigurationTriggersExcludeRule) UnmarshalJSON(data []byte) (err error
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zaraz.ConfigurationTriggersExcludeRulesZarazLoadRule],
-// [zaraz.ConfigurationTriggersExcludeRulesZarazClickListenerRule],
-// [zaraz.ConfigurationTriggersExcludeRulesZarazTimerRule],
-// [zaraz.ConfigurationTriggersExcludeRulesZarazFormSubmissionRule],
-// [zaraz.ConfigurationTriggersExcludeRulesZarazVariableMatchRule],
-// [zaraz.ConfigurationTriggersExcludeRulesZarazScrollDepthRule],
-// [zaraz.ConfigurationTriggersExcludeRulesZarazElementVisibilityRule].
+// [ConfigurationTriggersExcludeRulesZarazLoadRule],
+// [ConfigurationTriggersExcludeRulesZarazClickListenerRule],
+// [ConfigurationTriggersExcludeRulesZarazTimerRule],
+// [ConfigurationTriggersExcludeRulesZarazFormSubmissionRule],
+// [ConfigurationTriggersExcludeRulesZarazVariableMatchRule],
+// [ConfigurationTriggersExcludeRulesZarazScrollDepthRule],
+// [ConfigurationTriggersExcludeRulesZarazElementVisibilityRule].
 func (r ConfigurationTriggersExcludeRule) AsUnion() ConfigurationTriggersExcludeRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [zaraz.ConfigurationTriggersExcludeRulesZarazLoadRule],
-// [zaraz.ConfigurationTriggersExcludeRulesZarazClickListenerRule],
-// [zaraz.ConfigurationTriggersExcludeRulesZarazTimerRule],
-// [zaraz.ConfigurationTriggersExcludeRulesZarazFormSubmissionRule],
-// [zaraz.ConfigurationTriggersExcludeRulesZarazVariableMatchRule],
-// [zaraz.ConfigurationTriggersExcludeRulesZarazScrollDepthRule] or
-// [zaraz.ConfigurationTriggersExcludeRulesZarazElementVisibilityRule].
+// Union satisfied by [ConfigurationTriggersExcludeRulesZarazLoadRule],
+// [ConfigurationTriggersExcludeRulesZarazClickListenerRule],
+// [ConfigurationTriggersExcludeRulesZarazTimerRule],
+// [ConfigurationTriggersExcludeRulesZarazFormSubmissionRule],
+// [ConfigurationTriggersExcludeRulesZarazVariableMatchRule],
+// [ConfigurationTriggersExcludeRulesZarazScrollDepthRule] or
+// [ConfigurationTriggersExcludeRulesZarazElementVisibilityRule].
 type ConfigurationTriggersExcludeRulesUnion interface {
 	implementsConfigurationTriggersExcludeRule()
 }
@@ -1298,24 +1297,24 @@ func (r *ConfigurationTriggersLoadRule) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zaraz.ConfigurationTriggersLoadRulesZarazLoadRule],
-// [zaraz.ConfigurationTriggersLoadRulesZarazClickListenerRule],
-// [zaraz.ConfigurationTriggersLoadRulesZarazTimerRule],
-// [zaraz.ConfigurationTriggersLoadRulesZarazFormSubmissionRule],
-// [zaraz.ConfigurationTriggersLoadRulesZarazVariableMatchRule],
-// [zaraz.ConfigurationTriggersLoadRulesZarazScrollDepthRule],
-// [zaraz.ConfigurationTriggersLoadRulesZarazElementVisibilityRule].
+// [ConfigurationTriggersLoadRulesZarazLoadRule],
+// [ConfigurationTriggersLoadRulesZarazClickListenerRule],
+// [ConfigurationTriggersLoadRulesZarazTimerRule],
+// [ConfigurationTriggersLoadRulesZarazFormSubmissionRule],
+// [ConfigurationTriggersLoadRulesZarazVariableMatchRule],
+// [ConfigurationTriggersLoadRulesZarazScrollDepthRule],
+// [ConfigurationTriggersLoadRulesZarazElementVisibilityRule].
 func (r ConfigurationTriggersLoadRule) AsUnion() ConfigurationTriggersLoadRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [zaraz.ConfigurationTriggersLoadRulesZarazLoadRule],
-// [zaraz.ConfigurationTriggersLoadRulesZarazClickListenerRule],
-// [zaraz.ConfigurationTriggersLoadRulesZarazTimerRule],
-// [zaraz.ConfigurationTriggersLoadRulesZarazFormSubmissionRule],
-// [zaraz.ConfigurationTriggersLoadRulesZarazVariableMatchRule],
-// [zaraz.ConfigurationTriggersLoadRulesZarazScrollDepthRule] or
-// [zaraz.ConfigurationTriggersLoadRulesZarazElementVisibilityRule].
+// Union satisfied by [ConfigurationTriggersLoadRulesZarazLoadRule],
+// [ConfigurationTriggersLoadRulesZarazClickListenerRule],
+// [ConfigurationTriggersLoadRulesZarazTimerRule],
+// [ConfigurationTriggersLoadRulesZarazFormSubmissionRule],
+// [ConfigurationTriggersLoadRulesZarazVariableMatchRule],
+// [ConfigurationTriggersLoadRulesZarazScrollDepthRule] or
+// [ConfigurationTriggersLoadRulesZarazElementVisibilityRule].
 type ConfigurationTriggersLoadRulesUnion interface {
 	implementsConfigurationTriggersLoadRule()
 }
@@ -1908,16 +1907,16 @@ func (r *ConfigurationVariable) UnmarshalJSON(data []byte) (err error) {
 // the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zaraz.ConfigurationVariablesZarazStringVariable],
-// [zaraz.ConfigurationVariablesZarazSecretVariable],
-// [zaraz.ConfigurationVariablesZarazWorkerVariable].
+// [ConfigurationVariablesZarazStringVariable],
+// [ConfigurationVariablesZarazSecretVariable],
+// [ConfigurationVariablesZarazWorkerVariable].
 func (r ConfigurationVariable) AsUnion() ConfigurationVariablesUnion {
 	return r.union
 }
 
-// Union satisfied by [zaraz.ConfigurationVariablesZarazStringVariable],
-// [zaraz.ConfigurationVariablesZarazSecretVariable] or
-// [zaraz.ConfigurationVariablesZarazWorkerVariable].
+// Union satisfied by [ConfigurationVariablesZarazStringVariable],
+// [ConfigurationVariablesZarazSecretVariable] or
+// [ConfigurationVariablesZarazWorkerVariable].
 type ConfigurationVariablesUnion interface {
 	implementsConfigurationVariable()
 }

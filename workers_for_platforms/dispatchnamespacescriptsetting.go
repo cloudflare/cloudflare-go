@@ -253,28 +253,28 @@ func (r *DispatchNamespaceScriptSettingEditResponseBinding) UnmarshalJSON(data [
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAI],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAssets],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrowser],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdrive],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2Bucket],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretText],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindService],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTailConsumer],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorize],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAI],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAssets],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrowser],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdrive],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespace],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2Bucket],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretText],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindService],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTailConsumer],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorize],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey].
 func (r DispatchNamespaceScriptSettingEditResponseBinding) AsUnion() DispatchNamespaceScriptSettingEditResponseBindingsUnion {
 	return r.union
 }
@@ -282,29 +282,29 @@ func (r DispatchNamespaceScriptSettingEditResponseBinding) AsUnion() DispatchNam
 // A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAI],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAssets],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrowser],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdrive],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2Bucket],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretText],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindService],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTailConsumer],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorize],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret]
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAI],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAssets],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrowser],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdrive],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespace],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2Bucket],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretText],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindService],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTailConsumer],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorize],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret]
 // or
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey].
 type DispatchNamespaceScriptSettingEditResponseBindingsUnion interface {
 	implementsDispatchNamespaceScriptSettingEditResponseBinding()
 }
@@ -1703,7 +1703,7 @@ func (r *DispatchNamespaceScriptSettingEditResponseMigrations) UnmarshalJSON(dat
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [workers.SingleStepMigration],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations].
+// [DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations].
 func (r DispatchNamespaceScriptSettingEditResponseMigrations) AsUnion() DispatchNamespaceScriptSettingEditResponseMigrationsUnion {
 	return r.union
 }
@@ -1711,7 +1711,7 @@ func (r DispatchNamespaceScriptSettingEditResponseMigrations) AsUnion() Dispatch
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Union satisfied by [workers.SingleStepMigration] or
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations].
+// [DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations].
 type DispatchNamespaceScriptSettingEditResponseMigrationsUnion interface {
 	ImplementsDispatchNamespaceScriptSettingEditResponseMigrations()
 }
@@ -2012,28 +2012,28 @@ func (r *DispatchNamespaceScriptSettingGetResponseBinding) UnmarshalJSON(data []
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAI],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAssets],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrowser],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdrive],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2Bucket],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretText],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindService],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTailConsumer],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorize],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAI],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAssets],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrowser],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdrive],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespace],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2Bucket],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretText],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindService],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTailConsumer],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorize],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey].
 func (r DispatchNamespaceScriptSettingGetResponseBinding) AsUnion() DispatchNamespaceScriptSettingGetResponseBindingsUnion {
 	return r.union
 }
@@ -2041,29 +2041,29 @@ func (r DispatchNamespaceScriptSettingGetResponseBinding) AsUnion() DispatchName
 // A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAI],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAssets],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrowser],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdrive],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2Bucket],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretText],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindService],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTailConsumer],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorize],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret]
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAI],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAssets],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrowser],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdrive],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespace],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2Bucket],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretText],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindService],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTailConsumer],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorize],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret]
 // or
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey].
 type DispatchNamespaceScriptSettingGetResponseBindingsUnion interface {
 	implementsDispatchNamespaceScriptSettingGetResponseBinding()
 }
@@ -3462,7 +3462,7 @@ func (r *DispatchNamespaceScriptSettingGetResponseMigrations) UnmarshalJSON(data
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [workers.SingleStepMigration],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations].
+// [DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations].
 func (r DispatchNamespaceScriptSettingGetResponseMigrations) AsUnion() DispatchNamespaceScriptSettingGetResponseMigrationsUnion {
 	return r.union
 }
@@ -3470,7 +3470,7 @@ func (r DispatchNamespaceScriptSettingGetResponseMigrations) AsUnion() DispatchN
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Union satisfied by [workers.SingleStepMigration] or
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations].
+// [DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations].
 type DispatchNamespaceScriptSettingGetResponseMigrationsUnion interface {
 	ImplementsDispatchNamespaceScriptSettingGetResponseMigrations()
 }

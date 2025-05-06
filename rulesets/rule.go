@@ -3042,8 +3042,8 @@ func (r *RedirectRuleActionParametersFromValueTargetURL) UnmarshalJSON(data []by
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [rulesets.RedirectRuleActionParametersFromValueTargetURLStaticURLRedirect],
-// [rulesets.RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirect].
+// [RedirectRuleActionParametersFromValueTargetURLStaticURLRedirect],
+// [RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirect].
 func (r RedirectRuleActionParametersFromValueTargetURL) AsUnion() RedirectRuleActionParametersFromValueTargetURLUnion {
 	return r.union
 }
@@ -3051,8 +3051,8 @@ func (r RedirectRuleActionParametersFromValueTargetURL) AsUnion() RedirectRuleAc
 // The URL to redirect the request to.
 //
 // Union satisfied by
-// [rulesets.RedirectRuleActionParametersFromValueTargetURLStaticURLRedirect] or
-// [rulesets.RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirect].
+// [RedirectRuleActionParametersFromValueTargetURLStaticURLRedirect] or
+// [RedirectRuleActionParametersFromValueTargetURLDynamicURLRedirect].
 type RedirectRuleActionParametersFromValueTargetURLUnion interface {
 	implementsRedirectRuleActionParametersFromValueTargetURL()
 }
@@ -3518,22 +3518,22 @@ func (r *RewriteRuleActionParametersHeader) UnmarshalJSON(data []byte) (err erro
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [rulesets.RewriteRuleActionParametersHeadersRemoveHeader],
-// [rulesets.RewriteRuleActionParametersHeadersAddStaticHeader],
-// [rulesets.RewriteRuleActionParametersHeadersSetStaticHeader],
-// [rulesets.RewriteRuleActionParametersHeadersAddDynamicHeader],
-// [rulesets.RewriteRuleActionParametersHeadersSetDynamicHeader].
+// [RewriteRuleActionParametersHeadersRemoveHeader],
+// [RewriteRuleActionParametersHeadersAddStaticHeader],
+// [RewriteRuleActionParametersHeadersSetStaticHeader],
+// [RewriteRuleActionParametersHeadersAddDynamicHeader],
+// [RewriteRuleActionParametersHeadersSetDynamicHeader].
 func (r RewriteRuleActionParametersHeader) AsUnion() RewriteRuleActionParametersHeadersUnion {
 	return r.union
 }
 
 // Remove the header from the request.
 //
-// Union satisfied by [rulesets.RewriteRuleActionParametersHeadersRemoveHeader],
-// [rulesets.RewriteRuleActionParametersHeadersAddStaticHeader],
-// [rulesets.RewriteRuleActionParametersHeadersSetStaticHeader],
-// [rulesets.RewriteRuleActionParametersHeadersAddDynamicHeader] or
-// [rulesets.RewriteRuleActionParametersHeadersSetDynamicHeader].
+// Union satisfied by [RewriteRuleActionParametersHeadersRemoveHeader],
+// [RewriteRuleActionParametersHeadersAddStaticHeader],
+// [RewriteRuleActionParametersHeadersSetStaticHeader],
+// [RewriteRuleActionParametersHeadersAddDynamicHeader] or
+// [RewriteRuleActionParametersHeadersSetDynamicHeader].
 type RewriteRuleActionParametersHeadersUnion interface {
 	implementsRewriteRuleActionParametersHeader()
 }
@@ -4118,14 +4118,13 @@ func (r *RewriteURIPart) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RewriteURIPartUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [rulesets.RewriteURIPartStaticValue],
-// [rulesets.RewriteURIPartDynamicValue].
+// Possible runtime types of the union are [RewriteURIPartStaticValue],
+// [RewriteURIPartDynamicValue].
 func (r RewriteURIPart) AsUnion() RewriteURIPartUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.RewriteURIPartStaticValue] or
-// [rulesets.RewriteURIPartDynamicValue].
+// Union satisfied by [RewriteURIPartStaticValue] or [RewriteURIPartDynamicValue].
 type RewriteURIPartUnion interface {
 	implementsRewriteURIPart()
 }
@@ -5582,8 +5581,8 @@ func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString) Unmar
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters],
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters].
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters],
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters].
 func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString) AsUnion() SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion {
 	return r.union
 }
@@ -5591,9 +5590,9 @@ func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString) AsUnio
 // Use the presence of parameters in the query string to build the cache key.
 //
 // Union satisfied by
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters]
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParameters]
 // or
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters].
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParameters].
 type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringUnion interface {
 	implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryString()
 }
@@ -5678,8 +5677,8 @@ func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringInclude
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters],
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters].
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters],
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters].
 func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude) AsUnion() SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion {
 	return r.union
 }
@@ -5687,9 +5686,9 @@ func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncluded
 // A list of query string parameters used to build the cache key.
 //
 // Union satisfied by
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters]
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeSomeQueryStringParameters]
 // or
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters].
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeAllQueryStringParameters].
 type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersIncludeUnion interface {
 	implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringIncludedQueryStringParametersInclude()
 }
@@ -5831,8 +5830,8 @@ func (r *SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExclude
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters],
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters].
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters],
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters].
 func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude) AsUnion() SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion {
 	return r.union
 }
@@ -5842,9 +5841,9 @@ func (r SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcluded
 // the cache key.
 //
 // Union satisfied by
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters]
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeSomeQueryStringParameters]
 // or
-// [rulesets.SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters].
+// [SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeAllQueryStringParameters].
 type SetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExcludeUnion interface {
 	implementsSetCacheSettingsRuleActionParametersCacheKeyCustomKeyQueryStringExcludedQueryStringParametersExclude()
 }
@@ -7628,28 +7627,22 @@ func (r *RuleNewResponseRule) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RuleNewResponseRulesUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.RuleNewResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RuleNewResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule], [rulesets.ForceConnectionCloseRule].
+// Possible runtime types of the union are [BlockRule],
+// [RuleNewResponseRulesRulesetsChallengeRule], [CompressResponseRule],
+// [ExecuteRule], [RuleNewResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
 func (r RuleNewResponseRule) AsUnion() RuleNewResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule],
-// [rulesets.RuleNewResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RuleNewResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
+// Union satisfied by [BlockRule], [RuleNewResponseRulesRulesetsChallengeRule],
+// [CompressResponseRule], [ExecuteRule],
+// [RuleNewResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
 type RuleNewResponseRulesUnion interface {
 	implementsRuleNewResponseRule()
 }
@@ -8224,28 +8217,22 @@ func (r *RuleDeleteResponseRule) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RuleDeleteResponseRulesUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.RuleDeleteResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RuleDeleteResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule], [rulesets.ForceConnectionCloseRule].
+// Possible runtime types of the union are [BlockRule],
+// [RuleDeleteResponseRulesRulesetsChallengeRule], [CompressResponseRule],
+// [ExecuteRule], [RuleDeleteResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
 func (r RuleDeleteResponseRule) AsUnion() RuleDeleteResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule],
-// [rulesets.RuleDeleteResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RuleDeleteResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
+// Union satisfied by [BlockRule], [RuleDeleteResponseRulesRulesetsChallengeRule],
+// [CompressResponseRule], [ExecuteRule],
+// [RuleDeleteResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
 type RuleDeleteResponseRulesUnion interface {
 	implementsRuleDeleteResponseRule()
 }
@@ -8821,28 +8808,22 @@ func (r *RuleEditResponseRule) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RuleEditResponseRulesUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.RuleEditResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RuleEditResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule], [rulesets.ForceConnectionCloseRule].
+// Possible runtime types of the union are [BlockRule],
+// [RuleEditResponseRulesRulesetsChallengeRule], [CompressResponseRule],
+// [ExecuteRule], [RuleEditResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
 func (r RuleEditResponseRule) AsUnion() RuleEditResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule],
-// [rulesets.RuleEditResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RuleEditResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
+// Union satisfied by [BlockRule], [RuleEditResponseRulesRulesetsChallengeRule],
+// [CompressResponseRule], [ExecuteRule],
+// [RuleEditResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
 type RuleEditResponseRulesUnion interface {
 	implementsRuleEditResponseRule()
 }

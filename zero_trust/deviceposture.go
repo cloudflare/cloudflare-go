@@ -472,39 +472,30 @@ func (r *DeviceInput) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [DeviceInputUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.FileInput],
-// [zero_trust.UniqueClientIDInput], [zero_trust.DomainJoinedInput],
-// [zero_trust.OSVersionInput], [zero_trust.FirewallInput],
-// [zero_trust.SentineloneInput],
-// [zero_trust.DeviceInputTeamsDevicesCarbonblackInputRequest],
-// [zero_trust.DeviceInputTeamsDevicesAccessSerialNumberListInputRequest],
-// [zero_trust.DiskEncryptionInput],
-// [zero_trust.DeviceInputTeamsDevicesApplicationInputRequest],
-// [zero_trust.ClientCertificateInput],
-// [zero_trust.DeviceInputTeamsDevicesClientCertificateV2InputRequest],
-// [zero_trust.WorkspaceOneInput], [zero_trust.CrowdstrikeInput],
-// [zero_trust.IntuneInput], [zero_trust.KolideInput], [zero_trust.TaniumInput],
-// [zero_trust.SentineloneS2sInput],
-// [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequest].
+// Possible runtime types of the union are [FileInput], [UniqueClientIDInput],
+// [DomainJoinedInput], [OSVersionInput], [FirewallInput], [SentineloneInput],
+// [DeviceInputTeamsDevicesCarbonblackInputRequest],
+// [DeviceInputTeamsDevicesAccessSerialNumberListInputRequest],
+// [DiskEncryptionInput], [DeviceInputTeamsDevicesApplicationInputRequest],
+// [ClientCertificateInput],
+// [DeviceInputTeamsDevicesClientCertificateV2InputRequest], [WorkspaceOneInput],
+// [CrowdstrikeInput], [IntuneInput], [KolideInput], [TaniumInput],
+// [SentineloneS2sInput], [DeviceInputTeamsDevicesCustomS2sInputRequest].
 func (r DeviceInput) AsUnion() DeviceInputUnion {
 	return r.union
 }
 
 // The value to be checked against.
 //
-// Union satisfied by [zero_trust.FileInput], [zero_trust.UniqueClientIDInput],
-// [zero_trust.DomainJoinedInput], [zero_trust.OSVersionInput],
-// [zero_trust.FirewallInput], [zero_trust.SentineloneInput],
-// [zero_trust.DeviceInputTeamsDevicesCarbonblackInputRequest],
-// [zero_trust.DeviceInputTeamsDevicesAccessSerialNumberListInputRequest],
-// [zero_trust.DiskEncryptionInput],
-// [zero_trust.DeviceInputTeamsDevicesApplicationInputRequest],
-// [zero_trust.ClientCertificateInput],
-// [zero_trust.DeviceInputTeamsDevicesClientCertificateV2InputRequest],
-// [zero_trust.WorkspaceOneInput], [zero_trust.CrowdstrikeInput],
-// [zero_trust.IntuneInput], [zero_trust.KolideInput], [zero_trust.TaniumInput],
-// [zero_trust.SentineloneS2sInput] or
-// [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequest].
+// Union satisfied by [FileInput], [UniqueClientIDInput], [DomainJoinedInput],
+// [OSVersionInput], [FirewallInput], [SentineloneInput],
+// [DeviceInputTeamsDevicesCarbonblackInputRequest],
+// [DeviceInputTeamsDevicesAccessSerialNumberListInputRequest],
+// [DiskEncryptionInput], [DeviceInputTeamsDevicesApplicationInputRequest],
+// [ClientCertificateInput],
+// [DeviceInputTeamsDevicesClientCertificateV2InputRequest], [WorkspaceOneInput],
+// [CrowdstrikeInput], [IntuneInput], [KolideInput], [TaniumInput],
+// [SentineloneS2sInput] or [DeviceInputTeamsDevicesCustomS2sInputRequest].
 type DeviceInputUnion interface {
 	implementsDeviceInput()
 }

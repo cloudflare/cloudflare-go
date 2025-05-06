@@ -283,22 +283,21 @@ func (r *OperationNewResponseFeatures) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
+// [OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds],
+// [OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting],
+// [OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals],
+// [OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 func (r OperationNewResponseFeatures) AsUnion() OperationNewResponseFeaturesUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals]
-// or
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
+// [OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds],
+// [OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting],
+// [OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals] or
+// [OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 type OperationNewResponseFeaturesUnion interface {
 	implementsOperationNewResponseFeatures()
 }
@@ -928,22 +927,21 @@ func (r *OperationListResponseFeatures) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [api_gateway.OperationListResponseFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.OperationListResponseFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.OperationListResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals],
-// [api_gateway.OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
+// [OperationListResponseFeaturesAPIShieldOperationFeatureThresholds],
+// [OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [OperationListResponseFeaturesAPIShieldOperationFeatureAPIRouting],
+// [OperationListResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals],
+// [OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 func (r OperationListResponseFeatures) AsUnion() OperationListResponseFeaturesUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [api_gateway.OperationListResponseFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.OperationListResponseFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.OperationListResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals]
-// or
-// [api_gateway.OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
+// [OperationListResponseFeaturesAPIShieldOperationFeatureThresholds],
+// [OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [OperationListResponseFeaturesAPIShieldOperationFeatureAPIRouting],
+// [OperationListResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals] or
+// [OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 type OperationListResponseFeaturesUnion interface {
 	implementsOperationListResponseFeatures()
 }
@@ -1614,22 +1612,21 @@ func (r *OperationBulkNewResponseFeatures) UnmarshalJSON(data []byte) (err error
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [api_gateway.OperationBulkNewResponseFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.OperationBulkNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.OperationBulkNewResponseFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.OperationBulkNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals],
-// [api_gateway.OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
+// [OperationBulkNewResponseFeaturesAPIShieldOperationFeatureThresholds],
+// [OperationBulkNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [OperationBulkNewResponseFeaturesAPIShieldOperationFeatureAPIRouting],
+// [OperationBulkNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals],
+// [OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 func (r OperationBulkNewResponseFeatures) AsUnion() OperationBulkNewResponseFeaturesUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [api_gateway.OperationBulkNewResponseFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.OperationBulkNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.OperationBulkNewResponseFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.OperationBulkNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals]
-// or
-// [api_gateway.OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
+// [OperationBulkNewResponseFeaturesAPIShieldOperationFeatureThresholds],
+// [OperationBulkNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [OperationBulkNewResponseFeaturesAPIShieldOperationFeatureAPIRouting],
+// [OperationBulkNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals]
+// or [OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 type OperationBulkNewResponseFeaturesUnion interface {
 	implementsOperationBulkNewResponseFeatures()
 }
@@ -2300,22 +2297,21 @@ func (r *OperationGetResponseFeatures) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [api_gateway.OperationGetResponseFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.OperationGetResponseFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.OperationGetResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals],
-// [api_gateway.OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
+// [OperationGetResponseFeaturesAPIShieldOperationFeatureThresholds],
+// [OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [OperationGetResponseFeaturesAPIShieldOperationFeatureAPIRouting],
+// [OperationGetResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals],
+// [OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 func (r OperationGetResponseFeatures) AsUnion() OperationGetResponseFeaturesUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [api_gateway.OperationGetResponseFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.OperationGetResponseFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.OperationGetResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals]
-// or
-// [api_gateway.OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
+// [OperationGetResponseFeaturesAPIShieldOperationFeatureThresholds],
+// [OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [OperationGetResponseFeaturesAPIShieldOperationFeatureAPIRouting],
+// [OperationGetResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals] or
+// [OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
 type OperationGetResponseFeaturesUnion interface {
 	implementsOperationGetResponseFeatures()
 }

@@ -413,22 +413,20 @@ func (r *ResourceListResponseSectionsHiddenItemsValue) UnmarshalJSON(data []byte
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnStringItem],
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnYamlItem],
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnYamlDiffItem],
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItem],
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnListItem].
+// [ResourceListResponseSectionsHiddenItemsValueMcnStringItem],
+// [ResourceListResponseSectionsHiddenItemsValueMcnYamlItem],
+// [ResourceListResponseSectionsHiddenItemsValueMcnYamlDiffItem],
+// [ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItem],
+// [ResourceListResponseSectionsHiddenItemsValueMcnListItem].
 func (r ResourceListResponseSectionsHiddenItemsValue) AsUnion() ResourceListResponseSectionsHiddenItemsValueUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnStringItem],
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnYamlItem],
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnYamlDiffItem],
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItem]
-// or
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnListItem].
+// Union satisfied by [ResourceListResponseSectionsHiddenItemsValueMcnStringItem],
+// [ResourceListResponseSectionsHiddenItemsValueMcnYamlItem],
+// [ResourceListResponseSectionsHiddenItemsValueMcnYamlDiffItem],
+// [ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItem] or
+// [ResourceListResponseSectionsHiddenItemsValueMcnListItem].
 type ResourceListResponseSectionsHiddenItemsValueUnion interface {
 	implementsResourceListResponseSectionsHiddenItemsValue()
 }
@@ -783,16 +781,15 @@ func (r *ResourceListResponseSectionsHiddenItemsValueMcnListItemList) UnmarshalJ
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem],
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItem].
+// [ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem],
+// [ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItem].
 func (r ResourceListResponseSectionsHiddenItemsValueMcnListItemList) AsUnion() ResourceListResponseSectionsHiddenItemsValueMcnListItemListUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem]
-// or
-// [magic_cloud_networking.ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItem].
+// [ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem] or
+// [ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItem].
 type ResourceListResponseSectionsHiddenItemsValueMcnListItemListUnion interface {
 	implementsResourceListResponseSectionsHiddenItemsValueMcnListItemList()
 }
@@ -1057,22 +1054,20 @@ func (r *ResourceListResponseSectionsVisibleItemsValue) UnmarshalJSON(data []byt
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnStringItem],
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnYamlItem],
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnYamlDiffItem],
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItem],
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnListItem].
+// [ResourceListResponseSectionsVisibleItemsValueMcnStringItem],
+// [ResourceListResponseSectionsVisibleItemsValueMcnYamlItem],
+// [ResourceListResponseSectionsVisibleItemsValueMcnYamlDiffItem],
+// [ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItem],
+// [ResourceListResponseSectionsVisibleItemsValueMcnListItem].
 func (r ResourceListResponseSectionsVisibleItemsValue) AsUnion() ResourceListResponseSectionsVisibleItemsValueUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnStringItem],
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnYamlItem],
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnYamlDiffItem],
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItem]
-// or
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnListItem].
+// Union satisfied by [ResourceListResponseSectionsVisibleItemsValueMcnStringItem],
+// [ResourceListResponseSectionsVisibleItemsValueMcnYamlItem],
+// [ResourceListResponseSectionsVisibleItemsValueMcnYamlDiffItem],
+// [ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItem] or
+// [ResourceListResponseSectionsVisibleItemsValueMcnListItem].
 type ResourceListResponseSectionsVisibleItemsValueUnion interface {
 	implementsResourceListResponseSectionsVisibleItemsValue()
 }
@@ -1427,16 +1422,15 @@ func (r *ResourceListResponseSectionsVisibleItemsValueMcnListItemList) Unmarshal
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnStringItem],
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItem].
+// [ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnStringItem],
+// [ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItem].
 func (r ResourceListResponseSectionsVisibleItemsValueMcnListItemList) AsUnion() ResourceListResponseSectionsVisibleItemsValueMcnListItemListUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnStringItem]
-// or
-// [magic_cloud_networking.ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItem].
+// [ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnStringItem] or
+// [ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItem].
 type ResourceListResponseSectionsVisibleItemsValueMcnListItemListUnion interface {
 	implementsResourceListResponseSectionsVisibleItemsValueMcnListItemList()
 }
@@ -1965,22 +1959,20 @@ func (r *ResourceGetResponseSectionsHiddenItemsValue) UnmarshalJSON(data []byte)
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnStringItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnYamlItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnListItem].
+// [ResourceGetResponseSectionsHiddenItemsValueMcnStringItem],
+// [ResourceGetResponseSectionsHiddenItemsValueMcnYamlItem],
+// [ResourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItem],
+// [ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItem],
+// [ResourceGetResponseSectionsHiddenItemsValueMcnListItem].
 func (r ResourceGetResponseSectionsHiddenItemsValue) AsUnion() ResourceGetResponseSectionsHiddenItemsValueUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnStringItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnYamlItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItem]
-// or
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnListItem].
+// Union satisfied by [ResourceGetResponseSectionsHiddenItemsValueMcnStringItem],
+// [ResourceGetResponseSectionsHiddenItemsValueMcnYamlItem],
+// [ResourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItem],
+// [ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItem] or
+// [ResourceGetResponseSectionsHiddenItemsValueMcnListItem].
 type ResourceGetResponseSectionsHiddenItemsValueUnion interface {
 	implementsResourceGetResponseSectionsHiddenItemsValue()
 }
@@ -2333,16 +2325,15 @@ func (r *ResourceGetResponseSectionsHiddenItemsValueMcnListItemList) UnmarshalJS
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItem].
+// [ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem],
+// [ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItem].
 func (r ResourceGetResponseSectionsHiddenItemsValueMcnListItemList) AsUnion() ResourceGetResponseSectionsHiddenItemsValueMcnListItemListUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem]
-// or
-// [magic_cloud_networking.ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItem].
+// [ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem] or
+// [ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItem].
 type ResourceGetResponseSectionsHiddenItemsValueMcnListItemListUnion interface {
 	implementsResourceGetResponseSectionsHiddenItemsValueMcnListItemList()
 }
@@ -2607,22 +2598,20 @@ func (r *ResourceGetResponseSectionsVisibleItemsValue) UnmarshalJSON(data []byte
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnStringItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnYamlItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnListItem].
+// [ResourceGetResponseSectionsVisibleItemsValueMcnStringItem],
+// [ResourceGetResponseSectionsVisibleItemsValueMcnYamlItem],
+// [ResourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItem],
+// [ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItem],
+// [ResourceGetResponseSectionsVisibleItemsValueMcnListItem].
 func (r ResourceGetResponseSectionsVisibleItemsValue) AsUnion() ResourceGetResponseSectionsVisibleItemsValueUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnStringItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnYamlItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItem]
-// or
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnListItem].
+// Union satisfied by [ResourceGetResponseSectionsVisibleItemsValueMcnStringItem],
+// [ResourceGetResponseSectionsVisibleItemsValueMcnYamlItem],
+// [ResourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItem],
+// [ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItem] or
+// [ResourceGetResponseSectionsVisibleItemsValueMcnListItem].
 type ResourceGetResponseSectionsVisibleItemsValueUnion interface {
 	implementsResourceGetResponseSectionsVisibleItemsValue()
 }
@@ -2977,16 +2966,15 @@ func (r *ResourceGetResponseSectionsVisibleItemsValueMcnListItemList) UnmarshalJ
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnStringItem],
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItem].
+// [ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnStringItem],
+// [ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItem].
 func (r ResourceGetResponseSectionsVisibleItemsValueMcnListItemList) AsUnion() ResourceGetResponseSectionsVisibleItemsValueMcnListItemListUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnStringItem]
-// or
-// [magic_cloud_networking.ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItem].
+// [ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnStringItem] or
+// [ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItem].
 type ResourceGetResponseSectionsVisibleItemsValueMcnListItemListUnion interface {
 	implementsResourceGetResponseSectionsVisibleItemsValueMcnListItemList()
 }

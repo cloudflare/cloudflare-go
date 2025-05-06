@@ -177,15 +177,14 @@ func (r *InterconnectNewResponse) UnmarshalJSON(data []byte) (err error) {
 // the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [network_interconnects.InterconnectNewResponseNscInterconnectPhysicalBody],
-// [network_interconnects.InterconnectNewResponseNscInterconnectGcpPartnerBody].
+// [InterconnectNewResponseNscInterconnectPhysicalBody],
+// [InterconnectNewResponseNscInterconnectGcpPartnerBody].
 func (r InterconnectNewResponse) AsUnion() InterconnectNewResponseUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [network_interconnects.InterconnectNewResponseNscInterconnectPhysicalBody] or
-// [network_interconnects.InterconnectNewResponseNscInterconnectGcpPartnerBody].
+// Union satisfied by [InterconnectNewResponseNscInterconnectPhysicalBody] or
+// [InterconnectNewResponseNscInterconnectGcpPartnerBody].
 type InterconnectNewResponseUnion interface {
 	implementsInterconnectNewResponse()
 }
@@ -371,16 +370,14 @@ func (r *InterconnectListResponseItem) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [network_interconnects.InterconnectListResponseItemsNscInterconnectPhysicalBody],
-// [network_interconnects.InterconnectListResponseItemsNscInterconnectGcpPartnerBody].
+// [InterconnectListResponseItemsNscInterconnectPhysicalBody],
+// [InterconnectListResponseItemsNscInterconnectGcpPartnerBody].
 func (r InterconnectListResponseItem) AsUnion() InterconnectListResponseItemsUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [network_interconnects.InterconnectListResponseItemsNscInterconnectPhysicalBody]
-// or
-// [network_interconnects.InterconnectListResponseItemsNscInterconnectGcpPartnerBody].
+// Union satisfied by [InterconnectListResponseItemsNscInterconnectPhysicalBody] or
+// [InterconnectListResponseItemsNscInterconnectGcpPartnerBody].
 type InterconnectListResponseItemsUnion interface {
 	implementsInterconnectListResponseItem()
 }
@@ -547,15 +544,14 @@ func (r *InterconnectGetResponse) UnmarshalJSON(data []byte) (err error) {
 // the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [network_interconnects.InterconnectGetResponseNscInterconnectPhysicalBody],
-// [network_interconnects.InterconnectGetResponseNscInterconnectGcpPartnerBody].
+// [InterconnectGetResponseNscInterconnectPhysicalBody],
+// [InterconnectGetResponseNscInterconnectGcpPartnerBody].
 func (r InterconnectGetResponse) AsUnion() InterconnectGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [network_interconnects.InterconnectGetResponseNscInterconnectPhysicalBody] or
-// [network_interconnects.InterconnectGetResponseNscInterconnectGcpPartnerBody].
+// Union satisfied by [InterconnectGetResponseNscInterconnectPhysicalBody] or
+// [InterconnectGetResponseNscInterconnectGcpPartnerBody].
 type InterconnectGetResponseUnion interface {
 	implementsInterconnectGetResponse()
 }
@@ -701,19 +697,16 @@ func (r *InterconnectStatusResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [InterconnectStatusResponseUnion] interface which you can cast
 // to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [network_interconnects.InterconnectStatusResponsePending],
-// [network_interconnects.InterconnectStatusResponseDown],
-// [network_interconnects.InterconnectStatusResponseUnhealthy],
-// [network_interconnects.InterconnectStatusResponseHealthy].
+// Possible runtime types of the union are [InterconnectStatusResponsePending],
+// [InterconnectStatusResponseDown], [InterconnectStatusResponseUnhealthy],
+// [InterconnectStatusResponseHealthy].
 func (r InterconnectStatusResponse) AsUnion() InterconnectStatusResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [network_interconnects.InterconnectStatusResponsePending],
-// [network_interconnects.InterconnectStatusResponseDown],
-// [network_interconnects.InterconnectStatusResponseUnhealthy] or
-// [network_interconnects.InterconnectStatusResponseHealthy].
+// Union satisfied by [InterconnectStatusResponsePending],
+// [InterconnectStatusResponseDown], [InterconnectStatusResponseUnhealthy] or
+// [InterconnectStatusResponseHealthy].
 type InterconnectStatusResponseUnion interface {
 	implementsInterconnectStatusResponse()
 }

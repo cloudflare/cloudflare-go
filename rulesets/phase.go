@@ -238,28 +238,22 @@ func (r *PhaseUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [PhaseUpdateResponseRulesUnion] interface which you can cast
 // to the specific types for more type safety.
 //
-// Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.PhaseUpdateResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.PhaseUpdateResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule], [rulesets.ForceConnectionCloseRule].
+// Possible runtime types of the union are [BlockRule],
+// [PhaseUpdateResponseRulesRulesetsChallengeRule], [CompressResponseRule],
+// [ExecuteRule], [PhaseUpdateResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
 func (r PhaseUpdateResponseRule) AsUnion() PhaseUpdateResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule],
-// [rulesets.PhaseUpdateResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.PhaseUpdateResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
+// Union satisfied by [BlockRule], [PhaseUpdateResponseRulesRulesetsChallengeRule],
+// [CompressResponseRule], [ExecuteRule],
+// [PhaseUpdateResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
 type PhaseUpdateResponseRulesUnion interface {
 	implementsPhaseUpdateResponseRule()
 }
@@ -835,28 +829,22 @@ func (r *PhaseGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [PhaseGetResponseRulesUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.PhaseGetResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.PhaseGetResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule], [rulesets.ForceConnectionCloseRule].
+// Possible runtime types of the union are [BlockRule],
+// [PhaseGetResponseRulesRulesetsChallengeRule], [CompressResponseRule],
+// [ExecuteRule], [PhaseGetResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
 func (r PhaseGetResponseRule) AsUnion() PhaseGetResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule],
-// [rulesets.PhaseGetResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.PhaseGetResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
+// Union satisfied by [BlockRule], [PhaseGetResponseRulesRulesetsChallengeRule],
+// [CompressResponseRule], [ExecuteRule],
+// [PhaseGetResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
 type PhaseGetResponseRulesUnion interface {
 	implementsPhaseGetResponseRule()
 }

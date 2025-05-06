@@ -684,18 +684,17 @@ func (r *AccessRuleNewResponseConfiguration) UnmarshalJSON(data []byte) (err err
 // AsUnion returns a [AccessRuleNewResponseConfigurationUnion] interface which you
 // can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [firewall.AccessRuleIPConfiguration],
-// [firewall.IPV6Configuration], [firewall.AccessRuleCIDRConfiguration],
-// [firewall.ASNConfiguration], [firewall.CountryConfiguration].
+// Possible runtime types of the union are [AccessRuleIPConfiguration],
+// [IPV6Configuration], [AccessRuleCIDRConfiguration], [ASNConfiguration],
+// [CountryConfiguration].
 func (r AccessRuleNewResponseConfiguration) AsUnion() AccessRuleNewResponseConfigurationUnion {
 	return r.union
 }
 
 // The rule configuration.
 //
-// Union satisfied by [firewall.AccessRuleIPConfiguration],
-// [firewall.IPV6Configuration], [firewall.AccessRuleCIDRConfiguration],
-// [firewall.ASNConfiguration] or [firewall.CountryConfiguration].
+// Union satisfied by [AccessRuleIPConfiguration], [IPV6Configuration],
+// [AccessRuleCIDRConfiguration], [ASNConfiguration] or [CountryConfiguration].
 type AccessRuleNewResponseConfigurationUnion interface {
 	implementsAccessRuleNewResponseConfiguration()
 }
@@ -910,18 +909,17 @@ func (r *AccessRuleListResponseConfiguration) UnmarshalJSON(data []byte) (err er
 // AsUnion returns a [AccessRuleListResponseConfigurationUnion] interface which you
 // can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [firewall.AccessRuleIPConfiguration],
-// [firewall.IPV6Configuration], [firewall.AccessRuleCIDRConfiguration],
-// [firewall.ASNConfiguration], [firewall.CountryConfiguration].
+// Possible runtime types of the union are [AccessRuleIPConfiguration],
+// [IPV6Configuration], [AccessRuleCIDRConfiguration], [ASNConfiguration],
+// [CountryConfiguration].
 func (r AccessRuleListResponseConfiguration) AsUnion() AccessRuleListResponseConfigurationUnion {
 	return r.union
 }
 
 // The rule configuration.
 //
-// Union satisfied by [firewall.AccessRuleIPConfiguration],
-// [firewall.IPV6Configuration], [firewall.AccessRuleCIDRConfiguration],
-// [firewall.ASNConfiguration] or [firewall.CountryConfiguration].
+// Union satisfied by [AccessRuleIPConfiguration], [IPV6Configuration],
+// [AccessRuleCIDRConfiguration], [ASNConfiguration] or [CountryConfiguration].
 type AccessRuleListResponseConfigurationUnion interface {
 	implementsAccessRuleListResponseConfiguration()
 }
@@ -1158,18 +1156,17 @@ func (r *AccessRuleEditResponseConfiguration) UnmarshalJSON(data []byte) (err er
 // AsUnion returns a [AccessRuleEditResponseConfigurationUnion] interface which you
 // can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [firewall.AccessRuleIPConfiguration],
-// [firewall.IPV6Configuration], [firewall.AccessRuleCIDRConfiguration],
-// [firewall.ASNConfiguration], [firewall.CountryConfiguration].
+// Possible runtime types of the union are [AccessRuleIPConfiguration],
+// [IPV6Configuration], [AccessRuleCIDRConfiguration], [ASNConfiguration],
+// [CountryConfiguration].
 func (r AccessRuleEditResponseConfiguration) AsUnion() AccessRuleEditResponseConfigurationUnion {
 	return r.union
 }
 
 // The rule configuration.
 //
-// Union satisfied by [firewall.AccessRuleIPConfiguration],
-// [firewall.IPV6Configuration], [firewall.AccessRuleCIDRConfiguration],
-// [firewall.ASNConfiguration] or [firewall.CountryConfiguration].
+// Union satisfied by [AccessRuleIPConfiguration], [IPV6Configuration],
+// [AccessRuleCIDRConfiguration], [ASNConfiguration] or [CountryConfiguration].
 type AccessRuleEditResponseConfigurationUnion interface {
 	implementsAccessRuleEditResponseConfiguration()
 }
@@ -1384,18 +1381,17 @@ func (r *AccessRuleGetResponseConfiguration) UnmarshalJSON(data []byte) (err err
 // AsUnion returns a [AccessRuleGetResponseConfigurationUnion] interface which you
 // can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [firewall.AccessRuleIPConfiguration],
-// [firewall.IPV6Configuration], [firewall.AccessRuleCIDRConfiguration],
-// [firewall.ASNConfiguration], [firewall.CountryConfiguration].
+// Possible runtime types of the union are [AccessRuleIPConfiguration],
+// [IPV6Configuration], [AccessRuleCIDRConfiguration], [ASNConfiguration],
+// [CountryConfiguration].
 func (r AccessRuleGetResponseConfiguration) AsUnion() AccessRuleGetResponseConfigurationUnion {
 	return r.union
 }
 
 // The rule configuration.
 //
-// Union satisfied by [firewall.AccessRuleIPConfiguration],
-// [firewall.IPV6Configuration], [firewall.AccessRuleCIDRConfiguration],
-// [firewall.ASNConfiguration] or [firewall.CountryConfiguration].
+// Union satisfied by [AccessRuleIPConfiguration], [IPV6Configuration],
+// [AccessRuleCIDRConfiguration], [ASNConfiguration] or [CountryConfiguration].
 type AccessRuleGetResponseConfigurationUnion interface {
 	implementsAccessRuleGetResponseConfiguration()
 }
