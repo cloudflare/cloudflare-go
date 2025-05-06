@@ -166,7 +166,7 @@ type DevicePolicyCustomNewParams struct {
 	// The wirefilter expression to match devices. Available values: "identity.email",
 	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
 	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
-	// "os.version"
+	// "os.version".
 	Match param.Field[string] `json:"match,required"`
 	// The name of the device settings profile.
 	Name param.Field[string] `json:"name,required"`
@@ -326,7 +326,7 @@ type DevicePolicyCustomEditParams struct {
 	// The wirefilter expression to match devices. Available values: "identity.email",
 	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
 	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
-	// "os.version"
+	// "os.version".
 	Match param.Field[string] `json:"match"`
 	// The name of the device settings profile.
 	Name param.Field[string] `json:"name"`

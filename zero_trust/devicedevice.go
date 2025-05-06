@@ -204,7 +204,7 @@ func (r deviceDeviceListResponseJSON) RawJSON() string {
 
 // The last Access user to use the WARP device.
 type DeviceDeviceListResponseLastSeenUser struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
@@ -311,7 +311,7 @@ func (r deviceDeviceGetResponseJSON) RawJSON() string {
 
 // The last Access user to use the WARP device.
 type DeviceDeviceGetResponseLastSeenUser struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
