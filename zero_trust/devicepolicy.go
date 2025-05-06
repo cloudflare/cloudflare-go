@@ -300,15 +300,14 @@ func (r *SplitTunnelExclude) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress],
-// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost].
+// [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress],
+// [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost].
 func (r SplitTunnelExclude) AsUnion() SplitTunnelExcludeUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress] or
-// [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost].
+// Union satisfied by [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress]
+// or [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost].
 type SplitTunnelExcludeUnion interface {
 	implementsSplitTunnelExclude()
 }
@@ -481,15 +480,14 @@ func (r *SplitTunnelInclude) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress],
-// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost].
+// [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress],
+// [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost].
 func (r SplitTunnelInclude) AsUnion() SplitTunnelIncludeUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress] or
-// [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost].
+// Union satisfied by [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress]
+// or [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost].
 type SplitTunnelIncludeUnion interface {
 	implementsSplitTunnelInclude()
 }

@@ -332,14 +332,14 @@ func (r *PCAPNewResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [PCAPNewResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [magic_transit.PCAP],
-// [magic_transit.PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Possible runtime types of the union are [PCAP],
+// [PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull].
 func (r PCAPNewResponse) AsUnion() PCAPNewResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [magic_transit.PCAP] or
-// [magic_transit.PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Union satisfied by [PCAP] or
+// [PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull].
 type PCAPNewResponseUnion interface {
 	implementsPCAPNewResponse()
 }
@@ -596,14 +596,14 @@ func (r *PCAPListResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [PCAPListResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [magic_transit.PCAP],
-// [magic_transit.PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Possible runtime types of the union are [PCAP],
+// [PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull].
 func (r PCAPListResponse) AsUnion() PCAPListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [magic_transit.PCAP] or
-// [magic_transit.PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Union satisfied by [PCAP] or
+// [PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull].
 type PCAPListResponseUnion interface {
 	implementsPCAPListResponse()
 }
@@ -859,14 +859,14 @@ func (r *PCAPGetResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [PCAPGetResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [magic_transit.PCAP],
-// [magic_transit.PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Possible runtime types of the union are [PCAP],
+// [PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull].
 func (r PCAPGetResponse) AsUnion() PCAPGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [magic_transit.PCAP] or
-// [magic_transit.PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull].
+// Union satisfied by [PCAP] or
+// [PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull].
 type PCAPGetResponseUnion interface {
 	implementsPCAPGetResponse()
 }

@@ -75,13 +75,12 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 
 // An array of classification results for the input text
 //
-// Union satisfied by [ai.AIRunResponseTextClassification], [shared.UnionString],
-// [ai.AIRunResponseAudio], [ai.AIRunResponseTextEmbeddings],
-// [ai.AIRunResponseAutomaticSpeechRecognition],
-// [ai.AIRunResponseImageClassification], [ai.AIRunResponseObjectDetection],
-// [ai.AIRunResponseObject], [ai.AIRunResponseTranslation],
-// [ai.AIRunResponseSummarization], [ai.AIRunResponseImageToText] or
-// [ai.AIRunResponseImageTextToText].
+// Union satisfied by [AIRunResponseTextClassification], [shared.UnionString],
+// [AIRunResponseAudio], [AIRunResponseTextEmbeddings],
+// [AIRunResponseAutomaticSpeechRecognition], [AIRunResponseImageClassification],
+// [AIRunResponseObjectDetection], [AIRunResponseObject],
+// [AIRunResponseTranslation], [AIRunResponseSummarization],
+// [AIRunResponseImageToText] or [AIRunResponseImageTextToText].
 type AIRunResponseUnion interface {
 	ImplementsAIRunResponseUnion()
 }

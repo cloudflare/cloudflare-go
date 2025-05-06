@@ -232,14 +232,14 @@ func (r *NamespaceKeyBulkGetResponse) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [kv.NamespaceKeyBulkGetResponseWorkersKVBulkGetResult],
-// [kv.NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadata].
+// [NamespaceKeyBulkGetResponseWorkersKVBulkGetResult],
+// [NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadata].
 func (r NamespaceKeyBulkGetResponse) AsUnion() NamespaceKeyBulkGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [kv.NamespaceKeyBulkGetResponseWorkersKVBulkGetResult] or
-// [kv.NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadata].
+// Union satisfied by [NamespaceKeyBulkGetResponseWorkersKVBulkGetResult] or
+// [NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadata].
 type NamespaceKeyBulkGetResponseUnion interface {
 	implementsNamespaceKeyBulkGetResponse()
 }
@@ -286,7 +286,7 @@ func (r NamespaceKeyBulkGetResponseWorkersKVBulkGetResult) implementsNamespaceKe
 // The value associated with the key
 //
 // Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
-// or [kv.NamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesMap].
+// or [NamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesMap].
 type NamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion interface {
 	ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()
 }
@@ -383,7 +383,7 @@ func (r namespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValueJSON) 
 //
 // Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
 // or
-// [kv.NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap].
+// [NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueMap].
 type NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion interface {
 	ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValuesValueUnion()
 }

@@ -114,15 +114,14 @@ func (r *HyperdriveOrigin) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [HyperdriveOriginUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [hyperdrive.HyperdriveOriginPublicDatabase],
-// [hyperdrive.HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel].
+// Possible runtime types of the union are [HyperdriveOriginPublicDatabase],
+// [HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel].
 func (r HyperdriveOrigin) AsUnion() HyperdriveOriginUnion {
 	return r.union
 }
 
-// Union satisfied by [hyperdrive.HyperdriveOriginPublicDatabase] or
-// [hyperdrive.HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel].
+// Union satisfied by [HyperdriveOriginPublicDatabase] or
+// [HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel].
 type HyperdriveOriginUnion interface {
 	implementsHyperdriveOrigin()
 }
@@ -306,15 +305,14 @@ func (r *HyperdriveCaching) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingCommon],
-// [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingEnabled].
+// [HyperdriveCachingHyperdriveHyperdriveCachingCommon],
+// [HyperdriveCachingHyperdriveHyperdriveCachingEnabled].
 func (r HyperdriveCaching) AsUnion() HyperdriveCachingUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingCommon] or
-// [hyperdrive.HyperdriveCachingHyperdriveHyperdriveCachingEnabled].
+// Union satisfied by [HyperdriveCachingHyperdriveHyperdriveCachingCommon] or
+// [HyperdriveCachingHyperdriveHyperdriveCachingEnabled].
 type HyperdriveCachingUnion interface {
 	implementsHyperdriveCaching()
 }

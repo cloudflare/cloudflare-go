@@ -936,19 +936,16 @@ func (r *BotManagementUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [BotManagementUpdateResponseUnion] interface which you can
 // cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [bot_management.BotFightModeConfiguration],
-// [bot_management.SuperBotFightModeDefinitelyConfiguration],
-// [bot_management.SuperBotFightModeLikelyConfiguration],
-// [bot_management.SubscriptionConfiguration].
+// Possible runtime types of the union are [BotFightModeConfiguration],
+// [SuperBotFightModeDefinitelyConfiguration],
+// [SuperBotFightModeLikelyConfiguration], [SubscriptionConfiguration].
 func (r BotManagementUpdateResponse) AsUnion() BotManagementUpdateResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [bot_management.BotFightModeConfiguration],
-// [bot_management.SuperBotFightModeDefinitelyConfiguration],
-// [bot_management.SuperBotFightModeLikelyConfiguration] or
-// [bot_management.SubscriptionConfiguration].
+// Union satisfied by [BotFightModeConfiguration],
+// [SuperBotFightModeDefinitelyConfiguration],
+// [SuperBotFightModeLikelyConfiguration] or [SubscriptionConfiguration].
 type BotManagementUpdateResponseUnion interface {
 	implementsBotManagementUpdateResponse()
 }
@@ -1136,19 +1133,16 @@ func (r *BotManagementGetResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [BotManagementGetResponseUnion] interface which you can cast
 // to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [bot_management.BotFightModeConfiguration],
-// [bot_management.SuperBotFightModeDefinitelyConfiguration],
-// [bot_management.SuperBotFightModeLikelyConfiguration],
-// [bot_management.SubscriptionConfiguration].
+// Possible runtime types of the union are [BotFightModeConfiguration],
+// [SuperBotFightModeDefinitelyConfiguration],
+// [SuperBotFightModeLikelyConfiguration], [SubscriptionConfiguration].
 func (r BotManagementGetResponse) AsUnion() BotManagementGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [bot_management.BotFightModeConfiguration],
-// [bot_management.SuperBotFightModeDefinitelyConfiguration],
-// [bot_management.SuperBotFightModeLikelyConfiguration] or
-// [bot_management.SubscriptionConfiguration].
+// Union satisfied by [BotFightModeConfiguration],
+// [SuperBotFightModeDefinitelyConfiguration],
+// [SuperBotFightModeLikelyConfiguration] or [SubscriptionConfiguration].
 type BotManagementGetResponseUnion interface {
 	implementsBotManagementGetResponse()
 }

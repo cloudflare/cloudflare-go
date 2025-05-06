@@ -179,28 +179,28 @@ func (r *DispatchNamespaceScriptBindingGetResponse) UnmarshalJSON(data []byte) (
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey].
 func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceScriptBindingGetResponseUnion {
 	return r.union
 }
@@ -208,29 +208,28 @@ func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceSc
 // A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata],
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret]
-// or
-// [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey].
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTailConsumer],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret]
+// or [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey].
 type DispatchNamespaceScriptBindingGetResponseUnion interface {
 	implementsDispatchNamespaceScriptBindingGetResponse()
 }

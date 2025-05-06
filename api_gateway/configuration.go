@@ -122,8 +122,8 @@ func (r *ConfigurationAuthIDCharacteristic) UnmarshalJSON(data []byte) (err erro
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic],
-// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim].
+// [ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic],
+// [ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim].
 func (r ConfigurationAuthIDCharacteristic) AsUnion() ConfigurationAuthIDCharacteristicsUnion {
 	return r.union
 }
@@ -131,8 +131,8 @@ func (r ConfigurationAuthIDCharacteristic) AsUnion() ConfigurationAuthIDCharacte
 // Auth ID Characteristic
 //
 // Union satisfied by
-// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic] or
-// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim].
+// [ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic] or
+// [ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim].
 type ConfigurationAuthIDCharacteristicsUnion interface {
 	implementsConfigurationAuthIDCharacteristic()
 }

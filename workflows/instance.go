@@ -465,19 +465,16 @@ func (r *InstanceGetResponseStep) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [InstanceGetResponseStepsUnion] interface which you can cast
 // to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [workflows.InstanceGetResponseStepsObject],
-// [workflows.InstanceGetResponseStepsObject],
-// [workflows.InstanceGetResponseStepsObject],
-// [workflows.InstanceGetResponseStepsObject].
+// Possible runtime types of the union are [InstanceGetResponseStepsObject],
+// [InstanceGetResponseStepsObject], [InstanceGetResponseStepsObject],
+// [InstanceGetResponseStepsObject].
 func (r InstanceGetResponseStep) AsUnion() InstanceGetResponseStepsUnion {
 	return r.union
 }
 
-// Union satisfied by [workflows.InstanceGetResponseStepsObject],
-// [workflows.InstanceGetResponseStepsObject],
-// [workflows.InstanceGetResponseStepsObject] or
-// [workflows.InstanceGetResponseStepsObject].
+// Union satisfied by [InstanceGetResponseStepsObject],
+// [InstanceGetResponseStepsObject], [InstanceGetResponseStepsObject] or
+// [InstanceGetResponseStepsObject].
 type InstanceGetResponseStepsUnion interface {
 	implementsInstanceGetResponseStep()
 }

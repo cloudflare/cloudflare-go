@@ -251,52 +251,40 @@ func (r *PageRuleAction) UnmarshalJSON(data []byte) (err error) {
 //
 // Possible runtime types of the union are [zones.AlwaysUseHTTPS],
 // [zones.AutomaticHTTPSRewrites], [zones.BrowserCacheTTL], [zones.BrowserCheck],
-// [page_rules.PageRuleActionsBypassCacheOnCookie],
-// [page_rules.PageRuleActionsCacheByDeviceType],
-// [page_rules.PageRuleActionsCacheDeceptionArmor],
-// [page_rules.PageRuleActionsCacheKeyFields], [zones.CacheLevel],
-// [page_rules.PageRuleActionsCacheOnCookie],
-// [page_rules.PageRuleActionsCacheTTLByStatus],
-// [page_rules.PageRuleActionsDisableApps],
-// [page_rules.PageRuleActionsDisablePerformance],
-// [page_rules.PageRuleActionsDisableSecurity],
-// [page_rules.PageRuleActionsDisableZaraz],
-// [page_rules.PageRuleActionsEdgeCacheTTL], [zones.EmailObfuscation],
-// [page_rules.PageRuleActionsExplicitCacheControl],
-// [page_rules.PageRuleActionsForwardingURL],
-// [page_rules.PageRuleActionsHostHeaderOverride], [zones.IPGeolocation],
-// [zones.Mirage], [zones.OpportunisticEncryption],
+// [PageRuleActionsBypassCacheOnCookie], [PageRuleActionsCacheByDeviceType],
+// [PageRuleActionsCacheDeceptionArmor], [PageRuleActionsCacheKeyFields],
+// [zones.CacheLevel], [PageRuleActionsCacheOnCookie],
+// [PageRuleActionsCacheTTLByStatus], [PageRuleActionsDisableApps],
+// [PageRuleActionsDisablePerformance], [PageRuleActionsDisableSecurity],
+// [PageRuleActionsDisableZaraz], [PageRuleActionsEdgeCacheTTL],
+// [zones.EmailObfuscation], [PageRuleActionsExplicitCacheControl],
+// [PageRuleActionsForwardingURL], [PageRuleActionsHostHeaderOverride],
+// [zones.IPGeolocation], [zones.Mirage], [zones.OpportunisticEncryption],
 // [zones.OriginErrorPagePassThru], [zones.Polish],
-// [page_rules.PageRuleActionsResolveOverride],
-// [page_rules.PageRuleActionsRespectStrongEtag], [zones.ResponseBuffering],
-// [zones.RocketLoader], [zones.SecurityLevel], [zones.SortQueryStringForCache],
-// [zones.SSL], [zones.TrueClientIPHeader], [zones.WAF].
+// [PageRuleActionsResolveOverride], [PageRuleActionsRespectStrongEtag],
+// [zones.ResponseBuffering], [zones.RocketLoader], [zones.SecurityLevel],
+// [zones.SortQueryStringForCache], [zones.SSL], [zones.TrueClientIPHeader],
+// [zones.WAF].
 func (r PageRuleAction) AsUnion() PageRuleActionsUnion {
 	return r.union
 }
 
 // Union satisfied by [zones.AlwaysUseHTTPS], [zones.AutomaticHTTPSRewrites],
 // [zones.BrowserCacheTTL], [zones.BrowserCheck],
-// [page_rules.PageRuleActionsBypassCacheOnCookie],
-// [page_rules.PageRuleActionsCacheByDeviceType],
-// [page_rules.PageRuleActionsCacheDeceptionArmor],
-// [page_rules.PageRuleActionsCacheKeyFields], [zones.CacheLevel],
-// [page_rules.PageRuleActionsCacheOnCookie],
-// [page_rules.PageRuleActionsCacheTTLByStatus],
-// [page_rules.PageRuleActionsDisableApps],
-// [page_rules.PageRuleActionsDisablePerformance],
-// [page_rules.PageRuleActionsDisableSecurity],
-// [page_rules.PageRuleActionsDisableZaraz],
-// [page_rules.PageRuleActionsEdgeCacheTTL], [zones.EmailObfuscation],
-// [page_rules.PageRuleActionsExplicitCacheControl],
-// [page_rules.PageRuleActionsForwardingURL],
-// [page_rules.PageRuleActionsHostHeaderOverride], [zones.IPGeolocation],
-// [zones.Mirage], [zones.OpportunisticEncryption],
+// [PageRuleActionsBypassCacheOnCookie], [PageRuleActionsCacheByDeviceType],
+// [PageRuleActionsCacheDeceptionArmor], [PageRuleActionsCacheKeyFields],
+// [zones.CacheLevel], [PageRuleActionsCacheOnCookie],
+// [PageRuleActionsCacheTTLByStatus], [PageRuleActionsDisableApps],
+// [PageRuleActionsDisablePerformance], [PageRuleActionsDisableSecurity],
+// [PageRuleActionsDisableZaraz], [PageRuleActionsEdgeCacheTTL],
+// [zones.EmailObfuscation], [PageRuleActionsExplicitCacheControl],
+// [PageRuleActionsForwardingURL], [PageRuleActionsHostHeaderOverride],
+// [zones.IPGeolocation], [zones.Mirage], [zones.OpportunisticEncryption],
 // [zones.OriginErrorPagePassThru], [zones.Polish],
-// [page_rules.PageRuleActionsResolveOverride],
-// [page_rules.PageRuleActionsRespectStrongEtag], [zones.ResponseBuffering],
-// [zones.RocketLoader], [zones.SecurityLevel], [zones.SortQueryStringForCache],
-// [zones.SSL], [zones.TrueClientIPHeader] or [zones.WAF].
+// [PageRuleActionsResolveOverride], [PageRuleActionsRespectStrongEtag],
+// [zones.ResponseBuffering], [zones.RocketLoader], [zones.SecurityLevel],
+// [zones.SortQueryStringForCache], [zones.SSL], [zones.TrueClientIPHeader] or
+// [zones.WAF].
 type PageRuleActionsUnion interface {
 	ImplementsPageRuleAction()
 }
@@ -835,9 +823,8 @@ func (r pageRuleActionsCacheKeyFieldsValueQueryStringJSON) RawJSON() string {
 
 // Ignore all query string parameters.
 //
-// Union satisfied by
-// [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString] or
-// [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray].
+// Union satisfied by [PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString]
+// or [PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray].
 type PageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion interface {
 	implementsPageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion()
 }
@@ -882,9 +869,8 @@ func (r PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPag
 
 // Include all query string parameters.
 //
-// Union satisfied by
-// [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString] or
-// [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringIncludeArray].
+// Union satisfied by [PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString]
+// or [PageRuleActionsCacheKeyFieldsValueQueryStringIncludeArray].
 type PageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion interface {
 	implementsPageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion()
 }
@@ -1072,7 +1058,7 @@ func (r PageRuleActionsCacheTTLByStatusID) IsKnown() bool {
 
 // `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
 //
-// Union satisfied by [page_rules.PageRuleActionsCacheTTLByStatusValueString] or
+// Union satisfied by [PageRuleActionsCacheTTLByStatusValueString] or
 // [shared.UnionInt].
 type PageRuleActionsCacheTTLByStatusValueUnion interface {
 	ImplementsPageRuleActionsCacheTTLByStatusValueUnion()

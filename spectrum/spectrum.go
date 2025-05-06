@@ -127,15 +127,14 @@ func (r *EdgeIPs) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [EdgeIPsUnion] interface which you can cast to the specific
 // types for more type safety.
 //
-// Possible runtime types of the union are [spectrum.EdgeIPsObject],
-// [spectrum.EdgeIPsObject].
+// Possible runtime types of the union are [EdgeIPsObject], [EdgeIPsObject].
 func (r EdgeIPs) AsUnion() EdgeIPsUnion {
 	return r.union
 }
 
 // The anycast edge IP configuration for the hostname of this application.
 //
-// Union satisfied by [spectrum.EdgeIPsObject] or [spectrum.EdgeIPsObject].
+// Union satisfied by [EdgeIPsObject] or [EdgeIPsObject].
 type EdgeIPsUnion interface {
 	implementsEdgeIPs()
 }

@@ -247,15 +247,14 @@ func (r *DNSGetResponse) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [email_routing.DNSGetResponseEmailEmailRoutingDNSQueryResponse],
-// [email_routing.DNSGetResponseEmailDNSSettingsResponseCollection].
+// [DNSGetResponseEmailEmailRoutingDNSQueryResponse],
+// [DNSGetResponseEmailDNSSettingsResponseCollection].
 func (r DNSGetResponse) AsUnion() DNSGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [email_routing.DNSGetResponseEmailEmailRoutingDNSQueryResponse] or
-// [email_routing.DNSGetResponseEmailDNSSettingsResponseCollection].
+// Union satisfied by [DNSGetResponseEmailEmailRoutingDNSQueryResponse] or
+// [DNSGetResponseEmailDNSSettingsResponseCollection].
 type DNSGetResponseUnion interface {
 	implementsDNSGetResponse()
 }
