@@ -35,6 +35,7 @@ func NewScriptSubdomainService(opts ...option.RequestOption) (r *ScriptSubdomain
 
 // Enable or disable the Worker on the workers.dev subdomain.
 func (r *ScriptSubdomainService) New(ctx context.Context, scriptName string, params ScriptSubdomainNewParams, opts ...option.RequestOption) (res *ScriptSubdomainNewResponse, err error) {
+	var env ScriptSubdomainNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -45,12 +46,17 @@ func (r *ScriptSubdomainService) New(ctx context.Context, scriptName string, par
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/subdomain", params.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Get if the Worker is available on the workers.dev subdomain.
 func (r *ScriptSubdomainService) Get(ctx context.Context, scriptName string, query ScriptSubdomainGetParams, opts ...option.RequestOption) (res *ScriptSubdomainGetResponse, err error) {
+	var env ScriptSubdomainGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -61,16 +67,19 @@ func (r *ScriptSubdomainService) Get(ctx context.Context, scriptName string, que
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/subdomain", query.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type ScriptSubdomainNewResponse struct {
 	// Whether the Worker is available on the workers.dev subdomain.
-	Enabled bool `json:"enabled"`
-	// Whether the Worker's Preview URLs should be available on the workers.dev
-	// subdomain.
-	PreviewsEnabled bool                           `json:"previews_enabled"`
+	Enabled bool `json:"enabled,required"`
+	// Whether the Worker's Preview URLs are available on the workers.dev subdomain.
+	PreviewsEnabled bool                           `json:"previews_enabled,required"`
 	JSON            scriptSubdomainNewResponseJSON `json:"-"`
 }
 
@@ -93,10 +102,9 @@ func (r scriptSubdomainNewResponseJSON) RawJSON() string {
 
 type ScriptSubdomainGetResponse struct {
 	// Whether the Worker is available on the workers.dev subdomain.
-	Enabled bool `json:"enabled"`
-	// Whether the Worker's Preview URLs should be available on the workers.dev
-	// subdomain.
-	PreviewsEnabled bool                           `json:"previews_enabled"`
+	Enabled bool `json:"enabled,required"`
+	// Whether the Worker's Preview URLs are available on the workers.dev subdomain.
+	PreviewsEnabled bool                           `json:"previews_enabled,required"`
 	JSON            scriptSubdomainGetResponseJSON `json:"-"`
 }
 
@@ -131,7 +139,285 @@ func (r ScriptSubdomainNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type ScriptSubdomainNewResponseEnvelope struct {
+	Errors   []ScriptSubdomainNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScriptSubdomainNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptSubdomainNewResponse                   `json:"result,required"`
+	// Whether the API call was successful.
+	Success ScriptSubdomainNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    scriptSubdomainNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// scriptSubdomainNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ScriptSubdomainNewResponseEnvelope]
+type scriptSubdomainNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainNewResponseEnvelopeErrors struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           ScriptSubdomainNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scriptSubdomainNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scriptSubdomainNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ScriptSubdomainNewResponseEnvelopeErrors]
+type scriptSubdomainNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    scriptSubdomainNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scriptSubdomainNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [ScriptSubdomainNewResponseEnvelopeErrorsSource]
+type scriptSubdomainNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainNewResponseEnvelopeMessages struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           ScriptSubdomainNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scriptSubdomainNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scriptSubdomainNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ScriptSubdomainNewResponseEnvelopeMessages]
+type scriptSubdomainNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    scriptSubdomainNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scriptSubdomainNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ScriptSubdomainNewResponseEnvelopeMessagesSource]
+type scriptSubdomainNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type ScriptSubdomainNewResponseEnvelopeSuccess bool
+
+const (
+	ScriptSubdomainNewResponseEnvelopeSuccessTrue ScriptSubdomainNewResponseEnvelopeSuccess = true
+)
+
+func (r ScriptSubdomainNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptSubdomainNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ScriptSubdomainGetParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ScriptSubdomainGetResponseEnvelope struct {
+	Errors   []ScriptSubdomainGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScriptSubdomainGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptSubdomainGetResponse                   `json:"result,required"`
+	// Whether the API call was successful.
+	Success ScriptSubdomainGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    scriptSubdomainGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// scriptSubdomainGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ScriptSubdomainGetResponseEnvelope]
+type scriptSubdomainGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainGetResponseEnvelopeErrors struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           ScriptSubdomainGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scriptSubdomainGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scriptSubdomainGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ScriptSubdomainGetResponseEnvelopeErrors]
+type scriptSubdomainGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    scriptSubdomainGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scriptSubdomainGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [ScriptSubdomainGetResponseEnvelopeErrorsSource]
+type scriptSubdomainGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainGetResponseEnvelopeMessages struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           ScriptSubdomainGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scriptSubdomainGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scriptSubdomainGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ScriptSubdomainGetResponseEnvelopeMessages]
+type scriptSubdomainGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    scriptSubdomainGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scriptSubdomainGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ScriptSubdomainGetResponseEnvelopeMessagesSource]
+type scriptSubdomainGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type ScriptSubdomainGetResponseEnvelopeSuccess bool
+
+const (
+	ScriptSubdomainGetResponseEnvelopeSuccessTrue ScriptSubdomainGetResponseEnvelopeSuccess = true
+)
+
+func (r ScriptSubdomainGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptSubdomainGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
