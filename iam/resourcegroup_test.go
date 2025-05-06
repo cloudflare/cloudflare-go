@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-func TestResourceGroupNewWithOptionalParams(t *testing.T) {
+func TestResourceGroupNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,14 +29,12 @@ func TestResourceGroupNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.IAM.ResourceGroups.New(context.TODO(), iam.ResourceGroupNewParams{
 		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+		Name:      cloudflare.F("NewResourceGroup"),
 		Scope: cloudflare.F(iam.ResourceGroupNewParamsScope{
 			Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
 			Objects: cloudflare.F([]iam.ResourceGroupNewParamsScopeObject{{
 				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
 			}}),
-		}),
-		Meta: cloudflare.F[any](map[string]interface{}{
-			"editable": "false",
 		}),
 	})
 	if err != nil {
@@ -66,14 +64,12 @@ func TestResourceGroupUpdateWithOptionalParams(t *testing.T) {
 		"6d7f2f5f5b1d4a0e9081fdc98d432fd1",
 		iam.ResourceGroupUpdateParams{
 			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
+			Name:      cloudflare.F("UpdatedResourceGroup"),
 			Scope: cloudflare.F(iam.ResourceGroupUpdateParamsScope{
 				Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
 				Objects: cloudflare.F([]iam.ResourceGroupUpdateParamsScopeObject{{
 					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
 				}}),
-			}),
-			Meta: cloudflare.F[any](map[string]interface{}{
-				"editable": "false",
 			}),
 		},
 	)
