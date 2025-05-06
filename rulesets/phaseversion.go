@@ -522,7 +522,7 @@ type PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod `json:"period,required"`
+	Period int64 `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -565,24 +565,6 @@ func (r *PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimit) UnmarshalJS
 
 func (r phaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
-}
-
-// Period in seconds over which the counter is being incremented.
-type PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod int64
-
-const (
-	PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod10   PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 10
-	PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod60   PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 60
-	PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod600  PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 600
-	PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod3600 PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod10, PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod60, PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod600, PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 type PhaseVersionGetResponseRulesRulesetsJSChallengeRule struct {
@@ -694,7 +676,7 @@ type PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod `json:"period,required"`
+	Period int64 `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -737,24 +719,6 @@ func (r *PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimit) Unmarshal
 
 func (r phaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
-}
-
-// Period in seconds over which the counter is being incremented.
-type PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod int64
-
-const (
-	PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10   PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
-	PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60   PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
-	PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600  PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
-	PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600 PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10, PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60, PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600, PhaseVersionGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.
