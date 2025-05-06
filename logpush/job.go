@@ -557,6 +557,10 @@ type JobNewParams struct {
 	Dataset param.Field[JobNewParamsDataset] `json:"dataset"`
 	// Flag that indicates if the job is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
+	// The filters to select the events to include and/or remove from your logs. For
+	// more information, refer to
+	// [Filters](https://developers.cloudflare.com/logs/reference/filters/).
+	Filter param.Field[string] `json:"filter"`
 	// This field is deprecated. Please use `max_upload_*` parameters instead. The
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting
@@ -829,6 +833,10 @@ type JobUpdateParams struct {
 	DestinationConf param.Field[string] `json:"destination_conf" format:"uri"`
 	// Flag that indicates if the job is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
+	// The filters to select the events to include and/or remove from your logs. For
+	// more information, refer to
+	// [Filters](https://developers.cloudflare.com/logs/reference/filters/).
+	Filter param.Field[string] `json:"filter"`
 	// This field is deprecated. Please use `max_upload_*` parameters instead. The
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting
