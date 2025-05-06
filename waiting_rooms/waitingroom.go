@@ -435,7 +435,7 @@ type QueryParam struct {
 	//  11. `refreshIntervalSeconds`: Integer indicating the number of seconds after
 	//     `lastUpdated` until the user is able to make another attempt to leave the
 	//     waiting room and be let into the origin website. When the `queueingMethod`
-	//     is `reject`, there is no specified refresh time — it will always be
+	//     is `reject`, there is no specified refresh time —\_it will always be
 	//     **zero**.
 	//  12. `queueingMethod`: The queueing method currently used by the waiting room. It
 	//     is either **fifo**, **random**, **passthrough**, or **reject**.
@@ -471,6 +471,11 @@ type QueryParam struct {
 	//  23. `shuffleAtEventStart`: Valid only when `isEventActive` is **true**. Boolean
 	//     indicating if the users in the prequeue are shuffled randomly when the event
 	//     starts.
+	//  24. `turnstile`: Empty when turnstile isn't enabled. String displaying an html
+	//     tag to display the Turnstile widget. Please add the `{{{turnstile}}}` tag to
+	//     the `custom_html` template to ensure the Turnstile widget appears.
+	//  25. `infiniteQueue`: Boolean indicating whether the response is for a user in
+	//     the infinite queue.
 	//
 	// An example cURL to a waiting room could be:
 	//
@@ -539,7 +544,7 @@ type QueryParam struct {
 	//			"timeUntilEventEndFormatted": "15 minutes",
 	//			"shuffleAtEventStart": true
 	//		}
-	//	}.
+	//	}
 	JsonResponseEnabled param.Field[bool] `json:"json_response_enabled"`
 	// Sets the path within the host to enable the waiting room on. The waiting room
 	// will be enabled for all subpaths as well. If there are two waiting rooms on the
@@ -869,7 +874,7 @@ type WaitingRoom struct {
 	//  11. `refreshIntervalSeconds`: Integer indicating the number of seconds after
 	//     `lastUpdated` until the user is able to make another attempt to leave the
 	//     waiting room and be let into the origin website. When the `queueingMethod`
-	//     is `reject`, there is no specified refresh time — it will always be
+	//     is `reject`, there is no specified refresh time —\_it will always be
 	//     **zero**.
 	//  12. `queueingMethod`: The queueing method currently used by the waiting room. It
 	//     is either **fifo**, **random**, **passthrough**, or **reject**.
@@ -905,6 +910,11 @@ type WaitingRoom struct {
 	//  23. `shuffleAtEventStart`: Valid only when `isEventActive` is **true**. Boolean
 	//     indicating if the users in the prequeue are shuffled randomly when the event
 	//     starts.
+	//  24. `turnstile`: Empty when turnstile isn't enabled. String displaying an html
+	//     tag to display the Turnstile widget. Please add the `{{{turnstile}}}` tag to
+	//     the `custom_html` template to ensure the Turnstile widget appears.
+	//  25. `infiniteQueue`: Boolean indicating whether the response is for a user in
+	//     the infinite queue.
 	//
 	// An example cURL to a waiting room could be:
 	//
@@ -973,7 +983,7 @@ type WaitingRoom struct {
 	//			"timeUntilEventEndFormatted": "15 minutes",
 	//			"shuffleAtEventStart": true
 	//		}
-	//	}.
+	//	}
 	JsonResponseEnabled bool      `json:"json_response_enabled"`
 	ModifiedOn          time.Time `json:"modified_on" format:"date-time"`
 	// A unique name to identify the waiting room. Only alphanumeric characters,
@@ -1288,7 +1298,7 @@ func (r waitingRoomDeleteResponseJSON) RawJSON() string {
 }
 
 type WaitingRoomNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Query  QueryParam          `json:"query,required"`
 }
@@ -1319,7 +1329,7 @@ func (r waitingRoomNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WaitingRoomUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Query  QueryParam          `json:"query,required"`
 }
@@ -1369,7 +1379,7 @@ func (r WaitingRoomListParams) URLQuery() (v url.Values) {
 }
 
 type WaitingRoomDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -1395,7 +1405,7 @@ func (r waitingRoomDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WaitingRoomEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	Query  QueryParam          `json:"query,required"`
 }
@@ -1426,7 +1436,7 @@ func (r waitingRoomEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WaitingRoomGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 

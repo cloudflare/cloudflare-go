@@ -344,7 +344,7 @@ func (r eventDeleteResponseJSON) RawJSON() string {
 }
 
 type EventNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID     param.Field[string] `path:"zone_id,required"`
 	EventQuery EventQueryParam     `json:"event_query,required"`
 }
@@ -375,7 +375,7 @@ func (r eventNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EventUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID     param.Field[string] `path:"zone_id,required"`
 	EventQuery EventQueryParam     `json:"event_query,required"`
 }
@@ -406,7 +406,7 @@ func (r eventUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EventListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
@@ -423,7 +423,7 @@ func (r EventListParams) URLQuery() (v url.Values) {
 }
 
 type EventDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -449,7 +449,7 @@ func (r eventDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EventEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID     param.Field[string] `path:"zone_id,required"`
 	EventQuery EventQueryParam     `json:"event_query,required"`
 }
@@ -480,7 +480,7 @@ func (r eventEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EventGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
