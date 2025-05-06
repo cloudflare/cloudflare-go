@@ -37,19 +37,14 @@ func NewScanService(opts ...option.RequestOption) (r *ScanService) {
 
 // Submit a URL to scan. Check limits at
 // https://developers.cloudflare.com/security-center/investigate/scan-limits/.
-func (r *ScanService) New(ctx context.Context, params ScanNewParams, opts ...option.RequestOption) (res *string, err error) {
-	var env ScanNewResponseEnvelope
+func (r *ScanService) New(ctx context.Context, params ScanNewParams, opts ...option.RequestOption) (res *ScanNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/urlscanner/v2/scan", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
@@ -153,6 +148,64 @@ func (r *ScanService) Screenshot(ctx context.Context, scanID string, params Scan
 	path := fmt.Sprintf("accounts/%s/urlscanner/v2/screenshots/%s.png", params.AccountID, scanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
+}
+
+type ScanNewResponse struct {
+	// URL to api report.
+	API     string `json:"api,required"`
+	Message string `json:"message,required"`
+	// URL to report.
+	Result string `json:"result,required"`
+	// Canonical form of submitted URL. Use this if you want to later search by URL.
+	URL string `json:"url,required"`
+	// Scan ID.
+	UUID string `json:"uuid,required" format:"uuid"`
+	// Submitted visibility status.
+	Visibility string                 `json:"visibility,required"`
+	Options    ScanNewResponseOptions `json:"options"`
+	JSON       scanNewResponseJSON    `json:"-"`
+}
+
+// scanNewResponseJSON contains the JSON metadata for the struct [ScanNewResponse]
+type scanNewResponseJSON struct {
+	API         apijson.Field
+	Message     apijson.Field
+	Result      apijson.Field
+	URL         apijson.Field
+	UUID        apijson.Field
+	Visibility  apijson.Field
+	Options     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanNewResponseOptions struct {
+	Useragent string                     `json:"useragent"`
+	JSON      scanNewResponseOptionsJSON `json:"-"`
+}
+
+// scanNewResponseOptionsJSON contains the JSON metadata for the struct
+// [ScanNewResponseOptions]
+type scanNewResponseOptionsJSON struct {
+	Useragent   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanNewResponseOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanNewResponseOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ScanListResponse struct {
@@ -2818,65 +2871,6 @@ func (r ScanNewParamsVisibility) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type ScanNewResponseEnvelope struct {
-	// URL to api report.
-	API     string `json:"api,required"`
-	Message string `json:"message,required"`
-	// URL to report.
-	Result string `json:"result,required"`
-	// Canonical form of submitted URL. Use this if you want to later search by URL.
-	URL string `json:"url,required"`
-	// Scan ID.
-	UUID string `json:"uuid,required" format:"uuid"`
-	// Submitted visibility status.
-	Visibility string                         `json:"visibility,required"`
-	Options    ScanNewResponseEnvelopeOptions `json:"options"`
-	JSON       scanNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// scanNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ScanNewResponseEnvelope]
-type scanNewResponseEnvelopeJSON struct {
-	API         apijson.Field
-	Message     apijson.Field
-	Result      apijson.Field
-	URL         apijson.Field
-	UUID        apijson.Field
-	Visibility  apijson.Field
-	Options     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScanNewResponseEnvelopeOptions struct {
-	Useragent string                             `json:"useragent"`
-	JSON      scanNewResponseEnvelopeOptionsJSON `json:"-"`
-}
-
-// scanNewResponseEnvelopeOptionsJSON contains the JSON metadata for the struct
-// [ScanNewResponseEnvelopeOptions]
-type scanNewResponseEnvelopeOptionsJSON struct {
-	Useragent   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanNewResponseEnvelopeOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanNewResponseEnvelopeOptionsJSON) RawJSON() string {
-	return r.raw
 }
 
 type ScanListParams struct {
