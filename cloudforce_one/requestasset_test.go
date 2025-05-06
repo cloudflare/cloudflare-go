@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workers_test
+package cloudforce_one_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/cloudforce_one"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
-func TestScriptSubdomainNewWithOptionalParams(t *testing.T) {
+func TestRequestAssetNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,13 +27,13 @@ func TestScriptSubdomainNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.Scripts.Subdomain.New(
+	_, err := client.CloudforceOne.Requests.Assets.New(
 		context.TODO(),
-		"this-is_my_script-01",
-		workers.ScriptSubdomainNewParams{
-			AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Enabled:         cloudflare.F(true),
-			PreviewsEnabled: cloudflare.F(true),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudforce_one.RequestAssetNewParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Page:      cloudflare.F(int64(0)),
+			PerPage:   cloudflare.F(int64(10)),
 		},
 	)
 	if err != nil {
@@ -45,7 +45,7 @@ func TestScriptSubdomainNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestScriptSubdomainDelete(t *testing.T) {
+func TestRequestAssetUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -58,10 +58,42 @@ func TestScriptSubdomainDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.Scripts.Subdomain.Delete(
+	_, err := client.CloudforceOne.Requests.Assets.Update(
 		context.TODO(),
-		"this-is_my_script-01",
-		workers.ScriptSubdomainDeleteParams{
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudforce_one.RequestAssetUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Source:    cloudflare.F("@/Users/me/example.docx"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestRequestAssetDelete(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.CloudforceOne.Requests.Assets.Delete(
+		context.TODO(),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudforce_one.RequestAssetDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -74,7 +106,7 @@ func TestScriptSubdomainDelete(t *testing.T) {
 	}
 }
 
-func TestScriptSubdomainGet(t *testing.T) {
+func TestRequestAssetGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -87,10 +119,11 @@ func TestScriptSubdomainGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.Scripts.Subdomain.Get(
+	_, err := client.CloudforceOne.Requests.Assets.Get(
 		context.TODO(),
-		"this-is_my_script-01",
-		workers.ScriptSubdomainGetParams{
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudforce_one.RequestAssetGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
