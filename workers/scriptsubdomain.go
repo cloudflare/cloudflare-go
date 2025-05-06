@@ -54,6 +54,27 @@ func (r *ScriptSubdomainService) New(ctx context.Context, scriptName string, par
 	return
 }
 
+// Disable all workers.dev subdomains for a Worker.
+func (r *ScriptSubdomainService) Delete(ctx context.Context, scriptName string, body ScriptSubdomainDeleteParams, opts ...option.RequestOption) (res *ScriptSubdomainDeleteResponse, err error) {
+	var env ScriptSubdomainDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/subdomain", body.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Get if the Worker is available on the workers.dev subdomain.
 func (r *ScriptSubdomainService) Get(ctx context.Context, scriptName string, query ScriptSubdomainGetParams, opts ...option.RequestOption) (res *ScriptSubdomainGetResponse, err error) {
 	var env ScriptSubdomainGetResponseEnvelope
@@ -97,6 +118,31 @@ func (r *ScriptSubdomainNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptSubdomainNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainDeleteResponse struct {
+	// Whether the Worker is available on the workers.dev subdomain.
+	Enabled bool `json:"enabled,required"`
+	// Whether the Worker's Preview URLs are available on the workers.dev subdomain.
+	PreviewsEnabled bool                              `json:"previews_enabled,required"`
+	JSON            scriptSubdomainDeleteResponseJSON `json:"-"`
+}
+
+// scriptSubdomainDeleteResponseJSON contains the JSON metadata for the struct
+// [ScriptSubdomainDeleteResponse]
+type scriptSubdomainDeleteResponseJSON struct {
+	Enabled         apijson.Field
+	PreviewsEnabled apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -273,6 +319,150 @@ const (
 func (r ScriptSubdomainNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case ScriptSubdomainNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type ScriptSubdomainDeleteParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ScriptSubdomainDeleteResponseEnvelope struct {
+	Errors   []ScriptSubdomainDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ScriptSubdomainDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptSubdomainDeleteResponse                   `json:"result,required"`
+	// Whether the API call was successful.
+	Success ScriptSubdomainDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    scriptSubdomainDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// scriptSubdomainDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ScriptSubdomainDeleteResponseEnvelope]
+type scriptSubdomainDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainDeleteResponseEnvelopeErrors struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           ScriptSubdomainDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scriptSubdomainDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scriptSubdomainDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ScriptSubdomainDeleteResponseEnvelopeErrors]
+type scriptSubdomainDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    scriptSubdomainDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scriptSubdomainDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [ScriptSubdomainDeleteResponseEnvelopeErrorsSource]
+type scriptSubdomainDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainDeleteResponseEnvelopeMessages struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           ScriptSubdomainDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scriptSubdomainDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scriptSubdomainDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ScriptSubdomainDeleteResponseEnvelopeMessages]
+type scriptSubdomainDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSubdomainDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    scriptSubdomainDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scriptSubdomainDeleteResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [ScriptSubdomainDeleteResponseEnvelopeMessagesSource]
+type scriptSubdomainDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSubdomainDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSubdomainDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type ScriptSubdomainDeleteResponseEnvelopeSuccess bool
+
+const (
+	ScriptSubdomainDeleteResponseEnvelopeSuccessTrue ScriptSubdomainDeleteResponseEnvelopeSuccess = true
+)
+
+func (r ScriptSubdomainDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptSubdomainDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
