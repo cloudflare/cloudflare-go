@@ -3416,27 +3416,25 @@ func (r *RecordResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RecordResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [dns.RecordResponseA],
-// [dns.RecordResponseAAAA], [dns.RecordResponseCAA], [dns.RecordResponseCERT],
-// [dns.RecordResponseCNAME], [dns.RecordResponseDNSKEY], [dns.RecordResponseDS],
-// [dns.RecordResponseHTTPS], [dns.RecordResponseLOC], [dns.RecordResponseMX],
-// [dns.RecordResponseNAPTR], [dns.RecordResponseNS],
-// [dns.RecordResponseOpenpgpkey], [dns.RecordResponsePTR],
-// [dns.RecordResponseSMIMEA], [dns.RecordResponseSRV], [dns.RecordResponseSSHFP],
-// [dns.RecordResponseSVCB], [dns.RecordResponseTLSA], [dns.RecordResponseTXT],
-// [dns.RecordResponseURI].
+// Possible runtime types of the union are [RecordResponseA], [RecordResponseAAAA],
+// [RecordResponseCAA], [RecordResponseCERT], [RecordResponseCNAME],
+// [RecordResponseDNSKEY], [RecordResponseDS], [RecordResponseHTTPS],
+// [RecordResponseLOC], [RecordResponseMX], [RecordResponseNAPTR],
+// [RecordResponseNS], [RecordResponseOpenpgpkey], [RecordResponsePTR],
+// [RecordResponseSMIMEA], [RecordResponseSRV], [RecordResponseSSHFP],
+// [RecordResponseSVCB], [RecordResponseTLSA], [RecordResponseTXT],
+// [RecordResponseURI].
 func (r RecordResponse) AsUnion() RecordResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [dns.RecordResponseA], [dns.RecordResponseAAAA],
-// [dns.RecordResponseCAA], [dns.RecordResponseCERT], [dns.RecordResponseCNAME],
-// [dns.RecordResponseDNSKEY], [dns.RecordResponseDS], [dns.RecordResponseHTTPS],
-// [dns.RecordResponseLOC], [dns.RecordResponseMX], [dns.RecordResponseNAPTR],
-// [dns.RecordResponseNS], [dns.RecordResponseOpenpgpkey], [dns.RecordResponsePTR],
-// [dns.RecordResponseSMIMEA], [dns.RecordResponseSRV], [dns.RecordResponseSSHFP],
-// [dns.RecordResponseSVCB], [dns.RecordResponseTLSA], [dns.RecordResponseTXT] or
-// [dns.RecordResponseURI].
+// Union satisfied by [RecordResponseA], [RecordResponseAAAA], [RecordResponseCAA],
+// [RecordResponseCERT], [RecordResponseCNAME], [RecordResponseDNSKEY],
+// [RecordResponseDS], [RecordResponseHTTPS], [RecordResponseLOC],
+// [RecordResponseMX], [RecordResponseNAPTR], [RecordResponseNS],
+// [RecordResponseOpenpgpkey], [RecordResponsePTR], [RecordResponseSMIMEA],
+// [RecordResponseSRV], [RecordResponseSSHFP], [RecordResponseSVCB],
+// [RecordResponseTLSA], [RecordResponseTXT] or [RecordResponseURI].
 type RecordResponseUnion interface {
 	implementsRecordResponse()
 }

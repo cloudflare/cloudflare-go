@@ -410,28 +410,22 @@ func (r *RulesetNewResponseRule) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RulesetNewResponseRulesUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.RulesetNewResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RulesetNewResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule], [rulesets.ForceConnectionCloseRule].
+// Possible runtime types of the union are [BlockRule],
+// [RulesetNewResponseRulesRulesetsChallengeRule], [CompressResponseRule],
+// [ExecuteRule], [RulesetNewResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
 func (r RulesetNewResponseRule) AsUnion() RulesetNewResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule],
-// [rulesets.RulesetNewResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RulesetNewResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
+// Union satisfied by [BlockRule], [RulesetNewResponseRulesRulesetsChallengeRule],
+// [CompressResponseRule], [ExecuteRule],
+// [RulesetNewResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
 type RulesetNewResponseRulesUnion interface {
 	implementsRulesetNewResponseRule()
 }
@@ -641,7 +635,7 @@ type RulesetNewResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod `json:"period,required"`
+	Period int64 `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -683,24 +677,6 @@ func (r *RulesetNewResponseRulesRulesetsChallengeRuleRatelimit) UnmarshalJSON(da
 
 func (r rulesetNewResponseRulesRulesetsChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
-}
-
-// Period in seconds over which the counter is being incremented.
-type RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod int64
-
-const (
-	RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod10   RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod = 10
-	RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod60   RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod = 60
-	RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod600  RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod = 600
-	RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod3600 RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod10, RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod60, RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod600, RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 type RulesetNewResponseRulesRulesetsJSChallengeRule struct {
@@ -811,7 +787,7 @@ type RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod `json:"period,required"`
+	Period int64 `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -854,24 +830,6 @@ func (r *RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit) UnmarshalJSON(
 
 func (r rulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
-}
-
-// Period in seconds over which the counter is being incremented.
-type RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod int64
-
-const (
-	RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10   RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
-	RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60   RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
-	RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600  RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
-	RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600 RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10, RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60, RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600, RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.
@@ -1043,28 +1001,22 @@ func (r *RulesetUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RulesetUpdateResponseRulesUnion] interface which you can cast
 // to the specific types for more type safety.
 //
-// Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.RulesetUpdateResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RulesetUpdateResponseRulesRulesetsJSChallengeRule],
-// [rulesets.LogRule], [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule], [rulesets.ForceConnectionCloseRule].
+// Possible runtime types of the union are [BlockRule],
+// [RulesetUpdateResponseRulesRulesetsChallengeRule], [CompressResponseRule],
+// [ExecuteRule], [RulesetUpdateResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
 func (r RulesetUpdateResponseRule) AsUnion() RulesetUpdateResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule],
-// [rulesets.RulesetUpdateResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RulesetUpdateResponseRulesRulesetsJSChallengeRule],
-// [rulesets.LogRule], [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
+// Union satisfied by [BlockRule],
+// [RulesetUpdateResponseRulesRulesetsChallengeRule], [CompressResponseRule],
+// [ExecuteRule], [RulesetUpdateResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
 type RulesetUpdateResponseRulesUnion interface {
 	implementsRulesetUpdateResponseRule()
 }
@@ -1274,7 +1226,7 @@ type RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod `json:"period,required"`
+	Period int64 `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -1317,24 +1269,6 @@ func (r *RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit) UnmarshalJSON
 
 func (r rulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
-}
-
-// Period in seconds over which the counter is being incremented.
-type RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod int64
-
-const (
-	RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod10   RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod = 10
-	RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod60   RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod = 60
-	RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod600  RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod = 600
-	RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod3600 RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod10, RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod60, RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod600, RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 type RulesetUpdateResponseRulesRulesetsJSChallengeRule struct {
@@ -1445,7 +1379,7 @@ type RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod `json:"period,required"`
+	Period int64 `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -1488,24 +1422,6 @@ func (r *RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit) UnmarshalJS
 
 func (r rulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
-}
-
-// Period in seconds over which the counter is being incremented.
-type RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod int64
-
-const (
-	RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10   RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
-	RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60   RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
-	RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600  RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
-	RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600 RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10, RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60, RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600, RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.
@@ -1718,28 +1634,22 @@ func (r *RulesetGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RulesetGetResponseRulesUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.RulesetGetResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RulesetGetResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule], [rulesets.ForceConnectionCloseRule].
+// Possible runtime types of the union are [BlockRule],
+// [RulesetGetResponseRulesRulesetsChallengeRule], [CompressResponseRule],
+// [ExecuteRule], [RulesetGetResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule], [ForceConnectionCloseRule].
 func (r RulesetGetResponseRule) AsUnion() RulesetGetResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule],
-// [rulesets.RulesetGetResponseRulesRulesetsChallengeRule],
-// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.RulesetGetResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
-// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
-// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
-// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
+// Union satisfied by [BlockRule], [RulesetGetResponseRulesRulesetsChallengeRule],
+// [CompressResponseRule], [ExecuteRule],
+// [RulesetGetResponseRulesRulesetsJSChallengeRule], [LogRule],
+// [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
+// [ServeErrorRule], [SetConfigRule], [SkipRule], [SetCacheSettingsRule],
+// [LogCustomFieldRule], [DDoSDynamicRule] or [ForceConnectionCloseRule].
 type RulesetGetResponseRulesUnion interface {
 	implementsRulesetGetResponseRule()
 }
@@ -1949,7 +1859,7 @@ type RulesetGetResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod `json:"period,required"`
+	Period int64 `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -1991,24 +1901,6 @@ func (r *RulesetGetResponseRulesRulesetsChallengeRuleRatelimit) UnmarshalJSON(da
 
 func (r rulesetGetResponseRulesRulesetsChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
-}
-
-// Period in seconds over which the counter is being incremented.
-type RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod int64
-
-const (
-	RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod10   RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 10
-	RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod60   RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 60
-	RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod600  RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 600
-	RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod3600 RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod10, RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod60, RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod600, RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 type RulesetGetResponseRulesRulesetsJSChallengeRule struct {
@@ -2119,7 +2011,7 @@ type RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics []string `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod `json:"period,required"`
+	Period int64 `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -2162,24 +2054,6 @@ func (r *RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit) UnmarshalJSON(
 
 func (r rulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
-}
-
-// Period in seconds over which the counter is being incremented.
-type RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod int64
-
-const (
-	RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10   RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
-	RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60   RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
-	RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600  RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
-	RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600 RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10, RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60, RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600, RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.
@@ -2339,7 +2213,7 @@ type RulesetNewParamsRulesRulesetsChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod] `json:"period,required"`
+	Period param.Field[int64] `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -2361,24 +2235,6 @@ type RulesetNewParamsRulesRulesetsChallengeRuleRatelimit struct {
 
 func (r RulesetNewParamsRulesRulesetsChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Period in seconds over which the counter is being incremented.
-type RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod int64
-
-const (
-	RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod10   RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod = 10
-	RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod60   RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod = 60
-	RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod600  RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod = 600
-	RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod3600 RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod10, RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod60, RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod600, RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 type RulesetNewParamsRulesRulesetsJSChallengeRule struct {
@@ -2443,7 +2299,7 @@ type RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod] `json:"period,required"`
+	Period param.Field[int64] `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -2465,24 +2321,6 @@ type RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimit struct {
 
 func (r RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Period in seconds over which the counter is being incremented.
-type RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod int64
-
-const (
-	RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod10   RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
-	RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod60   RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
-	RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod600  RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
-	RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod3600 RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod10, RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod60, RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod600, RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.
@@ -2793,7 +2631,7 @@ type RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod] `json:"period,required"`
+	Period param.Field[int64] `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -2815,24 +2653,6 @@ type RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimit struct {
 
 func (r RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Period in seconds over which the counter is being incremented.
-type RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod int64
-
-const (
-	RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod10   RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod = 10
-	RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod60   RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod = 60
-	RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod600  RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod = 600
-	RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod3600 RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod10, RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod60, RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod600, RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 type RulesetUpdateParamsRulesRulesetsJSChallengeRule struct {
@@ -2897,7 +2717,7 @@ type RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimit struct {
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod] `json:"period,required"`
+	Period param.Field[int64] `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -2919,24 +2739,6 @@ type RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimit struct {
 
 func (r RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Period in seconds over which the counter is being incremented.
-type RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod int64
-
-const (
-	RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod10   RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
-	RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod60   RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
-	RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod600  RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
-	RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod3600 RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
-)
-
-func (r RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
-	switch r {
-	case RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod10, RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod60, RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod600, RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.

@@ -101,15 +101,14 @@ func (r *ListBulkOperationGetResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ListBulkOperationGetResponseUnion] interface which you can
 // cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [rules.ListBulkOperationGetResponseObject],
-// [rules.ListBulkOperationGetResponseObject].
+// Possible runtime types of the union are [ListBulkOperationGetResponseObject],
+// [ListBulkOperationGetResponseObject].
 func (r ListBulkOperationGetResponse) AsUnion() ListBulkOperationGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [rules.ListBulkOperationGetResponseObject] or
-// [rules.ListBulkOperationGetResponseObject].
+// Union satisfied by [ListBulkOperationGetResponseObject] or
+// [ListBulkOperationGetResponseObject].
 type ListBulkOperationGetResponseUnion interface {
 	implementsListBulkOperationGetResponse()
 }

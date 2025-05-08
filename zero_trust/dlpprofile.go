@@ -197,14 +197,14 @@ func (r *Profile) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ProfileUnion] interface which you can cast to the specific
 // types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.ProfileCustomProfile],
-// [zero_trust.ProfilePredefinedProfile], [zero_trust.ProfileIntegrationProfile].
+// Possible runtime types of the union are [ProfileCustomProfile],
+// [ProfilePredefinedProfile], [ProfileIntegrationProfile].
 func (r Profile) AsUnion() ProfileUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.ProfileCustomProfile],
-// [zero_trust.ProfilePredefinedProfile] or [zero_trust.ProfileIntegrationProfile].
+// Union satisfied by [ProfileCustomProfile], [ProfilePredefinedProfile] or
+// [ProfileIntegrationProfile].
 type ProfileUnion interface {
 	implementsProfile()
 }
@@ -339,20 +339,20 @@ func (r *ProfileCustomProfileEntry) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.ProfileCustomProfileEntriesCustomEntry],
-// [zero_trust.ProfileCustomProfileEntriesPredefinedEntry],
-// [zero_trust.ProfileCustomProfileEntriesIntegrationEntry],
-// [zero_trust.ProfileCustomProfileEntriesExactDataEntry],
-// [zero_trust.ProfileCustomProfileEntriesWordListEntry].
+// [ProfileCustomProfileEntriesCustomEntry],
+// [ProfileCustomProfileEntriesPredefinedEntry],
+// [ProfileCustomProfileEntriesIntegrationEntry],
+// [ProfileCustomProfileEntriesExactDataEntry],
+// [ProfileCustomProfileEntriesWordListEntry].
 func (r ProfileCustomProfileEntry) AsUnion() ProfileCustomProfileEntriesUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.ProfileCustomProfileEntriesCustomEntry],
-// [zero_trust.ProfileCustomProfileEntriesPredefinedEntry],
-// [zero_trust.ProfileCustomProfileEntriesIntegrationEntry],
-// [zero_trust.ProfileCustomProfileEntriesExactDataEntry] or
-// [zero_trust.ProfileCustomProfileEntriesWordListEntry].
+// Union satisfied by [ProfileCustomProfileEntriesCustomEntry],
+// [ProfileCustomProfileEntriesPredefinedEntry],
+// [ProfileCustomProfileEntriesIntegrationEntry],
+// [ProfileCustomProfileEntriesExactDataEntry] or
+// [ProfileCustomProfileEntriesWordListEntry].
 type ProfileCustomProfileEntriesUnion interface {
 	implementsProfileCustomProfileEntry()
 }
@@ -814,20 +814,20 @@ func (r *ProfilePredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.ProfilePredefinedProfileEntriesCustomEntry],
-// [zero_trust.ProfilePredefinedProfileEntriesPredefinedEntry],
-// [zero_trust.ProfilePredefinedProfileEntriesIntegrationEntry],
-// [zero_trust.ProfilePredefinedProfileEntriesExactDataEntry],
-// [zero_trust.ProfilePredefinedProfileEntriesWordListEntry].
+// [ProfilePredefinedProfileEntriesCustomEntry],
+// [ProfilePredefinedProfileEntriesPredefinedEntry],
+// [ProfilePredefinedProfileEntriesIntegrationEntry],
+// [ProfilePredefinedProfileEntriesExactDataEntry],
+// [ProfilePredefinedProfileEntriesWordListEntry].
 func (r ProfilePredefinedProfileEntry) AsUnion() ProfilePredefinedProfileEntriesUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.ProfilePredefinedProfileEntriesCustomEntry],
-// [zero_trust.ProfilePredefinedProfileEntriesPredefinedEntry],
-// [zero_trust.ProfilePredefinedProfileEntriesIntegrationEntry],
-// [zero_trust.ProfilePredefinedProfileEntriesExactDataEntry] or
-// [zero_trust.ProfilePredefinedProfileEntriesWordListEntry].
+// Union satisfied by [ProfilePredefinedProfileEntriesCustomEntry],
+// [ProfilePredefinedProfileEntriesPredefinedEntry],
+// [ProfilePredefinedProfileEntriesIntegrationEntry],
+// [ProfilePredefinedProfileEntriesExactDataEntry] or
+// [ProfilePredefinedProfileEntriesWordListEntry].
 type ProfilePredefinedProfileEntriesUnion interface {
 	implementsProfilePredefinedProfileEntry()
 }
@@ -1280,20 +1280,20 @@ func (r *ProfileIntegrationProfileEntry) UnmarshalJSON(data []byte) (err error) 
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.ProfileIntegrationProfileEntriesCustomEntry],
-// [zero_trust.ProfileIntegrationProfileEntriesPredefinedEntry],
-// [zero_trust.ProfileIntegrationProfileEntriesIntegrationEntry],
-// [zero_trust.ProfileIntegrationProfileEntriesExactDataEntry],
-// [zero_trust.ProfileIntegrationProfileEntriesWordListEntry].
+// [ProfileIntegrationProfileEntriesCustomEntry],
+// [ProfileIntegrationProfileEntriesPredefinedEntry],
+// [ProfileIntegrationProfileEntriesIntegrationEntry],
+// [ProfileIntegrationProfileEntriesExactDataEntry],
+// [ProfileIntegrationProfileEntriesWordListEntry].
 func (r ProfileIntegrationProfileEntry) AsUnion() ProfileIntegrationProfileEntriesUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.ProfileIntegrationProfileEntriesCustomEntry],
-// [zero_trust.ProfileIntegrationProfileEntriesPredefinedEntry],
-// [zero_trust.ProfileIntegrationProfileEntriesIntegrationEntry],
-// [zero_trust.ProfileIntegrationProfileEntriesExactDataEntry] or
-// [zero_trust.ProfileIntegrationProfileEntriesWordListEntry].
+// Union satisfied by [ProfileIntegrationProfileEntriesCustomEntry],
+// [ProfileIntegrationProfileEntriesPredefinedEntry],
+// [ProfileIntegrationProfileEntriesIntegrationEntry],
+// [ProfileIntegrationProfileEntriesExactDataEntry] or
+// [ProfileIntegrationProfileEntriesWordListEntry].
 type ProfileIntegrationProfileEntriesUnion interface {
 	implementsProfileIntegrationProfileEntry()
 }

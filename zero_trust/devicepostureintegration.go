@@ -247,10 +247,10 @@ func (r DevicePostureIntegrationNewParams) MarshalJSON() (data []byte, err error
 // The configuration object containing third-party integration information.
 type DevicePostureIntegrationNewParamsConfig struct {
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
-	// hitting the `api_url`
+	// hitting the `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
-	// when hitting the `api_url`
+	// when hitting the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
 	APIURL param.Field[string] `json:"api_url"`
@@ -379,10 +379,10 @@ type DevicePostureIntegrationNewParamsConfigTeamsDevicesTaniumConfigRequest stru
 	// The Tanium client secret.
 	ClientSecret param.Field[string] `json:"client_secret,required"`
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
-	// hitting the `api_url`
+	// hitting the `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
-	// when hitting the `api_url`
+	// when hitting the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
 }
 
@@ -409,10 +409,10 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigR
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest struct {
 	// This id will be passed in the `CF-Access-Client-ID` header when hitting the
-	// `api_url`
+	// `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id,required"`
 	// This secret will be passed in the `CF-Access-Client-Secret` header when hitting
-	// the `api_url`
+	// the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
 	// The Custom Device Posture Integration API URL.
 	APIURL param.Field[string] `json:"api_url,required"`
@@ -561,10 +561,10 @@ func (r DevicePostureIntegrationEditParams) MarshalJSON() (data []byte, err erro
 // The configuration object containing third-party integration information.
 type DevicePostureIntegrationEditParamsConfig struct {
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
-	// hitting the `api_url`
+	// hitting the `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
-	// when hitting the `api_url`
+	// when hitting the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
 	APIURL param.Field[string] `json:"api_url"`
@@ -693,10 +693,10 @@ type DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest str
 	// The Tanium client secret.
 	ClientSecret param.Field[string] `json:"client_secret,required"`
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
-	// hitting the `api_url`
+	// hitting the `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id"`
 	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
-	// when hitting the `api_url`
+	// when hitting the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
 }
 
@@ -723,10 +723,10 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfig
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest struct {
 	// This id will be passed in the `CF-Access-Client-ID` header when hitting the
-	// `api_url`
+	// `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id,required"`
 	// This secret will be passed in the `CF-Access-Client-Secret` header when hitting
-	// the `api_url`
+	// the `api_url`.
 	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
 	// The Custom Device Posture Integration API URL.
 	APIURL param.Field[string] `json:"api_url,required"`

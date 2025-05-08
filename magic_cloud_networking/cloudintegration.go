@@ -2757,17 +2757,16 @@ func (r *CloudIntegrationInitialSetupResponse) UnmarshalJSON(data []byte) (err e
 // you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [magic_cloud_networking.CloudIntegrationInitialSetupResponseMcnAwsTrustPolicy],
-// [magic_cloud_networking.CloudIntegrationInitialSetupResponseMcnAzureSetup],
-// [magic_cloud_networking.CloudIntegrationInitialSetupResponseMcnGcpSetup].
+// [CloudIntegrationInitialSetupResponseMcnAwsTrustPolicy],
+// [CloudIntegrationInitialSetupResponseMcnAzureSetup],
+// [CloudIntegrationInitialSetupResponseMcnGcpSetup].
 func (r CloudIntegrationInitialSetupResponse) AsUnion() CloudIntegrationInitialSetupResponseUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [magic_cloud_networking.CloudIntegrationInitialSetupResponseMcnAwsTrustPolicy],
-// [magic_cloud_networking.CloudIntegrationInitialSetupResponseMcnAzureSetup] or
-// [magic_cloud_networking.CloudIntegrationInitialSetupResponseMcnGcpSetup].
+// Union satisfied by [CloudIntegrationInitialSetupResponseMcnAwsTrustPolicy],
+// [CloudIntegrationInitialSetupResponseMcnAzureSetup] or
+// [CloudIntegrationInitialSetupResponseMcnGcpSetup].
 type CloudIntegrationInitialSetupResponseUnion interface {
 	implementsCloudIntegrationInitialSetupResponse()
 }

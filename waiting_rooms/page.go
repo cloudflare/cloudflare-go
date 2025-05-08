@@ -49,7 +49,7 @@ func NewPageService(opts ...option.RequestOption) (r *PageService) {
 //     waiting room page will only be displayed if `force_queue=true` or
 //     `event=prequeueing` — for other cases the request will pass through to the
 //     origin. For our preview, this will be a fake origin website returning
-//     "Welcome".
+//     \"Welcome\".
 //     - **reject** indicates a Reject queue.
 //  4. `event`: Used to preview a waiting room event.
 //     - **none** indicates no event is occurring.
@@ -108,7 +108,7 @@ func (r pagePreviewResponseJSON) RawJSON() string {
 }
 
 type PagePreviewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Only available for the Waiting Room Advanced subscription. This is a template
 	// html file that will be rendered at the edge. If no custom_page_html is provided,

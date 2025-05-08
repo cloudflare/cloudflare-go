@@ -244,28 +244,28 @@ func (r *ScriptScriptAndVersionSettingEditResponseBinding) UnmarshalJSON(data []
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipelines],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
 func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScriptAndVersionSettingEditResponseBindingsUnion {
 	return r.union
 }
@@ -273,29 +273,29 @@ func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScript
 // A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipelines],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret]
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAssets],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindBrowser],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindJson],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindKVNamespace],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVectorize],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret]
 // or
-// [workers.ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey].
 type ScriptScriptAndVersionSettingEditResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingEditResponseBinding()
 }
@@ -1691,16 +1691,16 @@ func (r *ScriptScriptAndVersionSettingEditResponseMigrations) UnmarshalJSON(data
 // AsUnion returns a [ScriptScriptAndVersionSettingEditResponseMigrationsUnion]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [workers.SingleStepMigration],
-// [workers.ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations].
+// Possible runtime types of the union are [SingleStepMigration],
+// [ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations].
 func (r ScriptScriptAndVersionSettingEditResponseMigrations) AsUnion() ScriptScriptAndVersionSettingEditResponseMigrationsUnion {
 	return r.union
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
-// Union satisfied by [workers.SingleStepMigration] or
-// [workers.ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations].
+// Union satisfied by [SingleStepMigration] or
+// [ScriptScriptAndVersionSettingEditResponseMigrationsWorkersMultipleStepMigrations].
 type ScriptScriptAndVersionSettingEditResponseMigrationsUnion interface {
 	implementsScriptScriptAndVersionSettingEditResponseMigrations()
 }
@@ -2000,28 +2000,28 @@ func (r *ScriptScriptAndVersionSettingGetResponseBinding) UnmarshalJSON(data []b
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipelines],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
 func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptAndVersionSettingGetResponseBindingsUnion {
 	return r.union
 }
@@ -2029,29 +2029,29 @@ func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptA
 // A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipelines],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret]
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAssets],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindBrowser],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindD1],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindJson],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindKVNamespace],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretText],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindTailConsumer],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVectorize],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret]
 // or
-// [workers.ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey].
 type ScriptScriptAndVersionSettingGetResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingGetResponseBinding()
 }
@@ -3447,16 +3447,16 @@ func (r *ScriptScriptAndVersionSettingGetResponseMigrations) UnmarshalJSON(data 
 // AsUnion returns a [ScriptScriptAndVersionSettingGetResponseMigrationsUnion]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [workers.SingleStepMigration],
-// [workers.ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations].
+// Possible runtime types of the union are [SingleStepMigration],
+// [ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations].
 func (r ScriptScriptAndVersionSettingGetResponseMigrations) AsUnion() ScriptScriptAndVersionSettingGetResponseMigrationsUnion {
 	return r.union
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
-// Union satisfied by [workers.SingleStepMigration] or
-// [workers.ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations].
+// Union satisfied by [SingleStepMigration] or
+// [ScriptScriptAndVersionSettingGetResponseMigrationsWorkersMultipleStepMigrations].
 type ScriptScriptAndVersionSettingGetResponseMigrationsUnion interface {
 	implementsScriptScriptAndVersionSettingGetResponseMigrations()
 }

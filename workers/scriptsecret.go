@@ -188,17 +188,16 @@ func (r *ScriptSecretUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers.ScriptSecretUpdateResponseWorkersBindingKindSecretText],
-// [workers.ScriptSecretUpdateResponseWorkersBindingKindSecretKey].
+// [ScriptSecretUpdateResponseWorkersBindingKindSecretText],
+// [ScriptSecretUpdateResponseWorkersBindingKindSecretKey].
 func (r ScriptSecretUpdateResponse) AsUnion() ScriptSecretUpdateResponseUnion {
 	return r.union
 }
 
 // A secret value accessible through a binding.
 //
-// Union satisfied by
-// [workers.ScriptSecretUpdateResponseWorkersBindingKindSecretText] or
-// [workers.ScriptSecretUpdateResponseWorkersBindingKindSecretKey].
+// Union satisfied by [ScriptSecretUpdateResponseWorkersBindingKindSecretText] or
+// [ScriptSecretUpdateResponseWorkersBindingKindSecretKey].
 type ScriptSecretUpdateResponseUnion interface {
 	implementsScriptSecretUpdateResponse()
 }
@@ -443,17 +442,16 @@ func (r *ScriptSecretListResponse) UnmarshalJSON(data []byte) (err error) {
 // to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers.ScriptSecretListResponseWorkersBindingKindSecretText],
-// [workers.ScriptSecretListResponseWorkersBindingKindSecretKey].
+// [ScriptSecretListResponseWorkersBindingKindSecretText],
+// [ScriptSecretListResponseWorkersBindingKindSecretKey].
 func (r ScriptSecretListResponse) AsUnion() ScriptSecretListResponseUnion {
 	return r.union
 }
 
 // A secret value accessible through a binding.
 //
-// Union satisfied by
-// [workers.ScriptSecretListResponseWorkersBindingKindSecretText] or
-// [workers.ScriptSecretListResponseWorkersBindingKindSecretKey].
+// Union satisfied by [ScriptSecretListResponseWorkersBindingKindSecretText] or
+// [ScriptSecretListResponseWorkersBindingKindSecretKey].
 type ScriptSecretListResponseUnion interface {
 	implementsScriptSecretListResponse()
 }
@@ -698,16 +696,16 @@ func (r *ScriptSecretGetResponse) UnmarshalJSON(data []byte) (err error) {
 // the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers.ScriptSecretGetResponseWorkersBindingKindSecretText],
-// [workers.ScriptSecretGetResponseWorkersBindingKindSecretKey].
+// [ScriptSecretGetResponseWorkersBindingKindSecretText],
+// [ScriptSecretGetResponseWorkersBindingKindSecretKey].
 func (r ScriptSecretGetResponse) AsUnion() ScriptSecretGetResponseUnion {
 	return r.union
 }
 
 // A secret value accessible through a binding.
 //
-// Union satisfied by [workers.ScriptSecretGetResponseWorkersBindingKindSecretText]
-// or [workers.ScriptSecretGetResponseWorkersBindingKindSecretKey].
+// Union satisfied by [ScriptSecretGetResponseWorkersBindingKindSecretText] or
+// [ScriptSecretGetResponseWorkersBindingKindSecretKey].
 type ScriptSecretGetResponseUnion interface {
 	implementsScriptSecretGetResponse()
 }

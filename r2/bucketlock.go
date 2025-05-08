@@ -176,19 +176,18 @@ func (r *BucketLockGetResponseRulesCondition) UnmarshalJSON(data []byte) (err er
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleAgeCondition],
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleDateCondition],
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleIndefiniteCondition].
+// [BucketLockGetResponseRulesConditionR2LockRuleAgeCondition],
+// [BucketLockGetResponseRulesConditionR2LockRuleDateCondition],
+// [BucketLockGetResponseRulesConditionR2LockRuleIndefiniteCondition].
 func (r BucketLockGetResponseRulesCondition) AsUnion() BucketLockGetResponseRulesConditionUnion {
 	return r.union
 }
 
 // Condition to apply a lock rule to an object for how long in seconds.
 //
-// Union satisfied by
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleAgeCondition],
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleDateCondition] or
-// [r2.BucketLockGetResponseRulesConditionR2LockRuleIndefiniteCondition].
+// Union satisfied by [BucketLockGetResponseRulesConditionR2LockRuleAgeCondition],
+// [BucketLockGetResponseRulesConditionR2LockRuleDateCondition] or
+// [BucketLockGetResponseRulesConditionR2LockRuleIndefiniteCondition].
 type BucketLockGetResponseRulesConditionUnion interface {
 	implementsBucketLockGetResponseRulesCondition()
 }

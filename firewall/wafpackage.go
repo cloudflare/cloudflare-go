@@ -138,14 +138,13 @@ func (r *WAFPackageGetResponse) UnmarshalJSON(data []byte) (err error) {
 // the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [firewall.WAFPackageGetResponseFirewallAPIResponseSingle],
-// [firewall.WAFPackageGetResponseResult].
+// [WAFPackageGetResponseFirewallAPIResponseSingle], [WAFPackageGetResponseResult].
 func (r WAFPackageGetResponse) AsUnion() WAFPackageGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [firewall.WAFPackageGetResponseFirewallAPIResponseSingle] or
-// [firewall.WAFPackageGetResponseResult].
+// Union satisfied by [WAFPackageGetResponseFirewallAPIResponseSingle] or
+// [WAFPackageGetResponseResult].
 type WAFPackageGetResponseUnion interface {
 	implementsWAFPackageGetResponse()
 }

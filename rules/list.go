@@ -286,14 +286,13 @@ func (r *ListNewResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ListNewResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [rules.ListNewResponseObject],
-// [rules.ListNewResponseObject].
+// Possible runtime types of the union are [ListNewResponseObject],
+// [ListNewResponseObject].
 func (r ListNewResponse) AsUnion() ListNewResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [rules.ListNewResponseObject] or
-// [rules.ListNewResponseObject].
+// Union satisfied by [ListNewResponseObject] or [ListNewResponseObject].
 type ListNewResponseUnion interface {
 	implementsListNewResponse()
 }
@@ -450,14 +449,13 @@ func (r *ListUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ListUpdateResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [rules.ListUpdateResponseObject],
-// [rules.ListUpdateResponseObject].
+// Possible runtime types of the union are [ListUpdateResponseObject],
+// [ListUpdateResponseObject].
 func (r ListUpdateResponse) AsUnion() ListUpdateResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [rules.ListUpdateResponseObject] or
-// [rules.ListUpdateResponseObject].
+// Union satisfied by [ListUpdateResponseObject] or [ListUpdateResponseObject].
 type ListUpdateResponseUnion interface {
 	implementsListUpdateResponse()
 }
@@ -592,13 +590,13 @@ func (r *ListDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ListDeleteResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [rules.ListDeleteResponseID],
-// [rules.ListDeleteResponseID].
+// Possible runtime types of the union are [ListDeleteResponseID],
+// [ListDeleteResponseID].
 func (r ListDeleteResponse) AsUnion() ListDeleteResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [rules.ListDeleteResponseID] or [rules.ListDeleteResponseID].
+// Union satisfied by [ListDeleteResponseID] or [ListDeleteResponseID].
 type ListDeleteResponseUnion interface {
 	implementsListDeleteResponse()
 }
@@ -694,14 +692,13 @@ func (r *ListGetResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ListGetResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [rules.ListGetResponseObject],
-// [rules.ListGetResponseObject].
+// Possible runtime types of the union are [ListGetResponseObject],
+// [ListGetResponseObject].
 func (r ListGetResponse) AsUnion() ListGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [rules.ListGetResponseObject] or
-// [rules.ListGetResponseObject].
+// Union satisfied by [ListGetResponseObject] or [ListGetResponseObject].
 type ListGetResponseUnion interface {
 	implementsListGetResponse()
 }

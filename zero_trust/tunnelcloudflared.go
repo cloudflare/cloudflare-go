@@ -231,7 +231,7 @@ func (r *TunnelCloudflaredNewResponse) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [shared.CloudflareTunnel],
-// [zero_trust.TunnelCloudflaredNewResponseTunnelWARPConnectorTunnel].
+// [TunnelCloudflaredNewResponseTunnelWARPConnectorTunnel].
 func (r TunnelCloudflaredNewResponse) AsUnion() TunnelCloudflaredNewResponseUnion {
 	return r.union
 }
@@ -239,7 +239,7 @@ func (r TunnelCloudflaredNewResponse) AsUnion() TunnelCloudflaredNewResponseUnio
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
 // Union satisfied by [shared.CloudflareTunnel] or
-// [zero_trust.TunnelCloudflaredNewResponseTunnelWARPConnectorTunnel].
+// [TunnelCloudflaredNewResponseTunnelWARPConnectorTunnel].
 type TunnelCloudflaredNewResponseUnion interface {
 	ImplementsTunnelCloudflaredNewResponse()
 }
@@ -526,7 +526,7 @@ func (r *TunnelCloudflaredListResponse) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [shared.CloudflareTunnel],
-// [zero_trust.TunnelCloudflaredListResponseTunnelWARPConnectorTunnel].
+// [TunnelCloudflaredListResponseTunnelWARPConnectorTunnel].
 func (r TunnelCloudflaredListResponse) AsUnion() TunnelCloudflaredListResponseUnion {
 	return r.union
 }
@@ -534,7 +534,7 @@ func (r TunnelCloudflaredListResponse) AsUnion() TunnelCloudflaredListResponseUn
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
 // Union satisfied by [shared.CloudflareTunnel] or
-// [zero_trust.TunnelCloudflaredListResponseTunnelWARPConnectorTunnel].
+// [TunnelCloudflaredListResponseTunnelWARPConnectorTunnel].
 type TunnelCloudflaredListResponseUnion interface {
 	ImplementsTunnelCloudflaredListResponse()
 }
@@ -821,7 +821,7 @@ func (r *TunnelCloudflaredDeleteResponse) UnmarshalJSON(data []byte) (err error)
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [shared.CloudflareTunnel],
-// [zero_trust.TunnelCloudflaredDeleteResponseTunnelWARPConnectorTunnel].
+// [TunnelCloudflaredDeleteResponseTunnelWARPConnectorTunnel].
 func (r TunnelCloudflaredDeleteResponse) AsUnion() TunnelCloudflaredDeleteResponseUnion {
 	return r.union
 }
@@ -829,7 +829,7 @@ func (r TunnelCloudflaredDeleteResponse) AsUnion() TunnelCloudflaredDeleteRespon
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
 // Union satisfied by [shared.CloudflareTunnel] or
-// [zero_trust.TunnelCloudflaredDeleteResponseTunnelWARPConnectorTunnel].
+// [TunnelCloudflaredDeleteResponseTunnelWARPConnectorTunnel].
 type TunnelCloudflaredDeleteResponseUnion interface {
 	ImplementsTunnelCloudflaredDeleteResponse()
 }
@@ -1117,7 +1117,7 @@ func (r *TunnelCloudflaredEditResponse) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [shared.CloudflareTunnel],
-// [zero_trust.TunnelCloudflaredEditResponseTunnelWARPConnectorTunnel].
+// [TunnelCloudflaredEditResponseTunnelWARPConnectorTunnel].
 func (r TunnelCloudflaredEditResponse) AsUnion() TunnelCloudflaredEditResponseUnion {
 	return r.union
 }
@@ -1125,7 +1125,7 @@ func (r TunnelCloudflaredEditResponse) AsUnion() TunnelCloudflaredEditResponseUn
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
 // Union satisfied by [shared.CloudflareTunnel] or
-// [zero_trust.TunnelCloudflaredEditResponseTunnelWARPConnectorTunnel].
+// [TunnelCloudflaredEditResponseTunnelWARPConnectorTunnel].
 type TunnelCloudflaredEditResponseUnion interface {
 	ImplementsTunnelCloudflaredEditResponse()
 }
@@ -1412,7 +1412,7 @@ func (r *TunnelCloudflaredGetResponse) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [shared.CloudflareTunnel],
-// [zero_trust.TunnelCloudflaredGetResponseTunnelWARPConnectorTunnel].
+// [TunnelCloudflaredGetResponseTunnelWARPConnectorTunnel].
 func (r TunnelCloudflaredGetResponse) AsUnion() TunnelCloudflaredGetResponseUnion {
 	return r.union
 }
@@ -1420,7 +1420,7 @@ func (r TunnelCloudflaredGetResponse) AsUnion() TunnelCloudflaredGetResponseUnio
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
 // Union satisfied by [shared.CloudflareTunnel] or
-// [zero_trust.TunnelCloudflaredGetResponseTunnelWARPConnectorTunnel].
+// [TunnelCloudflaredGetResponseTunnelWARPConnectorTunnel].
 type TunnelCloudflaredGetResponseUnion interface {
 	ImplementsTunnelCloudflaredGetResponse()
 }

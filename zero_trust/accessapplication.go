@@ -2603,31 +2603,30 @@ func (r *AccessApplicationNewResponse) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationNewResponseSelfHostedApplication],
-// [zero_trust.AccessApplicationNewResponseSaaSApplication],
-// [zero_trust.AccessApplicationNewResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationNewResponseBrowserVNCApplication],
-// [zero_trust.AccessApplicationNewResponseAppLauncherApplication],
-// [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationNewResponseBookmarkApplication],
-// [zero_trust.AccessApplicationNewResponseInfrastructureApplication],
-// [zero_trust.AccessApplicationNewResponseBrowserRdpApplication].
+// [AccessApplicationNewResponseSelfHostedApplication],
+// [AccessApplicationNewResponseSaaSApplication],
+// [AccessApplicationNewResponseBrowserSSHApplication],
+// [AccessApplicationNewResponseBrowserVNCApplication],
+// [AccessApplicationNewResponseAppLauncherApplication],
+// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
+// [AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationNewResponseBookmarkApplication],
+// [AccessApplicationNewResponseInfrastructureApplication],
+// [AccessApplicationNewResponseBrowserRdpApplication].
 func (r AccessApplicationNewResponse) AsUnion() AccessApplicationNewResponseUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [zero_trust.AccessApplicationNewResponseSelfHostedApplication],
-// [zero_trust.AccessApplicationNewResponseSaaSApplication],
-// [zero_trust.AccessApplicationNewResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationNewResponseBrowserVNCApplication],
-// [zero_trust.AccessApplicationNewResponseAppLauncherApplication],
-// [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationNewResponseBookmarkApplication],
-// [zero_trust.AccessApplicationNewResponseInfrastructureApplication] or
-// [zero_trust.AccessApplicationNewResponseBrowserRdpApplication].
+// Union satisfied by [AccessApplicationNewResponseSelfHostedApplication],
+// [AccessApplicationNewResponseSaaSApplication],
+// [AccessApplicationNewResponseBrowserSSHApplication],
+// [AccessApplicationNewResponseBrowserVNCApplication],
+// [AccessApplicationNewResponseAppLauncherApplication],
+// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
+// [AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationNewResponseBookmarkApplication],
+// [AccessApplicationNewResponseInfrastructureApplication] or
+// [AccessApplicationNewResponseBrowserRdpApplication].
 type AccessApplicationNewResponseUnion interface {
 	implementsAccessApplicationNewResponse()
 }
@@ -2879,8 +2878,8 @@ func (r *AccessApplicationNewResponseSelfHostedApplicationDestination) Unmarshal
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination],
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination].
 func (r AccessApplicationNewResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -2889,9 +2888,9 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination]
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination].
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseSelfHostedApplicationDestination()
 }
@@ -3185,12 +3184,11 @@ func (r accessApplicationNewResponseSelfHostedApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationUnion()
 }
@@ -3340,11 +3338,9 @@ func (r *AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticati
 // [AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -3352,10 +3348,9 @@ func (r AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticatio
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -3703,13 +3698,12 @@ func (r *AccessApplicationNewResponseSaaSApplicationSaaSApp) UnmarshalJSON(data 
 // AsUnion returns a [AccessApplicationNewResponseSaaSApplicationSaaSAppUnion]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.SAMLSaaSApp],
-// [zero_trust.OIDCSaaSApp].
+// Possible runtime types of the union are [SAMLSaaSApp], [OIDCSaaSApp].
 func (r AccessApplicationNewResponseSaaSApplicationSaaSApp) AsUnion() AccessApplicationNewResponseSaaSApplicationSaaSAppUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.SAMLSaaSApp] or [zero_trust.OIDCSaaSApp].
+// Union satisfied by [SAMLSaaSApp] or [OIDCSaaSApp].
 type AccessApplicationNewResponseSaaSApplicationSaaSAppUnion interface {
 	implementsAccessApplicationNewResponseSaaSApplicationSaaSApp()
 }
@@ -3793,12 +3787,11 @@ func (r accessApplicationNewResponseSaaSApplicationSCIMConfigJSON) RawJSON() str
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationUnion()
 }
@@ -3948,11 +3941,9 @@ func (r *AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAcce
 // [AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -3960,10 +3951,9 @@ func (r AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAcces
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -4260,8 +4250,8 @@ func (r *AccessApplicationNewResponseBrowserSSHApplicationDestination) Unmarshal
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination].
 func (r AccessApplicationNewResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -4270,9 +4260,9 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination]
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination].
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseBrowserSSHApplicationDestination()
 }
@@ -4566,12 +4556,11 @@ func (r accessApplicationNewResponseBrowserSSHApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion()
 }
@@ -4721,11 +4710,9 @@ func (r *AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticati
 // [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -4733,10 +4720,9 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -5033,8 +5019,8 @@ func (r *AccessApplicationNewResponseBrowserVNCApplicationDestination) Unmarshal
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination].
 func (r AccessApplicationNewResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -5043,9 +5029,9 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination]
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination].
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseBrowserVNCApplicationDestination()
 }
@@ -5339,12 +5325,11 @@ func (r accessApplicationNewResponseBrowserVNCApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion()
 }
@@ -5494,11 +5479,9 @@ func (r *AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticati
 // [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -5506,10 +5489,9 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticatio
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -5868,12 +5850,11 @@ func (r accessApplicationNewResponseAppLauncherApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion()
 }
@@ -6023,11 +6004,9 @@ func (r *AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticat
 // [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -6035,10 +6014,9 @@ func (r AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticati
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -6398,12 +6376,11 @@ func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion()
 }
@@ -6553,11 +6530,9 @@ func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMC
 // [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -6565,10 +6540,9 @@ func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -6928,12 +6902,11 @@ func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion()
 }
@@ -7083,11 +7056,9 @@ func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMC
 // [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -7095,10 +7066,9 @@ func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -7297,12 +7267,11 @@ func (r accessApplicationNewResponseBookmarkApplicationSCIMConfigJSON) RawJSON()
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion()
 }
@@ -7452,11 +7421,9 @@ func (r *AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication
 // [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -7464,10 +7431,9 @@ func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationA
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -7807,12 +7773,11 @@ func (r accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON) Raw
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion()
 }
@@ -7962,11 +7927,9 @@ func (r *AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenti
 // [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -7974,10 +7937,9 @@ func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentic
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -8321,8 +8283,8 @@ func (r *AccessApplicationNewResponseBrowserRdpApplicationDestination) Unmarshal
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationNewResponseBrowserRdpApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationNewResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsPublicDestination],
+// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsPrivateDestination].
 func (r AccessApplicationNewResponseBrowserRdpApplicationDestination) AsUnion() AccessApplicationNewResponseBrowserRdpApplicationDestinationsUnion {
 	return r.union
 }
@@ -8331,9 +8293,9 @@ func (r AccessApplicationNewResponseBrowserRdpApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationNewResponseBrowserRdpApplicationDestinationsPublicDestination]
+// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationNewResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationNewResponseBrowserRdpApplicationDestinationsPrivateDestination].
 type AccessApplicationNewResponseBrowserRdpApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseBrowserRdpApplicationDestination()
 }
@@ -8627,12 +8589,11 @@ func (r accessApplicationNewResponseBrowserRdpApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion()
 }
@@ -8782,11 +8743,9 @@ func (r *AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticati
 // [AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -8794,10 +8753,9 @@ func (r AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticatio
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -9093,31 +9051,30 @@ func (r *AccessApplicationUpdateResponse) UnmarshalJSON(data []byte) (err error)
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplication],
-// [zero_trust.AccessApplicationUpdateResponseSaaSApplication],
-// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplication],
-// [zero_trust.AccessApplicationUpdateResponseAppLauncherApplication],
-// [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationUpdateResponseBookmarkApplication],
-// [zero_trust.AccessApplicationUpdateResponseInfrastructureApplication],
-// [zero_trust.AccessApplicationUpdateResponseBrowserRdpApplication].
+// [AccessApplicationUpdateResponseSelfHostedApplication],
+// [AccessApplicationUpdateResponseSaaSApplication],
+// [AccessApplicationUpdateResponseBrowserSSHApplication],
+// [AccessApplicationUpdateResponseBrowserVNCApplication],
+// [AccessApplicationUpdateResponseAppLauncherApplication],
+// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
+// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationUpdateResponseBookmarkApplication],
+// [AccessApplicationUpdateResponseInfrastructureApplication],
+// [AccessApplicationUpdateResponseBrowserRdpApplication].
 func (r AccessApplicationUpdateResponse) AsUnion() AccessApplicationUpdateResponseUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplication],
-// [zero_trust.AccessApplicationUpdateResponseSaaSApplication],
-// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplication],
-// [zero_trust.AccessApplicationUpdateResponseAppLauncherApplication],
-// [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationUpdateResponseBookmarkApplication],
-// [zero_trust.AccessApplicationUpdateResponseInfrastructureApplication] or
-// [zero_trust.AccessApplicationUpdateResponseBrowserRdpApplication].
+// Union satisfied by [AccessApplicationUpdateResponseSelfHostedApplication],
+// [AccessApplicationUpdateResponseSaaSApplication],
+// [AccessApplicationUpdateResponseBrowserSSHApplication],
+// [AccessApplicationUpdateResponseBrowserVNCApplication],
+// [AccessApplicationUpdateResponseAppLauncherApplication],
+// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
+// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationUpdateResponseBookmarkApplication],
+// [AccessApplicationUpdateResponseInfrastructureApplication] or
+// [AccessApplicationUpdateResponseBrowserRdpApplication].
 type AccessApplicationUpdateResponseUnion interface {
 	implementsAccessApplicationUpdateResponse()
 }
@@ -9370,8 +9327,8 @@ func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestination) Unmars
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination],
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination].
 func (r AccessApplicationUpdateResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -9380,9 +9337,9 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestination) AsUnion
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination]
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination].
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseSelfHostedApplicationDestination()
 }
@@ -9676,12 +9633,11 @@ func (r accessApplicationUpdateResponseSelfHostedApplicationSCIMConfigJSON) RawJ
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationUnion()
 }
@@ -9831,11 +9787,9 @@ func (r *AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentic
 // [AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -9843,10 +9797,9 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentica
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -10194,13 +10147,12 @@ func (r *AccessApplicationUpdateResponseSaaSApplicationSaaSApp) UnmarshalJSON(da
 // AsUnion returns a [AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.SAMLSaaSApp],
-// [zero_trust.OIDCSaaSApp].
+// Possible runtime types of the union are [SAMLSaaSApp], [OIDCSaaSApp].
 func (r AccessApplicationUpdateResponseSaaSApplicationSaaSApp) AsUnion() AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.SAMLSaaSApp] or [zero_trust.OIDCSaaSApp].
+// Union satisfied by [SAMLSaaSApp] or [OIDCSaaSApp].
 type AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion interface {
 	implementsAccessApplicationUpdateResponseSaaSApplicationSaaSApp()
 }
@@ -10285,12 +10237,11 @@ func (r accessApplicationUpdateResponseSaaSApplicationSCIMConfigJSON) RawJSON() 
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationUnion()
 }
@@ -10440,11 +10391,9 @@ func (r *AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationA
 // [AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -10452,10 +10401,9 @@ func (r AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAc
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -10753,8 +10701,8 @@ func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestination) Unmars
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination].
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -10763,9 +10711,9 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestination) AsUnion
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination]
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination].
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserSSHApplicationDestination()
 }
@@ -11059,12 +11007,11 @@ func (r accessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigJSON) RawJ
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion()
 }
@@ -11214,11 +11161,9 @@ func (r *AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentic
 // [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -11226,10 +11171,9 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentica
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -11527,8 +11471,8 @@ func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestination) Unmars
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination].
 func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -11537,9 +11481,9 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestination) AsUnion
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination]
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination].
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserVNCApplicationDestination()
 }
@@ -11833,12 +11777,11 @@ func (r accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigJSON) RawJ
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion()
 }
@@ -11988,11 +11931,9 @@ func (r *AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentic
 // [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -12000,10 +11941,9 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentica
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -12362,12 +12302,11 @@ func (r accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigJSON) Raw
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion()
 }
@@ -12517,11 +12456,9 @@ func (r *AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenti
 // [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -12529,10 +12466,9 @@ func (r AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthentic
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -12892,12 +12828,11 @@ func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCI
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion()
 }
@@ -13047,11 +12982,9 @@ func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSC
 // [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -13059,10 +12992,9 @@ func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCI
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -13422,12 +13354,11 @@ func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCI
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion()
 }
@@ -13577,11 +13508,9 @@ func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSC
 // [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -13589,10 +13518,9 @@ func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCI
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -13792,12 +13720,11 @@ func (r accessApplicationUpdateResponseBookmarkApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion()
 }
@@ -13947,11 +13874,9 @@ func (r *AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticat
 // [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -13959,10 +13884,9 @@ func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticati
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -14303,12 +14227,11 @@ func (r accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON) 
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion()
 }
@@ -14458,11 +14381,9 @@ func (r *AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthe
 // [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -14470,10 +14391,9 @@ func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthen
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -14818,8 +14738,8 @@ func (r *AccessApplicationUpdateResponseBrowserRdpApplicationDestination) Unmars
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPublicDestination],
+// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPrivateDestination].
 func (r AccessApplicationUpdateResponseBrowserRdpApplicationDestination) AsUnion() AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsUnion {
 	return r.union
 }
@@ -14828,9 +14748,9 @@ func (r AccessApplicationUpdateResponseBrowserRdpApplicationDestination) AsUnion
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPublicDestination]
+// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsPrivateDestination].
 type AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserRdpApplicationDestination()
 }
@@ -15124,12 +15044,11 @@ func (r accessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigJSON) RawJ
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion()
 }
@@ -15279,11 +15198,9 @@ func (r *AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthentic
 // [AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -15291,10 +15208,9 @@ func (r AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthentica
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -15590,31 +15506,30 @@ func (r *AccessApplicationListResponse) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationListResponseSelfHostedApplication],
-// [zero_trust.AccessApplicationListResponseSaaSApplication],
-// [zero_trust.AccessApplicationListResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationListResponseBrowserVNCApplication],
-// [zero_trust.AccessApplicationListResponseAppLauncherApplication],
-// [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationListResponseBookmarkApplication],
-// [zero_trust.AccessApplicationListResponseInfrastructureApplication],
-// [zero_trust.AccessApplicationListResponseBrowserRdpApplication].
+// [AccessApplicationListResponseSelfHostedApplication],
+// [AccessApplicationListResponseSaaSApplication],
+// [AccessApplicationListResponseBrowserSSHApplication],
+// [AccessApplicationListResponseBrowserVNCApplication],
+// [AccessApplicationListResponseAppLauncherApplication],
+// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
+// [AccessApplicationListResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationListResponseBookmarkApplication],
+// [AccessApplicationListResponseInfrastructureApplication],
+// [AccessApplicationListResponseBrowserRdpApplication].
 func (r AccessApplicationListResponse) AsUnion() AccessApplicationListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [zero_trust.AccessApplicationListResponseSelfHostedApplication],
-// [zero_trust.AccessApplicationListResponseSaaSApplication],
-// [zero_trust.AccessApplicationListResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationListResponseBrowserVNCApplication],
-// [zero_trust.AccessApplicationListResponseAppLauncherApplication],
-// [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationListResponseBookmarkApplication],
-// [zero_trust.AccessApplicationListResponseInfrastructureApplication] or
-// [zero_trust.AccessApplicationListResponseBrowserRdpApplication].
+// Union satisfied by [AccessApplicationListResponseSelfHostedApplication],
+// [AccessApplicationListResponseSaaSApplication],
+// [AccessApplicationListResponseBrowserSSHApplication],
+// [AccessApplicationListResponseBrowserVNCApplication],
+// [AccessApplicationListResponseAppLauncherApplication],
+// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
+// [AccessApplicationListResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationListResponseBookmarkApplication],
+// [AccessApplicationListResponseInfrastructureApplication] or
+// [AccessApplicationListResponseBrowserRdpApplication].
 type AccessApplicationListResponseUnion interface {
 	implementsAccessApplicationListResponse()
 }
@@ -15867,8 +15782,8 @@ func (r *AccessApplicationListResponseSelfHostedApplicationDestination) Unmarsha
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination],
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination].
 func (r AccessApplicationListResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationListResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -15877,9 +15792,9 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestination) AsUnion()
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination]
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination].
 type AccessApplicationListResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseSelfHostedApplicationDestination()
 }
@@ -16173,12 +16088,11 @@ func (r accessApplicationListResponseSelfHostedApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationUnion()
 }
@@ -16328,11 +16242,9 @@ func (r *AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticat
 // [AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -16340,10 +16252,9 @@ func (r AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticati
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -16691,13 +16602,12 @@ func (r *AccessApplicationListResponseSaaSApplicationSaaSApp) UnmarshalJSON(data
 // AsUnion returns a [AccessApplicationListResponseSaaSApplicationSaaSAppUnion]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.SAMLSaaSApp],
-// [zero_trust.OIDCSaaSApp].
+// Possible runtime types of the union are [SAMLSaaSApp], [OIDCSaaSApp].
 func (r AccessApplicationListResponseSaaSApplicationSaaSApp) AsUnion() AccessApplicationListResponseSaaSApplicationSaaSAppUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.SAMLSaaSApp] or [zero_trust.OIDCSaaSApp].
+// Union satisfied by [SAMLSaaSApp] or [OIDCSaaSApp].
 type AccessApplicationListResponseSaaSApplicationSaaSAppUnion interface {
 	implementsAccessApplicationListResponseSaaSApplicationSaaSApp()
 }
@@ -16781,12 +16691,11 @@ func (r accessApplicationListResponseSaaSApplicationSCIMConfigJSON) RawJSON() st
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationUnion()
 }
@@ -16936,11 +16845,9 @@ func (r *AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAcc
 // [AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -16948,10 +16855,9 @@ func (r AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAcce
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -17249,8 +17155,8 @@ func (r *AccessApplicationListResponseBrowserSSHApplicationDestination) Unmarsha
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination].
 func (r AccessApplicationListResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -17259,9 +17165,9 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestination) AsUnion()
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination]
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination].
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseBrowserSSHApplicationDestination()
 }
@@ -17555,12 +17461,11 @@ func (r accessApplicationListResponseBrowserSSHApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion()
 }
@@ -17710,11 +17615,9 @@ func (r *AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticat
 // [AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -17722,10 +17625,9 @@ func (r AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticati
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -18023,8 +17925,8 @@ func (r *AccessApplicationListResponseBrowserVNCApplicationDestination) Unmarsha
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination].
 func (r AccessApplicationListResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -18033,9 +17935,9 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestination) AsUnion()
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination]
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination].
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseBrowserVNCApplicationDestination()
 }
@@ -18329,12 +18231,11 @@ func (r accessApplicationListResponseBrowserVNCApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion()
 }
@@ -18484,11 +18385,9 @@ func (r *AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticat
 // [AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -18496,10 +18395,9 @@ func (r AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticati
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -18858,12 +18756,11 @@ func (r accessApplicationListResponseAppLauncherApplicationSCIMConfigJSON) RawJS
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion()
 }
@@ -19013,11 +18910,9 @@ func (r *AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentica
 // [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -19025,10 +18920,9 @@ func (r AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticat
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -19388,12 +19282,11 @@ func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMC
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion()
 }
@@ -19543,11 +19436,9 @@ func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIM
 // [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -19555,10 +19446,9 @@ func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMC
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -19918,12 +19808,11 @@ func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMC
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion()
 }
@@ -20073,11 +19962,9 @@ func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIM
 // [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -20085,10 +19972,9 @@ func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMC
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -20287,12 +20173,11 @@ func (r accessApplicationListResponseBookmarkApplicationSCIMConfigJSON) RawJSON(
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion()
 }
@@ -20442,11 +20327,9 @@ func (r *AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticatio
 // [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -20454,10 +20337,9 @@ func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -20797,12 +20679,11 @@ func (r accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON) Ra
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion()
 }
@@ -20952,11 +20833,9 @@ func (r *AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthent
 // [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -20964,10 +20843,9 @@ func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenti
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -21312,8 +21190,8 @@ func (r *AccessApplicationListResponseBrowserRdpApplicationDestination) Unmarsha
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationListResponseBrowserRdpApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationListResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserRdpApplicationDestinationsPublicDestination],
+// [AccessApplicationListResponseBrowserRdpApplicationDestinationsPrivateDestination].
 func (r AccessApplicationListResponseBrowserRdpApplicationDestination) AsUnion() AccessApplicationListResponseBrowserRdpApplicationDestinationsUnion {
 	return r.union
 }
@@ -21322,9 +21200,9 @@ func (r AccessApplicationListResponseBrowserRdpApplicationDestination) AsUnion()
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationListResponseBrowserRdpApplicationDestinationsPublicDestination]
+// [AccessApplicationListResponseBrowserRdpApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationListResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationListResponseBrowserRdpApplicationDestinationsPrivateDestination].
 type AccessApplicationListResponseBrowserRdpApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseBrowserRdpApplicationDestination()
 }
@@ -21618,12 +21496,11 @@ func (r accessApplicationListResponseBrowserRdpApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion()
 }
@@ -21773,11 +21650,9 @@ func (r *AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticat
 // [AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -21785,10 +21660,9 @@ func (r AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticati
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -22106,31 +21980,30 @@ func (r *AccessApplicationGetResponse) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationGetResponseSelfHostedApplication],
-// [zero_trust.AccessApplicationGetResponseSaaSApplication],
-// [zero_trust.AccessApplicationGetResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationGetResponseBrowserVNCApplication],
-// [zero_trust.AccessApplicationGetResponseAppLauncherApplication],
-// [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationGetResponseBookmarkApplication],
-// [zero_trust.AccessApplicationGetResponseInfrastructureApplication],
-// [zero_trust.AccessApplicationGetResponseBrowserRdpApplication].
+// [AccessApplicationGetResponseSelfHostedApplication],
+// [AccessApplicationGetResponseSaaSApplication],
+// [AccessApplicationGetResponseBrowserSSHApplication],
+// [AccessApplicationGetResponseBrowserVNCApplication],
+// [AccessApplicationGetResponseAppLauncherApplication],
+// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
+// [AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationGetResponseBookmarkApplication],
+// [AccessApplicationGetResponseInfrastructureApplication],
+// [AccessApplicationGetResponseBrowserRdpApplication].
 func (r AccessApplicationGetResponse) AsUnion() AccessApplicationGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [zero_trust.AccessApplicationGetResponseSelfHostedApplication],
-// [zero_trust.AccessApplicationGetResponseSaaSApplication],
-// [zero_trust.AccessApplicationGetResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationGetResponseBrowserVNCApplication],
-// [zero_trust.AccessApplicationGetResponseAppLauncherApplication],
-// [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationGetResponseBookmarkApplication],
-// [zero_trust.AccessApplicationGetResponseInfrastructureApplication] or
-// [zero_trust.AccessApplicationGetResponseBrowserRdpApplication].
+// Union satisfied by [AccessApplicationGetResponseSelfHostedApplication],
+// [AccessApplicationGetResponseSaaSApplication],
+// [AccessApplicationGetResponseBrowserSSHApplication],
+// [AccessApplicationGetResponseBrowserVNCApplication],
+// [AccessApplicationGetResponseAppLauncherApplication],
+// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
+// [AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
+// [AccessApplicationGetResponseBookmarkApplication],
+// [AccessApplicationGetResponseInfrastructureApplication] or
+// [AccessApplicationGetResponseBrowserRdpApplication].
 type AccessApplicationGetResponseUnion interface {
 	implementsAccessApplicationGetResponse()
 }
@@ -22382,8 +22255,8 @@ func (r *AccessApplicationGetResponseSelfHostedApplicationDestination) Unmarshal
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination],
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination].
 func (r AccessApplicationGetResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -22392,9 +22265,9 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination]
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination].
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseSelfHostedApplicationDestination()
 }
@@ -22688,12 +22561,11 @@ func (r accessApplicationGetResponseSelfHostedApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationUnion()
 }
@@ -22843,11 +22715,9 @@ func (r *AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticati
 // [AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -22855,10 +22725,9 @@ func (r AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticatio
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -23206,13 +23075,12 @@ func (r *AccessApplicationGetResponseSaaSApplicationSaaSApp) UnmarshalJSON(data 
 // AsUnion returns a [AccessApplicationGetResponseSaaSApplicationSaaSAppUnion]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.SAMLSaaSApp],
-// [zero_trust.OIDCSaaSApp].
+// Possible runtime types of the union are [SAMLSaaSApp], [OIDCSaaSApp].
 func (r AccessApplicationGetResponseSaaSApplicationSaaSApp) AsUnion() AccessApplicationGetResponseSaaSApplicationSaaSAppUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.SAMLSaaSApp] or [zero_trust.OIDCSaaSApp].
+// Union satisfied by [SAMLSaaSApp] or [OIDCSaaSApp].
 type AccessApplicationGetResponseSaaSApplicationSaaSAppUnion interface {
 	implementsAccessApplicationGetResponseSaaSApplicationSaaSApp()
 }
@@ -23296,12 +23164,11 @@ func (r accessApplicationGetResponseSaaSApplicationSCIMConfigJSON) RawJSON() str
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationUnion()
 }
@@ -23451,11 +23318,9 @@ func (r *AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAcce
 // [AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -23463,10 +23328,9 @@ func (r AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAcces
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -23763,8 +23627,8 @@ func (r *AccessApplicationGetResponseBrowserSSHApplicationDestination) Unmarshal
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination],
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination].
 func (r AccessApplicationGetResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -23773,9 +23637,9 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination]
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination].
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseBrowserSSHApplicationDestination()
 }
@@ -24069,12 +23933,11 @@ func (r accessApplicationGetResponseBrowserSSHApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion()
 }
@@ -24224,11 +24087,9 @@ func (r *AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticati
 // [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -24236,10 +24097,9 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -24536,8 +24396,8 @@ func (r *AccessApplicationGetResponseBrowserVNCApplicationDestination) Unmarshal
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination],
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination].
 func (r AccessApplicationGetResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -24546,9 +24406,9 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination]
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination].
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseBrowserVNCApplicationDestination()
 }
@@ -24842,12 +24702,11 @@ func (r accessApplicationGetResponseBrowserVNCApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion()
 }
@@ -24997,11 +24856,9 @@ func (r *AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticati
 // [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -25009,10 +24866,9 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticatio
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -25371,12 +25227,11 @@ func (r accessApplicationGetResponseAppLauncherApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion()
 }
@@ -25526,11 +25381,9 @@ func (r *AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticat
 // [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -25538,10 +25391,9 @@ func (r AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticati
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -25901,12 +25753,11 @@ func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion()
 }
@@ -26056,11 +25907,9 @@ func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMC
 // [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -26068,10 +25917,9 @@ func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -26431,12 +26279,11 @@ func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion()
 }
@@ -26586,11 +26433,9 @@ func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMC
 // [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -26598,10 +26443,9 @@ func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -26800,12 +26644,11 @@ func (r accessApplicationGetResponseBookmarkApplicationSCIMConfigJSON) RawJSON()
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion()
 }
@@ -26955,11 +26798,9 @@ func (r *AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication
 // [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -26967,10 +26808,9 @@ func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationA
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -27310,12 +27150,11 @@ func (r accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON) Raw
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion()
 }
@@ -27465,11 +27304,9 @@ func (r *AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenti
 // [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -27477,10 +27314,9 @@ func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentic
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }
@@ -27824,8 +27660,8 @@ func (r *AccessApplicationGetResponseBrowserRdpApplicationDestination) Unmarshal
 // which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.AccessApplicationGetResponseBrowserRdpApplicationDestinationsPublicDestination],
-// [zero_trust.AccessApplicationGetResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsPublicDestination],
+// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsPrivateDestination].
 func (r AccessApplicationGetResponseBrowserRdpApplicationDestination) AsUnion() AccessApplicationGetResponseBrowserRdpApplicationDestinationsUnion {
 	return r.union
 }
@@ -27834,9 +27670,9 @@ func (r AccessApplicationGetResponseBrowserRdpApplicationDestination) AsUnion() 
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 //
 // Union satisfied by
-// [zero_trust.AccessApplicationGetResponseBrowserRdpApplicationDestinationsPublicDestination]
+// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsPublicDestination]
 // or
-// [zero_trust.AccessApplicationGetResponseBrowserRdpApplicationDestinationsPrivateDestination].
+// [AccessApplicationGetResponseBrowserRdpApplicationDestinationsPrivateDestination].
 type AccessApplicationGetResponseBrowserRdpApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseBrowserRdpApplicationDestination()
 }
@@ -28130,12 +27966,11 @@ func (r accessApplicationGetResponseBrowserRdpApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken]
 // or
-// [zero_trust.AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
+// [AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthentication].
 type AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion interface {
 	implementsAccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationUnion()
 }
@@ -28285,11 +28120,9 @@ func (r *AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticati
 // [AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem]
 // interface which you can cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2],
-// [zero_trust.AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Possible runtime types of the union are [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2],
+// [AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 func (r AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem) AsUnion() AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem {
 	return r.union
 }
@@ -28297,10 +28130,9 @@ func (r AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticatio
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 //
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2] or
-// [zero_trust.AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
+// Union satisfied by [SCIMConfigAuthenticationHTTPBasic],
+// [SCIMConfigAuthenticationOAuthBearerToken], [SCIMConfigAuthenticationOauth2] or
+// [AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken].
 type AccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationUnionItem interface {
 	implementsAccessApplicationGetResponseBrowserRdpApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem()
 }

@@ -224,7 +224,7 @@ func (r eventDetailGetResponseJSON) RawJSON() string {
 }
 
 type EventDetailGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 

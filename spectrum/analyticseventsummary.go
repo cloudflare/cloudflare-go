@@ -121,8 +121,8 @@ func (r analyticsEventSummaryGetResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [spectrum.AnalyticsEventSummaryGetResponseDataMetricsArray]
-// or [spectrum.AnalyticsEventSummaryGetResponseDataMetricsArray].
+// Union satisfied by [AnalyticsEventSummaryGetResponseDataMetricsArray] or
+// [AnalyticsEventSummaryGetResponseDataMetricsArray].
 type AnalyticsEventSummaryGetResponseDataMetricsUnion interface {
 	implementsAnalyticsEventSummaryGetResponseDataMetricsUnion()
 }

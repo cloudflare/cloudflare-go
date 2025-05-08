@@ -235,9 +235,9 @@ func (r *WAFPackageRuleListResponse) UnmarshalJSON(data []byte) (err error) {
 // to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [firewall.WAFPackageRuleListResponseWAFManagedRulesAnomalyRule],
-// [firewall.WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule],
-// [firewall.WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule].
+// [WAFPackageRuleListResponseWAFManagedRulesAnomalyRule],
+// [WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule],
+// [WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule].
 func (r WAFPackageRuleListResponse) AsUnion() WAFPackageRuleListResponseUnion {
 	return r.union
 }
@@ -247,10 +247,9 @@ func (r WAFPackageRuleListResponse) AsUnion() WAFPackageRuleListResponseUnion {
 // configure the total scoring threshold through the 'sensitivity' property of the
 // WAF package.
 //
-// Union satisfied by
-// [firewall.WAFPackageRuleListResponseWAFManagedRulesAnomalyRule],
-// [firewall.WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule] or
-// [firewall.WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule].
+// Union satisfied by [WAFPackageRuleListResponseWAFManagedRulesAnomalyRule],
+// [WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule] or
+// [WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule].
 type WAFPackageRuleListResponseUnion interface {
 	implementsWAFPackageRuleListResponse()
 }
@@ -597,9 +596,9 @@ func (r *WAFPackageRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
 // to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [firewall.WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule],
-// [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule],
-// [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule].
+// [WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule],
+// [WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule],
+// [WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule].
 func (r WAFPackageRuleEditResponse) AsUnion() WAFPackageRuleEditResponseUnion {
 	return r.union
 }
@@ -609,10 +608,9 @@ func (r WAFPackageRuleEditResponse) AsUnion() WAFPackageRuleEditResponseUnion {
 // configure the total scoring threshold through the 'sensitivity' property of the
 // WAF package.
 //
-// Union satisfied by
-// [firewall.WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule],
-// [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule] or
-// [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule].
+// Union satisfied by [WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule],
+// [WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule] or
+// [WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule].
 type WAFPackageRuleEditResponseUnion interface {
 	implementsWAFPackageRuleEditResponse()
 }

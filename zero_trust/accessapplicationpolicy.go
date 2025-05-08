@@ -408,36 +408,26 @@ func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [AccessRuleUnion] interface which you can cast to the specific
 // types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.GroupRule],
-// [zero_trust.AnyValidServiceTokenRule],
-// [zero_trust.AccessRuleAccessAuthContextRule],
-// [zero_trust.AuthenticationMethodRule], [zero_trust.AzureGroupRule],
-// [zero_trust.CertificateRule], [zero_trust.AccessRuleAccessCommonNameRule],
-// [zero_trust.CountryRule], [zero_trust.AccessDevicePostureRule],
-// [zero_trust.DomainRule], [zero_trust.EmailListRule], [zero_trust.EmailRule],
-// [zero_trust.EveryoneRule], [zero_trust.ExternalEvaluationRule],
-// [zero_trust.GitHubOrganizationRule], [zero_trust.GSuiteGroupRule],
-// [zero_trust.AccessRuleAccessLoginMethodRule], [zero_trust.IPListRule],
-// [zero_trust.IPRule], [zero_trust.OktaGroupRule], [zero_trust.SAMLGroupRule],
-// [zero_trust.ServiceTokenRule].
+// Possible runtime types of the union are [GroupRule], [AnyValidServiceTokenRule],
+// [AccessRuleAccessAuthContextRule], [AuthenticationMethodRule], [AzureGroupRule],
+// [CertificateRule], [AccessRuleAccessCommonNameRule], [CountryRule],
+// [AccessDevicePostureRule], [DomainRule], [EmailListRule], [EmailRule],
+// [EveryoneRule], [ExternalEvaluationRule], [GitHubOrganizationRule],
+// [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
+// [OktaGroupRule], [SAMLGroupRule], [ServiceTokenRule].
 func (r AccessRule) AsUnion() AccessRuleUnion {
 	return r.union
 }
 
 // Matches an Access group.
 //
-// Union satisfied by [zero_trust.GroupRule],
-// [zero_trust.AnyValidServiceTokenRule],
-// [zero_trust.AccessRuleAccessAuthContextRule],
-// [zero_trust.AuthenticationMethodRule], [zero_trust.AzureGroupRule],
-// [zero_trust.CertificateRule], [zero_trust.AccessRuleAccessCommonNameRule],
-// [zero_trust.CountryRule], [zero_trust.AccessDevicePostureRule],
-// [zero_trust.DomainRule], [zero_trust.EmailListRule], [zero_trust.EmailRule],
-// [zero_trust.EveryoneRule], [zero_trust.ExternalEvaluationRule],
-// [zero_trust.GitHubOrganizationRule], [zero_trust.GSuiteGroupRule],
-// [zero_trust.AccessRuleAccessLoginMethodRule], [zero_trust.IPListRule],
-// [zero_trust.IPRule], [zero_trust.OktaGroupRule], [zero_trust.SAMLGroupRule] or
-// [zero_trust.ServiceTokenRule].
+// Union satisfied by [GroupRule], [AnyValidServiceTokenRule],
+// [AccessRuleAccessAuthContextRule], [AuthenticationMethodRule], [AzureGroupRule],
+// [CertificateRule], [AccessRuleAccessCommonNameRule], [CountryRule],
+// [AccessDevicePostureRule], [DomainRule], [EmailListRule], [EmailRule],
+// [EveryoneRule], [ExternalEvaluationRule], [GitHubOrganizationRule],
+// [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
+// [OktaGroupRule], [SAMLGroupRule] or [ServiceTokenRule].
 type AccessRuleUnion interface {
 	implementsAccessRule()
 }

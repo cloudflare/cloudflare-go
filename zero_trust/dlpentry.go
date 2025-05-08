@@ -234,21 +234,18 @@ func (r *DLPEntryUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [DLPEntryUpdateResponseUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.DLPEntryUpdateResponseCustomEntry],
-// [zero_trust.DLPEntryUpdateResponsePredefinedEntry],
-// [zero_trust.DLPEntryUpdateResponseIntegrationEntry],
-// [zero_trust.DLPEntryUpdateResponseExactDataEntry],
-// [zero_trust.DLPEntryUpdateResponseWordListEntry].
+// Possible runtime types of the union are [DLPEntryUpdateResponseCustomEntry],
+// [DLPEntryUpdateResponsePredefinedEntry],
+// [DLPEntryUpdateResponseIntegrationEntry],
+// [DLPEntryUpdateResponseExactDataEntry], [DLPEntryUpdateResponseWordListEntry].
 func (r DLPEntryUpdateResponse) AsUnion() DLPEntryUpdateResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.DLPEntryUpdateResponseCustomEntry],
-// [zero_trust.DLPEntryUpdateResponsePredefinedEntry],
-// [zero_trust.DLPEntryUpdateResponseIntegrationEntry],
-// [zero_trust.DLPEntryUpdateResponseExactDataEntry] or
-// [zero_trust.DLPEntryUpdateResponseWordListEntry].
+// Union satisfied by [DLPEntryUpdateResponseCustomEntry],
+// [DLPEntryUpdateResponsePredefinedEntry],
+// [DLPEntryUpdateResponseIntegrationEntry], [DLPEntryUpdateResponseExactDataEntry]
+// or [DLPEntryUpdateResponseWordListEntry].
 type DLPEntryUpdateResponseUnion interface {
 	implementsDLPEntryUpdateResponse()
 }
@@ -632,21 +629,16 @@ func (r *DLPEntryListResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [DLPEntryListResponseUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.DLPEntryListResponseCustomEntry],
-// [zero_trust.DLPEntryListResponsePredefinedEntry],
-// [zero_trust.DLPEntryListResponseIntegrationEntry],
-// [zero_trust.DLPEntryListResponseExactDataEntry],
-// [zero_trust.DLPEntryListResponseWordListEntry].
+// Possible runtime types of the union are [DLPEntryListResponseCustomEntry],
+// [DLPEntryListResponsePredefinedEntry], [DLPEntryListResponseIntegrationEntry],
+// [DLPEntryListResponseExactDataEntry], [DLPEntryListResponseWordListEntry].
 func (r DLPEntryListResponse) AsUnion() DLPEntryListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.DLPEntryListResponseCustomEntry],
-// [zero_trust.DLPEntryListResponsePredefinedEntry],
-// [zero_trust.DLPEntryListResponseIntegrationEntry],
-// [zero_trust.DLPEntryListResponseExactDataEntry] or
-// [zero_trust.DLPEntryListResponseWordListEntry].
+// Union satisfied by [DLPEntryListResponseCustomEntry],
+// [DLPEntryListResponsePredefinedEntry], [DLPEntryListResponseIntegrationEntry],
+// [DLPEntryListResponseExactDataEntry] or [DLPEntryListResponseWordListEntry].
 type DLPEntryListResponseUnion interface {
 	implementsDLPEntryListResponse()
 }
@@ -1032,21 +1024,16 @@ func (r *DLPEntryGetResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [DLPEntryGetResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.DLPEntryGetResponseCustomEntry],
-// [zero_trust.DLPEntryGetResponsePredefinedEntry],
-// [zero_trust.DLPEntryGetResponseIntegrationEntry],
-// [zero_trust.DLPEntryGetResponseExactDataEntry],
-// [zero_trust.DLPEntryGetResponseWordListEntry].
+// Possible runtime types of the union are [DLPEntryGetResponseCustomEntry],
+// [DLPEntryGetResponsePredefinedEntry], [DLPEntryGetResponseIntegrationEntry],
+// [DLPEntryGetResponseExactDataEntry], [DLPEntryGetResponseWordListEntry].
 func (r DLPEntryGetResponse) AsUnion() DLPEntryGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.DLPEntryGetResponseCustomEntry],
-// [zero_trust.DLPEntryGetResponsePredefinedEntry],
-// [zero_trust.DLPEntryGetResponseIntegrationEntry],
-// [zero_trust.DLPEntryGetResponseExactDataEntry] or
-// [zero_trust.DLPEntryGetResponseWordListEntry].
+// Union satisfied by [DLPEntryGetResponseCustomEntry],
+// [DLPEntryGetResponsePredefinedEntry], [DLPEntryGetResponseIntegrationEntry],
+// [DLPEntryGetResponseExactDataEntry] or [DLPEntryGetResponseWordListEntry].
 type DLPEntryGetResponseUnion interface {
 	implementsDLPEntryGetResponse()
 }

@@ -106,15 +106,14 @@ func (r *AppType) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [AppTypeUnion] interface which you can cast to the specific
 // types for more type safety.
 //
-// Possible runtime types of the union are
-// [zero_trust.AppTypeZeroTrustGatewayApplication],
-// [zero_trust.AppTypeZeroTrustGatewayApplicationType].
+// Possible runtime types of the union are [AppTypeZeroTrustGatewayApplication],
+// [AppTypeZeroTrustGatewayApplicationType].
 func (r AppType) AsUnion() AppTypeUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.AppTypeZeroTrustGatewayApplication] or
-// [zero_trust.AppTypeZeroTrustGatewayApplicationType].
+// Union satisfied by [AppTypeZeroTrustGatewayApplication] or
+// [AppTypeZeroTrustGatewayApplicationType].
 type AppTypeUnion interface {
 	implementsAppType()
 }

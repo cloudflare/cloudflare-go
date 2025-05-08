@@ -122,15 +122,14 @@ func (r *UserSchemaOperationListResponse) UnmarshalJSON(data []byte) (err error)
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperation],
-// [api_gateway.UserSchemaOperationListResponseAPIShieldBasicOperation].
+// [UserSchemaOperationListResponseAPIShieldOperation],
+// [UserSchemaOperationListResponseAPIShieldBasicOperation].
 func (r UserSchemaOperationListResponse) AsUnion() UserSchemaOperationListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperation] or
-// [api_gateway.UserSchemaOperationListResponseAPIShieldBasicOperation].
+// Union satisfied by [UserSchemaOperationListResponseAPIShieldOperation] or
+// [UserSchemaOperationListResponseAPIShieldBasicOperation].
 type UserSchemaOperationListResponseUnion interface {
 	implementsUserSchemaOperationListResponse()
 }
@@ -265,22 +264,22 @@ func (r *UserSchemaOperationListResponseAPIShieldOperationFeatures) UnmarshalJSO
 // you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureConfidenceIntervals],
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfo].
+// [UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureThresholds],
+// [UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureAPIRouting],
+// [UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureConfidenceIntervals],
+// [UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfo].
 func (r UserSchemaOperationListResponseAPIShieldOperationFeatures) AsUnion() UserSchemaOperationListResponseAPIShieldOperationFeaturesUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureConfidenceIntervals]
+// [UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureThresholds],
+// [UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureAPIRouting],
+// [UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureConfidenceIntervals]
 // or
-// [api_gateway.UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfo].
+// [UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfo].
 type UserSchemaOperationListResponseAPIShieldOperationFeaturesUnion interface {
 	implementsUserSchemaOperationListResponseAPIShieldOperationFeatures()
 }

@@ -259,17 +259,16 @@ func (r *AppListResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [AppListResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [magic_transit.AppListResponseMagicAccountApp],
-// [magic_transit.AppListResponseMagicManagedApp].
+// Possible runtime types of the union are [AppListResponseMagicAccountApp],
+// [AppListResponseMagicManagedApp].
 func (r AppListResponse) AsUnion() AppListResponseUnion {
 	return r.union
 }
 
 // Collection of Hostnames and/or IP Subnets to associate with traffic decisions.
 //
-// Union satisfied by [magic_transit.AppListResponseMagicAccountApp] or
-// [magic_transit.AppListResponseMagicManagedApp].
+// Union satisfied by [AppListResponseMagicAccountApp] or
+// [AppListResponseMagicManagedApp].
 type AppListResponseUnion interface {
 	implementsAppListResponse()
 }

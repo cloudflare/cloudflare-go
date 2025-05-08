@@ -559,10 +559,10 @@ func (r resourceGroupGetResponseMetaJSON) RawJSON() string {
 type ResourceGroupNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Name of the resource group
+	Name param.Field[string] `json:"name,required"`
 	// A scope is a combination of scope objects which provides additional context.
 	Scope param.Field[ResourceGroupNewParamsScope] `json:"scope,required"`
-	// Attributes associated to the resource group.
-	Meta param.Field[interface{}] `json:"meta"`
 }
 
 func (r ResourceGroupNewParams) MarshalJSON() (data []byte, err error) {
@@ -598,10 +598,10 @@ func (r ResourceGroupNewParamsScopeObject) MarshalJSON() (data []byte, err error
 type ResourceGroupUpdateParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Name of the resource group
+	Name param.Field[string] `json:"name"`
 	// A scope is a combination of scope objects which provides additional context.
-	Scope param.Field[ResourceGroupUpdateParamsScope] `json:"scope,required"`
-	// Attributes associated to the resource group.
-	Meta param.Field[interface{}] `json:"meta"`
+	Scope param.Field[ResourceGroupUpdateParamsScope] `json:"scope"`
 }
 
 func (r ResourceGroupUpdateParams) MarshalJSON() (data []byte, err error) {

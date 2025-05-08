@@ -151,12 +151,12 @@ func (r *IPListResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [IPListResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [ips.IPs], [ips.JDCloudIPs].
+// Possible runtime types of the union are [IPs], [JDCloudIPs].
 func (r IPListResponse) AsUnion() IPListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [ips.IPs] or [ips.JDCloudIPs].
+// Union satisfied by [IPs] or [JDCloudIPs].
 type IPListResponseUnion interface {
 	implementsIPListResponse()
 }

@@ -231,15 +231,14 @@ func (r *AppNewResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [AppNewResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [spectrum.AppNewResponseSpectrumConfigAppConfig],
-// [spectrum.AppNewResponseSpectrumConfigPaygoAppConfig].
+// Possible runtime types of the union are [AppNewResponseSpectrumConfigAppConfig],
+// [AppNewResponseSpectrumConfigPaygoAppConfig].
 func (r AppNewResponse) AsUnion() AppNewResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [spectrum.AppNewResponseSpectrumConfigAppConfig] or
-// [spectrum.AppNewResponseSpectrumConfigPaygoAppConfig].
+// Union satisfied by [AppNewResponseSpectrumConfigAppConfig] or
+// [AppNewResponseSpectrumConfigPaygoAppConfig].
 type AppNewResponseUnion interface {
 	implementsAppNewResponse()
 }
@@ -583,14 +582,14 @@ func (r *AppUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [spectrum.AppUpdateResponseSpectrumConfigAppConfig],
-// [spectrum.AppUpdateResponseSpectrumConfigPaygoAppConfig].
+// [AppUpdateResponseSpectrumConfigAppConfig],
+// [AppUpdateResponseSpectrumConfigPaygoAppConfig].
 func (r AppUpdateResponse) AsUnion() AppUpdateResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [spectrum.AppUpdateResponseSpectrumConfigAppConfig] or
-// [spectrum.AppUpdateResponseSpectrumConfigPaygoAppConfig].
+// Union satisfied by [AppUpdateResponseSpectrumConfigAppConfig] or
+// [AppUpdateResponseSpectrumConfigPaygoAppConfig].
 type AppUpdateResponseUnion interface {
 	implementsAppUpdateResponse()
 }
@@ -849,8 +848,7 @@ func (r AppUpdateResponseTrafficType) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [spectrum.AppListResponseArray] or
-// [spectrum.AppListResponseArray].
+// Union satisfied by [AppListResponseArray] or [AppListResponseArray].
 type AppListResponseUnion interface {
 	implementsAppListResponseUnion()
 }
@@ -1115,15 +1113,14 @@ func (r *AppGetResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [AppGetResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [spectrum.AppGetResponseSpectrumConfigAppConfig],
-// [spectrum.AppGetResponseSpectrumConfigPaygoAppConfig].
+// Possible runtime types of the union are [AppGetResponseSpectrumConfigAppConfig],
+// [AppGetResponseSpectrumConfigPaygoAppConfig].
 func (r AppGetResponse) AsUnion() AppGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [spectrum.AppGetResponseSpectrumConfigAppConfig] or
-// [spectrum.AppGetResponseSpectrumConfigPaygoAppConfig].
+// Union satisfied by [AppGetResponseSpectrumConfigAppConfig] or
+// [AppGetResponseSpectrumConfigPaygoAppConfig].
 type AppGetResponseUnion interface {
 	implementsAppGetResponse()
 }

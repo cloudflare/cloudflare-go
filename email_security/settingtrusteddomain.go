@@ -135,9 +135,8 @@ func (r *SettingTrustedDomainService) Get(ctx context.Context, trustedDomainID i
 	return
 }
 
-// Union satisfied by
-// [email_security.SettingTrustedDomainNewResponseEmailSecurityTrustedDomain] or
-// [email_security.SettingTrustedDomainNewResponseArray].
+// Union satisfied by [SettingTrustedDomainNewResponseEmailSecurityTrustedDomain]
+// or [SettingTrustedDomainNewResponseArray].
 type SettingTrustedDomainNewResponseUnion interface {
 	implementsSettingTrustedDomainNewResponseUnion()
 }

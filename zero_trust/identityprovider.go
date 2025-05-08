@@ -477,38 +477,25 @@ func (r *IdentityProvider) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [IdentityProviderUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.AzureAD],
-// [zero_trust.IdentityProviderAccessCentrify],
-// [zero_trust.IdentityProviderAccessFacebook],
-// [zero_trust.IdentityProviderAccessGitHub],
-// [zero_trust.IdentityProviderAccessGoogle],
-// [zero_trust.IdentityProviderAccessGoogleApps],
-// [zero_trust.IdentityProviderAccessLinkedin],
-// [zero_trust.IdentityProviderAccessOIDC],
-// [zero_trust.IdentityProviderAccessOkta],
-// [zero_trust.IdentityProviderAccessOnelogin],
-// [zero_trust.IdentityProviderAccessPingone],
-// [zero_trust.IdentityProviderAccessSAML],
-// [zero_trust.IdentityProviderAccessYandex],
-// [zero_trust.IdentityProviderAccessOnetimepin].
+// Possible runtime types of the union are [AzureAD],
+// [IdentityProviderAccessCentrify], [IdentityProviderAccessFacebook],
+// [IdentityProviderAccessGitHub], [IdentityProviderAccessGoogle],
+// [IdentityProviderAccessGoogleApps], [IdentityProviderAccessLinkedin],
+// [IdentityProviderAccessOIDC], [IdentityProviderAccessOkta],
+// [IdentityProviderAccessOnelogin], [IdentityProviderAccessPingone],
+// [IdentityProviderAccessSAML], [IdentityProviderAccessYandex],
+// [IdentityProviderAccessOnetimepin].
 func (r IdentityProvider) AsUnion() IdentityProviderUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.AzureAD],
-// [zero_trust.IdentityProviderAccessCentrify],
-// [zero_trust.IdentityProviderAccessFacebook],
-// [zero_trust.IdentityProviderAccessGitHub],
-// [zero_trust.IdentityProviderAccessGoogle],
-// [zero_trust.IdentityProviderAccessGoogleApps],
-// [zero_trust.IdentityProviderAccessLinkedin],
-// [zero_trust.IdentityProviderAccessOIDC],
-// [zero_trust.IdentityProviderAccessOkta],
-// [zero_trust.IdentityProviderAccessOnelogin],
-// [zero_trust.IdentityProviderAccessPingone],
-// [zero_trust.IdentityProviderAccessSAML],
-// [zero_trust.IdentityProviderAccessYandex] or
-// [zero_trust.IdentityProviderAccessOnetimepin].
+// Union satisfied by [AzureAD], [IdentityProviderAccessCentrify],
+// [IdentityProviderAccessFacebook], [IdentityProviderAccessGitHub],
+// [IdentityProviderAccessGoogle], [IdentityProviderAccessGoogleApps],
+// [IdentityProviderAccessLinkedin], [IdentityProviderAccessOIDC],
+// [IdentityProviderAccessOkta], [IdentityProviderAccessOnelogin],
+// [IdentityProviderAccessPingone], [IdentityProviderAccessSAML],
+// [IdentityProviderAccessYandex] or [IdentityProviderAccessOnetimepin].
 type IdentityProviderUnion interface {
 	implementsIdentityProvider()
 }
@@ -2182,36 +2169,35 @@ func (r *IdentityProviderListResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [IdentityProviderListResponseUnion] interface which you can
 // cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.AzureAD],
-// [zero_trust.IdentityProviderListResponseAccessCentrify],
-// [zero_trust.IdentityProviderListResponseAccessFacebook],
-// [zero_trust.IdentityProviderListResponseAccessGitHub],
-// [zero_trust.IdentityProviderListResponseAccessGoogle],
-// [zero_trust.IdentityProviderListResponseAccessGoogleApps],
-// [zero_trust.IdentityProviderListResponseAccessLinkedin],
-// [zero_trust.IdentityProviderListResponseAccessOIDC],
-// [zero_trust.IdentityProviderListResponseAccessOkta],
-// [zero_trust.IdentityProviderListResponseAccessOnelogin],
-// [zero_trust.IdentityProviderListResponseAccessPingone],
-// [zero_trust.IdentityProviderListResponseAccessSAML],
-// [zero_trust.IdentityProviderListResponseAccessYandex].
+// Possible runtime types of the union are [AzureAD],
+// [IdentityProviderListResponseAccessCentrify],
+// [IdentityProviderListResponseAccessFacebook],
+// [IdentityProviderListResponseAccessGitHub],
+// [IdentityProviderListResponseAccessGoogle],
+// [IdentityProviderListResponseAccessGoogleApps],
+// [IdentityProviderListResponseAccessLinkedin],
+// [IdentityProviderListResponseAccessOIDC],
+// [IdentityProviderListResponseAccessOkta],
+// [IdentityProviderListResponseAccessOnelogin],
+// [IdentityProviderListResponseAccessPingone],
+// [IdentityProviderListResponseAccessSAML],
+// [IdentityProviderListResponseAccessYandex].
 func (r IdentityProviderListResponse) AsUnion() IdentityProviderListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.AzureAD],
-// [zero_trust.IdentityProviderListResponseAccessCentrify],
-// [zero_trust.IdentityProviderListResponseAccessFacebook],
-// [zero_trust.IdentityProviderListResponseAccessGitHub],
-// [zero_trust.IdentityProviderListResponseAccessGoogle],
-// [zero_trust.IdentityProviderListResponseAccessGoogleApps],
-// [zero_trust.IdentityProviderListResponseAccessLinkedin],
-// [zero_trust.IdentityProviderListResponseAccessOIDC],
-// [zero_trust.IdentityProviderListResponseAccessOkta],
-// [zero_trust.IdentityProviderListResponseAccessOnelogin],
-// [zero_trust.IdentityProviderListResponseAccessPingone],
-// [zero_trust.IdentityProviderListResponseAccessSAML] or
-// [zero_trust.IdentityProviderListResponseAccessYandex].
+// Union satisfied by [AzureAD], [IdentityProviderListResponseAccessCentrify],
+// [IdentityProviderListResponseAccessFacebook],
+// [IdentityProviderListResponseAccessGitHub],
+// [IdentityProviderListResponseAccessGoogle],
+// [IdentityProviderListResponseAccessGoogleApps],
+// [IdentityProviderListResponseAccessLinkedin],
+// [IdentityProviderListResponseAccessOIDC],
+// [IdentityProviderListResponseAccessOkta],
+// [IdentityProviderListResponseAccessOnelogin],
+// [IdentityProviderListResponseAccessPingone],
+// [IdentityProviderListResponseAccessSAML] or
+// [IdentityProviderListResponseAccessYandex].
 type IdentityProviderListResponseUnion interface {
 	implementsIdentityProviderListResponse()
 }

@@ -197,37 +197,34 @@ func (r *ConnectorEventGetResponseE) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ConnectorEventGetResponseEUnion] interface which you can cast
 // to the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [magic_transit.ConnectorEventGetResponseEInit],
-// [magic_transit.ConnectorEventGetResponseELeave],
-// [magic_transit.ConnectorEventGetResponseEStartAttestation],
-// [magic_transit.ConnectorEventGetResponseEFinishAttestationSuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishAttestationFailure],
-// [magic_transit.ConnectorEventGetResponseEStartRotateCryptKey],
-// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeySuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeyFailure],
-// [magic_transit.ConnectorEventGetResponseEStartUpgrade],
-// [magic_transit.ConnectorEventGetResponseEFinishUpgradeSuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishUpgradeFailure],
-// [magic_transit.ConnectorEventGetResponseEReconcile],
-// [magic_transit.ConnectorEventGetResponseEConfigureCloudflaredTunnel].
+// Possible runtime types of the union are [ConnectorEventGetResponseEInit],
+// [ConnectorEventGetResponseELeave], [ConnectorEventGetResponseEStartAttestation],
+// [ConnectorEventGetResponseEFinishAttestationSuccess],
+// [ConnectorEventGetResponseEFinishAttestationFailure],
+// [ConnectorEventGetResponseEStartRotateCryptKey],
+// [ConnectorEventGetResponseEFinishRotateCryptKeySuccess],
+// [ConnectorEventGetResponseEFinishRotateCryptKeyFailure],
+// [ConnectorEventGetResponseEStartUpgrade],
+// [ConnectorEventGetResponseEFinishUpgradeSuccess],
+// [ConnectorEventGetResponseEFinishUpgradeFailure],
+// [ConnectorEventGetResponseEReconcile],
+// [ConnectorEventGetResponseEConfigureCloudflaredTunnel].
 func (r ConnectorEventGetResponseE) AsUnion() ConnectorEventGetResponseEUnion {
 	return r.union
 }
 
-// Union satisfied by [magic_transit.ConnectorEventGetResponseEInit],
-// [magic_transit.ConnectorEventGetResponseELeave],
-// [magic_transit.ConnectorEventGetResponseEStartAttestation],
-// [magic_transit.ConnectorEventGetResponseEFinishAttestationSuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishAttestationFailure],
-// [magic_transit.ConnectorEventGetResponseEStartRotateCryptKey],
-// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeySuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishRotateCryptKeyFailure],
-// [magic_transit.ConnectorEventGetResponseEStartUpgrade],
-// [magic_transit.ConnectorEventGetResponseEFinishUpgradeSuccess],
-// [magic_transit.ConnectorEventGetResponseEFinishUpgradeFailure],
-// [magic_transit.ConnectorEventGetResponseEReconcile] or
-// [magic_transit.ConnectorEventGetResponseEConfigureCloudflaredTunnel].
+// Union satisfied by [ConnectorEventGetResponseEInit],
+// [ConnectorEventGetResponseELeave], [ConnectorEventGetResponseEStartAttestation],
+// [ConnectorEventGetResponseEFinishAttestationSuccess],
+// [ConnectorEventGetResponseEFinishAttestationFailure],
+// [ConnectorEventGetResponseEStartRotateCryptKey],
+// [ConnectorEventGetResponseEFinishRotateCryptKeySuccess],
+// [ConnectorEventGetResponseEFinishRotateCryptKeyFailure],
+// [ConnectorEventGetResponseEStartUpgrade],
+// [ConnectorEventGetResponseEFinishUpgradeSuccess],
+// [ConnectorEventGetResponseEFinishUpgradeFailure],
+// [ConnectorEventGetResponseEReconcile] or
+// [ConnectorEventGetResponseEConfigureCloudflaredTunnel].
 type ConnectorEventGetResponseEUnion interface {
 	implementsConnectorEventGetResponseE()
 }

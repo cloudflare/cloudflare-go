@@ -82,6 +82,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/rules"
 	"github.com/cloudflare/cloudflare-go/v4/rulesets"
 	"github.com/cloudflare/cloudflare-go/v4/rum"
+	"github.com/cloudflare/cloudflare-go/v4/schema_validation"
 	"github.com/cloudflare/cloudflare-go/v4/secrets_store"
 	"github.com/cloudflare/cloudflare-go/v4/security_center"
 	"github.com/cloudflare/cloudflare-go/v4/security_txt"
@@ -212,6 +213,7 @@ type Client struct {
 	CustomPages                 *custom_pages.CustomPageService
 	SecretsStore                *secrets_store.SecretsStoreService
 	Pipelines                   *pipelines.PipelineService
+	SchemaValidation            *schema_validation.SchemaValidationService
 }
 
 // DefaultClientOptions read from the environment (CLOUDFLARE_API_KEY,
@@ -341,6 +343,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CustomPages = custom_pages.NewCustomPageService(opts...)
 	r.SecretsStore = secrets_store.NewSecretsStoreService(opts...)
 	r.Pipelines = pipelines.NewPipelineService(opts...)
+	r.SchemaValidation = schema_validation.NewSchemaValidationService(opts...)
 
 	return
 }

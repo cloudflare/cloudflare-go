@@ -30,10 +30,10 @@ func TestRequestMessageNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Requests.Message.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudforce_one.RequestMessageNewParams{
-			Content: cloudflare.F("Can you elaborate on the type of DoS that occurred?"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Content:   cloudflare.F("Can you elaborate on the type of DoS that occurred?"),
 		},
 	)
 	if err != nil {
@@ -60,11 +60,11 @@ func TestRequestMessageUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Requests.Message.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		int64(0),
 		cloudforce_one.RequestMessageUpdateParams{
-			Content: cloudflare.F("Can you elaborate on the type of DoS that occurred?"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Content:   cloudflare.F("Can you elaborate on the type of DoS that occurred?"),
 		},
 	)
 	if err != nil {
@@ -91,9 +91,11 @@ func TestRequestMessageDelete(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Requests.Message.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		int64(0),
+		cloudforce_one.RequestMessageDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -119,9 +121,9 @@ func TestRequestMessageGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.Requests.Message.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudforce_one.RequestMessageGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Page:      cloudflare.F(int64(0)),
 			PerPage:   cloudflare.F(int64(10)),
 			After:     cloudflare.F(time.Now()),

@@ -361,16 +361,15 @@ func (r *PipelineNewResponseSource) UnmarshalJSON(data []byte) (err error) {
 // to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [pipelines.PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
-// [pipelines.PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
+// [PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
+// [PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 func (r PipelineNewResponseSource) AsUnion() PipelineNewResponseSourceUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [pipelines.PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
-// or
-// [pipelines.PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
+// [PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource] or
+// [PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 type PipelineNewResponseSourceUnion interface {
 	implementsPipelineNewResponseSource()
 }
@@ -755,16 +754,15 @@ func (r *PipelineUpdateResponseSource) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [pipelines.PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
-// [pipelines.PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
+// [PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
+// [PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 func (r PipelineUpdateResponseSource) AsUnion() PipelineUpdateResponseSourceUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [pipelines.PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
-// or
-// [pipelines.PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
+// [PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource] or
+// [PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 type PipelineUpdateResponseSourceUnion interface {
 	implementsPipelineUpdateResponseSource()
 }
@@ -1206,16 +1204,16 @@ func (r *PipelineListResponseResultsSource) UnmarshalJSON(data []byte) (err erro
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [pipelines.PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
-// [pipelines.PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource].
+// [PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
+// [PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 func (r PipelineListResponseResultsSource) AsUnion() PipelineListResponseResultsSourceUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [pipelines.PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
+// [PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
 // or
-// [pipelines.PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource].
+// [PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 type PipelineListResponseResultsSourceUnion interface {
 	implementsPipelineListResponseResultsSource()
 }
@@ -1600,16 +1598,15 @@ func (r *PipelineGetResponseSource) UnmarshalJSON(data []byte) (err error) {
 // to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [pipelines.PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
-// [pipelines.PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
+// [PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource],
+// [PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 func (r PipelineGetResponseSource) AsUnion() PipelineGetResponseSourceUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [pipelines.PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource]
-// or
-// [pipelines.PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
+// [PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource] or
+// [PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource].
 type PipelineGetResponseSourceUnion interface {
 	implementsPipelineGetResponseSource()
 }

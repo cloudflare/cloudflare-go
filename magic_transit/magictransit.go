@@ -91,7 +91,7 @@ func (r healthCheckJSON) RawJSON() string {
 // object form if the x-magic-new-hc-target header is set to true and string form
 // if x-magic-new-hc-target is absent or set to false.
 //
-// Union satisfied by [magic_transit.HealthCheckTargetMagicHealthCheckTarget] or
+// Union satisfied by [HealthCheckTargetMagicHealthCheckTarget] or
 // [shared.UnionString].
 type HealthCheckTargetUnion interface {
 	ImplementsHealthCheckTargetUnion()

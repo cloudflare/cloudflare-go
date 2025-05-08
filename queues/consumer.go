@@ -178,14 +178,13 @@ func (r *Consumer) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ConsumerUnion] interface which you can cast to the specific
 // types for more type safety.
 //
-// Possible runtime types of the union are [queues.ConsumerMqWorkerConsumer],
-// [queues.ConsumerMqHTTPConsumer].
+// Possible runtime types of the union are [ConsumerMqWorkerConsumer],
+// [ConsumerMqHTTPConsumer].
 func (r Consumer) AsUnion() ConsumerUnion {
 	return r.union
 }
 
-// Union satisfied by [queues.ConsumerMqWorkerConsumer] or
-// [queues.ConsumerMqHTTPConsumer].
+// Union satisfied by [ConsumerMqWorkerConsumer] or [ConsumerMqHTTPConsumer].
 type ConsumerUnion interface {
 	implementsConsumer()
 }

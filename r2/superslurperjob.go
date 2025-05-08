@@ -300,16 +300,16 @@ func (r *SuperSlurperJobListResponseSource) UnmarshalJSON(data []byte) (err erro
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [r2.SuperSlurperJobListResponseSourceS3SourceResponseSchema],
-// [r2.SuperSlurperJobListResponseSourceGcsSourceResponseSchema],
-// [r2.SuperSlurperJobListResponseSourceR2SourceResponseSchema].
+// [SuperSlurperJobListResponseSourceS3SourceResponseSchema],
+// [SuperSlurperJobListResponseSourceGcsSourceResponseSchema],
+// [SuperSlurperJobListResponseSourceR2SourceResponseSchema].
 func (r SuperSlurperJobListResponseSource) AsUnion() SuperSlurperJobListResponseSourceUnion {
 	return r.union
 }
 
-// Union satisfied by [r2.SuperSlurperJobListResponseSourceS3SourceResponseSchema],
-// [r2.SuperSlurperJobListResponseSourceGcsSourceResponseSchema] or
-// [r2.SuperSlurperJobListResponseSourceR2SourceResponseSchema].
+// Union satisfied by [SuperSlurperJobListResponseSourceS3SourceResponseSchema],
+// [SuperSlurperJobListResponseSourceGcsSourceResponseSchema] or
+// [SuperSlurperJobListResponseSourceR2SourceResponseSchema].
 type SuperSlurperJobListResponseSourceUnion interface {
 	implementsSuperSlurperJobListResponseSource()
 }
@@ -630,16 +630,16 @@ func (r *SuperSlurperJobGetResponseSource) UnmarshalJSON(data []byte) (err error
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [r2.SuperSlurperJobGetResponseSourceS3SourceResponseSchema],
-// [r2.SuperSlurperJobGetResponseSourceGcsSourceResponseSchema],
-// [r2.SuperSlurperJobGetResponseSourceR2SourceResponseSchema].
+// [SuperSlurperJobGetResponseSourceS3SourceResponseSchema],
+// [SuperSlurperJobGetResponseSourceGcsSourceResponseSchema],
+// [SuperSlurperJobGetResponseSourceR2SourceResponseSchema].
 func (r SuperSlurperJobGetResponseSource) AsUnion() SuperSlurperJobGetResponseSourceUnion {
 	return r.union
 }
 
-// Union satisfied by [r2.SuperSlurperJobGetResponseSourceS3SourceResponseSchema],
-// [r2.SuperSlurperJobGetResponseSourceGcsSourceResponseSchema] or
-// [r2.SuperSlurperJobGetResponseSourceR2SourceResponseSchema].
+// Union satisfied by [SuperSlurperJobGetResponseSourceS3SourceResponseSchema],
+// [SuperSlurperJobGetResponseSourceGcsSourceResponseSchema] or
+// [SuperSlurperJobGetResponseSourceR2SourceResponseSchema].
 type SuperSlurperJobGetResponseSourceUnion interface {
 	implementsSuperSlurperJobGetResponseSource()
 }

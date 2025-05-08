@@ -469,12 +469,12 @@ func (r *FirewallRuleFilter) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are [filters.FirewallFilter],
-// [firewall.DeletedFilter].
+// [DeletedFilter].
 func (r FirewallRuleFilter) AsUnion() FirewallRuleFilterUnion {
 	return r.union
 }
 
-// Union satisfied by [filters.FirewallFilter] or [firewall.DeletedFilter].
+// Union satisfied by [filters.FirewallFilter] or [DeletedFilter].
 type FirewallRuleFilterUnion interface {
 	ImplementsFirewallRuleFilter()
 }

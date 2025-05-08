@@ -213,14 +213,14 @@ func (r *ListItemNewResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ListItemNewResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [rules.ListItemNewResponseOperationID],
-// [rules.ListItemNewResponseOperationID].
+// Possible runtime types of the union are [ListItemNewResponseOperationID],
+// [ListItemNewResponseOperationID].
 func (r ListItemNewResponse) AsUnion() ListItemNewResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [rules.ListItemNewResponseOperationID] or
-// [rules.ListItemNewResponseOperationID].
+// Union satisfied by [ListItemNewResponseOperationID] or
+// [ListItemNewResponseOperationID].
 type ListItemNewResponseUnion interface {
 	implementsListItemNewResponse()
 }
@@ -295,15 +295,14 @@ func (r *ListItemUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ListItemUpdateResponseUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [rules.ListItemUpdateResponseOperationID],
-// [rules.ListItemUpdateResponseOperationID].
+// Possible runtime types of the union are [ListItemUpdateResponseOperationID],
+// [ListItemUpdateResponseOperationID].
 func (r ListItemUpdateResponse) AsUnion() ListItemUpdateResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [rules.ListItemUpdateResponseOperationID] or
-// [rules.ListItemUpdateResponseOperationID].
+// Union satisfied by [ListItemUpdateResponseOperationID] or
+// [ListItemUpdateResponseOperationID].
 type ListItemUpdateResponseUnion interface {
 	implementsListItemUpdateResponse()
 }
@@ -378,15 +377,14 @@ func (r *ListItemDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ListItemDeleteResponseUnion] interface which you can cast to
 // the specific types for more type safety.
 //
-// Possible runtime types of the union are
-// [rules.ListItemDeleteResponseOperationID],
-// [rules.ListItemDeleteResponseOperationID].
+// Possible runtime types of the union are [ListItemDeleteResponseOperationID],
+// [ListItemDeleteResponseOperationID].
 func (r ListItemDeleteResponse) AsUnion() ListItemDeleteResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [rules.ListItemDeleteResponseOperationID] or
-// [rules.ListItemDeleteResponseOperationID].
+// Union satisfied by [ListItemDeleteResponseOperationID] or
+// [ListItemDeleteResponseOperationID].
 type ListItemDeleteResponseUnion interface {
 	implementsListItemDeleteResponse()
 }
@@ -484,14 +482,13 @@ func (r *ListItemGetResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ListItemGetResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [rules.ListItemGetResponseObject],
-// [rules.ListItemGetResponseObject].
+// Possible runtime types of the union are [ListItemGetResponseObject],
+// [ListItemGetResponseObject].
 func (r ListItemGetResponse) AsUnion() ListItemGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [rules.ListItemGetResponseObject] or
-// [rules.ListItemGetResponseObject].
+// Union satisfied by [ListItemGetResponseObject] or [ListItemGetResponseObject].
 type ListItemGetResponseUnion interface {
 	implementsListItemGetResponse()
 }

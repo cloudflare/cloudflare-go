@@ -53,7 +53,7 @@ func (r *DeviceResilienceGlobalWARPOverrideService) New(ctx context.Context, par
 	return
 }
 
-// Fetch the Global WARP override state
+// Fetch the Global WARP override state.
 func (r *DeviceResilienceGlobalWARPOverrideService) Get(ctx context.Context, query DeviceResilienceGlobalWARPOverrideGetParams, opts ...option.RequestOption) (res *DeviceResilienceGlobalWARPOverrideGetResponse, err error) {
 	var env DeviceResilienceGlobalWARPOverrideGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

@@ -1472,8 +1472,8 @@ func (r *ObservabilityTelemetryQueryResponseEventsEventsWorkers) UnmarshalJSON(d
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers.ObservabilityTelemetryQueryResponseEventsEventsWorkersObject],
-// [workers.ObservabilityTelemetryQueryResponseEventsEventsWorkersObject].
+// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObject],
+// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObject].
 func (r ObservabilityTelemetryQueryResponseEventsEventsWorkers) AsUnion() ObservabilityTelemetryQueryResponseEventsEventsWorkersUnion {
 	return r.union
 }
@@ -1482,8 +1482,8 @@ func (r ObservabilityTelemetryQueryResponseEventsEventsWorkers) AsUnion() Observ
 // identify and debug issues.
 //
 // Union satisfied by
-// [workers.ObservabilityTelemetryQueryResponseEventsEventsWorkersObject] or
-// [workers.ObservabilityTelemetryQueryResponseEventsEventsWorkersObject].
+// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObject] or
+// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObject].
 type ObservabilityTelemetryQueryResponseEventsEventsWorkersUnion interface {
 	implementsObservabilityTelemetryQueryResponseEventsEventsWorkers()
 }
@@ -1568,8 +1568,7 @@ func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType) I
 }
 
 // Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
-// or
-// [workers.ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMap].
+// or [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMap].
 type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventUnion interface {
 	ImplementsObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventUnion()
 }
@@ -1607,8 +1606,7 @@ func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMap) Im
 }
 
 // Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
-// or
-// [workers.ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMap].
+// or [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMap].
 type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapUnionItem interface {
 	ImplementsObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapUnionItem()
 }
@@ -1646,7 +1644,7 @@ func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMap)
 }
 
 // Union satisfied by
-// [workers.ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapArray],
+// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapArray],
 // [shared.UnionString], [shared.UnionFloat] or [shared.UnionBool].
 type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapUnionItem interface {
 	ImplementsObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapUnionItem()
@@ -2108,8 +2106,8 @@ func (r *ObservabilityTelemetryQueryResponseInvocationsWorkers) UnmarshalJSON(da
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [workers.ObservabilityTelemetryQueryResponseInvocationsWorkersObject],
-// [workers.ObservabilityTelemetryQueryResponseInvocationsWorkersObject].
+// [ObservabilityTelemetryQueryResponseInvocationsWorkersObject],
+// [ObservabilityTelemetryQueryResponseInvocationsWorkersObject].
 func (r ObservabilityTelemetryQueryResponseInvocationsWorkers) AsUnion() ObservabilityTelemetryQueryResponseInvocationsWorkersUnion {
 	return r.union
 }
@@ -2117,9 +2115,8 @@ func (r ObservabilityTelemetryQueryResponseInvocationsWorkers) AsUnion() Observa
 // Cloudflare Workers event information enriches your logs so you can easily
 // identify and debug issues.
 //
-// Union satisfied by
-// [workers.ObservabilityTelemetryQueryResponseInvocationsWorkersObject] or
-// [workers.ObservabilityTelemetryQueryResponseInvocationsWorkersObject].
+// Union satisfied by [ObservabilityTelemetryQueryResponseInvocationsWorkersObject]
+// or [ObservabilityTelemetryQueryResponseInvocationsWorkersObject].
 type ObservabilityTelemetryQueryResponseInvocationsWorkersUnion interface {
 	implementsObservabilityTelemetryQueryResponseInvocationsWorkers()
 }
@@ -2204,8 +2201,7 @@ func (r ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType) Is
 }
 
 // Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
-// or
-// [workers.ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMap].
+// or [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMap].
 type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventUnion interface {
 	ImplementsObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventUnion()
 }
@@ -2243,8 +2239,7 @@ func (r ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMap) Imp
 }
 
 // Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
-// or
-// [workers.ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMap].
+// or [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMap].
 type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapUnionItem interface {
 	ImplementsObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapUnionItem()
 }
@@ -2282,7 +2277,7 @@ func (r ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMap) 
 }
 
 // Union satisfied by
-// [workers.ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapArray],
+// [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapArray],
 // [shared.UnionString], [shared.UnionFloat] or [shared.UnionBool].
 type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapUnionItem interface {
 	ImplementsObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapUnionItem()

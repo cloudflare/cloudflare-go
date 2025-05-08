@@ -37,7 +37,7 @@ func NewDevicePolicyDefaultCertificateService(opts ...option.RequestOption) (r *
 // Enable Zero Trust Clients to provision a certificate, containing a x509 subject,
 // and referenced by Access device posture policies when the client visits MTLS
 // protected domains. This facilitates device posture without a WARP session.
-func (r *DevicePolicyDefaultCertificateService) Edit(ctx context.Context, params DevicePolicyDefaultCertificateEditParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *DevicePolicyDefaultCertificateService) Edit(ctx context.Context, params DevicePolicyDefaultCertificateEditParams, opts ...option.RequestOption) (res *DevicePolicyCertificates, err error) {
 	var env DevicePolicyDefaultCertificateEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -53,8 +53,8 @@ func (r *DevicePolicyDefaultCertificateService) Edit(ctx context.Context, params
 	return
 }
 
-// Fetches device certificate provisioning
-func (r *DevicePolicyDefaultCertificateService) Get(ctx context.Context, query DevicePolicyDefaultCertificateGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
+// Fetches device certificate provisioning.
+func (r *DevicePolicyDefaultCertificateService) Get(ctx context.Context, query DevicePolicyDefaultCertificateGetParams, opts ...option.RequestOption) (res *DevicePolicyCertificates, err error) {
 	var env DevicePolicyDefaultCertificateGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
@@ -80,9 +80,9 @@ func (r DevicePolicyDefaultCertificateEditParams) MarshalJSON() (data []byte, er
 }
 
 type DevicePolicyDefaultCertificateEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   DevicePolicyCertificates `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyDefaultCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyDefaultCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -127,9 +127,9 @@ type DevicePolicyDefaultCertificateGetParams struct {
 }
 
 type DevicePolicyDefaultCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   DevicePolicyCertificates `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyDefaultCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyDefaultCertificateGetResponseEnvelopeJSON    `json:"-"`

@@ -354,7 +354,7 @@ func (r IPSECTunnelNewResponseHealthCheckDirection) IsKnown() bool {
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.IPSECTunnelNewResponseHealthCheckTargetMagicHealthCheckTarget] or
+// [IPSECTunnelNewResponseHealthCheckTargetMagicHealthCheckTarget] or
 // [shared.UnionString].
 type IPSECTunnelNewResponseHealthCheckTargetUnion interface {
 	ImplementsIPSECTunnelNewResponseHealthCheckTargetUnion()
@@ -566,7 +566,7 @@ func (r IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckDirection) IsKnow
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget]
+// [IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion interface {
 	ImplementsIPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion()
@@ -775,8 +775,8 @@ func (r IPSECTunnelListResponseIPSECTunnelsHealthCheckDirection) IsKnown() bool 
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.IPSECTunnelListResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget]
-// or [shared.UnionString].
+// [IPSECTunnelListResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget] or
+// [shared.UnionString].
 type IPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion interface {
 	ImplementsIPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion()
 }
@@ -986,7 +986,7 @@ func (r IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckDirection) IsKnown
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget]
+// [IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion interface {
 	ImplementsIPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion()
@@ -1198,7 +1198,7 @@ func (r IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirection) I
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget]
+// [IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget]
 // or [shared.UnionString].
 type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion interface {
 	ImplementsIPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion()
@@ -1407,8 +1407,8 @@ func (r IPSECTunnelGetResponseIPSECTunnelHealthCheckDirection) IsKnown() bool {
 // if x-magic-new-hc-target is absent or set to false.
 //
 // Union satisfied by
-// [magic_transit.IPSECTunnelGetResponseIPSECTunnelHealthCheckTargetMagicHealthCheckTarget]
-// or [shared.UnionString].
+// [IPSECTunnelGetResponseIPSECTunnelHealthCheckTargetMagicHealthCheckTarget] or
+// [shared.UnionString].
 type IPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion interface {
 	ImplementsIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion()
 }
