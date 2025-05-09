@@ -163,7 +163,10 @@ func (r *DevicePolicyCustomService) Get(ctx context.Context, policyID string, qu
 
 type DevicePolicyCustomNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The wirefilter expression to match devices.
+	// The wirefilter expression to match devices. Available values: "identity.email",
+	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
+	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
+	// "os.version"
 	Match param.Field[string] `json:"match,required"`
 	// The name of the device settings profile.
 	Name param.Field[string] `json:"name,required"`
@@ -191,12 +194,12 @@ type DevicePolicyCustomNewParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
-	Exclude param.Field[[]SplitTunnelExcludeParam] `json:"exclude"`
+	Exclude param.Field[[]SplitTunnelExcludeUnionParam] `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
 	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
 	// List of routes included in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
-	Include param.Field[[]SplitTunnelExcludeParam] `json:"include"`
+	Include param.Field[[]SplitTunnelIncludeUnionParam] `json:"include"`
 	// The amount of time in minutes a user is allowed access to their LAN. A value of
 	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
 	// laptop waking from sleep. Note that this field is omitted from the response if
@@ -306,13 +309,24 @@ type DevicePolicyCustomEditParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
-	Exclude param.Field[[]SplitTunnelExcludeParam] `json:"exclude"`
+	Exclude param.Field[[]SplitTunnelExcludeUnionParam] `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
 	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
 	// List of routes included in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
-	Include param.Field[[]SplitTunnelExcludeParam] `json:"include"`
-	// The wirefilter expression to match devices.
+	Include param.Field[[]SplitTunnelIncludeUnionParam] `json:"include"`
+	// The amount of time in minutes a user is allowed access to their LAN. A value of
+	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
+	// laptop waking from sleep. Note that this field is omitted from the response if
+	// null or unset.
+	LANAllowMinutes param.Field[float64] `json:"lan_allow_minutes"`
+	// The size of the subnet for the local access network. Note that this field is
+	// omitted from the response if null or unset.
+	LANAllowSubnetSize param.Field[float64] `json:"lan_allow_subnet_size"`
+	// The wirefilter expression to match devices. Available values: "identity.email",
+	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
+	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
+	// "os.version"
 	Match param.Field[string] `json:"match"`
 	// The name of the device settings profile.
 	Name param.Field[string] `json:"name"`

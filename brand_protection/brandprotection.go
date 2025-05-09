@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BrandProtectionService contains methods and other services that help with
@@ -333,9 +332,9 @@ func (r BrandProtectionSubmitParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BrandProtectionSubmitResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []BrandProtectionSubmitResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []BrandProtectionSubmitResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success BrandProtectionSubmitResponseEnvelopeSuccess `json:"success,required"`
 	Result  Submit                                       `json:"result"`
 	JSON    brandProtectionSubmitResponseEnvelopeJSON    `json:"-"`
@@ -360,7 +359,103 @@ func (r brandProtectionSubmitResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type BrandProtectionSubmitResponseEnvelopeErrors struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           BrandProtectionSubmitResponseEnvelopeErrorsSource `json:"source"`
+	JSON             brandProtectionSubmitResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// brandProtectionSubmitResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [BrandProtectionSubmitResponseEnvelopeErrors]
+type brandProtectionSubmitResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BrandProtectionSubmitResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionSubmitResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type BrandProtectionSubmitResponseEnvelopeErrorsSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    brandProtectionSubmitResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// brandProtectionSubmitResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [BrandProtectionSubmitResponseEnvelopeErrorsSource]
+type brandProtectionSubmitResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BrandProtectionSubmitResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionSubmitResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type BrandProtectionSubmitResponseEnvelopeMessages struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           BrandProtectionSubmitResponseEnvelopeMessagesSource `json:"source"`
+	JSON             brandProtectionSubmitResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// brandProtectionSubmitResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [BrandProtectionSubmitResponseEnvelopeMessages]
+type brandProtectionSubmitResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BrandProtectionSubmitResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionSubmitResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type BrandProtectionSubmitResponseEnvelopeMessagesSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    brandProtectionSubmitResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// brandProtectionSubmitResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [BrandProtectionSubmitResponseEnvelopeMessagesSource]
+type brandProtectionSubmitResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BrandProtectionSubmitResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionSubmitResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type BrandProtectionSubmitResponseEnvelopeSuccess bool
 
 const (
@@ -394,9 +489,9 @@ func (r BrandProtectionURLInfoParams) URLQuery() (v url.Values) {
 }
 
 type BrandProtectionURLInfoResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []BrandProtectionURLInfoResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []BrandProtectionURLInfoResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success BrandProtectionURLInfoResponseEnvelopeSuccess `json:"success,required"`
 	Result  Info                                          `json:"result"`
 	JSON    brandProtectionURLInfoResponseEnvelopeJSON    `json:"-"`
@@ -421,7 +516,103 @@ func (r brandProtectionURLInfoResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type BrandProtectionURLInfoResponseEnvelopeErrors struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           BrandProtectionURLInfoResponseEnvelopeErrorsSource `json:"source"`
+	JSON             brandProtectionURLInfoResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// brandProtectionURLInfoResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [BrandProtectionURLInfoResponseEnvelopeErrors]
+type brandProtectionURLInfoResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BrandProtectionURLInfoResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionURLInfoResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type BrandProtectionURLInfoResponseEnvelopeErrorsSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    brandProtectionURLInfoResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// brandProtectionURLInfoResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [BrandProtectionURLInfoResponseEnvelopeErrorsSource]
+type brandProtectionURLInfoResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BrandProtectionURLInfoResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionURLInfoResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type BrandProtectionURLInfoResponseEnvelopeMessages struct {
+	Code             int64                                                `json:"code,required"`
+	Message          string                                               `json:"message,required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           BrandProtectionURLInfoResponseEnvelopeMessagesSource `json:"source"`
+	JSON             brandProtectionURLInfoResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// brandProtectionURLInfoResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [BrandProtectionURLInfoResponseEnvelopeMessages]
+type brandProtectionURLInfoResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *BrandProtectionURLInfoResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionURLInfoResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type BrandProtectionURLInfoResponseEnvelopeMessagesSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    brandProtectionURLInfoResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// brandProtectionURLInfoResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [BrandProtectionURLInfoResponseEnvelopeMessagesSource]
+type brandProtectionURLInfoResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BrandProtectionURLInfoResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionURLInfoResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type BrandProtectionURLInfoResponseEnvelopeSuccess bool
 
 const (

@@ -69,7 +69,7 @@ func TestWAFOverrideUpdateWithOptionalParams(t *testing.T) {
 				Simulate:  cloudflare.F(firewall.RewriteActionSimulateChallenge),
 			}),
 			Rules: cloudflare.F(firewall.WAFRuleParam{
-				"100015": firewall.WAFRuleItemChallenge,
+				"100015": firewall.WAFRuleItemDisable,
 			}),
 			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
 		},

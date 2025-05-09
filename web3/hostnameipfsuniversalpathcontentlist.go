@@ -116,11 +116,11 @@ func (r ContentListAction) IsKnown() bool {
 }
 
 type HostnameIPFSUniversalPathContentListUpdateParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Behavior of the content list.
 	Action param.Field[HostnameIPFSUniversalPathContentListUpdateParamsAction] `json:"action,required"`
-	// Content list entries.
+	// Provides content list entries.
 	Entries param.Field[[]HostnameIPFSUniversalPathContentListUpdateParamsEntry] `json:"entries,required"`
 }
 
@@ -143,13 +143,13 @@ func (r HostnameIPFSUniversalPathContentListUpdateParamsAction) IsKnown() bool {
 	return false
 }
 
-// Content list entry to be blocked.
+// Specify a content list entry to block.
 type HostnameIPFSUniversalPathContentListUpdateParamsEntry struct {
-	// CID or content path of content to block.
+	// Specify the CID or content path of content to block.
 	Content param.Field[string] `json:"content"`
-	// An optional description of the content list entry.
+	// Specify an optional description of the content list entry.
 	Description param.Field[string] `json:"description"`
-	// Type of content list entry to block.
+	// Specify the type of content list entry to block.
 	Type param.Field[HostnameIPFSUniversalPathContentListUpdateParamsEntriesType] `json:"type"`
 }
 
@@ -157,7 +157,7 @@ func (r HostnameIPFSUniversalPathContentListUpdateParamsEntry) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// Type of content list entry to block.
+// Specify the type of content list entry to block.
 type HostnameIPFSUniversalPathContentListUpdateParamsEntriesType string
 
 const (
@@ -177,9 +177,11 @@ type HostnameIPFSUniversalPathContentListUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   ContentList           `json:"result,required"`
-	// Whether the API call was successful
+	// Specifies whether the API call was successful.
 	Success HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeJSON    `json:"-"`
+	// Provides the API response.
+	ResultInfo interface{}                                                    `json:"result_info"`
+	JSON       hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeJSON contains the JSON
@@ -190,6 +192,7 @@ type hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -202,7 +205,7 @@ func (r hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeJSON) RawJSON(
 	return r.raw
 }
 
-// Whether the API call was successful
+// Specifies whether the API call was successful.
 type HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -218,7 +221,7 @@ func (r HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess) IsKno
 }
 
 type HostnameIPFSUniversalPathContentListGetParams struct {
-	// Identifier
+	// Specify the identifier of the hostname.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -226,9 +229,11 @@ type HostnameIPFSUniversalPathContentListGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   ContentList           `json:"result,required"`
-	// Whether the API call was successful
+	// Specifies whether the API call was successful.
 	Success HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    hostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON    `json:"-"`
+	// Provides the API response.
+	ResultInfo interface{}                                                 `json:"result_info"`
+	JSON       hostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON `json:"-"`
 }
 
 // hostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON contains the JSON
@@ -239,6 +244,7 @@ type hostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -251,7 +257,7 @@ func (r hostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON) RawJSON() s
 	return r.raw
 }
 
-// Whether the API call was successful
+// Specifies whether the API call was successful.
 type HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess bool
 
 const (

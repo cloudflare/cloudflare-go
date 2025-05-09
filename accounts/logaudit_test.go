@@ -42,7 +42,7 @@ func TestLogAuditListWithOptionalParams(t *testing.T) {
 		ActorIPAddress:  cloudflare.F("17.168.228.63"),
 		ActorTokenID:    cloudflare.F("144cdb2e39c55e203cf225d8d8208647"),
 		ActorTokenName:  cloudflare.F("Test Token"),
-		ActorType:       cloudflare.F(accounts.LogAuditListParamsActorTypeCloudflareAdmin),
+		ActorType:       cloudflare.F(accounts.LogAuditListParamsActorTypeAccount),
 		AuditLogID:      cloudflare.F("f174be97-19b1-40d6-954d-70cd5fbd52db"),
 		Cursor:          cloudflare.F("Q1buH-__DQqqig7SVYXT-SsMOTGY2Z3Y80W-fGgva7yaDdmPKveucH5ddOcHsJRhNb-xUK8agZQqkJSMAENGO8NU6g=="),
 		Direction:       cloudflare.F(accounts.LogAuditListParamsDirectionDesc),

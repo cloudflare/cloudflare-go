@@ -244,8 +244,14 @@ type Event struct {
 	// If set, the event will override the waiting room's `total_active_users` property
 	// while it is active. If null, the event will inherit it. This can only be set if
 	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers int64     `json:"total_active_users,nullable"`
-	JSON             eventJSON `json:"-"`
+	TotalActiveUsers int64 `json:"total_active_users,nullable"`
+	// If set, the event will override the waiting room's `turnstile_action` property
+	// while it is active. If null, the event will inherit it.
+	TurnstileAction EventTurnstileAction `json:"turnstile_action,nullable"`
+	// If set, the event will override the waiting room's `turnstile_mode` property
+	// while it is active. If null, the event will inherit it.
+	TurnstileMode EventTurnstileMode `json:"turnstile_mode,nullable"`
+	JSON          eventJSON          `json:"-"`
 }
 
 // eventJSON contains the JSON metadata for the struct [Event]
@@ -266,6 +272,8 @@ type eventJSON struct {
 	ShuffleAtEventStart   apijson.Field
 	Suspended             apijson.Field
 	TotalActiveUsers      apijson.Field
+	TurnstileAction       apijson.Field
+	TurnstileMode         apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
 }
@@ -276,6 +284,42 @@ func (r *Event) UnmarshalJSON(data []byte) (err error) {
 
 func (r eventJSON) RawJSON() string {
 	return r.raw
+}
+
+// If set, the event will override the waiting room's `turnstile_action` property
+// while it is active. If null, the event will inherit it.
+type EventTurnstileAction string
+
+const (
+	EventTurnstileActionLog           EventTurnstileAction = "log"
+	EventTurnstileActionInfiniteQueue EventTurnstileAction = "infinite_queue"
+)
+
+func (r EventTurnstileAction) IsKnown() bool {
+	switch r {
+	case EventTurnstileActionLog, EventTurnstileActionInfiniteQueue:
+		return true
+	}
+	return false
+}
+
+// If set, the event will override the waiting room's `turnstile_mode` property
+// while it is active. If null, the event will inherit it.
+type EventTurnstileMode string
+
+const (
+	EventTurnstileModeOff                   EventTurnstileMode = "off"
+	EventTurnstileModeInvisible             EventTurnstileMode = "invisible"
+	EventTurnstileModeVisibleNonInteractive EventTurnstileMode = "visible_non_interactive"
+	EventTurnstileModeVisibleManaged        EventTurnstileMode = "visible_managed"
+)
+
+func (r EventTurnstileMode) IsKnown() bool {
+	switch r {
+	case EventTurnstileModeOff, EventTurnstileModeInvisible, EventTurnstileModeVisibleNonInteractive, EventTurnstileModeVisibleManaged:
+		return true
+	}
+	return false
 }
 
 type EventDeleteResponse struct {

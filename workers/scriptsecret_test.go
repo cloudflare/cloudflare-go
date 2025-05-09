@@ -32,9 +32,11 @@ func TestScriptSecretUpdateWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptSecretUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name:      cloudflare.F("MY_SECRET"),
-			Text:      cloudflare.F("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"),
-			Type:      cloudflare.F(workers.ScriptSecretUpdateParamsTypeSecretText),
+			Body: workers.ScriptSecretUpdateParamsBodyWorkersBindingKindSecretText{
+				Name: cloudflare.F("myBinding"),
+				Text: cloudflare.F("My secret."),
+				Type: cloudflare.F(workers.ScriptSecretUpdateParamsBodyWorkersBindingKindSecretTextTypeSecretText),
+			},
 		},
 	)
 	if err != nil {

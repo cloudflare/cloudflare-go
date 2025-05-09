@@ -121,7 +121,7 @@ func (r accessLogSCIMUpdateListResponseJSON) RawJSON() string {
 }
 
 type AccessLogSCIMUpdateListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The unique Id of the IdP that has SCIM enabled.
 	IdPID param.Field[[]string] `query:"idp_id,required"`

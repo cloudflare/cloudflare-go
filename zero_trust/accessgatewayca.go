@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessGatewayCAService contains methods and other services that help with
@@ -151,7 +150,7 @@ func (r accessGatewayCAListResponseJSON) RawJSON() string {
 }
 
 type AccessGatewayCADeleteResponse struct {
-	// UUID
+	// UUID.
 	ID   string                            `json:"id"`
 	JSON accessGatewayCADeleteResponseJSON `json:"-"`
 }
@@ -173,14 +172,14 @@ func (r accessGatewayCADeleteResponseJSON) RawJSON() string {
 }
 
 type AccessGatewayCANewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessGatewayCANewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessGatewayCANewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGatewayCANewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessGatewayCANewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessGatewayCANewResponse                `json:"result"`
 	JSON    accessGatewayCANewResponseEnvelopeJSON    `json:"-"`
@@ -205,7 +204,103 @@ func (r accessGatewayCANewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessGatewayCANewResponseEnvelopeErrors struct {
+	Code             int64                                          `json:"code,required"`
+	Message          string                                         `json:"message,required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           AccessGatewayCANewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessGatewayCANewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessGatewayCANewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessGatewayCANewResponseEnvelopeErrors]
+type accessGatewayCANewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGatewayCANewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGatewayCANewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGatewayCANewResponseEnvelopeErrorsSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    accessGatewayCANewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessGatewayCANewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [AccessGatewayCANewResponseEnvelopeErrorsSource]
+type accessGatewayCANewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGatewayCANewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGatewayCANewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGatewayCANewResponseEnvelopeMessages struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           AccessGatewayCANewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessGatewayCANewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessGatewayCANewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [AccessGatewayCANewResponseEnvelopeMessages]
+type accessGatewayCANewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGatewayCANewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGatewayCANewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGatewayCANewResponseEnvelopeMessagesSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    accessGatewayCANewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessGatewayCANewResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [AccessGatewayCANewResponseEnvelopeMessagesSource]
+type accessGatewayCANewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGatewayCANewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGatewayCANewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessGatewayCANewResponseEnvelopeSuccess bool
 
 const (
@@ -221,19 +316,19 @@ func (r AccessGatewayCANewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessGatewayCAListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessGatewayCADeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessGatewayCADeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessGatewayCADeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGatewayCADeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessGatewayCADeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessGatewayCADeleteResponse                `json:"result"`
 	JSON    accessGatewayCADeleteResponseEnvelopeJSON    `json:"-"`
@@ -258,7 +353,103 @@ func (r accessGatewayCADeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessGatewayCADeleteResponseEnvelopeErrors struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           AccessGatewayCADeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessGatewayCADeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessGatewayCADeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [AccessGatewayCADeleteResponseEnvelopeErrors]
+type accessGatewayCADeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGatewayCADeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGatewayCADeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGatewayCADeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    accessGatewayCADeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessGatewayCADeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [AccessGatewayCADeleteResponseEnvelopeErrorsSource]
+type accessGatewayCADeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGatewayCADeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGatewayCADeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGatewayCADeleteResponseEnvelopeMessages struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           AccessGatewayCADeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessGatewayCADeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessGatewayCADeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [AccessGatewayCADeleteResponseEnvelopeMessages]
+type accessGatewayCADeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGatewayCADeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGatewayCADeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGatewayCADeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    accessGatewayCADeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessGatewayCADeleteResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [AccessGatewayCADeleteResponseEnvelopeMessagesSource]
+type accessGatewayCADeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGatewayCADeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGatewayCADeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessGatewayCADeleteResponseEnvelopeSuccess bool
 
 const (

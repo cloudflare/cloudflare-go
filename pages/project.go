@@ -609,6 +609,7 @@ type DeploymentParam struct {
 	BuildConfig param.Field[DeploymentBuildConfigParam] `json:"build_config"`
 	// Environment variables used for builds and Pages Functions.
 	EnvVars param.Field[map[string]DeploymentEnvVarsUnionParam] `json:"env_vars"`
+	Source  param.Field[DeploymentSourceParam]                  `json:"source"`
 }
 
 func (r DeploymentParam) MarshalJSON() (data []byte, err error) {
@@ -2004,7 +2005,8 @@ type ProjectParam struct {
 	// Name of the project.
 	Name param.Field[string] `json:"name"`
 	// Production branch of the project. Used to identify production deployments.
-	ProductionBranch param.Field[string] `json:"production_branch"`
+	ProductionBranch param.Field[string]             `json:"production_branch"`
+	Source           param.Field[ProjectSourceParam] `json:"source"`
 }
 
 func (r ProjectParam) MarshalJSON() (data []byte, err error) {

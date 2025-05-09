@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -33,6 +32,7 @@ type AccessApplicationService struct {
 	UserPolicyChecks *AccessApplicationUserPolicyCheckService
 	Policies         *AccessApplicationPolicyService
 	PolicyTests      *AccessApplicationPolicyTestService
+	Settings         *AccessApplicationSettingService
 }
 
 // NewAccessApplicationService generates a new service that applies the given
@@ -45,6 +45,7 @@ func NewAccessApplicationService(opts ...option.RequestOption) (r *AccessApplica
 	r.UserPolicyChecks = NewAccessApplicationUserPolicyCheckService(opts...)
 	r.Policies = NewAccessApplicationPolicyService(opts...)
 	r.PolicyTests = NewAccessApplicationPolicyTestService(opts...)
+	r.Settings = NewAccessApplicationSettingService(opts...)
 	return
 }
 
@@ -295,74 +296,6 @@ type AllowedOrigins = string
 type AllowedOriginsParam = string
 
 type AppIDParam = string
-
-type ApplicationPolicy struct {
-	// The UUID of the policy
-	ID string `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired bool      `json:"approval_required"`
-	CreatedAt        time.Time `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy. Infrastructure
-	// application policies can only use the Allow action.
-	Decision Decision `json:"decision"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude []AccessRule `json:"exclude"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include []AccessRule `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired bool `json:"isolation_required"`
-	// The name of the Access policy.
-	Name string `json:"name"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired bool `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require []AccessRule `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration string                `json:"session_duration"`
-	UpdatedAt       time.Time             `json:"updated_at" format:"date-time"`
-	JSON            applicationPolicyJSON `json:"-"`
-}
-
-// applicationPolicyJSON contains the JSON metadata for the struct
-// [ApplicationPolicy]
-type applicationPolicyJSON struct {
-	ID                           apijson.Field
-	ApprovalGroups               apijson.Field
-	ApprovalRequired             apijson.Field
-	CreatedAt                    apijson.Field
-	Decision                     apijson.Field
-	Exclude                      apijson.Field
-	Include                      apijson.Field
-	IsolationRequired            apijson.Field
-	Name                         apijson.Field
-	PurposeJustificationPrompt   apijson.Field
-	PurposeJustificationRequired apijson.Field
-	Require                      apijson.Field
-	SessionDuration              apijson.Field
-	UpdatedAt                    apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
-}
-
-func (r *ApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r applicationPolicyJSON) RawJSON() string {
-	return r.raw
-}
 
 // The application type.
 type ApplicationType string
@@ -2472,13 +2405,15 @@ type SelfHostedDomains = string
 type SelfHostedDomainsParam = string
 
 type AccessApplicationNewResponse struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// This field can have the runtime type of [[]AllowedIdPs].
 	AllowedIdPs interface{} `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
@@ -2553,6 +2488,14 @@ type AccessApplicationNewResponse struct {
 	// [[]AccessApplicationNewResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationNewResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// This field can have the runtime type of
 	// [AccessApplicationNewResponseSaaSApplicationSaaSApp].
 	SaaSApp interface{} `json:"saas_app"`
@@ -2599,46 +2542,48 @@ type AccessApplicationNewResponse struct {
 // accessApplicationNewResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationNewResponse]
 type accessApplicationNewResponseJSON struct {
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	Domain                   apijson.Field
-	EnableBindingCookie      apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LandingPageDesign        apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SaaSApp                  apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	TargetCriteria           apijson.Field
-	Type                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherLogoURL          apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	BgColor                     apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	Domain                      apijson.Field
+	EnableBindingCookie         apijson.Field
+	FooterLinks                 apijson.Field
+	HeaderBgColor               apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LandingPageDesign           apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SaaSApp                     apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipAppLauncherLoginPage    apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	TargetCriteria              apijson.Field
+	Type                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r accessApplicationNewResponseJSON) RawJSON() string {
@@ -2740,13 +2685,15 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -2791,6 +2738,14 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationNewResponseSelfHostedApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -2821,38 +2776,40 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 // accessApplicationNewResponseSelfHostedApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationNewResponseSelfHostedApplication]
 type accessApplicationNewResponseSelfHostedApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseSelfHostedApplication) UnmarshalJSON(data []byte) (err error) {
@@ -3108,20 +3065,68 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsType) IsKno
 }
 
 type AccessApplicationNewResponseSelfHostedApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                       `json:"precedence"`
-	JSON       accessApplicationNewResponseSelfHostedApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                      `json:"session_duration"`
+	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseSelfHostedApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationNewResponseSelfHostedApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationNewResponseSelfHostedApplicationPolicy]
 type accessApplicationNewResponseSelfHostedApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseSelfHostedApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -3448,7 +3453,7 @@ func (r AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticatio
 }
 
 type AccessApplicationNewResponseSaaSApplication struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -3514,19 +3519,67 @@ func (r accessApplicationNewResponseSaaSApplicationJSON) RawJSON() string {
 func (r AccessApplicationNewResponseSaaSApplication) implementsAccessApplicationNewResponse() {}
 
 type AccessApplicationNewResponseSaaSApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                 `json:"precedence"`
-	JSON       accessApplicationNewResponseSaaSApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                `json:"session_duration"`
+	UpdatedAt       time.Time                                             `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseSaaSApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationNewResponseSaaSApplicationPolicyJSON contains the JSON metadata
 // for the struct [AccessApplicationNewResponseSaaSApplicationPolicy]
 type accessApplicationNewResponseSaaSApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseSaaSApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -4013,13 +4066,15 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -4064,6 +4119,14 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationNewResponseBrowserSSHApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -4094,38 +4157,40 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 // accessApplicationNewResponseBrowserSSHApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationNewResponseBrowserSSHApplication]
 type accessApplicationNewResponseBrowserSSHApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseBrowserSSHApplication) UnmarshalJSON(data []byte) (err error) {
@@ -4381,20 +4446,68 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsType) IsKno
 }
 
 type AccessApplicationNewResponseBrowserSSHApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                       `json:"precedence"`
-	JSON       accessApplicationNewResponseBrowserSSHApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                      `json:"session_duration"`
+	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseBrowserSSHApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserSSHApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationNewResponseBrowserSSHApplicationPolicy]
 type accessApplicationNewResponseBrowserSSHApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseBrowserSSHApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -4726,13 +4839,15 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -4777,6 +4892,14 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationNewResponseBrowserVNCApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -4807,38 +4930,40 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 // accessApplicationNewResponseBrowserVNCApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationNewResponseBrowserVNCApplication]
 type accessApplicationNewResponseBrowserVNCApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
@@ -5094,20 +5219,68 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsType) IsKno
 }
 
 type AccessApplicationNewResponseBrowserVNCApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                       `json:"precedence"`
-	JSON       accessApplicationNewResponseBrowserVNCApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                      `json:"session_duration"`
+	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseBrowserVNCApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserVNCApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationNewResponseBrowserVNCApplicationPolicy]
 type accessApplicationNewResponseBrowserVNCApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseBrowserVNCApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -5436,7 +5609,7 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticatio
 type AccessApplicationNewResponseAppLauncherApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -5575,20 +5748,68 @@ func (r accessApplicationNewResponseAppLauncherApplicationLandingPageDesignJSON)
 }
 
 type AccessApplicationNewResponseAppLauncherApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                        `json:"precedence"`
-	JSON       accessApplicationNewResponseAppLauncherApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                       `json:"session_duration"`
+	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseAppLauncherApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationNewResponseAppLauncherApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationNewResponseAppLauncherApplicationPolicy]
 type accessApplicationNewResponseAppLauncherApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseAppLauncherApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -5917,7 +6138,7 @@ func (r AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticati
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -6057,20 +6278,68 @@ func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandin
 }
 
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                                        `json:"precedence"`
-	JSON       accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                       `json:"session_duration"`
+	UpdatedAt       time.Time                                                                    `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy]
 type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -6399,7 +6668,7 @@ func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -6539,20 +6808,68 @@ func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationLandin
 }
 
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                                        `json:"precedence"`
-	JSON       accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                       `json:"session_duration"`
+	UpdatedAt       time.Time                                                                    `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy]
 type accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -6879,7 +7196,7 @@ func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMCo
 }
 
 type AccessApplicationNewResponseBookmarkApplication struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
@@ -7251,7 +7568,7 @@ type AccessApplicationNewResponseInfrastructureApplication struct {
 	TargetCriteria []AccessApplicationNewResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
 	AUD       string    `json:"aud"`
@@ -7764,13 +8081,15 @@ type AccessApplicationNewResponseBrowserRdpApplication struct {
 	TargetCriteria []AccessApplicationNewResponseBrowserRdpApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -7815,6 +8134,14 @@ type AccessApplicationNewResponseBrowserRdpApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationNewResponseBrowserRdpApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -7845,39 +8172,41 @@ type AccessApplicationNewResponseBrowserRdpApplication struct {
 // accessApplicationNewResponseBrowserRdpApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationNewResponseBrowserRdpApplication]
 type accessApplicationNewResponseBrowserRdpApplicationJSON struct {
-	Domain                   apijson.Field
-	TargetCriteria           apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	TargetCriteria              apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseBrowserRdpApplication) UnmarshalJSON(data []byte) (err error) {
@@ -8178,20 +8507,68 @@ func (r AccessApplicationNewResponseBrowserRdpApplicationDestinationsType) IsKno
 }
 
 type AccessApplicationNewResponseBrowserRdpApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                       `json:"precedence"`
-	JSON       accessApplicationNewResponseBrowserRdpApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                      `json:"session_duration"`
+	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationNewResponseBrowserRdpApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserRdpApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationNewResponseBrowserRdpApplicationPolicy]
 type accessApplicationNewResponseBrowserRdpApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseBrowserRdpApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -8518,13 +8895,15 @@ func (r AccessApplicationNewResponseBrowserRdpApplicationSCIMConfigAuthenticatio
 }
 
 type AccessApplicationUpdateResponse struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// This field can have the runtime type of [[]AllowedIdPs].
 	AllowedIdPs interface{} `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
@@ -8599,6 +8978,14 @@ type AccessApplicationUpdateResponse struct {
 	// [[]AccessApplicationUpdateResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// This field can have the runtime type of
 	// [AccessApplicationUpdateResponseSaaSApplicationSaaSApp].
 	SaaSApp interface{} `json:"saas_app"`
@@ -8645,46 +9032,48 @@ type AccessApplicationUpdateResponse struct {
 // accessApplicationUpdateResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponse]
 type accessApplicationUpdateResponseJSON struct {
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	Domain                   apijson.Field
-	EnableBindingCookie      apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LandingPageDesign        apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SaaSApp                  apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	TargetCriteria           apijson.Field
-	Type                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherLogoURL          apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	BgColor                     apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	Domain                      apijson.Field
+	EnableBindingCookie         apijson.Field
+	FooterLinks                 apijson.Field
+	HeaderBgColor               apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LandingPageDesign           apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SaaSApp                     apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipAppLauncherLoginPage    apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	TargetCriteria              apijson.Field
+	Type                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r accessApplicationUpdateResponseJSON) RawJSON() string {
@@ -8786,13 +9175,15 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -8837,6 +9228,14 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                         `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationUpdateResponseSelfHostedApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -8867,38 +9266,40 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 // accessApplicationUpdateResponseSelfHostedApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationUpdateResponseSelfHostedApplication]
 type accessApplicationUpdateResponseSelfHostedApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseSelfHostedApplication) UnmarshalJSON(data []byte) (err error) {
@@ -9155,20 +9556,68 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType) Is
 }
 
 type AccessApplicationUpdateResponseSelfHostedApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                          `json:"precedence"`
-	JSON       accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                         `json:"session_duration"`
+	UpdatedAt       time.Time                                                      `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationUpdateResponseSelfHostedApplicationPolicy]
 type accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseSelfHostedApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -9495,7 +9944,7 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentica
 }
 
 type AccessApplicationUpdateResponseSaaSApplication struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -9561,19 +10010,67 @@ func (r accessApplicationUpdateResponseSaaSApplicationJSON) RawJSON() string {
 func (r AccessApplicationUpdateResponseSaaSApplication) implementsAccessApplicationUpdateResponse() {}
 
 type AccessApplicationUpdateResponseSaaSApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                    `json:"precedence"`
-	JSON       accessApplicationUpdateResponseSaaSApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                   `json:"session_duration"`
+	UpdatedAt       time.Time                                                `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseSaaSApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseSaaSApplicationPolicyJSON contains the JSON
 // metadata for the struct [AccessApplicationUpdateResponseSaaSApplicationPolicy]
 type accessApplicationUpdateResponseSaaSApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseSaaSApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -10061,13 +10558,15 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -10112,6 +10611,14 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                         `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationUpdateResponseBrowserSSHApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -10142,38 +10649,40 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 // accessApplicationUpdateResponseBrowserSSHApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationUpdateResponseBrowserSSHApplication]
 type accessApplicationUpdateResponseBrowserSSHApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseBrowserSSHApplication) UnmarshalJSON(data []byte) (err error) {
@@ -10430,20 +10939,68 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType) Is
 }
 
 type AccessApplicationUpdateResponseBrowserSSHApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                          `json:"precedence"`
-	JSON       accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                         `json:"session_duration"`
+	UpdatedAt       time.Time                                                      `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationUpdateResponseBrowserSSHApplicationPolicy]
 type accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseBrowserSSHApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -10775,13 +11332,15 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -10826,6 +11385,14 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                         `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationUpdateResponseBrowserVNCApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -10856,38 +11423,40 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 // accessApplicationUpdateResponseBrowserVNCApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationUpdateResponseBrowserVNCApplication]
 type accessApplicationUpdateResponseBrowserVNCApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
@@ -11144,20 +11713,68 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType) Is
 }
 
 type AccessApplicationUpdateResponseBrowserVNCApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                          `json:"precedence"`
-	JSON       accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                         `json:"session_duration"`
+	UpdatedAt       time.Time                                                      `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationUpdateResponseBrowserVNCApplicationPolicy]
 type accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseBrowserVNCApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -11486,7 +12103,7 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentica
 type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -11625,20 +12242,68 @@ func (r accessApplicationUpdateResponseAppLauncherApplicationLandingPageDesignJS
 }
 
 type AccessApplicationUpdateResponseAppLauncherApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                           `json:"precedence"`
-	JSON       accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                          `json:"session_duration"`
+	UpdatedAt       time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON contains the
 // JSON metadata for the struct
 // [AccessApplicationUpdateResponseAppLauncherApplicationPolicy]
 type accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseAppLauncherApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -11967,7 +12632,7 @@ func (r AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthentic
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -12107,20 +12772,68 @@ func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLan
 }
 
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                                           `json:"precedence"`
-	JSON       accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                          `json:"session_duration"`
+	UpdatedAt       time.Time                                                                       `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicyJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy]
 type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -12449,7 +13162,7 @@ func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCI
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -12589,20 +13302,68 @@ func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLan
 }
 
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                                           `json:"precedence"`
-	JSON       accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                          `json:"session_duration"`
+	UpdatedAt       time.Time                                                                       `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy]
 type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -12929,7 +13690,7 @@ func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCI
 }
 
 type AccessApplicationUpdateResponseBookmarkApplication struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
@@ -13302,7 +14063,7 @@ type AccessApplicationUpdateResponseInfrastructureApplication struct {
 	TargetCriteria []AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
 	AUD       string    `json:"aud"`
@@ -13816,13 +14577,15 @@ type AccessApplicationUpdateResponseBrowserRdpApplication struct {
 	TargetCriteria []AccessApplicationUpdateResponseBrowserRdpApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -13867,6 +14630,14 @@ type AccessApplicationUpdateResponseBrowserRdpApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                         `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationUpdateResponseBrowserRdpApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -13897,39 +14668,41 @@ type AccessApplicationUpdateResponseBrowserRdpApplication struct {
 // accessApplicationUpdateResponseBrowserRdpApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationUpdateResponseBrowserRdpApplication]
 type accessApplicationUpdateResponseBrowserRdpApplicationJSON struct {
-	Domain                   apijson.Field
-	TargetCriteria           apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	TargetCriteria              apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseBrowserRdpApplication) UnmarshalJSON(data []byte) (err error) {
@@ -14231,20 +15004,68 @@ func (r AccessApplicationUpdateResponseBrowserRdpApplicationDestinationsType) Is
 }
 
 type AccessApplicationUpdateResponseBrowserRdpApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                          `json:"precedence"`
-	JSON       accessApplicationUpdateResponseBrowserRdpApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                         `json:"session_duration"`
+	UpdatedAt       time.Time                                                      `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationUpdateResponseBrowserRdpApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserRdpApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationUpdateResponseBrowserRdpApplicationPolicy]
 type accessApplicationUpdateResponseBrowserRdpApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseBrowserRdpApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -14571,13 +15392,15 @@ func (r AccessApplicationUpdateResponseBrowserRdpApplicationSCIMConfigAuthentica
 }
 
 type AccessApplicationListResponse struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// This field can have the runtime type of [[]AllowedIdPs].
 	AllowedIdPs interface{} `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
@@ -14652,6 +15475,14 @@ type AccessApplicationListResponse struct {
 	// [[]AccessApplicationListResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationListResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// This field can have the runtime type of
 	// [AccessApplicationListResponseSaaSApplicationSaaSApp].
 	SaaSApp interface{} `json:"saas_app"`
@@ -14698,46 +15529,48 @@ type AccessApplicationListResponse struct {
 // accessApplicationListResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationListResponse]
 type accessApplicationListResponseJSON struct {
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	Domain                   apijson.Field
-	EnableBindingCookie      apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LandingPageDesign        apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SaaSApp                  apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	TargetCriteria           apijson.Field
-	Type                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherLogoURL          apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	BgColor                     apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	Domain                      apijson.Field
+	EnableBindingCookie         apijson.Field
+	FooterLinks                 apijson.Field
+	HeaderBgColor               apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LandingPageDesign           apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SaaSApp                     apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipAppLauncherLoginPage    apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	TargetCriteria              apijson.Field
+	Type                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r accessApplicationListResponseJSON) RawJSON() string {
@@ -14839,13 +15672,15 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -14890,6 +15725,14 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                       `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationListResponseSelfHostedApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -14920,38 +15763,40 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 // accessApplicationListResponseSelfHostedApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseSelfHostedApplication]
 type accessApplicationListResponseSelfHostedApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseSelfHostedApplication) UnmarshalJSON(data []byte) (err error) {
@@ -15208,20 +16053,68 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsType) IsKn
 }
 
 type AccessApplicationListResponseSelfHostedApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                        `json:"precedence"`
-	JSON       accessApplicationListResponseSelfHostedApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                       `json:"session_duration"`
+	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseSelfHostedApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationListResponseSelfHostedApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationListResponseSelfHostedApplicationPolicy]
 type accessApplicationListResponseSelfHostedApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseSelfHostedApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -15548,7 +16441,7 @@ func (r AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticati
 }
 
 type AccessApplicationListResponseSaaSApplication struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -15614,19 +16507,67 @@ func (r accessApplicationListResponseSaaSApplicationJSON) RawJSON() string {
 func (r AccessApplicationListResponseSaaSApplication) implementsAccessApplicationListResponse() {}
 
 type AccessApplicationListResponseSaaSApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                  `json:"precedence"`
-	JSON       accessApplicationListResponseSaaSApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                 `json:"session_duration"`
+	UpdatedAt       time.Time                                              `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseSaaSApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationListResponseSaaSApplicationPolicyJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseSaaSApplicationPolicy]
 type accessApplicationListResponseSaaSApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseSaaSApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -16113,13 +17054,15 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -16164,6 +17107,14 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                       `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationListResponseBrowserSSHApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -16194,38 +17145,40 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 // accessApplicationListResponseBrowserSSHApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseBrowserSSHApplication]
 type accessApplicationListResponseBrowserSSHApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseBrowserSSHApplication) UnmarshalJSON(data []byte) (err error) {
@@ -16482,20 +17435,68 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsType) IsKn
 }
 
 type AccessApplicationListResponseBrowserSSHApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                        `json:"precedence"`
-	JSON       accessApplicationListResponseBrowserSSHApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                       `json:"session_duration"`
+	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseBrowserSSHApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserSSHApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationListResponseBrowserSSHApplicationPolicy]
 type accessApplicationListResponseBrowserSSHApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseBrowserSSHApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -16827,13 +17828,15 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -16878,6 +17881,14 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                       `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationListResponseBrowserVNCApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -16908,38 +17919,40 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 // accessApplicationListResponseBrowserVNCApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseBrowserVNCApplication]
 type accessApplicationListResponseBrowserVNCApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
@@ -17196,20 +18209,68 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsType) IsKn
 }
 
 type AccessApplicationListResponseBrowserVNCApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                        `json:"precedence"`
-	JSON       accessApplicationListResponseBrowserVNCApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                       `json:"session_duration"`
+	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseBrowserVNCApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserVNCApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationListResponseBrowserVNCApplicationPolicy]
 type accessApplicationListResponseBrowserVNCApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseBrowserVNCApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -17538,7 +18599,7 @@ func (r AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticati
 type AccessApplicationListResponseAppLauncherApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -17677,20 +18738,68 @@ func (r accessApplicationListResponseAppLauncherApplicationLandingPageDesignJSON
 }
 
 type AccessApplicationListResponseAppLauncherApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                         `json:"precedence"`
-	JSON       accessApplicationListResponseAppLauncherApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                        `json:"session_duration"`
+	UpdatedAt       time.Time                                                     `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseAppLauncherApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationListResponseAppLauncherApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationListResponseAppLauncherApplicationPolicy]
 type accessApplicationListResponseAppLauncherApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseAppLauncherApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -18019,7 +19128,7 @@ func (r AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticat
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -18159,20 +19268,68 @@ func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandi
 }
 
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                                         `json:"precedence"`
-	JSON       accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                        `json:"session_duration"`
+	UpdatedAt       time.Time                                                                     `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy]
 type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -18501,7 +19658,7 @@ func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMC
 type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -18641,20 +19798,68 @@ func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationLandi
 }
 
 type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                                         `json:"precedence"`
-	JSON       accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                        `json:"session_duration"`
+	UpdatedAt       time.Time                                                                     `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy]
 type accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -18981,7 +20186,7 @@ func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMC
 }
 
 type AccessApplicationListResponseBookmarkApplication struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
@@ -19353,7 +20558,7 @@ type AccessApplicationListResponseInfrastructureApplication struct {
 	TargetCriteria []AccessApplicationListResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
 	AUD       string    `json:"aud"`
@@ -19866,13 +21071,15 @@ type AccessApplicationListResponseBrowserRdpApplication struct {
 	TargetCriteria []AccessApplicationListResponseBrowserRdpApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -19917,6 +21124,14 @@ type AccessApplicationListResponseBrowserRdpApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                       `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationListResponseBrowserRdpApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -19947,39 +21162,41 @@ type AccessApplicationListResponseBrowserRdpApplication struct {
 // accessApplicationListResponseBrowserRdpApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseBrowserRdpApplication]
 type accessApplicationListResponseBrowserRdpApplicationJSON struct {
-	Domain                   apijson.Field
-	TargetCriteria           apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	TargetCriteria              apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseBrowserRdpApplication) UnmarshalJSON(data []byte) (err error) {
@@ -20281,20 +21498,68 @@ func (r AccessApplicationListResponseBrowserRdpApplicationDestinationsType) IsKn
 }
 
 type AccessApplicationListResponseBrowserRdpApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                        `json:"precedence"`
-	JSON       accessApplicationListResponseBrowserRdpApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                       `json:"session_duration"`
+	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationListResponseBrowserRdpApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserRdpApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationListResponseBrowserRdpApplicationPolicy]
 type accessApplicationListResponseBrowserRdpApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseBrowserRdpApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -20621,7 +21886,7 @@ func (r AccessApplicationListResponseBrowserRdpApplicationSCIMConfigAuthenticati
 }
 
 type AccessApplicationDeleteResponse struct {
-	// UUID
+	// UUID.
 	ID   string                              `json:"id"`
 	JSON accessApplicationDeleteResponseJSON `json:"-"`
 }
@@ -20643,13 +21908,15 @@ func (r accessApplicationDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessApplicationGetResponse struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// This field can have the runtime type of [[]AllowedIdPs].
 	AllowedIdPs interface{} `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
@@ -20724,6 +21991,14 @@ type AccessApplicationGetResponse struct {
 	// [[]AccessApplicationGetResponseInfrastructureApplicationPolicy],
 	// [[]AccessApplicationGetResponseBrowserRdpApplicationPolicy].
 	Policies interface{} `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// This field can have the runtime type of
 	// [AccessApplicationGetResponseSaaSApplicationSaaSApp].
 	SaaSApp interface{} `json:"saas_app"`
@@ -20770,46 +22045,48 @@ type AccessApplicationGetResponse struct {
 // accessApplicationGetResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationGetResponse]
 type accessApplicationGetResponseJSON struct {
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherLogoURL       apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	BgColor                  apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	Domain                   apijson.Field
-	EnableBindingCookie      apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LandingPageDesign        apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SaaSApp                  apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	TargetCriteria           apijson.Field
-	Type                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherLogoURL          apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	BgColor                     apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	Domain                      apijson.Field
+	EnableBindingCookie         apijson.Field
+	FooterLinks                 apijson.Field
+	HeaderBgColor               apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LandingPageDesign           apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SaaSApp                     apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipAppLauncherLoginPage    apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	TargetCriteria              apijson.Field
+	Type                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r accessApplicationGetResponseJSON) RawJSON() string {
@@ -20911,13 +22188,15 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -20962,6 +22241,14 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationGetResponseSelfHostedApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -20992,38 +22279,40 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 // accessApplicationGetResponseSelfHostedApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationGetResponseSelfHostedApplication]
 type accessApplicationGetResponseSelfHostedApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseSelfHostedApplication) UnmarshalJSON(data []byte) (err error) {
@@ -21279,20 +22568,68 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsType) IsKno
 }
 
 type AccessApplicationGetResponseSelfHostedApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                       `json:"precedence"`
-	JSON       accessApplicationGetResponseSelfHostedApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                      `json:"session_duration"`
+	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseSelfHostedApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationGetResponseSelfHostedApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationGetResponseSelfHostedApplicationPolicy]
 type accessApplicationGetResponseSelfHostedApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseSelfHostedApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -21619,7 +22956,7 @@ func (r AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticatio
 }
 
 type AccessApplicationGetResponseSaaSApplication struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -21685,19 +23022,67 @@ func (r accessApplicationGetResponseSaaSApplicationJSON) RawJSON() string {
 func (r AccessApplicationGetResponseSaaSApplication) implementsAccessApplicationGetResponse() {}
 
 type AccessApplicationGetResponseSaaSApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                 `json:"precedence"`
-	JSON       accessApplicationGetResponseSaaSApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                `json:"session_duration"`
+	UpdatedAt       time.Time                                             `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseSaaSApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationGetResponseSaaSApplicationPolicyJSON contains the JSON metadata
 // for the struct [AccessApplicationGetResponseSaaSApplicationPolicy]
 type accessApplicationGetResponseSaaSApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseSaaSApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -22184,13 +23569,15 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -22235,6 +23622,14 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationGetResponseBrowserSSHApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -22265,38 +23660,40 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 // accessApplicationGetResponseBrowserSSHApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationGetResponseBrowserSSHApplication]
 type accessApplicationGetResponseBrowserSSHApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseBrowserSSHApplication) UnmarshalJSON(data []byte) (err error) {
@@ -22552,20 +23949,68 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsType) IsKno
 }
 
 type AccessApplicationGetResponseBrowserSSHApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                       `json:"precedence"`
-	JSON       accessApplicationGetResponseBrowserSSHApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                      `json:"session_duration"`
+	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseBrowserSSHApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserSSHApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationGetResponseBrowserSSHApplicationPolicy]
 type accessApplicationGetResponseBrowserSSHApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseBrowserSSHApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -22897,13 +24342,15 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -22948,6 +24395,14 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationGetResponseBrowserVNCApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -22978,38 +24433,40 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 // accessApplicationGetResponseBrowserVNCApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationGetResponseBrowserVNCApplication]
 type accessApplicationGetResponseBrowserVNCApplicationJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
@@ -23265,20 +24722,68 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsType) IsKno
 }
 
 type AccessApplicationGetResponseBrowserVNCApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                       `json:"precedence"`
-	JSON       accessApplicationGetResponseBrowserVNCApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                      `json:"session_duration"`
+	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseBrowserVNCApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserVNCApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationGetResponseBrowserVNCApplicationPolicy]
 type accessApplicationGetResponseBrowserVNCApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseBrowserVNCApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -23607,7 +25112,7 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticatio
 type AccessApplicationGetResponseAppLauncherApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -23746,20 +25251,68 @@ func (r accessApplicationGetResponseAppLauncherApplicationLandingPageDesignJSON)
 }
 
 type AccessApplicationGetResponseAppLauncherApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                        `json:"precedence"`
-	JSON       accessApplicationGetResponseAppLauncherApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                       `json:"session_duration"`
+	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseAppLauncherApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationGetResponseAppLauncherApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationGetResponseAppLauncherApplicationPolicy]
 type accessApplicationGetResponseAppLauncherApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseAppLauncherApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -24088,7 +25641,7 @@ func (r AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticati
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -24228,20 +25781,68 @@ func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandin
 }
 
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                                        `json:"precedence"`
-	JSON       accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                       `json:"session_duration"`
+	UpdatedAt       time.Time                                                                    `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy]
 type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -24570,7 +26171,7 @@ func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
@@ -24710,20 +26311,68 @@ func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationLandin
 }
 
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                                        `json:"precedence"`
-	JSON       accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                                       `json:"session_duration"`
+	UpdatedAt       time.Time                                                                    `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy]
 type accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -25050,7 +26699,7 @@ func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMCo
 }
 
 type AccessApplicationGetResponseBookmarkApplication struct {
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
@@ -25422,7 +27071,7 @@ type AccessApplicationGetResponseInfrastructureApplication struct {
 	TargetCriteria []AccessApplicationGetResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
 	Type ApplicationType `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
 	AUD       string    `json:"aud"`
@@ -25935,13 +27584,15 @@ type AccessApplicationGetResponseBrowserRdpApplication struct {
 	TargetCriteria []AccessApplicationGetResponseBrowserRdpApplicationTargetCriterion `json:"target_criteria,required"`
 	// The application type.
 	Type string `json:"type,required"`
-	// UUID
+	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe bool `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
@@ -25986,6 +27637,14 @@ type AccessApplicationGetResponseBrowserRdpApplication struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
 	Policies            []AccessApplicationGetResponseBrowserRdpApplicationPolicy `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader string `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -26016,39 +27675,41 @@ type AccessApplicationGetResponseBrowserRdpApplication struct {
 // accessApplicationGetResponseBrowserRdpApplicationJSON contains the JSON metadata
 // for the struct [AccessApplicationGetResponseBrowserRdpApplication]
 type accessApplicationGetResponseBrowserRdpApplicationJSON struct {
-	Domain                   apijson.Field
-	TargetCriteria           apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdPs              apijson.Field
-	AppLauncherVisible       apijson.Field
-	AUD                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CORSHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Destinations             apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	OptionsPreflightBypass   apijson.Field
-	PathCookieAttribute      apijson.Field
-	Policies                 apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SCIMConfig               apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+	Domain                      apijson.Field
+	TargetCriteria              apijson.Field
+	Type                        apijson.Field
+	ID                          apijson.Field
+	AllowAuthenticateViaWARP    apijson.Field
+	AllowIframe                 apijson.Field
+	AllowedIdPs                 apijson.Field
+	AppLauncherVisible          apijson.Field
+	AUD                         apijson.Field
+	AutoRedirectToIdentity      apijson.Field
+	CORSHeaders                 apijson.Field
+	CreatedAt                   apijson.Field
+	CustomDenyMessage           apijson.Field
+	CustomDenyURL               apijson.Field
+	CustomNonIdentityDenyURL    apijson.Field
+	CustomPages                 apijson.Field
+	Destinations                apijson.Field
+	EnableBindingCookie         apijson.Field
+	HTTPOnlyCookieAttribute     apijson.Field
+	LogoURL                     apijson.Field
+	Name                        apijson.Field
+	OptionsPreflightBypass      apijson.Field
+	PathCookieAttribute         apijson.Field
+	Policies                    apijson.Field
+	ReadServiceTokensFromHeader apijson.Field
+	SameSiteCookieAttribute     apijson.Field
+	SCIMConfig                  apijson.Field
+	SelfHostedDomains           apijson.Field
+	ServiceAuth401Redirect      apijson.Field
+	SessionDuration             apijson.Field
+	SkipInterstitial            apijson.Field
+	Tags                        apijson.Field
+	UpdatedAt                   apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseBrowserRdpApplication) UnmarshalJSON(data []byte) (err error) {
@@ -26349,20 +28010,68 @@ func (r AccessApplicationGetResponseBrowserRdpApplicationDestinationsType) IsKno
 }
 
 type AccessApplicationGetResponseBrowserRdpApplicationPolicy struct {
+	// The UUID of the policy
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
+	// The name of the Access policy.
+	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
-	Precedence int64                                                       `json:"precedence"`
-	JSON       accessApplicationGetResponseBrowserRdpApplicationPolicyJSON `json:"-"`
-	ApplicationPolicy
+	Precedence int64 `json:"precedence"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                                                      `json:"session_duration"`
+	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationGetResponseBrowserRdpApplicationPolicyJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserRdpApplicationPolicyJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationGetResponseBrowserRdpApplicationPolicy]
 type accessApplicationGetResponseBrowserRdpApplicationPolicyJSON struct {
-	Precedence  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	Precedence                   apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseBrowserRdpApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -26709,8 +28418,10 @@ type AccessApplicationNewParamsBody struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWARP param.Field[bool]        `json:"allow_authenticate_via_warp"`
-	AllowedIdPs              param.Field[interface{}] `json:"allowed_idps"`
+	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool]        `json:"allow_iframe"`
+	AllowedIdPs param.Field[interface{}] `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
 	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// Displays the application in the App Launcher.
@@ -26756,7 +28467,15 @@ type AccessApplicationNewParamsBody struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool]        `json:"path_cookie_attribute"`
 	Policies            param.Field[interface{}] `json:"policies"`
-	SaaSApp             param.Field[interface{}] `json:"saas_app"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader param.Field[string]      `json:"read_service_tokens_from_header"`
+	SaaSApp                     param.Field[interface{}] `json:"saas_app"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string]      `json:"same_site_cookie_attribute"`
@@ -26812,6 +28531,8 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -26856,6 +28577,14 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader param.Field[string] `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -27813,6 +29542,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -27857,6 +29588,14 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader param.Field[string] `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -28376,6 +30115,8 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -28420,6 +30161,14 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader param.Field[string] `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -30449,6 +32198,8 @@ type AccessApplicationNewParamsBodyBrowserRdpApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -30493,6 +32244,14 @@ type AccessApplicationNewParamsBodyBrowserRdpApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserRdpApplicationPolicyUnion] `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader param.Field[string] `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -31031,9 +32790,9 @@ func (r AccessApplicationNewParamsBodyBrowserRdpApplicationSCIMConfigAuthenticat
 }
 
 type AccessApplicationNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessApplicationNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessApplicationNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessApplicationNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationNewResponse                `json:"result"`
 	JSON    accessApplicationNewResponseEnvelopeJSON    `json:"-"`
@@ -31058,7 +32817,103 @@ func (r accessApplicationNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessApplicationNewResponseEnvelopeErrors struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           AccessApplicationNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessApplicationNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessApplicationNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [AccessApplicationNewResponseEnvelopeErrors]
+type accessApplicationNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    accessApplicationNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessApplicationNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [AccessApplicationNewResponseEnvelopeErrorsSource]
+type accessApplicationNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseEnvelopeMessages struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           AccessApplicationNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessApplicationNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessApplicationNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [AccessApplicationNewResponseEnvelopeMessages]
+type accessApplicationNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    accessApplicationNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessApplicationNewResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [AccessApplicationNewResponseEnvelopeMessagesSource]
+type accessApplicationNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessApplicationNewResponseEnvelopeSuccess bool
 
 const (
@@ -31092,8 +32947,10 @@ type AccessApplicationUpdateParamsBody struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWARP param.Field[bool]        `json:"allow_authenticate_via_warp"`
-	AllowedIdPs              param.Field[interface{}] `json:"allowed_idps"`
+	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool]        `json:"allow_iframe"`
+	AllowedIdPs param.Field[interface{}] `json:"allowed_idps"`
 	// The image URL of the logo shown in the App Launcher header.
 	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// Displays the application in the App Launcher.
@@ -31139,7 +32996,15 @@ type AccessApplicationUpdateParamsBody struct {
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool]        `json:"path_cookie_attribute"`
 	Policies            param.Field[interface{}] `json:"policies"`
-	SaaSApp             param.Field[interface{}] `json:"saas_app"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader param.Field[string]      `json:"read_service_tokens_from_header"`
+	SaaSApp                     param.Field[interface{}] `json:"saas_app"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string]      `json:"same_site_cookie_attribute"`
@@ -31196,6 +33061,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -31240,6 +33107,14 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader param.Field[string] `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -32197,6 +34072,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -32241,6 +34118,14 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader param.Field[string] `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -32760,6 +34645,8 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -32804,6 +34691,14 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader param.Field[string] `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -34833,6 +36728,8 @@ type AccessApplicationUpdateParamsBodyBrowserRdpApplication struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// Enables loading application content in an iFrame.
+	AllowIframe param.Field[bool] `json:"allow_iframe"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -34877,6 +36774,14 @@ type AccessApplicationUpdateParamsBodyBrowserRdpApplication struct {
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserRdpApplicationPolicyUnion] `json:"policies"`
+	// Allows matching Access Service Tokens passed HTTP in a single header with this
+	// name. This works as an alternative to the (CF-Access-Client-Id,
+	// CF-Access-Client-Secret) pair of headers. The header value will be interpreted
+	// as a json object similar to: { "cf-access-client-id":
+	// "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	// "cf-access-client-secret":
+	// "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" }
+	ReadServiceTokensFromHeader param.Field[string] `json:"read_service_tokens_from_header"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -35415,9 +37320,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserRdpApplicationSCIMConfigAuthenti
 }
 
 type AccessApplicationUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessApplicationUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessApplicationUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessApplicationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationUpdateResponse                `json:"result"`
 	JSON    accessApplicationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -35442,7 +37347,103 @@ func (r accessApplicationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessApplicationUpdateResponseEnvelopeErrors struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           AccessApplicationUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessApplicationUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessApplicationUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [AccessApplicationUpdateResponseEnvelopeErrors]
+type accessApplicationUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    accessApplicationUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [AccessApplicationUpdateResponseEnvelopeErrorsSource]
+type accessApplicationUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseEnvelopeMessages struct {
+	Code             int64                                                 `json:"code,required"`
+	Message          string                                                `json:"message,required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           AccessApplicationUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessApplicationUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessApplicationUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [AccessApplicationUpdateResponseEnvelopeMessages]
+type accessApplicationUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    accessApplicationUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [AccessApplicationUpdateResponseEnvelopeMessagesSource]
+type accessApplicationUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessApplicationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -35489,9 +37490,9 @@ type AccessApplicationDeleteParams struct {
 }
 
 type AccessApplicationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessApplicationDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessApplicationDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessApplicationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationDeleteResponse                `json:"result"`
 	JSON    accessApplicationDeleteResponseEnvelopeJSON    `json:"-"`
@@ -35516,7 +37517,103 @@ func (r accessApplicationDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessApplicationDeleteResponseEnvelopeErrors struct {
+	Code             int64                                               `json:"code,required"`
+	Message          string                                              `json:"message,required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           AccessApplicationDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessApplicationDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessApplicationDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [AccessApplicationDeleteResponseEnvelopeErrors]
+type accessApplicationDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    accessApplicationDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessApplicationDeleteResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [AccessApplicationDeleteResponseEnvelopeErrorsSource]
+type accessApplicationDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationDeleteResponseEnvelopeMessages struct {
+	Code             int64                                                 `json:"code,required"`
+	Message          string                                                `json:"message,required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           AccessApplicationDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessApplicationDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessApplicationDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [AccessApplicationDeleteResponseEnvelopeMessages]
+type accessApplicationDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    accessApplicationDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessApplicationDeleteResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [AccessApplicationDeleteResponseEnvelopeMessagesSource]
+type accessApplicationDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessApplicationDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -35539,9 +37636,9 @@ type AccessApplicationGetParams struct {
 }
 
 type AccessApplicationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessApplicationGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessApplicationGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessApplicationGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationGetResponse                `json:"result"`
 	JSON    accessApplicationGetResponseEnvelopeJSON    `json:"-"`
@@ -35566,7 +37663,103 @@ func (r accessApplicationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessApplicationGetResponseEnvelopeErrors struct {
+	Code             int64                                            `json:"code,required"`
+	Message          string                                           `json:"message,required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           AccessApplicationGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessApplicationGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessApplicationGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [AccessApplicationGetResponseEnvelopeErrors]
+type accessApplicationGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    accessApplicationGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessApplicationGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [AccessApplicationGetResponseEnvelopeErrorsSource]
+type accessApplicationGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseEnvelopeMessages struct {
+	Code             int64                                              `json:"code,required"`
+	Message          string                                             `json:"message,required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           AccessApplicationGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessApplicationGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessApplicationGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [AccessApplicationGetResponseEnvelopeMessages]
+type accessApplicationGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    accessApplicationGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessApplicationGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [AccessApplicationGetResponseEnvelopeMessagesSource]
+type accessApplicationGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessApplicationGetResponseEnvelopeSuccess bool
 
 const (

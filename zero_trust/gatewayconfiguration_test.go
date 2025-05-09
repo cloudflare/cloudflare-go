@@ -38,9 +38,10 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 				EnabledUploadPhase:   cloudflare.F(false),
 				FailClosed:           cloudflare.F(false),
 				NotificationSettings: cloudflare.F(zero_trust.NotificationSettingsParam{
-					Enabled:    cloudflare.F(true),
-					Msg:        cloudflare.F("msg"),
-					SupportURL: cloudflare.F("support_url"),
+					Enabled:        cloudflare.F(true),
+					IncludeContext: cloudflare.F(true),
+					Msg:            cloudflare.F("msg"),
+					SupportURL:     cloudflare.F("support_url"),
 				}),
 			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
@@ -48,11 +49,14 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 				Enabled:         cloudflare.F(true),
 				FooterText:      cloudflare.F("--footer--"),
 				HeaderText:      cloudflare.F("--header--"),
+				IncludeContext:  cloudflare.F(true),
 				LogoPath:        cloudflare.F("https://logos.com/a.png"),
 				MailtoAddress:   cloudflare.F("admin@example.com"),
 				MailtoSubject:   cloudflare.F("Blocked User Inquiry"),
+				Mode:            cloudflare.F(zero_trust.BlockPageSettingsModeCustomizedBlockPage),
 				Name:            cloudflare.F("Cloudflare"),
 				SuppressFooter:  cloudflare.F(false),
+				TargetURI:       cloudflare.F("https://example.com"),
 			}),
 			BodyScanning: cloudflare.F(zero_trust.BodyScanningSettingsParam{
 				InspectionMode: cloudflare.F("deep"),
@@ -73,6 +77,9 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 			}),
 			Fips: cloudflare.F(zero_trust.FipsSettingsParam{
 				TLS: cloudflare.F(true),
+			}),
+			HostSelector: cloudflare.F(zero_trust.GatewayConfigurationSettingsHostSelectorParam{
+				Enabled: cloudflare.F(false),
 			}),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
@@ -119,9 +126,10 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 				EnabledUploadPhase:   cloudflare.F(false),
 				FailClosed:           cloudflare.F(false),
 				NotificationSettings: cloudflare.F(zero_trust.NotificationSettingsParam{
-					Enabled:    cloudflare.F(true),
-					Msg:        cloudflare.F("msg"),
-					SupportURL: cloudflare.F("support_url"),
+					Enabled:        cloudflare.F(true),
+					IncludeContext: cloudflare.F(true),
+					Msg:            cloudflare.F("msg"),
+					SupportURL:     cloudflare.F("support_url"),
 				}),
 			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
@@ -129,11 +137,14 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 				Enabled:         cloudflare.F(true),
 				FooterText:      cloudflare.F("--footer--"),
 				HeaderText:      cloudflare.F("--header--"),
+				IncludeContext:  cloudflare.F(true),
 				LogoPath:        cloudflare.F("https://logos.com/a.png"),
 				MailtoAddress:   cloudflare.F("admin@example.com"),
 				MailtoSubject:   cloudflare.F("Blocked User Inquiry"),
+				Mode:            cloudflare.F(zero_trust.BlockPageSettingsModeCustomizedBlockPage),
 				Name:            cloudflare.F("Cloudflare"),
 				SuppressFooter:  cloudflare.F(false),
+				TargetURI:       cloudflare.F("https://example.com"),
 			}),
 			BodyScanning: cloudflare.F(zero_trust.BodyScanningSettingsParam{
 				InspectionMode: cloudflare.F("deep"),
@@ -154,6 +165,9 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 			}),
 			Fips: cloudflare.F(zero_trust.FipsSettingsParam{
 				TLS: cloudflare.F(true),
+			}),
+			HostSelector: cloudflare.F(zero_trust.GatewayConfigurationSettingsHostSelectorParam{
+				Enabled: cloudflare.F(false),
 			}),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),

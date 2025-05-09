@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AddressMapZoneService contains methods and other services that help with
@@ -75,9 +74,9 @@ func (r *AddressMapZoneService) Delete(ctx context.Context, addressMapID string,
 }
 
 type AddressMapZoneUpdateResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AddressMapZoneUpdateResponseError   `json:"errors,required"`
+	Messages []AddressMapZoneUpdateResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
 	Success    AddressMapZoneUpdateResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapZoneUpdateResponseResultInfo `json:"result_info"`
 	JSON       addressMapZoneUpdateResponseJSON       `json:"-"`
@@ -102,7 +101,103 @@ func (r addressMapZoneUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AddressMapZoneUpdateResponseError struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           AddressMapZoneUpdateResponseErrorsSource `json:"source"`
+	JSON             addressMapZoneUpdateResponseErrorJSON    `json:"-"`
+}
+
+// addressMapZoneUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [AddressMapZoneUpdateResponseError]
+type addressMapZoneUpdateResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AddressMapZoneUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapZoneUpdateResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapZoneUpdateResponseErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    addressMapZoneUpdateResponseErrorsSourceJSON `json:"-"`
+}
+
+// addressMapZoneUpdateResponseErrorsSourceJSON contains the JSON metadata for the
+// struct [AddressMapZoneUpdateResponseErrorsSource]
+type addressMapZoneUpdateResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapZoneUpdateResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapZoneUpdateResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapZoneUpdateResponseMessage struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           AddressMapZoneUpdateResponseMessagesSource `json:"source"`
+	JSON             addressMapZoneUpdateResponseMessageJSON    `json:"-"`
+}
+
+// addressMapZoneUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [AddressMapZoneUpdateResponseMessage]
+type addressMapZoneUpdateResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AddressMapZoneUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapZoneUpdateResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapZoneUpdateResponseMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    addressMapZoneUpdateResponseMessagesSourceJSON `json:"-"`
+}
+
+// addressMapZoneUpdateResponseMessagesSourceJSON contains the JSON metadata for
+// the struct [AddressMapZoneUpdateResponseMessagesSource]
+type addressMapZoneUpdateResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapZoneUpdateResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapZoneUpdateResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AddressMapZoneUpdateResponseSuccess bool
 
 const (
@@ -118,13 +213,13 @@ func (r AddressMapZoneUpdateResponseSuccess) IsKnown() bool {
 }
 
 type AddressMapZoneUpdateResponseResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                    `json:"total_count"`
 	JSON       addressMapZoneUpdateResponseResultInfoJSON `json:"-"`
 }
@@ -149,9 +244,9 @@ func (r addressMapZoneUpdateResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapZoneDeleteResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AddressMapZoneDeleteResponseError   `json:"errors,required"`
+	Messages []AddressMapZoneDeleteResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
 	Success    AddressMapZoneDeleteResponseSuccess    `json:"success,required"`
 	ResultInfo AddressMapZoneDeleteResponseResultInfo `json:"result_info"`
 	JSON       addressMapZoneDeleteResponseJSON       `json:"-"`
@@ -176,7 +271,103 @@ func (r addressMapZoneDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AddressMapZoneDeleteResponseError struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           AddressMapZoneDeleteResponseErrorsSource `json:"source"`
+	JSON             addressMapZoneDeleteResponseErrorJSON    `json:"-"`
+}
+
+// addressMapZoneDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [AddressMapZoneDeleteResponseError]
+type addressMapZoneDeleteResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AddressMapZoneDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapZoneDeleteResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapZoneDeleteResponseErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    addressMapZoneDeleteResponseErrorsSourceJSON `json:"-"`
+}
+
+// addressMapZoneDeleteResponseErrorsSourceJSON contains the JSON metadata for the
+// struct [AddressMapZoneDeleteResponseErrorsSource]
+type addressMapZoneDeleteResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapZoneDeleteResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapZoneDeleteResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapZoneDeleteResponseMessage struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           AddressMapZoneDeleteResponseMessagesSource `json:"source"`
+	JSON             addressMapZoneDeleteResponseMessageJSON    `json:"-"`
+}
+
+// addressMapZoneDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AddressMapZoneDeleteResponseMessage]
+type addressMapZoneDeleteResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AddressMapZoneDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapZoneDeleteResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapZoneDeleteResponseMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    addressMapZoneDeleteResponseMessagesSourceJSON `json:"-"`
+}
+
+// addressMapZoneDeleteResponseMessagesSourceJSON contains the JSON metadata for
+// the struct [AddressMapZoneDeleteResponseMessagesSource]
+type addressMapZoneDeleteResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapZoneDeleteResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapZoneDeleteResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AddressMapZoneDeleteResponseSuccess bool
 
 const (
@@ -192,13 +383,13 @@ func (r AddressMapZoneDeleteResponseSuccess) IsKnown() bool {
 }
 
 type AddressMapZoneDeleteResponseResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                    `json:"total_count"`
 	JSON       addressMapZoneDeleteResponseResultInfoJSON `json:"-"`
 }

@@ -89,6 +89,6 @@ func (r accessUserFailedLoginListResponseJSON) RawJSON() string {
 }
 
 type AccessUserFailedLoginListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

@@ -46,6 +46,8 @@ func TestEventNewWithOptionalParams(t *testing.T) {
 				ShuffleAtEventStart:   cloudflare.F(true),
 				Suspended:             cloudflare.F(true),
 				TotalActiveUsers:      cloudflare.F(int64(200)),
+				TurnstileAction:       cloudflare.F(waiting_rooms.EventQueryTurnstileActionLog),
+				TurnstileMode:         cloudflare.F(waiting_rooms.EventQueryTurnstileModeOff),
 			},
 		},
 	)
@@ -91,6 +93,8 @@ func TestEventUpdateWithOptionalParams(t *testing.T) {
 				ShuffleAtEventStart:   cloudflare.F(true),
 				Suspended:             cloudflare.F(true),
 				TotalActiveUsers:      cloudflare.F(int64(200)),
+				TurnstileAction:       cloudflare.F(waiting_rooms.EventQueryTurnstileActionLog),
+				TurnstileMode:         cloudflare.F(waiting_rooms.EventQueryTurnstileModeOff),
 			},
 		},
 	)
@@ -197,6 +201,8 @@ func TestEventEditWithOptionalParams(t *testing.T) {
 				ShuffleAtEventStart:   cloudflare.F(true),
 				Suspended:             cloudflare.F(true),
 				TotalActiveUsers:      cloudflare.F(int64(200)),
+				TurnstileAction:       cloudflare.F(waiting_rooms.EventQueryTurnstileActionLog),
+				TurnstileMode:         cloudflare.F(waiting_rooms.EventQueryTurnstileModeOff),
 			},
 		},
 	)

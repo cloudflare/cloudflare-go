@@ -95,15 +95,15 @@ func (r searchGlobalResponseSearchJSON) RawJSON() string {
 type SearchGlobalParams struct {
 	// Search for locations, autonomous systems and reports.
 	Query param.Field[string] `query:"query,required"`
-	// Search types to be excluded from results.
+	// Search types excluded from results.
 	Exclude param.Field[[]SearchGlobalParamsExclude] `query:"exclude"`
 	// Format in which results will be returned.
 	Format param.Field[SearchGlobalParamsFormat] `query:"format"`
-	// Search types to be included in results.
+	// Search types included in results.
 	Include param.Field[[]SearchGlobalParamsInclude] `query:"include"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Limit the number of objects per search category.
+	// Limits the number of objects per search category.
 	LimitPerGroup param.Field[float64] `query:"limitPerGroup"`
 }
 

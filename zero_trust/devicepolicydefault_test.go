@@ -35,17 +35,17 @@ func TestDevicePolicyDefaultEditWithOptionalParams(t *testing.T) {
 		AutoConnect:         cloudflare.F(0.000000),
 		CaptivePortal:       cloudflare.F(180.000000),
 		DisableAutoFallback: cloudflare.F(true),
-		Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+		Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeUnionParam{zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam{
 			Address:     cloudflare.F("192.0.2.0/24"),
 			Description: cloudflare.F("Exclude testing domains from the tunnel"),
-			Host:        cloudflare.F("*.example.com"),
 		}}),
 		ExcludeOfficeIPs: cloudflare.F(true),
-		Include: cloudflare.F([]zero_trust.SplitTunnelExcludeParam{{
+		Include: cloudflare.F([]zero_trust.SplitTunnelIncludeUnionParam{zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam{
 			Address:     cloudflare.F("192.0.2.0/24"),
-			Description: cloudflare.F("Exclude testing domains from the tunnel"),
-			Host:        cloudflare.F("*.example.com"),
+			Description: cloudflare.F("Include testing domains in the tunnel"),
 		}}),
+		LANAllowMinutes:            cloudflare.F(30.000000),
+		LANAllowSubnetSize:         cloudflare.F(24.000000),
 		RegisterInterfaceIPWithDNS: cloudflare.F(true),
 		ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyDefaultEditParamsServiceModeV2{
 			Mode: cloudflare.F("proxy"),

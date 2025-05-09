@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessApplicationUserPolicyCheckService contains methods and other services that
@@ -114,7 +113,7 @@ func (r accessApplicationUserPolicyCheckListResponseJSON) RawJSON() string {
 }
 
 type AccessApplicationUserPolicyCheckListResponseAppState struct {
-	// UUID
+	// UUID.
 	AppUID   string                                                   `json:"app_uid"`
 	AUD      string                                                   `json:"aud"`
 	Hostname string                                                   `json:"hostname"`
@@ -155,7 +154,7 @@ type AccessApplicationUserPolicyCheckListResponseUserIdentity struct {
 	IsGateway      bool               `json:"is_gateway"`
 	IsWARP         bool               `json:"is_warp"`
 	Name           string             `json:"name"`
-	// UUID
+	// UUID.
 	UserUUID string                                                       `json:"user_uuid"`
 	Version  int64                                                        `json:"version"`
 	JSON     accessApplicationUserPolicyCheckListResponseUserIdentityJSON `json:"-"`
@@ -196,9 +195,9 @@ type AccessApplicationUserPolicyCheckListParams struct {
 }
 
 type AccessApplicationUserPolicyCheckListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessApplicationUserPolicyCheckListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessApplicationUserPolicyCheckListResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessApplicationUserPolicyCheckListResponse                `json:"result"`
 	JSON    accessApplicationUserPolicyCheckListResponseEnvelopeJSON    `json:"-"`
@@ -223,7 +222,107 @@ func (r accessApplicationUserPolicyCheckListResponseEnvelopeJSON) RawJSON() stri
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessApplicationUserPolicyCheckListResponseEnvelopeErrors struct {
+	Code             int64                                                            `json:"code,required"`
+	Message          string                                                           `json:"message,required"`
+	DocumentationURL string                                                           `json:"documentation_url"`
+	Source           AccessApplicationUserPolicyCheckListResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationUserPolicyCheckListResponseEnvelopeErrors]
+type accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUserPolicyCheckListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUserPolicyCheckListResponseEnvelopeErrorsSource struct {
+	Pointer string                                                               `json:"pointer"`
+	JSON    accessApplicationUserPolicyCheckListResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessApplicationUserPolicyCheckListResponseEnvelopeErrorsSourceJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationUserPolicyCheckListResponseEnvelopeErrorsSource]
+type accessApplicationUserPolicyCheckListResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUserPolicyCheckListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUserPolicyCheckListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUserPolicyCheckListResponseEnvelopeMessages struct {
+	Code             int64                                                              `json:"code,required"`
+	Message          string                                                             `json:"message,required"`
+	DocumentationURL string                                                             `json:"documentation_url"`
+	Source           AccessApplicationUserPolicyCheckListResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationUserPolicyCheckListResponseEnvelopeMessages]
+type accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUserPolicyCheckListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUserPolicyCheckListResponseEnvelopeMessagesSource struct {
+	Pointer string                                                                 `json:"pointer"`
+	JSON    accessApplicationUserPolicyCheckListResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessApplicationUserPolicyCheckListResponseEnvelopeMessagesSourceJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationUserPolicyCheckListResponseEnvelopeMessagesSource]
+type accessApplicationUserPolicyCheckListResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUserPolicyCheckListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUserPolicyCheckListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess bool
 
 const (

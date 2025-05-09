@@ -35,13 +35,13 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 		CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 		Description:        cloudflare.F("Tunnel for ISP X"),
 		HealthCheck: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheck{
-			Direction: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckDirectionUnidirectional),
+			Direction: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckDirectionBidirectional),
 			Enabled:   cloudflare.F(true),
 			Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
 			Target: cloudflare.F[magic_transit.IPSECTunnelNewParamsHealthCheckTargetUnion](magic_transit.IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget{
 				Saved: cloudflare.F("203.0.113.1"),
 			}),
-			Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
+			Type: cloudflare.F(magic_transit.HealthCheckTypeRequest),
 		}),
 		PSK:               cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 		ReplayProtection:  cloudflare.F(false),
@@ -81,13 +81,13 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 			CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 			Description:        cloudflare.F("Tunnel for ISP X"),
 			HealthCheck: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheck{
-				Direction: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckDirectionUnidirectional),
+				Direction: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckDirectionBidirectional),
 				Enabled:   cloudflare.F(true),
 				Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
 				Target: cloudflare.F[magic_transit.IPSECTunnelUpdateParamsHealthCheckTargetUnion](magic_transit.IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget{
 					Saved: cloudflare.F("203.0.113.1"),
 				}),
-				Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
+				Type: cloudflare.F(magic_transit.HealthCheckTypeRequest),
 			}),
 			PSK:               cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 			ReplayProtection:  cloudflare.F(false),

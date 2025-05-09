@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ValidateService contains methods and other services that help with interacting
@@ -210,9 +209,9 @@ func (r ValidateDestinationParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ValidateDestinationResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ValidateDestinationResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ValidateDestinationResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ValidateDestinationResponseEnvelopeSuccess `json:"success,required"`
 	Result  ValidateDestinationResponse                `json:"result,nullable"`
 	JSON    validateDestinationResponseEnvelopeJSON    `json:"-"`
@@ -237,7 +236,103 @@ func (r validateDestinationResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ValidateDestinationResponseEnvelopeErrors struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           ValidateDestinationResponseEnvelopeErrorsSource `json:"source"`
+	JSON             validateDestinationResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// validateDestinationResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ValidateDestinationResponseEnvelopeErrors]
+type validateDestinationResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ValidateDestinationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateDestinationResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ValidateDestinationResponseEnvelopeErrorsSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    validateDestinationResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// validateDestinationResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [ValidateDestinationResponseEnvelopeErrorsSource]
+type validateDestinationResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ValidateDestinationResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateDestinationResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ValidateDestinationResponseEnvelopeMessages struct {
+	Code             int64                                             `json:"code,required"`
+	Message          string                                            `json:"message,required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           ValidateDestinationResponseEnvelopeMessagesSource `json:"source"`
+	JSON             validateDestinationResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// validateDestinationResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ValidateDestinationResponseEnvelopeMessages]
+type validateDestinationResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ValidateDestinationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateDestinationResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ValidateDestinationResponseEnvelopeMessagesSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    validateDestinationResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// validateDestinationResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [ValidateDestinationResponseEnvelopeMessagesSource]
+type validateDestinationResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ValidateDestinationResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateDestinationResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ValidateDestinationResponseEnvelopeSuccess bool
 
 const (
@@ -268,9 +363,9 @@ func (r ValidateDestinationExistsParams) MarshalJSON() (data []byte, err error) 
 }
 
 type ValidateDestinationExistsResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ValidateDestinationExistsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ValidateDestinationExistsResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ValidateDestinationExistsResponseEnvelopeSuccess `json:"success,required"`
 	Result  ValidateDestinationExistsResponse                `json:"result,nullable"`
 	JSON    validateDestinationExistsResponseEnvelopeJSON    `json:"-"`
@@ -295,7 +390,104 @@ func (r validateDestinationExistsResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ValidateDestinationExistsResponseEnvelopeErrors struct {
+	Code             int64                                                 `json:"code,required"`
+	Message          string                                                `json:"message,required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           ValidateDestinationExistsResponseEnvelopeErrorsSource `json:"source"`
+	JSON             validateDestinationExistsResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// validateDestinationExistsResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [ValidateDestinationExistsResponseEnvelopeErrors]
+type validateDestinationExistsResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ValidateDestinationExistsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateDestinationExistsResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ValidateDestinationExistsResponseEnvelopeErrorsSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    validateDestinationExistsResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// validateDestinationExistsResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [ValidateDestinationExistsResponseEnvelopeErrorsSource]
+type validateDestinationExistsResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ValidateDestinationExistsResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateDestinationExistsResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ValidateDestinationExistsResponseEnvelopeMessages struct {
+	Code             int64                                                   `json:"code,required"`
+	Message          string                                                  `json:"message,required"`
+	DocumentationURL string                                                  `json:"documentation_url"`
+	Source           ValidateDestinationExistsResponseEnvelopeMessagesSource `json:"source"`
+	JSON             validateDestinationExistsResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// validateDestinationExistsResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [ValidateDestinationExistsResponseEnvelopeMessages]
+type validateDestinationExistsResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ValidateDestinationExistsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateDestinationExistsResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ValidateDestinationExistsResponseEnvelopeMessagesSource struct {
+	Pointer string                                                      `json:"pointer"`
+	JSON    validateDestinationExistsResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// validateDestinationExistsResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [ValidateDestinationExistsResponseEnvelopeMessagesSource]
+type validateDestinationExistsResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ValidateDestinationExistsResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateDestinationExistsResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ValidateDestinationExistsResponseEnvelopeSuccess bool
 
 const (
@@ -328,9 +520,9 @@ func (r ValidateOriginParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ValidateOriginResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []ValidateOriginResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ValidateOriginResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success ValidateOriginResponseEnvelopeSuccess `json:"success,required"`
 	Result  ValidateOriginResponse                `json:"result,nullable"`
 	JSON    validateOriginResponseEnvelopeJSON    `json:"-"`
@@ -355,7 +547,103 @@ func (r validateOriginResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ValidateOriginResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           ValidateOriginResponseEnvelopeErrorsSource `json:"source"`
+	JSON             validateOriginResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// validateOriginResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ValidateOriginResponseEnvelopeErrors]
+type validateOriginResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ValidateOriginResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateOriginResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ValidateOriginResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    validateOriginResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// validateOriginResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [ValidateOriginResponseEnvelopeErrorsSource]
+type validateOriginResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ValidateOriginResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateOriginResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ValidateOriginResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           ValidateOriginResponseEnvelopeMessagesSource `json:"source"`
+	JSON             validateOriginResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// validateOriginResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ValidateOriginResponseEnvelopeMessages]
+type validateOriginResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ValidateOriginResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateOriginResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ValidateOriginResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    validateOriginResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// validateOriginResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [ValidateOriginResponseEnvelopeMessagesSource]
+type validateOriginResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ValidateOriginResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r validateOriginResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ValidateOriginResponseEnvelopeSuccess bool
 
 const (

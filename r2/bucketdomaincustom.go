@@ -110,7 +110,7 @@ func (r *BucketDomainCustomService) List(ctx context.Context, bucketName string,
 	return
 }
 
-// Remove custom domain registration from an existing R2 bucket
+// Remove custom domain registration from an existing R2 bucket.
 func (r *BucketDomainCustomService) Delete(ctx context.Context, bucketName string, domain string, params BucketDomainCustomDeleteParams, opts ...option.RequestOption) (res *BucketDomainCustomDeleteResponse, err error) {
 	var env BucketDomainCustomDeleteResponseEnvelope
 	if params.Jurisdiction.Present {
@@ -167,9 +167,9 @@ func (r *BucketDomainCustomService) Get(ctx context.Context, bucketName string, 
 }
 
 type BucketDomainCustomNewResponse struct {
-	// Domain name of the affected custom domain
+	// Domain name of the affected custom domain.
 	Domain string `json:"domain,required"`
-	// Whether this bucket is publicly accessible at the specified custom domain
+	// Whether this bucket is publicly accessible at the specified custom domain.
 	Enabled bool `json:"enabled,required"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
@@ -215,9 +215,9 @@ func (r BucketDomainCustomNewResponseMinTLS) IsKnown() bool {
 }
 
 type BucketDomainCustomUpdateResponse struct {
-	// Domain name of the affected custom domain
+	// Domain name of the affected custom domain.
 	Domain string `json:"domain,required"`
-	// Whether this bucket is publicly accessible at the specified custom domain
+	// Whether this bucket is publicly accessible at the specified custom domain.
 	Enabled bool `json:"enabled"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
@@ -284,17 +284,17 @@ func (r bucketDomainCustomListResponseJSON) RawJSON() string {
 }
 
 type BucketDomainCustomListResponseDomain struct {
-	// Domain name of the custom domain to be added
+	// Domain name of the custom domain to be added.
 	Domain string `json:"domain,required"`
-	// Whether this bucket is publicly accessible at the specified custom domain
+	// Whether this bucket is publicly accessible at the specified custom domain.
 	Enabled bool                                        `json:"enabled,required"`
 	Status  BucketDomainCustomListResponseDomainsStatus `json:"status,required"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
 	MinTLS BucketDomainCustomListResponseDomainsMinTLS `json:"minTLS"`
-	// Zone ID of the custom domain resides in
+	// Zone ID of the custom domain resides in.
 	ZoneID string `json:"zoneId"`
-	// Zone that the custom domain resides in
+	// Zone that the custom domain resides in.
 	ZoneName string                                   `json:"zoneName"`
 	JSON     bucketDomainCustomListResponseDomainJSON `json:"-"`
 }
@@ -321,9 +321,9 @@ func (r bucketDomainCustomListResponseDomainJSON) RawJSON() string {
 }
 
 type BucketDomainCustomListResponseDomainsStatus struct {
-	// Ownership status of the domain
+	// Ownership status of the domain.
 	Ownership BucketDomainCustomListResponseDomainsStatusOwnership `json:"ownership,required"`
-	// SSL certificate status
+	// SSL certificate status.
 	SSL  BucketDomainCustomListResponseDomainsStatusSSL  `json:"ssl,required"`
 	JSON bucketDomainCustomListResponseDomainsStatusJSON `json:"-"`
 }
@@ -345,7 +345,7 @@ func (r bucketDomainCustomListResponseDomainsStatusJSON) RawJSON() string {
 	return r.raw
 }
 
-// Ownership status of the domain
+// Ownership status of the domain.
 type BucketDomainCustomListResponseDomainsStatusOwnership string
 
 const (
@@ -365,7 +365,7 @@ func (r BucketDomainCustomListResponseDomainsStatusOwnership) IsKnown() bool {
 	return false
 }
 
-// SSL certificate status
+// SSL certificate status.
 type BucketDomainCustomListResponseDomainsStatusSSL string
 
 const (
@@ -405,7 +405,7 @@ func (r BucketDomainCustomListResponseDomainsMinTLS) IsKnown() bool {
 }
 
 type BucketDomainCustomDeleteResponse struct {
-	// Name of the removed custom domain
+	// Name of the removed custom domain.
 	Domain string                               `json:"domain,required"`
 	JSON   bucketDomainCustomDeleteResponseJSON `json:"-"`
 }
@@ -427,17 +427,17 @@ func (r bucketDomainCustomDeleteResponseJSON) RawJSON() string {
 }
 
 type BucketDomainCustomGetResponse struct {
-	// Domain name of the custom domain to be added
+	// Domain name of the custom domain to be added.
 	Domain string `json:"domain,required"`
-	// Whether this bucket is publicly accessible at the specified custom domain
+	// Whether this bucket is publicly accessible at the specified custom domain.
 	Enabled bool                                `json:"enabled,required"`
 	Status  BucketDomainCustomGetResponseStatus `json:"status,required"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
 	MinTLS BucketDomainCustomGetResponseMinTLS `json:"minTLS"`
-	// Zone ID of the custom domain resides in
+	// Zone ID of the custom domain resides in.
 	ZoneID string `json:"zoneId"`
-	// Zone that the custom domain resides in
+	// Zone that the custom domain resides in.
 	ZoneName string                            `json:"zoneName"`
 	JSON     bucketDomainCustomGetResponseJSON `json:"-"`
 }
@@ -464,9 +464,9 @@ func (r bucketDomainCustomGetResponseJSON) RawJSON() string {
 }
 
 type BucketDomainCustomGetResponseStatus struct {
-	// Ownership status of the domain
+	// Ownership status of the domain.
 	Ownership BucketDomainCustomGetResponseStatusOwnership `json:"ownership,required"`
-	// SSL certificate status
+	// SSL certificate status.
 	SSL  BucketDomainCustomGetResponseStatusSSL  `json:"ssl,required"`
 	JSON bucketDomainCustomGetResponseStatusJSON `json:"-"`
 }
@@ -488,7 +488,7 @@ func (r bucketDomainCustomGetResponseStatusJSON) RawJSON() string {
 	return r.raw
 }
 
-// Ownership status of the domain
+// Ownership status of the domain.
 type BucketDomainCustomGetResponseStatusOwnership string
 
 const (
@@ -508,7 +508,7 @@ func (r BucketDomainCustomGetResponseStatusOwnership) IsKnown() bool {
 	return false
 }
 
-// SSL certificate status
+// SSL certificate status.
 type BucketDomainCustomGetResponseStatusSSL string
 
 const (
@@ -548,19 +548,19 @@ func (r BucketDomainCustomGetResponseMinTLS) IsKnown() bool {
 }
 
 type BucketDomainCustomNewParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Name of the custom domain to be added
+	// Name of the custom domain to be added.
 	Domain param.Field[string] `json:"domain,required"`
 	// Whether to enable public bucket access at the custom domain. If undefined, the
 	// domain will be enabled.
 	Enabled param.Field[bool] `json:"enabled,required"`
-	// Zone ID of the custom domain
+	// Zone ID of the custom domain.
 	ZoneID param.Field[string] `json:"zoneId,required"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
 	MinTLS param.Field[BucketDomainCustomNewParamsMinTLS] `json:"minTLS"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketDomainCustomNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -587,7 +587,7 @@ func (r BucketDomainCustomNewParamsMinTLS) IsKnown() bool {
 	return false
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketDomainCustomNewParamsCfR2Jurisdiction string
 
 const (
@@ -608,7 +608,7 @@ type BucketDomainCustomNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo         `json:"errors,required"`
 	Messages []string                      `json:"messages,required"`
 	Result   BucketDomainCustomNewResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketDomainCustomNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainCustomNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -632,7 +632,7 @@ func (r bucketDomainCustomNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketDomainCustomNewResponseEnvelopeSuccess bool
 
 const (
@@ -648,14 +648,14 @@ func (r BucketDomainCustomNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketDomainCustomUpdateParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Whether to enable public bucket access at the specified custom domain
+	// Whether to enable public bucket access at the specified custom domain.
 	Enabled param.Field[bool] `json:"enabled"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to previous value.
 	MinTLS param.Field[BucketDomainCustomUpdateParamsMinTLS] `json:"minTLS"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketDomainCustomUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -682,7 +682,7 @@ func (r BucketDomainCustomUpdateParamsMinTLS) IsKnown() bool {
 	return false
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketDomainCustomUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -703,7 +703,7 @@ type BucketDomainCustomUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo            `json:"errors,required"`
 	Messages []string                         `json:"messages,required"`
 	Result   BucketDomainCustomUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketDomainCustomUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainCustomUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -727,7 +727,7 @@ func (r bucketDomainCustomUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketDomainCustomUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -743,13 +743,13 @@ func (r BucketDomainCustomUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketDomainCustomListParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketDomainCustomListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketDomainCustomListParamsCfR2Jurisdiction string
 
 const (
@@ -770,7 +770,7 @@ type BucketDomainCustomListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo          `json:"errors,required"`
 	Messages []string                       `json:"messages,required"`
 	Result   BucketDomainCustomListResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketDomainCustomListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainCustomListResponseEnvelopeJSON    `json:"-"`
 }
@@ -794,7 +794,7 @@ func (r bucketDomainCustomListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketDomainCustomListResponseEnvelopeSuccess bool
 
 const (
@@ -810,13 +810,13 @@ func (r BucketDomainCustomListResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketDomainCustomDeleteParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketDomainCustomDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketDomainCustomDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -837,7 +837,7 @@ type BucketDomainCustomDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo            `json:"errors,required"`
 	Messages []string                         `json:"messages,required"`
 	Result   BucketDomainCustomDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketDomainCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainCustomDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -861,7 +861,7 @@ func (r bucketDomainCustomDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketDomainCustomDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -877,13 +877,13 @@ func (r BucketDomainCustomDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketDomainCustomGetParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketDomainCustomGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketDomainCustomGetParamsCfR2Jurisdiction string
 
 const (
@@ -904,7 +904,7 @@ type BucketDomainCustomGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo         `json:"errors,required"`
 	Messages []string                      `json:"messages,required"`
 	Result   BucketDomainCustomGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketDomainCustomGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDomainCustomGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -928,7 +928,7 @@ func (r bucketDomainCustomGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketDomainCustomGetResponseEnvelopeSuccess bool
 
 const (

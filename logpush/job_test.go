@@ -31,7 +31,7 @@ func TestJobNewWithOptionalParams(t *testing.T) {
 	_, err := client.Logpush.Jobs.New(context.TODO(), logpush.JobNewParams{
 		DestinationConf:          cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 		AccountID:                cloudflare.F("account_id"),
-		Dataset:                  cloudflare.F("http_requests"),
+		Dataset:                  cloudflare.F(logpush.JobNewParamsDatasetHTTPRequests),
 		Enabled:                  cloudflare.F(false),
 		Frequency:                cloudflare.F(logpush.JobNewParamsFrequencyHigh),
 		Kind:                     cloudflare.F(logpush.JobNewParamsKindEdge),

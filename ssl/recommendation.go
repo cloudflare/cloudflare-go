@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RecommendationService contains methods and other services that help with
@@ -95,14 +94,14 @@ func (r RecommendationGetResponseValue) IsKnown() bool {
 }
 
 type RecommendationGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RecommendationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []RecommendationGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RecommendationGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success RecommendationGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecommendationGetResponse                `json:"result"`
 	JSON    recommendationGetResponseEnvelopeJSON    `json:"-"`
@@ -127,7 +126,103 @@ func (r recommendationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RecommendationGetResponseEnvelopeErrors struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           RecommendationGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             recommendationGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// recommendationGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RecommendationGetResponseEnvelopeErrors]
+type recommendationGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecommendationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recommendationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecommendationGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    recommendationGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// recommendationGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [RecommendationGetResponseEnvelopeErrorsSource]
+type recommendationGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecommendationGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recommendationGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecommendationGetResponseEnvelopeMessages struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           RecommendationGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             recommendationGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// recommendationGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RecommendationGetResponseEnvelopeMessages]
+type recommendationGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RecommendationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recommendationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecommendationGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    recommendationGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// recommendationGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [RecommendationGetResponseEnvelopeMessagesSource]
+type recommendationGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecommendationGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recommendationGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RecommendationGetResponseEnvelopeSuccess bool
 
 const (

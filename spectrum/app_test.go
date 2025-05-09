@@ -39,7 +39,7 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 			IPFirewall:       cloudflare.F(true),
 			Protocol:         cloudflare.F("tcp/22"),
 			ProxyProtocol:    cloudflare.F(spectrum.AppNewParamsBodySpectrumConfigAppConfigProxyProtocolOff),
-			TLS:              cloudflare.F(spectrum.AppNewParamsBodySpectrumConfigAppConfigTLSOff),
+			TLS:              cloudflare.F(spectrum.AppNewParamsBodySpectrumConfigAppConfigTLSFull),
 			TrafficType:      cloudflare.F(spectrum.AppNewParamsBodySpectrumConfigAppConfigTrafficTypeDirect),
 			ArgoSmartRouting: cloudflare.F(true),
 			EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsObjectParam{
@@ -91,7 +91,7 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 				IPFirewall:       cloudflare.F(true),
 				Protocol:         cloudflare.F("tcp/22"),
 				ProxyProtocol:    cloudflare.F(spectrum.AppUpdateParamsBodySpectrumConfigAppConfigProxyProtocolOff),
-				TLS:              cloudflare.F(spectrum.AppUpdateParamsBodySpectrumConfigAppConfigTLSOff),
+				TLS:              cloudflare.F(spectrum.AppUpdateParamsBodySpectrumConfigAppConfigTLSFull),
 				TrafficType:      cloudflare.F(spectrum.AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeDirect),
 				ArgoSmartRouting: cloudflare.F(true),
 				EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsObjectParam{
@@ -133,7 +133,7 @@ func TestAppListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Spectrum.Apps.List(context.TODO(), spectrum.AppListParams{
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction: cloudflare.F(spectrum.AppListParamsDirectionAsc),
+		Direction: cloudflare.F(spectrum.AppListParamsDirectionDesc),
 		Order:     cloudflare.F(spectrum.AppListParamsOrderProtocol),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(1.000000),

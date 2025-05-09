@@ -30,11 +30,11 @@ func TestDiscoveryOperationListWithOptionalParams(t *testing.T) {
 	_, err := client.APIGateway.Discovery.Operations.List(context.TODO(), api_gateway.DiscoveryOperationListParams{
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Diff:      cloudflare.F(true),
-		Direction: cloudflare.F(api_gateway.DiscoveryOperationListParamsDirectionAsc),
+		Direction: cloudflare.F(api_gateway.DiscoveryOperationListParamsDirectionDesc),
 		Endpoint:  cloudflare.F("/api/v1"),
 		Host:      cloudflare.F([]string{"api.cloudflare.com"}),
 		Method:    cloudflare.F([]string{"GET"}),
-		Order:     cloudflare.F(api_gateway.DiscoveryOperationListParamsOrderHost),
+		Order:     cloudflare.F(api_gateway.DiscoveryOperationListParamsOrderMethod),
 		Origin:    cloudflare.F(api_gateway.DiscoveryOperationListParamsOriginMl),
 		Page:      cloudflare.F(int64(1)),
 		PerPage:   cloudflare.F(int64(5)),
@@ -66,7 +66,7 @@ func TestDiscoveryOperationBulkEdit(t *testing.T) {
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: map[string]api_gateway.DiscoveryOperationBulkEditParamsBody{
 			"3818d821-5901-4147-a474-f5f5aec1d54e": {
-				State: cloudflare.F(api_gateway.DiscoveryOperationBulkEditParamsBodyStateReview),
+				State: cloudflare.F(api_gateway.DiscoveryOperationBulkEditParamsBodyStateIgnored),
 			},
 			"b17c8043-99a0-4202-b7d9-8f7cdbee02cd": {
 				State: cloudflare.F(api_gateway.DiscoveryOperationBulkEditParamsBodyStateReview),

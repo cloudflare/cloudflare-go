@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessGroupService contains methods and other services that help with
@@ -275,7 +274,7 @@ func (r zeroTrustGroupMetaJSON) RawJSON() string {
 }
 
 type AccessGroupNewResponse struct {
-	// UUID
+	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
@@ -320,7 +319,7 @@ func (r accessGroupNewResponseJSON) RawJSON() string {
 }
 
 type AccessGroupUpdateResponse struct {
-	// UUID
+	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
@@ -365,7 +364,7 @@ func (r accessGroupUpdateResponseJSON) RawJSON() string {
 }
 
 type AccessGroupListResponse struct {
-	// UUID
+	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
@@ -410,7 +409,7 @@ func (r accessGroupListResponseJSON) RawJSON() string {
 }
 
 type AccessGroupDeleteResponse struct {
-	// UUID
+	// UUID.
 	ID   string                        `json:"id"`
 	JSON accessGroupDeleteResponseJSON `json:"-"`
 }
@@ -432,7 +431,7 @@ func (r accessGroupDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessGroupGetResponse struct {
-	// UUID
+	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
@@ -501,9 +500,9 @@ func (r AccessGroupNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessGroupNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessGroupNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGroupNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessGroupNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessGroupNewResponse                `json:"result"`
 	JSON    accessGroupNewResponseEnvelopeJSON    `json:"-"`
@@ -528,7 +527,103 @@ func (r accessGroupNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessGroupNewResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           AccessGroupNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessGroupNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessGroupNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessGroupNewResponseEnvelopeErrors]
+type accessGroupNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGroupNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    accessGroupNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessGroupNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [AccessGroupNewResponseEnvelopeErrorsSource]
+type accessGroupNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupNewResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           AccessGroupNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessGroupNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessGroupNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessGroupNewResponseEnvelopeMessages]
+type accessGroupNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGroupNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    accessGroupNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessGroupNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [AccessGroupNewResponseEnvelopeMessagesSource]
+type accessGroupNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessGroupNewResponseEnvelopeSuccess bool
 
 const (
@@ -568,9 +663,9 @@ func (r AccessGroupUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessGroupUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessGroupUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGroupUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessGroupUpdateResponse                `json:"result"`
 	JSON    accessGroupUpdateResponseEnvelopeJSON    `json:"-"`
@@ -595,7 +690,103 @@ func (r accessGroupUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessGroupUpdateResponseEnvelopeErrors struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           AccessGroupUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessGroupUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessGroupUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessGroupUpdateResponseEnvelopeErrors]
+type accessGroupUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGroupUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    accessGroupUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessGroupUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [AccessGroupUpdateResponseEnvelopeErrorsSource]
+type accessGroupUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupUpdateResponseEnvelopeMessages struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           AccessGroupUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessGroupUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessGroupUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessGroupUpdateResponseEnvelopeMessages]
+type accessGroupUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGroupUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    accessGroupUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessGroupUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [AccessGroupUpdateResponseEnvelopeMessagesSource]
+type accessGroupUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessGroupUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -637,9 +828,9 @@ type AccessGroupDeleteParams struct {
 }
 
 type AccessGroupDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessGroupDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGroupDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessGroupDeleteResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessGroupDeleteResponse                `json:"result"`
 	JSON    accessGroupDeleteResponseEnvelopeJSON    `json:"-"`
@@ -664,7 +855,103 @@ func (r accessGroupDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessGroupDeleteResponseEnvelopeErrors struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           AccessGroupDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessGroupDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessGroupDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessGroupDeleteResponseEnvelopeErrors]
+type accessGroupDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGroupDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    accessGroupDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessGroupDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [AccessGroupDeleteResponseEnvelopeErrorsSource]
+type accessGroupDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupDeleteResponseEnvelopeMessages struct {
+	Code             int64                                           `json:"code,required"`
+	Message          string                                          `json:"message,required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           AccessGroupDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessGroupDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessGroupDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessGroupDeleteResponseEnvelopeMessages]
+type accessGroupDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGroupDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    accessGroupDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessGroupDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [AccessGroupDeleteResponseEnvelopeMessagesSource]
+type accessGroupDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessGroupDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -687,9 +974,9 @@ type AccessGroupGetParams struct {
 }
 
 type AccessGroupGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessGroupGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGroupGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessGroupGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessGroupGetResponse                `json:"result"`
 	JSON    accessGroupGetResponseEnvelopeJSON    `json:"-"`
@@ -714,7 +1001,103 @@ func (r accessGroupGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessGroupGetResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           AccessGroupGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessGroupGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessGroupGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessGroupGetResponseEnvelopeErrors]
+type accessGroupGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    accessGroupGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessGroupGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseEnvelopeErrorsSource]
+type accessGroupGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupGetResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code,required"`
+	Message          string                                       `json:"message,required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           AccessGroupGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessGroupGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessGroupGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessGroupGetResponseEnvelopeMessages]
+type accessGroupGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessGroupGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    accessGroupGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessGroupGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseEnvelopeMessagesSource]
+type accessGroupGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessGroupGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessGroupGetResponseEnvelopeSuccess bool
 
 const (

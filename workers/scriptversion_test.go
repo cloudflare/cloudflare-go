@@ -39,9 +39,10 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 					WorkersMessage: cloudflare.F("Fixed worker code."),
 					WorkersTag:     cloudflare.F("workers/tag"),
 				}),
-				Bindings: cloudflare.F([]workers.ScriptVersionNewParamsMetadataBindingUnion{workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI{
+				Bindings: cloudflare.F([]workers.ScriptVersionNewParamsMetadataBindingUnion{workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText{
 					Name: cloudflare.F("MY_ENV_VAR"),
-					Type: cloudflare.F(workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAITypeAI),
+					Text: cloudflare.F("my_data"),
+					Type: cloudflare.F(workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText),
 				}}),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),

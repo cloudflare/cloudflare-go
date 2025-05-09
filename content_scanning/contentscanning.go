@@ -38,7 +38,7 @@ func NewContentScanningService(opts ...option.RequestOption) (r *ContentScanning
 	return
 }
 
-// Disable Content Scanning
+// Disable Content Scanning.
 func (r *ContentScanningService) Disable(ctx context.Context, body ContentScanningDisableParams, opts ...option.RequestOption) (res *ContentScanningDisableResponse, err error) {
 	var env ContentScanningDisableResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -55,7 +55,7 @@ func (r *ContentScanningService) Disable(ctx context.Context, body ContentScanni
 	return
 }
 
-// Enable Content Scanning
+// Enable Content Scanning.
 func (r *ContentScanningService) Enable(ctx context.Context, body ContentScanningEnableParams, opts ...option.RequestOption) (res *ContentScanningEnableResponse, err error) {
 	var env ContentScanningEnableResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -77,7 +77,7 @@ type ContentScanningDisableResponse = interface{}
 type ContentScanningEnableResponse = interface{}
 
 type ContentScanningDisableParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -85,7 +85,7 @@ type ContentScanningDisableResponseEnvelope struct {
 	Errors   []shared.ResponseInfo          `json:"errors,required"`
 	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   ContentScanningDisableResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success ContentScanningDisableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    contentScanningDisableResponseEnvelopeJSON    `json:"-"`
 }
@@ -109,7 +109,7 @@ func (r contentScanningDisableResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ContentScanningDisableResponseEnvelopeSuccess bool
 
 const (
@@ -125,7 +125,7 @@ func (r ContentScanningDisableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ContentScanningEnableParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -133,7 +133,7 @@ type ContentScanningEnableResponseEnvelope struct {
 	Errors   []shared.ResponseInfo         `json:"errors,required"`
 	Messages []shared.ResponseInfo         `json:"messages,required"`
 	Result   ContentScanningEnableResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success ContentScanningEnableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    contentScanningEnableResponseEnvelopeJSON    `json:"-"`
 }
@@ -157,7 +157,7 @@ func (r contentScanningEnableResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ContentScanningEnableResponseEnvelopeSuccess bool
 
 const (

@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // StreamService contains methods and other services that help with interacting
@@ -415,7 +414,8 @@ type StreamNewParams struct {
 	UploadCreator param.Field[string] `header:"Upload-Creator"`
 	// Comma-separated key-value pairs following the TUS protocol specification. Values
 	// are Base-64 encoded. Supported keys: `name`, `requiresignedurls`,
-	// `allowedorigins`, `thumbnailtimestamppct`, `watermark`, `scheduleddeletion`.
+	// `allowedorigins`, `thumbnailtimestamppct`, `watermark`, `scheduleddeletion`,
+	// `maxdurationseconds`.
 	UploadMetadata param.Field[string] `header:"Upload-Metadata"`
 }
 
@@ -542,9 +542,9 @@ func (r StreamEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type StreamEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []StreamEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamEditResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success StreamEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  Video                             `json:"result"`
 	JSON    streamEditResponseEnvelopeJSON    `json:"-"`
@@ -569,7 +569,103 @@ func (r streamEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type StreamEditResponseEnvelopeErrors struct {
+	Code             int64                                  `json:"code,required"`
+	Message          string                                 `json:"message,required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           StreamEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             streamEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// streamEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [StreamEditResponseEnvelopeErrors]
+type streamEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StreamEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type StreamEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    streamEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// streamEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [StreamEditResponseEnvelopeErrorsSource]
+type streamEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type StreamEditResponseEnvelopeMessages struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           StreamEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             streamEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// streamEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [StreamEditResponseEnvelopeMessages]
+type streamEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StreamEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type StreamEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    streamEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// streamEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [StreamEditResponseEnvelopeMessagesSource]
+type streamEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type StreamEditResponseEnvelopeSuccess bool
 
 const (
@@ -590,9 +686,9 @@ type StreamGetParams struct {
 }
 
 type StreamGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []StreamGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success StreamGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  Video                            `json:"result"`
 	JSON    streamGetResponseEnvelopeJSON    `json:"-"`
@@ -617,7 +713,103 @@ func (r streamGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type StreamGetResponseEnvelopeErrors struct {
+	Code             int64                                 `json:"code,required"`
+	Message          string                                `json:"message,required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           StreamGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             streamGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// streamGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [StreamGetResponseEnvelopeErrors]
+type streamGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StreamGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type StreamGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    streamGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// streamGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [StreamGetResponseEnvelopeErrorsSource]
+type streamGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type StreamGetResponseEnvelopeMessages struct {
+	Code             int64                                   `json:"code,required"`
+	Message          string                                  `json:"message,required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           StreamGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             streamGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// streamGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [StreamGetResponseEnvelopeMessages]
+type streamGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StreamGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type StreamGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    streamGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// streamGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [StreamGetResponseEnvelopeMessagesSource]
+type streamGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type StreamGetResponseEnvelopeSuccess bool
 
 const (

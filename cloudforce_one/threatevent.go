@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
@@ -58,7 +60,10 @@ func NewThreatEventService(opts ...option.RequestOption) (r *ThreatEventService)
 	return
 }
 
-// Creates a new event
+// Events must be created in a client-specific dataset, which means the `datasetId`
+// parameter must be defined. To create a dataset, see the
+// [`Create Dataset`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/create/)
+// endpoint.
 func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParams, opts ...option.RequestOption) (res *ThreatEventNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if !params.PathAccountID.Present {
@@ -70,7 +75,25 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 	return
 }
 
-// Deletes an event
+// The `datasetId` parameter must be defined. Must provide query parameters. To
+// list existing datasets (and their IDs), use the
+// [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
+// endpoint.
+func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListParams, opts ...option.RequestOption) (res *[]ThreatEventListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if !params.AccountID.Present {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%v/cloudforce-one/events", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	return
+}
+
+// The `datasetId` parameter must be defined. To list existing datasets (and their
+// IDs) in your account, use the
+// [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
+// endpoint.
 func (r *ThreatEventService) Delete(ctx context.Context, eventID string, body ThreatEventDeleteParams, opts ...option.RequestOption) (res *ThreatEventDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if !body.AccountID.Present {
@@ -86,7 +109,10 @@ func (r *ThreatEventService) Delete(ctx context.Context, eventID string, body Th
 	return
 }
 
-// Creates bulk events
+// The `datasetId` parameter must be defined. To list existing datasets (and their
+// IDs) in your account, use the
+// [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
+// endpoint.
 func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulkNewParams, opts ...option.RequestOption) (res *[]ThreatEventBulkNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if !params.AccountID.Present {
@@ -200,6 +226,79 @@ func (r *ThreatEventNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r threatEventNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventListResponse struct {
+	ID              float64                     `json:"id,required"`
+	AccountID       float64                     `json:"accountId,required"`
+	Attacker        string                      `json:"attacker,required"`
+	AttackerCountry string                      `json:"attackerCountry,required"`
+	Category        string                      `json:"category,required"`
+	CategoryID      float64                     `json:"categoryId,required"`
+	Date            string                      `json:"date,required"`
+	Event           string                      `json:"event,required"`
+	Indicator       string                      `json:"indicator,required"`
+	IndicatorType   string                      `json:"indicatorType,required"`
+	IndicatorTypeID float64                     `json:"indicatorTypeId,required"`
+	KillChain       float64                     `json:"killChain,required"`
+	MitreAttack     []string                    `json:"mitreAttack,required"`
+	NumReferenced   float64                     `json:"numReferenced,required"`
+	NumReferences   float64                     `json:"numReferences,required"`
+	RawID           string                      `json:"rawId,required"`
+	Referenced      []string                    `json:"referenced,required"`
+	ReferencedIDs   []float64                   `json:"referencedIds,required"`
+	References      []string                    `json:"references,required"`
+	ReferencesIDs   []float64                   `json:"referencesIds,required"`
+	Tags            []string                    `json:"tags,required"`
+	TargetCountry   string                      `json:"targetCountry,required"`
+	TargetIndustry  string                      `json:"targetIndustry,required"`
+	TLP             string                      `json:"tlp,required"`
+	UUID            string                      `json:"uuid,required"`
+	Insight         string                      `json:"insight"`
+	ReleasabilityID string                      `json:"releasabilityId"`
+	JSON            threatEventListResponseJSON `json:"-"`
+}
+
+// threatEventListResponseJSON contains the JSON metadata for the struct
+// [ThreatEventListResponse]
+type threatEventListResponseJSON struct {
+	ID              apijson.Field
+	AccountID       apijson.Field
+	Attacker        apijson.Field
+	AttackerCountry apijson.Field
+	Category        apijson.Field
+	CategoryID      apijson.Field
+	Date            apijson.Field
+	Event           apijson.Field
+	Indicator       apijson.Field
+	IndicatorType   apijson.Field
+	IndicatorTypeID apijson.Field
+	KillChain       apijson.Field
+	MitreAttack     apijson.Field
+	NumReferenced   apijson.Field
+	NumReferences   apijson.Field
+	RawID           apijson.Field
+	Referenced      apijson.Field
+	ReferencedIDs   apijson.Field
+	References      apijson.Field
+	ReferencesIDs   apijson.Field
+	Tags            apijson.Field
+	TargetCountry   apijson.Field
+	TargetIndustry  apijson.Field
+	TLP             apijson.Field
+	UUID            apijson.Field
+	Insight         apijson.Field
+	ReleasabilityID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *ThreatEventListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -474,6 +573,95 @@ type ThreatEventNewParamsRaw struct {
 
 func (r ThreatEventNewParamsRaw) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type ThreatEventListParams struct {
+	// Account ID
+	AccountID param.Field[float64]                       `path:"account_id,required"`
+	DatasetID param.Field[[]string]                      `query:"datasetId"`
+	Order     param.Field[ThreatEventListParamsOrder]    `query:"order"`
+	OrderBy   param.Field[string]                        `query:"orderBy"`
+	Page      param.Field[float64]                       `query:"page"`
+	PageSize  param.Field[float64]                       `query:"pageSize"`
+	Search    param.Field[[]ThreatEventListParamsSearch] `query:"search"`
+}
+
+// URLQuery serializes [ThreatEventListParams]'s query parameters as `url.Values`.
+func (r ThreatEventListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type ThreatEventListParamsOrder string
+
+const (
+	ThreatEventListParamsOrderAsc  ThreatEventListParamsOrder = "asc"
+	ThreatEventListParamsOrderDesc ThreatEventListParamsOrder = "desc"
+)
+
+func (r ThreatEventListParamsOrder) IsKnown() bool {
+	switch r {
+	case ThreatEventListParamsOrderAsc, ThreatEventListParamsOrderDesc:
+		return true
+	}
+	return false
+}
+
+type ThreatEventListParamsSearch struct {
+	Field param.Field[string]                                `query:"field"`
+	Op    param.Field[ThreatEventListParamsSearchOp]         `query:"op"`
+	Value param.Field[ThreatEventListParamsSearchValueUnion] `query:"value"`
+}
+
+// URLQuery serializes [ThreatEventListParamsSearch]'s query parameters as
+// `url.Values`.
+func (r ThreatEventListParamsSearch) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type ThreatEventListParamsSearchOp string
+
+const (
+	ThreatEventListParamsSearchOpEquals     ThreatEventListParamsSearchOp = "equals"
+	ThreatEventListParamsSearchOpNot        ThreatEventListParamsSearchOp = "not"
+	ThreatEventListParamsSearchOpGt         ThreatEventListParamsSearchOp = "gt"
+	ThreatEventListParamsSearchOpGte        ThreatEventListParamsSearchOp = "gte"
+	ThreatEventListParamsSearchOpLt         ThreatEventListParamsSearchOp = "lt"
+	ThreatEventListParamsSearchOpLte        ThreatEventListParamsSearchOp = "lte"
+	ThreatEventListParamsSearchOpLike       ThreatEventListParamsSearchOp = "like"
+	ThreatEventListParamsSearchOpContains   ThreatEventListParamsSearchOp = "contains"
+	ThreatEventListParamsSearchOpStartsWith ThreatEventListParamsSearchOp = "startsWith"
+	ThreatEventListParamsSearchOpEndsWith   ThreatEventListParamsSearchOp = "endsWith"
+	ThreatEventListParamsSearchOpIn         ThreatEventListParamsSearchOp = "in"
+	ThreatEventListParamsSearchOpFind       ThreatEventListParamsSearchOp = "find"
+)
+
+func (r ThreatEventListParamsSearchOp) IsKnown() bool {
+	switch r {
+	case ThreatEventListParamsSearchOpEquals, ThreatEventListParamsSearchOpNot, ThreatEventListParamsSearchOpGt, ThreatEventListParamsSearchOpGte, ThreatEventListParamsSearchOpLt, ThreatEventListParamsSearchOpLte, ThreatEventListParamsSearchOpLike, ThreatEventListParamsSearchOpContains, ThreatEventListParamsSearchOpStartsWith, ThreatEventListParamsSearchOpEndsWith, ThreatEventListParamsSearchOpIn, ThreatEventListParamsSearchOpFind:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat],
+// [cloudforce_one.ThreatEventListParamsSearchValueArray].
+type ThreatEventListParamsSearchValueUnion interface {
+	ImplementsThreatEventListParamsSearchValueUnion()
+}
+
+type ThreatEventListParamsSearchValueArray []ThreatEventListParamsSearchValueArrayItemUnion
+
+func (r ThreatEventListParamsSearchValueArray) ImplementsThreatEventListParamsSearchValueUnion() {}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat].
+type ThreatEventListParamsSearchValueArrayItemUnion interface {
+	ImplementsThreatEventListParamsSearchValueArrayItemUnion()
 }
 
 type ThreatEventDeleteParams struct {

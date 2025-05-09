@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/rules"
 )
 
 func TestListBulkOperationGet(t *testing.T) {
@@ -28,8 +29,10 @@ func TestListBulkOperationGet(t *testing.T) {
 	)
 	_, err := client.Rules.Lists.BulkOperations.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"4da8780eeb215e6cb7f48dd981c4ea02",
+		rules.ListBulkOperationGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

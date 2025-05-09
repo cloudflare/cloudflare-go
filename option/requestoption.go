@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -34,12 +33,15 @@ func WithAPIVersion(value string) RequestOption {
 }
 
 // WithBaseURL returns a RequestOption that sets the BaseURL for the client.
+//
+// For security reasons, ensure that the base URL is trusted.
 func WithBaseURL(base string) RequestOption {
 	u, err := url.Parse(base)
-	if err != nil {
-		log.Fatalf("failed to parse BaseURL: %s\n", err)
-	}
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
+		if err != nil {
+			return fmt.Errorf("requestoption: WithBaseURL failed to parse url %s\n", err)
+		}
+
 		if u.Path != "" && !strings.HasSuffix(u.Path, "/") {
 			u.Path += "/"
 		}
@@ -48,11 +50,34 @@ func WithBaseURL(base string) RequestOption {
 	})
 }
 
-// WithHTTPClient returns a RequestOption that changes the underlying [http.Client] used to make this
+// HTTPClient is primarily used to describe an [*http.Client], but also
+// supports custom implementations.
+//
+// For bespoke implementations, prefer using an [*http.Client] with a
+// custom transport. See [http.RoundTripper] for further information.
+type HTTPClient interface {
+	Do(*http.Request) (*http.Response, error)
+}
+
+// WithHTTPClient returns a RequestOption that changes the underlying http client used to make this
 // request, which by default is [http.DefaultClient].
-func WithHTTPClient(client *http.Client) RequestOption {
+//
+// For custom uses cases, it is recommended to provide an [*http.Client] with a custom
+// [http.RoundTripper] as its transport, rather than directly implementing [HTTPClient].
+func WithHTTPClient(client HTTPClient) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
-		r.HTTPClient = client
+		if client == nil {
+			return fmt.Errorf("requestoption: custom http client cannot be nil")
+		}
+
+		if c, ok := client.(*http.Client); ok {
+			// Prefer the native client if possible.
+			r.HTTPClient = c
+			r.CustomHTTPDoer = nil
+		} else {
+			r.CustomHTTPDoer = client
+		}
+
 		return nil
 	})
 }
@@ -154,17 +179,26 @@ func WithQueryDel(key string) RequestOption {
 // [sjson format]: https://github.com/tidwall/sjson
 func WithJSONSet(key string, value interface{}) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) (err error) {
-		if buffer, ok := r.Body.(*bytes.Buffer); ok {
-			b := buffer.Bytes()
+		var b []byte
+
+		if r.Body == nil {
+			b, err = sjson.SetBytes(nil, key, value)
+			if err != nil {
+				return err
+			}
+		} else if buffer, ok := r.Body.(*bytes.Buffer); ok {
+			b = buffer.Bytes()
 			b, err = sjson.SetBytes(b, key, value)
 			if err != nil {
 				return err
 			}
-			r.Body = bytes.NewBuffer(b)
 			return nil
+		} else {
+			return fmt.Errorf("cannot use WithJSONSet on a body that is not serialized as *bytes.Buffer")
 		}
 
-		return fmt.Errorf("cannot use WithJSONSet on a body that is not serialized as *bytes.Buffer")
+		r.Body = bytes.NewBuffer(b)
+		return nil
 	})
 }
 

@@ -132,8 +132,8 @@ func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleI
 	return
 }
 
-// When set to `on`, the current WAF rule will be used when evaluating the request.
-// Applies to anomaly detection WAF rules.
+// Defines the mode anomaly. When set to `on`, the current WAF rule will be used
+// when evaluating the request. Applies to anomaly detection WAF rules.
 type AllowedModesAnomaly string
 
 const (
@@ -149,11 +149,11 @@ func (r AllowedModesAnomaly) IsKnown() bool {
 	return false
 }
 
-// The rule group to which the current WAF rule belongs.
+// Defines the rule group to which the current WAF rule belongs.
 type WAFRuleGroup struct {
-	// The unique identifier of the rule group.
+	// Defines the unique identifier of the rule group.
 	ID string `json:"id"`
-	// The name of the rule group.
+	// Defines the name of the rule group.
 	Name string           `json:"name"`
 	JSON wafRuleGroupJSON `json:"-"`
 }
@@ -179,24 +179,25 @@ func (r wafRuleGroupJSON) RawJSON() string {
 // configure the total scoring threshold through the 'sensitivity' property of the
 // WAF package.
 type WAFPackageRuleListResponse struct {
-	// The unique identifier of the WAF rule.
+	// Defines the unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// This field can have the runtime type of [[]AllowedModesAnomaly],
 	// [[]WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode],
 	// [[]WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode].
 	AllowedModes interface{} `json:"allowed_modes,required"`
-	// The public description of the WAF rule.
+	// Defines the public description of the WAF rule.
 	Description string `json:"description,required"`
-	// The rule group to which the current WAF rule belongs.
+	// Defines the rule group to which the current WAF rule belongs.
 	Group WAFRuleGroup `json:"group,required"`
-	// When set to `on`, the current WAF rule will be used when evaluating the request.
-	// Applies to anomaly detection WAF rules.
+	// Defines the mode anomaly. When set to `on`, the current WAF rule will be used
+	// when evaluating the request. Applies to anomaly detection WAF rules.
 	Mode AllowedModesAnomaly `json:"mode,required"`
-	// The unique identifier of a WAF package.
+	// Defines the unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
-	// The order in which the individual WAF rule is executed within its rule group.
+	// Defines the order in which the individual WAF rule is executed within its rule
+	// group.
 	Priority string `json:"priority,required"`
-	// The default action/mode of a rule.
+	// Defines the default action/mode of a rule.
 	DefaultMode WAFPackageRuleListResponseDefaultMode `json:"default_mode"`
 	JSON        wafPackageRuleListResponseJSON        `json:"-"`
 	union       WAFPackageRuleListResponseUnion
@@ -278,21 +279,22 @@ func init() {
 // configure the total scoring threshold through the 'sensitivity' property of the
 // WAF package.
 type WAFPackageRuleListResponseWAFManagedRulesAnomalyRule struct {
-	// The unique identifier of the WAF rule.
+	// Defines the unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule. Applies to anomaly
 	// detection WAF rules.
 	AllowedModes []AllowedModesAnomaly `json:"allowed_modes,required"`
-	// The public description of the WAF rule.
+	// Defines the public description of the WAF rule.
 	Description string `json:"description,required"`
-	// The rule group to which the current WAF rule belongs.
+	// Defines the rule group to which the current WAF rule belongs.
 	Group WAFRuleGroup `json:"group,required"`
-	// When set to `on`, the current WAF rule will be used when evaluating the request.
-	// Applies to anomaly detection WAF rules.
+	// Defines the mode anomaly. When set to `on`, the current WAF rule will be used
+	// when evaluating the request. Applies to anomaly detection WAF rules.
 	Mode AllowedModesAnomaly `json:"mode,required"`
-	// The unique identifier of a WAF package.
+	// Defines the unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
-	// The order in which the individual WAF rule is executed within its rule group.
+	// Defines the order in which the individual WAF rule is executed within its rule
+	// group.
 	Priority string                                                   `json:"priority,required"`
 	JSON     wafPackageRuleListResponseWAFManagedRulesAnomalyRuleJSON `json:"-"`
 }
@@ -327,22 +329,23 @@ func (r WAFPackageRuleListResponseWAFManagedRulesAnomalyRule) implementsWAFPacka
 // immediately respond to the request based on the configured rule action/mode (for
 // example, 'block') and no other rules will be processed.
 type WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule struct {
-	// The unique identifier of the WAF rule.
+	// Defines the unique identifier of the WAF rule.
 	ID string `json:"id,required"`
-	// The list of possible actions of the WAF rule when it is triggered.
+	// Defines the list of possible actions of the WAF rule when it is triggered.
 	AllowedModes []WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode `json:"allowed_modes,required"`
-	// The default action/mode of a rule.
+	// Defines the default action/mode of a rule.
 	DefaultMode WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultMode `json:"default_mode,required"`
-	// The public description of the WAF rule.
+	// Defines the public description of the WAF rule.
 	Description string `json:"description,required"`
-	// The rule group to which the current WAF rule belongs.
+	// Defines the rule group to which the current WAF rule belongs.
 	Group WAFRuleGroup `json:"group,required"`
-	// The action that the current WAF rule will perform when triggered. Applies to
-	// traditional (deny) WAF rules.
+	// Defines the action that the current WAF rule will perform when triggered.
+	// Applies to traditional (deny) WAF rules.
 	Mode WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode `json:"mode,required"`
-	// The unique identifier of a WAF package.
+	// Defines the unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
-	// The order in which the individual WAF rule is executed within its rule group.
+	// Defines the order in which the individual WAF rule is executed within its rule
+	// group.
 	Priority string                                                           `json:"priority,required"`
 	JSON     wafPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleJSON `json:"-"`
 }
@@ -374,8 +377,8 @@ func (r wafPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleJSON) RawJSO
 func (r WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule) implementsWAFPackageRuleListResponse() {
 }
 
-// The action that the current WAF rule will perform when triggered. Applies to
-// traditional (deny) WAF rules.
+// Defines the action that the current WAF rule will perform when triggered.
+// Applies to traditional (deny) WAF rules.
 type WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode string
 
 const (
@@ -394,7 +397,7 @@ func (r WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode)
 	return false
 }
 
-// The default action/mode of a rule.
+// Defines the default action/mode of a rule.
 type WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultMode string
 
 const (
@@ -412,8 +415,8 @@ func (r WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultMode)
 	return false
 }
 
-// The action that the current WAF rule will perform when triggered. Applies to
-// traditional (deny) WAF rules.
+// Defines the action that the current WAF rule will perform when triggered.
+// Applies to traditional (deny) WAF rules.
 type WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode string
 
 const (
@@ -436,20 +439,21 @@ func (r WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode) IsKnow
 // the request based on the rule configuration. An 'allow' rule will immediately
 // allow the request and no other rules will be processed.
 type WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule struct {
-	// The unique identifier of the WAF rule.
+	// Defines the unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule.
 	AllowedModes []WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode `json:"allowed_modes,required"`
-	// The public description of the WAF rule.
+	// Defines the public description of the WAF rule.
 	Description string `json:"description,required"`
-	// The rule group to which the current WAF rule belongs.
+	// Defines the rule group to which the current WAF rule belongs.
 	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current rule will be used when evaluating the request.
 	// Applies to traditional (allow) WAF rules.
 	Mode WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleMode `json:"mode,required"`
-	// The unique identifier of a WAF package.
+	// Defines the unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
-	// The order in which the individual WAF rule is executed within its rule group.
+	// Defines the order in which the individual WAF rule is executed within its rule
+	// group.
 	Priority string                                                            `json:"priority,required"`
 	JSON     wafPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleJSON `json:"-"`
 }
@@ -514,7 +518,7 @@ func (r WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleMode) IsKno
 	return false
 }
 
-// The default action/mode of a rule.
+// Defines the default action/mode of a rule.
 type WAFPackageRuleListResponseDefaultMode string
 
 const (
@@ -537,24 +541,25 @@ func (r WAFPackageRuleListResponseDefaultMode) IsKnown() bool {
 // configure the total scoring threshold through the 'sensitivity' property of the
 // WAF package.
 type WAFPackageRuleEditResponse struct {
-	// The unique identifier of the WAF rule.
+	// Defines the unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// This field can have the runtime type of [[]AllowedModesAnomaly],
 	// [[]WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedMode],
 	// [[]WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedMode].
 	AllowedModes interface{} `json:"allowed_modes,required"`
-	// The public description of the WAF rule.
+	// Defines the public description of the WAF rule.
 	Description string `json:"description,required"`
-	// The rule group to which the current WAF rule belongs.
+	// Defines the rule group to which the current WAF rule belongs.
 	Group WAFRuleGroup `json:"group,required"`
-	// When set to `on`, the current WAF rule will be used when evaluating the request.
-	// Applies to anomaly detection WAF rules.
+	// Defines the mode anomaly. When set to `on`, the current WAF rule will be used
+	// when evaluating the request. Applies to anomaly detection WAF rules.
 	Mode AllowedModesAnomaly `json:"mode,required"`
-	// The unique identifier of a WAF package.
+	// Defines the unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
-	// The order in which the individual WAF rule is executed within its rule group.
+	// Defines the order in which the individual WAF rule is executed within its rule
+	// group.
 	Priority string `json:"priority,required"`
-	// The default action/mode of a rule.
+	// Defines the default action/mode of a rule.
 	DefaultMode WAFPackageRuleEditResponseDefaultMode `json:"default_mode"`
 	JSON        wafPackageRuleEditResponseJSON        `json:"-"`
 	union       WAFPackageRuleEditResponseUnion
@@ -636,21 +641,22 @@ func init() {
 // configure the total scoring threshold through the 'sensitivity' property of the
 // WAF package.
 type WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule struct {
-	// The unique identifier of the WAF rule.
+	// Defines the unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule. Applies to anomaly
 	// detection WAF rules.
 	AllowedModes []AllowedModesAnomaly `json:"allowed_modes,required"`
-	// The public description of the WAF rule.
+	// Defines the public description of the WAF rule.
 	Description string `json:"description,required"`
-	// The rule group to which the current WAF rule belongs.
+	// Defines the rule group to which the current WAF rule belongs.
 	Group WAFRuleGroup `json:"group,required"`
-	// When set to `on`, the current WAF rule will be used when evaluating the request.
-	// Applies to anomaly detection WAF rules.
+	// Defines the mode anomaly. When set to `on`, the current WAF rule will be used
+	// when evaluating the request. Applies to anomaly detection WAF rules.
 	Mode AllowedModesAnomaly `json:"mode,required"`
-	// The unique identifier of a WAF package.
+	// Defines the unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
-	// The order in which the individual WAF rule is executed within its rule group.
+	// Defines the order in which the individual WAF rule is executed within its rule
+	// group.
 	Priority string                                                   `json:"priority,required"`
 	JSON     wafPackageRuleEditResponseWAFManagedRulesAnomalyRuleJSON `json:"-"`
 }
@@ -685,22 +691,23 @@ func (r WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule) implementsWAFPacka
 // immediately respond to the request based on the configured rule action/mode (for
 // example, 'block') and no other rules will be processed.
 type WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule struct {
-	// The unique identifier of the WAF rule.
+	// Defines the unique identifier of the WAF rule.
 	ID string `json:"id,required"`
-	// The list of possible actions of the WAF rule when it is triggered.
+	// Defines the list of possible actions of the WAF rule when it is triggered.
 	AllowedModes []WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedMode `json:"allowed_modes,required"`
-	// The default action/mode of a rule.
+	// Defines the default action/mode of a rule.
 	DefaultMode WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultMode `json:"default_mode,required"`
-	// The public description of the WAF rule.
+	// Defines the public description of the WAF rule.
 	Description string `json:"description,required"`
-	// The rule group to which the current WAF rule belongs.
+	// Defines the rule group to which the current WAF rule belongs.
 	Group WAFRuleGroup `json:"group,required"`
-	// The action that the current WAF rule will perform when triggered. Applies to
-	// traditional (deny) WAF rules.
+	// Defines the action that the current WAF rule will perform when triggered.
+	// Applies to traditional (deny) WAF rules.
 	Mode WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleMode `json:"mode,required"`
-	// The unique identifier of a WAF package.
+	// Defines the unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
-	// The order in which the individual WAF rule is executed within its rule group.
+	// Defines the order in which the individual WAF rule is executed within its rule
+	// group.
 	Priority string                                                           `json:"priority,required"`
 	JSON     wafPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleJSON `json:"-"`
 }
@@ -732,8 +739,8 @@ func (r wafPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleJSON) RawJSO
 func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule) implementsWAFPackageRuleEditResponse() {
 }
 
-// The action that the current WAF rule will perform when triggered. Applies to
-// traditional (deny) WAF rules.
+// Defines the action that the current WAF rule will perform when triggered.
+// Applies to traditional (deny) WAF rules.
 type WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedMode string
 
 const (
@@ -752,7 +759,7 @@ func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedMode)
 	return false
 }
 
-// The default action/mode of a rule.
+// Defines the default action/mode of a rule.
 type WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultMode string
 
 const (
@@ -770,8 +777,8 @@ func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultMode)
 	return false
 }
 
-// The action that the current WAF rule will perform when triggered. Applies to
-// traditional (deny) WAF rules.
+// Defines the action that the current WAF rule will perform when triggered.
+// Applies to traditional (deny) WAF rules.
 type WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleMode string
 
 const (
@@ -794,20 +801,21 @@ func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleMode) IsKnow
 // the request based on the rule configuration. An 'allow' rule will immediately
 // allow the request and no other rules will be processed.
 type WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule struct {
-	// The unique identifier of the WAF rule.
+	// Defines the unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule.
 	AllowedModes []WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedMode `json:"allowed_modes,required"`
-	// The public description of the WAF rule.
+	// Defines the public description of the WAF rule.
 	Description string `json:"description,required"`
-	// The rule group to which the current WAF rule belongs.
+	// Defines the rule group to which the current WAF rule belongs.
 	Group WAFRuleGroup `json:"group,required"`
 	// When set to `on`, the current rule will be used when evaluating the request.
 	// Applies to traditional (allow) WAF rules.
 	Mode WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode `json:"mode,required"`
-	// The unique identifier of a WAF package.
+	// Defines the unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
-	// The order in which the individual WAF rule is executed within its rule group.
+	// Defines the order in which the individual WAF rule is executed within its rule
+	// group.
 	Priority string                                                            `json:"priority,required"`
 	JSON     wafPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleJSON `json:"-"`
 }
@@ -872,7 +880,7 @@ func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode) IsKno
 	return false
 }
 
-// The default action/mode of a rule.
+// Defines the default action/mode of a rule.
 type WAFPackageRuleEditResponseDefaultMode string
 
 const (
@@ -891,26 +899,27 @@ func (r WAFPackageRuleEditResponseDefaultMode) IsKnown() bool {
 }
 
 type WAFPackageRuleListParams struct {
-	// Identifier
+	// Defines an identifier of a schema.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The public description of the WAF rule.
+	// Defines the public description of the WAF rule.
 	Description param.Field[string] `query:"description"`
-	// The direction used to sort returned rules.
+	// Defines the direction used to sort returned rules.
 	Direction param.Field[WAFPackageRuleListParamsDirection] `query:"direction"`
-	// The unique identifier of the rule group.
+	// Defines the unique identifier of the rule group.
 	GroupID param.Field[string] `query:"group_id"`
-	// When set to `all`, all the search requirements must match. When set to `any`,
-	// only one of the search requirements has to match.
+	// Defines the search requirements. When set to `all`, all the search requirements
+	// must match. When set to `any`, only one of the search requirements has to match.
 	Match param.Field[WAFPackageRuleListParamsMatch] `query:"match"`
-	// The action/mode a rule has been overridden to perform.
+	// Defines the action/mode a rule has been overridden to perform.
 	Mode param.Field[WAFPackageRuleListParamsMode] `query:"mode"`
-	// The field used to sort returned rules.
+	// Defines the field used to sort returned rules.
 	Order param.Field[WAFPackageRuleListParamsOrder] `query:"order"`
-	// The page number of paginated results.
+	// Defines the page number of paginated results.
 	Page param.Field[float64] `query:"page"`
-	// The number of rules per page.
+	// Defines the number of rules per page.
 	PerPage param.Field[float64] `query:"per_page"`
-	// The order in which the individual WAF rule is executed within its rule group.
+	// Defines the order in which the individual WAF rule is executed within its rule
+	// group.
 	Priority param.Field[string] `query:"priority"`
 }
 
@@ -923,7 +932,7 @@ func (r WAFPackageRuleListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// The direction used to sort returned rules.
+// Defines the direction used to sort returned rules.
 type WAFPackageRuleListParamsDirection string
 
 const (
@@ -939,8 +948,8 @@ func (r WAFPackageRuleListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// When set to `all`, all the search requirements must match. When set to `any`,
-// only one of the search requirements has to match.
+// Defines the search requirements. When set to `all`, all the search requirements
+// must match. When set to `any`, only one of the search requirements has to match.
 type WAFPackageRuleListParamsMatch string
 
 const (
@@ -956,7 +965,7 @@ func (r WAFPackageRuleListParamsMatch) IsKnown() bool {
 	return false
 }
 
-// The action/mode a rule has been overridden to perform.
+// Defines the action/mode a rule has been overridden to perform.
 type WAFPackageRuleListParamsMode string
 
 const (
@@ -974,7 +983,7 @@ func (r WAFPackageRuleListParamsMode) IsKnown() bool {
 	return false
 }
 
-// The field used to sort returned rules.
+// Defines the field used to sort returned rules.
 type WAFPackageRuleListParamsOrder string
 
 const (
@@ -992,10 +1001,10 @@ func (r WAFPackageRuleListParamsOrder) IsKnown() bool {
 }
 
 type WAFPackageRuleEditParams struct {
-	// Identifier
+	// Defines an identifier of a schema.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The mode/action of the rule when triggered. You must use a value from the
-	// `allowed_modes` array of the current rule.
+	// Defines the mode/action of the rule when triggered. You must use a value from
+	// the `allowed_modes` array of the current rule.
 	Mode param.Field[WAFPackageRuleEditParamsMode] `json:"mode"`
 }
 
@@ -1003,8 +1012,8 @@ func (r WAFPackageRuleEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The mode/action of the rule when triggered. You must use a value from the
-// `allowed_modes` array of the current rule.
+// Defines the mode/action of the rule when triggered. You must use a value from
+// the `allowed_modes` array of the current rule.
 type WAFPackageRuleEditParamsMode string
 
 const (
@@ -1033,7 +1042,7 @@ type WAFPackageRuleEditResponseEnvelope struct {
 	// configure the total scoring threshold through the 'sensitivity' property of the
 	// WAF package.
 	Result WAFPackageRuleEditResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success WAFPackageRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageRuleEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -1057,7 +1066,7 @@ func (r wafPackageRuleEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type WAFPackageRuleEditResponseEnvelopeSuccess bool
 
 const (
@@ -1073,7 +1082,7 @@ func (r WAFPackageRuleEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type WAFPackageRuleGetParams struct {
-	// Identifier
+	// Defines an identifier of a schema.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -1081,7 +1090,7 @@ type WAFPackageRuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   interface{}           `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success WAFPackageRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageRuleGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1105,7 +1114,7 @@ func (r wafPackageRuleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type WAFPackageRuleGetResponseEnvelopeSuccess bool
 
 const (

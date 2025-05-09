@@ -202,27 +202,6 @@ func (r Action) IsKnown() bool {
 	return false
 }
 
-// An HTTP method or `_ALL_` to indicate all methods.
-type Methods string
-
-const (
-	MethodsGet    Methods = "GET"
-	MethodsPost   Methods = "POST"
-	MethodsPut    Methods = "PUT"
-	MethodsDelete Methods = "DELETE"
-	MethodsPatch  Methods = "PATCH"
-	MethodsHead   Methods = "HEAD"
-	Methods_All   Methods = "_ALL_"
-)
-
-func (r Methods) IsKnown() bool {
-	switch r {
-	case MethodsGet, MethodsPost, MethodsPut, MethodsDelete, MethodsPatch, MethodsHead, Methods_All:
-		return true
-	}
-	return false
-}
-
 type RateLimit struct {
 	// The unique identifier of the rate limit.
 	ID string `json:"id"`
@@ -470,7 +449,7 @@ type RateLimitMatchRequest struct {
 	// The HTTP methods to match. You can specify a subset (for example,
 	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
 	// creating a rate limit.
-	Methods []Methods `json:"methods"`
+	Methods []RateLimitMatchRequestMethod `json:"methods"`
 	// The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both
 	// schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is
 	// optional.
@@ -499,6 +478,27 @@ func (r *RateLimitMatchRequest) UnmarshalJSON(data []byte) (err error) {
 
 func (r rateLimitMatchRequestJSON) RawJSON() string {
 	return r.raw
+}
+
+// An HTTP method or `_ALL_` to indicate all methods.
+type RateLimitMatchRequestMethod string
+
+const (
+	RateLimitMatchRequestMethodGet    RateLimitMatchRequestMethod = "GET"
+	RateLimitMatchRequestMethodPost   RateLimitMatchRequestMethod = "POST"
+	RateLimitMatchRequestMethodPut    RateLimitMatchRequestMethod = "PUT"
+	RateLimitMatchRequestMethodDelete RateLimitMatchRequestMethod = "DELETE"
+	RateLimitMatchRequestMethodPatch  RateLimitMatchRequestMethod = "PATCH"
+	RateLimitMatchRequestMethodHead   RateLimitMatchRequestMethod = "HEAD"
+	RateLimitMatchRequestMethod_All   RateLimitMatchRequestMethod = "_ALL_"
+)
+
+func (r RateLimitMatchRequestMethod) IsKnown() bool {
+	switch r {
+	case RateLimitMatchRequestMethodGet, RateLimitMatchRequestMethodPost, RateLimitMatchRequestMethodPut, RateLimitMatchRequestMethodDelete, RateLimitMatchRequestMethodPatch, RateLimitMatchRequestMethodHead, RateLimitMatchRequestMethod_All:
+		return true
+	}
+	return false
 }
 
 type RateLimitMatchResponse struct {
@@ -778,7 +778,7 @@ type RateLimitDeleteResponseMatchRequest struct {
 	// The HTTP methods to match. You can specify a subset (for example,
 	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
 	// creating a rate limit.
-	Methods []Methods `json:"methods"`
+	Methods []RateLimitDeleteResponseMatchRequestMethod `json:"methods"`
 	// The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both
 	// schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is
 	// optional.
@@ -809,6 +809,27 @@ func (r rateLimitDeleteResponseMatchRequestJSON) RawJSON() string {
 	return r.raw
 }
 
+// An HTTP method or `_ALL_` to indicate all methods.
+type RateLimitDeleteResponseMatchRequestMethod string
+
+const (
+	RateLimitDeleteResponseMatchRequestMethodGet    RateLimitDeleteResponseMatchRequestMethod = "GET"
+	RateLimitDeleteResponseMatchRequestMethodPost   RateLimitDeleteResponseMatchRequestMethod = "POST"
+	RateLimitDeleteResponseMatchRequestMethodPut    RateLimitDeleteResponseMatchRequestMethod = "PUT"
+	RateLimitDeleteResponseMatchRequestMethodDelete RateLimitDeleteResponseMatchRequestMethod = "DELETE"
+	RateLimitDeleteResponseMatchRequestMethodPatch  RateLimitDeleteResponseMatchRequestMethod = "PATCH"
+	RateLimitDeleteResponseMatchRequestMethodHead   RateLimitDeleteResponseMatchRequestMethod = "HEAD"
+	RateLimitDeleteResponseMatchRequestMethod_All   RateLimitDeleteResponseMatchRequestMethod = "_ALL_"
+)
+
+func (r RateLimitDeleteResponseMatchRequestMethod) IsKnown() bool {
+	switch r {
+	case RateLimitDeleteResponseMatchRequestMethodGet, RateLimitDeleteResponseMatchRequestMethodPost, RateLimitDeleteResponseMatchRequestMethodPut, RateLimitDeleteResponseMatchRequestMethodDelete, RateLimitDeleteResponseMatchRequestMethodPatch, RateLimitDeleteResponseMatchRequestMethodHead, RateLimitDeleteResponseMatchRequestMethod_All:
+		return true
+	}
+	return false
+}
+
 type RateLimitDeleteResponseMatchResponse struct {
 	// When true, only the uncached traffic served from your origin servers will count
 	// towards rate limiting. In this case, any cached traffic served by Cloudflare
@@ -836,7 +857,7 @@ func (r rateLimitDeleteResponseMatchResponseJSON) RawJSON() string {
 }
 
 type RateLimitNewParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
@@ -961,7 +982,7 @@ type RateLimitNewParamsMatchRequest struct {
 	// The HTTP methods to match. You can specify a subset (for example,
 	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
 	// creating a rate limit.
-	Methods param.Field[[]Methods] `json:"methods"`
+	Methods param.Field[[]RateLimitNewParamsMatchRequestMethod] `json:"methods"`
 	// The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both
 	// schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is
 	// optional.
@@ -975,6 +996,27 @@ type RateLimitNewParamsMatchRequest struct {
 
 func (r RateLimitNewParamsMatchRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// An HTTP method or `_ALL_` to indicate all methods.
+type RateLimitNewParamsMatchRequestMethod string
+
+const (
+	RateLimitNewParamsMatchRequestMethodGet    RateLimitNewParamsMatchRequestMethod = "GET"
+	RateLimitNewParamsMatchRequestMethodPost   RateLimitNewParamsMatchRequestMethod = "POST"
+	RateLimitNewParamsMatchRequestMethodPut    RateLimitNewParamsMatchRequestMethod = "PUT"
+	RateLimitNewParamsMatchRequestMethodDelete RateLimitNewParamsMatchRequestMethod = "DELETE"
+	RateLimitNewParamsMatchRequestMethodPatch  RateLimitNewParamsMatchRequestMethod = "PATCH"
+	RateLimitNewParamsMatchRequestMethodHead   RateLimitNewParamsMatchRequestMethod = "HEAD"
+	RateLimitNewParamsMatchRequestMethod_All   RateLimitNewParamsMatchRequestMethod = "_ALL_"
+)
+
+func (r RateLimitNewParamsMatchRequestMethod) IsKnown() bool {
+	switch r {
+	case RateLimitNewParamsMatchRequestMethodGet, RateLimitNewParamsMatchRequestMethodPost, RateLimitNewParamsMatchRequestMethodPut, RateLimitNewParamsMatchRequestMethodDelete, RateLimitNewParamsMatchRequestMethodPatch, RateLimitNewParamsMatchRequestMethodHead, RateLimitNewParamsMatchRequestMethod_All:
+		return true
+	}
+	return false
 }
 
 type RateLimitNewParamsMatchResponse struct {
@@ -994,7 +1036,7 @@ type RateLimitNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   RateLimit             `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success RateLimitNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -1018,7 +1060,7 @@ func (r rateLimitNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type RateLimitNewResponseEnvelopeSuccess bool
 
 const (
@@ -1034,12 +1076,12 @@ func (r RateLimitNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RateLimitListParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// The page number of paginated results.
+	// Defines the page number of paginated results.
 	Page param.Field[float64] `query:"page"`
-	// The maximum number of results per page. You can only set the value to `1` or to
-	// a multiple of 5 such as `5`, `10`, `15`, or `20`.
+	// Defines the maximum number of results per page. You can only set the value to
+	// `1` or to a multiple of 5 such as `5`, `10`, `15`, or `20`.
 	PerPage param.Field[float64] `query:"per_page"`
 }
 
@@ -1052,7 +1094,7 @@ func (r RateLimitListParams) URLQuery() (v url.Values) {
 }
 
 type RateLimitDeleteParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -1060,7 +1102,7 @@ type RateLimitDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo   `json:"errors,required"`
 	Messages []shared.ResponseInfo   `json:"messages,required"`
 	Result   RateLimitDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success RateLimitDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -1084,7 +1126,7 @@ func (r rateLimitDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type RateLimitDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1100,7 +1142,7 @@ func (r RateLimitDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RateLimitEditParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
@@ -1225,7 +1267,7 @@ type RateLimitEditParamsMatchRequest struct {
 	// The HTTP methods to match. You can specify a subset (for example,
 	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
 	// creating a rate limit.
-	Methods param.Field[[]Methods] `json:"methods"`
+	Methods param.Field[[]RateLimitEditParamsMatchRequestMethod] `json:"methods"`
 	// The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both
 	// schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is
 	// optional.
@@ -1239,6 +1281,27 @@ type RateLimitEditParamsMatchRequest struct {
 
 func (r RateLimitEditParamsMatchRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// An HTTP method or `_ALL_` to indicate all methods.
+type RateLimitEditParamsMatchRequestMethod string
+
+const (
+	RateLimitEditParamsMatchRequestMethodGet    RateLimitEditParamsMatchRequestMethod = "GET"
+	RateLimitEditParamsMatchRequestMethodPost   RateLimitEditParamsMatchRequestMethod = "POST"
+	RateLimitEditParamsMatchRequestMethodPut    RateLimitEditParamsMatchRequestMethod = "PUT"
+	RateLimitEditParamsMatchRequestMethodDelete RateLimitEditParamsMatchRequestMethod = "DELETE"
+	RateLimitEditParamsMatchRequestMethodPatch  RateLimitEditParamsMatchRequestMethod = "PATCH"
+	RateLimitEditParamsMatchRequestMethodHead   RateLimitEditParamsMatchRequestMethod = "HEAD"
+	RateLimitEditParamsMatchRequestMethod_All   RateLimitEditParamsMatchRequestMethod = "_ALL_"
+)
+
+func (r RateLimitEditParamsMatchRequestMethod) IsKnown() bool {
+	switch r {
+	case RateLimitEditParamsMatchRequestMethodGet, RateLimitEditParamsMatchRequestMethodPost, RateLimitEditParamsMatchRequestMethodPut, RateLimitEditParamsMatchRequestMethodDelete, RateLimitEditParamsMatchRequestMethodPatch, RateLimitEditParamsMatchRequestMethodHead, RateLimitEditParamsMatchRequestMethod_All:
+		return true
+	}
+	return false
 }
 
 type RateLimitEditParamsMatchResponse struct {
@@ -1258,7 +1321,7 @@ type RateLimitEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   RateLimit             `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success RateLimitEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -1282,7 +1345,7 @@ func (r rateLimitEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type RateLimitEditResponseEnvelopeSuccess bool
 
 const (
@@ -1298,7 +1361,7 @@ func (r RateLimitEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RateLimitGetParams struct {
-	// Identifier
+	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
@@ -1306,7 +1369,7 @@ type RateLimitGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   RateLimit             `json:"result,required"`
-	// Whether the API call was successful
+	// Defines whether the API call was successful.
 	Success RateLimitGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1330,7 +1393,7 @@ func (r rateLimitGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Defines whether the API call was successful.
 type RateLimitGetResponseEnvelopeSuccess bool
 
 const (

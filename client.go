@@ -71,6 +71,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/page_rules"
 	"github.com/cloudflare/cloudflare-go/v4/page_shield"
 	"github.com/cloudflare/cloudflare-go/v4/pages"
+	"github.com/cloudflare/cloudflare-go/v4/pipelines"
 	"github.com/cloudflare/cloudflare-go/v4/queues"
 	"github.com/cloudflare/cloudflare-go/v4/r2"
 	"github.com/cloudflare/cloudflare-go/v4/radar"
@@ -81,6 +82,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/rules"
 	"github.com/cloudflare/cloudflare-go/v4/rulesets"
 	"github.com/cloudflare/cloudflare-go/v4/rum"
+	"github.com/cloudflare/cloudflare-go/v4/secrets_store"
 	"github.com/cloudflare/cloudflare-go/v4/security_center"
 	"github.com/cloudflare/cloudflare-go/v4/security_txt"
 	"github.com/cloudflare/cloudflare-go/v4/snippets"
@@ -208,13 +210,18 @@ type Client struct {
 	SecurityCenter              *security_center.SecurityCenterService
 	BrowserRendering            *browser_rendering.BrowserRenderingService
 	CustomPages                 *custom_pages.CustomPageService
+	SecretsStore                *secrets_store.SecretsStoreService
+	Pipelines                   *pipelines.PipelineService
 }
 
-// DefaultClientOptions read from the environment (CLOUDFLARE_API_TOKEN,
-// CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL, CLOUDFLARE_API_USER_SERVICE_KEY). This
-// should be used to initialize new clients.
+// DefaultClientOptions read from the environment (CLOUDFLARE_API_KEY,
+// CLOUDFLARE_API_USER_SERVICE_KEY, CLOUDFLARE_API_TOKEN, CLOUDFLARE_EMAIL,
+// CLOUDFLARE_BASE_URL). This should be used to initialize new clients.
 func DefaultClientOptions() []option.RequestOption {
 	defaults := []option.RequestOption{option.WithEnvironmentProduction()}
+	if o, ok := os.LookupEnv("CLOUDFLARE_BASE_URL"); ok {
+		defaults = append(defaults, option.WithBaseURL(o))
+	}
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_TOKEN"); ok {
 		defaults = append(defaults, option.WithAPIToken(o))
 	}
@@ -231,10 +238,10 @@ func DefaultClientOptions() []option.RequestOption {
 }
 
 // NewClient generates a new client with the default option read from the
-// environment (CLOUDFLARE_API_TOKEN, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL,
-// CLOUDFLARE_API_USER_SERVICE_KEY). The option passed in as arguments are applied
-// after these default arguments, and all option will be passed down to the
-// services and requests that this client makes.
+// environment (CLOUDFLARE_API_KEY, CLOUDFLARE_API_USER_SERVICE_KEY,
+// CLOUDFLARE_API_TOKEN, CLOUDFLARE_EMAIL, CLOUDFLARE_BASE_URL). The option passed
+// in as arguments are applied after these default arguments, and all option will
+// be passed down to the services and requests that this client makes.
 func NewClient(opts ...option.RequestOption) (r *Client) {
 	opts = append(DefaultClientOptions(), opts...)
 
@@ -332,6 +339,8 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.SecurityCenter = security_center.NewSecurityCenterService(opts...)
 	r.BrowserRendering = browser_rendering.NewBrowserRenderingService(opts...)
 	r.CustomPages = custom_pages.NewCustomPageService(opts...)
+	r.SecretsStore = secrets_store.NewSecretsStoreService(opts...)
+	r.Pipelines = pipelines.NewPipelineService(opts...)
 
 	return
 }

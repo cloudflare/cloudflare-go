@@ -34,7 +34,7 @@ func NewDatasetJobService(opts ...option.RequestOption) (r *DatasetJobService) {
 }
 
 // Lists Logpush jobs for an account or zone for a dataset.
-func (r *DatasetJobService) Get(ctx context.Context, datasetID string, query DatasetJobGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[LogpushJob], err error) {
+func (r *DatasetJobService) Get(ctx context.Context, datasetID DatasetJobGetParamsDatasetID, query DatasetJobGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[LogpushJob], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -56,11 +56,7 @@ func (r *DatasetJobService) Get(ctx context.Context, datasetID string, query Dat
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
-	if datasetID == "" {
-		err = errors.New("missing required dataset_id parameter")
-		return
-	}
-	path := fmt.Sprintf("%s/%s/logpush/datasets/%s/jobs", accountOrZone, accountOrZoneID, datasetID)
+	path := fmt.Sprintf("%s/%s/logpush/datasets/%v/jobs", accountOrZone, accountOrZoneID, datasetID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -74,7 +70,7 @@ func (r *DatasetJobService) Get(ctx context.Context, datasetID string, query Dat
 }
 
 // Lists Logpush jobs for an account or zone for a dataset.
-func (r *DatasetJobService) GetAutoPaging(ctx context.Context, datasetID string, query DatasetJobGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LogpushJob] {
+func (r *DatasetJobService) GetAutoPaging(ctx context.Context, datasetID DatasetJobGetParamsDatasetID, query DatasetJobGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LogpushJob] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, datasetID, query, opts...))
 }
 
@@ -83,4 +79,43 @@ type DatasetJobGetParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+}
+
+// Name of the dataset. A list of supported datasets can be found on the
+// [Developer Docs](https://developers.cloudflare.com/logs/reference/log-fields/).
+type DatasetJobGetParamsDatasetID string
+
+const (
+	DatasetJobGetParamsDatasetIDAccessRequests           DatasetJobGetParamsDatasetID = "access_requests"
+	DatasetJobGetParamsDatasetIDAuditLogs                DatasetJobGetParamsDatasetID = "audit_logs"
+	DatasetJobGetParamsDatasetIDBISOUserActions          DatasetJobGetParamsDatasetID = "biso_user_actions"
+	DatasetJobGetParamsDatasetIDCasbFindings             DatasetJobGetParamsDatasetID = "casb_findings"
+	DatasetJobGetParamsDatasetIDDevicePostureResults     DatasetJobGetParamsDatasetID = "device_posture_results"
+	DatasetJobGetParamsDatasetIDDLPForensicCopies        DatasetJobGetParamsDatasetID = "dlp_forensic_copies"
+	DatasetJobGetParamsDatasetIDDNSFirewallLogs          DatasetJobGetParamsDatasetID = "dns_firewall_logs"
+	DatasetJobGetParamsDatasetIDDNSLogs                  DatasetJobGetParamsDatasetID = "dns_logs"
+	DatasetJobGetParamsDatasetIDEmailSecurityAlerts      DatasetJobGetParamsDatasetID = "email_security_alerts"
+	DatasetJobGetParamsDatasetIDFirewallEvents           DatasetJobGetParamsDatasetID = "firewall_events"
+	DatasetJobGetParamsDatasetIDGatewayDNS               DatasetJobGetParamsDatasetID = "gateway_dns"
+	DatasetJobGetParamsDatasetIDGatewayHTTP              DatasetJobGetParamsDatasetID = "gateway_http"
+	DatasetJobGetParamsDatasetIDGatewayNetwork           DatasetJobGetParamsDatasetID = "gateway_network"
+	DatasetJobGetParamsDatasetIDHTTPRequests             DatasetJobGetParamsDatasetID = "http_requests"
+	DatasetJobGetParamsDatasetIDMagicIDsDetections       DatasetJobGetParamsDatasetID = "magic_ids_detections"
+	DatasetJobGetParamsDatasetIDNELReports               DatasetJobGetParamsDatasetID = "nel_reports"
+	DatasetJobGetParamsDatasetIDNetworkAnalyticsLogs     DatasetJobGetParamsDatasetID = "network_analytics_logs"
+	DatasetJobGetParamsDatasetIDPageShieldEvents         DatasetJobGetParamsDatasetID = "page_shield_events"
+	DatasetJobGetParamsDatasetIDSinkholeHTTPLogs         DatasetJobGetParamsDatasetID = "sinkhole_http_logs"
+	DatasetJobGetParamsDatasetIDSpectrumEvents           DatasetJobGetParamsDatasetID = "spectrum_events"
+	DatasetJobGetParamsDatasetIDSSHLogs                  DatasetJobGetParamsDatasetID = "ssh_logs"
+	DatasetJobGetParamsDatasetIDWorkersTraceEvents       DatasetJobGetParamsDatasetID = "workers_trace_events"
+	DatasetJobGetParamsDatasetIDZarazEvents              DatasetJobGetParamsDatasetID = "zaraz_events"
+	DatasetJobGetParamsDatasetIDZeroTrustNetworkSessions DatasetJobGetParamsDatasetID = "zero_trust_network_sessions"
+)
+
+func (r DatasetJobGetParamsDatasetID) IsKnown() bool {
+	switch r {
+	case DatasetJobGetParamsDatasetIDAccessRequests, DatasetJobGetParamsDatasetIDAuditLogs, DatasetJobGetParamsDatasetIDBISOUserActions, DatasetJobGetParamsDatasetIDCasbFindings, DatasetJobGetParamsDatasetIDDevicePostureResults, DatasetJobGetParamsDatasetIDDLPForensicCopies, DatasetJobGetParamsDatasetIDDNSFirewallLogs, DatasetJobGetParamsDatasetIDDNSLogs, DatasetJobGetParamsDatasetIDEmailSecurityAlerts, DatasetJobGetParamsDatasetIDFirewallEvents, DatasetJobGetParamsDatasetIDGatewayDNS, DatasetJobGetParamsDatasetIDGatewayHTTP, DatasetJobGetParamsDatasetIDGatewayNetwork, DatasetJobGetParamsDatasetIDHTTPRequests, DatasetJobGetParamsDatasetIDMagicIDsDetections, DatasetJobGetParamsDatasetIDNELReports, DatasetJobGetParamsDatasetIDNetworkAnalyticsLogs, DatasetJobGetParamsDatasetIDPageShieldEvents, DatasetJobGetParamsDatasetIDSinkholeHTTPLogs, DatasetJobGetParamsDatasetIDSpectrumEvents, DatasetJobGetParamsDatasetIDSSHLogs, DatasetJobGetParamsDatasetIDWorkersTraceEvents, DatasetJobGetParamsDatasetIDZarazEvents, DatasetJobGetParamsDatasetIDZeroTrustNetworkSessions:
+		return true
+	}
+	return false
 }

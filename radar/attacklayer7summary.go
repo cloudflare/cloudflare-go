@@ -60,6 +60,19 @@ func (r *AttackLayer7SummaryService) HTTPVersion(ctx context.Context, query Atta
 	return
 }
 
+// Retrieves the distribution of layer 7 attacks by targeted industry.
+func (r *AttackLayer7SummaryService) Industry(ctx context.Context, query AttackLayer7SummaryIndustryParams, opts ...option.RequestOption) (res *AttackLayer7SummaryIndustryResponse, err error) {
+	var env AttackLayer7SummaryIndustryResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	path := "radar/attacks/layer7/summary/industry"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Retrieves the distribution of layer 7 attacks by IP version.
 func (r *AttackLayer7SummaryService) IPVersion(ctx context.Context, query AttackLayer7SummaryIPVersionParams, opts ...option.RequestOption) (res *AttackLayer7SummaryIPVersionResponse, err error) {
 	var env AttackLayer7SummaryIPVersionResponseEnvelope
@@ -91,6 +104,19 @@ func (r *AttackLayer7SummaryService) MitigationProduct(ctx context.Context, quer
 	var env AttackLayer7SummaryMitigationProductResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/summary/mitigation_product"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Retrieves the distribution of layer 7 attacks by targeted vertical.
+func (r *AttackLayer7SummaryService) Vertical(ctx context.Context, query AttackLayer7SummaryVerticalParams, opts ...option.RequestOption) (res *AttackLayer7SummaryVerticalResponse, err error) {
+	var env AttackLayer7SummaryVerticalResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	path := "radar/attacks/layer7/summary/vertical"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -387,6 +413,138 @@ func (r *AttackLayer7SummaryHTTPVersionResponseSummary0) UnmarshalJSON(data []by
 }
 
 func (r attackLayer7SummaryHTTPVersionResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryIndustryResponse struct {
+	Meta     AttackLayer7SummaryIndustryResponseMeta `json:"meta,required"`
+	Summary0 map[string]string                       `json:"summary_0,required"`
+	JSON     attackLayer7SummaryIndustryResponseJSON `json:"-"`
+}
+
+// attackLayer7SummaryIndustryResponseJSON contains the JSON metadata for the
+// struct [AttackLayer7SummaryIndustryResponse]
+type attackLayer7SummaryIndustryResponseJSON struct {
+	Meta        apijson.Field
+	Summary0    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryIndustryResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryIndustryResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryIndustryResponseMeta struct {
+	DateRange      []AttackLayer7SummaryIndustryResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                `json:"lastUpdated,required"`
+	Normalization  string                                                `json:"normalization,required"`
+	ConfidenceInfo AttackLayer7SummaryIndustryResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           attackLayer7SummaryIndustryResponseMetaJSON           `json:"-"`
+}
+
+// attackLayer7SummaryIndustryResponseMetaJSON contains the JSON metadata for the
+// struct [AttackLayer7SummaryIndustryResponseMeta]
+type attackLayer7SummaryIndustryResponseMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryIndustryResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryIndustryResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryIndustryResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	JSON      attackLayer7SummaryIndustryResponseMetaDateRangeJSON `json:"-"`
+}
+
+// attackLayer7SummaryIndustryResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [AttackLayer7SummaryIndustryResponseMetaDateRange]
+type attackLayer7SummaryIndustryResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryIndustryResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryIndustryResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryIndustryResponseMetaConfidenceInfo struct {
+	Annotations []AttackLayer7SummaryIndustryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                             `json:"level"`
+	JSON        attackLayer7SummaryIndustryResponseMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// attackLayer7SummaryIndustryResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [AttackLayer7SummaryIndustryResponseMetaConfidenceInfo]
+type attackLayer7SummaryIndustryResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryIndustryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryIndustryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryIndustryResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                              `json:"dataSource,required"`
+	Description     string                                                              `json:"description,required"`
+	EventType       string                                                              `json:"eventType,required"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                              `json:"linkedUrl"`
+	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
+	JSON            attackLayer7SummaryIndustryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// attackLayer7SummaryIndustryResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [AttackLayer7SummaryIndustryResponseMetaConfidenceInfoAnnotation]
+type attackLayer7SummaryIndustryResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryIndustryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryIndustryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -812,20 +970,153 @@ func (r attackLayer7SummaryMitigationProductResponseMetaConfidenceInfoAnnotation
 	return r.raw
 }
 
+type AttackLayer7SummaryVerticalResponse struct {
+	Meta     AttackLayer7SummaryVerticalResponseMeta `json:"meta,required"`
+	Summary0 map[string]string                       `json:"summary_0,required"`
+	JSON     attackLayer7SummaryVerticalResponseJSON `json:"-"`
+}
+
+// attackLayer7SummaryVerticalResponseJSON contains the JSON metadata for the
+// struct [AttackLayer7SummaryVerticalResponse]
+type attackLayer7SummaryVerticalResponseJSON struct {
+	Meta        apijson.Field
+	Summary0    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryVerticalResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryVerticalResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryVerticalResponseMeta struct {
+	DateRange      []AttackLayer7SummaryVerticalResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                `json:"lastUpdated,required"`
+	Normalization  string                                                `json:"normalization,required"`
+	ConfidenceInfo AttackLayer7SummaryVerticalResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           attackLayer7SummaryVerticalResponseMetaJSON           `json:"-"`
+}
+
+// attackLayer7SummaryVerticalResponseMetaJSON contains the JSON metadata for the
+// struct [AttackLayer7SummaryVerticalResponseMeta]
+type attackLayer7SummaryVerticalResponseMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryVerticalResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryVerticalResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryVerticalResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	JSON      attackLayer7SummaryVerticalResponseMetaDateRangeJSON `json:"-"`
+}
+
+// attackLayer7SummaryVerticalResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [AttackLayer7SummaryVerticalResponseMetaDateRange]
+type attackLayer7SummaryVerticalResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryVerticalResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryVerticalResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryVerticalResponseMetaConfidenceInfo struct {
+	Annotations []AttackLayer7SummaryVerticalResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                             `json:"level"`
+	JSON        attackLayer7SummaryVerticalResponseMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// attackLayer7SummaryVerticalResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [AttackLayer7SummaryVerticalResponseMetaConfidenceInfo]
+type attackLayer7SummaryVerticalResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryVerticalResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryVerticalResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryVerticalResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                              `json:"dataSource,required"`
+	Description     string                                                              `json:"description,required"`
+	EventType       string                                                              `json:"eventType,required"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                              `json:"linkedUrl"`
+	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
+	JSON            attackLayer7SummaryVerticalResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// attackLayer7SummaryVerticalResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [AttackLayer7SummaryVerticalResponseMetaConfidenceInfoAnnotation]
+type attackLayer7SummaryVerticalResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryVerticalResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryVerticalResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type AttackLayer7SummaryHTTPMethodParams struct {
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -836,15 +1127,14 @@ type AttackLayer7SummaryHTTPMethodParams struct {
 	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer7SummaryHTTPMethodParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects per group to the top items within the specified
-	// time range. If there are more items than the limit, the response will include
-	// the count of items, with any remaining items grouped together under an "other"
-	// category.
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of L7 mitigation products.
+	// Filters the results by layer 7 mitigation product.
 	MitigationProduct param.Field[[]AttackLayer7SummaryHTTPMethodParamsMitigationProduct] `query:"mitigationProduct"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
@@ -950,19 +1240,20 @@ func (r attackLayer7SummaryHTTPMethodResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryHTTPVersionParams struct {
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -972,11 +1263,11 @@ type AttackLayer7SummaryHTTPVersionParams struct {
 	HTTPMethod param.Field[[]AttackLayer7SummaryHTTPVersionParamsHTTPMethod] `query:"httpMethod"`
 	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer7SummaryHTTPVersionParamsIPVersion] `query:"ipVersion"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of L7 mitigation products.
+	// Filters the results by layer 7 mitigation product.
 	MitigationProduct param.Field[[]AttackLayer7SummaryHTTPVersionParamsMitigationProduct] `query:"mitigationProduct"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
@@ -1124,20 +1415,219 @@ func (r attackLayer7SummaryHTTPVersionResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AttackLayer7SummaryIPVersionParams struct {
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+type AttackLayer7SummaryIndustryParams struct {
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
+	DateRange param.Field[[]string] `query:"dateRange"`
+	// Start of the date range.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format in which results will be returned.
+	Format param.Field[AttackLayer7SummaryIndustryParamsFormat] `query:"format"`
+	// Filters results by HTTP method.
+	HTTPMethod param.Field[[]AttackLayer7SummaryIndustryParamsHTTPMethod] `query:"httpMethod"`
+	// Filters results by HTTP version.
+	HTTPVersion param.Field[[]AttackLayer7SummaryIndustryParamsHTTPVersion] `query:"httpVersion"`
+	// Filters results by IP version (Ipv4 vs. IPv6).
+	IPVersion param.Field[[]AttackLayer7SummaryIndustryParamsIPVersion] `query:"ipVersion"`
+	// Limits the number of objects per group to the top items within the specified
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Filters the results by layer 7 mitigation product.
+	MitigationProduct param.Field[[]AttackLayer7SummaryIndustryParamsMitigationProduct] `query:"mitigationProduct"`
+	// Array of names used to label the series in the response.
+	Name param.Field[[]string] `query:"name"`
+}
+
+// URLQuery serializes [AttackLayer7SummaryIndustryParams]'s query parameters as
+// `url.Values`.
+func (r AttackLayer7SummaryIndustryParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Format in which results will be returned.
+type AttackLayer7SummaryIndustryParamsFormat string
+
+const (
+	AttackLayer7SummaryIndustryParamsFormatJson AttackLayer7SummaryIndustryParamsFormat = "JSON"
+	AttackLayer7SummaryIndustryParamsFormatCsv  AttackLayer7SummaryIndustryParamsFormat = "CSV"
+)
+
+func (r AttackLayer7SummaryIndustryParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryIndustryParamsFormatJson, AttackLayer7SummaryIndustryParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryIndustryParamsHTTPMethod string
+
+const (
+	AttackLayer7SummaryIndustryParamsHTTPMethodGet             AttackLayer7SummaryIndustryParamsHTTPMethod = "GET"
+	AttackLayer7SummaryIndustryParamsHTTPMethodPost            AttackLayer7SummaryIndustryParamsHTTPMethod = "POST"
+	AttackLayer7SummaryIndustryParamsHTTPMethodDelete          AttackLayer7SummaryIndustryParamsHTTPMethod = "DELETE"
+	AttackLayer7SummaryIndustryParamsHTTPMethodPut             AttackLayer7SummaryIndustryParamsHTTPMethod = "PUT"
+	AttackLayer7SummaryIndustryParamsHTTPMethodHead            AttackLayer7SummaryIndustryParamsHTTPMethod = "HEAD"
+	AttackLayer7SummaryIndustryParamsHTTPMethodPurge           AttackLayer7SummaryIndustryParamsHTTPMethod = "PURGE"
+	AttackLayer7SummaryIndustryParamsHTTPMethodOptions         AttackLayer7SummaryIndustryParamsHTTPMethod = "OPTIONS"
+	AttackLayer7SummaryIndustryParamsHTTPMethodPropfind        AttackLayer7SummaryIndustryParamsHTTPMethod = "PROPFIND"
+	AttackLayer7SummaryIndustryParamsHTTPMethodMkcol           AttackLayer7SummaryIndustryParamsHTTPMethod = "MKCOL"
+	AttackLayer7SummaryIndustryParamsHTTPMethodPatch           AttackLayer7SummaryIndustryParamsHTTPMethod = "PATCH"
+	AttackLayer7SummaryIndustryParamsHTTPMethodACL             AttackLayer7SummaryIndustryParamsHTTPMethod = "ACL"
+	AttackLayer7SummaryIndustryParamsHTTPMethodBcopy           AttackLayer7SummaryIndustryParamsHTTPMethod = "BCOPY"
+	AttackLayer7SummaryIndustryParamsHTTPMethodBdelete         AttackLayer7SummaryIndustryParamsHTTPMethod = "BDELETE"
+	AttackLayer7SummaryIndustryParamsHTTPMethodBmove           AttackLayer7SummaryIndustryParamsHTTPMethod = "BMOVE"
+	AttackLayer7SummaryIndustryParamsHTTPMethodBpropfind       AttackLayer7SummaryIndustryParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7SummaryIndustryParamsHTTPMethodBproppatch      AttackLayer7SummaryIndustryParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7SummaryIndustryParamsHTTPMethodCheckin         AttackLayer7SummaryIndustryParamsHTTPMethod = "CHECKIN"
+	AttackLayer7SummaryIndustryParamsHTTPMethodCheckout        AttackLayer7SummaryIndustryParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7SummaryIndustryParamsHTTPMethodConnect         AttackLayer7SummaryIndustryParamsHTTPMethod = "CONNECT"
+	AttackLayer7SummaryIndustryParamsHTTPMethodCopy            AttackLayer7SummaryIndustryParamsHTTPMethod = "COPY"
+	AttackLayer7SummaryIndustryParamsHTTPMethodLabel           AttackLayer7SummaryIndustryParamsHTTPMethod = "LABEL"
+	AttackLayer7SummaryIndustryParamsHTTPMethodLock            AttackLayer7SummaryIndustryParamsHTTPMethod = "LOCK"
+	AttackLayer7SummaryIndustryParamsHTTPMethodMerge           AttackLayer7SummaryIndustryParamsHTTPMethod = "MERGE"
+	AttackLayer7SummaryIndustryParamsHTTPMethodMkactivity      AttackLayer7SummaryIndustryParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7SummaryIndustryParamsHTTPMethodMkworkspace     AttackLayer7SummaryIndustryParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7SummaryIndustryParamsHTTPMethodMove            AttackLayer7SummaryIndustryParamsHTTPMethod = "MOVE"
+	AttackLayer7SummaryIndustryParamsHTTPMethodNotify          AttackLayer7SummaryIndustryParamsHTTPMethod = "NOTIFY"
+	AttackLayer7SummaryIndustryParamsHTTPMethodOrderpatch      AttackLayer7SummaryIndustryParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7SummaryIndustryParamsHTTPMethodPoll            AttackLayer7SummaryIndustryParamsHTTPMethod = "POLL"
+	AttackLayer7SummaryIndustryParamsHTTPMethodProppatch       AttackLayer7SummaryIndustryParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7SummaryIndustryParamsHTTPMethodReport          AttackLayer7SummaryIndustryParamsHTTPMethod = "REPORT"
+	AttackLayer7SummaryIndustryParamsHTTPMethodSearch          AttackLayer7SummaryIndustryParamsHTTPMethod = "SEARCH"
+	AttackLayer7SummaryIndustryParamsHTTPMethodSubscribe       AttackLayer7SummaryIndustryParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7SummaryIndustryParamsHTTPMethodTrace           AttackLayer7SummaryIndustryParamsHTTPMethod = "TRACE"
+	AttackLayer7SummaryIndustryParamsHTTPMethodUncheckout      AttackLayer7SummaryIndustryParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7SummaryIndustryParamsHTTPMethodUnlock          AttackLayer7SummaryIndustryParamsHTTPMethod = "UNLOCK"
+	AttackLayer7SummaryIndustryParamsHTTPMethodUnsubscribe     AttackLayer7SummaryIndustryParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7SummaryIndustryParamsHTTPMethodUpdate          AttackLayer7SummaryIndustryParamsHTTPMethod = "UPDATE"
+	AttackLayer7SummaryIndustryParamsHTTPMethodVersioncontrol  AttackLayer7SummaryIndustryParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7SummaryIndustryParamsHTTPMethodBaselinecontrol AttackLayer7SummaryIndustryParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7SummaryIndustryParamsHTTPMethodXmsenumatts     AttackLayer7SummaryIndustryParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7SummaryIndustryParamsHTTPMethodRpcOutData      AttackLayer7SummaryIndustryParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7SummaryIndustryParamsHTTPMethodRpcInData       AttackLayer7SummaryIndustryParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7SummaryIndustryParamsHTTPMethodJson            AttackLayer7SummaryIndustryParamsHTTPMethod = "JSON"
+	AttackLayer7SummaryIndustryParamsHTTPMethodCook            AttackLayer7SummaryIndustryParamsHTTPMethod = "COOK"
+	AttackLayer7SummaryIndustryParamsHTTPMethodTrack           AttackLayer7SummaryIndustryParamsHTTPMethod = "TRACK"
+)
+
+func (r AttackLayer7SummaryIndustryParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryIndustryParamsHTTPMethodGet, AttackLayer7SummaryIndustryParamsHTTPMethodPost, AttackLayer7SummaryIndustryParamsHTTPMethodDelete, AttackLayer7SummaryIndustryParamsHTTPMethodPut, AttackLayer7SummaryIndustryParamsHTTPMethodHead, AttackLayer7SummaryIndustryParamsHTTPMethodPurge, AttackLayer7SummaryIndustryParamsHTTPMethodOptions, AttackLayer7SummaryIndustryParamsHTTPMethodPropfind, AttackLayer7SummaryIndustryParamsHTTPMethodMkcol, AttackLayer7SummaryIndustryParamsHTTPMethodPatch, AttackLayer7SummaryIndustryParamsHTTPMethodACL, AttackLayer7SummaryIndustryParamsHTTPMethodBcopy, AttackLayer7SummaryIndustryParamsHTTPMethodBdelete, AttackLayer7SummaryIndustryParamsHTTPMethodBmove, AttackLayer7SummaryIndustryParamsHTTPMethodBpropfind, AttackLayer7SummaryIndustryParamsHTTPMethodBproppatch, AttackLayer7SummaryIndustryParamsHTTPMethodCheckin, AttackLayer7SummaryIndustryParamsHTTPMethodCheckout, AttackLayer7SummaryIndustryParamsHTTPMethodConnect, AttackLayer7SummaryIndustryParamsHTTPMethodCopy, AttackLayer7SummaryIndustryParamsHTTPMethodLabel, AttackLayer7SummaryIndustryParamsHTTPMethodLock, AttackLayer7SummaryIndustryParamsHTTPMethodMerge, AttackLayer7SummaryIndustryParamsHTTPMethodMkactivity, AttackLayer7SummaryIndustryParamsHTTPMethodMkworkspace, AttackLayer7SummaryIndustryParamsHTTPMethodMove, AttackLayer7SummaryIndustryParamsHTTPMethodNotify, AttackLayer7SummaryIndustryParamsHTTPMethodOrderpatch, AttackLayer7SummaryIndustryParamsHTTPMethodPoll, AttackLayer7SummaryIndustryParamsHTTPMethodProppatch, AttackLayer7SummaryIndustryParamsHTTPMethodReport, AttackLayer7SummaryIndustryParamsHTTPMethodSearch, AttackLayer7SummaryIndustryParamsHTTPMethodSubscribe, AttackLayer7SummaryIndustryParamsHTTPMethodTrace, AttackLayer7SummaryIndustryParamsHTTPMethodUncheckout, AttackLayer7SummaryIndustryParamsHTTPMethodUnlock, AttackLayer7SummaryIndustryParamsHTTPMethodUnsubscribe, AttackLayer7SummaryIndustryParamsHTTPMethodUpdate, AttackLayer7SummaryIndustryParamsHTTPMethodVersioncontrol, AttackLayer7SummaryIndustryParamsHTTPMethodBaselinecontrol, AttackLayer7SummaryIndustryParamsHTTPMethodXmsenumatts, AttackLayer7SummaryIndustryParamsHTTPMethodRpcOutData, AttackLayer7SummaryIndustryParamsHTTPMethodRpcInData, AttackLayer7SummaryIndustryParamsHTTPMethodJson, AttackLayer7SummaryIndustryParamsHTTPMethodCook, AttackLayer7SummaryIndustryParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryIndustryParamsHTTPVersion string
+
+const (
+	AttackLayer7SummaryIndustryParamsHTTPVersionHttPv1 AttackLayer7SummaryIndustryParamsHTTPVersion = "HTTPv1"
+	AttackLayer7SummaryIndustryParamsHTTPVersionHttPv2 AttackLayer7SummaryIndustryParamsHTTPVersion = "HTTPv2"
+	AttackLayer7SummaryIndustryParamsHTTPVersionHttPv3 AttackLayer7SummaryIndustryParamsHTTPVersion = "HTTPv3"
+)
+
+func (r AttackLayer7SummaryIndustryParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryIndustryParamsHTTPVersionHttPv1, AttackLayer7SummaryIndustryParamsHTTPVersionHttPv2, AttackLayer7SummaryIndustryParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryIndustryParamsIPVersion string
+
+const (
+	AttackLayer7SummaryIndustryParamsIPVersionIPv4 AttackLayer7SummaryIndustryParamsIPVersion = "IPv4"
+	AttackLayer7SummaryIndustryParamsIPVersionIPv6 AttackLayer7SummaryIndustryParamsIPVersion = "IPv6"
+)
+
+func (r AttackLayer7SummaryIndustryParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryIndustryParamsIPVersionIPv4, AttackLayer7SummaryIndustryParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryIndustryParamsMitigationProduct string
+
+const (
+	AttackLayer7SummaryIndustryParamsMitigationProductDDoS               AttackLayer7SummaryIndustryParamsMitigationProduct = "DDOS"
+	AttackLayer7SummaryIndustryParamsMitigationProductWAF                AttackLayer7SummaryIndustryParamsMitigationProduct = "WAF"
+	AttackLayer7SummaryIndustryParamsMitigationProductBotManagement      AttackLayer7SummaryIndustryParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7SummaryIndustryParamsMitigationProductAccessRules        AttackLayer7SummaryIndustryParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7SummaryIndustryParamsMitigationProductIPReputation       AttackLayer7SummaryIndustryParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7SummaryIndustryParamsMitigationProductAPIShield          AttackLayer7SummaryIndustryParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7SummaryIndustryParamsMitigationProductDataLossPrevention AttackLayer7SummaryIndustryParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+func (r AttackLayer7SummaryIndustryParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryIndustryParamsMitigationProductDDoS, AttackLayer7SummaryIndustryParamsMitigationProductWAF, AttackLayer7SummaryIndustryParamsMitigationProductBotManagement, AttackLayer7SummaryIndustryParamsMitigationProductAccessRules, AttackLayer7SummaryIndustryParamsMitigationProductIPReputation, AttackLayer7SummaryIndustryParamsMitigationProductAPIShield, AttackLayer7SummaryIndustryParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryIndustryResponseEnvelope struct {
+	Result  AttackLayer7SummaryIndustryResponse             `json:"result,required"`
+	Success bool                                            `json:"success,required"`
+	JSON    attackLayer7SummaryIndustryResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7SummaryIndustryResponseEnvelopeJSON contains the JSON metadata for
+// the struct [AttackLayer7SummaryIndustryResponseEnvelope]
+type attackLayer7SummaryIndustryResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryIndustryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryIndustryResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryIPVersionParams struct {
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -1147,11 +1637,11 @@ type AttackLayer7SummaryIPVersionParams struct {
 	HTTPMethod param.Field[[]AttackLayer7SummaryIPVersionParamsHTTPMethod] `query:"httpMethod"`
 	// Filters results by HTTP version.
 	HTTPVersion param.Field[[]AttackLayer7SummaryIPVersionParamsHTTPVersion] `query:"httpVersion"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of L7 mitigation products.
+	// Filters the results by layer 7 mitigation product.
 	MitigationProduct param.Field[[]AttackLayer7SummaryIPVersionParamsMitigationProduct] `query:"mitigationProduct"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
@@ -1301,19 +1791,20 @@ func (r attackLayer7SummaryIPVersionResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryManagedRulesParams struct {
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -1326,15 +1817,14 @@ type AttackLayer7SummaryManagedRulesParams struct {
 	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer7SummaryManagedRulesParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects per group to the top items within the specified
-	// time range. If there are more items than the limit, the response will include
-	// the count of items, with any remaining items grouped together under an "other"
-	// category.
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Array of L7 mitigation products.
+	// Filters the results by layer 7 mitigation product.
 	MitigationProduct param.Field[[]AttackLayer7SummaryManagedRulesParamsMitigationProduct] `query:"mitigationProduct"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
@@ -1499,19 +1989,20 @@ func (r attackLayer7SummaryManagedRulesResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryMitigationProductParams struct {
-	// Comma-separated list of Autonomous System Numbers (ASNs). Prefix with `-` to
-	// exclude ASNs from results. For example, `-174, 3356` excludes results from
-	// AS174, but includes results from AS3356.
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Comma-separated list of continents (alpha-2 continent codes). Prefix with `-` to
-	// exclude continents from results. For example, `-EU,NA` excludes results from EU,
-	// but includes results from NA.
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -1524,13 +2015,12 @@ type AttackLayer7SummaryMitigationProductParams struct {
 	// Filters results by IP version (Ipv4 vs. IPv6).
 	IPVersion param.Field[[]AttackLayer7SummaryMitigationProductParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects per group to the top items within the specified
-	// time range. If there are more items than the limit, the response will include
-	// the count of items, with any remaining items grouped together under an "other"
-	// category.
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
-	// Comma-separated list of locations (alpha-2 codes). Prefix with `-` to exclude
-	// locations from results. For example, `-US,PT` excludes results from the US, but
-	// includes results from PT.
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
@@ -1671,5 +2161,203 @@ func (r *AttackLayer7SummaryMitigationProductResponseEnvelope) UnmarshalJSON(dat
 }
 
 func (r attackLayer7SummaryMitigationProductResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7SummaryVerticalParams struct {
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
+	// results. For example, `-174, 3356` excludes results from AS174, but includes
+	// results from AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
+	// excludes results from EU, but includes results from NA.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
+	DateRange param.Field[[]string] `query:"dateRange"`
+	// Start of the date range.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format in which results will be returned.
+	Format param.Field[AttackLayer7SummaryVerticalParamsFormat] `query:"format"`
+	// Filters results by HTTP method.
+	HTTPMethod param.Field[[]AttackLayer7SummaryVerticalParamsHTTPMethod] `query:"httpMethod"`
+	// Filters results by HTTP version.
+	HTTPVersion param.Field[[]AttackLayer7SummaryVerticalParamsHTTPVersion] `query:"httpVersion"`
+	// Filters results by IP version (Ipv4 vs. IPv6).
+	IPVersion param.Field[[]AttackLayer7SummaryVerticalParamsIPVersion] `query:"ipVersion"`
+	// Limits the number of objects per group to the top items within the specified
+	// time range. When item count exceeds the limit, extra items appear grouped under
+	// an "other" category.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
+	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
+	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
+	// excludes results from the US, but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Filters the results by layer 7 mitigation product.
+	MitigationProduct param.Field[[]AttackLayer7SummaryVerticalParamsMitigationProduct] `query:"mitigationProduct"`
+	// Array of names used to label the series in the response.
+	Name param.Field[[]string] `query:"name"`
+}
+
+// URLQuery serializes [AttackLayer7SummaryVerticalParams]'s query parameters as
+// `url.Values`.
+func (r AttackLayer7SummaryVerticalParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Format in which results will be returned.
+type AttackLayer7SummaryVerticalParamsFormat string
+
+const (
+	AttackLayer7SummaryVerticalParamsFormatJson AttackLayer7SummaryVerticalParamsFormat = "JSON"
+	AttackLayer7SummaryVerticalParamsFormatCsv  AttackLayer7SummaryVerticalParamsFormat = "CSV"
+)
+
+func (r AttackLayer7SummaryVerticalParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryVerticalParamsFormatJson, AttackLayer7SummaryVerticalParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryVerticalParamsHTTPMethod string
+
+const (
+	AttackLayer7SummaryVerticalParamsHTTPMethodGet             AttackLayer7SummaryVerticalParamsHTTPMethod = "GET"
+	AttackLayer7SummaryVerticalParamsHTTPMethodPost            AttackLayer7SummaryVerticalParamsHTTPMethod = "POST"
+	AttackLayer7SummaryVerticalParamsHTTPMethodDelete          AttackLayer7SummaryVerticalParamsHTTPMethod = "DELETE"
+	AttackLayer7SummaryVerticalParamsHTTPMethodPut             AttackLayer7SummaryVerticalParamsHTTPMethod = "PUT"
+	AttackLayer7SummaryVerticalParamsHTTPMethodHead            AttackLayer7SummaryVerticalParamsHTTPMethod = "HEAD"
+	AttackLayer7SummaryVerticalParamsHTTPMethodPurge           AttackLayer7SummaryVerticalParamsHTTPMethod = "PURGE"
+	AttackLayer7SummaryVerticalParamsHTTPMethodOptions         AttackLayer7SummaryVerticalParamsHTTPMethod = "OPTIONS"
+	AttackLayer7SummaryVerticalParamsHTTPMethodPropfind        AttackLayer7SummaryVerticalParamsHTTPMethod = "PROPFIND"
+	AttackLayer7SummaryVerticalParamsHTTPMethodMkcol           AttackLayer7SummaryVerticalParamsHTTPMethod = "MKCOL"
+	AttackLayer7SummaryVerticalParamsHTTPMethodPatch           AttackLayer7SummaryVerticalParamsHTTPMethod = "PATCH"
+	AttackLayer7SummaryVerticalParamsHTTPMethodACL             AttackLayer7SummaryVerticalParamsHTTPMethod = "ACL"
+	AttackLayer7SummaryVerticalParamsHTTPMethodBcopy           AttackLayer7SummaryVerticalParamsHTTPMethod = "BCOPY"
+	AttackLayer7SummaryVerticalParamsHTTPMethodBdelete         AttackLayer7SummaryVerticalParamsHTTPMethod = "BDELETE"
+	AttackLayer7SummaryVerticalParamsHTTPMethodBmove           AttackLayer7SummaryVerticalParamsHTTPMethod = "BMOVE"
+	AttackLayer7SummaryVerticalParamsHTTPMethodBpropfind       AttackLayer7SummaryVerticalParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7SummaryVerticalParamsHTTPMethodBproppatch      AttackLayer7SummaryVerticalParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7SummaryVerticalParamsHTTPMethodCheckin         AttackLayer7SummaryVerticalParamsHTTPMethod = "CHECKIN"
+	AttackLayer7SummaryVerticalParamsHTTPMethodCheckout        AttackLayer7SummaryVerticalParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7SummaryVerticalParamsHTTPMethodConnect         AttackLayer7SummaryVerticalParamsHTTPMethod = "CONNECT"
+	AttackLayer7SummaryVerticalParamsHTTPMethodCopy            AttackLayer7SummaryVerticalParamsHTTPMethod = "COPY"
+	AttackLayer7SummaryVerticalParamsHTTPMethodLabel           AttackLayer7SummaryVerticalParamsHTTPMethod = "LABEL"
+	AttackLayer7SummaryVerticalParamsHTTPMethodLock            AttackLayer7SummaryVerticalParamsHTTPMethod = "LOCK"
+	AttackLayer7SummaryVerticalParamsHTTPMethodMerge           AttackLayer7SummaryVerticalParamsHTTPMethod = "MERGE"
+	AttackLayer7SummaryVerticalParamsHTTPMethodMkactivity      AttackLayer7SummaryVerticalParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7SummaryVerticalParamsHTTPMethodMkworkspace     AttackLayer7SummaryVerticalParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7SummaryVerticalParamsHTTPMethodMove            AttackLayer7SummaryVerticalParamsHTTPMethod = "MOVE"
+	AttackLayer7SummaryVerticalParamsHTTPMethodNotify          AttackLayer7SummaryVerticalParamsHTTPMethod = "NOTIFY"
+	AttackLayer7SummaryVerticalParamsHTTPMethodOrderpatch      AttackLayer7SummaryVerticalParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7SummaryVerticalParamsHTTPMethodPoll            AttackLayer7SummaryVerticalParamsHTTPMethod = "POLL"
+	AttackLayer7SummaryVerticalParamsHTTPMethodProppatch       AttackLayer7SummaryVerticalParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7SummaryVerticalParamsHTTPMethodReport          AttackLayer7SummaryVerticalParamsHTTPMethod = "REPORT"
+	AttackLayer7SummaryVerticalParamsHTTPMethodSearch          AttackLayer7SummaryVerticalParamsHTTPMethod = "SEARCH"
+	AttackLayer7SummaryVerticalParamsHTTPMethodSubscribe       AttackLayer7SummaryVerticalParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7SummaryVerticalParamsHTTPMethodTrace           AttackLayer7SummaryVerticalParamsHTTPMethod = "TRACE"
+	AttackLayer7SummaryVerticalParamsHTTPMethodUncheckout      AttackLayer7SummaryVerticalParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7SummaryVerticalParamsHTTPMethodUnlock          AttackLayer7SummaryVerticalParamsHTTPMethod = "UNLOCK"
+	AttackLayer7SummaryVerticalParamsHTTPMethodUnsubscribe     AttackLayer7SummaryVerticalParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7SummaryVerticalParamsHTTPMethodUpdate          AttackLayer7SummaryVerticalParamsHTTPMethod = "UPDATE"
+	AttackLayer7SummaryVerticalParamsHTTPMethodVersioncontrol  AttackLayer7SummaryVerticalParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7SummaryVerticalParamsHTTPMethodBaselinecontrol AttackLayer7SummaryVerticalParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7SummaryVerticalParamsHTTPMethodXmsenumatts     AttackLayer7SummaryVerticalParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7SummaryVerticalParamsHTTPMethodRpcOutData      AttackLayer7SummaryVerticalParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7SummaryVerticalParamsHTTPMethodRpcInData       AttackLayer7SummaryVerticalParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7SummaryVerticalParamsHTTPMethodJson            AttackLayer7SummaryVerticalParamsHTTPMethod = "JSON"
+	AttackLayer7SummaryVerticalParamsHTTPMethodCook            AttackLayer7SummaryVerticalParamsHTTPMethod = "COOK"
+	AttackLayer7SummaryVerticalParamsHTTPMethodTrack           AttackLayer7SummaryVerticalParamsHTTPMethod = "TRACK"
+)
+
+func (r AttackLayer7SummaryVerticalParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryVerticalParamsHTTPMethodGet, AttackLayer7SummaryVerticalParamsHTTPMethodPost, AttackLayer7SummaryVerticalParamsHTTPMethodDelete, AttackLayer7SummaryVerticalParamsHTTPMethodPut, AttackLayer7SummaryVerticalParamsHTTPMethodHead, AttackLayer7SummaryVerticalParamsHTTPMethodPurge, AttackLayer7SummaryVerticalParamsHTTPMethodOptions, AttackLayer7SummaryVerticalParamsHTTPMethodPropfind, AttackLayer7SummaryVerticalParamsHTTPMethodMkcol, AttackLayer7SummaryVerticalParamsHTTPMethodPatch, AttackLayer7SummaryVerticalParamsHTTPMethodACL, AttackLayer7SummaryVerticalParamsHTTPMethodBcopy, AttackLayer7SummaryVerticalParamsHTTPMethodBdelete, AttackLayer7SummaryVerticalParamsHTTPMethodBmove, AttackLayer7SummaryVerticalParamsHTTPMethodBpropfind, AttackLayer7SummaryVerticalParamsHTTPMethodBproppatch, AttackLayer7SummaryVerticalParamsHTTPMethodCheckin, AttackLayer7SummaryVerticalParamsHTTPMethodCheckout, AttackLayer7SummaryVerticalParamsHTTPMethodConnect, AttackLayer7SummaryVerticalParamsHTTPMethodCopy, AttackLayer7SummaryVerticalParamsHTTPMethodLabel, AttackLayer7SummaryVerticalParamsHTTPMethodLock, AttackLayer7SummaryVerticalParamsHTTPMethodMerge, AttackLayer7SummaryVerticalParamsHTTPMethodMkactivity, AttackLayer7SummaryVerticalParamsHTTPMethodMkworkspace, AttackLayer7SummaryVerticalParamsHTTPMethodMove, AttackLayer7SummaryVerticalParamsHTTPMethodNotify, AttackLayer7SummaryVerticalParamsHTTPMethodOrderpatch, AttackLayer7SummaryVerticalParamsHTTPMethodPoll, AttackLayer7SummaryVerticalParamsHTTPMethodProppatch, AttackLayer7SummaryVerticalParamsHTTPMethodReport, AttackLayer7SummaryVerticalParamsHTTPMethodSearch, AttackLayer7SummaryVerticalParamsHTTPMethodSubscribe, AttackLayer7SummaryVerticalParamsHTTPMethodTrace, AttackLayer7SummaryVerticalParamsHTTPMethodUncheckout, AttackLayer7SummaryVerticalParamsHTTPMethodUnlock, AttackLayer7SummaryVerticalParamsHTTPMethodUnsubscribe, AttackLayer7SummaryVerticalParamsHTTPMethodUpdate, AttackLayer7SummaryVerticalParamsHTTPMethodVersioncontrol, AttackLayer7SummaryVerticalParamsHTTPMethodBaselinecontrol, AttackLayer7SummaryVerticalParamsHTTPMethodXmsenumatts, AttackLayer7SummaryVerticalParamsHTTPMethodRpcOutData, AttackLayer7SummaryVerticalParamsHTTPMethodRpcInData, AttackLayer7SummaryVerticalParamsHTTPMethodJson, AttackLayer7SummaryVerticalParamsHTTPMethodCook, AttackLayer7SummaryVerticalParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryVerticalParamsHTTPVersion string
+
+const (
+	AttackLayer7SummaryVerticalParamsHTTPVersionHttPv1 AttackLayer7SummaryVerticalParamsHTTPVersion = "HTTPv1"
+	AttackLayer7SummaryVerticalParamsHTTPVersionHttPv2 AttackLayer7SummaryVerticalParamsHTTPVersion = "HTTPv2"
+	AttackLayer7SummaryVerticalParamsHTTPVersionHttPv3 AttackLayer7SummaryVerticalParamsHTTPVersion = "HTTPv3"
+)
+
+func (r AttackLayer7SummaryVerticalParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryVerticalParamsHTTPVersionHttPv1, AttackLayer7SummaryVerticalParamsHTTPVersionHttPv2, AttackLayer7SummaryVerticalParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryVerticalParamsIPVersion string
+
+const (
+	AttackLayer7SummaryVerticalParamsIPVersionIPv4 AttackLayer7SummaryVerticalParamsIPVersion = "IPv4"
+	AttackLayer7SummaryVerticalParamsIPVersionIPv6 AttackLayer7SummaryVerticalParamsIPVersion = "IPv6"
+)
+
+func (r AttackLayer7SummaryVerticalParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryVerticalParamsIPVersionIPv4, AttackLayer7SummaryVerticalParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryVerticalParamsMitigationProduct string
+
+const (
+	AttackLayer7SummaryVerticalParamsMitigationProductDDoS               AttackLayer7SummaryVerticalParamsMitigationProduct = "DDOS"
+	AttackLayer7SummaryVerticalParamsMitigationProductWAF                AttackLayer7SummaryVerticalParamsMitigationProduct = "WAF"
+	AttackLayer7SummaryVerticalParamsMitigationProductBotManagement      AttackLayer7SummaryVerticalParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7SummaryVerticalParamsMitigationProductAccessRules        AttackLayer7SummaryVerticalParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7SummaryVerticalParamsMitigationProductIPReputation       AttackLayer7SummaryVerticalParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7SummaryVerticalParamsMitigationProductAPIShield          AttackLayer7SummaryVerticalParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7SummaryVerticalParamsMitigationProductDataLossPrevention AttackLayer7SummaryVerticalParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+func (r AttackLayer7SummaryVerticalParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryVerticalParamsMitigationProductDDoS, AttackLayer7SummaryVerticalParamsMitigationProductWAF, AttackLayer7SummaryVerticalParamsMitigationProductBotManagement, AttackLayer7SummaryVerticalParamsMitigationProductAccessRules, AttackLayer7SummaryVerticalParamsMitigationProductIPReputation, AttackLayer7SummaryVerticalParamsMitigationProductAPIShield, AttackLayer7SummaryVerticalParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7SummaryVerticalResponseEnvelope struct {
+	Result  AttackLayer7SummaryVerticalResponse             `json:"result,required"`
+	Success bool                                            `json:"success,required"`
+	JSON    attackLayer7SummaryVerticalResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7SummaryVerticalResponseEnvelopeJSON contains the JSON metadata for
+// the struct [AttackLayer7SummaryVerticalResponseEnvelope]
+type attackLayer7SummaryVerticalResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7SummaryVerticalResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7SummaryVerticalResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }

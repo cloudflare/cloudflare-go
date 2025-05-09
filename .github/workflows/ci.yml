@@ -1,12 +1,12 @@
 name: CI
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-      - next
+    branches-ignore:
+      - 'generated'
+      - 'codegen/**'
+      - 'integrated/**'
+      - 'stl-preview-head/**'
+      - 'stl-preview-base/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -14,9 +14,9 @@ concurrency:
 
 jobs:
   lint:
+    timeout-minutes: 10
     name: lint
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+    runs-on: ${{ github.repository == 'stainless-sdks/cloudflare-go' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -29,9 +29,9 @@ jobs:
       - name: Run lints
         run: ./scripts/lint
   test:
+    timeout-minutes: 10
     name: test
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    runs-on: ${{ github.repository == 'stainless-sdks/cloudflare-go' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
 
     steps:
       - uses: actions/checkout@v4

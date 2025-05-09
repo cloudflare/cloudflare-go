@@ -30,6 +30,7 @@ import (
 type InstanceService struct {
 	Options []option.RequestOption
 	Status  *InstanceStatusService
+	Events  *InstanceEventService
 }
 
 // NewInstanceService generates a new service that applies the given options to
@@ -39,6 +40,7 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 	r = &InstanceService{}
 	r.Options = opts
 	r.Status = NewInstanceStatusService(opts...)
+	r.Events = NewInstanceEventService(opts...)
 	return
 }
 
@@ -188,12 +190,11 @@ const (
 	InstanceNewResponseStatusComplete        InstanceNewResponseStatus = "complete"
 	InstanceNewResponseStatusWaitingForPause InstanceNewResponseStatus = "waitingForPause"
 	InstanceNewResponseStatusWaiting         InstanceNewResponseStatus = "waiting"
-	InstanceNewResponseStatusUnknown         InstanceNewResponseStatus = "unknown"
 )
 
 func (r InstanceNewResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseStatusQueued, InstanceNewResponseStatusRunning, InstanceNewResponseStatusPaused, InstanceNewResponseStatusErrored, InstanceNewResponseStatusTerminated, InstanceNewResponseStatusComplete, InstanceNewResponseStatusWaitingForPause, InstanceNewResponseStatusWaiting, InstanceNewResponseStatusUnknown:
+	case InstanceNewResponseStatusQueued, InstanceNewResponseStatusRunning, InstanceNewResponseStatusPaused, InstanceNewResponseStatusErrored, InstanceNewResponseStatusTerminated, InstanceNewResponseStatusComplete, InstanceNewResponseStatusWaitingForPause, InstanceNewResponseStatusWaiting:
 		return true
 	}
 	return false
@@ -245,12 +246,11 @@ const (
 	InstanceListResponseStatusComplete        InstanceListResponseStatus = "complete"
 	InstanceListResponseStatusWaitingForPause InstanceListResponseStatus = "waitingForPause"
 	InstanceListResponseStatusWaiting         InstanceListResponseStatus = "waiting"
-	InstanceListResponseStatusUnknown         InstanceListResponseStatus = "unknown"
 )
 
 func (r InstanceListResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceListResponseStatusQueued, InstanceListResponseStatusRunning, InstanceListResponseStatusPaused, InstanceListResponseStatusErrored, InstanceListResponseStatusTerminated, InstanceListResponseStatusComplete, InstanceListResponseStatusWaitingForPause, InstanceListResponseStatusWaiting, InstanceListResponseStatusUnknown:
+	case InstanceListResponseStatusQueued, InstanceListResponseStatusRunning, InstanceListResponseStatusPaused, InstanceListResponseStatusErrored, InstanceListResponseStatusTerminated, InstanceListResponseStatusComplete, InstanceListResponseStatusWaitingForPause, InstanceListResponseStatusWaiting:
 		return true
 	}
 	return false
@@ -294,12 +294,11 @@ const (
 	InstanceBulkResponseStatusComplete        InstanceBulkResponseStatus = "complete"
 	InstanceBulkResponseStatusWaitingForPause InstanceBulkResponseStatus = "waitingForPause"
 	InstanceBulkResponseStatusWaiting         InstanceBulkResponseStatus = "waiting"
-	InstanceBulkResponseStatusUnknown         InstanceBulkResponseStatus = "unknown"
 )
 
 func (r InstanceBulkResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceBulkResponseStatusQueued, InstanceBulkResponseStatusRunning, InstanceBulkResponseStatusPaused, InstanceBulkResponseStatusErrored, InstanceBulkResponseStatusTerminated, InstanceBulkResponseStatusComplete, InstanceBulkResponseStatusWaitingForPause, InstanceBulkResponseStatusWaiting, InstanceBulkResponseStatusUnknown:
+	case InstanceBulkResponseStatusQueued, InstanceBulkResponseStatusRunning, InstanceBulkResponseStatusPaused, InstanceBulkResponseStatusErrored, InstanceBulkResponseStatusTerminated, InstanceBulkResponseStatusComplete, InstanceBulkResponseStatusWaitingForPause, InstanceBulkResponseStatusWaiting:
 		return true
 	}
 	return false
@@ -400,12 +399,11 @@ const (
 	InstanceGetResponseStatusComplete        InstanceGetResponseStatus = "complete"
 	InstanceGetResponseStatusWaitingForPause InstanceGetResponseStatus = "waitingForPause"
 	InstanceGetResponseStatusWaiting         InstanceGetResponseStatus = "waiting"
-	InstanceGetResponseStatusUnknown         InstanceGetResponseStatus = "unknown"
 )
 
 func (r InstanceGetResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceGetResponseStatusQueued, InstanceGetResponseStatusRunning, InstanceGetResponseStatusPaused, InstanceGetResponseStatusErrored, InstanceGetResponseStatusTerminated, InstanceGetResponseStatusComplete, InstanceGetResponseStatusWaitingForPause, InstanceGetResponseStatusWaiting, InstanceGetResponseStatusUnknown:
+	case InstanceGetResponseStatusQueued, InstanceGetResponseStatusRunning, InstanceGetResponseStatusPaused, InstanceGetResponseStatusErrored, InstanceGetResponseStatusTerminated, InstanceGetResponseStatusComplete, InstanceGetResponseStatusWaitingForPause, InstanceGetResponseStatusWaiting:
 		return true
 	}
 	return false
@@ -470,12 +468,14 @@ func (r *InstanceGetResponseStep) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are
 // [workflows.InstanceGetResponseStepsObject],
 // [workflows.InstanceGetResponseStepsObject],
+// [workflows.InstanceGetResponseStepsObject],
 // [workflows.InstanceGetResponseStepsObject].
 func (r InstanceGetResponseStep) AsUnion() InstanceGetResponseStepsUnion {
 	return r.union
 }
 
 // Union satisfied by [workflows.InstanceGetResponseStepsObject],
+// [workflows.InstanceGetResponseStepsObject],
 // [workflows.InstanceGetResponseStepsObject] or
 // [workflows.InstanceGetResponseStepsObject].
 type InstanceGetResponseStepsUnion interface {
@@ -486,6 +486,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*InstanceGetResponseStepsUnion)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(InstanceGetResponseStepsObject{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(InstanceGetResponseStepsObject{}),
@@ -589,9 +593,9 @@ func (r instanceGetResponseStepsObjectAttemptsErrorJSON) RawJSON() string {
 }
 
 type InstanceGetResponseStepsObjectConfig struct {
-	Retries InstanceGetResponseStepsObjectConfigRetries      `json:"retries,required"`
-	Timeout InstanceGetResponseStepsObjectConfigTimeoutUnion `json:"timeout,required"`
-	JSON    instanceGetResponseStepsObjectConfigJSON         `json:"-"`
+	Retries InstanceGetResponseStepsObjectConfigRetries `json:"retries,required"`
+	Timeout interface{}                                 `json:"timeout,required"`
+	JSON    instanceGetResponseStepsObjectConfigJSON    `json:"-"`
 }
 
 // instanceGetResponseStepsObjectConfigJSON contains the JSON metadata for the
@@ -612,10 +616,10 @@ func (r instanceGetResponseStepsObjectConfigJSON) RawJSON() string {
 }
 
 type InstanceGetResponseStepsObjectConfigRetries struct {
-	Delay   InstanceGetResponseStepsObjectConfigRetriesDelayUnion `json:"delay,required"`
-	Limit   float64                                               `json:"limit,required"`
-	Backoff InstanceGetResponseStepsObjectConfigRetriesBackoff    `json:"backoff"`
-	JSON    instanceGetResponseStepsObjectConfigRetriesJSON       `json:"-"`
+	Delay   interface{}                                        `json:"delay,required"`
+	Limit   float64                                            `json:"limit,required"`
+	Backoff InstanceGetResponseStepsObjectConfigRetriesBackoff `json:"backoff"`
+	JSON    instanceGetResponseStepsObjectConfigRetriesJSON    `json:"-"`
 }
 
 // instanceGetResponseStepsObjectConfigRetriesJSON contains the JSON metadata for
@@ -636,26 +640,6 @@ func (r instanceGetResponseStepsObjectConfigRetriesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [shared.UnionString] or [shared.UnionFloat].
-type InstanceGetResponseStepsObjectConfigRetriesDelayUnion interface {
-	ImplementsInstanceGetResponseStepsObjectConfigRetriesDelayUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*InstanceGetResponseStepsObjectConfigRetriesDelayUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-	)
-}
-
 type InstanceGetResponseStepsObjectConfigRetriesBackoff string
 
 const (
@@ -670,26 +654,6 @@ func (r InstanceGetResponseStepsObjectConfigRetriesBackoff) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Union satisfied by [shared.UnionString] or [shared.UnionFloat].
-type InstanceGetResponseStepsObjectConfigTimeoutUnion interface {
-	ImplementsInstanceGetResponseStepsObjectConfigTimeoutUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*InstanceGetResponseStepsObjectConfigTimeoutUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-	)
 }
 
 type InstanceGetResponseStepsObjectType string
@@ -709,14 +673,15 @@ func (r InstanceGetResponseStepsObjectType) IsKnown() bool {
 type InstanceGetResponseStepsType string
 
 const (
-	InstanceGetResponseStepsTypeStep        InstanceGetResponseStepsType = "step"
-	InstanceGetResponseStepsTypeSleep       InstanceGetResponseStepsType = "sleep"
-	InstanceGetResponseStepsTypeTermination InstanceGetResponseStepsType = "termination"
+	InstanceGetResponseStepsTypeStep         InstanceGetResponseStepsType = "step"
+	InstanceGetResponseStepsTypeSleep        InstanceGetResponseStepsType = "sleep"
+	InstanceGetResponseStepsTypeTermination  InstanceGetResponseStepsType = "termination"
+	InstanceGetResponseStepsTypeWaitForEvent InstanceGetResponseStepsType = "waitForEvent"
 )
 
 func (r InstanceGetResponseStepsType) IsKnown() bool {
 	switch r {
-	case InstanceGetResponseStepsTypeStep, InstanceGetResponseStepsTypeSleep, InstanceGetResponseStepsTypeTermination:
+	case InstanceGetResponseStepsTypeStep, InstanceGetResponseStepsTypeSleep, InstanceGetResponseStepsTypeTermination, InstanceGetResponseStepsTypeWaitForEvent:
 		return true
 	}
 	return false
@@ -917,12 +882,11 @@ const (
 	InstanceListParamsStatusComplete        InstanceListParamsStatus = "complete"
 	InstanceListParamsStatusWaitingForPause InstanceListParamsStatus = "waitingForPause"
 	InstanceListParamsStatusWaiting         InstanceListParamsStatus = "waiting"
-	InstanceListParamsStatusUnknown         InstanceListParamsStatus = "unknown"
 )
 
 func (r InstanceListParamsStatus) IsKnown() bool {
 	switch r {
-	case InstanceListParamsStatusQueued, InstanceListParamsStatusRunning, InstanceListParamsStatusPaused, InstanceListParamsStatusErrored, InstanceListParamsStatusTerminated, InstanceListParamsStatusComplete, InstanceListParamsStatusWaitingForPause, InstanceListParamsStatusWaiting, InstanceListParamsStatusUnknown:
+	case InstanceListParamsStatusQueued, InstanceListParamsStatusRunning, InstanceListParamsStatusPaused, InstanceListParamsStatusErrored, InstanceListParamsStatusTerminated, InstanceListParamsStatusComplete, InstanceListParamsStatusWaitingForPause, InstanceListParamsStatusWaiting:
 		return true
 	}
 	return false

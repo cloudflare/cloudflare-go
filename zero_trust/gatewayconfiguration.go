@@ -135,7 +135,7 @@ type AntiVirusSettings struct {
 	FailClosed bool `json:"fail_closed"`
 	// Configure a message to display on the user's device when an antivirus search is
 	// performed.
-	NotificationSettings NotificationSettings  `json:"notification_settings"`
+	NotificationSettings NotificationSettings  `json:"notification_settings,nullable"`
 	JSON                 antiVirusSettingsJSON `json:"-"`
 }
 
@@ -177,25 +177,35 @@ func (r AntiVirusSettingsParam) MarshalJSON() (data []byte, err error) {
 
 // Block page layout settings.
 type BlockPageSettings struct {
-	// Block page background color in #rrggbb format.
+	// If mode is customized_block_page: block page background color in #rrggbb format.
 	BackgroundColor string `json:"background_color"`
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
 	Enabled bool `json:"enabled"`
-	// Block page footer text.
+	// If mode is customized_block_page: block page footer text.
 	FooterText string `json:"footer_text"`
-	// Block page header text.
+	// If mode is customized_block_page: block page header text.
 	HeaderText string `json:"header_text"`
-	// Full URL to the logo file.
+	// If mode is redirect_uri: when enabled, context will be appended to target_uri as
+	// query parameters.
+	IncludeContext bool `json:"include_context"`
+	// If mode is customized_block_page: full URL to the logo file.
 	LogoPath string `json:"logo_path"`
-	// Admin email for users to contact.
+	// If mode is customized_block_page: admin email for users to contact.
 	MailtoAddress string `json:"mailto_address"`
-	// Subject line for emails created from block page.
+	// If mode is customized_block_page: subject line for emails created from block
+	// page.
 	MailtoSubject string `json:"mailto_subject"`
-	// Block page title.
+	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
+	// a customer-provided URI.
+	Mode BlockPageSettingsMode `json:"mode"`
+	// If mode is customized_block_page: block page title.
 	Name string `json:"name"`
-	// Suppress detailed info at the bottom of the block page.
-	SuppressFooter bool                  `json:"suppress_footer"`
-	JSON           blockPageSettingsJSON `json:"-"`
+	// If mode is customized_block_page: suppress detailed info at the bottom of the
+	// block page.
+	SuppressFooter bool `json:"suppress_footer"`
+	// If mode is redirect_uri: URI to which the user should be redirected.
+	TargetURI string                `json:"target_uri" format:"uri"`
+	JSON      blockPageSettingsJSON `json:"-"`
 }
 
 // blockPageSettingsJSON contains the JSON metadata for the struct
@@ -205,11 +215,14 @@ type blockPageSettingsJSON struct {
 	Enabled         apijson.Field
 	FooterText      apijson.Field
 	HeaderText      apijson.Field
+	IncludeContext  apijson.Field
 	LogoPath        apijson.Field
 	MailtoAddress   apijson.Field
 	MailtoSubject   apijson.Field
+	Mode            apijson.Field
 	Name            apijson.Field
 	SuppressFooter  apijson.Field
+	TargetURI       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -222,26 +235,53 @@ func (r blockPageSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
+// Controls whether the user is redirected to a Cloudflare-hosted block page or to
+// a customer-provided URI.
+type BlockPageSettingsMode string
+
+const (
+	BlockPageSettingsModeCustomizedBlockPage BlockPageSettingsMode = "customized_block_page"
+	BlockPageSettingsModeRedirectURI         BlockPageSettingsMode = "redirect_uri"
+)
+
+func (r BlockPageSettingsMode) IsKnown() bool {
+	switch r {
+	case BlockPageSettingsModeCustomizedBlockPage, BlockPageSettingsModeRedirectURI:
+		return true
+	}
+	return false
+}
+
 // Block page layout settings.
 type BlockPageSettingsParam struct {
-	// Block page background color in #rrggbb format.
+	// If mode is customized_block_page: block page background color in #rrggbb format.
 	BackgroundColor param.Field[string] `json:"background_color"`
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Block page footer text.
+	// If mode is customized_block_page: block page footer text.
 	FooterText param.Field[string] `json:"footer_text"`
-	// Block page header text.
+	// If mode is customized_block_page: block page header text.
 	HeaderText param.Field[string] `json:"header_text"`
-	// Full URL to the logo file.
+	// If mode is redirect_uri: when enabled, context will be appended to target_uri as
+	// query parameters.
+	IncludeContext param.Field[bool] `json:"include_context"`
+	// If mode is customized_block_page: full URL to the logo file.
 	LogoPath param.Field[string] `json:"logo_path"`
-	// Admin email for users to contact.
+	// If mode is customized_block_page: admin email for users to contact.
 	MailtoAddress param.Field[string] `json:"mailto_address"`
-	// Subject line for emails created from block page.
+	// If mode is customized_block_page: subject line for emails created from block
+	// page.
 	MailtoSubject param.Field[string] `json:"mailto_subject"`
-	// Block page title.
+	// Controls whether the user is redirected to a Cloudflare-hosted block page or to
+	// a customer-provided URI.
+	Mode param.Field[BlockPageSettingsMode] `json:"mode"`
+	// If mode is customized_block_page: block page title.
 	Name param.Field[string] `json:"name"`
-	// Suppress detailed info at the bottom of the block page.
+	// If mode is customized_block_page: suppress detailed info at the bottom of the
+	// block page.
 	SuppressFooter param.Field[bool] `json:"suppress_footer"`
+	// If mode is redirect_uri: URI to which the user should be redirected.
+	TargetURI param.Field[string] `json:"target_uri" format:"uri"`
 }
 
 func (r BlockPageSettingsParam) MarshalJSON() (data []byte, err error) {
@@ -438,33 +478,35 @@ func (r FipsSettingsParam) MarshalJSON() (data []byte, err error) {
 // Account settings
 type GatewayConfigurationSettings struct {
 	// Activity log settings.
-	ActivityLog ActivityLogSettings `json:"activity_log"`
+	ActivityLog ActivityLogSettings `json:"activity_log,nullable"`
 	// Anti-virus settings.
 	Antivirus AntiVirusSettings `json:"antivirus"`
 	// Block page layout settings.
-	BlockPage BlockPageSettings `json:"block_page"`
+	BlockPage BlockPageSettings `json:"block_page,nullable"`
 	// DLP body scanning settings.
-	BodyScanning BodyScanningSettings `json:"body_scanning"`
+	BodyScanning BodyScanningSettings `json:"body_scanning,nullable"`
 	// Browser isolation settings.
-	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation"`
+	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation,nullable"`
 	// Certificate settings for Gateway TLS interception. If not specified, the
 	// Cloudflare Root CA will be used.
-	Certificate GatewayConfigurationSettingsCertificate `json:"certificate"`
+	Certificate GatewayConfigurationSettingsCertificate `json:"certificate,nullable"`
 	// Custom certificate settings for BYO-PKI. (deprecated and replaced by
 	// `certificate`)
 	//
 	// Deprecated: deprecated
-	CustomCertificate CustomCertificateSettings `json:"custom_certificate"`
+	CustomCertificate CustomCertificateSettings `json:"custom_certificate,nullable"`
 	// Extended e-mail matching settings.
 	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching"`
 	// FIPS settings.
-	Fips FipsSettings `json:"fips"`
+	Fips FipsSettings `json:"fips,nullable"`
+	// Setting to enable host selector in egress policies.
+	HostSelector GatewayConfigurationSettingsHostSelector `json:"host_selector,nullable"`
 	// Protocol Detection settings.
-	ProtocolDetection ProtocolDetection `json:"protocol_detection"`
+	ProtocolDetection ProtocolDetection `json:"protocol_detection,nullable"`
 	// Sandbox settings.
-	Sandbox GatewayConfigurationSettingsSandbox `json:"sandbox"`
+	Sandbox GatewayConfigurationSettingsSandbox `json:"sandbox,nullable"`
 	// TLS interception settings.
-	TLSDecrypt TLSSettings                      `json:"tls_decrypt"`
+	TLSDecrypt TLSSettings                      `json:"tls_decrypt,nullable"`
 	JSON       gatewayConfigurationSettingsJSON `json:"-"`
 }
 
@@ -480,6 +522,7 @@ type gatewayConfigurationSettingsJSON struct {
 	CustomCertificate     apijson.Field
 	ExtendedEmailMatching apijson.Field
 	Fips                  apijson.Field
+	HostSelector          apijson.Field
 	ProtocolDetection     apijson.Field
 	Sandbox               apijson.Field
 	TLSDecrypt            apijson.Field
@@ -518,6 +561,29 @@ func (r *GatewayConfigurationSettingsCertificate) UnmarshalJSON(data []byte) (er
 }
 
 func (r gatewayConfigurationSettingsCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
+// Setting to enable host selector in egress policies.
+type GatewayConfigurationSettingsHostSelector struct {
+	// Enable filtering via hosts for egress policies.
+	Enabled bool                                         `json:"enabled"`
+	JSON    gatewayConfigurationSettingsHostSelectorJSON `json:"-"`
+}
+
+// gatewayConfigurationSettingsHostSelectorJSON contains the JSON metadata for the
+// struct [GatewayConfigurationSettingsHostSelector]
+type gatewayConfigurationSettingsHostSelectorJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayConfigurationSettingsHostSelector) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayConfigurationSettingsHostSelectorJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -587,6 +653,8 @@ type GatewayConfigurationSettingsParam struct {
 	ExtendedEmailMatching param.Field[ExtendedEmailMatchingParam] `json:"extended_email_matching"`
 	// FIPS settings.
 	Fips param.Field[FipsSettingsParam] `json:"fips"`
+	// Setting to enable host selector in egress policies.
+	HostSelector param.Field[GatewayConfigurationSettingsHostSelectorParam] `json:"host_selector"`
 	// Protocol Detection settings.
 	ProtocolDetection param.Field[ProtocolDetectionParam] `json:"protocol_detection"`
 	// Sandbox settings.
@@ -612,6 +680,16 @@ func (r GatewayConfigurationSettingsCertificateParam) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
+// Setting to enable host selector in egress policies.
+type GatewayConfigurationSettingsHostSelectorParam struct {
+	// Enable filtering via hosts for egress policies.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r GatewayConfigurationSettingsHostSelectorParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Sandbox settings.
 type GatewayConfigurationSettingsSandboxParam struct {
 	// Enable sandbox.
@@ -629,6 +707,8 @@ func (r GatewayConfigurationSettingsSandboxParam) MarshalJSON() (data []byte, er
 type NotificationSettings struct {
 	// Set notification on
 	Enabled bool `json:"enabled"`
+	// If true, context information will be passed as query parameters
+	IncludeContext bool `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
@@ -640,11 +720,12 @@ type NotificationSettings struct {
 // notificationSettingsJSON contains the JSON metadata for the struct
 // [NotificationSettings]
 type notificationSettingsJSON struct {
-	Enabled     apijson.Field
-	Msg         apijson.Field
-	SupportURL  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Enabled        apijson.Field
+	IncludeContext apijson.Field
+	Msg            apijson.Field
+	SupportURL     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *NotificationSettings) UnmarshalJSON(data []byte) (err error) {
@@ -660,6 +741,8 @@ func (r notificationSettingsJSON) RawJSON() string {
 type NotificationSettingsParam struct {
 	// Set notification on
 	Enabled param.Field[bool] `json:"enabled"`
+	// If true, context information will be passed as query parameters
+	IncludeContext param.Field[bool] `json:"include_context"`
 	// Customize the message shown in the notification.
 	Msg param.Field[string] `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the

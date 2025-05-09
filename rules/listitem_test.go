@@ -182,9 +182,11 @@ func TestListItemGet(t *testing.T) {
 	)
 	_, err := client.Rules.Lists.Items.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		"34b12448945f11eaa1b71c4d701ab86e",
+		rules.ListItemGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

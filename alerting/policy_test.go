@@ -30,14 +30,18 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Alerting.Policies.New(context.TODO(), alerting.PolicyNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		AlertType: cloudflare.F(alerting.PolicyNewParamsAlertTypeAccessCustomCertificateExpirationType),
+		AlertType: cloudflare.F(alerting.PolicyNewParamsAlertTypeUniversalSSLEventType),
 		Enabled:   cloudflare.F(true),
 		Mechanisms: cloudflare.F(alerting.MechanismParam{
 			Email: cloudflare.F([]alerting.MechanismEmailParam{{
 				ID: cloudflare.F("test@example.com"),
 			}}),
-			Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{}}),
-			Webhooks:  cloudflare.F([]alerting.MechanismWebhookParam{{}}),
+			Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{
+				ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
+			}}),
+			Webhooks: cloudflare.F([]alerting.MechanismWebhookParam{{
+				ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
+			}}),
 		}),
 		Name:          cloudflare.F("SSL Notification Event Policy"),
 		AlertInterval: cloudflare.F("30m"),
@@ -116,7 +120,7 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 		alerting.PolicyUpdateParams{
 			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AlertInterval: cloudflare.F("30m"),
-			AlertType:     cloudflare.F(alerting.PolicyUpdateParamsAlertTypeAccessCustomCertificateExpirationType),
+			AlertType:     cloudflare.F(alerting.PolicyUpdateParamsAlertTypeUniversalSSLEventType),
 			Description:   cloudflare.F("Something describing the policy."),
 			Enabled:       cloudflare.F(true),
 			Filters: cloudflare.F(alerting.PolicyFilterParam{
@@ -167,8 +171,12 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 				Email: cloudflare.F([]alerting.MechanismEmailParam{{
 					ID: cloudflare.F("test@example.com"),
 				}}),
-				Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{}}),
-				Webhooks:  cloudflare.F([]alerting.MechanismWebhookParam{{}}),
+				Pagerduty: cloudflare.F([]alerting.MechanismPagerdutyParam{{
+					ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
+				}}),
+				Webhooks: cloudflare.F([]alerting.MechanismWebhookParam{{
+					ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
+				}}),
 			}),
 			Name: cloudflare.F("SSL Notification Event Policy"),
 		},

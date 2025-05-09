@@ -42,8 +42,7 @@ func TestCopyNewWithOptionalParams(t *testing.T) {
 		Watermark: cloudflare.F(stream.CopyNewParamsWatermark{
 			UID: cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
 		}),
-		UploadCreator:  cloudflare.F("creator-id_abcde12345"),
-		UploadMetadata: cloudflare.F("name aGVsbG8gd29ybGQ=, requiresignedurls, allowedorigins ZXhhbXBsZS5jb20sdGVzdC5jb20="),
+		UploadCreator: cloudflare.F("creator-id_abcde12345"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

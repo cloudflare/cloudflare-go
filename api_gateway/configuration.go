@@ -338,7 +338,7 @@ func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimP
 type ConfigurationUpdateResponse struct {
 	Errors   Message `json:"errors,required"`
 	Messages Message `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success ConfigurationUpdateResponseSuccess `json:"success,required"`
 	JSON    configurationUpdateResponseJSON    `json:"-"`
 }
@@ -361,7 +361,7 @@ func (r configurationUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ConfigurationUpdateResponseSuccess bool
 
 const (
@@ -377,7 +377,7 @@ func (r ConfigurationUpdateResponseSuccess) IsKnown() bool {
 }
 
 type ConfigurationUpdateParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID        param.Field[string] `path:"zone_id,required"`
 	Configuration ConfigurationParam  `json:"configuration,required"`
 }
@@ -387,7 +387,7 @@ func (r ConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigurationGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Requests information about certain properties.
 	Properties param.Field[[]ConfigurationGetParamsProperty] `query:"properties"`
@@ -419,7 +419,7 @@ type ConfigurationGetResponseEnvelope struct {
 	Errors   Message       `json:"errors,required"`
 	Messages Message       `json:"messages,required"`
 	Result   Configuration `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success ConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configurationGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -443,7 +443,7 @@ func (r configurationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ConfigurationGetResponseEnvelopeSuccess bool
 
 const (

@@ -29,7 +29,7 @@ func TestAttackLayer3TimeseriesGroupBitrateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Bitrate(context.TODO(), radar.AttackLayer3TimeseriesGroupBitrateParams{
-		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupBitrateParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupBitrateParamsAggInterval1h),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
@@ -65,7 +65,7 @@ func TestAttackLayer3TimeseriesGroupDurationWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Duration(context.TODO(), radar.AttackLayer3TimeseriesGroupDurationParams{
-		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupDurationParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupDurationParamsAggInterval1h),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
@@ -101,7 +101,7 @@ func TestAttackLayer3TimeseriesGroupIndustryWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Industry(context.TODO(), radar.AttackLayer3TimeseriesGroupIndustryParams{
-		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupIndustryParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupIndustryParamsAggInterval1h),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
@@ -138,7 +138,7 @@ func TestAttackLayer3TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.IPVersion(context.TODO(), radar.AttackLayer3TimeseriesGroupIPVersionParams{
-		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupIPVersionParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupIPVersionParamsAggInterval1h),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
@@ -173,7 +173,7 @@ func TestAttackLayer3TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Protocol(context.TODO(), radar.AttackLayer3TimeseriesGroupProtocolParams{
-		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupProtocolParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupProtocolParamsAggInterval1h),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
@@ -208,7 +208,7 @@ func TestAttackLayer3TimeseriesGroupVectorWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Vector(context.TODO(), radar.AttackLayer3TimeseriesGroupVectorParams{
-		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupVectorParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupVectorParamsAggInterval1h),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
@@ -245,7 +245,7 @@ func TestAttackLayer3TimeseriesGroupVerticalWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Vertical(context.TODO(), radar.AttackLayer3TimeseriesGroupVerticalParams{
-		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupVerticalParamsAggInterval15m),
+		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesGroupVerticalParamsAggInterval1h),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),

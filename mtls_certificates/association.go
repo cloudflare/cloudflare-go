@@ -91,6 +91,6 @@ func (r certificateAsssociationJSON) RawJSON() string {
 }
 
 type AssociationGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

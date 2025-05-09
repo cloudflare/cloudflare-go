@@ -151,7 +151,7 @@ func (r cfInterconnectUpdateResponseJSON) RawJSON() string {
 }
 
 type CfInterconnectUpdateResponseModifiedInterconnect struct {
-	// Tunnel identifier tag.
+	// Identifier
 	ID string `json:"id"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
@@ -247,7 +247,7 @@ func (r cfInterconnectListResponseJSON) RawJSON() string {
 }
 
 type CfInterconnectListResponseInterconnect struct {
-	// Tunnel identifier tag.
+	// Identifier
 	ID string `json:"id"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
@@ -345,7 +345,7 @@ func (r cfInterconnectBulkUpdateResponseJSON) RawJSON() string {
 }
 
 type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
-	// Tunnel identifier tag.
+	// Identifier
 	ID string `json:"id"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
@@ -442,7 +442,7 @@ func (r cfInterconnectGetResponseJSON) RawJSON() string {
 }
 
 type CfInterconnectGetResponseInterconnect struct {
-	// Tunnel identifier tag.
+	// Identifier
 	ID string `json:"id"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`

@@ -22,6 +22,7 @@ type WorkerService struct {
 	AccountSettings *AccountSettingService
 	Domains         *DomainService
 	Subdomains      *SubdomainService
+	Observability   *ObservabilityService
 }
 
 // NewWorkerService generates a new service that applies the given options to each
@@ -36,6 +37,7 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 	r.AccountSettings = NewAccountSettingService(opts...)
 	r.Domains = NewDomainService(opts...)
 	r.Subdomains = NewSubdomainService(opts...)
+	r.Observability = NewObservabilityService(opts...)
 	return
 }
 
@@ -201,6 +203,10 @@ func (r singleStepMigrationJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r SingleStepMigration) implementsScriptScriptAndVersionSettingEditResponseMigrations() {}
+
+func (r SingleStepMigration) implementsScriptScriptAndVersionSettingGetResponseMigrations() {}
+
 func (r SingleStepMigration) ImplementsDispatchNamespaceScriptSettingEditResponseMigrations() {}
 
 func (r SingleStepMigration) ImplementsDispatchNamespaceScriptSettingGetResponseMigrations() {}
@@ -278,6 +284,9 @@ func (r SingleStepMigrationParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r SingleStepMigrationParam) implementsScriptUpdateParamsMetadataMigrationsUnion() {}
+
+func (r SingleStepMigrationParam) implementsScriptScriptAndVersionSettingEditParamsSettingsMigrationsUnion() {
+}
 
 func (r SingleStepMigrationParam) ImplementsDispatchNamespaceScriptUpdateParamsMetadataMigrationsUnion() {
 }

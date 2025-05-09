@@ -34,7 +34,10 @@ func NewDeviceRevokeService(opts ...option.RequestOption) (r *DeviceRevokeServic
 	return
 }
 
-// Revokes a list of devices.
+// Revokes a list of registrations.
+//
+// **Deprecated**: please use POST
+// /accounts/{account_id}/devices/registrations/revoke instead.
 func (r *DeviceRevokeService) New(ctx context.Context, params DeviceRevokeNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env DeviceRevokeNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -53,7 +56,7 @@ func (r *DeviceRevokeService) New(ctx context.Context, params DeviceRevokeNewPar
 
 type DeviceRevokeNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A list of device ids to revoke.
+	// A list of Registration IDs to revoke.
 	Body []string `json:"body,required"`
 }
 

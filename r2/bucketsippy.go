@@ -58,7 +58,7 @@ func (r *BucketSippyService) Update(ctx context.Context, bucketName string, para
 	return
 }
 
-// Disables Sippy on this bucket
+// Disables Sippy on this bucket.
 func (r *BucketSippyService) Delete(ctx context.Context, bucketName string, params BucketSippyDeleteParams, opts ...option.RequestOption) (res *BucketSippyDeleteResponse, err error) {
 	var env BucketSippyDeleteResponseEnvelope
 	if params.Jurisdiction.Present {
@@ -121,11 +121,11 @@ func (r Provider) IsKnown() bool {
 }
 
 type Sippy struct {
-	// Details about the configured destination bucket
+	// Details about the configured destination bucket.
 	Destination SippyDestination `json:"destination"`
-	// State of Sippy for this bucket
+	// State of Sippy for this bucket.
 	Enabled bool `json:"enabled"`
-	// Details about the configured source bucket
+	// Details about the configured source bucket.
 	Source SippySource `json:"source"`
 	JSON   sippyJSON   `json:"-"`
 }
@@ -147,12 +147,12 @@ func (r sippyJSON) RawJSON() string {
 	return r.raw
 }
 
-// Details about the configured destination bucket
+// Details about the configured destination bucket.
 type SippyDestination struct {
-	// ID of the Cloudflare API token used when writing objects to this bucket
+	// ID of the Cloudflare API token used when writing objects to this bucket.
 	AccessKeyID string `json:"accessKeyId"`
 	Account     string `json:"account"`
-	// Name of the bucket on the provider
+	// Name of the bucket on the provider.
 	Bucket   string               `json:"bucket"`
 	Provider Provider             `json:"provider"`
 	JSON     sippyDestinationJSON `json:"-"`
@@ -177,12 +177,12 @@ func (r sippyDestinationJSON) RawJSON() string {
 	return r.raw
 }
 
-// Details about the configured source bucket
+// Details about the configured source bucket.
 type SippySource struct {
-	// Name of the bucket on the provider
+	// Name of the bucket on the provider.
 	Bucket   string              `json:"bucket"`
 	Provider SippySourceProvider `json:"provider"`
-	// Region where the bucket resides (AWS only)
+	// Region where the bucket resides (AWS only).
 	Region string          `json:"region,nullable"`
 	JSON   sippySourceJSON `json:"-"`
 }
@@ -255,10 +255,10 @@ func (r BucketSippyDeleteResponseEnabled) IsKnown() bool {
 }
 
 type BucketSippyUpdateParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string]              `path:"account_id,required"`
 	Body      BucketSippyUpdateParamsBodyUnion `json:"body,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketSippyUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -284,9 +284,9 @@ type BucketSippyUpdateParamsBodyUnion interface {
 }
 
 type BucketSippyUpdateParamsBodyR2EnableSippyAws struct {
-	// R2 bucket to copy objects to
+	// R2 bucket to copy objects to.
 	Destination param.Field[BucketSippyUpdateParamsBodyR2EnableSippyAwsDestination] `json:"destination"`
-	// AWS S3 bucket to copy objects from
+	// AWS S3 bucket to copy objects from.
 	Source param.Field[BucketSippyUpdateParamsBodyR2EnableSippyAwsSource] `json:"source"`
 }
 
@@ -296,10 +296,10 @@ func (r BucketSippyUpdateParamsBodyR2EnableSippyAws) MarshalJSON() (data []byte,
 
 func (r BucketSippyUpdateParamsBodyR2EnableSippyAws) implementsBucketSippyUpdateParamsBodyUnion() {}
 
-// R2 bucket to copy objects to
+// R2 bucket to copy objects to.
 type BucketSippyUpdateParamsBodyR2EnableSippyAwsDestination struct {
 	// ID of a Cloudflare API token. This is the value labelled "Access Key ID" when
-	// creating an API token from the
+	// creating an API. token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
@@ -307,7 +307,7 @@ type BucketSippyUpdateParamsBodyR2EnableSippyAwsDestination struct {
 	AccessKeyID param.Field[string]   `json:"accessKeyId"`
 	Provider    param.Field[Provider] `json:"provider"`
 	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
-	// when creating an API token from the
+	// when creating an API. token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
@@ -319,16 +319,16 @@ func (r BucketSippyUpdateParamsBodyR2EnableSippyAwsDestination) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-// AWS S3 bucket to copy objects from
+// AWS S3 bucket to copy objects from.
 type BucketSippyUpdateParamsBodyR2EnableSippyAwsSource struct {
-	// Access Key ID of an IAM credential (ideally scoped to a single S3 bucket)
+	// Access Key ID of an IAM credential (ideally scoped to a single S3 bucket).
 	AccessKeyID param.Field[string] `json:"accessKeyId"`
-	// Name of the AWS S3 bucket
+	// Name of the AWS S3 bucket.
 	Bucket   param.Field[string]                                                    `json:"bucket"`
 	Provider param.Field[BucketSippyUpdateParamsBodyR2EnableSippyAwsSourceProvider] `json:"provider"`
-	// Name of the AWS availability zone
+	// Name of the AWS availability zone.
 	Region param.Field[string] `json:"region"`
-	// Secret Access Key of an IAM credential (ideally scoped to a single S3 bucket)
+	// Secret Access Key of an IAM credential (ideally scoped to a single S3 bucket).
 	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
 }
 
@@ -351,9 +351,9 @@ func (r BucketSippyUpdateParamsBodyR2EnableSippyAwsSourceProvider) IsKnown() boo
 }
 
 type BucketSippyUpdateParamsBodyR2EnableSippyGcs struct {
-	// R2 bucket to copy objects to
+	// R2 bucket to copy objects to.
 	Destination param.Field[BucketSippyUpdateParamsBodyR2EnableSippyGcsDestination] `json:"destination"`
-	// GCS bucket to copy objects from
+	// GCS bucket to copy objects from.
 	Source param.Field[BucketSippyUpdateParamsBodyR2EnableSippyGcsSource] `json:"source"`
 }
 
@@ -363,10 +363,10 @@ func (r BucketSippyUpdateParamsBodyR2EnableSippyGcs) MarshalJSON() (data []byte,
 
 func (r BucketSippyUpdateParamsBodyR2EnableSippyGcs) implementsBucketSippyUpdateParamsBodyUnion() {}
 
-// R2 bucket to copy objects to
+// R2 bucket to copy objects to.
 type BucketSippyUpdateParamsBodyR2EnableSippyGcsDestination struct {
 	// ID of a Cloudflare API token. This is the value labelled "Access Key ID" when
-	// creating an API token from the
+	// creating an API. token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
@@ -374,7 +374,7 @@ type BucketSippyUpdateParamsBodyR2EnableSippyGcsDestination struct {
 	AccessKeyID param.Field[string]   `json:"accessKeyId"`
 	Provider    param.Field[Provider] `json:"provider"`
 	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
-	// when creating an API token from the
+	// when creating an API. token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
@@ -386,13 +386,13 @@ func (r BucketSippyUpdateParamsBodyR2EnableSippyGcsDestination) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-// GCS bucket to copy objects from
+// GCS bucket to copy objects from.
 type BucketSippyUpdateParamsBodyR2EnableSippyGcsSource struct {
-	// Name of the GCS bucket
+	// Name of the GCS bucket.
 	Bucket param.Field[string] `json:"bucket"`
-	// Client email of an IAM credential (ideally scoped to a single GCS bucket)
+	// Client email of an IAM credential (ideally scoped to a single GCS bucket).
 	ClientEmail param.Field[string] `json:"clientEmail"`
-	// Private Key of an IAM credential (ideally scoped to a single GCS bucket)
+	// Private Key of an IAM credential (ideally scoped to a single GCS bucket).
 	PrivateKey param.Field[string]                                                    `json:"privateKey"`
 	Provider   param.Field[BucketSippyUpdateParamsBodyR2EnableSippyGcsSourceProvider] `json:"provider"`
 }
@@ -415,7 +415,7 @@ func (r BucketSippyUpdateParamsBodyR2EnableSippyGcsSourceProvider) IsKnown() boo
 	return false
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketSippyUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -436,7 +436,7 @@ type BucketSippyUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []string              `json:"messages,required"`
 	Result   Sippy                 `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketSippyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketSippyUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -460,7 +460,7 @@ func (r bucketSippyUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketSippyUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -476,13 +476,13 @@ func (r BucketSippyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketSippyDeleteParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketSippyDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketSippyDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -503,7 +503,7 @@ type BucketSippyDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo     `json:"errors,required"`
 	Messages []string                  `json:"messages,required"`
 	Result   BucketSippyDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketSippyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketSippyDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -527,7 +527,7 @@ func (r bucketSippyDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketSippyDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -543,13 +543,13 @@ func (r BucketSippyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketSippyGetParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
+	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketSippyGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction
+// The bucket jurisdiction.
 type BucketSippyGetParamsCfR2Jurisdiction string
 
 const (
@@ -570,7 +570,7 @@ type BucketSippyGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []string              `json:"messages,required"`
 	Result   Sippy                 `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success BucketSippyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketSippyGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -594,7 +594,7 @@ func (r bucketSippyGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type BucketSippyGetResponseEnvelopeSuccess bool
 
 const (

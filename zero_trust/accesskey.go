@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccessKeyService contains methods and other services that help with interacting
@@ -171,7 +170,7 @@ func (r accessKeyRotateResponseJSON) RawJSON() string {
 }
 
 type AccessKeyUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The number of days between key rotations.
 	KeyRotationIntervalDays param.Field[float64] `json:"key_rotation_interval_days,required"`
@@ -182,9 +181,9 @@ func (r AccessKeyUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessKeyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessKeyUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessKeyUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessKeyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessKeyUpdateResponse                `json:"result"`
 	JSON    accessKeyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -209,7 +208,103 @@ func (r accessKeyUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessKeyUpdateResponseEnvelopeErrors struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           AccessKeyUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessKeyUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessKeyUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessKeyUpdateResponseEnvelopeErrors]
+type accessKeyUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessKeyUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessKeyUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    accessKeyUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessKeyUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [AccessKeyUpdateResponseEnvelopeErrorsSource]
+type accessKeyUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessKeyUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessKeyUpdateResponseEnvelopeMessages struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           AccessKeyUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessKeyUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessKeyUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessKeyUpdateResponseEnvelopeMessages]
+type accessKeyUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessKeyUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessKeyUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    accessKeyUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessKeyUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [AccessKeyUpdateResponseEnvelopeMessagesSource]
+type accessKeyUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessKeyUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessKeyUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -225,14 +320,14 @@ func (r AccessKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessKeyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessKeyGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessKeyGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessKeyGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessKeyGetResponse                `json:"result"`
 	JSON    accessKeyGetResponseEnvelopeJSON    `json:"-"`
@@ -257,7 +352,103 @@ func (r accessKeyGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessKeyGetResponseEnvelopeErrors struct {
+	Code             int64                                    `json:"code,required"`
+	Message          string                                   `json:"message,required"`
+	DocumentationURL string                                   `json:"documentation_url"`
+	Source           AccessKeyGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessKeyGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessKeyGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [AccessKeyGetResponseEnvelopeErrors]
+type accessKeyGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessKeyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessKeyGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                       `json:"pointer"`
+	JSON    accessKeyGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessKeyGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [AccessKeyGetResponseEnvelopeErrorsSource]
+type accessKeyGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessKeyGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessKeyGetResponseEnvelopeMessages struct {
+	Code             int64                                      `json:"code,required"`
+	Message          string                                     `json:"message,required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           AccessKeyGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessKeyGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessKeyGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessKeyGetResponseEnvelopeMessages]
+type accessKeyGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessKeyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessKeyGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    accessKeyGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessKeyGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [AccessKeyGetResponseEnvelopeMessagesSource]
+type accessKeyGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessKeyGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessKeyGetResponseEnvelopeSuccess bool
 
 const (
@@ -273,14 +464,14 @@ func (r AccessKeyGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyRotateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccessKeyRotateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
+	Errors   []AccessKeyRotateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessKeyRotateResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
 	Success AccessKeyRotateResponseEnvelopeSuccess `json:"success,required"`
 	Result  AccessKeyRotateResponse                `json:"result"`
 	JSON    accessKeyRotateResponseEnvelopeJSON    `json:"-"`
@@ -305,7 +496,103 @@ func (r accessKeyRotateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type AccessKeyRotateResponseEnvelopeErrors struct {
+	Code             int64                                       `json:"code,required"`
+	Message          string                                      `json:"message,required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           AccessKeyRotateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             accessKeyRotateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// accessKeyRotateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessKeyRotateResponseEnvelopeErrors]
+type accessKeyRotateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessKeyRotateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyRotateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessKeyRotateResponseEnvelopeErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    accessKeyRotateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// accessKeyRotateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [AccessKeyRotateResponseEnvelopeErrorsSource]
+type accessKeyRotateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessKeyRotateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyRotateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessKeyRotateResponseEnvelopeMessages struct {
+	Code             int64                                         `json:"code,required"`
+	Message          string                                        `json:"message,required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           AccessKeyRotateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             accessKeyRotateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// accessKeyRotateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessKeyRotateResponseEnvelopeMessages]
+type accessKeyRotateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessKeyRotateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyRotateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessKeyRotateResponseEnvelopeMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    accessKeyRotateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// accessKeyRotateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [AccessKeyRotateResponseEnvelopeMessagesSource]
+type accessKeyRotateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessKeyRotateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyRotateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type AccessKeyRotateResponseEnvelopeSuccess bool
 
 const (

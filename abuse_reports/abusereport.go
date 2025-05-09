@@ -82,11 +82,21 @@ func (r AbuseReportNewParamsReportType) IsKnown() bool {
 }
 
 type AbuseReportNewParamsBody struct {
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	OwnerNotification param.Field[AbuseReportNewParamsBodyOwnerNotification] `json:"owner_notification,required"`
 	// The abuse report type
-	Act param.Field[AbuseReportNewParamsBodyAct] `json:"act"`
+	Act param.Field[AbuseReportNewParamsBodyAct] `json:"act,required"`
+	// A valid email of the abuse reporter. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Email param.Field[string] `json:"email,required"`
+	// Should match the value provided in `email`
+	Email2 param.Field[string] `json:"email2,required"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Name param.Field[string] `json:"name,required"`
+	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
+	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
+	// should be unique. This field may be released by Cloudflare to third parties such
+	// as the Lumen Database (https://lumendatabase.org/).
+	URLs param.Field[string] `json:"urls,required"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Address1 param.Field[string] `json:"address1"`
@@ -111,11 +121,6 @@ type AbuseReportNewParamsBody struct {
 	// destination IPs should not exceed 30 IP addresses. Each one of the IP addresses
 	// ought to be unique
 	DestinationIPs param.Field[string] `json:"destination_ips"`
-	// A valid email of the abuse reporter. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Email param.Field[string] `json:"email"`
-	// Should match the value provided in `email`
-	Email2 param.Field[string] `json:"email2"`
 	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 	// reports cannot be anonymous.
 	HostNotification param.Field[AbuseReportNewParamsBodyHostNotification] `json:"host_notification"`
@@ -123,9 +128,6 @@ type AbuseReportNewParamsBody struct {
 	// details and the exact steps needed to view the content, not exceeding 5000
 	// characters
 	Justification param.Field[string] `json:"justification"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Name param.Field[string] `json:"name"`
 	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 	// reports cannot be anonymous.
 	NcmecNotification param.Field[AbuseReportNewParamsBodyNcmecNotification] `json:"ncmec_notification"`
@@ -134,11 +136,18 @@ type AbuseReportNewParamsBody struct {
 	// Text not exceeding 255 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	OriginalWork param.Field[string] `json:"original_work"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	OwnerNotification param.Field[AbuseReportNewParamsBodyOwnerNotification] `json:"owner_notification"`
 	// A comma separated list of ports and protocols e.g. 80/TCP, 22/UDP. The total
 	// size of the field should not exceed 2000 characters. Each individual
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -161,11 +170,6 @@ type AbuseReportNewParamsBody struct {
 	TrademarkOffice param.Field[string] `json:"trademark_office"`
 	// Text not exceeding 1000 characters
 	TrademarkSymbol param.Field[string] `json:"trademark_symbol"`
-	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
-	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
-	// should be unique. This field may be released by Cloudflare to third parties such
-	// as the Lumen Database (https://lumendatabase.org/).
-	URLs param.Field[string] `json:"urls"`
 }
 
 func (r AbuseReportNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -188,74 +192,83 @@ type AbuseReportNewParamsBodyUnion interface {
 }
 
 type AbuseReportNewParamsBodyAbuseReportsDmcaReport struct {
+	// The abuse report type
+	Act param.Field[AbuseReportNewParamsBodyAbuseReportsDmcaReportAct] `json:"act,required"`
+	// A valid email of the abuse reporter. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Email param.Field[string] `json:"email,required"`
+	// Should match the value provided in `email`
+	Email2 param.Field[string] `json:"email2,required"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Name param.Field[string] `json:"name,required"`
+	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
+	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
+	// should be unique. This field may be released by Cloudflare to third parties such
+	// as the Lumen Database (https://lumendatabase.org/).
+	URLs param.Field[string] `json:"urls,required"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Address1 param.Field[string] `json:"address1,required"`
+	Address1 param.Field[string] `json:"address1"`
 	// The name of the copyright holder. Text not exceeding 60 characters. This field
 	// may be released by Cloudflare to third parties such as the Lumen Database
 	// (https://lumendatabase.org/).
-	AgentName param.Field[string] `json:"agent_name,required"`
+	AgentName param.Field[string] `json:"agent_name"`
 	// Can be `0` for false or `1` for true. Must be value: 1 for DMCA reports
-	Agree param.Field[AbuseReportNewParamsBodyAbuseReportsDmcaReportAgree] `json:"agree,required"`
+	Agree param.Field[AbuseReportNewParamsBodyAbuseReportsDmcaReportAgree] `json:"agree"`
 	// Text not exceeding 255 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	City param.Field[string] `json:"city,required"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Country param.Field[string] `json:"country,required"`
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsDmcaReportHostNotification] `json:"host_notification,required"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	OriginalWork param.Field[string] `json:"original_work,required"`
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification] `json:"owner_notification,required"`
-	// Required for DMCA reports, should be same as Name. An affirmation that all
-	// information in the report is true and accurate while agreeing to the policies of
-	// Cloudflare's abuse reports
-	Signature param.Field[string] `json:"signature,required"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	State param.Field[string] `json:"state,required"`
-	// The abuse report type
-	Act param.Field[AbuseReportNewParamsBodyAbuseReportsDmcaReportAct] `json:"act"`
+	City param.Field[string] `json:"city"`
 	// Any additional comments about the infringement not exceeding 2000 characters
 	Comments param.Field[string] `json:"comments"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Company param.Field[string] `json:"company"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Country param.Field[string] `json:"country"`
 	// A list of IP addresses separated by ‘ ’ (new line character). The list of
 	// destination IPs should not exceed 30 IP addresses. Each one of the IP addresses
 	// ought to be unique
 	DestinationIPs param.Field[string] `json:"destination_ips"`
-	// A valid email of the abuse reporter. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Email param.Field[string] `json:"email"`
-	// Should match the value provided in `email`
-	Email2 param.Field[string] `json:"email2"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsDmcaReportHostNotification] `json:"host_notification"`
 	// A detailed description of the infringement, including any necessary access
 	// details and the exact steps needed to view the content, not exceeding 5000
 	// characters
 	Justification param.Field[string] `json:"justification"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Name param.Field[string] `json:"name"`
 	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 	// reports cannot be anonymous.
 	NcmecNotification param.Field[AbuseReportNewParamsBodyAbuseReportsDmcaReportNcmecNotification] `json:"ncmec_notification"`
 	// If the submitter is the target of NCSEI in the URLs of the abuse report.
 	NcseiSubjectRepresentation param.Field[bool] `json:"ncsei_subject_representation"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	OriginalWork param.Field[string] `json:"original_work"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification] `json:"owner_notification"`
 	// A comma separated list of ports and protocols e.g. 80/TCP, 22/UDP. The total
 	// size of the field should not exceed 2000 characters. Each individual
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
+	// Required for DMCA reports, should be same as Name. An affirmation that all
+	// information in the report is true and accurate while agreeing to the policies of
+	// Cloudflare's abuse reports
+	Signature param.Field[string] `json:"signature"`
 	// A list of IP addresses separated by ‘ ’ (new line character). The list of source
 	// IPs should not exceed 30 IP addresses. Each one of the IP addresses ought to be
 	// unique
 	SourceIPs param.Field[string] `json:"source_ips"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	State param.Field[string] `json:"state"`
 	// Text not exceeding 20 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Tele param.Field[string] `json:"tele"`
@@ -267,11 +280,6 @@ type AbuseReportNewParamsBodyAbuseReportsDmcaReport struct {
 	TrademarkOffice param.Field[string] `json:"trademark_office"`
 	// Text not exceeding 1000 characters
 	TrademarkSymbol param.Field[string] `json:"trademark_symbol"`
-	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
-	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
-	// should be unique. This field may be released by Cloudflare to third parties such
-	// as the Lumen Database (https://lumendatabase.org/).
-	URLs param.Field[string] `json:"urls"`
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsDmcaReport) MarshalJSON() (data []byte, err error) {
@@ -279,6 +287,28 @@ func (r AbuseReportNewParamsBodyAbuseReportsDmcaReport) MarshalJSON() (data []by
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsDmcaReport) implementsAbuseReportNewParamsBodyUnion() {}
+
+// The abuse report type
+type AbuseReportNewParamsBodyAbuseReportsDmcaReportAct string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseDmca           AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_dmca"
+	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseTrademark      AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_trademark"
+	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseGeneral        AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_general"
+	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbusePhishing       AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_phishing"
+	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseChildren       AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_children"
+	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseThreat         AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_threat"
+	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseRegistrarWhois AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_registrar_whois"
+	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseNcsei          AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_ncsei"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsDmcaReportAct) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseDmca, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseTrademark, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseGeneral, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbusePhishing, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseChildren, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseThreat, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseRegistrarWhois, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseNcsei:
+		return true
+	}
+	return false
+}
 
 // Can be `0` for false or `1` for true. Must be value: 1 for DMCA reports
 type AbuseReportNewParamsBodyAbuseReportsDmcaReportAgree int64
@@ -316,46 +346,6 @@ func (r AbuseReportNewParamsBodyAbuseReportsDmcaReportHostNotification) IsKnown(
 
 // Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 // reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationNone:
-		return true
-	}
-	return false
-}
-
-// The abuse report type
-type AbuseReportNewParamsBodyAbuseReportsDmcaReportAct string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseDmca           AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_dmca"
-	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseTrademark      AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_trademark"
-	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseGeneral        AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_general"
-	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbusePhishing       AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_phishing"
-	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseChildren       AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_children"
-	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseThreat         AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_threat"
-	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseRegistrarWhois AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_registrar_whois"
-	AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseNcsei          AbuseReportNewParamsBodyAbuseReportsDmcaReportAct = "abuse_ncsei"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsDmcaReportAct) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseDmca, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseTrademark, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseGeneral, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbusePhishing, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseChildren, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseThreat, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseRegistrarWhois, AbuseReportNewParamsBodyAbuseReportsDmcaReportActAbuseNcsei:
-		return true
-	}
-	return false
-}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
 type AbuseReportNewParamsBodyAbuseReportsDmcaReportNcmecNotification string
 
 const (
@@ -372,25 +362,40 @@ func (r AbuseReportNewParamsBodyAbuseReportsDmcaReportNcmecNotification) IsKnown
 	return false
 }
 
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
+type AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsDmcaReportOwnerNotificationNone:
+		return true
+	}
+	return false
+}
+
 type AbuseReportNewParamsBodyAbuseReportsTrademarkReport struct {
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification] `json:"host_notification,required"`
-	// A detailed description of the infringement, including any necessary access
-	// details and the exact steps needed to view the content, not exceeding 5000
-	// characters
-	Justification param.Field[string] `json:"justification,required"`
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification] `json:"owner_notification,required"`
-	// Text not exceeding 1000 characters
-	TrademarkNumber param.Field[string] `json:"trademark_number,required"`
-	// Text not exceeding 1000 characters
-	TrademarkOffice param.Field[string] `json:"trademark_office,required"`
-	// Text not exceeding 1000 characters
-	TrademarkSymbol param.Field[string] `json:"trademark_symbol,required"`
 	// The abuse report type
-	Act param.Field[AbuseReportNewParamsBodyAbuseReportsTrademarkReportAct] `json:"act"`
+	Act param.Field[AbuseReportNewParamsBodyAbuseReportsTrademarkReportAct] `json:"act,required"`
+	// A valid email of the abuse reporter. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Email param.Field[string] `json:"email,required"`
+	// Should match the value provided in `email`
+	Email2 param.Field[string] `json:"email2,required"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Name param.Field[string] `json:"name,required"`
+	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
+	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
+	// should be unique. This field may be released by Cloudflare to third parties such
+	// as the Lumen Database (https://lumendatabase.org/).
+	URLs param.Field[string] `json:"urls,required"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Address1 param.Field[string] `json:"address1"`
@@ -415,14 +420,13 @@ type AbuseReportNewParamsBodyAbuseReportsTrademarkReport struct {
 	// destination IPs should not exceed 30 IP addresses. Each one of the IP addresses
 	// ought to be unique
 	DestinationIPs param.Field[string] `json:"destination_ips"`
-	// A valid email of the abuse reporter. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Email param.Field[string] `json:"email"`
-	// Should match the value provided in `email`
-	Email2 param.Field[string] `json:"email2"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Name param.Field[string] `json:"name"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification] `json:"host_notification"`
+	// A detailed description of the infringement, including any necessary access
+	// details and the exact steps needed to view the content, not exceeding 5000
+	// characters
+	Justification param.Field[string] `json:"justification"`
 	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 	// reports cannot be anonymous.
 	NcmecNotification param.Field[AbuseReportNewParamsBodyAbuseReportsTrademarkReportNcmecNotification] `json:"ncmec_notification"`
@@ -431,11 +435,18 @@ type AbuseReportNewParamsBodyAbuseReportsTrademarkReport struct {
 	// Text not exceeding 255 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	OriginalWork param.Field[string] `json:"original_work"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification] `json:"owner_notification"`
 	// A comma separated list of ports and protocols e.g. 80/TCP, 22/UDP. The total
 	// size of the field should not exceed 2000 characters. Each individual
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -452,11 +463,12 @@ type AbuseReportNewParamsBodyAbuseReportsTrademarkReport struct {
 	Tele param.Field[string] `json:"tele"`
 	// Text not exceeding 255 characters
 	Title param.Field[string] `json:"title"`
-	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
-	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
-	// should be unique. This field may be released by Cloudflare to third parties such
-	// as the Lumen Database (https://lumendatabase.org/).
-	URLs param.Field[string] `json:"urls"`
+	// Text not exceeding 1000 characters
+	TrademarkNumber param.Field[string] `json:"trademark_number"`
+	// Text not exceeding 1000 characters
+	TrademarkOffice param.Field[string] `json:"trademark_office"`
+	// Text not exceeding 1000 characters
+	TrademarkSymbol param.Field[string] `json:"trademark_symbol"`
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReport) MarshalJSON() (data []byte, err error) {
@@ -464,42 +476,6 @@ func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReport) MarshalJSON() (data
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReport) implementsAbuseReportNewParamsBodyUnion() {
-}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationSend     AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationNone     AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationSend, AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationNone:
-		return true
-	}
-	return false
-}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationNone:
-		return true
-	}
-	return false
 }
 
 // The abuse report type
@@ -542,6 +518,24 @@ func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReportAgree) IsKnown() bool
 
 // Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 // reports cannot be anonymous.
+type AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationSend     AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationNone     AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationSend, AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsTrademarkReportHostNotificationNone:
+		return true
+	}
+	return false
+}
+
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
 type AbuseReportNewParamsBodyAbuseReportsTrademarkReportNcmecNotification string
 
 const (
@@ -558,19 +552,40 @@ func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReportNcmecNotification) Is
 	return false
 }
 
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
+type AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsTrademarkReportOwnerNotificationNone:
+		return true
+	}
+	return false
+}
+
 type AbuseReportNewParamsBodyAbuseReportsGeneralReport struct {
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification] `json:"host_notification,required"`
-	// A detailed description of the infringement, including any necessary access
-	// details and the exact steps needed to view the content, not exceeding 5000
-	// characters
-	Justification param.Field[string] `json:"justification,required"`
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification] `json:"owner_notification,required"`
 	// The abuse report type
-	Act param.Field[AbuseReportNewParamsBodyAbuseReportsGeneralReportAct] `json:"act"`
+	Act param.Field[AbuseReportNewParamsBodyAbuseReportsGeneralReportAct] `json:"act,required"`
+	// A valid email of the abuse reporter. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Email param.Field[string] `json:"email,required"`
+	// Should match the value provided in `email`
+	Email2 param.Field[string] `json:"email2,required"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Name param.Field[string] `json:"name,required"`
+	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
+	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
+	// should be unique. This field may be released by Cloudflare to third parties such
+	// as the Lumen Database (https://lumendatabase.org/).
+	URLs param.Field[string] `json:"urls,required"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Address1 param.Field[string] `json:"address1"`
@@ -595,14 +610,13 @@ type AbuseReportNewParamsBodyAbuseReportsGeneralReport struct {
 	// destination IPs should not exceed 30 IP addresses. Each one of the IP addresses
 	// ought to be unique
 	DestinationIPs param.Field[string] `json:"destination_ips"`
-	// A valid email of the abuse reporter. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Email param.Field[string] `json:"email"`
-	// Should match the value provided in `email`
-	Email2 param.Field[string] `json:"email2"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Name param.Field[string] `json:"name"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification] `json:"host_notification"`
+	// A detailed description of the infringement, including any necessary access
+	// details and the exact steps needed to view the content, not exceeding 5000
+	// characters
+	Justification param.Field[string] `json:"justification"`
 	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 	// reports cannot be anonymous.
 	NcmecNotification param.Field[AbuseReportNewParamsBodyAbuseReportsGeneralReportNcmecNotification] `json:"ncmec_notification"`
@@ -611,11 +625,18 @@ type AbuseReportNewParamsBodyAbuseReportsGeneralReport struct {
 	// Text not exceeding 255 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	OriginalWork param.Field[string] `json:"original_work"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification] `json:"owner_notification"`
 	// A comma separated list of ports and protocols e.g. 80/TCP, 22/UDP. The total
 	// size of the field should not exceed 2000 characters. Each individual
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -638,11 +659,6 @@ type AbuseReportNewParamsBodyAbuseReportsGeneralReport struct {
 	TrademarkOffice param.Field[string] `json:"trademark_office"`
 	// Text not exceeding 1000 characters
 	TrademarkSymbol param.Field[string] `json:"trademark_symbol"`
-	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
-	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
-	// should be unique. This field may be released by Cloudflare to third parties such
-	// as the Lumen Database (https://lumendatabase.org/).
-	URLs param.Field[string] `json:"urls"`
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsGeneralReport) MarshalJSON() (data []byte, err error) {
@@ -650,42 +666,6 @@ func (r AbuseReportNewParamsBodyAbuseReportsGeneralReport) MarshalJSON() (data [
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsGeneralReport) implementsAbuseReportNewParamsBodyUnion() {
-}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationSend     AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationNone     AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationSend, AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationNone:
-		return true
-	}
-	return false
-}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationNone:
-		return true
-	}
-	return false
 }
 
 // The abuse report type
@@ -728,6 +708,24 @@ func (r AbuseReportNewParamsBodyAbuseReportsGeneralReportAgree) IsKnown() bool {
 
 // Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 // reports cannot be anonymous.
+type AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationSend     AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationNone     AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationSend, AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsGeneralReportHostNotificationNone:
+		return true
+	}
+	return false
+}
+
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
 type AbuseReportNewParamsBodyAbuseReportsGeneralReportNcmecNotification string
 
 const (
@@ -744,19 +742,40 @@ func (r AbuseReportNewParamsBodyAbuseReportsGeneralReportNcmecNotification) IsKn
 	return false
 }
 
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
+type AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsGeneralReportOwnerNotificationNone:
+		return true
+	}
+	return false
+}
+
 type AbuseReportNewParamsBodyAbuseReportsPhishingReport struct {
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification] `json:"host_notification,required"`
-	// A detailed description of the infringement, including any necessary access
-	// details and the exact steps needed to view the content, not exceeding 5000
-	// characters
-	Justification param.Field[string] `json:"justification,required"`
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification] `json:"owner_notification,required"`
 	// The abuse report type
-	Act param.Field[AbuseReportNewParamsBodyAbuseReportsPhishingReportAct] `json:"act"`
+	Act param.Field[AbuseReportNewParamsBodyAbuseReportsPhishingReportAct] `json:"act,required"`
+	// A valid email of the abuse reporter. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Email param.Field[string] `json:"email,required"`
+	// Should match the value provided in `email`
+	Email2 param.Field[string] `json:"email2,required"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Name param.Field[string] `json:"name,required"`
+	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
+	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
+	// should be unique. This field may be released by Cloudflare to third parties such
+	// as the Lumen Database (https://lumendatabase.org/).
+	URLs param.Field[string] `json:"urls,required"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Address1 param.Field[string] `json:"address1"`
@@ -781,14 +800,13 @@ type AbuseReportNewParamsBodyAbuseReportsPhishingReport struct {
 	// destination IPs should not exceed 30 IP addresses. Each one of the IP addresses
 	// ought to be unique
 	DestinationIPs param.Field[string] `json:"destination_ips"`
-	// A valid email of the abuse reporter. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Email param.Field[string] `json:"email"`
-	// Should match the value provided in `email`
-	Email2 param.Field[string] `json:"email2"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Name param.Field[string] `json:"name"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification] `json:"host_notification"`
+	// A detailed description of the infringement, including any necessary access
+	// details and the exact steps needed to view the content, not exceeding 5000
+	// characters
+	Justification param.Field[string] `json:"justification"`
 	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 	// reports cannot be anonymous.
 	NcmecNotification param.Field[AbuseReportNewParamsBodyAbuseReportsPhishingReportNcmecNotification] `json:"ncmec_notification"`
@@ -797,11 +815,18 @@ type AbuseReportNewParamsBodyAbuseReportsPhishingReport struct {
 	// Text not exceeding 255 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	OriginalWork param.Field[string] `json:"original_work"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification] `json:"owner_notification"`
 	// A comma separated list of ports and protocols e.g. 80/TCP, 22/UDP. The total
 	// size of the field should not exceed 2000 characters. Each individual
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -824,11 +849,6 @@ type AbuseReportNewParamsBodyAbuseReportsPhishingReport struct {
 	TrademarkOffice param.Field[string] `json:"trademark_office"`
 	// Text not exceeding 1000 characters
 	TrademarkSymbol param.Field[string] `json:"trademark_symbol"`
-	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
-	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
-	// should be unique. This field may be released by Cloudflare to third parties such
-	// as the Lumen Database (https://lumendatabase.org/).
-	URLs param.Field[string] `json:"urls"`
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsPhishingReport) MarshalJSON() (data []byte, err error) {
@@ -836,42 +856,6 @@ func (r AbuseReportNewParamsBodyAbuseReportsPhishingReport) MarshalJSON() (data 
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsPhishingReport) implementsAbuseReportNewParamsBodyUnion() {
-}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationSend     AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationNone     AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationSend, AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationNone:
-		return true
-	}
-	return false
-}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationNone:
-		return true
-	}
-	return false
 }
 
 // The abuse report type
@@ -914,6 +898,24 @@ func (r AbuseReportNewParamsBodyAbuseReportsPhishingReportAgree) IsKnown() bool 
 
 // Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 // reports cannot be anonymous.
+type AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationSend     AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationNone     AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationSend, AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsPhishingReportHostNotificationNone:
+		return true
+	}
+	return false
+}
+
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
 type AbuseReportNewParamsBodyAbuseReportsPhishingReportNcmecNotification string
 
 const (
@@ -930,22 +932,40 @@ func (r AbuseReportNewParamsBodyAbuseReportsPhishingReportNcmecNotification) IsK
 	return false
 }
 
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
+type AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsPhishingReportOwnerNotificationNone:
+		return true
+	}
+	return false
+}
+
 type AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReport struct {
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportHostNotification] `json:"host_notification,required"`
-	// A detailed description of the infringement, including any necessary access
-	// details and the exact steps needed to view the content, not exceeding 5000
-	// characters
-	Justification param.Field[string] `json:"justification,required"`
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	NcmecNotification param.Field[AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportNcmecNotification] `json:"ncmec_notification,required"`
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportOwnerNotification] `json:"owner_notification,required"`
 	// The abuse report type
-	Act param.Field[AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct] `json:"act"`
+	Act param.Field[AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct] `json:"act,required"`
+	// A valid email of the abuse reporter. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Email param.Field[string] `json:"email,required"`
+	// Should match the value provided in `email`
+	Email2 param.Field[string] `json:"email2,required"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Name param.Field[string] `json:"name,required"`
+	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
+	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
+	// should be unique. This field may be released by Cloudflare to third parties such
+	// as the Lumen Database (https://lumendatabase.org/).
+	URLs param.Field[string] `json:"urls,required"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Address1 param.Field[string] `json:"address1"`
@@ -970,24 +990,33 @@ type AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReport struct {
 	// destination IPs should not exceed 30 IP addresses. Each one of the IP addresses
 	// ought to be unique
 	DestinationIPs param.Field[string] `json:"destination_ips"`
-	// A valid email of the abuse reporter. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Email param.Field[string] `json:"email"`
-	// Should match the value provided in `email`
-	Email2 param.Field[string] `json:"email2"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Name param.Field[string] `json:"name"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportHostNotification] `json:"host_notification"`
+	// A detailed description of the infringement, including any necessary access
+	// details and the exact steps needed to view the content, not exceeding 5000
+	// characters
+	Justification param.Field[string] `json:"justification"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	NcmecNotification param.Field[AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportNcmecNotification] `json:"ncmec_notification"`
 	// If the submitter is the target of NCSEI in the URLs of the abuse report.
 	NcseiSubjectRepresentation param.Field[bool] `json:"ncsei_subject_representation"`
 	// Text not exceeding 255 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	OriginalWork param.Field[string] `json:"original_work"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportOwnerNotification] `json:"owner_notification"`
 	// A comma separated list of ports and protocols e.g. 80/TCP, 22/UDP. The total
 	// size of the field should not exceed 2000 characters. Each individual
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -1010,11 +1039,6 @@ type AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReport struct {
 	TrademarkOffice param.Field[string] `json:"trademark_office"`
 	// Text not exceeding 1000 characters
 	TrademarkSymbol param.Field[string] `json:"trademark_symbol"`
-	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
-	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
-	// should be unique. This field may be released by Cloudflare to third parties such
-	// as the Lumen Database (https://lumendatabase.org/).
-	URLs param.Field[string] `json:"urls"`
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReport) MarshalJSON() (data []byte, err error) {
@@ -1022,6 +1046,44 @@ func (r AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReport) MarshalJSON() (
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReport) implementsAbuseReportNewParamsBodyUnion() {
+}
+
+// The abuse report type
+type AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseDmca           AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_dmca"
+	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseTrademark      AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_trademark"
+	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseGeneral        AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_general"
+	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbusePhishing       AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_phishing"
+	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseChildren       AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_children"
+	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseThreat         AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_threat"
+	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseRegistrarWhois AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_registrar_whois"
+	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseNcsei          AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_ncsei"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseDmca, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseTrademark, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseGeneral, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbusePhishing, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseChildren, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseThreat, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseRegistrarWhois, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseNcsei:
+		return true
+	}
+	return false
+}
+
+// Can be `0` for false or `1` for true. Must be value: 1 for DMCA reports
+type AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree int64
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree0 AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree = 0
+	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree1 AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree = 1
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree0, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree1:
+		return true
+	}
+	return false
 }
 
 // Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
@@ -1078,57 +1140,22 @@ func (r AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportOwnerNotification
 	return false
 }
 
-// The abuse report type
-type AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseDmca           AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_dmca"
-	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseTrademark      AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_trademark"
-	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseGeneral        AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_general"
-	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbusePhishing       AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_phishing"
-	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseChildren       AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_children"
-	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseThreat         AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_threat"
-	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseRegistrarWhois AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_registrar_whois"
-	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseNcsei          AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct = "abuse_ncsei"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAct) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseDmca, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseTrademark, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseGeneral, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbusePhishing, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseChildren, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseThreat, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseRegistrarWhois, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportActAbuseNcsei:
-		return true
-	}
-	return false
-}
-
-// Can be `0` for false or `1` for true. Must be value: 1 for DMCA reports
-type AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree int64
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree0 AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree = 0
-	AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree1 AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree = 1
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree0, AbuseReportNewParamsBodyAbuseReportsChildrenAbuseReportAgree1:
-		return true
-	}
-	return false
-}
-
 type AbuseReportNewParamsBodyAbuseReportsThreatReport struct {
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification] `json:"host_notification,required"`
-	// A detailed description of the infringement, including any necessary access
-	// details and the exact steps needed to view the content, not exceeding 5000
-	// characters
-	Justification param.Field[string] `json:"justification,required"`
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification] `json:"owner_notification,required"`
 	// The abuse report type
-	Act param.Field[AbuseReportNewParamsBodyAbuseReportsThreatReportAct] `json:"act"`
+	Act param.Field[AbuseReportNewParamsBodyAbuseReportsThreatReportAct] `json:"act,required"`
+	// A valid email of the abuse reporter. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Email param.Field[string] `json:"email,required"`
+	// Should match the value provided in `email`
+	Email2 param.Field[string] `json:"email2,required"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Name param.Field[string] `json:"name,required"`
+	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
+	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
+	// should be unique. This field may be released by Cloudflare to third parties such
+	// as the Lumen Database (https://lumendatabase.org/).
+	URLs param.Field[string] `json:"urls,required"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Address1 param.Field[string] `json:"address1"`
@@ -1153,14 +1180,13 @@ type AbuseReportNewParamsBodyAbuseReportsThreatReport struct {
 	// destination IPs should not exceed 30 IP addresses. Each one of the IP addresses
 	// ought to be unique
 	DestinationIPs param.Field[string] `json:"destination_ips"`
-	// A valid email of the abuse reporter. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Email param.Field[string] `json:"email"`
-	// Should match the value provided in `email`
-	Email2 param.Field[string] `json:"email2"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Name param.Field[string] `json:"name"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification] `json:"host_notification"`
+	// A detailed description of the infringement, including any necessary access
+	// details and the exact steps needed to view the content, not exceeding 5000
+	// characters
+	Justification param.Field[string] `json:"justification"`
 	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 	// reports cannot be anonymous.
 	NcmecNotification param.Field[AbuseReportNewParamsBodyAbuseReportsThreatReportNcmecNotification] `json:"ncmec_notification"`
@@ -1169,11 +1195,18 @@ type AbuseReportNewParamsBodyAbuseReportsThreatReport struct {
 	// Text not exceeding 255 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	OriginalWork param.Field[string] `json:"original_work"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification] `json:"owner_notification"`
 	// A comma separated list of ports and protocols e.g. 80/TCP, 22/UDP. The total
 	// size of the field should not exceed 2000 characters. Each individual
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -1196,11 +1229,6 @@ type AbuseReportNewParamsBodyAbuseReportsThreatReport struct {
 	TrademarkOffice param.Field[string] `json:"trademark_office"`
 	// Text not exceeding 1000 characters
 	TrademarkSymbol param.Field[string] `json:"trademark_symbol"`
-	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
-	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
-	// should be unique. This field may be released by Cloudflare to third parties such
-	// as the Lumen Database (https://lumendatabase.org/).
-	URLs param.Field[string] `json:"urls"`
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsThreatReport) MarshalJSON() (data []byte, err error) {
@@ -1208,42 +1236,6 @@ func (r AbuseReportNewParamsBodyAbuseReportsThreatReport) MarshalJSON() (data []
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsThreatReport) implementsAbuseReportNewParamsBodyUnion() {}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationSend     AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationNone     AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationSend, AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationNone:
-		return true
-	}
-	return false
-}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationNone:
-		return true
-	}
-	return false
-}
 
 // The abuse report type
 type AbuseReportNewParamsBodyAbuseReportsThreatReportAct string
@@ -1285,6 +1277,24 @@ func (r AbuseReportNewParamsBodyAbuseReportsThreatReportAgree) IsKnown() bool {
 
 // Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 // reports cannot be anonymous.
+type AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationSend     AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationNone     AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationSend, AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsThreatReportHostNotificationNone:
+		return true
+	}
+	return false
+}
+
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
 type AbuseReportNewParamsBodyAbuseReportsThreatReportNcmecNotification string
 
 const (
@@ -1301,12 +1311,40 @@ func (r AbuseReportNewParamsBodyAbuseReportsThreatReportNcmecNotification) IsKno
 	return false
 }
 
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
+type AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsThreatReportOwnerNotificationNone:
+		return true
+	}
+	return false
+}
+
 type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport struct {
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification] `json:"owner_notification,required"`
 	// The abuse report type
-	Act param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportAct] `json:"act"`
+	Act param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportAct] `json:"act,required"`
+	// A valid email of the abuse reporter. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Email param.Field[string] `json:"email,required"`
+	// Should match the value provided in `email`
+	Email2 param.Field[string] `json:"email2,required"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Name param.Field[string] `json:"name,required"`
+	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
+	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
+	// should be unique. This field may be released by Cloudflare to third parties such
+	// as the Lumen Database (https://lumendatabase.org/).
+	URLs param.Field[string] `json:"urls,required"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Address1 param.Field[string] `json:"address1"`
@@ -1331,11 +1369,6 @@ type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport struct {
 	// destination IPs should not exceed 30 IP addresses. Each one of the IP addresses
 	// ought to be unique
 	DestinationIPs param.Field[string] `json:"destination_ips"`
-	// A valid email of the abuse reporter. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Email param.Field[string] `json:"email"`
-	// Should match the value provided in `email`
-	Email2 param.Field[string] `json:"email2"`
 	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 	// reports cannot be anonymous.
 	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportHostNotification] `json:"host_notification"`
@@ -1343,9 +1376,6 @@ type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport struct {
 	// details and the exact steps needed to view the content, not exceeding 5000
 	// characters
 	Justification param.Field[string] `json:"justification"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Name param.Field[string] `json:"name"`
 	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 	// reports cannot be anonymous.
 	NcmecNotification param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportNcmecNotification] `json:"ncmec_notification"`
@@ -1354,11 +1384,18 @@ type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport struct {
 	// Text not exceeding 255 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	OriginalWork param.Field[string] `json:"original_work"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification] `json:"owner_notification"`
 	// A comma separated list of ports and protocols e.g. 80/TCP, 22/UDP. The total
 	// size of the field should not exceed 2000 characters. Each individual
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -1381,11 +1418,6 @@ type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport struct {
 	TrademarkOffice param.Field[string] `json:"trademark_office"`
 	// Text not exceeding 1000 characters
 	TrademarkSymbol param.Field[string] `json:"trademark_symbol"`
-	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
-	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
-	// should be unique. This field may be released by Cloudflare to third parties such
-	// as the Lumen Database (https://lumendatabase.org/).
-	URLs param.Field[string] `json:"urls"`
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport) MarshalJSON() (data []byte, err error) {
@@ -1393,24 +1425,6 @@ func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport) MarshalJSON() 
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport) implementsAbuseReportNewParamsBodyUnion() {
-}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationNone:
-		return true
-	}
-	return false
 }
 
 // The abuse report type
@@ -1487,17 +1501,40 @@ func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportNcmecNotificatio
 	return false
 }
 
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
+type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationNone:
+		return true
+	}
+	return false
+}
+
 type AbuseReportNewParamsBodyAbuseReportsNcseiReport struct {
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification] `json:"host_notification,required"`
-	// If the submitter is the target of NCSEI in the URLs of the abuse report.
-	NcseiSubjectRepresentation param.Field[bool] `json:"ncsei_subject_representation,required"`
-	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-	// reports cannot be anonymous.
-	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification] `json:"owner_notification,required"`
 	// The abuse report type
-	Act param.Field[AbuseReportNewParamsBodyAbuseReportsNcseiReportAct] `json:"act"`
+	Act param.Field[AbuseReportNewParamsBodyAbuseReportsNcseiReportAct] `json:"act,required"`
+	// A valid email of the abuse reporter. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Email param.Field[string] `json:"email,required"`
+	// Should match the value provided in `email`
+	Email2 param.Field[string] `json:"email2,required"`
+	// Text not exceeding 255 characters. This field may be released by Cloudflare to
+	// third parties such as the Lumen Database (https://lumendatabase.org/).
+	Name param.Field[string] `json:"name,required"`
+	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
+	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
+	// should be unique. This field may be released by Cloudflare to third parties such
+	// as the Lumen Database (https://lumendatabase.org/).
+	URLs param.Field[string] `json:"urls,required"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Address1 param.Field[string] `json:"address1"`
@@ -1522,29 +1559,33 @@ type AbuseReportNewParamsBodyAbuseReportsNcseiReport struct {
 	// destination IPs should not exceed 30 IP addresses. Each one of the IP addresses
 	// ought to be unique
 	DestinationIPs param.Field[string] `json:"destination_ips"`
-	// A valid email of the abuse reporter. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Email param.Field[string] `json:"email"`
-	// Should match the value provided in `email`
-	Email2 param.Field[string] `json:"email2"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	HostNotification param.Field[AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification] `json:"host_notification"`
 	// A detailed description of the infringement, including any necessary access
 	// details and the exact steps needed to view the content, not exceeding 5000
 	// characters
 	Justification param.Field[string] `json:"justification"`
-	// Text not exceeding 255 characters. This field may be released by Cloudflare to
-	// third parties such as the Lumen Database (https://lumendatabase.org/).
-	Name param.Field[string] `json:"name"`
 	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 	// reports cannot be anonymous.
 	NcmecNotification param.Field[AbuseReportNewParamsBodyAbuseReportsNcseiReportNcmecNotification] `json:"ncmec_notification"`
+	// If the submitter is the target of NCSEI in the URLs of the abuse report.
+	NcseiSubjectRepresentation param.Field[bool] `json:"ncsei_subject_representation"`
 	// Text not exceeding 255 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	OriginalWork param.Field[string] `json:"original_work"`
+	// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+	// reports cannot be anonymous.
+	OwnerNotification param.Field[AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification] `json:"owner_notification"`
 	// A comma separated list of ports and protocols e.g. 80/TCP, 22/UDP. The total
 	// size of the field should not exceed 2000 characters. Each individual
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
 	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	// Text containing 2 characters
+	ReportedCountry param.Field[string] `json:"reported_country"`
+	// Text not exceeding 255 characters
+	ReportedUserAgent param.Field[string] `json:"reported_user_agent"`
 	// Required for DMCA reports, should be same as Name. An affirmation that all
 	// information in the report is true and accurate while agreeing to the policies of
 	// Cloudflare's abuse reports
@@ -1567,11 +1608,6 @@ type AbuseReportNewParamsBodyAbuseReportsNcseiReport struct {
 	TrademarkOffice param.Field[string] `json:"trademark_office"`
 	// Text not exceeding 1000 characters
 	TrademarkSymbol param.Field[string] `json:"trademark_symbol"`
-	// A list of valid URLs separated by ‘ ’ (new line character). The list of the URLs
-	// should not exceed 250 URLs. All URLs should have the same hostname. Each URL
-	// should be unique. This field may be released by Cloudflare to third parties such
-	// as the Lumen Database (https://lumendatabase.org/).
-	URLs param.Field[string] `json:"urls"`
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsNcseiReport) MarshalJSON() (data []byte, err error) {
@@ -1579,42 +1615,6 @@ func (r AbuseReportNewParamsBodyAbuseReportsNcseiReport) MarshalJSON() (data []b
 }
 
 func (r AbuseReportNewParamsBodyAbuseReportsNcseiReport) implementsAbuseReportNewParamsBodyUnion() {}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationSend     AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationNone     AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationSend, AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationNone:
-		return true
-	}
-	return false
-}
-
-// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
-// reports cannot be anonymous.
-type AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification string
-
-const (
-	AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification = "send"
-	AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification = "send-anon"
-	AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification = "none"
-)
-
-func (r AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification) IsKnown() bool {
-	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationNone:
-		return true
-	}
-	return false
-}
 
 // The abuse report type
 type AbuseReportNewParamsBodyAbuseReportsNcseiReportAct string
@@ -1656,6 +1656,24 @@ func (r AbuseReportNewParamsBodyAbuseReportsNcseiReportAgree) IsKnown() bool {
 
 // Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 // reports cannot be anonymous.
+type AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationSend     AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationNone     AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationSend, AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsNcseiReportHostNotificationNone:
+		return true
+	}
+	return false
+}
+
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
 type AbuseReportNewParamsBodyAbuseReportsNcseiReportNcmecNotification string
 
 const (
@@ -1674,17 +1692,17 @@ func (r AbuseReportNewParamsBodyAbuseReportsNcseiReportNcmecNotification) IsKnow
 
 // Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
 // reports cannot be anonymous.
-type AbuseReportNewParamsBodyOwnerNotification string
+type AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification string
 
 const (
-	AbuseReportNewParamsBodyOwnerNotificationSend     AbuseReportNewParamsBodyOwnerNotification = "send"
-	AbuseReportNewParamsBodyOwnerNotificationSendAnon AbuseReportNewParamsBodyOwnerNotification = "send-anon"
-	AbuseReportNewParamsBodyOwnerNotificationNone     AbuseReportNewParamsBodyOwnerNotification = "none"
+	AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationSend     AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification = "send"
+	AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationSendAnon AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification = "send-anon"
+	AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationNone     AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification = "none"
 )
 
-func (r AbuseReportNewParamsBodyOwnerNotification) IsKnown() bool {
+func (r AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotification) IsKnown() bool {
 	switch r {
-	case AbuseReportNewParamsBodyOwnerNotificationSend, AbuseReportNewParamsBodyOwnerNotificationSendAnon, AbuseReportNewParamsBodyOwnerNotificationNone:
+	case AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsNcseiReportOwnerNotificationNone:
 		return true
 	}
 	return false
@@ -1759,6 +1777,24 @@ const (
 func (r AbuseReportNewParamsBodyNcmecNotification) IsKnown() bool {
 	switch r {
 	case AbuseReportNewParamsBodyNcmecNotificationSend, AbuseReportNewParamsBodyNcmecNotificationSendAnon, AbuseReportNewParamsBodyNcmecNotificationNone:
+		return true
+	}
+	return false
+}
+
+// Notification type based on the abuse type. NOTE: Copyright (DMCA) and Trademark
+// reports cannot be anonymous.
+type AbuseReportNewParamsBodyOwnerNotification string
+
+const (
+	AbuseReportNewParamsBodyOwnerNotificationSend     AbuseReportNewParamsBodyOwnerNotification = "send"
+	AbuseReportNewParamsBodyOwnerNotificationSendAnon AbuseReportNewParamsBodyOwnerNotification = "send-anon"
+	AbuseReportNewParamsBodyOwnerNotificationNone     AbuseReportNewParamsBodyOwnerNotification = "none"
+)
+
+func (r AbuseReportNewParamsBodyOwnerNotification) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyOwnerNotificationSend, AbuseReportNewParamsBodyOwnerNotificationSendAnon, AbuseReportNewParamsBodyOwnerNotificationNone:
 		return true
 	}
 	return false

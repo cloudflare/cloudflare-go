@@ -20,7 +20,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // UserSchemaService contains methods and other services that help with interacting
@@ -148,7 +147,54 @@ func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params Use
 	return
 }
 
-type Message []shared.ResponseInfo
+type Message []MessageItem
+
+type MessageItem struct {
+	Code             int64             `json:"code,required"`
+	Message          string            `json:"message,required"`
+	DocumentationURL string            `json:"documentation_url"`
+	Source           MessageItemSource `json:"source"`
+	JSON             messageItemJSON   `json:"-"`
+}
+
+// messageItemJSON contains the JSON metadata for the struct [MessageItem]
+type messageItemJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *MessageItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messageItemJSON) RawJSON() string {
+	return r.raw
+}
+
+type MessageItemSource struct {
+	Pointer string                `json:"pointer"`
+	JSON    messageItemSourceJSON `json:"-"`
+}
+
+// messageItemSourceJSON contains the JSON metadata for the struct
+// [MessageItemSource]
+type messageItemSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MessageItemSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messageItemSourceJSON) RawJSON() string {
+	return r.raw
+}
 
 type PublicSchema struct {
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
@@ -156,7 +202,7 @@ type PublicSchema struct {
 	Kind PublicSchemaKind `json:"kind,required"`
 	// Name of the schema
 	Name string `json:"name,required"`
-	// UUID
+	// UUID.
 	SchemaID string `json:"schema_id,required"`
 	// Source of the schema
 	Source string `json:"source"`
@@ -278,7 +324,7 @@ func (r schemaUploadUploadDetailsWarningJSON) RawJSON() string {
 type UserSchemaDeleteResponse struct {
 	Errors   Message `json:"errors,required"`
 	Messages Message `json:"messages,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success UserSchemaDeleteResponseSuccess `json:"success,required"`
 	JSON    userSchemaDeleteResponseJSON    `json:"-"`
 }
@@ -301,7 +347,7 @@ func (r userSchemaDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type UserSchemaDeleteResponseSuccess bool
 
 const (
@@ -317,7 +363,7 @@ func (r UserSchemaDeleteResponseSuccess) IsKnown() bool {
 }
 
 type UserSchemaNewParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Schema file bytes
 	File param.Field[io.Reader] `json:"file,required" format:"binary"`
@@ -379,7 +425,7 @@ type UserSchemaNewResponseEnvelope struct {
 	Errors   Message      `json:"errors,required"`
 	Messages Message      `json:"messages,required"`
 	Result   SchemaUpload `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success UserSchemaNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userSchemaNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -403,7 +449,7 @@ func (r userSchemaNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type UserSchemaNewResponseEnvelopeSuccess bool
 
 const (
@@ -419,7 +465,7 @@ func (r UserSchemaNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UserSchemaListParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Omit the source-files of schemas and only retrieve their meta-data.
 	OmitSource param.Field[bool] `query:"omit_source"`
@@ -440,12 +486,12 @@ func (r UserSchemaListParams) URLQuery() (v url.Values) {
 }
 
 type UserSchemaDeleteParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type UserSchemaEditParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Flag whether schema is enabled for validation.
 	ValidationEnabled param.Field[UserSchemaEditParamsValidationEnabled] `json:"validation_enabled"`
@@ -474,7 +520,7 @@ type UserSchemaEditResponseEnvelope struct {
 	Errors   Message      `json:"errors,required"`
 	Messages Message      `json:"messages,required"`
 	Result   PublicSchema `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success UserSchemaEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userSchemaEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -498,7 +544,7 @@ func (r userSchemaEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type UserSchemaEditResponseEnvelopeSuccess bool
 
 const (
@@ -514,7 +560,7 @@ func (r UserSchemaEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UserSchemaGetParams struct {
-	// Identifier
+	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Omit the source-files of schemas and only retrieve their meta-data.
 	OmitSource param.Field[bool] `query:"omit_source"`
@@ -532,7 +578,7 @@ type UserSchemaGetResponseEnvelope struct {
 	Errors   Message      `json:"errors,required"`
 	Messages Message      `json:"messages,required"`
 	Result   PublicSchema `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success UserSchemaGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userSchemaGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -556,7 +602,7 @@ func (r userSchemaGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type UserSchemaGetResponseEnvelopeSuccess bool
 
 const (

@@ -321,7 +321,7 @@ func (r rankingInternetServiceTopResponseTop0JSON) RawJSON() string {
 }
 
 type RankingInternetServiceCategoriesParams struct {
-	// Array of dates to filter the results.
+	// Filters results by the specified array of dates.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Format in which results will be returned.
 	Format param.Field[RankingInternetServiceCategoriesParamsFormat] `query:"format"`
@@ -382,9 +382,9 @@ func (r rankingInternetServiceCategoriesResponseEnvelopeJSON) RawJSON() string {
 type RankingInternetServiceTimeseriesGroupsParams struct {
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by the specified date range. For example, use `7d` and
-	// `7dcontrol` to compare this week with the previous week. Use this parameter or
-	// set specific start and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
@@ -447,7 +447,7 @@ func (r rankingInternetServiceTimeseriesGroupsResponseEnvelopeJSON) RawJSON() st
 }
 
 type RankingInternetServiceTopParams struct {
-	// Array of dates to filter the results.
+	// Filters results by the specified array of dates.
 	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Format in which results will be returned.
 	Format param.Field[RankingInternetServiceTopParamsFormat] `query:"format"`

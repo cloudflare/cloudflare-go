@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
-func TestAssetUploadNewWithOptionalParams(t *testing.T) {
+func TestAssetUploadNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,9 +28,11 @@ func TestAssetUploadNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Assets.Upload.New(context.TODO(), workers.AssetUploadNewParams{
-		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Base64:      cloudflare.F(workers.AssetUploadNewParamsBase64True),
-		AnyFileHash: cloudflare.F([]string{"string"}),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Base64:    cloudflare.F(workers.AssetUploadNewParamsBase64True),
+		Body: map[string]string{
+			"foo": "string",
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

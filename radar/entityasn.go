@@ -177,7 +177,7 @@ type EntityASNGetResponseASN struct {
 	Name            string                                `json:"name,required"`
 	OrgName         string                                `json:"orgName,required"`
 	Related         []EntityASNGetResponseASNRelated      `json:"related,required"`
-	// Regional Internet Registry
+	// Regional Internet Registry.
 	Source  string `json:"source,required"`
 	Website string `json:"website,required"`
 	Aka     string `json:"aka"`
@@ -215,7 +215,7 @@ func (r entityASNGetResponseASNJSON) RawJSON() string {
 
 type EntityASNGetResponseASNEstimatedUsers struct {
 	Locations []EntityASNGetResponseASNEstimatedUsersLocation `json:"locations,required"`
-	// Total estimated users
+	// Total estimated users.
 	EstimatedUsers int64                                     `json:"estimatedUsers"`
 	JSON           entityASNGetResponseASNEstimatedUsersJSON `json:"-"`
 }
@@ -240,7 +240,7 @@ func (r entityASNGetResponseASNEstimatedUsersJSON) RawJSON() string {
 type EntityASNGetResponseASNEstimatedUsersLocation struct {
 	LocationAlpha2 string `json:"locationAlpha2,required"`
 	LocationName   string `json:"locationName,required"`
-	// Estimated users per location
+	// Estimated users per location.
 	EstimatedUsers int64                                             `json:"estimatedUsers"`
 	JSON           entityASNGetResponseASNEstimatedUsersLocationJSON `json:"-"`
 }
@@ -267,7 +267,7 @@ type EntityASNGetResponseASNRelated struct {
 	ASN  int64  `json:"asn,required"`
 	Name string `json:"name,required"`
 	Aka  string `json:"aka"`
-	// Total estimated users
+	// Total estimated users.
 	EstimatedUsers int64                              `json:"estimatedUsers"`
 	JSON           entityASNGetResponseASNRelatedJSON `json:"-"`
 }
@@ -320,7 +320,7 @@ type EntityAsnipResponseASN struct {
 	Name           string                               `json:"name,required"`
 	OrgName        string                               `json:"orgName,required"`
 	Related        []EntityAsnipResponseASNRelated      `json:"related,required"`
-	// Regional Internet Registry
+	// Regional Internet Registry.
 	Source  string `json:"source,required"`
 	Website string `json:"website,required"`
 	Aka     string `json:"aka"`
@@ -357,7 +357,7 @@ func (r entityAsnipResponseASNJSON) RawJSON() string {
 
 type EntityAsnipResponseASNEstimatedUsers struct {
 	Locations []EntityAsnipResponseASNEstimatedUsersLocation `json:"locations,required"`
-	// Total estimated users
+	// Total estimated users.
 	EstimatedUsers int64                                    `json:"estimatedUsers"`
 	JSON           entityAsnipResponseASNEstimatedUsersJSON `json:"-"`
 }
@@ -382,7 +382,7 @@ func (r entityAsnipResponseASNEstimatedUsersJSON) RawJSON() string {
 type EntityAsnipResponseASNEstimatedUsersLocation struct {
 	LocationAlpha2 string `json:"locationAlpha2,required"`
 	LocationName   string `json:"locationName,required"`
-	// Estimated users per location
+	// Estimated users per location.
 	EstimatedUsers int64                                            `json:"estimatedUsers"`
 	JSON           entityAsnipResponseASNEstimatedUsersLocationJSON `json:"-"`
 }
@@ -409,7 +409,7 @@ type EntityAsnipResponseASNRelated struct {
 	ASN  int64  `json:"asn,required"`
 	Name string `json:"name,required"`
 	Aka  string `json:"aka"`
-	// Total estimated users
+	// Total estimated users.
 	EstimatedUsers int64                             `json:"estimatedUsers"`
 	JSON           entityAsnipResponseASNRelatedJSON `json:"-"`
 }
@@ -515,17 +515,18 @@ func (r entityASNRelResponseRelJSON) RawJSON() string {
 }
 
 type EntityASNListParams struct {
-	// Comma-separated list of Autonomous System Numbers (ASNs).
+	// Filters results by Autonomous System. Specify one or more Autonomous System
+	// Numbers (ASNs) as a comma-separated list.
 	ASN param.Field[string] `query:"asn"`
 	// Format in which results will be returned.
 	Format param.Field[EntityASNListParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Location alpha-2 code.
+	// Filters results by location. Specify an alpha-2 location code.
 	Location param.Field[string] `query:"location"`
 	// Skips the specified number of objects before fetching the results.
 	Offset param.Field[int64] `query:"offset"`
-	// Metric to order the ASNs by.
+	// Specifies the metric to order the ASNs by.
 	OrderBy param.Field[EntityASNListParamsOrderBy] `query:"orderBy"`
 }
 
@@ -553,7 +554,7 @@ func (r EntityASNListParamsFormat) IsKnown() bool {
 	return false
 }
 
-// Metric to order the ASNs by.
+// Specifies the metric to order the ASNs by.
 type EntityASNListParamsOrderBy string
 
 const (
