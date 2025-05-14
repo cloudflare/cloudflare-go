@@ -76,6 +76,11 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				Observability: cloudflare.F(workers.ScriptUpdateParamsMetadataObservability{
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(0.100000),
+					Logs: cloudflare.F(workers.ScriptUpdateParamsMetadataObservabilityLogs{
+						Enabled:          cloudflare.F(true),
+						InvocationLogs:   cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(0.100000),
+					}),
 				}),
 				Placement: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacement{
 					Mode: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacementModeSmart),

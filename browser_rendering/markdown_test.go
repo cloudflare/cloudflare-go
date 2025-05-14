@@ -28,8 +28,9 @@ func TestMarkdownNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.BrowserRendering.Markdown.New(context.TODO(), browser_rendering.MarkdownNewParams{
-		AccountID: cloudflare.F("account_id"),
-		CacheTTL:  cloudflare.F(86400.000000),
+		AccountID:     cloudflare.F("account_id"),
+		CacheTTL:      cloudflare.F(86400.000000),
+		ActionTimeout: cloudflare.F(300000.000000),
 		AddScriptTag: cloudflare.F([]browser_rendering.MarkdownNewParamsAddScriptTag{{
 			ID:      cloudflare.F("id"),
 			Content: cloudflare.F("content"),

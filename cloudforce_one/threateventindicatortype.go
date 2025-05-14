@@ -90,6 +90,6 @@ func (r threatEventIndicatorTypeListResponseItemsJSON) RawJSON() string {
 }
 
 type ThreatEventIndicatorTypeListParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }

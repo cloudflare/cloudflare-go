@@ -644,7 +644,7 @@ type BucketLifecycleUpdateParams struct {
 	// Account ID.
 	AccountID param.Field[string]                            `path:"account_id,required"`
 	Rules     param.Field[[]BucketLifecycleUpdateParamsRule] `json:"rules"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketLifecycleUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -947,7 +947,7 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsStorageClass) IsK
 	return false
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketLifecycleUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -1010,11 +1010,11 @@ func (r BucketLifecycleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type BucketLifecycleGetParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketLifecycleGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketLifecycleGetParamsCfR2Jurisdiction string
 
 const (

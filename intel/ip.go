@@ -38,7 +38,7 @@ func NewIPService(opts ...option.RequestOption) (r *IPService) {
 
 // Gets the geolocation, ASN, infrastructure type of the ASN, and any security
 // threat categories of an IP address. **Must provide ip query parameters.** For
-// example, `/intel/ip?ipv4=1.1.1.1` or `/intel/ip?ipv6=2001:db8::1`
+// example, `/intel/ip?ipv4=1.1.1.1` or `/intel/ip?ipv6=2001:db8::1`.
 func (r *IPService) Get(ctx context.Context, params IPGetParams, opts ...option.RequestOption) (res *[]IP, err error) {
 	var env IPGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -154,7 +154,7 @@ func (r ipRiskTypeJSON) RawJSON() string {
 }
 
 type IPGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	IPV4      param.Field[string] `query:"ipv4"`
 	IPV6      param.Field[string] `query:"ipv6"`
@@ -172,7 +172,7 @@ type IPGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   []IP                  `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    IPGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo IPGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ipGetResponseEnvelopeJSON       `json:"-"`
@@ -198,7 +198,7 @@ func (r ipGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type IPGetResponseEnvelopeSuccess bool
 
 const (
@@ -214,13 +214,13 @@ func (r IPGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type IPGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                             `json:"total_count"`
 	JSON       ipGetResponseEnvelopeResultInfoJSON `json:"-"`
 }

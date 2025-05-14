@@ -76,6 +76,7 @@ func TestWidgetUpdateWithOptionalParams(t *testing.T) {
 			ClearanceLevel: cloudflare.F(turnstile.WidgetUpdateParamsClearanceLevelInteractive),
 			EphemeralID:    cloudflare.F(false),
 			Offlabel:       cloudflare.F(false),
+			Region:         cloudflare.F(turnstile.WidgetUpdateParamsRegionWorld),
 		},
 	)
 	if err != nil {

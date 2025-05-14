@@ -106,7 +106,7 @@ func (r InstanceStatusEditResponseStatus) IsKnown() bool {
 
 type InstanceStatusEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Possible actions to apply to instance
+	// Possible actions to apply to instance.
 	Status param.Field[InstanceStatusEditParamsStatus] `json:"status,required"`
 }
 
@@ -114,7 +114,7 @@ func (r InstanceStatusEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Possible actions to apply to instance
+// Possible actions to apply to instance.
 type InstanceStatusEditParamsStatus string
 
 const (

@@ -56,6 +56,7 @@ func TestDNSSECEditWithOptionalParams(t *testing.T) {
 		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		DNSSECMultiSigner: cloudflare.F(false),
 		DNSSECPresigned:   cloudflare.F(true),
+		DNSSECUseNsec3:    cloudflare.F(false),
 		Status:            cloudflare.F(dns.DNSSECEditParamsStatusActive),
 	})
 	if err != nil {

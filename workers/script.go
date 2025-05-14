@@ -288,9 +288,9 @@ type ScriptSetting struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
 	// Observability settings for the Worker.
-	Observability ScriptSettingObservability `json:"observability"`
+	Observability ScriptSettingObservability `json:"observability,nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript  `json:"tail_consumers"`
+	TailConsumers []ConsumerScript  `json:"tail_consumers,nullable"`
 	JSON          scriptSettingJSON `json:"-"`
 }
 
@@ -317,8 +317,10 @@ type ScriptSettingObservability struct {
 	Enabled bool `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64                        `json:"head_sampling_rate,nullable"`
-	JSON             scriptSettingObservabilityJSON `json:"-"`
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Log settings for the Worker.
+	Logs ScriptSettingObservabilityLogs `json:"logs,nullable"`
+	JSON scriptSettingObservabilityJSON `json:"-"`
 }
 
 // scriptSettingObservabilityJSON contains the JSON metadata for the struct
@@ -326,6 +328,7 @@ type ScriptSettingObservability struct {
 type scriptSettingObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
+	Logs             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -335,6 +338,37 @@ func (r *ScriptSettingObservability) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptSettingObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Log settings for the Worker.
+type ScriptSettingObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs bool `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64                            `json:"head_sampling_rate,nullable"`
+	JSON             scriptSettingObservabilityLogsJSON `json:"-"`
+}
+
+// scriptSettingObservabilityLogsJSON contains the JSON metadata for the struct
+// [ScriptSettingObservabilityLogs]
+type scriptSettingObservabilityLogsJSON struct {
+	Enabled          apijson.Field
+	InvocationLogs   apijson.Field
+	HeadSamplingRate apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSettingObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSettingObservabilityLogsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -358,9 +392,27 @@ type ScriptSettingObservabilityParam struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Log settings for the Worker.
+	Logs param.Field[ScriptSettingObservabilityLogsParam] `json:"logs"`
 }
 
 func (r ScriptSettingObservabilityParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Log settings for the Worker.
+type ScriptSettingObservabilityLogsParam struct {
+	// Whether logs are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs param.Field[bool] `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r ScriptSettingObservabilityLogsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -940,12 +992,12 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOut
 }
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace struct {
-	// The exported class name of the Durable Object.
-	ClassName param.Field[string] `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
+	// The exported class name of the Durable Object.
+	ClassName param.Field[string] `json:"class_name"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
@@ -1606,9 +1658,27 @@ type ScriptUpdateParamsMetadataObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Log settings for the Worker.
+	Logs param.Field[ScriptUpdateParamsMetadataObservabilityLogs] `json:"logs"`
 }
 
 func (r ScriptUpdateParamsMetadataObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Log settings for the Worker.
+type ScriptUpdateParamsMetadataObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs param.Field[bool] `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r ScriptUpdateParamsMetadataObservabilityLogs) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

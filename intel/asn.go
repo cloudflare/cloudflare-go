@@ -55,7 +55,7 @@ func (r *ASNService) Get(ctx context.Context, asn shared.ASNParam, query ASNGetP
 }
 
 type ASNGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

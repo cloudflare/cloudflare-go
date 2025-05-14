@@ -66,6 +66,11 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				Observability: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsObservability{
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(0.100000),
+					Logs: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsObservabilityLogs{
+						Enabled:          cloudflare.F(true),
+						InvocationLogs:   cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(0.100000),
+					}),
 				}),
 				Placement: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacement{
 					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacementModeSmart),

@@ -111,6 +111,16 @@ type DNSSEC struct {
 	// [Cloudflare as Secondary](https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/setup/#dnssec)
 	// for details.
 	DNSSECPresigned bool `json:"dnssec_presigned"`
+	// If true, enables the use of NSEC3 together with DNSSEC on the zone. Combined
+	// with setting dnssec_presigned to true, this enables the use of NSEC3 records
+	// when transferring in from an external provider. If dnssec_presigned is instead
+	// set to false (default), NSEC3 records will be generated and signed at request
+	// time.
+	//
+	// See
+	// [DNSSEC with NSEC3](https://developers.cloudflare.com/dns/dnssec/enable-nsec3/)
+	// for details.
+	DNSSECUseNsec3 bool `json:"dnssec_use_nsec3"`
 	// Full DS record.
 	DS string `json:"ds,nullable"`
 	// Flag for DNSSEC record.
@@ -136,6 +146,7 @@ type dnssecJSON struct {
 	DigestType        apijson.Field
 	DNSSECMultiSigner apijson.Field
 	DNSSECPresigned   apijson.Field
+	DNSSECUseNsec3    apijson.Field
 	DS                apijson.Field
 	Flags             apijson.Field
 	KeyTag            apijson.Field
@@ -338,6 +349,16 @@ type DNSSECEditParams struct {
 	// [Cloudflare as Secondary](https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/setup/#dnssec)
 	// for details.
 	DNSSECPresigned param.Field[bool] `json:"dnssec_presigned"`
+	// If true, enables the use of NSEC3 together with DNSSEC on the zone. Combined
+	// with setting dnssec_presigned to true, this enables the use of NSEC3 records
+	// when transferring in from an external provider. If dnssec_presigned is instead
+	// set to false (default), NSEC3 records will be generated and signed at request
+	// time.
+	//
+	// See
+	// [DNSSEC with NSEC3](https://developers.cloudflare.com/dns/dnssec/enable-nsec3/)
+	// for details.
+	DNSSECUseNsec3 param.Field[bool] `json:"dnssec_use_nsec3"`
 	// Status of DNSSEC, based on user-desired state and presence of necessary records.
 	Status param.Field[DNSSECEditParamsStatus] `json:"status"`
 }

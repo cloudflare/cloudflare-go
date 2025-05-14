@@ -76,7 +76,7 @@ func (r threatEventRelateDeleteResponseJSON) RawJSON() string {
 }
 
 type ThreatEventRelateDeleteParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }
 

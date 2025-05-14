@@ -758,12 +758,12 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDisp
 }
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace struct {
-	// The exported class name of the Durable Object.
-	ClassName string `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
+	// The exported class name of the Durable Object.
+	ClassName string `json:"class_name"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
@@ -778,9 +778,9 @@ type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurable
 // contains the JSON metadata for the struct
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace]
 type dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
-	ClassName   apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	ClassName   apijson.Field
 	Environment apijson.Field
 	NamespaceID apijson.Field
 	ScriptName  apijson.Field
@@ -1770,8 +1770,10 @@ type DispatchNamespaceScriptSettingEditResponseObservability struct {
 	Enabled bool `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64                                                     `json:"head_sampling_rate,nullable"`
-	JSON             dispatchNamespaceScriptSettingEditResponseObservabilityJSON `json:"-"`
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Log settings for the Worker.
+	Logs DispatchNamespaceScriptSettingEditResponseObservabilityLogs `json:"logs,nullable"`
+	JSON dispatchNamespaceScriptSettingEditResponseObservabilityJSON `json:"-"`
 }
 
 // dispatchNamespaceScriptSettingEditResponseObservabilityJSON contains the JSON
@@ -1780,6 +1782,7 @@ type DispatchNamespaceScriptSettingEditResponseObservability struct {
 type dispatchNamespaceScriptSettingEditResponseObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
+	Logs             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -1789,6 +1792,38 @@ func (r *DispatchNamespaceScriptSettingEditResponseObservability) UnmarshalJSON(
 }
 
 func (r dispatchNamespaceScriptSettingEditResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Log settings for the Worker.
+type DispatchNamespaceScriptSettingEditResponseObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs bool `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64                                                         `json:"head_sampling_rate,nullable"`
+	JSON             dispatchNamespaceScriptSettingEditResponseObservabilityLogsJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseObservabilityLogsJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseObservabilityLogs]
+type dispatchNamespaceScriptSettingEditResponseObservabilityLogsJSON struct {
+	Enabled          apijson.Field
+	InvocationLogs   apijson.Field
+	HeadSamplingRate apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseObservabilityLogsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2517,12 +2552,12 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispa
 }
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace struct {
-	// The exported class name of the Durable Object.
-	ClassName string `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
+	// The exported class name of the Durable Object.
+	ClassName string `json:"class_name"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
@@ -2537,9 +2572,9 @@ type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableO
 // contains the JSON metadata for the struct
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace]
 type dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
-	ClassName   apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	ClassName   apijson.Field
 	Environment apijson.Field
 	NamespaceID apijson.Field
 	ScriptName  apijson.Field
@@ -3529,8 +3564,10 @@ type DispatchNamespaceScriptSettingGetResponseObservability struct {
 	Enabled bool `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64                                                    `json:"head_sampling_rate,nullable"`
-	JSON             dispatchNamespaceScriptSettingGetResponseObservabilityJSON `json:"-"`
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Log settings for the Worker.
+	Logs DispatchNamespaceScriptSettingGetResponseObservabilityLogs `json:"logs,nullable"`
+	JSON dispatchNamespaceScriptSettingGetResponseObservabilityJSON `json:"-"`
 }
 
 // dispatchNamespaceScriptSettingGetResponseObservabilityJSON contains the JSON
@@ -3538,6 +3575,7 @@ type DispatchNamespaceScriptSettingGetResponseObservability struct {
 type dispatchNamespaceScriptSettingGetResponseObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
+	Logs             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -3547,6 +3585,38 @@ func (r *DispatchNamespaceScriptSettingGetResponseObservability) UnmarshalJSON(d
 }
 
 func (r dispatchNamespaceScriptSettingGetResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Log settings for the Worker.
+type DispatchNamespaceScriptSettingGetResponseObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs bool `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64                                                        `json:"head_sampling_rate,nullable"`
+	JSON             dispatchNamespaceScriptSettingGetResponseObservabilityLogsJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseObservabilityLogsJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseObservabilityLogs]
+type dispatchNamespaceScriptSettingGetResponseObservabilityLogsJSON struct {
+	Enabled          apijson.Field
+	InvocationLogs   apijson.Field
+	HeadSamplingRate apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseObservabilityLogsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3959,12 +4029,12 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 }
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespace struct {
-	// The exported class name of the Durable Object.
-	ClassName param.Field[string] `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
+	// The exported class name of the Durable Object.
+	ClassName param.Field[string] `json:"class_name"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
@@ -4636,9 +4706,27 @@ type DispatchNamespaceScriptSettingEditParamsSettingsObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Log settings for the Worker.
+	Logs param.Field[DispatchNamespaceScriptSettingEditParamsSettingsObservabilityLogs] `json:"logs"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Log settings for the Worker.
+type DispatchNamespaceScriptSettingEditParamsSettingsObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs param.Field[bool] `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsObservabilityLogs) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

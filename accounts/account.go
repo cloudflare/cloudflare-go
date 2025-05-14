@@ -170,44 +170,18 @@ func (r accountJSON) RawJSON() string {
 type AccountSettings struct {
 	// Sets an abuse contact email to notify for abuse reports.
 	AbuseContactEmail string `json:"abuse_contact_email"`
-	// Specifies the default nameservers to be used for new zones added to this
-	// account.
-	//
-	// - `cloudflare.standard` for Cloudflare-branded nameservers
-	// - `custom.account` for account custom nameservers
-	// - `custom.tenant` for tenant custom nameservers
-	//
-	// See
-	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
-	// for more information.
-	//
-	// Deprecated in favor of
-	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
-	//
-	// Deprecated: deprecated
-	DefaultNameservers AccountSettingsDefaultNameservers `json:"default_nameservers"`
 	// Indicates whether membership in this account requires that Two-Factor
 	// Authentication is enabled
-	EnforceTwofactor bool `json:"enforce_twofactor"`
-	// Indicates whether new zones should use the account-level custom nameservers by
-	// default.
-	//
-	// Deprecated in favor of
-	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
-	//
-	// Deprecated: deprecated
-	UseAccountCustomNSByDefault bool                `json:"use_account_custom_ns_by_default"`
-	JSON                        accountSettingsJSON `json:"-"`
+	EnforceTwofactor bool                `json:"enforce_twofactor"`
+	JSON             accountSettingsJSON `json:"-"`
 }
 
 // accountSettingsJSON contains the JSON metadata for the struct [AccountSettings]
 type accountSettingsJSON struct {
-	AbuseContactEmail           apijson.Field
-	DefaultNameservers          apijson.Field
-	EnforceTwofactor            apijson.Field
-	UseAccountCustomNSByDefault apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
+	AbuseContactEmail apijson.Field
+	EnforceTwofactor  apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *AccountSettings) UnmarshalJSON(data []byte) (err error) {
@@ -216,35 +190,6 @@ func (r *AccountSettings) UnmarshalJSON(data []byte) (err error) {
 
 func (r accountSettingsJSON) RawJSON() string {
 	return r.raw
-}
-
-// Specifies the default nameservers to be used for new zones added to this
-// account.
-//
-// - `cloudflare.standard` for Cloudflare-branded nameservers
-// - `custom.account` for account custom nameservers
-// - `custom.tenant` for tenant custom nameservers
-//
-// See
-// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
-// for more information.
-//
-// Deprecated in favor of
-// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
-type AccountSettingsDefaultNameservers string
-
-const (
-	AccountSettingsDefaultNameserversCloudflareStandard AccountSettingsDefaultNameservers = "cloudflare.standard"
-	AccountSettingsDefaultNameserversCustomAccount      AccountSettingsDefaultNameservers = "custom.account"
-	AccountSettingsDefaultNameserversCustomTenant       AccountSettingsDefaultNameservers = "custom.tenant"
-)
-
-func (r AccountSettingsDefaultNameservers) IsKnown() bool {
-	switch r {
-	case AccountSettingsDefaultNameserversCloudflareStandard, AccountSettingsDefaultNameserversCustomAccount, AccountSettingsDefaultNameserversCustomTenant:
-		return true
-	}
-	return false
 }
 
 type AccountParam struct {
@@ -262,33 +207,9 @@ func (r AccountParam) MarshalJSON() (data []byte, err error) {
 type AccountSettingsParam struct {
 	// Sets an abuse contact email to notify for abuse reports.
 	AbuseContactEmail param.Field[string] `json:"abuse_contact_email"`
-	// Specifies the default nameservers to be used for new zones added to this
-	// account.
-	//
-	// - `cloudflare.standard` for Cloudflare-branded nameservers
-	// - `custom.account` for account custom nameservers
-	// - `custom.tenant` for tenant custom nameservers
-	//
-	// See
-	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
-	// for more information.
-	//
-	// Deprecated in favor of
-	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
-	//
-	// Deprecated: deprecated
-	DefaultNameservers param.Field[AccountSettingsDefaultNameservers] `json:"default_nameservers"`
 	// Indicates whether membership in this account requires that Two-Factor
 	// Authentication is enabled
 	EnforceTwofactor param.Field[bool] `json:"enforce_twofactor"`
-	// Indicates whether new zones should use the account-level custom nameservers by
-	// default.
-	//
-	// Deprecated in favor of
-	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
-	//
-	// Deprecated: deprecated
-	UseAccountCustomNSByDefault param.Field[bool] `json:"use_account_custom_ns_by_default"`
 }
 
 func (r AccountSettingsParam) MarshalJSON() (data []byte, err error) {

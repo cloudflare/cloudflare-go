@@ -34,14 +34,14 @@ func NewHyperdriveService(opts ...option.RequestOption) (r *HyperdriveService) {
 }
 
 type Hyperdrive struct {
-	// Identifier
+	// Define configurations using a unique string identifier.
 	ID      string            `json:"id,required"`
 	Name    string            `json:"name,required"`
 	Origin  HyperdriveOrigin  `json:"origin,required"`
 	Caching HyperdriveCaching `json:"caching"`
-	// When the Hyperdrive configuration was created.
+	// Defines the creation time of the Hyperdrive configuration.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// When the Hyperdrive configuration was last modified.
+	// Defines the last modified time of the Hyperdrive configuration.
 	ModifiedOn time.Time      `json:"modified_on" format:"date-time"`
 	MTLS       HyperdriveMTLS `json:"mtls"`
 	JSON       hyperdriveJSON `json:"-"`
@@ -69,17 +69,18 @@ func (r hyperdriveJSON) RawJSON() string {
 }
 
 type HyperdriveOrigin struct {
-	// The name of your origin database.
+	// Set the name of your origin database.
 	Database string `json:"database,required"`
-	// The host (hostname or IP) of your origin database.
+	// Defines the host (hostname or IP) of your origin database.
 	Host string `json:"host,required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme HyperdriveOriginScheme `json:"scheme,required"`
-	// The user of your origin database.
+	// Set the user of your origin database.
 	User string `json:"user,required"`
-	// The Client ID of the Access token to use when connecting to the origin database.
+	// Defines the Client ID of the Access token to use when connecting to the origin
+	// database.
 	AccessClientID string `json:"access_client_id"`
-	// The port (default: 5432 for Postgres) of your origin database.
+	// Defines the port (default: 5432 for Postgres) of your origin database.
 	Port  int64                `json:"port"`
 	JSON  hyperdriveOriginJSON `json:"-"`
 	union HyperdriveOriginUnion
@@ -142,15 +143,15 @@ func init() {
 }
 
 type HyperdriveOriginPublicDatabase struct {
-	// The name of your origin database.
+	// Set the name of your origin database.
 	Database string `json:"database,required"`
-	// The host (hostname or IP) of your origin database.
+	// Defines the host (hostname or IP) of your origin database.
 	Host string `json:"host,required"`
-	// The port (default: 5432 for Postgres) of your origin database.
+	// Defines the port (default: 5432 for Postgres) of your origin database.
 	Port int64 `json:"port,required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme HyperdriveOriginPublicDatabaseScheme `json:"scheme,required"`
-	// The user of your origin database.
+	// Set the user of your origin database.
 	User string                             `json:"user,required"`
 	JSON hyperdriveOriginPublicDatabaseJSON `json:"-"`
 }
@@ -195,15 +196,16 @@ func (r HyperdriveOriginPublicDatabaseScheme) IsKnown() bool {
 }
 
 type HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel struct {
-	// The Client ID of the Access token to use when connecting to the origin database.
+	// Defines the Client ID of the Access token to use when connecting to the origin
+	// database.
 	AccessClientID string `json:"access_client_id,required"`
-	// The name of your origin database.
+	// Set the name of your origin database.
 	Database string `json:"database,required"`
-	// The host (hostname or IP) of your origin database.
+	// Defines the host (hostname or IP) of your origin database.
 	Host string `json:"host,required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme `json:"scheme,required"`
-	// The user of your origin database.
+	// Set the user of your origin database.
 	User string                                                            `json:"user,required"`
 	JSON hyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelJSON `json:"-"`
 }
@@ -266,13 +268,13 @@ func (r HyperdriveOriginScheme) IsKnown() bool {
 }
 
 type HyperdriveCaching struct {
-	// When set to true, disables the caching of SQL responses. (Default: false)
+	// Set to true to disable caching of SQL responses. Default is false.
 	Disabled bool `json:"disabled"`
-	// When present, specifies max duration for which items should persist in the
-	// cache. Not returned if set to default. (Default: 60)
+	// Specify the maximum duration items should persist in the cache. Not returned if
+	// set to the default (60).
 	MaxAge int64 `json:"max_age"`
-	// When present, indicates the number of seconds cache may serve the response after
-	// it becomes stale. Not returned if set to default. (Default: 15)
+	// Specify the number of seconds the cache may serve a stale response. Omitted if
+	// set to the default (15).
 	StaleWhileRevalidate int64                 `json:"stale_while_revalidate"`
 	JSON                 hyperdriveCachingJSON `json:"-"`
 	union                HyperdriveCachingUnion
@@ -333,7 +335,7 @@ func init() {
 }
 
 type HyperdriveCachingHyperdriveHyperdriveCachingCommon struct {
-	// When set to true, disables the caching of SQL responses. (Default: false)
+	// Set to true to disable caching of SQL responses. Default is false.
 	Disabled bool                                                   `json:"disabled"`
 	JSON     hyperdriveCachingHyperdriveHyperdriveCachingCommonJSON `json:"-"`
 }
@@ -357,13 +359,13 @@ func (r hyperdriveCachingHyperdriveHyperdriveCachingCommonJSON) RawJSON() string
 func (r HyperdriveCachingHyperdriveHyperdriveCachingCommon) implementsHyperdriveCaching() {}
 
 type HyperdriveCachingHyperdriveHyperdriveCachingEnabled struct {
-	// When set to true, disables the caching of SQL responses. (Default: false)
+	// Set to true to disable caching of SQL responses. Default is false.
 	Disabled bool `json:"disabled"`
-	// When present, specifies max duration for which items should persist in the
-	// cache. Not returned if set to default. (Default: 60)
+	// Specify the maximum duration items should persist in the cache. Not returned if
+	// set to the default (60).
 	MaxAge int64 `json:"max_age"`
-	// When present, indicates the number of seconds cache may serve the response after
-	// it becomes stale. Not returned if set to default. (Default: 15)
+	// Specify the number of seconds the cache may serve a stale response. Omitted if
+	// set to the default (15).
 	StaleWhileRevalidate int64                                                   `json:"stale_while_revalidate"`
 	JSON                 hyperdriveCachingHyperdriveHyperdriveCachingEnabledJSON `json:"-"`
 }
@@ -389,12 +391,11 @@ func (r hyperdriveCachingHyperdriveHyperdriveCachingEnabledJSON) RawJSON() strin
 func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabled) implementsHyperdriveCaching() {}
 
 type HyperdriveMTLS struct {
-	// CA certificate ID
+	// Define CA certificate ID obtained after uploading CA cert.
 	CACertificateID string `json:"ca_certificate_id"`
-	// mTLS certificate ID
+	// Define mTLS certificate ID obtained after uploading client cert.
 	MTLSCertificateID string `json:"mtls_certificate_id"`
-	// SSL mode used for CA verification. Must be 'require', 'verify-ca', or
-	// 'verify-full'
+	// Set SSL mode to 'require', 'verify-ca', or 'verify-full' to verify the CA.
 	Sslmode string             `json:"sslmode"`
 	JSON    hyperdriveMTLSJSON `json:"-"`
 }
@@ -428,23 +429,24 @@ func (r HyperdriveParam) MarshalJSON() (data []byte, err error) {
 }
 
 type HyperdriveOriginParam struct {
-	// The name of your origin database.
+	// Set the name of your origin database.
 	Database param.Field[string] `json:"database,required"`
-	// The host (hostname or IP) of your origin database.
+	// Defines the host (hostname or IP) of your origin database.
 	Host param.Field[string] `json:"host,required"`
-	// The password required to access your origin database. This value is write-only
-	// and never returned by the API.
+	// Set the password needed to access your origin database. The API never returns
+	// this write-only value.
 	Password param.Field[string] `json:"password,required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme param.Field[HyperdriveOriginScheme] `json:"scheme,required"`
-	// The user of your origin database.
+	// Set the user of your origin database.
 	User param.Field[string] `json:"user,required"`
-	// The Client ID of the Access token to use when connecting to the origin database.
+	// Defines the Client ID of the Access token to use when connecting to the origin
+	// database.
 	AccessClientID param.Field[string] `json:"access_client_id"`
-	// The Client Secret of the Access token to use when connecting to the origin
-	// database. This value is write-only and never returned by the API.
+	// Defines the Client Secret of the Access Token to use when connecting to the
+	// origin database. The API never returns this write-only value.
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
-	// The port (default: 5432 for Postgres) of your origin database.
+	// Defines the port (default: 5432 for Postgres) of your origin database.
 	Port param.Field[int64] `json:"port"`
 }
 
@@ -462,18 +464,18 @@ type HyperdriveOriginUnionParam interface {
 }
 
 type HyperdriveOriginPublicDatabaseParam struct {
-	// The name of your origin database.
+	// Set the name of your origin database.
 	Database param.Field[string] `json:"database,required"`
-	// The host (hostname or IP) of your origin database.
+	// Defines the host (hostname or IP) of your origin database.
 	Host param.Field[string] `json:"host,required"`
-	// The password required to access your origin database. This value is write-only
-	// and never returned by the API.
+	// Set the password needed to access your origin database. The API never returns
+	// this write-only value.
 	Password param.Field[string] `json:"password,required"`
-	// The port (default: 5432 for Postgres) of your origin database.
+	// Defines the port (default: 5432 for Postgres) of your origin database.
 	Port param.Field[int64] `json:"port,required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme param.Field[HyperdriveOriginPublicDatabaseScheme] `json:"scheme,required"`
-	// The user of your origin database.
+	// Set the user of your origin database.
 	User param.Field[string] `json:"user,required"`
 }
 
@@ -484,21 +486,22 @@ func (r HyperdriveOriginPublicDatabaseParam) MarshalJSON() (data []byte, err err
 func (r HyperdriveOriginPublicDatabaseParam) implementsHyperdriveOriginUnionParam() {}
 
 type HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam struct {
-	// The Client ID of the Access token to use when connecting to the origin database.
+	// Defines the Client ID of the Access token to use when connecting to the origin
+	// database.
 	AccessClientID param.Field[string] `json:"access_client_id,required"`
-	// The Client Secret of the Access token to use when connecting to the origin
-	// database. This value is write-only and never returned by the API.
+	// Defines the Client Secret of the Access Token to use when connecting to the
+	// origin database. The API never returns this write-only value.
 	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
-	// The name of your origin database.
+	// Set the name of your origin database.
 	Database param.Field[string] `json:"database,required"`
-	// The host (hostname or IP) of your origin database.
+	// Defines the host (hostname or IP) of your origin database.
 	Host param.Field[string] `json:"host,required"`
-	// The password required to access your origin database. This value is write-only
-	// and never returned by the API.
+	// Set the password needed to access your origin database. The API never returns
+	// this write-only value.
 	Password param.Field[string] `json:"password,required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme param.Field[HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme] `json:"scheme,required"`
-	// The user of your origin database.
+	// Set the user of your origin database.
 	User param.Field[string] `json:"user,required"`
 }
 
@@ -510,13 +513,13 @@ func (r HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam) impl
 }
 
 type HyperdriveCachingParam struct {
-	// When set to true, disables the caching of SQL responses. (Default: false)
+	// Set to true to disable caching of SQL responses. Default is false.
 	Disabled param.Field[bool] `json:"disabled"`
-	// When present, specifies max duration for which items should persist in the
-	// cache. Not returned if set to default. (Default: 60)
+	// Specify the maximum duration items should persist in the cache. Not returned if
+	// set to the default (60).
 	MaxAge param.Field[int64] `json:"max_age"`
-	// When present, indicates the number of seconds cache may serve the response after
-	// it becomes stale. Not returned if set to default. (Default: 15)
+	// Specify the number of seconds the cache may serve a stale response. Omitted if
+	// set to the default (15).
 	StaleWhileRevalidate param.Field[int64] `json:"stale_while_revalidate"`
 }
 
@@ -535,7 +538,7 @@ type HyperdriveCachingUnionParam interface {
 }
 
 type HyperdriveCachingHyperdriveHyperdriveCachingCommonParam struct {
-	// When set to true, disables the caching of SQL responses. (Default: false)
+	// Set to true to disable caching of SQL responses. Default is false.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -547,13 +550,13 @@ func (r HyperdriveCachingHyperdriveHyperdriveCachingCommonParam) implementsHyper
 }
 
 type HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam struct {
-	// When set to true, disables the caching of SQL responses. (Default: false)
+	// Set to true to disable caching of SQL responses. Default is false.
 	Disabled param.Field[bool] `json:"disabled"`
-	// When present, specifies max duration for which items should persist in the
-	// cache. Not returned if set to default. (Default: 60)
+	// Specify the maximum duration items should persist in the cache. Not returned if
+	// set to the default (60).
 	MaxAge param.Field[int64] `json:"max_age"`
-	// When present, indicates the number of seconds cache may serve the response after
-	// it becomes stale. Not returned if set to default. (Default: 15)
+	// Specify the number of seconds the cache may serve a stale response. Omitted if
+	// set to the default (15).
 	StaleWhileRevalidate param.Field[int64] `json:"stale_while_revalidate"`
 }
 
@@ -565,12 +568,11 @@ func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam) implementsHype
 }
 
 type HyperdriveMTLSParam struct {
-	// CA certificate ID
+	// Define CA certificate ID obtained after uploading CA cert.
 	CACertificateID param.Field[string] `json:"ca_certificate_id"`
-	// mTLS certificate ID
+	// Define mTLS certificate ID obtained after uploading client cert.
 	MTLSCertificateID param.Field[string] `json:"mtls_certificate_id"`
-	// SSL mode used for CA verification. Must be 'require', 'verify-ca', or
-	// 'verify-full'
+	// Set SSL mode to 'require', 'verify-ca', or 'verify-full' to verify the CA.
 	Sslmode param.Field[string] `json:"sslmode"`
 }
 

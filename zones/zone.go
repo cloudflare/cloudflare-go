@@ -190,11 +190,27 @@ type Zone struct {
 	OriginalRegistrar string `json:"original_registrar,required,nullable"`
 	// The owner of the zone
 	Owner ZoneOwner `json:"owner,required"`
+	// A Zones subscription information.
+	//
+	// Deprecated: deprecated
+	Plan ZonePlan `json:"plan,required"`
+	// Allows the customer to use a custom apex. _Tenants Only Configuration_.
+	CNAMESuffix string `json:"cname_suffix"`
 	// Indicates whether the zone is only using Cloudflare DNS services. A true value
 	// means the zone will not receive security or performance benefits.
 	Paused bool `json:"paused"`
+	// Legacy permissions based on legacy user membership information.
+	//
+	// Deprecated: deprecated
+	Permissions []string `json:"permissions"`
 	// The zone status on Cloudflare.
 	Status ZoneStatus `json:"status"`
+	// The root organizational unit that this zone belongs to (such as a tenant or
+	// organization).
+	Tenant ZoneTenant `json:"tenant"`
+	// The immediate parent organizational unit that this zone belongs to (such as
+	// under a tenant or sub-organization).
+	TenantUnit ZoneTenantUnit `json:"tenant_unit"`
 	// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
 	// typically a partner-hosted zone or a CNAME setup.
 	Type Type `json:"type"`
@@ -221,8 +237,13 @@ type zoneJSON struct {
 	OriginalNameServers apijson.Field
 	OriginalRegistrar   apijson.Field
 	Owner               apijson.Field
+	Plan                apijson.Field
+	CNAMESuffix         apijson.Field
 	Paused              apijson.Field
+	Permissions         apijson.Field
 	Status              apijson.Field
+	Tenant              apijson.Field
+	TenantUnit          apijson.Field
 	Type                apijson.Field
 	VanityNameServers   apijson.Field
 	VerificationKey     apijson.Field
@@ -330,6 +351,57 @@ func (r zoneOwnerJSON) RawJSON() string {
 	return r.raw
 }
 
+// A Zones subscription information.
+//
+// Deprecated: deprecated
+type ZonePlan struct {
+	// Identifier
+	ID string `json:"id"`
+	// States if the subscription can be activated.
+	CanSubscribe bool `json:"can_subscribe"`
+	// The denomination of the customer.
+	Currency string `json:"currency"`
+	// If this Zone is managed by another company.
+	ExternallyManaged bool `json:"externally_managed"`
+	// How often the customer is billed.
+	Frequency string `json:"frequency"`
+	// States if the subscription active.
+	IsSubscribed bool `json:"is_subscribed"`
+	// If the legacy discount applies to this Zone.
+	LegacyDiscount bool `json:"legacy_discount"`
+	// The legacy name of the plan.
+	LegacyID string `json:"legacy_id"`
+	// Name of the owner
+	Name string `json:"name"`
+	// How much the customer is paying.
+	Price float64      `json:"price"`
+	JSON  zonePlanJSON `json:"-"`
+}
+
+// zonePlanJSON contains the JSON metadata for the struct [ZonePlan]
+type zonePlanJSON struct {
+	ID                apijson.Field
+	CanSubscribe      apijson.Field
+	Currency          apijson.Field
+	ExternallyManaged apijson.Field
+	Frequency         apijson.Field
+	IsSubscribed      apijson.Field
+	LegacyDiscount    apijson.Field
+	LegacyID          apijson.Field
+	Name              apijson.Field
+	Price             apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ZonePlan) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zonePlanJSON) RawJSON() string {
+	return r.raw
+}
+
 // The zone status on Cloudflare.
 type ZoneStatus string
 
@@ -346,6 +418,55 @@ func (r ZoneStatus) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// The root organizational unit that this zone belongs to (such as a tenant or
+// organization).
+type ZoneTenant struct {
+	// Identifier
+	ID string `json:"id"`
+	// The name of the Tenant account.
+	Name string         `json:"name"`
+	JSON zoneTenantJSON `json:"-"`
+}
+
+// zoneTenantJSON contains the JSON metadata for the struct [ZoneTenant]
+type zoneTenantJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneTenant) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTenantJSON) RawJSON() string {
+	return r.raw
+}
+
+// The immediate parent organizational unit that this zone belongs to (such as
+// under a tenant or sub-organization).
+type ZoneTenantUnit struct {
+	// Identifier
+	ID   string             `json:"id"`
+	JSON zoneTenantUnitJSON `json:"-"`
+}
+
+// zoneTenantUnitJSON contains the JSON metadata for the struct [ZoneTenantUnit]
+type zoneTenantUnitJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneTenantUnit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTenantUnitJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneDeleteResponse struct {

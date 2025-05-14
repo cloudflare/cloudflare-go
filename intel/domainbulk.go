@@ -36,7 +36,7 @@ func NewDomainBulkService(opts ...option.RequestOption) (r *DomainBulkService) {
 	return
 }
 
-// Same as summary
+// Same as summary.
 func (r *DomainBulkService) Get(ctx context.Context, params DomainBulkGetParams, opts ...option.RequestOption) (res *[]DomainBulkGetResponse, err error) {
 	var env DomainBulkGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -249,10 +249,10 @@ func (r domainBulkGetResponseRiskTypeJSON) RawJSON() string {
 }
 
 type DomainBulkGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Accepts multiple values, i.e. `?domain=cloudflare.com&domain=example.com`.
-	Domain param.Field[interface{}] `query:"domain"`
+	// Accepts multiple values like `?domain=cloudflare.com&domain=example.com`.
+	Domain param.Field[[]string] `query:"domain"`
 }
 
 // URLQuery serializes [DomainBulkGetParams]'s query parameters as `url.Values`.
@@ -267,7 +267,7 @@ type DomainBulkGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo   `json:"errors,required"`
 	Messages []shared.ResponseInfo   `json:"messages,required"`
 	Result   []DomainBulkGetResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    DomainBulkGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DomainBulkGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       domainBulkGetResponseEnvelopeJSON       `json:"-"`
@@ -293,7 +293,7 @@ func (r domainBulkGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type DomainBulkGetResponseEnvelopeSuccess bool
 
 const (
@@ -309,13 +309,13 @@ func (r DomainBulkGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DomainBulkGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                     `json:"total_count"`
 	JSON       domainBulkGetResponseEnvelopeResultInfoJSON `json:"-"`
 }

@@ -3,6 +3,13 @@
 package zero_trust
 
 import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
@@ -24,4 +31,20 @@ func NewGatewayConfigurationCustomCertificateService(opts ...option.RequestOptio
 	r = &GatewayConfigurationCustomCertificateService{}
 	r.Options = opts
 	return
+}
+
+// Fetches the current Zero Trust certificate configuration.
+func (r *GatewayConfigurationCustomCertificateService) Get(ctx context.Context, query GatewayConfigurationCustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateSettings, err error) {
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/gateway/configuration/custom_certificate", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+type GatewayConfigurationCustomCertificateGetParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 }

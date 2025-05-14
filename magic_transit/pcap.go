@@ -283,8 +283,13 @@ type PCAPNewResponse struct {
 	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
 	// within the last 24h. When this field is empty, defaults to time of request.
 	OffsetTime time.Time `json:"offset_time" format:"date-time"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPNewResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -307,7 +312,9 @@ type pcapNewResponseJSON struct {
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
 	OffsetTime      apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
@@ -376,8 +383,13 @@ type PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFull struct {
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPNewResponseMagicVisibilityPCAPsPCAPsResponseFullStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -399,7 +411,9 @@ type pcapNewResponseMagicVisibilityPCAPsPCAPsResponseFullJSON struct {
 	DestinationConf apijson.Field
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
@@ -546,8 +560,13 @@ type PCAPListResponse struct {
 	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
 	// within the last 24h. When this field is empty, defaults to time of request.
 	OffsetTime time.Time `json:"offset_time" format:"date-time"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPListResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -571,7 +590,9 @@ type pcapListResponseJSON struct {
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
 	OffsetTime      apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
@@ -640,8 +661,13 @@ type PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFull struct {
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPListResponseMagicVisibilityPCAPsPCAPsResponseFullStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -663,7 +689,9 @@ type pcapListResponseMagicVisibilityPCAPsPCAPsResponseFullJSON struct {
 	DestinationConf apijson.Field
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
@@ -810,8 +838,13 @@ type PCAPGetResponse struct {
 	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
 	// within the last 24h. When this field is empty, defaults to time of request.
 	OffsetTime time.Time `json:"offset_time" format:"date-time"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPGetResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -834,7 +867,9 @@ type pcapGetResponseJSON struct {
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
 	OffsetTime      apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
@@ -903,8 +938,13 @@ type PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFull struct {
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The number of packets captured.
+	PacketsCaptured int64 `json:"packets_captured"`
 	// The status of the packet capture request.
 	Status PCAPGetResponseMagicVisibilityPCAPsPCAPsResponseFullStatus `json:"status"`
+	// The RFC 3339 timestamp when stopping the packet capture was requested. This
+	// field only applies to `full` packet captures.
+	StopRequested time.Time `json:"stop_requested" format:"date-time"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
@@ -926,7 +966,9 @@ type pcapGetResponseMagicVisibilityPCAPsPCAPsResponseFullJSON struct {
 	DestinationConf apijson.Field
 	ErrorMessage    apijson.Field
 	FilterV1        apijson.Field
+	PacketsCaptured apijson.Field
 	Status          apijson.Field
+	StopRequested   apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field

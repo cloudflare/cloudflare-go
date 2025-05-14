@@ -73,7 +73,7 @@ func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params 
 	return
 }
 
-// Returns a list of Hyperdrives
+// Returns a list of Hyperdrives.
 func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Hyperdrive], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -95,7 +95,7 @@ func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts .
 	return res, nil
 }
 
-// Returns a list of Hyperdrives
+// Returns a list of Hyperdrives.
 func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Hyperdrive] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
@@ -167,7 +167,7 @@ func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query Conf
 type ConfigDeleteResponse = interface{}
 
 type ConfigNewParams struct {
-	// Identifier
+	// Define configurations using a unique string identifier.
 	AccountID  param.Field[string] `path:"account_id,required"`
 	Hyperdrive HyperdriveParam     `json:"hyperdrive,required"`
 }
@@ -180,7 +180,7 @@ type ConfigNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Hyperdrive            `json:"result,required"`
-	// Whether the API call was successful
+	// Return the status of the API call success.
 	Success ConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -204,7 +204,7 @@ func (r configNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Return the status of the API call success.
 type ConfigNewResponseEnvelopeSuccess bool
 
 const (
@@ -220,7 +220,7 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigUpdateParams struct {
-	// Identifier
+	// Define configurations using a unique string identifier.
 	AccountID  param.Field[string] `path:"account_id,required"`
 	Hyperdrive HyperdriveParam     `json:"hyperdrive,required"`
 }
@@ -233,7 +233,7 @@ type ConfigUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Hyperdrive            `json:"result,required"`
-	// Whether the API call was successful
+	// Return the status of the API call success.
 	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -257,7 +257,7 @@ func (r configUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Return the status of the API call success.
 type ConfigUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -273,12 +273,12 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigListParams struct {
-	// Identifier
+	// Define configurations using a unique string identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConfigDeleteParams struct {
-	// Identifier
+	// Define configurations using a unique string identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -286,7 +286,7 @@ type ConfigDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   ConfigDeleteResponse  `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Return the status of the API call success.
 	Success ConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -310,7 +310,7 @@ func (r configDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Return the status of the API call success.
 type ConfigDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -326,7 +326,7 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigEditParams struct {
-	// Identifier
+	// Define configurations using a unique string identifier.
 	AccountID param.Field[string]                       `path:"account_id,required"`
 	Caching   param.Field[ConfigEditParamsCachingUnion] `json:"caching"`
 	MTLS      param.Field[ConfigEditParamsMTLS]         `json:"mtls"`
@@ -339,13 +339,13 @@ func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigEditParamsCaching struct {
-	// When set to true, disables the caching of SQL responses. (Default: false)
+	// Set to true to disable caching of SQL responses. Default is false.
 	Disabled param.Field[bool] `json:"disabled"`
-	// When present, specifies max duration for which items should persist in the
-	// cache. Not returned if set to default. (Default: 60)
+	// Specify the maximum duration items should persist in the cache. Not returned if
+	// set to the default (60).
 	MaxAge param.Field[int64] `json:"max_age"`
-	// When present, indicates the number of seconds cache may serve the response after
-	// it becomes stale. Not returned if set to default. (Default: 15)
+	// Specify the number of seconds the cache may serve a stale response. Omitted if
+	// set to the default (15).
 	StaleWhileRevalidate param.Field[int64] `json:"stale_while_revalidate"`
 }
 
@@ -364,7 +364,7 @@ type ConfigEditParamsCachingUnion interface {
 }
 
 type ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon struct {
-	// When set to true, disables the caching of SQL responses. (Default: false)
+	// Set to true to disable caching of SQL responses. Default is false.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -376,13 +376,13 @@ func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon) implementsConf
 }
 
 type ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled struct {
-	// When set to true, disables the caching of SQL responses. (Default: false)
+	// Set to true to disable caching of SQL responses. Default is false.
 	Disabled param.Field[bool] `json:"disabled"`
-	// When present, specifies max duration for which items should persist in the
-	// cache. Not returned if set to default. (Default: 60)
+	// Specify the maximum duration items should persist in the cache. Not returned if
+	// set to the default (60).
 	MaxAge param.Field[int64] `json:"max_age"`
-	// When present, indicates the number of seconds cache may serve the response after
-	// it becomes stale. Not returned if set to default. (Default: 15)
+	// Specify the number of seconds the cache may serve a stale response. Omitted if
+	// set to the default (15).
 	StaleWhileRevalidate param.Field[int64] `json:"stale_while_revalidate"`
 }
 
@@ -394,12 +394,11 @@ func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) implementsCon
 }
 
 type ConfigEditParamsMTLS struct {
-	// CA certificate ID
+	// Define CA certificate ID obtained after uploading CA cert.
 	CACertificateID param.Field[string] `json:"ca_certificate_id"`
-	// mTLS certificate ID
+	// Define mTLS certificate ID obtained after uploading client cert.
 	MTLSCertificateID param.Field[string] `json:"mtls_certificate_id"`
-	// SSL mode used for CA verification. Must be 'require', 'verify-ca', or
-	// 'verify-full'
+	// Set SSL mode to 'require', 'verify-ca', or 'verify-full' to verify the CA.
 	Sslmode param.Field[string] `json:"sslmode"`
 }
 
@@ -408,23 +407,24 @@ func (r ConfigEditParamsMTLS) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigEditParamsOrigin struct {
-	// The Client ID of the Access token to use when connecting to the origin database.
+	// Defines the Client ID of the Access token to use when connecting to the origin
+	// database.
 	AccessClientID param.Field[string] `json:"access_client_id"`
-	// The Client Secret of the Access token to use when connecting to the origin
-	// database. This value is write-only and never returned by the API.
+	// Defines the Client Secret of the Access Token to use when connecting to the
+	// origin database. The API never returns this write-only value.
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
-	// The name of your origin database.
+	// Set the name of your origin database.
 	Database param.Field[string] `json:"database"`
-	// The host (hostname or IP) of your origin database.
+	// Defines the host (hostname or IP) of your origin database.
 	Host param.Field[string] `json:"host"`
-	// The password required to access your origin database. This value is write-only
-	// and never returned by the API.
+	// Set the password needed to access your origin database. The API never returns
+	// this write-only value.
 	Password param.Field[string] `json:"password"`
-	// The port (default: 5432 for Postgres) of your origin database.
+	// Defines the port (default: 5432 for Postgres) of your origin database.
 	Port param.Field[int64] `json:"port"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme param.Field[ConfigEditParamsOriginScheme] `json:"scheme"`
-	// The user of your origin database.
+	// Set the user of your origin database.
 	User param.Field[string] `json:"user"`
 }
 
@@ -443,14 +443,14 @@ type ConfigEditParamsOriginUnion interface {
 }
 
 type ConfigEditParamsOriginHyperdriveHyperdriveDatabase struct {
-	// The name of your origin database.
+	// Set the name of your origin database.
 	Database param.Field[string] `json:"database"`
-	// The password required to access your origin database. This value is write-only
-	// and never returned by the API.
+	// Set the password needed to access your origin database. The API never returns
+	// this write-only value.
 	Password param.Field[string] `json:"password"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme param.Field[ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme] `json:"scheme"`
-	// The user of your origin database.
+	// Set the user of your origin database.
 	User param.Field[string] `json:"user"`
 }
 
@@ -478,9 +478,9 @@ func (r ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme) IsKnown() bool
 }
 
 type ConfigEditParamsOriginHyperdriveInternetOrigin struct {
-	// The host (hostname or IP) of your origin database.
+	// Defines the host (hostname or IP) of your origin database.
 	Host param.Field[string] `json:"host,required"`
-	// The port (default: 5432 for Postgres) of your origin database.
+	// Defines the port (default: 5432 for Postgres) of your origin database.
 	Port param.Field[int64] `json:"port,required"`
 }
 
@@ -491,12 +491,13 @@ func (r ConfigEditParamsOriginHyperdriveInternetOrigin) MarshalJSON() (data []by
 func (r ConfigEditParamsOriginHyperdriveInternetOrigin) implementsConfigEditParamsOriginUnion() {}
 
 type ConfigEditParamsOriginHyperdriveOverAccessOrigin struct {
-	// The Client ID of the Access token to use when connecting to the origin database.
+	// Defines the Client ID of the Access token to use when connecting to the origin
+	// database.
 	AccessClientID param.Field[string] `json:"access_client_id,required"`
-	// The Client Secret of the Access token to use when connecting to the origin
-	// database. This value is write-only and never returned by the API.
+	// Defines the Client Secret of the Access Token to use when connecting to the
+	// origin database. The API never returns this write-only value.
 	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
-	// The host (hostname or IP) of your origin database.
+	// Defines the host (hostname or IP) of your origin database.
 	Host param.Field[string] `json:"host,required"`
 }
 
@@ -527,7 +528,7 @@ type ConfigEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Hyperdrive            `json:"result,required"`
-	// Whether the API call was successful
+	// Return the status of the API call success.
 	Success ConfigEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -551,7 +552,7 @@ func (r configEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Return the status of the API call success.
 type ConfigEditResponseEnvelopeSuccess bool
 
 const (
@@ -567,7 +568,7 @@ func (r ConfigEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigGetParams struct {
-	// Identifier
+	// Define configurations using a unique string identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -575,7 +576,7 @@ type ConfigGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Hyperdrive            `json:"result,required"`
-	// Whether the API call was successful
+	// Return the status of the API call success.
 	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -599,7 +600,7 @@ func (r configGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Return the status of the API call success.
 type ConfigGetResponseEnvelopeSuccess bool
 
 const (

@@ -175,8 +175,8 @@ type ConnectorSnapshotGetResponse struct {
 	Disks         []ConnectorSnapshotGetResponseDisk      `json:"disks"`
 	// Name of high availability state
 	HaState string `json:"ha_state"`
-	// Numeric value associated with high availability state (0 = unknown, 1 = active,
-	// 2 = standby, 3 = disabled, 4 = fault)
+	// Numeric value associated with high availability state (0 = disabled, 1 = active,
+	// 2 = standby, 3 = stopped, 4 = fault)
 	HaValue    float64                                 `json:"ha_value"`
 	Interfaces []ConnectorSnapshotGetResponseInterface `json:"interfaces"`
 	// Percentage of time over a 10 second window that all tasks were stalled

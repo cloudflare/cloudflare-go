@@ -169,6 +169,8 @@ func (r *BucketService) Get(ctx context.Context, bucketName string, params Bucke
 type Bucket struct {
 	// Creation timestamp.
 	CreationDate string `json:"creation_date"`
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
+	Jurisdiction BucketJurisdiction `json:"jurisdiction"`
 	// Location of the bucket.
 	Location BucketLocation `json:"location"`
 	// Name of the bucket.
@@ -181,6 +183,7 @@ type Bucket struct {
 // bucketJSON contains the JSON metadata for the struct [Bucket]
 type bucketJSON struct {
 	CreationDate apijson.Field
+	Jurisdiction apijson.Field
 	Location     apijson.Field
 	Name         apijson.Field
 	StorageClass apijson.Field
@@ -194,6 +197,23 @@ func (r *Bucket) UnmarshalJSON(data []byte) (err error) {
 
 func (r bucketJSON) RawJSON() string {
 	return r.raw
+}
+
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
+type BucketJurisdiction string
+
+const (
+	BucketJurisdictionDefault BucketJurisdiction = "default"
+	BucketJurisdictionEu      BucketJurisdiction = "eu"
+	BucketJurisdictionFedramp BucketJurisdiction = "fedramp"
+)
+
+func (r BucketJurisdiction) IsKnown() bool {
+	switch r {
+	case BucketJurisdictionDefault, BucketJurisdictionEu, BucketJurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 // Location of the bucket.
@@ -264,7 +284,7 @@ type BucketNewParams struct {
 	LocationHint param.Field[BucketNewParamsLocationHint] `json:"locationHint"`
 	// Storage class for newly uploaded objects, unless specified otherwise.
 	StorageClass param.Field[BucketNewParamsStorageClass] `json:"storageClass"`
-	// Creates the bucket in the provided jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -308,7 +328,7 @@ func (r BucketNewParamsStorageClass) IsKnown() bool {
 	return false
 }
 
-// Creates the bucket in the provided jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketNewParamsCfR2Jurisdiction string
 
 const (
@@ -386,7 +406,7 @@ type BucketListParams struct {
 	PerPage param.Field[float64] `query:"per_page"`
 	// Bucket name to start searching after. Buckets are ordered lexicographically.
 	StartAfter param.Field[string] `query:"start_after"`
-	// Lists buckets in the provided jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -429,7 +449,7 @@ func (r BucketListParamsOrder) IsKnown() bool {
 	return false
 }
 
-// Lists buckets in the provided jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketListParamsCfR2Jurisdiction string
 
 const (
@@ -519,11 +539,11 @@ func (r bucketListResponseEnvelopeResultInfoJSON) RawJSON() string {
 type BucketDeleteParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -588,7 +608,7 @@ type BucketEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Storage class for newly uploaded objects, unless specified otherwise.
 	StorageClass param.Field[BucketEditParamsCfR2StorageClass] `header:"cf-r2-storage-class,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketEditParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -608,7 +628,7 @@ func (r BucketEditParamsCfR2StorageClass) IsKnown() bool {
 	return false
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketEditParamsCfR2Jurisdiction string
 
 const (
@@ -672,11 +692,11 @@ func (r BucketEditResponseEnvelopeSuccess) IsKnown() bool {
 type BucketGetParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketGetParamsCfR2Jurisdiction string
 
 const (

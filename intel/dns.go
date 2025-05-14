@@ -123,7 +123,7 @@ func (r dnsReverseRecordJSON) RawJSON() string {
 }
 
 type DNSListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	IPV4      param.Field[string] `query:"ipv4"`
 	// Requested page within paginated list of results.

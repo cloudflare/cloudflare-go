@@ -543,7 +543,7 @@ func (r threatEventGetResponseJSON) RawJSON() string {
 }
 
 type ThreatEventNewParams struct {
-	// Account ID
+	// Account ID.
 	PathAccountID   param.Field[float64]                 `path:"account_id,required"`
 	Attacker        param.Field[string]                  `json:"attacker,required"`
 	AttackerCountry param.Field[string]                  `json:"attackerCountry,required"`
@@ -566,9 +566,9 @@ func (r ThreatEventNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventNewParamsRaw struct {
-	Data   param.Field[interface{}] `json:"data"`
-	Source param.Field[string]      `json:"source"`
-	TLP    param.Field[string]      `json:"tlp"`
+	Data   param.Field[map[string]interface{}] `json:"data,required"`
+	Source param.Field[string]                 `json:"source"`
+	TLP    param.Field[string]                 `json:"tlp"`
 }
 
 func (r ThreatEventNewParamsRaw) MarshalJSON() (data []byte, err error) {
@@ -576,7 +576,7 @@ func (r ThreatEventNewParamsRaw) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventListParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64]                       `path:"account_id,required"`
 	DatasetID param.Field[[]string]                      `query:"datasetId"`
 	Order     param.Field[ThreatEventListParamsOrder]    `query:"order"`
@@ -665,12 +665,12 @@ type ThreatEventListParamsSearchValueArrayItemUnion interface {
 }
 
 type ThreatEventDeleteParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }
 
 type ThreatEventBulkNewParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64]                        `path:"account_id,required"`
 	Data      param.Field[[]ThreatEventBulkNewParamsData] `json:"data,required"`
 	DatasetID param.Field[string]                         `json:"datasetId,required"`
@@ -702,9 +702,9 @@ func (r ThreatEventBulkNewParamsData) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventBulkNewParamsDataRaw struct {
-	Data   param.Field[interface{}] `json:"data"`
-	Source param.Field[string]      `json:"source"`
-	TLP    param.Field[string]      `json:"tlp"`
+	Data   param.Field[map[string]interface{}] `json:"data,required"`
+	Source param.Field[string]                 `json:"source"`
+	TLP    param.Field[string]                 `json:"tlp"`
 }
 
 func (r ThreatEventBulkNewParamsDataRaw) MarshalJSON() (data []byte, err error) {
@@ -712,7 +712,7 @@ func (r ThreatEventBulkNewParamsDataRaw) MarshalJSON() (data []byte, err error) 
 }
 
 type ThreatEventEditParams struct {
-	// Account ID
+	// Account ID.
 	AccountID       param.Field[float64]   `path:"account_id,required"`
 	Attacker        param.Field[string]    `json:"attacker"`
 	AttackerCountry param.Field[string]    `json:"attackerCountry"`
@@ -731,6 +731,6 @@ func (r ThreatEventEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventGetParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }
