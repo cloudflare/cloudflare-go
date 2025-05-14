@@ -28,8 +28,9 @@ func TestContentNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.BrowserRendering.Content.New(context.TODO(), browser_rendering.ContentNewParams{
-		AccountID: cloudflare.F("account_id"),
-		CacheTTL:  cloudflare.F(86400.000000),
+		AccountID:     cloudflare.F("account_id"),
+		CacheTTL:      cloudflare.F(86400.000000),
+		ActionTimeout: cloudflare.F(300000.000000),
 		AddScriptTag: cloudflare.F([]browser_rendering.ContentNewParamsAddScriptTag{{
 			ID:      cloudflare.F("id"),
 			Content: cloudflare.F("content"),

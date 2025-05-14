@@ -560,7 +560,7 @@ type BucketDomainCustomNewParams struct {
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
 	MinTLS param.Field[BucketDomainCustomNewParamsMinTLS] `json:"minTLS"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainCustomNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -587,7 +587,7 @@ func (r BucketDomainCustomNewParamsMinTLS) IsKnown() bool {
 	return false
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainCustomNewParamsCfR2Jurisdiction string
 
 const (
@@ -655,7 +655,7 @@ type BucketDomainCustomUpdateParams struct {
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to previous value.
 	MinTLS param.Field[BucketDomainCustomUpdateParamsMinTLS] `json:"minTLS"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainCustomUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -682,7 +682,7 @@ func (r BucketDomainCustomUpdateParamsMinTLS) IsKnown() bool {
 	return false
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainCustomUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -745,11 +745,11 @@ func (r BucketDomainCustomUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type BucketDomainCustomListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainCustomListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainCustomListParamsCfR2Jurisdiction string
 
 const (
@@ -812,11 +812,11 @@ func (r BucketDomainCustomListResponseEnvelopeSuccess) IsKnown() bool {
 type BucketDomainCustomDeleteParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainCustomDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainCustomDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -879,11 +879,11 @@ func (r BucketDomainCustomDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type BucketDomainCustomGetParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainCustomGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainCustomGetParamsCfR2Jurisdiction string
 
 const (

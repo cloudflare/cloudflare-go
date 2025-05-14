@@ -34,7 +34,7 @@ func NewASNSubnetService(opts ...option.RequestOption) (r *ASNSubnetService) {
 	return
 }
 
-// Get ASN Subnets
+// Get ASN Subnets.
 func (r *ASNSubnetService) Get(ctx context.Context, asn shared.ASNParam, query ASNSubnetGetParams, opts ...option.RequestOption) (res *ASNSubnetGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -81,6 +81,6 @@ func (r asnSubnetGetResponseJSON) RawJSON() string {
 }
 
 type ASNSubnetGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

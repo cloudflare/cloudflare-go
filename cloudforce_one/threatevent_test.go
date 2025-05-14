@@ -39,7 +39,9 @@ func TestThreatEventNewWithOptionalParams(t *testing.T) {
 		Event:           cloudflare.F("An attacker registered the domain domain.com"),
 		IndicatorType:   cloudflare.F("domain"),
 		Raw: cloudflare.F(cloudforce_one.ThreatEventNewParamsRaw{
-			Data:   cloudflare.F[any](map[string]interface{}{}),
+			Data: cloudflare.F(map[string]interface{}{
+				"foo": "bar",
+			}),
 			Source: cloudflare.F("example.com"),
 			TLP:    cloudflare.F("amber"),
 		}),
@@ -150,7 +152,9 @@ func TestThreatEventBulkNew(t *testing.T) {
 			Event:           cloudflare.F("An attacker registered the domain domain.com"),
 			IndicatorType:   cloudflare.F("domain"),
 			Raw: cloudflare.F(cloudforce_one.ThreatEventBulkNewParamsDataRaw{
-				Data:   cloudflare.F[any](map[string]interface{}{}),
+				Data: cloudflare.F(map[string]interface{}{
+					"foo": "bar",
+				}),
 				Source: cloudflare.F("example.com"),
 				TLP:    cloudflare.F("amber"),
 			}),

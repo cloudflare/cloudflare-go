@@ -128,7 +128,7 @@ func (r threatEventRawGetResponseJSON) RawJSON() string {
 }
 
 type ThreatEventRawEditParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64]     `path:"account_id,required"`
 	Data      param.Field[interface{}] `json:"data"`
 	Source    param.Field[string]      `json:"source"`
@@ -140,6 +140,6 @@ func (r ThreatEventRawEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventRawGetParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }

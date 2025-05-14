@@ -135,7 +135,7 @@ type AntiVirusSettings struct {
 	FailClosed bool `json:"fail_closed"`
 	// Configure a message to display on the user's device when an antivirus search is
 	// performed.
-	NotificationSettings NotificationSettings  `json:"notification_settings,nullable"`
+	NotificationSettings NotificationSettings  `json:"notification_settings"`
 	JSON                 antiVirusSettingsJSON `json:"-"`
 }
 
@@ -478,35 +478,35 @@ func (r FipsSettingsParam) MarshalJSON() (data []byte, err error) {
 // Account settings
 type GatewayConfigurationSettings struct {
 	// Activity log settings.
-	ActivityLog ActivityLogSettings `json:"activity_log,nullable"`
+	ActivityLog ActivityLogSettings `json:"activity_log"`
 	// Anti-virus settings.
 	Antivirus AntiVirusSettings `json:"antivirus"`
 	// Block page layout settings.
-	BlockPage BlockPageSettings `json:"block_page,nullable"`
+	BlockPage BlockPageSettings `json:"block_page"`
 	// DLP body scanning settings.
-	BodyScanning BodyScanningSettings `json:"body_scanning,nullable"`
+	BodyScanning BodyScanningSettings `json:"body_scanning"`
 	// Browser isolation settings.
-	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation,nullable"`
+	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation"`
 	// Certificate settings for Gateway TLS interception. If not specified, the
 	// Cloudflare Root CA will be used.
-	Certificate GatewayConfigurationSettingsCertificate `json:"certificate,nullable"`
+	Certificate GatewayConfigurationSettingsCertificate `json:"certificate"`
 	// Custom certificate settings for BYO-PKI. (deprecated and replaced by
 	// `certificate`)
 	//
 	// Deprecated: deprecated
-	CustomCertificate CustomCertificateSettings `json:"custom_certificate,nullable"`
+	CustomCertificate CustomCertificateSettings `json:"custom_certificate"`
 	// Extended e-mail matching settings.
 	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching"`
 	// FIPS settings.
-	Fips FipsSettings `json:"fips,nullable"`
+	Fips FipsSettings `json:"fips"`
 	// Setting to enable host selector in egress policies.
-	HostSelector GatewayConfigurationSettingsHostSelector `json:"host_selector,nullable"`
+	HostSelector GatewayConfigurationSettingsHostSelector `json:"host_selector"`
 	// Protocol Detection settings.
-	ProtocolDetection ProtocolDetection `json:"protocol_detection,nullable"`
+	ProtocolDetection ProtocolDetection `json:"protocol_detection"`
 	// Sandbox settings.
-	Sandbox GatewayConfigurationSettingsSandbox `json:"sandbox,nullable"`
+	Sandbox GatewayConfigurationSettingsSandbox `json:"sandbox"`
 	// TLS interception settings.
-	TLSDecrypt TLSSettings                      `json:"tls_decrypt,nullable"`
+	TLSDecrypt TLSSettings                      `json:"tls_decrypt"`
 	JSON       gatewayConfigurationSettingsJSON `json:"-"`
 }
 

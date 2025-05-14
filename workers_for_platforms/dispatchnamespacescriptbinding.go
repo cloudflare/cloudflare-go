@@ -683,12 +683,12 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNames
 }
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace struct {
-	// The exported class name of the Durable Object.
-	ClassName string `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
+	// The exported class name of the Durable Object.
+	ClassName string `json:"class_name"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
@@ -703,9 +703,9 @@ type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNam
 // contains the JSON metadata for the struct
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace]
 type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceJSON struct {
-	ClassName   apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	ClassName   apijson.Field
 	Environment apijson.Field
 	NamespaceID apijson.Field
 	ScriptName  apijson.Field

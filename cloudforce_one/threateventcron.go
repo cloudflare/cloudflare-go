@@ -102,11 +102,11 @@ func (r threatEventCronEditResponseJSON) RawJSON() string {
 }
 
 type ThreatEventCronListParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }
 
 type ThreatEventCronEditParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }

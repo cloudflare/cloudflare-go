@@ -62,6 +62,7 @@ func TestWorkflowListWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("account_id"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(1.000000),
+		Search:    cloudflare.F("x"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

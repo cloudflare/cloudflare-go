@@ -634,7 +634,7 @@ func (r DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem) IsKnown()
 }
 
 type DeviceInputTeamsDevicesAccessSerialNumberListInputRequest struct {
-	// UUID of Access List
+	// UUID of Access List.
 	ID   string                                                        `json:"id,required"`
 	JSON deviceInputTeamsDevicesAccessSerialNumberListInputRequestJSON `json:"-"`
 }
@@ -1189,7 +1189,7 @@ func (r DeviceInputTeamsDevicesCarbonblackInputRequestParam) MarshalJSON() (data
 func (r DeviceInputTeamsDevicesCarbonblackInputRequestParam) implementsDeviceInputUnionParam() {}
 
 type DeviceInputTeamsDevicesAccessSerialNumberListInputRequestParam struct {
-	// UUID of Access List
+	// UUID of Access List.
 	ID param.Field[string] `json:"id,required"`
 }
 

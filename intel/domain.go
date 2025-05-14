@@ -229,7 +229,7 @@ func (r domainInheritedRiskTypeJSON) RawJSON() string {
 
 type DomainResolvesToRef struct {
 	// STIX 2.1 identifier:
-	// https://docs.oasis-open.org/cti/stix/v2.1/cs02/stix-v2.1-cs02.html#_64yvzeku5a5c
+	// https://docs.oasis-open.org/cti/stix/v2.1/cs02/stix-v2.1-cs02.html#_64yvzeku5a5c.
 	ID string `json:"id"`
 	// IP address or domain name.
 	Value string                  `json:"value"`
@@ -278,7 +278,7 @@ func (r domainRiskTypeJSON) RawJSON() string {
 }
 
 type DomainGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Domain    param.Field[string] `query:"domain"`
 }

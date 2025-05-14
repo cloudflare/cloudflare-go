@@ -34,7 +34,7 @@ func NewIPListService(opts ...option.RequestOption) (r *IPListService) {
 	return
 }
 
-// Get IP Lists
+// Get IP Lists.
 func (r *IPListService) Get(ctx context.Context, query IPListGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[IPList], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -56,7 +56,7 @@ func (r *IPListService) Get(ctx context.Context, query IPListGetParams, opts ...
 	return res, nil
 }
 
-// Get IP Lists
+// Get IP Lists.
 func (r *IPListService) GetAutoPaging(ctx context.Context, query IPListGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IPList] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }
@@ -86,6 +86,6 @@ func (r ipListJSON) RawJSON() string {
 }
 
 type IPListGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

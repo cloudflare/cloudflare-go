@@ -731,12 +731,12 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDis
 }
 
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace struct {
-	// The exported class name of the Durable Object.
-	ClassName param.Field[string] `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
+	// The exported class name of the Durable Object.
+	ClassName param.Field[string] `json:"class_name"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
@@ -1398,9 +1398,27 @@ type DispatchNamespaceScriptUpdateParamsMetadataObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Log settings for the Worker.
+	Logs param.Field[DispatchNamespaceScriptUpdateParamsMetadataObservabilityLogs] `json:"logs"`
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Log settings for the Worker.
+type DispatchNamespaceScriptUpdateParamsMetadataObservabilityLogs struct {
+	// Whether logs are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs param.Field[bool] `json:"invocation_logs,required"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataObservabilityLogs) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

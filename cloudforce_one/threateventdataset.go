@@ -241,12 +241,12 @@ func (r threatEventDatasetRawResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetNewParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 	// If true, then anyone can search the dataset. If false, then its limited to the
 	// account.
 	IsPublic param.Field[bool] `json:"isPublic,required"`
-	// Used to describe the dataset within the account context
+	// Used to describe the dataset within the account context.
 	Name param.Field[string] `json:"name,required"`
 }
 
@@ -255,17 +255,17 @@ func (r ThreatEventDatasetNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventDatasetListParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }
 
 type ThreatEventDatasetEditParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 	// If true, then anyone can search the dataset. If false, then its limited to the
 	// account.
 	IsPublic param.Field[bool] `json:"isPublic,required"`
-	// Used to describe the dataset within the account context
+	// Used to describe the dataset within the account context.
 	Name param.Field[string] `json:"name,required"`
 }
 
@@ -274,11 +274,11 @@ func (r ThreatEventDatasetEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventDatasetGetParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }
 
 type ThreatEventDatasetRawParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }

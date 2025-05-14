@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package accounts_test
+package zero_trust_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/accounts"
 	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
-func TestAccountNewWithOptionalParams(t *testing.T) {
+func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,12 +27,23 @@ func TestAccountNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Accounts.New(context.TODO(), accounts.AccountNewParams{
-		Name: cloudflare.F("name"),
-		Type: cloudflare.F(accounts.AccountNewParamsTypeStandard),
-		Unit: cloudflare.F(accounts.AccountNewParamsUnit{
-			ID: cloudflare.F("f267e341f3dd4697bd3b9f71dd96247f"),
+	_, err := client.ZeroTrust.Devices.DEXTests.New(context.TODO(), zero_trust.DeviceDEXTestNewParams{
+		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
+		Data: cloudflare.F(zero_trust.DeviceDEXTestNewParamsData{
+			Host:   cloudflare.F("https://dash.cloudflare.com"),
+			Kind:   cloudflare.F("http"),
+			Method: cloudflare.F("GET"),
 		}),
+		Enabled:     cloudflare.F(true),
+		Interval:    cloudflare.F("30m"),
+		Name:        cloudflare.F("HTTP dash health check"),
+		Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
+		TargetPolicies: cloudflare.F([]zero_trust.DeviceDEXTestNewParamsTargetPolicy{{
+			ID:      cloudflare.F("id"),
+			Default: cloudflare.F(true),
+			Name:    cloudflare.F("name"),
+		}}),
+		Targeted: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -43,7 +54,7 @@ func TestAccountNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccountUpdateWithOptionalParams(t *testing.T) {
+func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -56,16 +67,28 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Accounts.Update(context.TODO(), accounts.AccountUpdateParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
-		Account: accounts.AccountParam{
-			Name: cloudflare.F("Demo Account"),
-			Settings: cloudflare.F(accounts.AccountSettingsParam{
-				AbuseContactEmail: cloudflare.F("abuse_contact_email"),
-				EnforceTwofactor:  cloudflare.F(true),
+	_, err := client.ZeroTrust.Devices.DEXTests.Update(
+		context.TODO(),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		zero_trust.DeviceDEXTestUpdateParams{
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
+			Data: cloudflare.F(zero_trust.DeviceDEXTestUpdateParamsData{
+				Host:   cloudflare.F("https://dash.cloudflare.com"),
+				Kind:   cloudflare.F("http"),
+				Method: cloudflare.F("GET"),
 			}),
+			Enabled:     cloudflare.F(true),
+			Interval:    cloudflare.F("30m"),
+			Name:        cloudflare.F("HTTP dash health check"),
+			Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
+			TargetPolicies: cloudflare.F([]zero_trust.DeviceDEXTestUpdateParamsTargetPolicy{{
+				ID:      cloudflare.F("id"),
+				Default: cloudflare.F(true),
+				Name:    cloudflare.F("name"),
+			}}),
+			Targeted: cloudflare.F(true),
 		},
-	})
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -75,7 +98,7 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccountListWithOptionalParams(t *testing.T) {
+func TestDeviceDEXTestList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -88,11 +111,8 @@ func TestAccountListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Accounts.List(context.TODO(), accounts.AccountListParams{
-		Direction: cloudflare.F(accounts.AccountListParamsDirectionDesc),
-		Name:      cloudflare.F("example.com"),
-		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(5.000000),
+	_, err := client.ZeroTrust.Devices.DEXTests.List(context.TODO(), zero_trust.DeviceDEXTestListParams{
+		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -103,7 +123,7 @@ func TestAccountListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccountDelete(t *testing.T) {
+func TestDeviceDEXTestDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -116,9 +136,13 @@ func TestAccountDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Accounts.Delete(context.TODO(), accounts.AccountDeleteParams{
-		AccountID: cloudflare.F("account_id"),
-	})
+	_, err := client.ZeroTrust.Devices.DEXTests.Delete(
+		context.TODO(),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		zero_trust.DeviceDEXTestDeleteParams{
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -128,7 +152,7 @@ func TestAccountDelete(t *testing.T) {
 	}
 }
 
-func TestAccountGet(t *testing.T) {
+func TestDeviceDEXTestGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -141,9 +165,13 @@ func TestAccountGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Accounts.Get(context.TODO(), accounts.AccountGetParams{
-		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
-	})
+	_, err := client.ZeroTrust.Devices.DEXTests.Get(
+		context.TODO(),
+		"372e67954025e0ba6aaa6d586b9e0b59",
+		zero_trust.DeviceDEXTestGetParams{
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

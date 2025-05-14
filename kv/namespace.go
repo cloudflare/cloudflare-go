@@ -63,7 +63,7 @@ func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, o
 }
 
 // Modifies a namespace's title.
-func (r *NamespaceService) Update(ctx context.Context, namespaceID string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *NamespaceUpdateResponse, err error) {
+func (r *NamespaceService) Update(ctx context.Context, namespaceID string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *Namespace, err error) {
 	var env NamespaceUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -183,25 +183,6 @@ func (r namespaceJSON) RawJSON() string {
 	return r.raw
 }
 
-type NamespaceUpdateResponse struct {
-	JSON namespaceUpdateResponseJSON `json:"-"`
-}
-
-// namespaceUpdateResponseJSON contains the JSON metadata for the struct
-// [NamespaceUpdateResponse]
-type namespaceUpdateResponseJSON struct {
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type NamespaceDeleteResponse struct {
 	JSON namespaceDeleteResponseJSON `json:"-"`
 }
@@ -289,9 +270,9 @@ func (r NamespaceUpdateParams) MarshalJSON() (data []byte, err error) {
 type NamespaceUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Namespace             `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  NamespaceUpdateResponse                `json:"result,nullable"`
 	JSON    namespaceUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -300,8 +281,8 @@ type NamespaceUpdateResponseEnvelope struct {
 type namespaceUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

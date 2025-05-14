@@ -118,7 +118,7 @@ func (r threatEventEventTagDeleteResponseJSON) RawJSON() string {
 }
 
 type ThreatEventEventTagNewParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64]  `path:"account_id,required"`
 	Tags      param.Field[[]string] `json:"tags,required"`
 }
@@ -151,7 +151,7 @@ func (r threatEventEventTagNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ThreatEventEventTagDeleteParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }
 

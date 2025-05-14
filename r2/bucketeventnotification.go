@@ -232,7 +232,7 @@ type BucketEventNotificationUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Array of rules to drive notifications.
 	Rules param.Field[[]BucketEventNotificationUpdateParamsRule] `json:"rules"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketEventNotificationUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
@@ -274,7 +274,7 @@ func (r BucketEventNotificationUpdateParamsRulesAction) IsKnown() bool {
 	return false
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketEventNotificationUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -337,11 +337,11 @@ func (r BucketEventNotificationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type BucketEventNotificationDeleteParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketEventNotificationDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketEventNotificationDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -404,11 +404,11 @@ func (r BucketEventNotificationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type BucketEventNotificationGetParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction.
+	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketEventNotificationGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
+// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketEventNotificationGetParamsCfR2Jurisdiction string
 
 const (

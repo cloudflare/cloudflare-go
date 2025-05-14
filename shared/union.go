@@ -210,8 +210,9 @@ func (UnionInt) ImplementsOriginPortUnion()                                     
 
 type UnionFloat float64
 
-func (UnionFloat) ImplementsTTLParam() {}
-func (UnionFloat) ImplementsTTL()      {}
+func (UnionFloat) ImplementsSettingEditParamsBodyValueValueUnion() {}
+func (UnionFloat) ImplementsTTLParam()                             {}
+func (UnionFloat) ImplementsTTL()                                  {}
 func (UnionFloat) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersValueUnion() {
 }
 func (UnionFloat) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion() {}

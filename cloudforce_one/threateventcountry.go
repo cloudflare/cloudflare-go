@@ -92,6 +92,6 @@ func (r threatEventCountryListResponseResultJSON) RawJSON() string {
 }
 
 type ThreatEventCountryListParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }

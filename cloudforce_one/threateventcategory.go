@@ -243,7 +243,7 @@ func (r threatEventCategoryGetResponseJSON) RawJSON() string {
 }
 
 type ThreatEventCategoryNewParams struct {
-	// Account ID
+	// Account ID.
 	AccountID   param.Field[float64]  `path:"account_id,required"`
 	KillChain   param.Field[float64]  `json:"killChain,required"`
 	Name        param.Field[string]   `json:"name,required"`
@@ -256,17 +256,17 @@ func (r ThreatEventCategoryNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventCategoryListParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }
 
 type ThreatEventCategoryDeleteParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }
 
 type ThreatEventCategoryEditParams struct {
-	// Account ID
+	// Account ID.
 	AccountID   param.Field[float64]  `path:"account_id,required"`
 	KillChain   param.Field[float64]  `json:"killChain"`
 	MitreAttack param.Field[[]string] `json:"mitreAttack"`
@@ -279,6 +279,6 @@ func (r ThreatEventCategoryEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventCategoryGetParams struct {
-	// Account ID
+	// Account ID.
 	AccountID param.Field[float64] `path:"account_id,required"`
 }

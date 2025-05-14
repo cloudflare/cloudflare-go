@@ -29,8 +29,9 @@ func TestPDFNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	resp, err := client.BrowserRendering.PDF.New(context.TODO(), browser_rendering.PDFNewParams{
-		AccountID: cloudflare.F("account_id"),
-		CacheTTL:  cloudflare.F(86400.000000),
+		AccountID:     cloudflare.F("account_id"),
+		CacheTTL:      cloudflare.F(86400.000000),
+		ActionTimeout: cloudflare.F(300000.000000),
 		AddScriptTag: cloudflare.F([]browser_rendering.PDFNewParamsAddScriptTag{{
 			ID:      cloudflare.F("id"),
 			Content: cloudflare.F("content"),

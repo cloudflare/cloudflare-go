@@ -289,12 +289,13 @@ func (r matcherJSON) RawJSON() string {
 type MatcherType string
 
 const (
+	MatcherTypeAll     MatcherType = "all"
 	MatcherTypeLiteral MatcherType = "literal"
 )
 
 func (r MatcherType) IsKnown() bool {
 	switch r {
-	case MatcherTypeLiteral:
+	case MatcherTypeAll, MatcherTypeLiteral:
 		return true
 	}
 	return false

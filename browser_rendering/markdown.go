@@ -58,6 +58,10 @@ type MarkdownNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout param.Field[float64] `json:"actionTimeout"`
 	// Adds a `<script>` tag into the page with the desired URL or content.
 	AddScriptTag param.Field[[]MarkdownNewParamsAddScriptTag] `json:"addScriptTag"`
 	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
