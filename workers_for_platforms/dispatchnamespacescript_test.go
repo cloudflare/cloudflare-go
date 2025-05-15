@@ -119,7 +119,7 @@ func TestDispatchNamespaceScriptDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Delete(
+	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Delete(
 		context.TODO(),
 		"my-dispatch-namespace",
 		"this-is_my_script-01",

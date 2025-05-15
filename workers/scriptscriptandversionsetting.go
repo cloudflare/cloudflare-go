@@ -38,7 +38,7 @@ func NewScriptScriptAndVersionSettingService(opts ...option.RequestOption) (r *S
 	return
 }
 
-// Patch metadata or config, such as bindings or usage model
+// Patch metadata or config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptName string, params ScriptScriptAndVersionSettingEditParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingEditResponse, err error) {
 	var env ScriptScriptAndVersionSettingEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -59,7 +59,7 @@ func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptN
 	return
 }
 
-// Get metadata and config, such as bindings or usage model
+// Get metadata and config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Get(ctx context.Context, scriptName string, query ScriptScriptAndVersionSettingGetParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingGetResponse, err error) {
 	var env ScriptScriptAndVersionSettingGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -103,7 +103,7 @@ type ScriptScriptAndVersionSettingEditResponse struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptScriptAndVersionSettingEditResponsePlacement `json:"placement"`
-	// Tags to help you manage your Workers
+	// Tags to help you manage your Workers.
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript `json:"tail_consumers"`
@@ -138,7 +138,7 @@ func (r scriptScriptAndVersionSettingEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -270,7 +270,7 @@ func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScript
 	return r.union
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Union satisfied by
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindAI],
@@ -1894,7 +1894,7 @@ type ScriptScriptAndVersionSettingGetResponse struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement ScriptScriptAndVersionSettingGetResponsePlacement `json:"placement"`
-	// Tags to help you manage your Workers
+	// Tags to help you manage your Workers.
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript `json:"tail_consumers"`
@@ -1929,7 +1929,7 @@ func (r scriptScriptAndVersionSettingGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -2061,7 +2061,7 @@ func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptA
 	return r.union
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Union satisfied by
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindAI],
@@ -3706,7 +3706,7 @@ type ScriptScriptAndVersionSettingEditParamsSettings struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement param.Field[ScriptScriptAndVersionSettingEditParamsSettingsPlacement] `json:"placement"`
-	// Tags to help you manage your Workers
+	// Tags to help you manage your Workers.
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
@@ -3718,7 +3718,7 @@ func (r ScriptScriptAndVersionSettingEditParamsSettings) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -3777,7 +3777,7 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) MarshalJSON() (d
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Satisfied by
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindAI],
@@ -4762,9 +4762,9 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsUsageModel) IsKnown() boo
 type ScriptScriptAndVersionSettingEditResponseEnvelope struct {
 	Errors   []ScriptScriptAndVersionSettingEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptScriptAndVersionSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptScriptAndVersionSettingEditResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptScriptAndVersionSettingEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptScriptAndVersionSettingEditResponse                `json:"result"`
 	JSON    scriptScriptAndVersionSettingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4773,8 +4773,8 @@ type ScriptScriptAndVersionSettingEditResponseEnvelope struct {
 type scriptScriptAndVersionSettingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4910,9 +4910,9 @@ type ScriptScriptAndVersionSettingGetParams struct {
 type ScriptScriptAndVersionSettingGetResponseEnvelope struct {
 	Errors   []ScriptScriptAndVersionSettingGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptScriptAndVersionSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptScriptAndVersionSettingGetResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptScriptAndVersionSettingGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptScriptAndVersionSettingGetResponse                `json:"result"`
 	JSON    scriptScriptAndVersionSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4921,8 +4921,8 @@ type ScriptScriptAndVersionSettingGetResponseEnvelope struct {
 type scriptScriptAndVersionSettingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

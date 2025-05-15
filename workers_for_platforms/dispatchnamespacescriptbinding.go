@@ -73,7 +73,7 @@ func (r *DispatchNamespaceScriptBindingService) GetAutoPaging(ctx context.Contex
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, dispatchNamespace, scriptName, query, opts...))
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type DispatchNamespaceScriptBindingGetResponse struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -205,7 +205,7 @@ func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceSc
 	return r.union
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Union satisfied by
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI],

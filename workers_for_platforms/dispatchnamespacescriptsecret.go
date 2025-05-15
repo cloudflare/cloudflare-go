@@ -1127,11 +1127,11 @@ func (r DispatchNamespaceScriptSecretUpdateParamsBodyFormat) IsKnown() bool {
 type DispatchNamespaceScriptSecretUpdateResponseEnvelope struct {
 	Errors   []DispatchNamespaceScriptSecretUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DispatchNamespaceScriptSecretUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// A secret value accessible through a binding.
+	Result DispatchNamespaceScriptSecretUpdateResponse `json:"result,required"`
 	// Whether the API call was successful.
 	Success DispatchNamespaceScriptSecretUpdateResponseEnvelopeSuccess `json:"success,required"`
-	// A secret value accessible through a binding.
-	Result DispatchNamespaceScriptSecretUpdateResponse             `json:"result"`
-	JSON   dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON `json:"-"`
+	JSON    dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON contains the JSON
@@ -1139,8 +1139,8 @@ type DispatchNamespaceScriptSecretUpdateResponseEnvelope struct {
 type dispatchNamespaceScriptSecretUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1429,11 +1429,11 @@ type DispatchNamespaceScriptSecretGetParams struct {
 type DispatchNamespaceScriptSecretGetResponseEnvelope struct {
 	Errors   []DispatchNamespaceScriptSecretGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DispatchNamespaceScriptSecretGetResponseEnvelopeMessages `json:"messages,required"`
+	// A secret value accessible through a binding.
+	Result DispatchNamespaceScriptSecretGetResponse `json:"result,required"`
 	// Whether the API call was successful.
 	Success DispatchNamespaceScriptSecretGetResponseEnvelopeSuccess `json:"success,required"`
-	// A secret value accessible through a binding.
-	Result DispatchNamespaceScriptSecretGetResponse             `json:"result"`
-	JSON   dispatchNamespaceScriptSecretGetResponseEnvelopeJSON `json:"-"`
+	JSON    dispatchNamespaceScriptSecretGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // dispatchNamespaceScriptSecretGetResponseEnvelopeJSON contains the JSON metadata
@@ -1441,8 +1441,8 @@ type DispatchNamespaceScriptSecretGetResponseEnvelope struct {
 type dispatchNamespaceScriptSecretGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

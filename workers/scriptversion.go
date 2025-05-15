@@ -260,7 +260,7 @@ func (r ScriptVersionNewParamsMetadataAnnotations) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type ScriptVersionNewParamsMetadataBinding struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -319,7 +319,7 @@ func (r ScriptVersionNewParamsMetadataBinding) MarshalJSON() (data []byte, err e
 func (r ScriptVersionNewParamsMetadataBinding) implementsScriptVersionNewParamsMetadataBindingUnion() {
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Satisfied by
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAI],
@@ -1187,9 +1187,9 @@ func (r ScriptVersionNewParamsMetadataUsageModel) IsKnown() bool {
 type ScriptVersionNewResponseEnvelope struct {
 	Errors   []ScriptVersionNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptVersionNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptVersionNewResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptVersionNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptVersionNewResponse                `json:"result"`
 	JSON    scriptVersionNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1198,8 +1198,8 @@ type ScriptVersionNewResponseEnvelope struct {
 type scriptVersionNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1351,9 +1351,9 @@ type ScriptVersionGetParams struct {
 type ScriptVersionGetResponseEnvelope struct {
 	Errors   []ScriptVersionGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptVersionGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptVersionGetResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptVersionGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptVersionGetResponse                `json:"result"`
 	JSON    scriptVersionGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1362,8 +1362,8 @@ type ScriptVersionGetResponseEnvelope struct {
 type scriptVersionGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

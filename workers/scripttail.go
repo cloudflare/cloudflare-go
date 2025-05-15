@@ -138,9 +138,10 @@ func (r ConsumerScriptParam) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailNewResponse struct {
-	ID        string                    `json:"id"`
-	ExpiresAt string                    `json:"expires_at"`
-	URL       string                    `json:"url"`
+	// Identifier.
+	ID        string                    `json:"id,required"`
+	ExpiresAt string                    `json:"expires_at,required"`
+	URL       string                    `json:"url,required"`
 	JSON      scriptTailNewResponseJSON `json:"-"`
 }
 
@@ -300,9 +301,10 @@ func (r ScriptTailDeleteResponseSuccess) IsKnown() bool {
 }
 
 type ScriptTailGetResponse struct {
-	ID        string                    `json:"id"`
-	ExpiresAt string                    `json:"expires_at"`
-	URL       string                    `json:"url"`
+	// Identifier.
+	ID        string                    `json:"id,required"`
+	ExpiresAt string                    `json:"expires_at,required"`
+	URL       string                    `json:"url,required"`
 	JSON      scriptTailGetResponseJSON `json:"-"`
 }
 
@@ -337,9 +339,9 @@ func (r ScriptTailNewParams) MarshalJSON() (data []byte, err error) {
 type ScriptTailNewResponseEnvelope struct {
 	Errors   []ScriptTailNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptTailNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptTailNewResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptTailNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptTailNewResponse                `json:"result"`
 	JSON    scriptTailNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -348,8 +350,8 @@ type ScriptTailNewResponseEnvelope struct {
 type scriptTailNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -486,9 +488,9 @@ type ScriptTailGetParams struct {
 type ScriptTailGetResponseEnvelope struct {
 	Errors   []ScriptTailGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptTailGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ScriptTailGetResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success ScriptTailGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptTailGetResponse                `json:"result"`
 	JSON    scriptTailGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -497,8 +499,8 @@ type ScriptTailGetResponseEnvelope struct {
 type scriptTailGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

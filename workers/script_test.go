@@ -142,7 +142,7 @@ func TestScriptDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Workers.Scripts.Delete(
+	_, err := client.Workers.Scripts.Delete(
 		context.TODO(),
 		"this-is_my_script-01",
 		workers.ScriptDeleteParams{
