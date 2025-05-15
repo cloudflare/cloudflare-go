@@ -87,6 +87,22 @@ func (r *MessageService) PullAutoPaging(ctx context.Context, queueID string, par
 	return pagination.NewSinglePageAutoPager(r.Pull(ctx, queueID, params, opts...))
 }
 
+// Push a message to a Queue
+func (r *MessageService) Push(ctx context.Context, queueID string, params MessagePushParams, opts ...option.RequestOption) (res *MessagePushResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/queues/%s/messages", params.AccountID, queueID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	return
+}
+
 type MessageAckResponse struct {
 	// The number of messages that were succesfully acknowledged.
 	AckCount float64 `json:"ackCount"`
@@ -145,6 +161,47 @@ func (r *MessagePullResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r messagePullResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type MessagePushResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	// Indicates if the API call was successful or not.
+	Success MessagePushResponseSuccess `json:"success"`
+	JSON    messagePushResponseJSON    `json:"-"`
+}
+
+// messagePushResponseJSON contains the JSON metadata for the struct
+// [MessagePushResponse]
+type messagePushResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MessagePushResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messagePushResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicates if the API call was successful or not.
+type MessagePushResponseSuccess bool
+
+const (
+	MessagePushResponseSuccessTrue MessagePushResponseSuccess = true
+)
+
+func (r MessagePushResponseSuccess) IsKnown() bool {
+	switch r {
+	case MessagePushResponseSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type MessageAckParams struct {
@@ -236,4 +293,105 @@ type MessagePullParams struct {
 
 func (r MessagePullParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type MessagePushParams struct {
+	// A Resource identifier.
+	AccountID param.Field[string]        `path:"account_id,required"`
+	Body      MessagePushParamsBodyUnion `json:"body"`
+}
+
+func (r MessagePushParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type MessagePushParamsBody struct {
+	Body        param.Field[interface{}]                      `json:"body"`
+	ContentType param.Field[MessagePushParamsBodyContentType] `json:"content_type"`
+	// The number of seconds to wait for attempting to deliver this message to
+	// consumers
+	DelaySeconds param.Field[float64] `json:"delay_seconds"`
+}
+
+func (r MessagePushParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r MessagePushParamsBody) implementsMessagePushParamsBodyUnion() {}
+
+// Satisfied by [queues.MessagePushParamsBodyMqQueueMessageText],
+// [queues.MessagePushParamsBodyMqQueueMessageJson], [MessagePushParamsBody].
+type MessagePushParamsBodyUnion interface {
+	implementsMessagePushParamsBodyUnion()
+}
+
+type MessagePushParamsBodyMqQueueMessageText struct {
+	Body        param.Field[string]                                             `json:"body"`
+	ContentType param.Field[MessagePushParamsBodyMqQueueMessageTextContentType] `json:"content_type"`
+	// The number of seconds to wait for attempting to deliver this message to
+	// consumers
+	DelaySeconds param.Field[float64] `json:"delay_seconds"`
+}
+
+func (r MessagePushParamsBodyMqQueueMessageText) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r MessagePushParamsBodyMqQueueMessageText) implementsMessagePushParamsBodyUnion() {}
+
+type MessagePushParamsBodyMqQueueMessageTextContentType string
+
+const (
+	MessagePushParamsBodyMqQueueMessageTextContentTypeText MessagePushParamsBodyMqQueueMessageTextContentType = "text"
+)
+
+func (r MessagePushParamsBodyMqQueueMessageTextContentType) IsKnown() bool {
+	switch r {
+	case MessagePushParamsBodyMqQueueMessageTextContentTypeText:
+		return true
+	}
+	return false
+}
+
+type MessagePushParamsBodyMqQueueMessageJson struct {
+	Body        param.Field[interface{}]                                        `json:"body"`
+	ContentType param.Field[MessagePushParamsBodyMqQueueMessageJsonContentType] `json:"content_type"`
+	// The number of seconds to wait for attempting to deliver this message to
+	// consumers
+	DelaySeconds param.Field[float64] `json:"delay_seconds"`
+}
+
+func (r MessagePushParamsBodyMqQueueMessageJson) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r MessagePushParamsBodyMqQueueMessageJson) implementsMessagePushParamsBodyUnion() {}
+
+type MessagePushParamsBodyMqQueueMessageJsonContentType string
+
+const (
+	MessagePushParamsBodyMqQueueMessageJsonContentTypeJson MessagePushParamsBodyMqQueueMessageJsonContentType = "json"
+)
+
+func (r MessagePushParamsBodyMqQueueMessageJsonContentType) IsKnown() bool {
+	switch r {
+	case MessagePushParamsBodyMqQueueMessageJsonContentTypeJson:
+		return true
+	}
+	return false
+}
+
+type MessagePushParamsBodyContentType string
+
+const (
+	MessagePushParamsBodyContentTypeText MessagePushParamsBodyContentType = "text"
+	MessagePushParamsBodyContentTypeJson MessagePushParamsBodyContentType = "json"
+)
+
+func (r MessagePushParamsBodyContentType) IsKnown() bool {
+	switch r {
+	case MessagePushParamsBodyContentTypeText, MessagePushParamsBodyContentTypeJson:
+		return true
+	}
+	return false
 }

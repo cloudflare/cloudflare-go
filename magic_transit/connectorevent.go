@@ -26,6 +26,7 @@ import (
 // the [NewConnectorEventService] method instead.
 type ConnectorEventService struct {
 	Options []option.RequestOption
+	Latest  *ConnectorEventLatestService
 }
 
 // NewConnectorEventService generates a new service that applies the given options
@@ -34,6 +35,7 @@ type ConnectorEventService struct {
 func NewConnectorEventService(opts ...option.RequestOption) (r *ConnectorEventService) {
 	r = &ConnectorEventService{}
 	r.Options = opts
+	r.Latest = NewConnectorEventLatestService(opts...)
 	return
 }
 
