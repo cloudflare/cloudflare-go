@@ -210,8 +210,11 @@ type DevicePolicyCustomNewParams struct {
 	LANAllowSubnetSize param.Field[float64] `json:"lan_allow_subnet_size"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
-	RegisterInterfaceIPWithDNS param.Field[bool]                                     `json:"register_interface_ip_with_dns"`
-	ServiceModeV2              param.Field[DevicePolicyCustomNewParamsServiceModeV2] `json:"service_mode_v2"`
+	RegisterInterfaceIPWithDNS param.Field[bool] `json:"register_interface_ip_with_dns"`
+	// Determines whether the WARP client indicates to SCCM that it is inside a VPN
+	// boundary. (Windows only).
+	SccmVpnBoundarySupport param.Field[bool]                                     `json:"sccm_vpn_boundary_support"`
+	ServiceModeV2          param.Field[DevicePolicyCustomNewParamsServiceModeV2] `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL param.Field[string] `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
@@ -335,8 +338,11 @@ type DevicePolicyCustomEditParams struct {
 	Precedence param.Field[float64] `json:"precedence"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
-	RegisterInterfaceIPWithDNS param.Field[bool]                                      `json:"register_interface_ip_with_dns"`
-	ServiceModeV2              param.Field[DevicePolicyCustomEditParamsServiceModeV2] `json:"service_mode_v2"`
+	RegisterInterfaceIPWithDNS param.Field[bool] `json:"register_interface_ip_with_dns"`
+	// Determines whether the WARP client indicates to SCCM that it is inside a VPN
+	// boundary. (Windows only).
+	SccmVpnBoundarySupport param.Field[bool]                                      `json:"sccm_vpn_boundary_support"`
+	ServiceModeV2          param.Field[DevicePolicyCustomEditParamsServiceModeV2] `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL param.Field[string] `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.

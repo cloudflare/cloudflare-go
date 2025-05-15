@@ -158,8 +158,11 @@ type SettingsPolicy struct {
 	Precedence float64 `json:"precedence"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
-	RegisterInterfaceIPWithDNS bool                        `json:"register_interface_ip_with_dns"`
-	ServiceModeV2              SettingsPolicyServiceModeV2 `json:"service_mode_v2"`
+	RegisterInterfaceIPWithDNS bool `json:"register_interface_ip_with_dns"`
+	// Determines whether the WARP client indicates to SCCM that it is inside a VPN
+	// boundary. (Windows only).
+	SccmVpnBoundarySupport bool                        `json:"sccm_vpn_boundary_support"`
+	ServiceModeV2          SettingsPolicyServiceModeV2 `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL string `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
@@ -193,6 +196,7 @@ type settingsPolicyJSON struct {
 	PolicyID                   apijson.Field
 	Precedence                 apijson.Field
 	RegisterInterfaceIPWithDNS apijson.Field
+	SccmVpnBoundarySupport     apijson.Field
 	ServiceModeV2              apijson.Field
 	SupportURL                 apijson.Field
 	SwitchLocked               apijson.Field

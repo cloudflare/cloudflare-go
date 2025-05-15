@@ -106,8 +106,11 @@ type DevicePolicyDefaultEditResponse struct {
 	Include []SplitTunnelInclude `json:"include"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
-	RegisterInterfaceIPWithDNS bool                                         `json:"register_interface_ip_with_dns"`
-	ServiceModeV2              DevicePolicyDefaultEditResponseServiceModeV2 `json:"service_mode_v2"`
+	RegisterInterfaceIPWithDNS bool `json:"register_interface_ip_with_dns"`
+	// Determines whether the WARP client indicates to SCCM that it is inside a VPN
+	// boundary. (Windows only).
+	SccmVpnBoundarySupport bool                                         `json:"sccm_vpn_boundary_support"`
+	ServiceModeV2          DevicePolicyDefaultEditResponseServiceModeV2 `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL string `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
@@ -134,6 +137,7 @@ type devicePolicyDefaultEditResponseJSON struct {
 	GatewayUniqueID            apijson.Field
 	Include                    apijson.Field
 	RegisterInterfaceIPWithDNS apijson.Field
+	SccmVpnBoundarySupport     apijson.Field
 	ServiceModeV2              apijson.Field
 	SupportURL                 apijson.Field
 	SwitchLocked               apijson.Field
@@ -205,8 +209,11 @@ type DevicePolicyDefaultGetResponse struct {
 	Include []SplitTunnelInclude `json:"include"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
-	RegisterInterfaceIPWithDNS bool                                        `json:"register_interface_ip_with_dns"`
-	ServiceModeV2              DevicePolicyDefaultGetResponseServiceModeV2 `json:"service_mode_v2"`
+	RegisterInterfaceIPWithDNS bool `json:"register_interface_ip_with_dns"`
+	// Determines whether the WARP client indicates to SCCM that it is inside a VPN
+	// boundary. (Windows only).
+	SccmVpnBoundarySupport bool                                        `json:"sccm_vpn_boundary_support"`
+	ServiceModeV2          DevicePolicyDefaultGetResponseServiceModeV2 `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL string `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
@@ -233,6 +240,7 @@ type devicePolicyDefaultGetResponseJSON struct {
 	GatewayUniqueID            apijson.Field
 	Include                    apijson.Field
 	RegisterInterfaceIPWithDNS apijson.Field
+	SccmVpnBoundarySupport     apijson.Field
 	ServiceModeV2              apijson.Field
 	SupportURL                 apijson.Field
 	SwitchLocked               apijson.Field
@@ -309,8 +317,11 @@ type DevicePolicyDefaultEditParams struct {
 	LANAllowSubnetSize param.Field[float64] `json:"lan_allow_subnet_size"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
-	RegisterInterfaceIPWithDNS param.Field[bool]                                       `json:"register_interface_ip_with_dns"`
-	ServiceModeV2              param.Field[DevicePolicyDefaultEditParamsServiceModeV2] `json:"service_mode_v2"`
+	RegisterInterfaceIPWithDNS param.Field[bool] `json:"register_interface_ip_with_dns"`
+	// Determines whether the WARP client indicates to SCCM that it is inside a VPN
+	// boundary. (Windows only).
+	SccmVpnBoundarySupport param.Field[bool]                                       `json:"sccm_vpn_boundary_support"`
+	ServiceModeV2          param.Field[DevicePolicyDefaultEditParamsServiceModeV2] `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL param.Field[string] `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.

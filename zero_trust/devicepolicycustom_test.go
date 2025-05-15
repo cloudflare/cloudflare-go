@@ -53,6 +53,7 @@ func TestDevicePolicyCustomNewWithOptionalParams(t *testing.T) {
 		LANAllowMinutes:            cloudflare.F(30.000000),
 		LANAllowSubnetSize:         cloudflare.F(24.000000),
 		RegisterInterfaceIPWithDNS: cloudflare.F(true),
+		SccmVpnBoundarySupport:     cloudflare.F(false),
 		ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyCustomNewParamsServiceModeV2{
 			Mode: cloudflare.F("proxy"),
 			Port: cloudflare.F(3000.000000),
@@ -166,6 +167,7 @@ func TestDevicePolicyCustomEditWithOptionalParams(t *testing.T) {
 			Name:                       cloudflare.F("Allow Developers"),
 			Precedence:                 cloudflare.F(100.000000),
 			RegisterInterfaceIPWithDNS: cloudflare.F(true),
+			SccmVpnBoundarySupport:     cloudflare.F(false),
 			ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyCustomEditParamsServiceModeV2{
 				Mode: cloudflare.F("proxy"),
 				Port: cloudflare.F(3000.000000),
