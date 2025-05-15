@@ -7,60 +7,35 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v4/internal/param"
 	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
-// ConnectorSnapshotService contains methods and other services that help with
-// interacting with the cloudflare API.
+// ConnectorSnapshotLatestService contains methods and other services that help
+// with interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewConnectorSnapshotService] method instead.
-type ConnectorSnapshotService struct {
+// the [NewConnectorSnapshotLatestService] method instead.
+type ConnectorSnapshotLatestService struct {
 	Options []option.RequestOption
-	Latest  *ConnectorSnapshotLatestService
 }
 
-// NewConnectorSnapshotService generates a new service that applies the given
+// NewConnectorSnapshotLatestService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewConnectorSnapshotService(opts ...option.RequestOption) (r *ConnectorSnapshotService) {
-	r = &ConnectorSnapshotService{}
+func NewConnectorSnapshotLatestService(opts ...option.RequestOption) (r *ConnectorSnapshotLatestService) {
+	r = &ConnectorSnapshotLatestService{}
 	r.Options = opts
-	r.Latest = NewConnectorSnapshotLatestService(opts...)
 	return
 }
 
-// List Snapshots
-func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string, params ConnectorSnapshotListParams, opts ...option.RequestOption) (res *ConnectorSnapshotListResponse, err error) {
-	var env ConnectorSnapshotListResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if !params.AccountID.Present {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if connectorID == "" {
-		err = errors.New("missing required connector_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%v/magic/connectors/%s/telemetry/snapshots", params.AccountID, connectorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Get Snapshot
-func (r *ConnectorSnapshotService) Get(ctx context.Context, connectorID string, snapshotT float64, query ConnectorSnapshotGetParams, opts ...option.RequestOption) (res *ConnectorSnapshotGetResponse, err error) {
-	var env ConnectorSnapshotGetResponseEnvelope
+// Get latest Snapshots
+func (r *ConnectorSnapshotLatestService) List(ctx context.Context, connectorID string, query ConnectorSnapshotLatestListParams, opts ...option.RequestOption) (res *ConnectorSnapshotLatestListResponse, err error) {
+	var env ConnectorSnapshotLatestListResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if !query.AccountID.Present {
 		err = errors.New("missing required account_id parameter")
@@ -70,7 +45,7 @@ func (r *ConnectorSnapshotService) Get(ctx context.Context, connectorID string, 
 		err = errors.New("missing required connector_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%v/magic/connectors/%s/telemetry/snapshots/%v", query.AccountID, connectorID, snapshotT)
+	path := fmt.Sprintf("accounts/%v/magic/connectors/%s/telemetry/snapshots/latest", query.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -79,58 +54,31 @@ func (r *ConnectorSnapshotService) Get(ctx context.Context, connectorID string, 
 	return
 }
 
-type ConnectorSnapshotListResponse struct {
-	Count  float64                             `json:"count,required"`
-	Items  []ConnectorSnapshotListResponseItem `json:"items,required"`
-	Cursor string                              `json:"cursor"`
-	JSON   connectorSnapshotListResponseJSON   `json:"-"`
+type ConnectorSnapshotLatestListResponse struct {
+	Count float64                                   `json:"count,required"`
+	Items []ConnectorSnapshotLatestListResponseItem `json:"items,required"`
+	JSON  connectorSnapshotLatestListResponseJSON   `json:"-"`
 }
 
-// connectorSnapshotListResponseJSON contains the JSON metadata for the struct
-// [ConnectorSnapshotListResponse]
-type connectorSnapshotListResponseJSON struct {
+// connectorSnapshotLatestListResponseJSON contains the JSON metadata for the
+// struct [ConnectorSnapshotLatestListResponse]
+type connectorSnapshotLatestListResponseJSON struct {
 	Count       apijson.Field
 	Items       apijson.Field
-	Cursor      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectorSnapshotListResponseItem struct {
-	// Time the Snapshot was collected (seconds since the Unix epoch)
-	A float64 `json:"a,required"`
-	// Time the Snapshot was recorded (seconds since the Unix epoch)
-	T    float64                               `json:"t,required"`
-	JSON connectorSnapshotListResponseItemJSON `json:"-"`
-}
-
-// connectorSnapshotListResponseItemJSON contains the JSON metadata for the struct
-// [ConnectorSnapshotListResponseItem]
-type connectorSnapshotListResponseItemJSON struct {
-	A           apijson.Field
-	T           apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorSnapshotListResponseItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorSnapshotListResponseItemJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Snapshot
-type ConnectorSnapshotGetResponse struct {
+type ConnectorSnapshotLatestListResponseItem struct {
 	// Count of failures to reclaim space
 	CountReclaimFailures float64 `json:"count_reclaim_failures,required"`
 	// Count of reclaimed paths
@@ -172,15 +120,15 @@ type ConnectorSnapshotGetResponse struct {
 	// Time spent in system mode (milliseconds)
 	CPUTimeSystemMs float64 `json:"cpu_time_system_ms"`
 	// Time spent in user mode (milliseconds)
-	CPUTimeUserMs float64                                 `json:"cpu_time_user_ms"`
-	DHCPLeases    []ConnectorSnapshotGetResponseDHCPLease `json:"dhcp_leases"`
-	Disks         []ConnectorSnapshotGetResponseDisk      `json:"disks"`
+	CPUTimeUserMs float64                                             `json:"cpu_time_user_ms"`
+	DHCPLeases    []ConnectorSnapshotLatestListResponseItemsDHCPLease `json:"dhcp_leases"`
+	Disks         []ConnectorSnapshotLatestListResponseItemsDisk      `json:"disks"`
 	// Name of high availability state
 	HaState string `json:"ha_state"`
 	// Numeric value associated with high availability state (0 = disabled, 1 = active,
 	// 2 = standby, 3 = stopped, 4 = fault)
-	HaValue    float64                                 `json:"ha_value"`
-	Interfaces []ConnectorSnapshotGetResponseInterface `json:"interfaces"`
+	HaValue    float64                                             `json:"ha_value"`
+	Interfaces []ConnectorSnapshotLatestListResponseItemsInterface `json:"interfaces"`
 	// Percentage of time over a 10 second window that all tasks were stalled
 	IoPressureFull10s float64 `json:"io_pressure_full_10s"`
 	// Percentage of time over a 5 minute window that all tasks were stalled
@@ -325,9 +273,9 @@ type ConnectorSnapshotGetResponse struct {
 	// Memory consumed by the zswap backend, compressed
 	MemoryZSwapBytes float64 `json:"memory_z_swap_bytes"`
 	// Amount of anonymous memory stored in zswap, uncompressed
-	MemoryZSwappedBytes float64                              `json:"memory_z_swapped_bytes"`
-	Mounts              []ConnectorSnapshotGetResponseMount  `json:"mounts"`
-	Netdevs             []ConnectorSnapshotGetResponseNetdev `json:"netdevs"`
+	MemoryZSwappedBytes float64                                          `json:"memory_z_swapped_bytes"`
+	Mounts              []ConnectorSnapshotLatestListResponseItemsMount  `json:"mounts"`
+	Netdevs             []ConnectorSnapshotLatestListResponseItemsNetdev `json:"netdevs"`
 	// Number of ICMP Address Mask Reply messages received
 	SnmpIcmpInAddrMaskReps float64 `json:"snmp_icmp_in_addr_mask_reps"`
 	// Number of ICMP Address Mask Request messages received
@@ -463,19 +411,19 @@ type ConnectorSnapshotGetResponse struct {
 	// Number of UDP datagrams sent
 	SnmpUdpOutDatagrams float64 `json:"snmp_udp_out_datagrams"`
 	// Boottime of the system (seconds since the Unix epoch)
-	SystemBootTimeS float64                               `json:"system_boot_time_s"`
-	Thermals        []ConnectorSnapshotGetResponseThermal `json:"thermals"`
-	Tunnels         []ConnectorSnapshotGetResponseTunnel  `json:"tunnels"`
+	SystemBootTimeS float64                                           `json:"system_boot_time_s"`
+	Thermals        []ConnectorSnapshotLatestListResponseItemsThermal `json:"thermals"`
+	Tunnels         []ConnectorSnapshotLatestListResponseItemsTunnel  `json:"tunnels"`
 	// Sum of how much time each core has spent idle
 	UptimeIdleMs float64 `json:"uptime_idle_ms"`
 	// Uptime of the system, including time spent in suspend
-	UptimeTotalMs float64                          `json:"uptime_total_ms"`
-	JSON          connectorSnapshotGetResponseJSON `json:"-"`
+	UptimeTotalMs float64                                     `json:"uptime_total_ms"`
+	JSON          connectorSnapshotLatestListResponseItemJSON `json:"-"`
 }
 
-// connectorSnapshotGetResponseJSON contains the JSON metadata for the struct
-// [ConnectorSnapshotGetResponse]
-type connectorSnapshotGetResponseJSON struct {
+// connectorSnapshotLatestListResponseItemJSON contains the JSON metadata for the
+// struct [ConnectorSnapshotLatestListResponseItem]
+type connectorSnapshotLatestListResponseItemJSON struct {
 	CountReclaimFailures           apijson.Field
 	CountReclaimedPaths            apijson.Field
 	CountRecordFailed              apijson.Field
@@ -649,16 +597,16 @@ type connectorSnapshotGetResponseJSON struct {
 	ExtraFields                    map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotGetResponseJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseItemJSON) RawJSON() string {
 	return r.raw
 }
 
 // Snapshot DHCP lease
-type ConnectorSnapshotGetResponseDHCPLease struct {
+type ConnectorSnapshotLatestListResponseItemsDHCPLease struct {
 	// Client ID of the device the IP Address was leased to
 	ClientID string `json:"client_id,required"`
 	// Expiry time of the DHCP lease (seconds since the Unix epoch)
@@ -672,13 +620,13 @@ type ConnectorSnapshotGetResponseDHCPLease struct {
 	// MAC Address of the device the IP Address was leased to
 	MacAddress string `json:"mac_address,required"`
 	// Connector identifier
-	ConnectorID string                                    `json:"connector_id"`
-	JSON        connectorSnapshotGetResponseDHCPLeaseJSON `json:"-"`
+	ConnectorID string                                                `json:"connector_id"`
+	JSON        connectorSnapshotLatestListResponseItemsDHCPLeaseJSON `json:"-"`
 }
 
-// connectorSnapshotGetResponseDHCPLeaseJSON contains the JSON metadata for the
-// struct [ConnectorSnapshotGetResponseDHCPLease]
-type connectorSnapshotGetResponseDHCPLeaseJSON struct {
+// connectorSnapshotLatestListResponseItemsDHCPLeaseJSON contains the JSON metadata
+// for the struct [ConnectorSnapshotLatestListResponseItemsDHCPLease]
+type connectorSnapshotLatestListResponseItemsDHCPLeaseJSON struct {
 	ClientID      apijson.Field
 	ExpiryTime    apijson.Field
 	Hostname      apijson.Field
@@ -690,16 +638,16 @@ type connectorSnapshotGetResponseDHCPLeaseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotGetResponseDHCPLease) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseItemsDHCPLease) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotGetResponseDHCPLeaseJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseItemsDHCPLeaseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Snapshot Disk
-type ConnectorSnapshotGetResponseDisk struct {
+type ConnectorSnapshotLatestListResponseItemsDisk struct {
 	// I/Os currently in progress
 	InProgress float64 `json:"in_progress,required"`
 	// Device major number
@@ -741,13 +689,13 @@ type ConnectorSnapshotGetResponseDisk struct {
 	// Time spent discarding (milliseconds)
 	TimeDiscardingMs float64 `json:"time_discarding_ms"`
 	// Time spent flushing (milliseconds)
-	TimeFlushingMs float64                              `json:"time_flushing_ms"`
-	JSON           connectorSnapshotGetResponseDiskJSON `json:"-"`
+	TimeFlushingMs float64                                          `json:"time_flushing_ms"`
+	JSON           connectorSnapshotLatestListResponseItemsDiskJSON `json:"-"`
 }
 
-// connectorSnapshotGetResponseDiskJSON contains the JSON metadata for the struct
-// [ConnectorSnapshotGetResponseDisk]
-type connectorSnapshotGetResponseDiskJSON struct {
+// connectorSnapshotLatestListResponseItemsDiskJSON contains the JSON metadata for
+// the struct [ConnectorSnapshotLatestListResponseItemsDisk]
+type connectorSnapshotLatestListResponseItemsDiskJSON struct {
 	InProgress               apijson.Field
 	Major                    apijson.Field
 	Merged                   apijson.Field
@@ -773,31 +721,31 @@ type connectorSnapshotGetResponseDiskJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotGetResponseDisk) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseItemsDisk) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotGetResponseDiskJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseItemsDiskJSON) RawJSON() string {
 	return r.raw
 }
 
 // Snapshot Interface
-type ConnectorSnapshotGetResponseInterface struct {
+type ConnectorSnapshotLatestListResponseItemsInterface struct {
 	// Name of the network interface
 	Name string `json:"name,required"`
 	// UP/DOWN state of the network interface
 	Operstate string `json:"operstate,required"`
 	// Connector identifier
-	ConnectorID string                                            `json:"connector_id"`
-	IPAddresses []ConnectorSnapshotGetResponseInterfacesIPAddress `json:"ip_addresses"`
+	ConnectorID string                                                        `json:"connector_id"`
+	IPAddresses []ConnectorSnapshotLatestListResponseItemsInterfacesIPAddress `json:"ip_addresses"`
 	// Speed of the network interface (bits per second)
-	Speed float64                                   `json:"speed"`
-	JSON  connectorSnapshotGetResponseInterfaceJSON `json:"-"`
+	Speed float64                                               `json:"speed"`
+	JSON  connectorSnapshotLatestListResponseItemsInterfaceJSON `json:"-"`
 }
 
-// connectorSnapshotGetResponseInterfaceJSON contains the JSON metadata for the
-// struct [ConnectorSnapshotGetResponseInterface]
-type connectorSnapshotGetResponseInterfaceJSON struct {
+// connectorSnapshotLatestListResponseItemsInterfaceJSON contains the JSON metadata
+// for the struct [ConnectorSnapshotLatestListResponseItemsInterface]
+type connectorSnapshotLatestListResponseItemsInterfaceJSON struct {
 	Name        apijson.Field
 	Operstate   apijson.Field
 	ConnectorID apijson.Field
@@ -807,28 +755,29 @@ type connectorSnapshotGetResponseInterfaceJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotGetResponseInterface) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseItemsInterface) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotGetResponseInterfaceJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseItemsInterfaceJSON) RawJSON() string {
 	return r.raw
 }
 
 // Snapshot Interface Address
-type ConnectorSnapshotGetResponseInterfacesIPAddress struct {
+type ConnectorSnapshotLatestListResponseItemsInterfacesIPAddress struct {
 	// Name of the network interface
 	InterfaceName string `json:"interface_name,required"`
 	// IP address of the network interface
 	IPAddress string `json:"ip_address,required"`
 	// Connector identifier
-	ConnectorID string                                              `json:"connector_id"`
-	JSON        connectorSnapshotGetResponseInterfacesIPAddressJSON `json:"-"`
+	ConnectorID string                                                          `json:"connector_id"`
+	JSON        connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON `json:"-"`
 }
 
-// connectorSnapshotGetResponseInterfacesIPAddressJSON contains the JSON metadata
-// for the struct [ConnectorSnapshotGetResponseInterfacesIPAddress]
-type connectorSnapshotGetResponseInterfacesIPAddressJSON struct {
+// connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON contains the
+// JSON metadata for the struct
+// [ConnectorSnapshotLatestListResponseItemsInterfacesIPAddress]
+type connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON struct {
 	InterfaceName apijson.Field
 	IPAddress     apijson.Field
 	ConnectorID   apijson.Field
@@ -836,16 +785,16 @@ type connectorSnapshotGetResponseInterfacesIPAddressJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotGetResponseInterfacesIPAddress) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseItemsInterfacesIPAddress) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotGetResponseInterfacesIPAddressJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON) RawJSON() string {
 	return r.raw
 }
 
 // Snapshot Mount
-type ConnectorSnapshotGetResponseMount struct {
+type ConnectorSnapshotLatestListResponseItemsMount struct {
 	// File system on disk (EXT4, NTFS, etc.)
 	FileSystem string `json:"file_system,required"`
 	// Kind of disk (HDD, SSD, etc.)
@@ -863,13 +812,13 @@ type ConnectorSnapshotGetResponseMount struct {
 	// Determines whether the disk is removable
 	IsRemovable bool `json:"is_removable"`
 	// Total disk size (bytes)
-	TotalBytes float64                               `json:"total_bytes"`
-	JSON       connectorSnapshotGetResponseMountJSON `json:"-"`
+	TotalBytes float64                                           `json:"total_bytes"`
+	JSON       connectorSnapshotLatestListResponseItemsMountJSON `json:"-"`
 }
 
-// connectorSnapshotGetResponseMountJSON contains the JSON metadata for the struct
-// [ConnectorSnapshotGetResponseMount]
-type connectorSnapshotGetResponseMountJSON struct {
+// connectorSnapshotLatestListResponseItemsMountJSON contains the JSON metadata for
+// the struct [ConnectorSnapshotLatestListResponseItemsMount]
+type connectorSnapshotLatestListResponseItemsMountJSON struct {
 	FileSystem     apijson.Field
 	Kind           apijson.Field
 	MountPoint     apijson.Field
@@ -883,16 +832,16 @@ type connectorSnapshotGetResponseMountJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotGetResponseMount) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseItemsMount) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotGetResponseMountJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseItemsMountJSON) RawJSON() string {
 	return r.raw
 }
 
 // Snapshot Netdev
-type ConnectorSnapshotGetResponseNetdev struct {
+type ConnectorSnapshotLatestListResponseItemsNetdev struct {
 	// Name of the network device
 	Name string `json:"name,required"`
 	// Total bytes received
@@ -928,13 +877,13 @@ type ConnectorSnapshotGetResponseNetdev struct {
 	// Total packets transmitted
 	SentPackets float64 `json:"sent_packets,required"`
 	// Connector identifier
-	ConnectorID string                                 `json:"connector_id"`
-	JSON        connectorSnapshotGetResponseNetdevJSON `json:"-"`
+	ConnectorID string                                             `json:"connector_id"`
+	JSON        connectorSnapshotLatestListResponseItemsNetdevJSON `json:"-"`
 }
 
-// connectorSnapshotGetResponseNetdevJSON contains the JSON metadata for the struct
-// [ConnectorSnapshotGetResponseNetdev]
-type connectorSnapshotGetResponseNetdevJSON struct {
+// connectorSnapshotLatestListResponseItemsNetdevJSON contains the JSON metadata
+// for the struct [ConnectorSnapshotLatestListResponseItemsNetdev]
+type connectorSnapshotLatestListResponseItemsNetdevJSON struct {
 	Name           apijson.Field
 	RecvBytes      apijson.Field
 	RecvCompressed apijson.Field
@@ -957,16 +906,16 @@ type connectorSnapshotGetResponseNetdevJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotGetResponseNetdev) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseItemsNetdev) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotGetResponseNetdevJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseItemsNetdevJSON) RawJSON() string {
 	return r.raw
 }
 
 // Snapshot Thermal
-type ConnectorSnapshotGetResponseThermal struct {
+type ConnectorSnapshotLatestListResponseItemsThermal struct {
 	// Sensor identifier for the component
 	Label string `json:"label,required"`
 	// Connector identifier
@@ -976,13 +925,13 @@ type ConnectorSnapshotGetResponseThermal struct {
 	// Current temperature of the component (degrees Celsius)
 	CurrentCelcius float64 `json:"current_celcius"`
 	// Maximum temperature of the component (degrees Celsius)
-	MaxCelcius float64                                 `json:"max_celcius"`
-	JSON       connectorSnapshotGetResponseThermalJSON `json:"-"`
+	MaxCelcius float64                                             `json:"max_celcius"`
+	JSON       connectorSnapshotLatestListResponseItemsThermalJSON `json:"-"`
 }
 
-// connectorSnapshotGetResponseThermalJSON contains the JSON metadata for the
-// struct [ConnectorSnapshotGetResponseThermal]
-type connectorSnapshotGetResponseThermalJSON struct {
+// connectorSnapshotLatestListResponseItemsThermalJSON contains the JSON metadata
+// for the struct [ConnectorSnapshotLatestListResponseItemsThermal]
+type connectorSnapshotLatestListResponseItemsThermalJSON struct {
 	Label           apijson.Field
 	ConnectorID     apijson.Field
 	CriticalCelcius apijson.Field
@@ -992,16 +941,16 @@ type connectorSnapshotGetResponseThermalJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotGetResponseThermal) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseItemsThermal) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotGetResponseThermalJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseItemsThermalJSON) RawJSON() string {
 	return r.raw
 }
 
 // Snapshot Tunnels
-type ConnectorSnapshotGetResponseTunnel struct {
+type ConnectorSnapshotLatestListResponseItemsTunnel struct {
 	// Name of tunnel health state (unknown, healthy, degraded, down)
 	HealthState string `json:"health_state,required"`
 	// Numeric value associated with tunnel state (0 = unknown, 1 = healthy, 2 =
@@ -1012,13 +961,13 @@ type ConnectorSnapshotGetResponseTunnel struct {
 	// Tunnel identifier
 	TunnelID string `json:"tunnel_id,required"`
 	// Connector identifier
-	ConnectorID string                                 `json:"connector_id"`
-	JSON        connectorSnapshotGetResponseTunnelJSON `json:"-"`
+	ConnectorID string                                             `json:"connector_id"`
+	JSON        connectorSnapshotLatestListResponseItemsTunnelJSON `json:"-"`
 }
 
-// connectorSnapshotGetResponseTunnelJSON contains the JSON metadata for the struct
-// [ConnectorSnapshotGetResponseTunnel]
-type connectorSnapshotGetResponseTunnelJSON struct {
+// connectorSnapshotLatestListResponseItemsTunnelJSON contains the JSON metadata
+// for the struct [ConnectorSnapshotLatestListResponseItemsTunnel]
+type connectorSnapshotLatestListResponseItemsTunnelJSON struct {
 	HealthState   apijson.Field
 	HealthValue   apijson.Field
 	InterfaceName apijson.Field
@@ -1028,42 +977,29 @@ type connectorSnapshotGetResponseTunnelJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotGetResponseTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseItemsTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotGetResponseTunnelJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseItemsTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConnectorSnapshotListParams struct {
+type ConnectorSnapshotLatestListParams struct {
 	AccountID param.Field[float64] `path:"account_id,required"`
-	From      param.Field[float64] `query:"from,required"`
-	To        param.Field[float64] `query:"to,required"`
-	Cursor    param.Field[string]  `query:"cursor"`
-	Limit     param.Field[float64] `query:"limit"`
 }
 
-// URLQuery serializes [ConnectorSnapshotListParams]'s query parameters as
-// `url.Values`.
-func (r ConnectorSnapshotListParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
+type ConnectorSnapshotLatestListResponseEnvelope struct {
+	Result   ConnectorSnapshotLatestListResponse                   `json:"result,required"`
+	Success  bool                                                  `json:"success,required"`
+	Errors   []ConnectorSnapshotLatestListResponseEnvelopeErrors   `json:"errors"`
+	Messages []ConnectorSnapshotLatestListResponseEnvelopeMessages `json:"messages"`
+	JSON     connectorSnapshotLatestListResponseEnvelopeJSON       `json:"-"`
 }
 
-type ConnectorSnapshotListResponseEnvelope struct {
-	Result   ConnectorSnapshotListResponse                   `json:"result,required"`
-	Success  bool                                            `json:"success,required"`
-	Errors   []ConnectorSnapshotListResponseEnvelopeErrors   `json:"errors"`
-	Messages []ConnectorSnapshotListResponseEnvelopeMessages `json:"messages"`
-	JSON     connectorSnapshotListResponseEnvelopeJSON       `json:"-"`
-}
-
-// connectorSnapshotListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ConnectorSnapshotListResponseEnvelope]
-type connectorSnapshotListResponseEnvelopeJSON struct {
+// connectorSnapshotLatestListResponseEnvelopeJSON contains the JSON metadata for
+// the struct [ConnectorSnapshotLatestListResponseEnvelope]
+type connectorSnapshotLatestListResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	Errors      apijson.Field
@@ -1072,134 +1008,56 @@ type connectorSnapshotListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotListResponseEnvelopeJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConnectorSnapshotListResponseEnvelopeErrors struct {
-	Code    float64                                         `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    connectorSnapshotListResponseEnvelopeErrorsJSON `json:"-"`
+type ConnectorSnapshotLatestListResponseEnvelopeErrors struct {
+	Code    float64                                               `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    connectorSnapshotLatestListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// connectorSnapshotListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ConnectorSnapshotListResponseEnvelopeErrors]
-type connectorSnapshotListResponseEnvelopeErrorsJSON struct {
+// connectorSnapshotLatestListResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [ConnectorSnapshotLatestListResponseEnvelopeErrors]
+type connectorSnapshotLatestListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotListResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConnectorSnapshotListResponseEnvelopeMessages struct {
-	Code    float64                                           `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    connectorSnapshotListResponseEnvelopeMessagesJSON `json:"-"`
+type ConnectorSnapshotLatestListResponseEnvelopeMessages struct {
+	Code    float64                                                 `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    connectorSnapshotLatestListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// connectorSnapshotListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ConnectorSnapshotListResponseEnvelopeMessages]
-type connectorSnapshotListResponseEnvelopeMessagesJSON struct {
+// connectorSnapshotLatestListResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [ConnectorSnapshotLatestListResponseEnvelopeMessages]
+type connectorSnapshotLatestListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ConnectorSnapshotListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectorSnapshotLatestListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectorSnapshotListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectorSnapshotGetParams struct {
-	AccountID param.Field[float64] `path:"account_id,required"`
-}
-
-type ConnectorSnapshotGetResponseEnvelope struct {
-	// Snapshot
-	Result   ConnectorSnapshotGetResponse                   `json:"result,required"`
-	Success  bool                                           `json:"success,required"`
-	Errors   []ConnectorSnapshotGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []ConnectorSnapshotGetResponseEnvelopeMessages `json:"messages"`
-	JSON     connectorSnapshotGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// connectorSnapshotGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ConnectorSnapshotGetResponseEnvelope]
-type connectorSnapshotGetResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	Errors      apijson.Field
-	Messages    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorSnapshotGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorSnapshotGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectorSnapshotGetResponseEnvelopeErrors struct {
-	Code    float64                                        `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    connectorSnapshotGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// connectorSnapshotGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ConnectorSnapshotGetResponseEnvelopeErrors]
-type connectorSnapshotGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorSnapshotGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorSnapshotGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectorSnapshotGetResponseEnvelopeMessages struct {
-	Code    float64                                          `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    connectorSnapshotGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// connectorSnapshotGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ConnectorSnapshotGetResponseEnvelopeMessages]
-type connectorSnapshotGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorSnapshotGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorSnapshotGetResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r connectorSnapshotLatestListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
