@@ -39,7 +39,7 @@ func NewDispatchNamespaceScriptSettingService(opts ...option.RequestOption) (r *
 	return
 }
 
-// Patch script metadata, such as bindings
+// Patch script metadata, such as bindings.
 func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSettingEditParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSettingEditResponse, err error) {
 	var env DispatchNamespaceScriptSettingEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -112,7 +112,7 @@ type DispatchNamespaceScriptSettingEditResponse struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement DispatchNamespaceScriptSettingEditResponsePlacement `json:"placement"`
-	// Tags to help you manage your Workers
+	// Tags to help you manage your Workers.
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []workers.ConsumerScript `json:"tail_consumers"`
@@ -147,7 +147,7 @@ func (r dispatchNamespaceScriptSettingEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type DispatchNamespaceScriptSettingEditResponseBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -279,7 +279,7 @@ func (r DispatchNamespaceScriptSettingEditResponseBinding) AsUnion() DispatchNam
 	return r.union
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Union satisfied by
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAI],
@@ -1906,7 +1906,7 @@ type DispatchNamespaceScriptSettingGetResponse struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement DispatchNamespaceScriptSettingGetResponsePlacement `json:"placement"`
-	// Tags to help you manage your Workers
+	// Tags to help you manage your Workers.
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []workers.ConsumerScript `json:"tail_consumers"`
@@ -1941,7 +1941,7 @@ func (r dispatchNamespaceScriptSettingGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type DispatchNamespaceScriptSettingGetResponseBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -2073,7 +2073,7 @@ func (r DispatchNamespaceScriptSettingGetResponseBinding) AsUnion() DispatchName
 	return r.union
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Union satisfied by
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAI],
@@ -3720,7 +3720,7 @@ type DispatchNamespaceScriptSettingEditParamsSettings struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement param.Field[DispatchNamespaceScriptSettingEditParamsSettingsPlacement] `json:"placement"`
-	// Tags to help you manage your Workers
+	// Tags to help you manage your Workers.
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]workers.ConsumerScriptParam] `json:"tail_consumers"`
@@ -3732,7 +3732,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettings) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type DispatchNamespaceScriptSettingEditParamsSettingsBinding struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -3791,7 +3791,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) MarshalJSON() (
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Satisfied by
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAI],

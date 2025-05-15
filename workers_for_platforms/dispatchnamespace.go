@@ -136,7 +136,7 @@ type DispatchNamespaceNewResponse struct {
 	NamespaceID string `json:"namespace_id"`
 	// Name of the Workers for Platforms dispatch namespace.
 	NamespaceName string `json:"namespace_name"`
-	// The current number of scripts in this Dispatch Namespace
+	// The current number of scripts in this Dispatch Namespace.
 	ScriptCount int64                            `json:"script_count"`
 	JSON        dispatchNamespaceNewResponseJSON `json:"-"`
 }
@@ -176,7 +176,7 @@ type DispatchNamespaceListResponse struct {
 	NamespaceID string `json:"namespace_id"`
 	// Name of the Workers for Platforms dispatch namespace.
 	NamespaceName string `json:"namespace_name"`
-	// The current number of scripts in this Dispatch Namespace
+	// The current number of scripts in this Dispatch Namespace.
 	ScriptCount int64                             `json:"script_count"`
 	JSON        dispatchNamespaceListResponseJSON `json:"-"`
 }
@@ -218,7 +218,7 @@ type DispatchNamespaceGetResponse struct {
 	NamespaceID string `json:"namespace_id"`
 	// Name of the Workers for Platforms dispatch namespace.
 	NamespaceName string `json:"namespace_name"`
-	// The current number of scripts in this Dispatch Namespace
+	// The current number of scripts in this Dispatch Namespace.
 	ScriptCount int64                            `json:"script_count"`
 	JSON        dispatchNamespaceGetResponseJSON `json:"-"`
 }
@@ -248,7 +248,7 @@ func (r dispatchNamespaceGetResponseJSON) RawJSON() string {
 type DispatchNamespaceNewParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The name of the dispatch namespace
+	// The name of the dispatch namespace.
 	Name param.Field[string] `json:"name"`
 }
 

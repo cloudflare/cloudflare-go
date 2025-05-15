@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
-func TestSubdomainUpdateWithOptionalParams(t *testing.T) {
+func TestSubdomainUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,7 +29,7 @@ func TestSubdomainUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Workers.Subdomains.Update(context.TODO(), workers.SubdomainUpdateParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Subdomain: cloudflare.F("example-subdomain"),
+		Subdomain: cloudflare.F("my-subdomain"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

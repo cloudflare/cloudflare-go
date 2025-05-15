@@ -60,7 +60,7 @@ func TestScriptTailDelete(t *testing.T) {
 	_, err := client.Workers.Scripts.Tail.Delete(
 		context.TODO(),
 		"this-is_my_script-01",
-		"03dc9f77817b488fb26c5861ec18f791",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		workers.ScriptTailDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

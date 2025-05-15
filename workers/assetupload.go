@@ -40,7 +40,7 @@ func NewAssetUploadService(opts ...option.RequestOption) (r *AssetUploadService)
 
 // Upload assets ahead of creating a Worker version. To learn more about the direct
 // uploads of assets, see
-// https://developers.cloudflare.com/workers/static-assets/direct-upload/
+// https://developers.cloudflare.com/workers/static-assets/direct-upload/.
 func (r *AssetUploadService) New(ctx context.Context, params AssetUploadNewParams, opts ...option.RequestOption) (res *AssetUploadNewResponse, err error) {
 	var env AssetUploadNewResponseEnvelope
 	opts = append(r.Options[:], opts...)

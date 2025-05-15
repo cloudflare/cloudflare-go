@@ -78,9 +78,9 @@ func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNam
 
 // Delete a worker from a Workers for Platforms namespace. This call has no
 // response body on a successful delete.
-func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptDeleteResponse, err error) {
+	var env DispatchNamespaceScriptDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -94,7 +94,11 @@ func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNam
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", params.AccountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -154,6 +158,7 @@ func (r scriptJSON) RawJSON() string {
 }
 
 type DispatchNamespaceScriptUpdateResponse struct {
+	StartupTimeMs int64 `json:"startup_time_ms,required"`
 	// The id of the script in the Workers system. Usually the script name.
 	ID string `json:"id"`
 	// When the script was created.
@@ -171,17 +176,10 @@ type DispatchNamespaceScriptUpdateResponse struct {
 	// Configuration for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	Placement DispatchNamespaceScriptUpdateResponsePlacement `json:"placement"`
-	// Enables
-	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	//
 	// Deprecated: deprecated
 	PlacementMode DispatchNamespaceScriptUpdateResponsePlacementMode `json:"placement_mode"`
-	// Status of
-	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	//
 	// Deprecated: deprecated
 	PlacementStatus DispatchNamespaceScriptUpdateResponsePlacementStatus `json:"placement_status"`
-	StartupTimeMs   int64                                                `json:"startup_time_ms"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []workers.ConsumerScript `json:"tail_consumers"`
 	// Usage model for the Worker invocations.
@@ -192,6 +190,7 @@ type DispatchNamespaceScriptUpdateResponse struct {
 // dispatchNamespaceScriptUpdateResponseJSON contains the JSON metadata for the
 // struct [DispatchNamespaceScriptUpdateResponse]
 type dispatchNamespaceScriptUpdateResponseJSON struct {
+	StartupTimeMs   apijson.Field
 	ID              apijson.Field
 	CreatedOn       apijson.Field
 	Etag            apijson.Field
@@ -202,7 +201,6 @@ type dispatchNamespaceScriptUpdateResponseJSON struct {
 	Placement       apijson.Field
 	PlacementMode   apijson.Field
 	PlacementStatus apijson.Field
-	StartupTimeMs   apijson.Field
 	TailConsumers   apijson.Field
 	UsageModel      apijson.Field
 	raw             string
@@ -299,6 +297,8 @@ func (r DispatchNamespaceScriptUpdateResponseUsageModel) IsKnown() bool {
 	return false
 }
 
+type DispatchNamespaceScriptDeleteResponse = interface{}
+
 type DispatchNamespaceScriptUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -312,7 +312,7 @@ func (r DispatchNamespaceScriptUpdateParams) MarshalJSON() (data []byte, err err
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
 type DispatchNamespaceScriptUpdateParamsMetadata struct {
-	// Configuration for assets within a Worker
+	// Configuration for assets within a Worker.
 	Assets param.Field[DispatchNamespaceScriptUpdateParamsMetadataAssets] `json:"assets"`
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
@@ -358,7 +358,7 @@ func (r DispatchNamespaceScriptUpdateParamsMetadata) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-// Configuration for assets within a Worker
+// Configuration for assets within a Worker.
 type DispatchNamespaceScriptUpdateParamsMetadataAssets struct {
 	// Configuration for assets within a Worker.
 	Config param.Field[DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig] `json:"config"`
@@ -373,10 +373,10 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataAssets) MarshalJSON() (data [
 // Configuration for assets within a Worker.
 type DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig struct {
 	// The contents of a \_headers file (used to attach custom headers on asset
-	// responses)
+	// responses).
 	Headers param.Field[string] `json:"_headers"`
 	// The contents of a \_redirects file (used to apply redirects or proxy paths ahead
-	// of asset serving)
+	// of asset serving).
 	Redirects param.Field[string] `json:"_redirects"`
 	// Determines the redirects and rewrites of requests for HTML content.
 	HTMLHandling param.Field[DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
@@ -434,7 +434,7 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigNotFoundHandling)
 	return false
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 type DispatchNamespaceScriptUpdateParamsMetadataBinding struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
@@ -493,7 +493,7 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) MarshalJSON() (data 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
 }
 
-// A binding to allow the Worker to communicate with resources
+// A binding to allow the Worker to communicate with resources.
 //
 // Satisfied by
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAI],
@@ -1486,9 +1486,9 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
 type DispatchNamespaceScriptUpdateResponseEnvelope struct {
 	Errors   []DispatchNamespaceScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DispatchNamespaceScriptUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   DispatchNamespaceScriptUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success DispatchNamespaceScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  DispatchNamespaceScriptUpdateResponse                `json:"result"`
 	JSON    dispatchNamespaceScriptUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1497,8 +1497,8 @@ type DispatchNamespaceScriptUpdateResponseEnvelope struct {
 type dispatchNamespaceScriptUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1642,6 +1642,147 @@ func (r DispatchNamespaceScriptDeleteParams) URLQuery() (v url.Values) {
 	})
 }
 
+type DispatchNamespaceScriptDeleteResponseEnvelope struct {
+	Errors   []DispatchNamespaceScriptDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatchNamespaceScriptDeleteResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful.
+	Success DispatchNamespaceScriptDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  DispatchNamespaceScriptDeleteResponse                `json:"result,nullable"`
+	JSON    dispatchNamespaceScriptDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// dispatchNamespaceScriptDeleteResponseEnvelopeJSON contains the JSON metadata for
+// the struct [DispatchNamespaceScriptDeleteResponseEnvelope]
+type dispatchNamespaceScriptDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptDeleteResponseEnvelopeErrors struct {
+	Code             int64                                                     `json:"code,required"`
+	Message          string                                                    `json:"message,required"`
+	DocumentationURL string                                                    `json:"documentation_url"`
+	Source           DispatchNamespaceScriptDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dispatchNamespaceScriptDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptDeleteResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptDeleteResponseEnvelopeErrors]
+type dispatchNamespaceScriptDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                                        `json:"pointer"`
+	JSON    dispatchNamespaceScriptDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptDeleteResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptDeleteResponseEnvelopeErrorsSource]
+type dispatchNamespaceScriptDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptDeleteResponseEnvelopeMessages struct {
+	Code             int64                                                       `json:"code,required"`
+	Message          string                                                      `json:"message,required"`
+	DocumentationURL string                                                      `json:"documentation_url"`
+	Source           DispatchNamespaceScriptDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dispatchNamespaceScriptDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dispatchNamespaceScriptDeleteResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptDeleteResponseEnvelopeMessages]
+type dispatchNamespaceScriptDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                          `json:"pointer"`
+	JSON    dispatchNamespaceScriptDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptDeleteResponseEnvelopeMessagesSourceJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptDeleteResponseEnvelopeMessagesSource]
+type dispatchNamespaceScriptDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type DispatchNamespaceScriptDeleteResponseEnvelopeSuccess bool
+
+const (
+	DispatchNamespaceScriptDeleteResponseEnvelopeSuccessTrue DispatchNamespaceScriptDeleteResponseEnvelopeSuccess = true
+)
+
+func (r DispatchNamespaceScriptDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptGetParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1650,11 +1791,11 @@ type DispatchNamespaceScriptGetParams struct {
 type DispatchNamespaceScriptGetResponseEnvelope struct {
 	Errors   []DispatchNamespaceScriptGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DispatchNamespaceScriptGetResponseEnvelopeMessages `json:"messages,required"`
+	// Details about a worker uploaded to a Workers for Platforms namespace.
+	Result Script `json:"result,required"`
 	// Whether the API call was successful.
 	Success DispatchNamespaceScriptGetResponseEnvelopeSuccess `json:"success,required"`
-	// Details about a worker uploaded to a Workers for Platforms namespace.
-	Result Script                                         `json:"result"`
-	JSON   dispatchNamespaceScriptGetResponseEnvelopeJSON `json:"-"`
+	JSON    dispatchNamespaceScriptGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // dispatchNamespaceScriptGetResponseEnvelopeJSON contains the JSON metadata for
@@ -1662,8 +1803,8 @@ type DispatchNamespaceScriptGetResponseEnvelope struct {
 type dispatchNamespaceScriptGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -68,7 +68,7 @@ func (r *SubdomainService) Get(ctx context.Context, query SubdomainGetParams, op
 }
 
 type SubdomainUpdateResponse struct {
-	Subdomain string                      `json:"subdomain"`
+	Subdomain string                      `json:"subdomain,required"`
 	JSON      subdomainUpdateResponseJSON `json:"-"`
 }
 
@@ -89,7 +89,7 @@ func (r subdomainUpdateResponseJSON) RawJSON() string {
 }
 
 type SubdomainGetResponse struct {
-	Subdomain string                   `json:"subdomain"`
+	Subdomain string                   `json:"subdomain,required"`
 	JSON      subdomainGetResponseJSON `json:"-"`
 }
 
@@ -112,7 +112,7 @@ func (r subdomainGetResponseJSON) RawJSON() string {
 type SubdomainUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	Subdomain param.Field[string] `json:"subdomain"`
+	Subdomain param.Field[string] `json:"subdomain,required"`
 }
 
 func (r SubdomainUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -122,9 +122,9 @@ func (r SubdomainUpdateParams) MarshalJSON() (data []byte, err error) {
 type SubdomainUpdateResponseEnvelope struct {
 	Errors   []SubdomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SubdomainUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   SubdomainUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success SubdomainUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  SubdomainUpdateResponse                `json:"result"`
 	JSON    subdomainUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -133,8 +133,8 @@ type SubdomainUpdateResponseEnvelope struct {
 type subdomainUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -266,9 +266,9 @@ type SubdomainGetParams struct {
 type SubdomainGetResponseEnvelope struct {
 	Errors   []SubdomainGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SubdomainGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   SubdomainGetResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success SubdomainGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  SubdomainGetResponse                `json:"result"`
 	JSON    subdomainGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -277,8 +277,8 @@ type SubdomainGetResponseEnvelope struct {
 type subdomainGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
