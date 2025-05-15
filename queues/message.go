@@ -56,6 +56,22 @@ func (r *MessageService) Ack(ctx context.Context, queueID string, params Message
 	return
 }
 
+// Push a batch of message to a Queue
+func (r *MessageService) BulkPush(ctx context.Context, queueID string, params MessageBulkPushParams, opts ...option.RequestOption) (res *MessageBulkPushResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/queues/%s/messages/batch", params.AccountID, queueID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	return
+}
+
 // Pull a batch of messages from a Queue
 func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *pagination.SinglePage[MessagePullResponse], err error) {
 	var raw *http.Response
@@ -128,6 +144,47 @@ func (r *MessageAckResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r messageAckResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type MessageBulkPushResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	// Indicates if the API call was successful or not.
+	Success MessageBulkPushResponseSuccess `json:"success"`
+	JSON    messageBulkPushResponseJSON    `json:"-"`
+}
+
+// messageBulkPushResponseJSON contains the JSON metadata for the struct
+// [MessageBulkPushResponse]
+type messageBulkPushResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MessageBulkPushResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messageBulkPushResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicates if the API call was successful or not.
+type MessageBulkPushResponseSuccess bool
+
+const (
+	MessageBulkPushResponseSuccessTrue MessageBulkPushResponseSuccess = true
+)
+
+func (r MessageBulkPushResponseSuccess) IsKnown() bool {
+	switch r {
+	case MessageBulkPushResponseSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type MessagePullResponse struct {
@@ -276,6 +333,112 @@ const (
 func (r MessageAckResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case MessageAckResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type MessageBulkPushParams struct {
+	// A Resource identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The number of seconds to wait for attempting to deliver this batch to consumers
+	DelaySeconds param.Field[float64]                             `json:"delay_seconds"`
+	Messages     param.Field[[]MessageBulkPushParamsMessageUnion] `json:"messages"`
+}
+
+func (r MessageBulkPushParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type MessageBulkPushParamsMessage struct {
+	Body        param.Field[interface{}]                              `json:"body"`
+	ContentType param.Field[MessageBulkPushParamsMessagesContentType] `json:"content_type"`
+	// The number of seconds to wait for attempting to deliver this message to
+	// consumers
+	DelaySeconds param.Field[float64] `json:"delay_seconds"`
+}
+
+func (r MessageBulkPushParamsMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r MessageBulkPushParamsMessage) implementsMessageBulkPushParamsMessageUnion() {}
+
+// Satisfied by [queues.MessageBulkPushParamsMessagesMqQueueMessageText],
+// [queues.MessageBulkPushParamsMessagesMqQueueMessageJson],
+// [MessageBulkPushParamsMessage].
+type MessageBulkPushParamsMessageUnion interface {
+	implementsMessageBulkPushParamsMessageUnion()
+}
+
+type MessageBulkPushParamsMessagesMqQueueMessageText struct {
+	Body        param.Field[string]                                                     `json:"body"`
+	ContentType param.Field[MessageBulkPushParamsMessagesMqQueueMessageTextContentType] `json:"content_type"`
+	// The number of seconds to wait for attempting to deliver this message to
+	// consumers
+	DelaySeconds param.Field[float64] `json:"delay_seconds"`
+}
+
+func (r MessageBulkPushParamsMessagesMqQueueMessageText) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r MessageBulkPushParamsMessagesMqQueueMessageText) implementsMessageBulkPushParamsMessageUnion() {
+}
+
+type MessageBulkPushParamsMessagesMqQueueMessageTextContentType string
+
+const (
+	MessageBulkPushParamsMessagesMqQueueMessageTextContentTypeText MessageBulkPushParamsMessagesMqQueueMessageTextContentType = "text"
+)
+
+func (r MessageBulkPushParamsMessagesMqQueueMessageTextContentType) IsKnown() bool {
+	switch r {
+	case MessageBulkPushParamsMessagesMqQueueMessageTextContentTypeText:
+		return true
+	}
+	return false
+}
+
+type MessageBulkPushParamsMessagesMqQueueMessageJson struct {
+	Body        param.Field[interface{}]                                                `json:"body"`
+	ContentType param.Field[MessageBulkPushParamsMessagesMqQueueMessageJsonContentType] `json:"content_type"`
+	// The number of seconds to wait for attempting to deliver this message to
+	// consumers
+	DelaySeconds param.Field[float64] `json:"delay_seconds"`
+}
+
+func (r MessageBulkPushParamsMessagesMqQueueMessageJson) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r MessageBulkPushParamsMessagesMqQueueMessageJson) implementsMessageBulkPushParamsMessageUnion() {
+}
+
+type MessageBulkPushParamsMessagesMqQueueMessageJsonContentType string
+
+const (
+	MessageBulkPushParamsMessagesMqQueueMessageJsonContentTypeJson MessageBulkPushParamsMessagesMqQueueMessageJsonContentType = "json"
+)
+
+func (r MessageBulkPushParamsMessagesMqQueueMessageJsonContentType) IsKnown() bool {
+	switch r {
+	case MessageBulkPushParamsMessagesMqQueueMessageJsonContentTypeJson:
+		return true
+	}
+	return false
+}
+
+type MessageBulkPushParamsMessagesContentType string
+
+const (
+	MessageBulkPushParamsMessagesContentTypeText MessageBulkPushParamsMessagesContentType = "text"
+	MessageBulkPushParamsMessagesContentTypeJson MessageBulkPushParamsMessagesContentType = "json"
+)
+
+func (r MessageBulkPushParamsMessagesContentType) IsKnown() bool {
+	switch r {
+	case MessageBulkPushParamsMessagesContentTypeText, MessageBulkPushParamsMessagesContentTypeJson:
 		return true
 	}
 	return false
