@@ -38,7 +38,7 @@ func NewCatalogSyncService(opts ...option.RequestOption) (r *CatalogSyncService)
 	return
 }
 
-// Create a new Catalog Sync (Closed Beta)
+// Create a new Catalog Sync (Closed Beta).
 func (r *CatalogSyncService) New(ctx context.Context, params CatalogSyncNewParams, opts ...option.RequestOption) (res *CatalogSyncNewResponse, err error) {
 	var env CatalogSyncNewResponseEnvelope
 	if params.Forwarded.Present {
@@ -58,7 +58,7 @@ func (r *CatalogSyncService) New(ctx context.Context, params CatalogSyncNewParam
 	return
 }
 
-// Update a Catalog Sync (Closed Beta)
+// Update a Catalog Sync (Closed Beta).
 func (r *CatalogSyncService) Update(ctx context.Context, syncID string, params CatalogSyncUpdateParams, opts ...option.RequestOption) (res *CatalogSyncUpdateResponse, err error) {
 	var env CatalogSyncUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -79,7 +79,7 @@ func (r *CatalogSyncService) Update(ctx context.Context, syncID string, params C
 	return
 }
 
-// List Catalog Syncs (Closed Beta)
+// List Catalog Syncs (Closed Beta).
 func (r *CatalogSyncService) List(ctx context.Context, query CatalogSyncListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CatalogSyncListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -101,12 +101,12 @@ func (r *CatalogSyncService) List(ctx context.Context, query CatalogSyncListPara
 	return res, nil
 }
 
-// List Catalog Syncs (Closed Beta)
+// List Catalog Syncs (Closed Beta).
 func (r *CatalogSyncService) ListAutoPaging(ctx context.Context, query CatalogSyncListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CatalogSyncListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete a Catalog Sync (Closed Beta)
+// Delete a Catalog Sync (Closed Beta).
 func (r *CatalogSyncService) Delete(ctx context.Context, syncID string, params CatalogSyncDeleteParams, opts ...option.RequestOption) (res *CatalogSyncDeleteResponse, err error) {
 	var env CatalogSyncDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -127,7 +127,7 @@ func (r *CatalogSyncService) Delete(ctx context.Context, syncID string, params C
 	return
 }
 
-// Update a Catalog Sync (Closed Beta)
+// Update a Catalog Sync (Closed Beta).
 func (r *CatalogSyncService) Edit(ctx context.Context, syncID string, params CatalogSyncEditParams, opts ...option.RequestOption) (res *CatalogSyncEditResponse, err error) {
 	var env CatalogSyncEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -148,7 +148,7 @@ func (r *CatalogSyncService) Edit(ctx context.Context, syncID string, params Cat
 	return
 }
 
-// Read a Catalog Sync (Closed Beta)
+// Read a Catalog Sync (Closed Beta).
 func (r *CatalogSyncService) Get(ctx context.Context, syncID string, query CatalogSyncGetParams, opts ...option.RequestOption) (res *CatalogSyncGetResponse, err error) {
 	var env CatalogSyncGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -170,7 +170,7 @@ func (r *CatalogSyncService) Get(ctx context.Context, syncID string, query Catal
 }
 
 // Refresh a Catalog Sync's destination by running the sync policy against latest
-// resource catalog (Closed Beta)
+// resource catalog (Closed Beta).
 func (r *CatalogSyncService) Refresh(ctx context.Context, syncID string, body CatalogSyncRefreshParams, opts ...option.RequestOption) (res *string, err error) {
 	var env CatalogSyncRefreshResponseEnvelope
 	opts = append(r.Options[:], opts...)
